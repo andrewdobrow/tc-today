@@ -23,8 +23,8 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.8"
-SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.1"
+SEMANTIC_PUBLICATION_GATE_VERSION = "1.9"
+SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.2"
 SEMANTIC_PUBLICATION_RESOLUTION_PROMPT_VERSION = "1.0"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
@@ -772,10 +772,46 @@ def validate_model_decision(
     reason = str(raw_decision.get("reason") or "").strip()
     shared_anchors = [str(v).strip() for v in (raw_decision.get("shared_anchors") or []) if str(v).strip()]
     novel_facts = [str(v).strip() for v in (raw_decision.get("novel_facts") or []) if str(v).strip()]
+    consistency_repairs: list[str] = []
+
+    # The model sometimes reaches the correct structured identity/materiality
+    # conclusion but truncates before the final recommended_action field (it is
+    # intentionally last in older prompts). When the core booleans provide an
+    # unambiguous policy action, recover that missing trailing field instead of
+    # turning a high-confidence same-event update into a terminal HOLD.
+    if not requested_action:
+        if same_event and selected in candidate_slugs:
+            requested_action = ACTION_UPDATE if material_update else ACTION_DUPLICATE
+            consistency_repairs.append("recommended_action_inferred_from_same_event_flags")
+        elif not same_event and confidence >= 0.65:
+            requested_action = ACTION_NEW
+            consistency_repairs.append("recommended_action_inferred_from_new_story_flags")
+
+    # recommended_action is the model's explicit final policy choice. If it says
+    # to update an established same-event canonical and supplies concrete novel
+    # facts, treat a contradictory false material_new_update flag as a schema
+    # inconsistency rather than silently discarding the requested canonical
+    # refresh. The downstream composer/context contract still has to validate
+    # the actual update before any article can be rewritten.
+    if (
+        same_event
+        and selected in candidate_slugs
+        and requested_action == ACTION_UPDATE
+        and not material_update
+        and novel_facts
+    ):
+        material_update = True
+        consistency_repairs.append("material_update_inferred_from_explicit_update_action")
 
     validation_errors: list[str] = []
     if requested_action not in ALLOWED_ACTIONS:
         validation_errors.append("unknown_recommended_action")
+    if (
+        same_event
+        and requested_action == ACTION_UPDATE
+        and not material_update
+    ):
+        validation_errors.append("update_action_without_material_evidence")
     if same_event and selected not in candidate_slugs:
         validation_errors.append("same_event_without_valid_candidate")
     if not same_event and requested_action in {ACTION_DUPLICATE, ACTION_UPDATE}:
@@ -811,6 +847,7 @@ def validate_model_decision(
         "novel_facts": novel_facts[:20],
         "reason": reason,
         "validation_errors": validation_errors,
+        "consistency_repairs": consistency_repairs,
     }
 
 
@@ -840,8 +877,9 @@ Choose exactly one action:
 - new_story: either no candidate is the same event, OR the same event has a material, independently newsworthy follow-up as defined above.
 - hold: evidence is ambiguous or insufficient.
 
-Return ONLY one JSON object with this exact shape:
+Return ONLY one JSON object with this exact shape. Put recommended_action first and make every field agree with that action:
 {{
+  "recommended_action": "duplicate_use_existing_canonical",
   "selected_candidate_slug": "candidate slug or null",
   "same_real_world_event": true,
   "material_new_update": false,
@@ -849,9 +887,10 @@ Return ONLY one JSON object with this exact shape:
   "confidence": 0.0,
   "shared_anchors": ["specific shared facts"],
   "novel_facts": ["specific genuinely new facts"],
-  "reason": "brief evidence-based explanation",
-  "recommended_action": "duplicate_use_existing_canonical"
+  "reason": "brief evidence-based explanation"
 }}
+
+Consistency is mandatory: update_existing_canonical requires same_real_world_event=true and material_new_update=true. duplicate_use_existing_canonical requires same_real_world_event=true and material_new_update=false.
 
 INCOMING ARTICLE:
 {json.dumps(_compact_article(incoming), ensure_ascii=False, indent=2)}
@@ -903,7 +942,7 @@ def adjudicate_candidates(
     request_client = client
     kwargs = {
         "model": model,
-        "max_tokens": 900,
+        "max_tokens": 1200,
         "messages": [{"role": "user", "content": _prompt(incoming, candidates)}],
     }
     try:
@@ -969,8 +1008,9 @@ Decision rules:
 - A separate new_story for the same event is rare and requires a material independently newsworthy accountability, consequence, policy, investigation, or public-interest question.
 - Use hold only when the supplied evidence is genuinely contradictory or too sparse to distinguish identity safely. There will be no third pass.
 
-Return ONLY one JSON object with this exact shape:
+Return ONLY one JSON object with this exact shape. Put recommended_action first and make every field agree with that action:
 {{
+  "recommended_action": "new_story",
   "selected_candidate_slug": "candidate slug or null",
   "same_real_world_event": true,
   "material_new_update": false,
@@ -978,9 +1018,10 @@ Return ONLY one JSON object with this exact shape:
   "confidence": 0.0,
   "shared_anchors": ["specific shared facts"],
   "novel_facts": ["specific genuinely new facts"],
-  "reason": "brief evidence-based explanation",
-  "recommended_action": "new_story"
+  "reason": "brief evidence-based explanation"
 }}
+
+Consistency is mandatory: update_existing_canonical requires same_real_world_event=true and material_new_update=true. duplicate_use_existing_canonical requires same_real_world_event=true and material_new_update=false.
 
 INITIAL HOLD (context only; do not defer to it):
 {json.dumps(initial, ensure_ascii=False, indent=2)}
@@ -1036,7 +1077,7 @@ def adjudicate_resolution(
     request_client = client
     kwargs = {
         "model": model,
-        "max_tokens": 900,
+        "max_tokens": 1200,
         "messages": [{"role": "user", "content": _resolution_prompt(incoming, candidates, initial_decision)}],
     }
     try:

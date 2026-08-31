@@ -1284,7 +1284,7 @@ SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 5
 # high-recall archive shortlist and Sonnet 5 adjudication immediately before the
 # permalink write. Retrieval may nominate unrelated candidates; only the model can
 # authorize NEW, and any ambiguity fails closed.
-TERMINAL_PERMALINK_GATE_VERSION = "1.1"
+TERMINAL_PERMALINK_GATE_VERSION = "1.2"
 TERMINAL_PERMALINK_RESOLUTION_VERSION = "1.0"
 TERMINAL_PERMALINK_RECENT_DAYS = _positive_int_env(
     "TCT_TERMINAL_PERMALINK_RECENT_DAYS", 14

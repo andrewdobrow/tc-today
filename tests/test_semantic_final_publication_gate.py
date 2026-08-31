@@ -1417,3 +1417,93 @@ def test_semantic_gate_request_matches_current_anthropic_sdk_without_temperature
 
     assert result["action"] == ACTION_DUPLICATE
     assert len(client.messages.calls) == 1
+
+
+def test_semantic_gate_recovers_truncated_missing_recommended_action_for_same_event_update():
+    candidates = _candidate_row(
+        _article(CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31")
+    )
+    payload = {
+        "selected_candidate_slug": CANONICAL_SLUG,
+        "same_real_world_event": True,
+        "material_new_update": True,
+        "independently_newsworthy_followup": False,
+        "confidence": 0.90,
+        "shared_anchors": ["Booker Park", "Saturday flooding", "Indiantown"],
+        "novel_facts": ["$2.18 million drainage project completed in 2022"],
+        "reason": "Same flooding incident with consequential new drainage context.",
+        # Simulates the production Sonnet 5 response truncating before the
+        # trailing recommended_action field.
+    }
+    result = adjudicate_candidates(
+        _Client(payload),
+        model="claude-sonnet-5",
+        incoming=_article("", "Indiantown Booker Park flooding drainage update", "2026-08-01"),
+        candidates=candidates,
+        min_confidence=0.82,
+    )
+    assert result["status"] == "validated"
+    assert result["action"] == ACTION_UPDATE
+    assert result["recommended_action"] == ACTION_UPDATE
+    assert result["consistency_repairs"] == [
+        "recommended_action_inferred_from_same_event_flags"
+    ]
+
+
+def test_semantic_gate_honors_explicit_update_action_when_auxiliary_material_flag_conflicts():
+    candidates = _candidate_row(
+        _article(CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31")
+    )
+    payload = {
+        "selected_candidate_slug": CANONICAL_SLUG,
+        "same_real_world_event": True,
+        "material_new_update": False,
+        "independently_newsworthy_followup": False,
+        "confidence": 0.95,
+        "shared_anchors": ["$24 million Waste Pro settlement", "Port St. Lucie homeowners"],
+        "novel_facts": [
+            "Credits appear on property tax bills rather than solid waste bills",
+            "$364 credit for 57,000 longtime homeowners and $64 for 38,000 others",
+            "Credits arrive with TRIM notices",
+        ],
+        "reason": "Same settlement; canonical should be refreshed with implementation details and correction.",
+        "recommended_action": ACTION_UPDATE,
+    }
+    result = adjudicate_candidates(
+        _Client(payload),
+        model="claude-sonnet-4-5",
+        incoming=_article("", "Port St. Lucie homeowners receiving Waste Pro settlement credits", "2026-08-01"),
+        candidates=candidates,
+    )
+    assert result["status"] == "validated"
+    assert result["action"] == ACTION_UPDATE
+    assert result["material_new_update"] is True
+    assert result["consistency_repairs"] == [
+        "material_update_inferred_from_explicit_update_action"
+    ]
+
+
+def test_semantic_gate_does_not_invent_update_without_novel_evidence():
+    candidates = _candidate_row(
+        _article(CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31")
+    )
+    payload = {
+        "selected_candidate_slug": CANONICAL_SLUG,
+        "same_real_world_event": True,
+        "material_new_update": False,
+        "independently_newsworthy_followup": False,
+        "confidence": 0.95,
+        "shared_anchors": ["same event"],
+        "novel_facts": [],
+        "reason": "No new evidence supplied.",
+        "recommended_action": ACTION_UPDATE,
+    }
+    result = adjudicate_candidates(
+        _Client(payload),
+        model="claude-sonnet-4-5",
+        incoming=_article("", INCOMING_HEADLINE, "2026-08-01"),
+        candidates=candidates,
+    )
+    assert result["status"] == "invalid_model_response"
+    assert result["action"] == ACTION_HOLD
+    assert "update_action_without_material_evidence" in result["validation_errors"]
