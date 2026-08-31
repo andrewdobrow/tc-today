@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-31T01:49:30Z",
+  "generated_at": "2026-08-31T02:36:21Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -51,20 +51,20 @@
   "audit": {
     "candidates_processed": 169,
     "routes": {
-      "generate_new": 19,
-      "skip": 150
+      "generate_new": 2,
+      "skip": 167
     },
     "eligibility": {
-      "listing": 2,
-      "low_value": 131,
+      "listing": 3,
+      "low_value": 130,
       "publishable": 36
     },
     "source_classes": {
       "aggregator": 133,
-      "local_news": 24,
-      "regional_news": 12
+      "local_news": 25,
+      "regional_news": 11
     },
-    "rejected_count": 2,
+    "rejected_count": 3,
     "rejected_examples": [
       {
         "headline": "5680 Highway A1a Apt 111, Vero Beach, FL 32963 - Realtor.com",
@@ -83,25 +83,36 @@
           "Headline matches listing pattern 'realtor.com'"
         ],
         "source_class": "aggregator"
+      },
+      {
+        "headline": "1400 Binney Dr Unit A, Fort Pierce, FL 34949 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNYjFRWXVwZm1Tb2NXT1JjOE1uS0Z2WmZMeTdINThuVlRnd2lIYl9aTkJBTThEc0xucG8zR01fRFJtdlA5cFplQ3dVaGcycDZ0VGVxUDZ6d2pPYkFQRUc4QXQzQk9uWG04TmRLdk1zampwY3Y1UUlHQkE0eHR2aG5sZEtPVW1SdkRQdllWc3V1ejgxbGVM?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 18,
-      "same_event": 151
+      "new_story": 4,
+      "same_event": 165
     },
     "examples": [
       {
         "story_id": "story_006977",
         "title": "Delray Beach targets sidewalk parking with $250 fines, but residents say the city needs more spaces",
         "event_key": "unknown-event-4151e7ccf8",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -194,10 +205,11 @@
         "event_key": "unknown-event-efa4be7f6b",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMizwFBVV95cUxPLW9MVnhaMjNSRTlfS0F6UnVSTXdpSTJGMG1lQkVZX05ITERnVVA2N3lsQlVzQkdsUVZJbFM4UXhlTDBlTHNOT240Nlh2TWdnb0ZtWWxKN0pSd25Id1ZGNEFCQmVxV0plXzAyalJYbkVNNk5fTmcwUW9FbVhGRlI3YXd5YWxJOHI1YklKNVJHOUpnM2NBaGRWUGRpcW1zUkczdEVKOVd2Ylo1ZXlsMU1kSV82OTFzR1YyM2xRR1JvSHNiSTJPTU95Q2lrN18tSFU",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -370,13 +382,15 @@
         "story_id": "story_006977",
         "title": "Delray Beach targets sidewalk parking with $250 fines, but residents say the city needs more spaces",
         "event_key": "unknown-event-4151e7ccf8",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -476,10 +490,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMizwFBVV95cUxPLW9MVnhaMjNSRTlfS0F6UnVSTXdpSTJGMG1lQkVZX05ITERnVVA2N3lsQlVzQkdsUVZJbFM4UXhlTDBlTHNOT240Nlh2TWdnb0ZtWWxKN0pSd25Id1ZGNEFCQmVxV0plXzAyalJYbkVNNk5fTmcwUW9FbVhGRlI3YXd5YWxJOHI1YklKNVJHOUpnM2NBaGRWUGRpcW1zUkczdEVKOVd2Ylo1ZXlsMU1kSV82OTFzR1YyM2xRR1JvSHNiSTJPTU95Q2lrN18tSFU",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -675,19 +690,19 @@
     "milestones": {},
     "reason_codes": {},
     "examples": [],
-    "retrospective_candidate_count": 27,
-    "retrospective_high_confidence_candidate_count": 6,
-    "retrospective_activation_eligible_candidate_count": 4,
+    "retrospective_candidate_count": 28,
+    "retrospective_high_confidence_candidate_count": 8,
+    "retrospective_activation_eligible_candidate_count": 6,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1120,
-      "timeline_entries_examined": 3078,
-      "transitions_examined": 1834,
+      "stories_with_timelines": 1114,
+      "timeline_entries_examined": 3083,
+      "transitions_examined": 1845,
       "candidate_scope": "distinct_article_transitions",
-      "candidate_count": 27,
-      "high_confidence_candidate_count": 6,
-      "activation_eligible_candidate_count": 4,
+      "candidate_count": 28,
+      "high_confidence_candidate_count": 8,
+      "activation_eligible_candidate_count": 6,
       "same_source_evolution_count": 9,
       "same_source_evolution_milestones": {
         "arrest": 2,
@@ -700,7 +715,7 @@
       "same_source_evolution_examples": [
         {
           "story_id": "story_000695",
-          "story_title": "West Palm Beach police seek public's help finding missing 10-year-old boy traveling with his aunt",
+          "story_title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
           "milestones": [
             "recovery"
           ],
@@ -1009,9 +1024,9 @@
           }
         }
       ],
-      "identity_anchor_rejected_count": 20,
-      "incoherent_transition_count": 20,
-      "incoherent_story_count": 14,
+      "identity_anchor_rejected_count": 19,
+      "incoherent_transition_count": 19,
+      "incoherent_story_count": 12,
       "incoherent_stories": [
         {
           "story_id": "story_003665",
@@ -1121,6 +1136,94 @@
                 "identity_anchor_missing"
               ],
               "prior_title_overlap": 0.0
+            }
+          ]
+        },
+        {
+          "story_id": "story_000695",
+          "story_title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
+          "transition_count": 3,
+          "blocking_reasons": {
+            "timeline_identity_unanchored": 3
+          },
+          "examples": [
+            {
+              "prior_article": {
+                "article_id": "rss-706a436b97d6d82dc274",
+                "event_key": "missing-person-fort-pierce",
+                "published_at": "2026-07-29T10:40:45.649396+00:00",
+                "title": "Fort Pierce police search for missing 51-year-old missing, endangered woman - WPEC",
+                "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNOExCbjltTU5NRXZ0d3BSZ3M3eGwxQ2ZvYkxCdHlQcFV5RmZVVS1fU2pSUUtiRnJMSzBqaEZ4bmI0WGpLcS1ZamdJeFFQcVphUjY4bV9oVlVCRUlNRGxCOGdsbDBaWldBTENENm9KNnYtdlhQMXlFeVJVUm4ta3k5R29ObmFYWXczaVpaUHhIUVhTZHVLRnFnQXV0Nzl3aEFhbWRrNjB0bmtwcjlHTmQ1X0hNV0w5QzZJUU5Ic1ZZeEZYSHNkZl9ZeXhXRzFuek1lZU54bjhHUi1FU2N0a1dDUXBkSTBZaTV3SUpGa3p4Rm1yUHlFdm5US0RVenBpTEY3cHJVU3g1QmhoeU5nRjBhNVpUMi1HaFIwX3IzbGlzV1poY2pMNGc?oc=5",
+                "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNOExCbjltTU5NRXZ0d3BSZ3M3eGwxQ2ZvYkxCdHlQcFV5RmZVVS1fU2pSUUtiRnJMSzBqaEZ4bmI0WGpLcS1ZamdJeFFQcVphUjY4bV9oVlVCRUlNRGxCOGdsbDBaWldBTENENm9KNnYtdlhQMXlFeVJVUm4ta3k5R29ObmFYWXczaVpaUHhIUVhTZHVLRnFnQXV0Nzl3aEFhbWRrNjB0bmtwcjlHTmQ1X0hNV0w5QzZJUU5Ic1ZZeEZYSHNkZl9ZeXhXRzFuek1lZU54bjhHUi1FU2N0a1dDUXBkSTBZaTV3SUpGa3p4Rm1yUHlFdm5US0RVenBpTEY3cHJVU3g1QmhoeU5nRjBhNVpUMi1HaFIwX3IzbGlzV1poY2pMNGc?oc=5"
+              },
+              "newer_article": {
+                "article_id": "rss-a7aa84caddadacd95195",
+                "event_key": "named-person-death:marie-martin",
+                "published_at": "2026-07-31T15:41:27.895225+00:00",
+                "title": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+                "source": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
+                "url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection"
+              },
+              "milestones": [
+                "death"
+              ],
+              "identity_anchor_codes": [
+                "event_family_conflict",
+                "identity_anchor_missing"
+              ],
+              "prior_title_overlap": 0.125
+            },
+            {
+              "prior_article": {
+                "article_id": "rss-3b62086e1bdc5d124bec",
+                "event_key": "traffic-crash-e629a56133-e629a56133",
+                "published_at": "2026-08-09T10:25:13.599979+00:00",
+                "title": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - cw34.com",
+                "source": "https://cw34.com/newsletter-daily/indian-river-county-sheriffs-office-seeks-help-finding-missing-24-year-old-man-florida-news-missing-person-ircso",
+                "url": "https://cw34.com/newsletter-daily/indian-river-county-sheriffs-office-seeks-help-finding-missing-24-year-old-man-florida-news-missing-person-ircso"
+              },
+              "newer_article": {
+                "article_id": "rss-468e68e9b35e34e8052b",
+                "event_key": "traffic-crash-fort-pierce-bbc3a2cc12",
+                "published_at": "2026-08-09T10:25:13.599979+00:00",
+                "title": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - cw34.com",
+                "source": "https://cw34.com/newsletter-daily/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd?teaserSource=trending",
+                "url": "https://cw34.com/newsletter-daily/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd?teaserSource=trending"
+              },
+              "milestones": [
+                "arrest"
+              ],
+              "identity_anchor_codes": [
+                "event_family_match",
+                "identity_anchor_missing"
+              ],
+              "prior_title_overlap": 0.181818
+            },
+            {
+              "prior_article": {
+                "article_id": "rss-f9b62cef9a9d97fb7ca8",
+                "event_key": "traffic-crash-port-st-lucie-ad34a8eb8a",
+                "published_at": "2026-08-16T15:41:39.398545+00:00",
+                "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
+                "source": "https://www.wpbf.com/article/florida-man-82-dies-single-car-crash-95-port-st-lucie/73443819",
+                "url": "https://www.wpbf.com/article/florida-man-82-dies-single-car-crash-95-port-st-lucie/73443819"
+              },
+              "newer_article": {
+                "article_id": "rss-27668c873f348955b0c7",
+                "event_key": "traffic-crash-aadd98dab7-aadd98dab7",
+                "published_at": "2026-08-21T01:41:36.860743+00:00",
+                "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - cw34.com",
+                "source": "https://cw34.com/news/local/major-accident-shuts-down-2-right-lanes-on-i-95-north-in-martin-county-florida-news-florida-traffic-major-accident-511-fhp",
+                "url": "https://cw34.com/news/local/major-accident-shuts-down-2-right-lanes-on-i-95-north-in-martin-county-florida-news-florida-traffic-major-accident-511-fhp"
+              },
+              "milestones": [
+                "closure"
+              ],
+              "identity_anchor_codes": [
+                "event_family_match",
+                "identity_anchor_missing"
+              ],
+              "prior_title_overlap": 0.111111
             }
           ]
         },
@@ -1252,67 +1355,6 @@
           ]
         },
         {
-          "story_id": "story_004460",
-          "story_title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
-          "transition_count": 2,
-          "blocking_reasons": {
-            "timeline_identity_unanchored": 2
-          },
-          "examples": [
-            {
-              "prior_article": {
-                "article_id": "rss-70d95d6ae4f046c353c0",
-                "event_key": "fire-fort-pierce-7ed8a8c1e3",
-                "published_at": "2026-08-18T10:41:41.111339+00:00",
-                "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - cw34.com",
-                "source": "https://cw34.com/newsletter-daily/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire",
-                "url": "https://cw34.com/newsletter-daily/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
-              },
-              "newer_article": {
-                "article_id": "rss-7ff60213d56d49fe783f",
-                "event_key": "unknown-event-9cc788da56",
-                "published_at": "2026-08-18T10:41:41.111339+00:00",
-                "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
-                "source": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach",
-                "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach"
-              },
-              "milestones": [
-                "arrest"
-              ],
-              "identity_anchor_codes": [
-                "shared_discriminative_title_tokens",
-                "identity_anchor_missing"
-              ],
-              "prior_title_overlap": 0.230769
-            },
-            {
-              "prior_article": {
-                "article_id": "rss-a82d7d23309cb4bcb514",
-                "event_key": "unknown-event-c1bdc220b8",
-                "published_at": "2026-08-18T15:41:43.759340+00:00",
-                "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - WPEC",
-                "source": "https://news.google.com/rss/articles/CBMiiANBVV95cUxNWkRvSkg4VXlaRFZ0U0Joak1VeGtqdWc2N0VTTmxfeTRMSWlDUFlod3NPNTA0WWF1Q0NWNWxuMkZiVmdKZmpZUEkxem5NendNa3ZrNnFsMTJfY2dNZ0xCNkgwdld2LUk0Z1Jpb2w4ZkRyQ0Rhckd3RjB1NWs5SmVZOERJSmgwQzBGdHZXdDFXcVh0V2tnZzFZWHYyUVlwN3hibHluU0F1WXRSRmZVdkxMdS1fZnhvUDVqSlg5R3FRR21LWEZqYndVVmJfdEIzWDZhTG1qUVgzMS1pX3hWZ015UktKNjE5SUxDZFFQNEs4TmJKQk5Gem5kUFdhUHh0d1FBa1VKRTFOTDN0MklQMjVPTUVUVm5SLXd5cDF5WUhIYkRWT1ppVnNOYmcyZ3VlNFZmTzRCdDQ5eDVDeUExNUlZWDk4NEhvTHBUNUJSdWdieXZoUXhPblE0MDdLak8zaGlYclJYTGoyMjctdzFqSFpwbDdlZ1BXUnhrZ29rNkhJRklIRll0TDlidA?oc=5",
-                "url": "https://news.google.com/rss/articles/CBMiiANBVV95cUxNWkRvSkg4VXlaRFZ0U0Joak1VeGtqdWc2N0VTTmxfeTRMSWlDUFlod3NPNTA0WWF1Q0NWNWxuMkZiVmdKZmpZUEkxem5NendNa3ZrNnFsMTJfY2dNZ0xCNkgwdld2LUk0Z1Jpb2w4ZkRyQ0Rhckd3RjB1NWs5SmVZOERJSmgwQzBGdHZXdDFXcVh0V2tnZzFZWHYyUVlwN3hibHluU0F1WXRSRmZVdkxMdS1fZnhvUDVqSlg5R3FRR21LWEZqYndVVmJfdEIzWDZhTG1qUVgzMS1pX3hWZ015UktKNjE5SUxDZFFQNEs4TmJKQk5Gem5kUFdhUHh0d1FBa1VKRTFOTDN0MklQMjVPTUVUVm5SLXd5cDF5WUhIYkRWT1ppVnNOYmcyZ3VlNFZmTzRCdDQ5eDVDeUExNUlZWDk4NEhvTHBUNUJSdWdieXZoUXhPblE0MDdLak8zaGlYclJYTGoyMjctdzFqSFpwbDdlZ1BXUnhrZ29rNkhJRklIRll0TDlidA?oc=5"
-              },
-              "newer_article": {
-                "article_id": "rss-9ecc1a1b8df48ce6a6d3",
-                "event_key": "unknown-event-fa2359ec5d",
-                "published_at": "2026-08-21T20:42:04.135455+00:00",
-                "title": "Fort Pierce police identify suspect in deadly shooting after Fourth of July - cw34.com",
-                "source": "https://cw34.com/newsletter-daily/suspect-identified-dead-shooting-independence-day-fourth-of-july-south-14th-street-crime-shooting-shotspotter-st-lucie-county-jail-fort-pierce-police-department-florida-news",
-                "url": "https://cw34.com/newsletter-daily/suspect-identified-dead-shooting-independence-day-fourth-of-july-south-14th-street-crime-shooting-shotspotter-st-lucie-county-jail-fort-pierce-police-department-florida-news"
-              },
-              "milestones": [
-                "death"
-              ],
-              "identity_anchor_codes": [
-                "identity_anchor_missing"
-              ],
-              "prior_title_overlap": 0.181818
-            }
-          ]
-        },
-        {
           "story_id": "story_000536",
           "story_title": "3 arrested in death of 3-month-old in St. Lucie County who died from dehydration, malnutrition",
           "transition_count": 1,
@@ -1344,43 +1386,6 @@
                 "identity_anchor_missing"
               ],
               "prior_title_overlap": 0.125
-            }
-          ]
-        },
-        {
-          "story_id": "story_001215",
-          "story_title": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - cbs12.com",
-          "transition_count": 1,
-          "blocking_reasons": {
-            "timeline_identity_unanchored": 1
-          },
-          "examples": [
-            {
-              "prior_article": {
-                "article_id": "rss-706a436b97d6d82dc274",
-                "event_key": "missing-person-fort-pierce",
-                "published_at": "2026-07-29T10:40:45.649396+00:00",
-                "title": "Fort Pierce police search for missing 51-year-old missing, endangered woman - WPEC",
-                "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNOExCbjltTU5NRXZ0d3BSZ3M3eGwxQ2ZvYkxCdHlQcFV5RmZVVS1fU2pSUUtiRnJMSzBqaEZ4bmI0WGpLcS1ZamdJeFFQcVphUjY4bV9oVlVCRUlNRGxCOGdsbDBaWldBTENENm9KNnYtdlhQMXlFeVJVUm4ta3k5R29ObmFYWXczaVpaUHhIUVhTZHVLRnFnQXV0Nzl3aEFhbWRrNjB0bmtwcjlHTmQ1X0hNV0w5QzZJUU5Ic1ZZeEZYSHNkZl9ZeXhXRzFuek1lZU54bjhHUi1FU2N0a1dDUXBkSTBZaTV3SUpGa3p4Rm1yUHlFdm5US0RVenBpTEY3cHJVU3g1QmhoeU5nRjBhNVpUMi1HaFIwX3IzbGlzV1poY2pMNGc?oc=5",
-                "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNOExCbjltTU5NRXZ0d3BSZ3M3eGwxQ2ZvYkxCdHlQcFV5RmZVVS1fU2pSUUtiRnJMSzBqaEZ4bmI0WGpLcS1ZamdJeFFQcVphUjY4bV9oVlVCRUlNRGxCOGdsbDBaWldBTENENm9KNnYtdlhQMXlFeVJVUm4ta3k5R29ObmFYWXczaVpaUHhIUVhTZHVLRnFnQXV0Nzl3aEFhbWRrNjB0bmtwcjlHTmQ1X0hNV0w5QzZJUU5Ic1ZZeEZYSHNkZl9ZeXhXRzFuek1lZU54bjhHUi1FU2N0a1dDUXBkSTBZaTV3SUpGa3p4Rm1yUHlFdm5US0RVenBpTEY3cHJVU3g1QmhoeU5nRjBhNVpUMi1HaFIwX3IzbGlzV1poY2pMNGc?oc=5"
-              },
-              "newer_article": {
-                "article_id": "rss-468e68e9b35e34e8052b",
-                "event_key": "traffic-crash-fort-pierce-bbc3a2cc12",
-                "published_at": "2026-08-09T10:25:13.599979+00:00",
-                "title": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - cw34.com",
-                "source": "https://cw34.com/newsletter-daily/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd?teaserSource=trending",
-                "url": "https://cw34.com/newsletter-daily/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd?teaserSource=trending"
-              },
-              "milestones": [
-                "arrest"
-              ],
-              "identity_anchor_codes": [
-                "event_family_conflict",
-                "shared_discriminative_title_tokens",
-                "identity_anchor_missing"
-              ],
-              "prior_title_overlap": 0.3
             }
           ]
         },
@@ -1566,42 +1571,6 @@
           ]
         },
         {
-          "story_id": "story_004903",
-          "story_title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
-          "transition_count": 1,
-          "blocking_reasons": {
-            "timeline_identity_unanchored": 1
-          },
-          "examples": [
-            {
-              "prior_article": {
-                "article_id": "rss-f9b62cef9a9d97fb7ca8",
-                "event_key": "traffic-crash-port-st-lucie-ad34a8eb8a",
-                "published_at": "2026-08-16T15:41:39.398545+00:00",
-                "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
-                "source": "https://www.wpbf.com/article/florida-man-82-dies-single-car-crash-95-port-st-lucie/73443819",
-                "url": "https://www.wpbf.com/article/florida-man-82-dies-single-car-crash-95-port-st-lucie/73443819"
-              },
-              "newer_article": {
-                "article_id": "rss-27668c873f348955b0c7",
-                "event_key": "traffic-crash-aadd98dab7-aadd98dab7",
-                "published_at": "2026-08-21T01:41:36.860743+00:00",
-                "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - cw34.com",
-                "source": "https://cw34.com/news/local/major-accident-shuts-down-2-right-lanes-on-i-95-north-in-martin-county-florida-news-florida-traffic-major-accident-511-fhp",
-                "url": "https://cw34.com/news/local/major-accident-shuts-down-2-right-lanes-on-i-95-north-in-martin-county-florida-news-florida-traffic-major-accident-511-fhp"
-              },
-              "milestones": [
-                "closure"
-              ],
-              "identity_anchor_codes": [
-                "event_family_match",
-                "identity_anchor_missing"
-              ],
-              "prior_title_overlap": 0.111111
-            }
-          ]
-        },
-        {
           "story_id": "story_005154",
           "story_title": "'He came back': North Carolina family chased off road near I-95 in Martin County tell what happened - wpbf.com",
           "transition_count": 1,
@@ -1638,8 +1607,8 @@
           ]
         },
         {
-          "story_id": "story_006974",
-          "story_title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
+          "story_id": "story_007001",
+          "story_title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
           "transition_count": 1,
           "blocking_reasons": {
             "timeline_identity_unanchored": 1
@@ -1647,29 +1616,29 @@
           "examples": [
             {
               "prior_article": {
-                "article_id": "rss-a159016d9d6f5bf11bcf",
-                "event_key": "missing-person-bc2bfac354",
-                "published_at": "2026-08-31T01:42:35.990130+00:00",
-                "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
-                "source": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia",
-                "url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
+                "article_id": "rss-51d62bcc4676d6e5fd34",
+                "event_key": "fire-fort-pierce-3428a9d8b4",
+                "published_at": "2026-08-31T02:27:42.831331+00:00",
+                "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - cw34.com",
+                "source": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire",
+                "url": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
               },
               "newer_article": {
-                "article_id": "rss-a875a76fc20cb08f71fe",
-                "event_key": "unknown-event-b3ff31e321",
-                "published_at": "2026-08-31T01:42:35.990130+00:00",
-                "title": "Police arrest teen in connection with deadly Boynton Beach shooting",
-                "source": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting",
-                "url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
+                "article_id": "rss-596746811b3b9ec096d9",
+                "event_key": "unknown-event-7340026fe5",
+                "published_at": "2026-08-31T02:27:42.831331+00:00",
+                "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach",
+                "source": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach",
+                "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach"
               },
               "milestones": [
-                "arrest",
-                "death"
+                "arrest"
               ],
               "identity_anchor_codes": [
+                "shared_discriminative_title_tokens",
                 "identity_anchor_missing"
               ],
-              "prior_title_overlap": 0.125
+              "prior_title_overlap": 0.25
             }
           ]
         }
@@ -1679,16 +1648,17 @@
         "arrest": 11,
         "closure": 1,
         "court_action": 1,
-        "death": 5,
+        "death": 4,
         "identified": 3,
         "investigation": 4,
         "opening": 2,
+        "recovery": 1,
         "resolution": 2
       },
       "blocking_conflicts": {
         "event_family_conflict": 3,
         "same_timestamp_order_uncertain": 11,
-        "timeline_identity_unanchored": 20,
+        "timeline_identity_unanchored": 19,
         "weak_title_continuity": 7
       },
       "excluded_entry_count": 137,
@@ -1698,6 +1668,78 @@
         "social_source": 77
       },
       "examples": [
+        {
+          "story_id": "story_006378",
+          "story_title": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
+          "milestones": [
+            "arrest"
+          ],
+          "matched_phrases": {
+            "arrest": [
+              "arrested"
+            ]
+          },
+          "confidence": 0.96,
+          "activation_eligible": true,
+          "timeline_incoherent": false,
+          "identity_anchor_qualified": true,
+          "identity_anchor_codes": [
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "shared_title_tokens": [
+            "city",
+            "hit",
+            "palm",
+            "run",
+            "suspect"
+          ],
+          "blocking_conflicts": [],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified",
+            "prior_title_continuity",
+            "canonical_title_continuity_context_only",
+            "chronology_supported",
+            "activation_evidence_candidate"
+          ],
+          "prior_title_overlap": 0.5,
+          "canonical_title_overlap": 1.0,
+          "prior_article": {
+            "article_id": "rss-e080996103137fbeb4f4",
+            "event_key": "unknown-event-e3836961dd",
+            "published_at": "2026-08-27T01:42:51.203291+00:00",
+            "title": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
+            "source": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
+            "url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091"
+          },
+          "newer_article": {
+            "article_id": "rss-ffd6ad2f68aeb67071f4",
+            "event_key": "traffic-crash-palm-city-03b209ec60",
+            "published_at": "2026-08-28T01:11:01.086838+00:00",
+            "title": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_006378",
+            "Novel milestones: arrest",
+            "Identity anchor qualified: True",
+            "Identity anchor codes: strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
+            "Prior title overlap: 0.50",
+            "Canonical title overlap (context only): 1.00",
+            "Same timestamp: False",
+            "Blocking conflicts: none",
+            "Candidate confidence: 0.96",
+            "Activation eligible: True"
+          ]
+        },
         {
           "story_id": "story_004881",
           "story_title": "Person of Interest in Florida Homicide Found in West Virginia - The Boca Raton Tribune",
@@ -1837,6 +1879,79 @@
             "Identity anchor codes: strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
             "Prior title overlap: 0.58",
             "Canonical title overlap (context only): 0.58",
+            "Same timestamp: False",
+            "Blocking conflicts: none",
+            "Candidate confidence: 0.91",
+            "Activation eligible: True"
+          ]
+        },
+        {
+          "story_id": "story_001850",
+          "story_title": "Flagler County deputies seek help finding missing 17-year-old Freddie Lawrence - WFTV",
+          "milestones": [
+            "recovery"
+          ],
+          "matched_phrases": {
+            "recovery": [
+              "missing teenager freddie lawrence located"
+            ]
+          },
+          "confidence": 0.911429,
+          "activation_eligible": true,
+          "timeline_incoherent": false,
+          "identity_anchor_qualified": true,
+          "identity_anchor_codes": [
+            "event_family_match",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "shared_title_tokens": [
+            "freddie",
+            "lawrence",
+            "missing",
+            "wftv"
+          ],
+          "blocking_conflicts": [],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "event_family_match",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified",
+            "prior_title_continuity",
+            "canonical_title_continuity_context_only",
+            "chronology_supported",
+            "activation_evidence_candidate"
+          ],
+          "prior_title_overlap": 0.571429,
+          "canonical_title_overlap": 0.571429,
+          "prior_article": {
+            "article_id": "rss-475ec265a842462f1c69",
+            "event_key": "missing-person-e24f6979ee",
+            "published_at": "2026-08-02T15:41:09.329483+00:00",
+            "title": "Flagler County deputies seek help finding missing 17-year-old Freddie Lawrence - WFTV",
+            "source": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQR01aeFlKQmtjMmdnZVA4LTB4cm1uWHFUNGMxUElGaDUwUGZxTThWVHFHRkx3V3BJNV9oWC1nc2hDRGJuRlNEWTRZcE00VmY1RWVZZVE1OG52cmJnbUZFWG5qVllidFNwWU9Fc2pVM2YwUVpfcVVrVzBQclYwSW9SbzdSOEZfdGdLcnJjQk5OUU4tRU9BYVBQV3NoTFNVc2Fod0RQZzN1TE9hWVM1Y0l5aG9ac3BOODVacnRWNDZtWXNKdm93VVl4OHcwWnNCLVhtZFVxQ9IB6AFBVV95cUxQckZuNm9uMEtpU3FBWGFBdzUzazlqMldfNm5NZTIwZi10Y3BOSkxFY2thSEowZU00aUxoV3djNVhfSDdvbjhSbzd2Tm5iOHNvVE14c1NaaGh0a19FcU0xbjJmN3NFX3AyOUI5Q3BhMlU4a3RncHJ4bGF2RU5DbEY2ZENPeGFpblRabEVYN0FpNmRzNURRZ2tRVU5TZ1BLd2NaMkhsTk01X2xzQ3phM1RtNU9CYkp4LU00WjlZa1RZZzlmZkVjRE5pS1JkcjlFYl9GcWNyWl9rRnkzcThORV84OUZoa0dUeFlx?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQR01aeFlKQmtjMmdnZVA4LTB4cm1uWHFUNGMxUElGaDUwUGZxTThWVHFHRkx3V3BJNV9oWC1nc2hDRGJuRlNEWTRZcE00VmY1RWVZZVE1OG52cmJnbUZFWG5qVllidFNwWU9Fc2pVM2YwUVpfcVVrVzBQclYwSW9SbzdSOEZfdGdLcnJjQk5OUU4tRU9BYVBQV3NoTFNVc2Fod0RQZzN1TE9hWVM1Y0l5aG9ac3BOODVacnRWNDZtWXNKdm93VVl4OHcwWnNCLVhtZFVxQ9IB6AFBVV95cUxQckZuNm9uMEtpU3FBWGFBdzUzazlqMldfNm5NZTIwZi10Y3BOSkxFY2thSEowZU00aUxoV3djNVhfSDdvbjhSbzd2Tm5iOHNvVE14c1NaaGh0a19FcU0xbjJmN3NFX3AyOUI5Q3BhMlU4a3RncHJ4bGF2RU5DbEY2ZENPeGFpblRabEVYN0FpNmRzNURRZ2tRVU5TZ1BLd2NaMkhsTk01X2xzQ3phM1RtNU9CYkp4LU00WjlZa1RZZzlmZkVjRE5pS1JkcjlFYl9GcWNyWl9rRnkzcThORV84OUZoa0dUeFlx?oc=5"
+          },
+          "newer_article": {
+            "article_id": "rss-844801162239a32af9e1",
+            "event_key": "missing-person-94e897d9b1",
+            "published_at": "2026-08-04T23:11:38.621211+00:00",
+            "title": "Missing teenager Freddie Lawrence located safely - WFTV",
+            "source": "https://news.google.com/rss/articles/CBMirAFBVV95cUxObm9sVlhDTURCa3BNR0txYmtsQzd5LVB0WFYzZVVacGVGMWxmSEFGc2RNZDJpdW9DY0F6dG4zMWhtWnhhRm9yWjVGaElsUW95dmJDQWl5NEtuWVJmd0ktMjFVM05STTM0RldSZHpVMExpckRVZFZiUHBjc3libGxwTHk5MEZsN21ZUldXTW5NWWJUaWJhQVdqRko4MHlNU2RvVTB5TXZyeU9SQ3RU0gHAAUFVX3lxTE5CaUhzd3J4alVMYVAzSnQ0bGhlMHNXMmp1V2dQNEZpMnc3R0V3TmdGbXZHWmQ5OVNVWUtubU42Y1VIbENMd25taFRDeV9aMVRURl9QdkRzZTg4MFplMURLSnhWR3pfRFBTd3NsbS1pY0xGZkZUUVVWN3N5NlJCNkdpT3ZlSEN4R0E0V1NpeGpjZnFtNlhsTUlqTUQwaFQyelB4blRhODQ1TWQ5YS1XWl9oR28wdnZlTGV5UDRJQ3I0Ug?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxObm9sVlhDTURCa3BNR0txYmtsQzd5LVB0WFYzZVVacGVGMWxmSEFGc2RNZDJpdW9DY0F6dG4zMWhtWnhhRm9yWjVGaElsUW95dmJDQWl5NEtuWVJmd0ktMjFVM05STTM0RldSZHpVMExpckRVZFZiUHBjc3libGxwTHk5MEZsN21ZUldXTW5NWWJUaWJhQVdqRko4MHlNU2RvVTB5TXZyeU9SQ3RU0gHAAUFVX3lxTE5CaUhzd3J4alVMYVAzSnQ0bGhlMHNXMmp1V2dQNEZpMnc3R0V3TmdGbXZHWmQ5OVNVWUtubU42Y1VIbENMd25taFRDeV9aMVRURl9QdkRzZTg4MFplMURLSnhWR3pfRFBTd3NsbS1pY0xGZkZUUVVWN3N5NlJCNkdpT3ZlSEN4R0E0V1NpeGpjZnFtNlhsTUlqTUQwaFQyelB4blRhODQ1TWQ5YS1XWl9oR28wdnZlTGV5UDRJQ3I0Ug?oc=5"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_001850",
+            "Novel milestones: recovery",
+            "Identity anchor qualified: True",
+            "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
+            "Prior title overlap: 0.57",
+            "Canonical title overlap (context only): 0.57",
             "Same timestamp: False",
             "Blocking conflicts: none",
             "Candidate confidence: 0.91",
@@ -2061,7 +2176,7 @@
           ]
         },
         {
-          "story_id": "story_004903",
+          "story_id": "story_000695",
           "story_title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
           "milestones": [
             "court_action"
@@ -2121,7 +2236,7 @@
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_004903",
+            "Story: story_000695",
             "Novel milestones: court_action",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
@@ -2134,7 +2249,7 @@
           ]
         },
         {
-          "story_id": "story_004903",
+          "story_id": "story_000695",
           "story_title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
           "milestones": [
             "resolution"
@@ -2193,7 +2308,7 @@
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_004903",
+            "Story: story_000695",
             "Novel milestones: resolution",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
@@ -2270,14 +2385,15 @@
           ]
         },
         {
-          "story_id": "story_001215",
-          "story_title": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - cbs12.com",
+          "story_id": "story_000695",
+          "story_title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
           "milestones": [
-            "arrest"
+            "death"
           ],
           "matched_phrases": {
-            "arrest": [
-              "arrested"
+            "death": [
+              "death",
+              "killed"
             ]
           },
           "confidence": 0.74,
@@ -2286,12 +2402,9 @@
           "identity_anchor_qualified": false,
           "identity_anchor_codes": [
             "event_family_conflict",
-            "shared_discriminative_title_tokens",
             "identity_anchor_missing"
           ],
           "shared_title_tokens": [
-            "fort",
-            "pierce",
             "woman"
           ],
           "blocking_conflicts": [
@@ -2303,15 +2416,14 @@
             "novel_milestone",
             "persistent_story_identity_untrusted",
             "event_family_conflict",
-            "shared_discriminative_title_tokens",
             "identity_anchor_missing",
             "canonical_title_continuity_context_only",
             "chronology_supported",
             "timeline_incoherent",
             "activation_blocked_event_family_conflict"
           ],
-          "prior_title_overlap": 0.3,
-          "canonical_title_overlap": 0.909091,
+          "prior_title_overlap": 0.125,
+          "canonical_title_overlap": 0.375,
           "prior_article": {
             "article_id": "rss-706a436b97d6d82dc274",
             "event_key": "missing-person-fort-pierce",
@@ -2321,21 +2433,21 @@
             "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNOExCbjltTU5NRXZ0d3BSZ3M3eGwxQ2ZvYkxCdHlQcFV5RmZVVS1fU2pSUUtiRnJMSzBqaEZ4bmI0WGpLcS1ZamdJeFFQcVphUjY4bV9oVlVCRUlNRGxCOGdsbDBaWldBTENENm9KNnYtdlhQMXlFeVJVUm4ta3k5R29ObmFYWXczaVpaUHhIUVhTZHVLRnFnQXV0Nzl3aEFhbWRrNjB0bmtwcjlHTmQ1X0hNV0w5QzZJUU5Ic1ZZeEZYSHNkZl9ZeXhXRzFuek1lZU54bjhHUi1FU2N0a1dDUXBkSTBZaTV3SUpGa3p4Rm1yUHlFdm5US0RVenBpTEY3cHJVU3g1QmhoeU5nRjBhNVpUMi1HaFIwX3IzbGlzV1poY2pMNGc?oc=5"
           },
           "newer_article": {
-            "article_id": "rss-468e68e9b35e34e8052b",
-            "event_key": "traffic-crash-fort-pierce-bbc3a2cc12",
-            "published_at": "2026-08-09T10:25:13.599979+00:00",
-            "title": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - cw34.com",
-            "source": "https://cw34.com/newsletter-daily/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd?teaserSource=trending",
-            "url": "https://cw34.com/newsletter-daily/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd?teaserSource=trending"
+            "article_id": "rss-a7aa84caddadacd95195",
+            "event_key": "named-person-death:marie-martin",
+            "published_at": "2026-07-31T15:41:27.895225+00:00",
+            "title": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+            "source": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
+            "url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_001215",
-            "Novel milestones: arrest",
+            "Story: story_000695",
+            "Novel milestones: death",
             "Identity anchor qualified: False",
-            "Identity anchor codes: event_family_conflict, shared_discriminative_title_tokens, identity_anchor_missing",
-            "Prior title overlap: 0.30",
-            "Canonical title overlap (context only): 0.91",
+            "Identity anchor codes: event_family_conflict, identity_anchor_missing",
+            "Prior title overlap: 0.12",
+            "Canonical title overlap (context only): 0.38",
             "Same timestamp: False",
             "Blocking conflicts: timeline_identity_unanchored, event_family_conflict",
             "Candidate confidence: 0.74",
@@ -2834,7 +2946,7 @@
           ]
         },
         {
-          "story_id": "story_004460",
+          "story_id": "story_007001",
           "story_title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
           "milestones": [
             "arrest"
@@ -2871,99 +2983,34 @@
             "canonical_title_continuity_context_only",
             "timeline_incoherent"
           ],
-          "prior_title_overlap": 0.230769,
+          "prior_title_overlap": 0.25,
           "canonical_title_overlap": 1.0,
           "prior_article": {
-            "article_id": "rss-70d95d6ae4f046c353c0",
-            "event_key": "fire-fort-pierce-7ed8a8c1e3",
-            "published_at": "2026-08-18T10:41:41.111339+00:00",
+            "article_id": "rss-51d62bcc4676d6e5fd34",
+            "event_key": "fire-fort-pierce-3428a9d8b4",
+            "published_at": "2026-08-31T02:27:42.831331+00:00",
             "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - cw34.com",
-            "source": "https://cw34.com/newsletter-daily/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire",
-            "url": "https://cw34.com/newsletter-daily/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
+            "source": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire",
+            "url": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
           },
           "newer_article": {
-            "article_id": "rss-7ff60213d56d49fe783f",
-            "event_key": "unknown-event-9cc788da56",
-            "published_at": "2026-08-18T10:41:41.111339+00:00",
-            "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
+            "article_id": "rss-596746811b3b9ec096d9",
+            "event_key": "unknown-event-7340026fe5",
+            "published_at": "2026-08-31T02:27:42.831331+00:00",
+            "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach",
             "source": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach",
             "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_004460",
+            "Story: story_007001",
             "Novel milestones: arrest",
             "Identity anchor qualified: False",
             "Identity anchor codes: shared_discriminative_title_tokens, identity_anchor_missing",
-            "Prior title overlap: 0.23",
+            "Prior title overlap: 0.25",
             "Canonical title overlap (context only): 1.00",
             "Same timestamp: True",
             "Blocking conflicts: same_timestamp_order_uncertain, timeline_identity_unanchored",
-            "Candidate confidence: 0.74",
-            "Activation eligible: False"
-          ]
-        },
-        {
-          "story_id": "story_004460",
-          "story_title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
-          "milestones": [
-            "death"
-          ],
-          "matched_phrases": {
-            "death": [
-              "deadly"
-            ]
-          },
-          "confidence": 0.74,
-          "activation_eligible": false,
-          "timeline_incoherent": true,
-          "identity_anchor_qualified": false,
-          "identity_anchor_codes": [
-            "identity_anchor_missing"
-          ],
-          "shared_title_tokens": [
-            "fort",
-            "pierce"
-          ],
-          "blocking_conflicts": [
-            "timeline_identity_unanchored"
-          ],
-          "reason_codes": [
-            "retrospective_timeline_transition",
-            "novel_milestone",
-            "persistent_story_identity_untrusted",
-            "identity_anchor_missing",
-            "chronology_supported",
-            "timeline_incoherent"
-          ],
-          "prior_title_overlap": 0.181818,
-          "canonical_title_overlap": 0.272727,
-          "prior_article": {
-            "article_id": "rss-a82d7d23309cb4bcb514",
-            "event_key": "unknown-event-c1bdc220b8",
-            "published_at": "2026-08-18T15:41:43.759340+00:00",
-            "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - WPEC",
-            "source": "https://news.google.com/rss/articles/CBMiiANBVV95cUxNWkRvSkg4VXlaRFZ0U0Joak1VeGtqdWc2N0VTTmxfeTRMSWlDUFlod3NPNTA0WWF1Q0NWNWxuMkZiVmdKZmpZUEkxem5NendNa3ZrNnFsMTJfY2dNZ0xCNkgwdld2LUk0Z1Jpb2w4ZkRyQ0Rhckd3RjB1NWs5SmVZOERJSmgwQzBGdHZXdDFXcVh0V2tnZzFZWHYyUVlwN3hibHluU0F1WXRSRmZVdkxMdS1fZnhvUDVqSlg5R3FRR21LWEZqYndVVmJfdEIzWDZhTG1qUVgzMS1pX3hWZ015UktKNjE5SUxDZFFQNEs4TmJKQk5Gem5kUFdhUHh0d1FBa1VKRTFOTDN0MklQMjVPTUVUVm5SLXd5cDF5WUhIYkRWT1ppVnNOYmcyZ3VlNFZmTzRCdDQ5eDVDeUExNUlZWDk4NEhvTHBUNUJSdWdieXZoUXhPblE0MDdLak8zaGlYclJYTGoyMjctdzFqSFpwbDdlZ1BXUnhrZ29rNkhJRklIRll0TDlidA?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMiiANBVV95cUxNWkRvSkg4VXlaRFZ0U0Joak1VeGtqdWc2N0VTTmxfeTRMSWlDUFlod3NPNTA0WWF1Q0NWNWxuMkZiVmdKZmpZUEkxem5NendNa3ZrNnFsMTJfY2dNZ0xCNkgwdld2LUk0Z1Jpb2w4ZkRyQ0Rhckd3RjB1NWs5SmVZOERJSmgwQzBGdHZXdDFXcVh0V2tnZzFZWHYyUVlwN3hibHluU0F1WXRSRmZVdkxMdS1fZnhvUDVqSlg5R3FRR21LWEZqYndVVmJfdEIzWDZhTG1qUVgzMS1pX3hWZ015UktKNjE5SUxDZFFQNEs4TmJKQk5Gem5kUFdhUHh0d1FBa1VKRTFOTDN0MklQMjVPTUVUVm5SLXd5cDF5WUhIYkRWT1ppVnNOYmcyZ3VlNFZmTzRCdDQ5eDVDeUExNUlZWDk4NEhvTHBUNUJSdWdieXZoUXhPblE0MDdLak8zaGlYclJYTGoyMjctdzFqSFpwbDdlZ1BXUnhrZ29rNkhJRklIRll0TDlidA?oc=5"
-          },
-          "newer_article": {
-            "article_id": "rss-9ecc1a1b8df48ce6a6d3",
-            "event_key": "unknown-event-fa2359ec5d",
-            "published_at": "2026-08-21T20:42:04.135455+00:00",
-            "title": "Fort Pierce police identify suspect in deadly shooting after Fourth of July - cw34.com",
-            "source": "https://cw34.com/newsletter-daily/suspect-identified-dead-shooting-independence-day-fourth-of-july-south-14th-street-crime-shooting-shotspotter-st-lucie-county-jail-fort-pierce-police-department-florida-news",
-            "url": "https://cw34.com/newsletter-daily/suspect-identified-dead-shooting-independence-day-fourth-of-july-south-14th-street-crime-shooting-shotspotter-st-lucie-county-jail-fort-pierce-police-department-florida-news"
-          },
-          "candidate_trace": [
-            "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_004460",
-            "Novel milestones: death",
-            "Identity anchor qualified: False",
-            "Identity anchor codes: identity_anchor_missing",
-            "Prior title overlap: 0.18",
-            "Canonical title overlap (context only): 0.27",
-            "Same timestamp: False",
-            "Blocking conflicts: timeline_identity_unanchored",
             "Candidate confidence: 0.74",
             "Activation eligible: False"
           ]
@@ -3105,7 +3152,7 @@
           ]
         },
         {
-          "story_id": "story_004903",
+          "story_id": "story_000695",
           "story_title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
           "milestones": [
             "closure"
@@ -3159,7 +3206,7 @@
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_004903",
+            "Story: story_000695",
             "Novel milestones: closure",
             "Identity anchor qualified: False",
             "Identity anchor codes: event_family_match, identity_anchor_missing",
@@ -3441,6 +3488,74 @@
           ]
         },
         {
+          "story_id": "story_000695",
+          "story_title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
+          "milestones": [
+            "arrest"
+          ],
+          "matched_phrases": {
+            "arrest": [
+              "arrested"
+            ]
+          },
+          "confidence": 0.529091,
+          "activation_eligible": false,
+          "timeline_incoherent": true,
+          "identity_anchor_qualified": false,
+          "identity_anchor_codes": [
+            "event_family_match",
+            "identity_anchor_missing"
+          ],
+          "shared_title_tokens": [
+            "com",
+            "cw34"
+          ],
+          "blocking_conflicts": [
+            "same_timestamp_order_uncertain",
+            "weak_title_continuity",
+            "timeline_identity_unanchored"
+          ],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "event_family_match",
+            "identity_anchor_missing",
+            "timeline_incoherent"
+          ],
+          "prior_title_overlap": 0.181818,
+          "canonical_title_overlap": 0.0,
+          "prior_article": {
+            "article_id": "rss-3b62086e1bdc5d124bec",
+            "event_key": "traffic-crash-e629a56133-e629a56133",
+            "published_at": "2026-08-09T10:25:13.599979+00:00",
+            "title": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - cw34.com",
+            "source": "https://cw34.com/newsletter-daily/indian-river-county-sheriffs-office-seeks-help-finding-missing-24-year-old-man-florida-news-missing-person-ircso",
+            "url": "https://cw34.com/newsletter-daily/indian-river-county-sheriffs-office-seeks-help-finding-missing-24-year-old-man-florida-news-missing-person-ircso"
+          },
+          "newer_article": {
+            "article_id": "rss-468e68e9b35e34e8052b",
+            "event_key": "traffic-crash-fort-pierce-bbc3a2cc12",
+            "published_at": "2026-08-09T10:25:13.599979+00:00",
+            "title": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - cw34.com",
+            "source": "https://cw34.com/newsletter-daily/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd?teaserSource=trending",
+            "url": "https://cw34.com/newsletter-daily/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd?teaserSource=trending"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_000695",
+            "Novel milestones: arrest",
+            "Identity anchor qualified: False",
+            "Identity anchor codes: event_family_match, identity_anchor_missing",
+            "Prior title overlap: 0.18",
+            "Canonical title overlap (context only): 0.00",
+            "Same timestamp: True",
+            "Blocking conflicts: same_timestamp_order_uncertain, weak_title_continuity, timeline_identity_unanchored",
+            "Candidate confidence: 0.53",
+            "Activation eligible: False"
+          ]
+        },
+        {
           "story_id": "story_003628",
           "story_title": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
           "milestones": [
@@ -3508,75 +3623,6 @@
             "Candidate confidence: 0.52",
             "Activation eligible: False"
           ]
-        },
-        {
-          "story_id": "story_006974",
-          "story_title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
-          "milestones": [
-            "arrest",
-            "death"
-          ],
-          "matched_phrases": {
-            "arrest": [
-              "arrest"
-            ],
-            "death": [
-              "deadly"
-            ]
-          },
-          "confidence": 0.4575,
-          "activation_eligible": false,
-          "timeline_incoherent": true,
-          "identity_anchor_qualified": false,
-          "identity_anchor_codes": [
-            "identity_anchor_missing"
-          ],
-          "shared_title_tokens": [
-            "police"
-          ],
-          "blocking_conflicts": [
-            "same_timestamp_order_uncertain",
-            "weak_title_continuity",
-            "timeline_identity_unanchored"
-          ],
-          "reason_codes": [
-            "retrospective_timeline_transition",
-            "novel_milestone",
-            "persistent_story_identity_untrusted",
-            "identity_anchor_missing",
-            "timeline_incoherent"
-          ],
-          "prior_title_overlap": 0.125,
-          "canonical_title_overlap": 0.125,
-          "prior_article": {
-            "article_id": "rss-a159016d9d6f5bf11bcf",
-            "event_key": "missing-person-bc2bfac354",
-            "published_at": "2026-08-31T01:42:35.990130+00:00",
-            "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
-            "source": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia",
-            "url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
-          },
-          "newer_article": {
-            "article_id": "rss-a875a76fc20cb08f71fe",
-            "event_key": "unknown-event-b3ff31e321",
-            "published_at": "2026-08-31T01:42:35.990130+00:00",
-            "title": "Police arrest teen in connection with deadly Boynton Beach shooting",
-            "source": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting",
-            "url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
-          },
-          "candidate_trace": [
-            "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_006974",
-            "Novel milestones: arrest, death",
-            "Identity anchor qualified: False",
-            "Identity anchor codes: identity_anchor_missing",
-            "Prior title overlap: 0.12",
-            "Canonical title overlap (context only): 0.12",
-            "Same timestamp: True",
-            "Blocking conflicts: same_timestamp_order_uncertain, weak_title_continuity, timeline_identity_unanchored",
-            "Candidate confidence: 0.46",
-            "Activation eligible: False"
-          ]
         }
       ],
       "review_ready": true,
@@ -3589,26 +3635,26 @@
   "local_relevance": {
     "scopes": {
       "florida": 1040,
-      "treasure_coast_local": 842,
+      "treasure_coast_local": 833,
       "treasure_coast_region": 401,
-      "unknown": 1984
+      "unknown": 1985
     },
-    "average_score": 60.78
+    "average_score": 60.69
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 1040,
-      "treasure_coast_local": 842,
+      "treasure_coast_local": 833,
       "treasure_coast_region": 401,
-      "unknown": 1984
+      "unknown": 1985
     },
-    "average_priority": 3.46
+    "average_priority": 3.42
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3431,
-      "developing": 57,
-      "ongoing": 777,
+      "active": 3423,
+      "developing": 61,
+      "ongoing": 773,
       "resolved": 2
     }
   },
@@ -3616,8 +3662,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 5597,
-    "active_stories_after": 5597,
+    "active_stories_before": 5599,
+    "active_stories_after": 5599,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3646,20 +3692,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-31T01:43:04Z",
-    "quarantined_story_records_retained": 726,
-    "active_story_count": 5614
+    "generated_at": "2026-08-31T02:28:39Z",
+    "quarantined_story_records_retained": 733,
+    "active_story_count": 5605
   },
   "stories": {
-    "total": 4267,
+    "total": 4259,
     "importance_levels": {
       "breaking": 5,
-      "high": 82,
-      "normal": 653,
+      "high": 79,
+      "normal": 648,
       "low": 3527,
       "archived": 0
     },
-    "average_importance": 9.01,
+    "average_importance": 8.94,
     "top": [
       {
         "story_id": "story_001880",
@@ -3674,7 +3720,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 57.26
+          "age_hours": 58.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3728,9 +3774,98 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 57.26,
+          "hours_since_update": 58.04,
           "event_count": 41,
           "timeline_entries": 25
+        }
+      },
+      {
+        "story_id": "story_000695",
+        "title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
+        "score": 100,
+        "editorial_priority": 79,
+        "editorial_score": 79,
+        "score_breakdown": {
+          "score": 79,
+          "importance": 100,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 120.8
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "weather_emergency",
+            "label": "Weather emergency",
+            "points": 35
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Stuart",
+            "Palm City",
+            "Hobe Sound",
+            "Port St. Lucie",
+            "Fort Pierce",
+            "Vero Beach",
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 84,
+        "timeline_entries": 72,
+        "relationship_decisions": 23,
+        "canonical_source_candidates": 83,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Established multi-event story has not updated in the past 72 hours",
+          "last_updated": "2026-08-26T01:42:10.693389+00:00",
+          "hours_since_update": 120.8,
+          "event_count": 84,
+          "timeline_entries": 72
         }
       },
       {
@@ -3746,7 +3881,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 102.42
+          "age_hours": 103.19
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3810,96 +3945,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 102.42,
+          "hours_since_update": 103.19,
           "event_count": 28,
           "timeline_entries": 20
-        }
-      },
-      {
-        "story_id": "story_004903",
-        "title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
-        "score": 100,
-        "editorial_priority": 79,
-        "editorial_score": 79,
-        "score_breakdown": {
-          "score": 79,
-          "importance": 100,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 120.03
-        },
-        "level": "breaking",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "weather_emergency",
-            "label": "Weather emergency",
-            "points": 35
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Stuart",
-            "Hobe Sound",
-            "Port St. Lucie",
-            "Fort Pierce",
-            "Vero Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 40,
-        "timeline_entries": 32,
-        "relationship_decisions": 7,
-        "canonical_source_candidates": 32,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-08-26T01:42:10.693389+00:00",
-          "hours_since_update": 120.03,
-          "event_count": 40,
-          "timeline_entries": 32
         }
       },
       {
@@ -3915,7 +3963,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 111.02
+          "age_hours": 111.8
         },
         "level": "high",
         "importance_reasons": [
@@ -3958,7 +4006,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T10:42:22.175311+00:00",
-          "hours_since_update": 111.02,
+          "hours_since_update": 111.8,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3976,7 +4024,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 408.04
+          "age_hours": 408.81
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4024,7 +4072,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 408.04,
+          "hours_since_update": 408.81,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4042,7 +4090,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 399.03
+          "age_hours": 399.8
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4088,7 +4136,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 399.03,
+          "hours_since_update": 399.8,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4106,7 +4154,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.02
+          "age_hours": 24.79
         },
         "level": "high",
         "importance_reasons": [
@@ -4140,9 +4188,70 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-30T01:42:51.409087+00:00",
-          "hours_since_update": 24.02,
+          "hours_since_update": 24.79,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_007001",
+        "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
+        "score": 45,
+        "editorial_priority": 51,
+        "editorial_score": 51,
+        "score_breakdown": {
+          "score": 51,
+          "importance": 45,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.04
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 8,
+        "timeline_entries": 8,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 8,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-31T02:27:42.831331+00:00",
+          "hours_since_update": 0.04,
+          "event_count": 8,
+          "timeline_entries": 8
         }
       },
       {
@@ -4158,7 +4267,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 717.65
+          "age_hours": 718.41
         },
         "level": "high",
         "importance_reasons": [
@@ -4201,7 +4310,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 717.65,
+          "hours_since_update": 718.41,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4219,7 +4328,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 717.66
+          "age_hours": 718.42
         },
         "level": "high",
         "importance_reasons": [
@@ -4262,7 +4371,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 717.66,
+          "hours_since_update": 718.42,
           "event_count": 14,
           "timeline_entries": 7
         }
@@ -4280,7 +4389,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 226.04
+          "age_hours": 226.81
         },
         "level": "high",
         "importance_reasons": [
@@ -4324,7 +4433,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 226.04,
+          "hours_since_update": 226.81,
           "event_count": 34,
           "timeline_entries": 34
         }
@@ -4342,7 +4451,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 408.04
+          "age_hours": 408.81
         },
         "level": "high",
         "importance_reasons": [
@@ -4385,7 +4494,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 408.04,
+          "hours_since_update": 408.81,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4403,7 +4512,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 336.04
+          "age_hours": 336.81
         },
         "level": "high",
         "importance_reasons": [
@@ -4444,7 +4553,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 336.04,
+          "hours_since_update": 336.81,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -4462,7 +4571,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 135.03
+          "age_hours": 135.8
         },
         "level": "high",
         "importance_reasons": [
@@ -4501,71 +4610,9 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-25T10:42:16.525222+00:00",
-          "hours_since_update": 135.03,
+          "hours_since_update": 135.8,
           "event_count": 1,
           "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_003095",
-        "title": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com",
-        "score": 75,
-        "editorial_priority": 46,
-        "editorial_score": 46,
-        "score_breakdown": {
-          "score": 46,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.55,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 418.03
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach",
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 15,
-        "timeline_entries": 15,
-        "relationship_decisions": 4,
-        "canonical_source_candidates": 16,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Multi-event story remains open but is no longer rapidly developing",
-          "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 418.03,
-          "event_count": 15,
-          "timeline_entries": 15
         }
       },
       {
@@ -4581,7 +4628,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 423.03
+          "age_hours": 423.8
         },
         "level": "high",
         "importance_reasons": [
@@ -4625,7 +4672,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-08-13T10:41:50.330585+00:00",
-          "hours_since_update": 423.03,
+          "hours_since_update": 423.8,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4643,7 +4690,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 384.29
+          "age_hours": 385.06
         },
         "level": "high",
         "importance_reasons": [
@@ -4686,7 +4733,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-15T01:26:01.600639+00:00",
-          "hours_since_update": 384.29,
+          "hours_since_update": 385.06,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4704,7 +4751,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 102.42
+          "age_hours": 103.19
         },
         "level": "high",
         "importance_reasons": [
@@ -4743,7 +4790,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 102.42,
+          "hours_since_update": 103.19,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4761,7 +4808,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 72.02
+          "age_hours": 72.79
         },
         "level": "high",
         "importance_reasons": [
@@ -4799,7 +4846,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-28T01:42:52.960630+00:00",
-          "hours_since_update": 72.02,
+          "hours_since_update": 72.79,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4817,7 +4864,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 82.01
+          "age_hours": 82.77
         },
         "level": "high",
         "importance_reasons": [
@@ -4872,7 +4919,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-27T15:44:47.058272+00:00",
-          "hours_since_update": 82.01,
+          "hours_since_update": 82.77,
           "event_count": 87,
           "timeline_entries": 87
         }
@@ -4890,7 +4937,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 80.12
+          "age_hours": 80.88
         },
         "level": "high",
         "importance_reasons": [
@@ -4942,7 +4989,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-27T17:39:05.927333+00:00",
-          "hours_since_update": 80.12,
+          "hours_since_update": 80.88,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4952,7 +4999,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-08-31T01:46:25Z",
+    "generated_at": "2026-08-31T02:32:30Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -4981,11 +5028,11 @@
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 0,
-      "published_story_duplicate_suppression_count": 38,
+      "published_story_duplicate_suppression_count": 39,
       "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 3,
       "material_update_promotion_model_call_count": 1
     },
     "categories": [
@@ -5177,7 +5224,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 20.1
+        "elapsed_seconds": 20.447
       },
       {
         "category_key": "crime",
@@ -5251,7 +5298,7 @@
             "category_key": "crime",
             "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
             "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-            "editorial_story_id": "story_006955",
+            "editorial_story_id": "story_006968",
             "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
             "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
             "basis": "exact_source_and_persistent_story_skip",
@@ -5332,7 +5379,7 @@
             "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
             "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
             "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:exact_source_url",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5342,14 +5389,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.711
+        "elapsed_seconds": 12.503
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 16,
+        "fresh_candidate_count": 15,
         "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5370,7 +5417,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -5451,6 +5498,16 @@
             "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
+            "editorial_story_id": "story_006319",
+            "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
+            "canonical_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 1,
@@ -5499,8 +5556,8 @@
         ],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 1,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
@@ -5603,8 +5660,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": true,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "update_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "update_existing_canonical",
@@ -5659,10 +5716,25 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
+            "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
+            "canonical_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 6,
-        "elapsed_seconds": 23.875
+        "elapsed_seconds": 17.267
       },
       {
         "category_key": "sports",
@@ -5726,8 +5798,8 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 11,
-        "elapsed_seconds": 10.47
+        "new_publication_stale_rejected_count": 10,
+        "elapsed_seconds": 10.003
       },
       {
         "category_key": "things_to_do",
@@ -5837,7 +5909,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.759
+        "elapsed_seconds": 12.011
       },
       {
         "category_key": "florida",
@@ -5875,15 +5947,15 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.43
+        "elapsed_seconds": 10.033
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "cache_hit",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 2,
+        "fetched_candidate_count": 25,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 1,
         "selected_source_count": 1,
         "cache_hit": true,
         "archive_recovery_requested": false,
@@ -5900,29 +5972,19 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
             "source_headline": "Martin County Sheriff's Office searching for man visiting from Oklahoma - WPBF",
             "source_url": "https://www.wpbf.com/article/martin-county-sheriffs-office-searching-for-man-visiting-from-oklahoma/73563156",
             "editorial_story_id": "story_006909",
-            "canonical_slug": "2026-08-30-martin-county-sheriffs-office-searches-for-oklahoma-visitor-last-seen-at-hutchin",
-            "canonical_headline": "Martin County Sheriff's Office searches for Oklahoma visitor last seen at Hutchinson Island beach",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-injured-in-lightning-strike-on-boat-near-sandsprit-park-in-stuart",
-            "editorial_story_id": "story_006860",
-            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "basis": "exact_source_and_persistent_story_skip",
+            "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+            "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
+            "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5934,44 +5996,68 @@
             "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
-        "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County Sheriff's Office searching for man visiting from Oklahoma - WPBF",
-            "source_url": "https://www.wpbf.com/article/martin-county-sheriffs-office-searching-for-man-visiting-from-oklahoma/73563156",
-            "canonical_slug": "2026-08-30-martin-county-sheriffs-office-searches-for-oklahoma-visitor-last-seen-at-hutchin",
-            "canonical_headline": "Martin County Sheriff's Office searches for Oklahoma visitor last seen at Hutchinson Island beach",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "martin",
             "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-injured-in-lightning-strike-on-boat-near-sandsprit-park-in-stuart",
+            "editorial_story_id": "story_006860",
             "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
             "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQNERiZ3hPTDlwa2lDNExzdHJuZ1podXBacTc3cktxS1p5a292VmNMUzhrRW1ONzBjeFk2SWdTRGczbFozV1pnS19vUzBOdWhIdF9pelRJNDBCQU5IYkk0ODFNd1hyMzdEMUlNOEpabTBzMlVfQXNxdWlVR1dGQy1XcjRmb3ZFSUFwVzdHWGNuNmZXM1VYMWJ5TUVHc1RERDdDemdMd05naWVjdUdM0gGsAUFVX3lxTFA0RGJneE9MOXBraUM0THN0cm5nWmh1cFpxNzdyS3FLWnlrb3ZWY0xTOGtFbU43MGN4WTZJZ1NEZzNsWjNXWmdLX29TME51aEh0X2l6VEk0MEJBTkhiSTQ4MU13WHIzN0QxSU04SlptMHMyVV9Bc3F1aVVHV0ZDLVdyNGZvdkVJQXBXN0dYY242ZlczVVgxYnlNRUdzVEREN0N6Z0x3TmdpZWN1R0w",
+            "editorial_story_id": "story_006860",
+            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
+            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          }
+        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_count": 0,
+        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County Sheriff's Office searching for man visiting from Oklahoma - WPBF",
+            "source_url": "https://www.wpbf.com/article/martin-county-sheriffs-office-searching-for-man-visiting-from-oklahoma/73563156",
+            "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+            "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Michael Debevec (Michael Anthony Debevec II) missing person",
+              "Martin County Sheriff's Office search",
+              "Visiting from Oklahoma",
+              "Last seen at Chastain Beach (The Rocks)",
+              "Vehicle found at the beach",
+              "Family has not heard from him",
+              "Last seen Wednesday afternoon/Aug. 26"
+            ],
+            "novel_facts": [
+              "May be experiencing an emotional breakdown (additional detail)",
+              "Physical description: 5-foot-7 with blue eyes",
+              "LinkedIn page lists him from Broken Arrow, Oklahoma"
+            ],
+            "reason": "Both articles cover the identical missing person case: Michael Debevec from Oklahoma, last seen at Chastain Beach on Aug. 26/Wednesday afternoon, vehicle found at the beach, family hasn't heard from him. The incoming article adds minor descriptive details (height, eye color, possible emotional breakdown, specific Oklahoma city) but contains no material update such as him being found, an arrest, a body being discovered, or any significant development in the search. These are routine descriptive details that should be incorporated into the existing canonical story rather than warrant a new URL.",
+            "validation_errors": []
           },
           {
             "category_key": "martin",
@@ -5987,11 +6073,41 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-injured-in-lightning-strike-on-boat-near-sandsprit-park-in-stuart",
+            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
+            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQNERiZ3hPTDlwa2lDNExzdHJuZ1podXBacTc3cktxS1p5a292VmNMUzhrRW1ONzBjeFk2SWdTRGczbFozV1pnS19vUzBOdWhIdF9pelRJNDBCQU5IYkk0ODFNd1hyMzdEMUlNOEpabTBzMlVfQXNxdWlVR1dGQy1XcjRmb3ZFSUFwVzdHWGNuNmZXM1VYMWJ5TUVHc1RERDdDemdMd05naWVjdUdM0gGsAUFVX3lxTFA0RGJneE9MOXBraUM0THN0cm5nWmh1cFpxNzdyS3FLWnlrb3ZWY0xTOGtFbU43MGN4WTZJZ1NEZzNsWjNXWmdLX29TME51aEh0X2l6VEk0MEJBTkhiSTQ4MU13WHIzN0QxSU04SlptMHMyVV9Bc3F1aVVHV0ZDLVdyNGZvdkVJQXBXN0dYY242ZlczVVgxYnlNRUdzVEREN0N6Z0x3TmdpZWN1R0w",
+            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
+            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Martin County deputies use drones to catch hit-and-run suspect hiding underwater in Palm City swamp",
-        "elapsed_seconds": 11.101
+        "elapsed_seconds": 27.58
       },
       {
         "category_key": "st_lucie",
@@ -6045,7 +6161,7 @@
             "category_key": "st_lucie",
             "source_headline": "Three arrested in St. Lucie County convenience store drug bust after detectives find crack cocaine - WPBF",
             "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-            "editorial_story_id": "story_006955",
+            "editorial_story_id": "story_006968",
             "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
             "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
             "basis": "authorized_canonical_identity_skip",
@@ -6065,7 +6181,7 @@
             "category_key": "st_lucie",
             "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
             "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-            "editorial_story_id": "story_006955",
+            "editorial_story_id": "story_006968",
             "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
             "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
             "basis": "exact_source_and_persistent_story_skip",
@@ -6301,14 +6417,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.278
+        "elapsed_seconds": 12.837
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -6329,7 +6445,7 @@
         "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -6348,16 +6464,6 @@
             "editorial_story_id": "story_006860",
             "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
             "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
-            "editorial_story_id": "story_006685",
-            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
-            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -6398,25 +6504,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
-            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
-            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.397
+        "elapsed_seconds": 11.6
       }
     ]
   }
