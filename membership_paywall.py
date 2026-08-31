@@ -127,9 +127,11 @@ def paywall_section_html(slug: str) -> str:
     escaped_slug = html.escape(slug, quote=True)
     return f'''<section class="tct-paywall" data-tct-paywall data-slug="{escaped_slug}" aria-label="Treasure Coast Today membership">
   <div class="tct-paywall-topline">Already a subscriber? <button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
-  <div class="tct-paywall-brand">Treasure Coast Today Membership</div>
-  <h2 class="tct-paywall-offer-headline">Continue reading Treasure Coast Today for just $1.</h2>
-  <p class="tct-paywall-copy">Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties.</p>
+  <div class="tct-paywall-meter-status hidden" data-meter-status></div>
+  <div class="tct-paywall-brand" data-paywall-brand>Treasure Coast Today Membership</div>
+  <h2 class="tct-paywall-offer-headline" data-paywall-headline>Continue reading Treasure Coast Today for just $1.</h2>
+  <p class="tct-paywall-copy" data-paywall-copy>Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties.</p>
+  <p class="tct-paywall-meter-reset hidden" data-meter-reset></p>
   <div class="membership-message hidden"></div>
   <div class="tct-paywall-signin hidden" data-paywall-signin>
     <form class="membership-form" data-signin-form>
@@ -194,12 +196,20 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.6.8g"
+MEMBERSHIP_ASSET_VERSION = "1.13.7.1"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'
-    "(function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1')"
-    "document.documentElement.classList.add('tct-member-preverified')}catch(_e){}})();\n"
+    "(function(){try{"
+    "if(localStorage.getItem('tct_member_entitled_hint')==='1'){document.documentElement.classList.add('tct-member-preverified');return;}"
+    "var z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit'}).formatToParts(new Date());"
+    "var y=(z.find(function(p){return p.type==='year'})||{}).value||'';var m=(z.find(function(p){return p.type==='month'})||{}).value||'';"
+    "var period=y+'-'+m;var slug=(location.pathname.split('/').pop()||'').replace(/\\.html$/,'');"
+    "var raw=localStorage.getItem('tct_monthly_free_article_v1');var state=raw?JSON.parse(raw):null;"
+    "var stalePending=state&&state.pending&&!state.meter_token&&(Date.now()-Number(state.started_at||0)>120000);"
+    "if(stalePending){localStorage.removeItem('tct_monthly_free_article_v1');state=null;}"
+    "if(slug&&(!state||state.period!==period||state.slug===slug)){document.documentElement.classList.add('tct-meter-precheck');setTimeout(function(){document.documentElement.classList.remove('tct-meter-precheck')},5000);}"
+    "}catch(_e){}})();\n"
     '</script>'
 )
 

@@ -23,7 +23,14 @@ def test_public_membership_functions_have_explicit_server_side_verification():
     assert "[functions.sync-protected-articles]\nverify_jwt = false" in config
     assert "[functions.membership-status]\nverify_jwt = true" in config
     assert "[functions.create-portal]\nverify_jwt = true" in config
-    assert "[functions.protected-article]\nverify_jwt = true" in config
+    assert "[functions.protected-article]" in config
+    assert "verify_jwt = false" in config.split("[functions.protected-article]", 1)[1].split("[functions.", 1)[0]
+    protected = (ROOT / "supabase/functions/protected-article/index.ts").read_text()
+    assert "withSupabase({ auth: 'none' }" in protected
+    assert "optionalUserId(req, ctx)" in protected
+    assert "hasMembership(ctx, userId)" in protected
+    assert "meterSignature" in protected
+    assert "FREE_ARTICLE_USED" in protected
 
 
 def test_admin_bypass_is_server_side_and_not_a_static_passcode():

@@ -6,6 +6,9 @@ const supabase = configured ? createClient(config.supabaseUrl, config.supabasePu
 let membershipStatusPromise = null
 
 const MEMBER_HINT_KEY = 'tct_member_entitled_hint'
+const METER_STATE_KEY = 'tct_monthly_free_article_v1'
+const METER_PENDING_TTL_MS = 120000
+
 function setMemberHint(entitled){
   try {
     if (entitled) localStorage.setItem(MEMBER_HINT_KEY, '1')
@@ -16,6 +19,69 @@ function setMemberHint(entitled){
 function endMemberPrepaint(){
   document.documentElement.classList.remove('tct-member-preverified')
 }
+function endMeterPrepaint(){
+  document.documentElement.classList.remove('tct-meter-precheck')
+}
+function currentMeterPeriod(){
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric',
+      month: '2-digit',
+    }).formatToParts(new Date())
+    const year = parts.find(part => part.type === 'year')?.value || ''
+    const month = parts.find(part => part.type === 'month')?.value || ''
+    return /^\d{4}$/.test(year) && /^\d{2}$/.test(month) ? `${year}-${month}` : ''
+  } catch { return '' }
+}
+function readMeterState(){
+  try {
+    const raw = localStorage.getItem(METER_STATE_KEY)
+    if (!raw) return null
+    const state = JSON.parse(raw)
+    if (!state || typeof state !== 'object') return null
+    if (!/^\d{4}-\d{2}$/.test(String(state.period || ''))) return null
+    if (!/^[a-z0-9][a-z0-9-]{2,180}$/.test(String(state.slug || ''))) return null
+    if (state.pending && !state.meter_token && Date.now() - Number(state.started_at || 0) > METER_PENDING_TTL_MS) {
+      localStorage.removeItem(METER_STATE_KEY)
+      return null
+    }
+    return state
+  } catch { return null }
+}
+function writeMeterState(state){
+  try { localStorage.setItem(METER_STATE_KEY, JSON.stringify(state)) } catch {}
+}
+function clearPendingMeterFor(slug){
+  const state = readMeterState()
+  if (!state || state.slug !== slug || !state.pending || state.meter_token) return
+  try { localStorage.removeItem(METER_STATE_KEY) } catch {}
+}
+function reserveMeterArticle(slug){
+  const period = currentMeterPeriod()
+  if (!period) return { allowed:false, state:null, reason:'period_unavailable' }
+  const state = readMeterState()
+  if (state?.period === period) {
+    if (state.slug !== slug) return { allowed:false, state, reason:'already_used' }
+    return { allowed:true, state, period, meterToken:String(state.meter_token || '') }
+  }
+  const pending = { period, slug, meter_token:'', pending:true, started_at:Date.now() }
+  writeMeterState(pending)
+  return { allowed:true, state:pending, period, meterToken:'' }
+}
+function monthNameForPeriod(period){
+  const match = String(period || '').match(/^(\d{4})-(\d{2})$/)
+  if (!match) return 'this month'
+  const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, 1))
+  return date.toLocaleString('en-US', { month:'long', timeZone:'UTC' })
+}
+function resetLabelForPeriod(period){
+  const match = String(period || '').match(/^(\d{4})-(\d{2})$/)
+  if (!match) return ''
+  const next = new Date(Date.UTC(Number(match[1]), Number(match[2]), 1))
+  return `Your free article resets ${next.toLocaleString('en-US', { month:'long', timeZone:'UTC' })} 1.`
+}
+
 if (config.paymentMode === 'test' || config.sandbox) {
   document.querySelector('[data-membership-sandbox]')?.classList.remove('hidden')
 } else if (!config.uiEnabled) {
@@ -178,69 +244,158 @@ async function openPortal(button){
   window.location.assign(data.url)
 }
 
-async function unlockArticle(statusOverride=null){
-  const paywall = qs('[data-tct-paywall]')
-  if (!paywall || !supabase) return
-  const slug = paywall.dataset.slug
-  const status = statusOverride || await membershipStatus()
-  const signin = qs('[data-paywall-signin]', paywall)
-  const plans = qs('[data-paywall-plans]', paywall)
-  const message = qs('.membership-message', paywall)
-  if (!status?.authenticated) {
-    signin?.classList.add('hidden')
-    plans?.classList.remove('hidden')
-    return
+function setMeterPaywallState(paywall, period, afterRead=false){
+  if (!paywall) return
+  const month = monthNameForPeriod(period)
+  const status = qs('[data-meter-status]', paywall)
+  const brand = qs('[data-paywall-brand]', paywall)
+  const headline = qs('[data-paywall-headline]', paywall)
+  const copy = qs('[data-paywall-copy]', paywall)
+  const reset = qs('[data-meter-reset]', paywall)
+  status?.classList.remove('hidden')
+  if (status) status.textContent = afterRead ? `Your free article for ${month}` : '1 free article each month'
+  if (brand) brand.textContent = 'Treasure Coast Today Membership'
+  if (headline) headline.textContent = afterRead
+    ? "You've read your free article this month."
+    : 'Continue reading Treasure Coast Today for just $1.'
+  if (copy) copy.textContent = afterRead
+    ? 'Thanks for reading. Get unlimited, ad-free access to every Treasure Coast Today story and support independent local journalism.'
+    : "You've read your free article this month. Get unlimited, ad-free access to every Treasure Coast Today story and support independent local journalism."
+  if (reset) {
+    reset.textContent = resetLabelForPeriod(period)
+    reset.classList.toggle('hidden', !reset.textContent)
   }
-  if (!status.entitled) {
-    endMemberPrepaint()
-    setMessage(message, status.error ? `Membership check failed: ${status.error}` : 'This signed-in account does not have an active membership.', Boolean(status.error))
-    plans?.classList.remove('hidden')
-    return
-  }
-  setMessage(message, 'Unlocking article…')
-  const { data, error } = await supabase.functions.invoke('protected-article', { body: { slug } })
-  if (error || !data?.protected_body) {
-    // If protected content cannot be retrieved, restore the visible shell so the
-    // member sees the error instead of being stranded on an apparently truncated article.
-    endMemberPrepaint()
-    setMessage(message, `We couldn't load the member portion of this article. ${data?.error || error?.message || ''}`.trim(), true)
-    return
-  }
-  const protectedBody = String(data.protected_body || '')
+  paywall.classList.toggle('tct-paywall-metered-after-read', afterRead)
+  qs('.tct-paywall-fade', paywall.parentElement || document)?.remove()
+}
+
+function renderProtectedBody(protectedBody, paywall, access){
   const fullBodyMarker = '<!--tct-full-article-v2-->'
   const preview = qs('.tct-member-preview')
-  const memberOnly = paywall.closest('.tct-member-only')
+  const memberOnly = paywall?.closest('.tct-member-only')
 
   if (protectedBody.startsWith(fullBodyMarker) && preview) {
     preview.innerHTML = protectedBody.slice(fullBodyMarker.length).trim()
     preview.classList.remove('tct-member-preview')
     qs('.tct-preview-copy', preview)?.classList.remove('tct-preview-copy')
-    memberOnly?.remove()
-    endMemberPrepaint()
-    return
+    if (access === 'member') memberOnly?.remove()
+    return true
   }
 
   // Backward-compatible unlock path for rows written before full-body payload v2.
   const target = qs('#tct-protected-content')
-  if (target) {
-    const holder = document.createElement('div')
-    holder.innerHTML = protectedBody
-    const continuation = qs('[data-tct-first-paragraph-continuation]', holder)
-    const previewParagraph = qs('[data-tct-preview-paragraph]')
-    if (continuation && previewParagraph) {
-      const solid = qs('.tct-preview-solid', previewParagraph)?.textContent || ''
-      const faded = qs('.tct-preview-fade-text', previewParagraph)?.textContent || ''
-      const rest = continuation.textContent || ''
-      previewParagraph.textContent = `${solid} ${faded} ${rest}`.replace(/\s+/g, ' ').trim()
-      previewParagraph.removeAttribute('data-tct-preview-paragraph')
-      continuation.remove()
-    }
-    target.innerHTML = holder.innerHTML
-    target.classList.add('is-unlocked')
+  if (!target) return false
+  const holder = document.createElement('div')
+  holder.innerHTML = protectedBody
+  const continuation = qs('[data-tct-first-paragraph-continuation]', holder)
+  const previewParagraph = qs('[data-tct-preview-paragraph]')
+  if (continuation && previewParagraph) {
+    const solid = qs('.tct-preview-solid', previewParagraph)?.textContent || ''
+    const faded = qs('.tct-preview-fade-text', previewParagraph)?.textContent || ''
+    const rest = continuation.textContent || ''
+    previewParagraph.textContent = `${solid} ${faded} ${rest}`.replace(/\s+/g, ' ').trim()
+    previewParagraph.removeAttribute('data-tct-preview-paragraph')
+    continuation.remove()
   }
-  qs('.tct-paywall-fade')?.remove()
-  paywall.remove()
+  target.innerHTML = holder.innerHTML
+  target.classList.add('is-unlocked')
+  if (access === 'monthly_free' && memberOnly && preview) {
+    preview.insertAdjacentElement('afterend', target)
+  } else if (access === 'member') {
+    qs('.tct-paywall-fade')?.remove()
+    paywall?.remove()
+  }
+  return true
+}
+
+async function unlockArticle(statusOverride=null){
+  const paywall = qs('[data-tct-paywall]')
+  if (!paywall || !supabase) return
+  const slug = paywall.dataset.slug
+  const status = statusOverride || await membershipStatus()
+  const plans = qs('[data-paywall-plans]', paywall)
+  const message = qs('.membership-message', paywall)
+
+  if (status?.authenticated && status?.entitled) {
+    setMessage(message, 'Unlocking article…')
+    const { data, error } = await supabase.functions.invoke('protected-article', { body: { slug } })
+    if (error || !data?.protected_body) {
+      endMemberPrepaint()
+      endMeterPrepaint()
+      setMessage(message, `We couldn't load the member portion of this article. ${data?.error || error?.message || ''}`.trim(), true)
+      return
+    }
+    renderProtectedBody(String(data.protected_body || ''), paywall, 'member')
+    endMemberPrepaint()
+    endMeterPrepaint()
+    return
+  }
+
+  // Non-members get one complete article per calendar month. The browser reserves
+  // the slug synchronously before the network request so two ordinary tabs cannot
+  // casually claim two different articles at once. The server-signed token remains
+  // the authority for subsequent requests.
+  const reservation = reserveMeterArticle(slug)
+  if (!reservation.allowed) {
+    endMemberPrepaint()
+    endMeterPrepaint()
+    setMessage(message, '')
+    plans?.classList.remove('hidden')
+    setMeterPaywallState(paywall, reservation.state?.period || currentMeterPeriod(), false)
+    return
+  }
+
+  const { data, error } = await supabase.functions.invoke('protected-article', {
+    body: { slug, meter_token: reservation.meterToken || '' },
+  })
+  if (!error && data?.protected_body && data?.access === 'member') {
+    clearPendingMeterFor(slug)
+    setMemberHint(true)
+    document.body.classList.add('tct-member-entitled')
+    renderProtectedBody(String(data.protected_body || ''), paywall, 'member')
+    endMemberPrepaint()
+    endMeterPrepaint()
+    return
+  }
+  if (!error && data?.protected_body && data?.access === 'monthly_free') {
+    writeMeterState({
+      period: String(data.period || reservation.period || currentMeterPeriod()),
+      slug,
+      meter_token: String(data.meter_token || ''),
+      pending: false,
+      started_at: Date.now(),
+    })
+    const rendered = renderProtectedBody(String(data.protected_body || ''), paywall, 'monthly_free')
+    endMemberPrepaint()
+    endMeterPrepaint()
+    setMessage(message, '')
+    if (rendered) setMeterPaywallState(paywall, String(data.period || reservation.period || ''), true)
+    return
+  }
+
+  let errorPayload = null
+  try {
+    if (error?.context?.clone) errorPayload = await error.context.clone().json()
+  } catch {}
+  const serverCode = String(data?.code || errorPayload?.code || '')
+  if (serverCode === 'FREE_ARTICLE_USED') {
+    endMemberPrepaint()
+    endMeterPrepaint()
+    plans?.classList.remove('hidden')
+    setMessage(message, '')
+    setMeterPaywallState(paywall, String(data?.period || errorPayload?.period || reservation.state?.period || currentMeterPeriod()), false)
+    return
+  }
+
+  clearPendingMeterFor(slug)
   endMemberPrepaint()
+  endMeterPrepaint()
+  plans?.classList.remove('hidden')
+  if (status?.error) {
+    setMessage(message, `Membership check failed: ${status.error}`, true)
+  } else {
+    setMessage(message, `We couldn't load your free article. ${data?.error || error?.message || ''}`.trim(), true)
+  }
 }
 
 function revealSignIn(button){
@@ -257,6 +412,7 @@ function revealRequestedSignIn(){
 }
 
 if (!configured) {
+  endMeterPrepaint()
   qsa('[data-membership-message]').forEach(el => setMessage(el, 'Membership configuration is unavailable. Please try again shortly.', true))
 } else {
   qsa('[data-plan]').forEach(button => button.addEventListener('click', () => startCheckout(button)))

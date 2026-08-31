@@ -11,7 +11,9 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.protected-article]
-verify_jwt = true
+# Public at the gateway so anonymous readers can claim one server-signed metered article.
+# The function itself verifies paid membership or the signed monthly meter token.
+verify_jwt = false
 
 # Stripe does not send a Supabase user JWT. This function is public at the
 # gateway and authenticates every request by verifying Stripe's signature.

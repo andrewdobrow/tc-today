@@ -805,3 +805,54 @@ body.membership-page.membership-landing-page {
   .membership-hero-plans { grid-template-columns: 1fr; }
   .membership-hero-plan { padding: 17px 16px 15px; }
 }
+
+
+/* ================================================================
+   TCT v1.13.7.1 — one free full article per calendar month
+   The first metered article loads without a paywall interruption. After the
+   complete story, the same restrained membership card becomes the conversion ask.
+   ================================================================ */
+html.tct-meter-precheck .tct-member-only {
+  display: none !important;
+}
+html.tct-meter-precheck .tct-preview-copy {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+.tct-paywall-meter-status {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 0 12px;
+  padding: 5px 8px;
+  border: 1px solid #b8c8c0;
+  border-radius: 999px;
+  background: #f4f8f6;
+  color: var(--pw-green,#174f3d);
+  font-size: .68rem;
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  box-sizing: border-box;
+}
+.tct-paywall-meter-reset {
+  margin: 10px 0 0;
+  color: var(--pw-muted,#626963);
+  font-size: .82rem;
+  line-height: 1.45;
+  font-weight: 700;
+}
+.tct-paywall.tct-paywall-metered-after-read {
+  margin-top: 30px;
+  border-top-color: #174f3d;
+  box-shadow: 0 8px 24px rgba(20,35,28,.055);
+}
+.tct-paywall.tct-paywall-metered-after-read .tct-paywall-topline {
+  margin-bottom: 18px;
+}
+@media(max-width:680px){
+  .tct-paywall-meter-status { font-size:.64rem; }
+  .tct-paywall.tct-paywall-metered-after-read { margin-top:24px; }
+}

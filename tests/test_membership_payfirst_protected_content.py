@@ -223,13 +223,21 @@ def test_checkout_completion_creates_or_links_identity_then_sends_passwordless_a
     assert "resolveMembershipUser" in webhook
 
 
-def test_protected_content_is_entitlement_checked_server_side():
+def test_protected_content_is_entitlement_or_monthly_meter_checked_server_side():
     protected = (ROOT / "supabase/functions/protected-article/index.ts").read_text()
-    assert "withSupabase({ auth: 'user' }" in protected
+    config = (ROOT / "supabase/config.toml").read_text()
+    assert "withSupabase({ auth: 'none' }" in protected
     assert "is_admin" in protected
     assert "ACTIVE_STATUSES" in protected
-    assert "MEMBERSHIP_REQUIRED" in protected
+    assert "optionalUserId(req, ctx)" in protected
+    assert "meterSignature" in protected
+    assert "signMeterToken" in protected
+    assert "readMeterToken" in protected
+    assert "FREE_ARTICLE_USED" in protected
+    assert "one_free_article_per_month" in protected
     assert ".from('protected_articles')" in protected
+    section = config.split("[functions.protected-article]", 1)[1].split("[functions.", 1)[0]
+    assert "verify_jwt = false" in section
 
 
 def test_protected_sync_uses_dedicated_secret_and_never_browser_config():
@@ -458,8 +466,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.6.8g"' in page
-    assert 'src="/membership.js?v=1.13.6.8g"' in page
+    assert 'href="/membership.css?v=1.13.7.1"' in page
+    assert 'src="/membership.js?v=1.13.7.1"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -472,10 +480,11 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
     # cannot substitute for the entitlement check that gates protected content.
     entitled_at = js.index('const entitled = Boolean(data?.entitled)')
     hint_at = js.index('setMemberHint(entitled)', entitled_at)
-    status_gate_at = js.index('if (!status.entitled)')
     protected_fetch_at = js.index("supabase.functions.invoke('protected-article'")
+    meter_reservation_at = js.index('const reservation = reserveMeterArticle(slug)')
     assert entitled_at < hint_at
-    assert status_gate_at < protected_fetch_at
+    assert protected_fetch_at > 0
+    assert meter_reservation_at > protected_fetch_at
     assert "localStorage.getItem(MEMBER_HINT_KEY)" not in js
     assert "localStorage.setItem(MEMBER_HINT_KEY, '1')" in js
     assert "localStorage.removeItem(MEMBER_HINT_KEY)" in js
@@ -488,8 +497,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.6.8g') == 1
-    assert first.count('/membership.js?v=1.13.6.8g') == 1
+    assert first.count('/membership.css?v=1.13.7.1') == 1
+    assert first.count('/membership.js?v=1.13.7.1') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -517,3 +526,51 @@ def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
     assert split is not None
     assert 'Original report:' in split.protected_html
     assert 'Additional original reporting' in split.protected_html
+
+
+
+def test_one_free_article_monthly_meter_contract_is_server_signed_and_repeat_safe():
+    protected = (ROOT / "supabase/functions/protected-article/index.ts").read_text()
+    browser = (ROOT / "membership.js").read_text()
+    css = (ROOT / "membership.css").read_text()
+    helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
+
+    assert "METER_POLICY = 'one_free_article_per_month'" in protected
+    assert "METER_TIME_ZONE = 'America/New_York'" in protected
+    assert "Deno.env.get('TCT_METER_TOKEN_SECRET')" in protected
+    assert "Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')" in protected
+    assert "existingMeter?.period === period && existingMeter.slug !== slug" in protected
+    assert "existingMeter.period !== period || existingMeter.slug !== slug" in protected
+    assert "access: 'monthly_free'" in protected
+    assert "meter_token: meterToken" in protected
+
+    assert "const METER_STATE_KEY = 'tct_monthly_free_article_v1'" in browser
+    assert "reserveMeterArticle(slug)" in browser
+    assert "meter_token: reservation.meterToken || ''" in browser
+    assert "data?.access === 'monthly_free'" in browser
+    assert "You've read your free article this month." in browser
+    assert "Continue reading Treasure Coast Today for just $1." in browser
+    assert "if (headline) headline.textContent = afterRead" in browser
+    assert "clearPendingMeterFor(slug)" in browser
+    assert "METER_PENDING_TTL_MS = 120000" in browser
+    assert "html.tct-meter-precheck .tct-member-only" in css
+    assert "data-meter-status" in helper
+    assert "data-paywall-headline" in helper
+    assert "data-meter-reset" in helper
+
+
+def test_first_free_article_keeps_conversion_card_after_full_story_but_member_removes_it():
+    browser = (ROOT / "membership.js").read_text()
+    assert "if (access === 'member') memberOnly?.remove()" in browser
+    assert "setMeterPaywallState(paywall" in browser
+    assert "tct-paywall-metered-after-read" in browser
+    assert "Thanks for reading. Get unlimited, ad-free access" in browser
+
+
+def test_update_workflow_auto_repairs_legacy_protected_article_endpoint_for_meter_launch():
+    workflow = (ROOT / ".github/workflows/update.yml").read_text()
+    assert "Probe monthly free-article meter capability" in workflow
+    assert 'json={"action": "meter-capability"}' in workflow
+    assert "one_free_article_per_month" in workflow
+    assert "Deploy monthly free-article protected endpoint" in workflow
+    assert "supabase functions deploy protected-article --use-api" in workflow
