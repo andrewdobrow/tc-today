@@ -32151,7 +32151,10 @@ def _published_skip_material_update_candidate(item, canonical):
     """Bound semantic materiality checks to genuinely newer, source-backed rows."""
     if not isinstance(item, dict) or not isinstance(canonical, dict):
         return False, "missing_item_or_canonical"
-    if not _source_candidate_publishable(item):
+    if not (
+        item.get("_source_candidate_publishable_verified")
+        or _source_candidate_publishable(item)
+    ):
         return False, "insufficient_source_depth"
     if _material_update_source_already_absorbed(item, canonical):
         return False, "material_update_source_already_absorbed"
@@ -32459,6 +32462,29 @@ def _promote_published_skip_material_updates(
 
 
 
+def _has_target_bound_pre_generation_material_update_authority(item, canonical):
+    """Return True when this exact canonical already passed pre-generation materiality.
+
+    Generated/category placements do not necessarily carry the RSS publication timestamp
+    that the source candidate had.  Once the source has already passed semantic
+    materiality and received target-bound canonical write authorization, later duplicate
+    guards must reuse that decision instead of treating the generated placement as an
+    unevaluated no-change duplicate.
+    """
+    if not isinstance(item, dict) or not isinstance(canonical, dict):
+        return False
+    canonical_slug = str(canonical.get("slug") or "").strip()
+    return bool(
+        item.get("_semantic_material_update")
+        and item.get("_pre_generation_material_update_promotion")
+        and canonical_slug
+        and str(
+            item.get("_pre_generation_material_update_canonical_slug") or ""
+        ).strip() == canonical_slug
+        and _canonical_write_authorized(item, canonical)
+    )
+
+
 def _late_published_skip_material_update_promotion(
     item, canonical, basis, cache, report
 ):
@@ -32495,6 +32521,30 @@ def _late_published_skip_material_update_promotion(
         "model_call": False,
         "action": "preserve_existing_canonical",
     }
+    # If the exact source already passed the pre-generation material-update gate,
+    # do not demand a second publication timestamp or a second semantic decision
+    # from the generated placement.  The source-level decision and target-bound
+    # write authorization are the authority.  This is the critical handoff between
+    # source promotion and generated-placement publication.
+    if _has_target_bound_pre_generation_material_update_authority(item, canonical):
+        decision = dict(item.get("_semantic_material_update_decision") or {})
+        row.update({
+            "eligibility_reason": "pre_generation_material_update_authority_reused",
+            "evaluated": False,
+            "promoted": True,
+            "cache_hit": True,
+            "model_call": False,
+            "semantic_status": str(decision.get("status") or "validated"),
+            "semantic_action": str(decision.get("action") or SEMANTIC_ACTION_UPDATE),
+            "confidence": float(decision.get("confidence") or 0.0),
+            "shared_anchors": list(decision.get("shared_anchors") or [])[:20],
+            "novel_facts": list(decision.get("novel_facts") or [])[:20],
+            "reason": str(decision.get("reason") or "pre-generation material update already validated"),
+            "validation_errors": list(decision.get("validation_errors") or []),
+            "action": "update_existing_canonical",
+        })
+        return copy.deepcopy(item), row
+
     if not should_check:
         return None, row
 
@@ -32662,15 +32712,8 @@ def _filter_published_skip_candidates(headlines, archive, category_key=""):
             kept.append(item)
             continue
 
-        canonical_slug = str(canonical.get("slug") or "").strip()
-        promoted_material_update = bool(
-            item.get("_semantic_material_update")
-            and item.get("_pre_generation_material_update_promotion")
-            and canonical_slug
-            and str(
-                item.get("_pre_generation_material_update_canonical_slug") or ""
-            ).strip() == canonical_slug
-            and _canonical_write_authorized(item, canonical)
+        promoted_material_update = _has_target_bound_pre_generation_material_update_authority(
+            item, canonical
         )
         if promoted_material_update:
             kept.append(item)
@@ -32785,7 +32828,8 @@ def _stamp_current_run_story_ids(data, headlines):
             "_canonical_context_body", "_canonical_context_first_published",
             "_canonical_context_basis", "_story_aware_update_context",
             "_publication_route_repaired", "canonical_slug",
-            "canonical_publication_id",
+            "canonical_publication_id", "_source_candidate_publishable_verified",
+            "source_published",
         ):
             item.pop(key, None)
         source = None
@@ -32833,6 +32877,16 @@ def _stamp_current_run_story_ids(data, headlines):
         item["source_url"] = normalized or str(source_url or "")
         if isinstance(source, dict) and source.get("title"):
             item["source_headline"] = source.get("title")
+        if isinstance(source, dict) and not item.get("source_published"):
+            for _published_key in (
+                "source_published", "published_raw", "published",
+                "first_published", "date",
+            ):
+                if source.get(_published_key):
+                    item["source_published"] = source.get(_published_key)
+                    break
+        if isinstance(source, dict) and _source_candidate_publishable(source):
+            item["_source_candidate_publishable_verified"] = True
         if identity.get("pre_generation_material_update_promotion") or (
             isinstance(source, dict) and source.get("_pre_generation_material_update_promotion")
         ):

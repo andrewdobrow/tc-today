@@ -1068,3 +1068,226 @@ def test_main_uses_main_scoped_semantic_report_for_prearchive_placement_suppress
         "semantic_report=_pre_generation_placement_semantic_report"
     ) == 2
     assert "_current_regression_report = write_archives(all_categories, top_cat)" in source
+
+
+
+def test_pre_generation_material_update_authority_is_reused_without_timestamp(monkeypatch):
+    g = _load_generate()
+    canonical = _canonical()
+    generated = _incoming()
+    generated.update({
+        "headline": "Body found in Hutchinson Island mangroves believed to be missing man",
+        "body": "Authorities recovered a body during the search and are awaiting positive identification.",
+        "_editorial_route": "update_existing",
+        "editorial_route": "update_existing",
+        "_semantic_material_update": True,
+        "_pre_generation_material_update_promotion": True,
+        "_pre_generation_material_update_canonical_slug": canonical["slug"],
+        "_semantic_material_update_decision": {
+            "status": "validated",
+            "action": g.SEMANTIC_ACTION_UPDATE,
+            "selected_candidate_slug": canonical["slug"],
+            "same_real_world_event": True,
+            "material_new_update": True,
+            "confidence": 0.99,
+            "shared_anchors": ["missing person search"],
+            "novel_facts": ["body recovered"],
+            "reason": "Major development.",
+            "validation_errors": [],
+        },
+    })
+    for key in ("source_published", "published_raw", "published", "first_published", "date"):
+        generated.pop(key, None)
+    g._stamp_canonical_write_authorization(
+        generated,
+        canonical,
+        {
+            "outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "identity_outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "evidence_tier": "known_canonical_plus_semantic_materiality",
+            "write_authorized": True,
+            "proof_type": "published_skip_canonical_plus_semantic_materiality",
+            "reason": "Major development.",
+            "reason_codes": ["semantic_material_update_validated"],
+        },
+        basis="pre_generation_material_update_promotion",
+    )
+    monkeypatch.setattr(
+        g,
+        "_run_known_canonical_materiality_gate",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("must not re-adjudicate")),
+    )
+
+    updated, row = g._late_published_skip_material_update_promotion(
+        generated, canonical, "authorized_canonical_identity_skip", {}, {"summary": {}}
+    )
+
+    assert updated is not None
+    assert updated["headline"].startswith("Body found")
+    assert row["promoted"] is True
+    assert row["eligibility_reason"] == "pre_generation_material_update_authority_reused"
+    assert row["model_call"] is False
+
+
+def test_stamp_current_run_story_ids_propagates_source_materiality_receipt():
+    g = _load_generate()
+    canonical = _canonical()
+    source = _incoming()
+    source.update({
+        "published": "Tue, 01 Sep 2026 19:00:00 GMT",
+        "source_quality": "full",
+        "article_text": " ".join(["Authorities recovered a body during the missing-person search."] * 60),
+    })
+    normalized = g._normalized_external_source_url(source["link"])
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES = {
+        normalized: {
+            "story_id": canonical["editorial_story_id"],
+            "event_key": "missing-person-example",
+            "route": "skip",
+            "relationship": "same_event",
+            "relationship_confidence": 1.0,
+            "new_facts": [],
+        }
+    }
+    data = {
+        "hero": {
+            "headline": "Body found during missing-person search",
+            "source_index": 1,
+            "body": "Authorities recovered a body.",
+        },
+        "cards": [],
+    }
+
+    stamped = g._stamp_current_run_story_ids(data, [source])
+    assert stamped == 1
+    assert data["hero"]["source_published"] == source["published"]
+    assert data["hero"]["_source_candidate_publishable_verified"] is True
+    should_check, reason = g._published_skip_material_update_candidate(data["hero"], canonical)
+    assert should_check is True
+    assert reason == "newer_source_requires_materiality_decision"
+
+
+def test_generated_skip_placement_with_verified_source_receipt_gets_late_materiality(monkeypatch):
+    g = _load_generate()
+    canonical = _canonical()
+    canonical["lastmod"] = "2026-08-29"
+    generated = _incoming()
+    generated.update({
+        "headline": "Body found in Hutchinson Island mangroves believed to be missing man",
+        "body": "Authorities recovered a body during the search and are awaiting positive identification.",
+        "source_published": "2026-09-01T19:00:00+00:00",
+        "_source_candidate_publishable_verified": True,
+        "_editorial_route": "skip",
+        "editorial_route": "skip",
+        "_editorial_relationship": "same_event",
+        "_editorial_relationship_confidence": 1.0,
+    })
+    data = {"hero": generated, "cards": []}
+    report = {"summary": {}}
+
+    monkeypatch.setattr(
+        g,
+        "_run_known_canonical_materiality_gate",
+        lambda *args, **kwargs: ({
+            "status": "validated",
+            "action": g.SEMANTIC_ACTION_UPDATE,
+            "selected_candidate_slug": canonical["slug"],
+            "same_real_world_event": True,
+            "material_new_update": True,
+            "confidence": 0.99,
+            "shared_anchors": ["missing person search"],
+            "novel_facts": ["body recovered"],
+            "reason": "Major development.",
+            "validation_errors": [],
+        }, [], True, False),
+    )
+    monkeypatch.setattr(
+        g,
+        "_semantic_material_update_composition",
+        lambda canonical_arg, working_arg, decision_arg, report_arg, phase="": (
+            dict(working_arg),
+            {"status": "validated", "validation_errors": []},
+        ),
+    )
+
+    removed = g._suppress_published_skip_placements(
+        data,
+        [canonical],
+        "martin",
+        semantic_cache={},
+        semantic_report=report,
+    )
+
+    assert removed == []
+    assert data["hero"]["_semantic_material_update"] is True
+    assert data["hero"]["_late_published_skip_material_update_promotion"] is True
+    assert report["summary"]["late_published_skip_materiality_promotions"] == 1
+
+
+def test_generated_promoted_custom_canonical_placement_is_not_deleted(monkeypatch):
+    g = _load_generate()
+    canonical = _canonical()
+    canonical.update({
+        "is_custom": True,
+        "authoritative_custom": True,
+    })
+    generated = _incoming()
+    generated.update({
+        "headline": "Body found in Hutchinson Island mangroves believed to be missing man",
+        "body": "Authorities recovered a body during the search and are awaiting positive identification.",
+        "_editorial_route": "update_existing",
+        "editorial_route": "update_existing",
+        "_semantic_material_update": True,
+        "_pre_generation_material_update_promotion": True,
+        "_pre_generation_material_update_canonical_slug": canonical["slug"],
+        "_semantic_material_update_decision": {
+            "status": "validated",
+            "action": g.SEMANTIC_ACTION_UPDATE,
+            "selected_candidate_slug": canonical["slug"],
+            "same_real_world_event": True,
+            "material_new_update": True,
+            "confidence": 0.99,
+            "novel_facts": ["body recovered"],
+        },
+    })
+    g._stamp_canonical_write_authorization(
+        generated,
+        canonical,
+        {
+            "outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "identity_outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "evidence_tier": "known_canonical_plus_semantic_materiality",
+            "write_authorized": True,
+            "proof_type": "published_skip_canonical_plus_semantic_materiality",
+            "reason": "Major development.",
+            "reason_codes": ["semantic_material_update_validated"],
+        },
+        basis="pre_generation_material_update_promotion",
+    )
+    monkeypatch.setattr(
+        g,
+        "_published_skip_canonical",
+        lambda item, archive: (canonical, "durable_custom_incident_identity:missing-person|michael-debevec"),
+    )
+    monkeypatch.setattr(
+        g,
+        "_run_known_canonical_materiality_gate",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("must reuse pre-generation authority")),
+    )
+    data = {"hero": generated, "cards": []}
+    report = {"summary": {}}
+
+    removed = g._suppress_published_skip_placements(
+        data,
+        [canonical],
+        "martin",
+        semantic_cache={},
+        semantic_report=report,
+    )
+
+    assert removed == []
+    assert data["hero"]["headline"].startswith("Body found")
+    assert data["hero"]["_pre_generation_material_update_promotion"] is True
+    decisions = report.get("late_published_skip_materiality_decisions") or []
+    assert decisions and decisions[0]["promoted"] is True
+    assert decisions[0]["eligibility_reason"] == "pre_generation_material_update_authority_reused"
