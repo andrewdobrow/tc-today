@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-01T20:48:28Z",
+  "generated_at": "2026-09-01T22:15:18Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 2,
-    "placements_after": 2,
+    "placements_before": 4,
+    "placements_after": 4,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,21 +49,22 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 170,
+    "candidates_processed": 173,
     "routes": {
-      "generate_new": 5,
-      "skip": 165
+      "generate_new": 41,
+      "skip": 131,
+      "update_existing": 1
     },
     "eligibility": {
       "low_value": 125,
-      "publishable": 44,
+      "publishable": 47,
       "search_page": 1
     },
     "source_classes": {
       "aggregator": 125,
-      "local_news": 29,
+      "local_news": 30,
       "regional_news": 15,
-      "unknown": 1
+      "unknown": 3
     },
     "rejected_count": 1,
     "rejected_examples": [
@@ -80,10 +81,23 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 3,
-      "same_event": 167
+      "new_story": 18,
+      "same_event": 155
     },
     "examples": [
+      {
+        "story_id": "story_007410",
+        "title": "Tiger Woods set for change-of-plea hearing in Martin County DUI case - KFDM",
+        "event_key": "unknown-event-af9375d176",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
       {
         "story_id": "story_007433",
         "title": "DEA tactic that let fentanyl flood the streets is being investigated by House Republicans",
@@ -156,16 +170,27 @@
       },
       {
         "story_id": "story_007380",
-        "title": "August 2026 in photos: School starts, primary election and more - tcpalm.com",
-        "event_key": "unknown-event-51d2746970",
+        "title": "August 2026 in photos: School starts, primary election and more - Treasure Coast News",
+        "event_key": "unknown-event-baffe587cb",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_007448",
+        "title": "Could Property Tax Plan Mean Longer wait Times, Less Access to Hospital Care? - bocaratontribune.com",
+        "event_key": "unknown-event-a028e106db",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -184,15 +209,14 @@
       },
       {
         "story_id": "story_007383",
-        "title": "TCPalm Super 10: Vero Beach remains No. 1, John Carroll jumps to No. 2 - tcpalm.com",
-        "event_key": "unknown-event-1eb5d96ab5",
+        "title": "TCPalm Super 10: Vero Beach remains No. 1, John Carroll jumps to No. 2 - Treasure Coast News",
+        "event_key": "unknown-event-032ba83981",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -239,6 +263,20 @@
         ]
       },
       {
+        "story_id": "story_007267",
+        "title": "Florida city plans $3 million repairs to hurricane-ravaged boardwalk - Treasure Coast News",
+        "event_key": "unknown-event-8755b8a9a6",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_007386",
         "title": "New David Jolly ad attacks Byron Donalds for data center support - The Miami Times",
         "event_key": "unknown-event-ae5547971d",
@@ -256,20 +294,6 @@
         "story_id": "story_007306",
         "title": "Whistleblower raises concerns about untested USPS election technology",
         "event_key": "unknown-event-2f7291fd30",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007266",
-        "title": "'Community Conversations' will help Florida voters learn the issues - tcpalm.com",
-        "event_key": "unknown-event-896a58a68b",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -326,34 +350,6 @@
         "story_id": "story_007310",
         "title": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie",
         "event_key": "unknown-event-597a56ede1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007267",
-        "title": "Florida city plans $3 million repairs to hurricane-ravaged boardwalk - tcpalm.com",
-        "event_key": "unknown-event-ff4f492624",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007268",
-        "title": "Florida city canning city manager, mayor wrong. Taxes fair? | Opinion - tcpalm.com",
-        "event_key": "unknown-event-162cce8d59",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -367,6 +363,20 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_007410",
+        "title": "Tiger Woods set for change-of-plea hearing in Martin County DUI case - KFDM",
+        "event_key": "unknown-event-af9375d176",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_007433",
         "title": "DEA tactic that let fentanyl flood the streets is being investigated by House Republicans",
         "event_key": "unknown-event-df06363fed",
@@ -443,17 +453,29 @@
       },
       {
         "story_id": "story_007380",
-        "title": "August 2026 in photos: School starts, primary election and more - tcpalm.com",
-        "event_key": "unknown-event-51d2746970",
+        "title": "August 2026 in photos: School starts, primary election and more - Treasure Coast News",
+        "event_key": "unknown-event-baffe587cb",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_007448",
+        "title": "Could Property Tax Plan Mean Longer wait Times, Less Access to Hospital Care? - bocaratontribune.com",
+        "event_key": "unknown-event-a028e106db",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -473,16 +495,15 @@
       },
       {
         "story_id": "story_007383",
-        "title": "TCPalm Super 10: Vero Beach remains No. 1, John Carroll jumps to No. 2 - tcpalm.com",
-        "event_key": "unknown-event-1eb5d96ab5",
+        "title": "TCPalm Super 10: Vero Beach remains No. 1, John Carroll jumps to No. 2 - Treasure Coast News",
+        "event_key": "unknown-event-032ba83981",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -532,6 +553,21 @@
         ]
       },
       {
+        "story_id": "story_007267",
+        "title": "Florida city plans $3 million repairs to hurricane-ravaged boardwalk - Treasure Coast News",
+        "event_key": "unknown-event-8755b8a9a6",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_007386",
         "title": "New David Jolly ad attacks Byron Donalds for data center support - The Miami Times",
         "event_key": "unknown-event-ae5547971d",
@@ -550,21 +586,6 @@
         "story_id": "story_007306",
         "title": "Whistleblower raises concerns about untested USPS election technology",
         "event_key": "unknown-event-2f7291fd30",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007266",
-        "title": "'Community Conversations' will help Florida voters learn the issues - tcpalm.com",
-        "event_key": "unknown-event-896a58a68b",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -625,36 +646,6 @@
         "story_id": "story_007310",
         "title": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie",
         "event_key": "unknown-event-597a56ede1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007267",
-        "title": "Florida city plans $3 million repairs to hurricane-ravaged boardwalk - tcpalm.com",
-        "event_key": "unknown-event-ff4f492624",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007268",
-        "title": "Florida city canning city manager, mayor wrong. Taxes fair? | Opinion - tcpalm.com",
-        "event_key": "unknown-event-162cce8d59",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -684,9 +675,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1141,
-      "timeline_entries_examined": 3139,
-      "transitions_examined": 1889,
+      "stories_with_timelines": 1161,
+      "timeline_entries_examined": 3183,
+      "transitions_examined": 1913,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 30,
       "high_confidence_candidate_count": 7,
@@ -3805,28 +3796,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1077,
-      "treasure_coast_local": 848,
-      "treasure_coast_region": 411,
-      "unknown": 2014
+      "florida": 1079,
+      "treasure_coast_local": 852,
+      "treasure_coast_region": 415,
+      "unknown": 2020
     },
-    "average_score": 60.77
+    "average_score": 60.8
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1077,
-      "treasure_coast_local": 848,
-      "treasure_coast_region": 411,
-      "unknown": 2014
+      "florida": 1079,
+      "treasure_coast_local": 852,
+      "treasure_coast_region": 415,
+      "unknown": 2020
     },
-    "average_priority": 3.62
+    "average_priority": 3.66
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3589,
+      "active": 3582,
       "breaking": 2,
-      "developing": 175,
-      "ongoing": 582,
+      "developing": 195,
+      "ongoing": 585,
       "resolved": 2
     }
   },
@@ -3834,8 +3825,8 @@
     "repair_version": 15,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 5939,
-    "active_stories_after": 5939,
+    "active_stories_before": 5942,
+    "active_stories_after": 5942,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3860,24 +3851,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 101,
+    "incident_anchor_to_story_count": 102,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-01T20:42:15Z",
-    "quarantined_story_records_retained": 800,
-    "active_story_count": 5942
+    "generated_at": "2026-09-01T22:05:53Z",
+    "quarantined_story_records_retained": 805,
+    "active_story_count": 5958
   },
   "stories": {
-    "total": 4350,
+    "total": 4366,
     "importance_levels": {
       "breaking": 6,
-      "high": 83,
-      "normal": 663,
-      "low": 3598,
+      "high": 85,
+      "normal": 665,
+      "low": 3610,
       "archived": 0
     },
-    "average_importance": 8.98,
+    "average_importance": 9.04,
     "top": [
       {
         "story_id": "story_007353",
@@ -3892,7 +3883,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.75
+          "age_hours": 2.17
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3957,7 +3948,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.75,
+          "hours_since_update": 2.17,
           "event_count": 39,
           "timeline_entries": 29
         }
@@ -3975,7 +3966,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.71
+          "age_hours": 2.11
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4023,7 +4014,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.71,
+          "hours_since_update": 2.11,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4041,7 +4032,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.71
+          "age_hours": 2.1
         },
         "level": "high",
         "importance_reasons": [
@@ -4084,7 +4075,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.71,
+          "hours_since_update": 2.1,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4102,7 +4093,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.71
+          "age_hours": 2.1
         },
         "level": "high",
         "importance_reasons": [
@@ -4145,7 +4136,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.71,
+          "hours_since_update": 2.1,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4163,7 +4154,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.71
+          "age_hours": 2.11
         },
         "level": "high",
         "importance_reasons": [
@@ -4207,7 +4198,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.71,
+          "hours_since_update": 2.11,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4225,7 +4216,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 145.4
+          "age_hours": 146.8
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4289,7 +4280,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 145.4,
+          "hours_since_update": 146.8,
           "event_count": 28,
           "timeline_entries": 20
         }
@@ -4307,7 +4298,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 100.25
+          "age_hours": 101.65
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4361,9 +4352,68 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 100.25,
+          "hours_since_update": 101.65,
           "event_count": 41,
           "timeline_entries": 25
+        }
+      },
+      {
+        "story_id": "story_007424",
+        "title": "New Indian River County corrections assistant killed in Brevard County crash - Yahoo",
+        "score": 75,
+        "editorial_priority": 74,
+        "editorial_score": 74,
+        "score_breakdown": {
+          "score": 74,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.08
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-01T22:05:22.131106+00:00",
+          "hours_since_update": 0.08,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -4379,7 +4429,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.75
+          "age_hours": 2.17
         },
         "level": "high",
         "importance_reasons": [
@@ -4415,61 +4465,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.75,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_007424",
-        "title": "New Indian River County corrections assistant killed in Brevard County crash - WFTV",
-        "score": 65,
-        "editorial_priority": 64,
-        "editorial_score": 64,
-        "score_breakdown": {
-          "score": 64,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 0.75
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.75,
+          "hours_since_update": 2.17,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4487,7 +4483,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 24.81
+          "age_hours": 26.21
         },
         "level": "high",
         "importance_reasons": [
@@ -4528,7 +4524,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-31T19:55:07.482601+00:00",
-          "hours_since_update": 24.81,
+          "hours_since_update": 26.21,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4546,7 +4542,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.75
+          "age_hours": 2.17
         },
         "level": "high",
         "importance_reasons": [
@@ -4600,7 +4596,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.75,
+          "hours_since_update": 2.17,
           "event_count": 14,
           "timeline_entries": 10
         }
@@ -4618,7 +4614,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.71
+          "age_hours": 2.11
         },
         "level": "high",
         "importance_reasons": [
@@ -4670,7 +4666,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.71,
+          "hours_since_update": 2.11,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4688,7 +4684,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.72
+          "age_hours": 2.12
         },
         "level": "high",
         "importance_reasons": [
@@ -4741,7 +4737,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.72,
+          "hours_since_update": 2.12,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4759,7 +4755,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 154.01
+          "age_hours": 155.41
         },
         "level": "high",
         "importance_reasons": [
@@ -4802,7 +4798,137 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T10:42:22.175311+00:00",
-          "hours_since_update": 154.01,
+          "hours_since_update": 155.41,
+          "event_count": 4,
+          "timeline_entries": 4
+        }
+      },
+      {
+        "story_id": "story_003628",
+        "title": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
+        "score": 85,
+        "editorial_priority": 53,
+        "editorial_score": 53,
+        "score_breakdown": {
+          "score": 53,
+          "importance": 85,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 452.42
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 7,
+        "timeline_entries": 7,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 9,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-08-14T01:41:36.748145+00:00",
+          "hours_since_update": 452.42,
+          "event_count": 7,
+          "timeline_entries": 7
+        }
+      },
+      {
+        "story_id": "story_003660",
+        "title": "Person dies after shooting at St. Lucie County mobile home park, investigation ongoing - wpbf.com",
+        "score": 85,
+        "editorial_priority": 53,
+        "editorial_score": 53,
+        "score_breakdown": {
+          "score": 53,
+          "importance": 85,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 443.42
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 4,
+        "timeline_entries": 4,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 4,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-08-14T10:41:34.652293+00:00",
+          "hours_since_update": 443.42,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4811,16 +4937,16 @@
         "story_id": "story_006042",
         "title": "Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns - WPTV",
         "score": 55,
-        "editorial_priority": 59,
-        "editorial_score": 59,
+        "editorial_priority": 53,
+        "editorial_score": 53,
         "score_breakdown": {
-          "score": 59,
+          "score": 53,
           "importance": 55,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 22.82
+          "age_hours": 24.21
         },
         "level": "high",
         "importance_reasons": [
@@ -4872,139 +4998,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-31T21:54:02.137964+00:00",
-          "hours_since_update": 22.82,
+          "hours_since_update": 24.21,
           "event_count": 16,
           "timeline_entries": 16
-        }
-      },
-      {
-        "story_id": "story_003628",
-        "title": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
-        "score": 85,
-        "editorial_priority": 53,
-        "editorial_score": 53,
-        "score_breakdown": {
-          "score": 53,
-          "importance": 85,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.55,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 451.02
-        },
-        "level": "breaking",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 7,
-        "timeline_entries": 7,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 9,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Multi-event story remains open but is no longer rapidly developing",
-          "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 451.02,
-          "event_count": 7,
-          "timeline_entries": 7
-        }
-      },
-      {
-        "story_id": "story_003660",
-        "title": "Person dies after shooting at St. Lucie County mobile home park, investigation ongoing - wpbf.com",
-        "score": 85,
-        "editorial_priority": 53,
-        "editorial_score": 53,
-        "score_breakdown": {
-          "score": 53,
-          "importance": 85,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.55,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 442.02
-        },
-        "level": "breaking",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 4,
-        "timeline_entries": 4,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Multi-event story remains open but is no longer rapidly developing",
-          "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 442.02,
-          "event_count": 4,
-          "timeline_entries": 4
         }
       },
       {
@@ -5020,7 +5016,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 67.0
+          "age_hours": 68.4
         },
         "level": "high",
         "importance_reasons": [
@@ -5054,7 +5050,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-30T01:42:51.409087+00:00",
-          "hours_since_update": 67.0,
+          "hours_since_update": 68.4,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -5072,7 +5068,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.3
+          "age_hours": 1.69
         },
         "level": "normal",
         "importance_reasons": [
@@ -5113,7 +5109,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T20:26:29.629232+00:00",
-          "hours_since_update": 0.3,
+          "hours_since_update": 1.69,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -5131,7 +5127,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.71
+          "age_hours": 2.11
         },
         "level": "normal",
         "importance_reasons": [
@@ -5176,7 +5172,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 0.71,
+          "hours_since_update": 2.11,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -5186,7 +5182,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-01T20:45:02Z",
+    "generated_at": "2026-09-01T22:10:33Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5201,24 +5197,27 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 2,
-        "category_eligibility_archive_recovery": 7
+        "cache_hit": 1,
+        "category_eligibility_archive_recovery": 5,
+        "generated_live": 1,
+        "generation_failed_archive_recovery": 2
       },
       "failures": {
-        "no_category_eligible_sources": 7
+        "contextless_update_lead": 2,
+        "no_category_eligible_sources": 5
       },
-      "model_attempt_count": 0,
-      "model_elapsed_seconds": 0.0,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 34.382,
       "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejection_count": 4,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 3,
-      "published_story_duplicate_suppression_count": 61,
-      "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 10,
+      "published_story_duplicate_suppression_count": 51,
+      "story_aware_update_context_count": 3,
+      "material_update_promotion_evaluation_count": 12,
       "material_update_promotion_count": 6,
-      "material_update_promotion_cache_hit_count": 10,
+      "material_update_promotion_cache_hit_count": 12,
       "material_update_promotion_model_call_count": 0
     },
     "categories": [
@@ -5227,8 +5226,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 16,
-        "publishable_source_count": 7,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5248,7 +5247,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -5302,32 +5301,12 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Lanes reopen after crash on I-95 North near Congress Ave. exit causes major delays in Palm Beach County",
-            "source_url": "https://www.wptv.com/traffic/traffic-news/crash-on-i-95-north-in-southern-palm-beach-county-shuts-down-5-lanes",
-            "editorial_story_id": "story_007416",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "basis": "authorized_canonical_identity_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie",
             "source_url": "https://www.wptv.com/shining-a-light/flavor-south-florida-returns-with-dining-deals-at-more-than-100-restaurants-from-boca-raton-to-port-st-lucie",
             "editorial_story_id": "story_007310",
             "canonical_slug": "2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res",
             "canonical_headline": "Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
-            "editorial_story_id": "story_006607",
-            "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
-            "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5448,42 +5427,12 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Lanes reopen after crash on I-95 North near Congress Ave. exit causes major delays in Palm Beach County",
-            "source_url": "https://www.wptv.com/traffic/traffic-news/crash-on-i-95-north-in-southern-palm-beach-county-shuts-down-5-lanes",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie",
             "source_url": "https://www.wptv.com/shining-a-light/flavor-south-florida-returns-with-dining-deals-at-more-than-100-restaurants-from-boca-raton-to-port-st-lucie",
             "canonical_slug": "2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res",
             "canonical_headline": "Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
-            "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
-            "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5508,23 +5457,40 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.607
+        "elapsed_seconds": 25.839
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 17,
-        "publishable_source_count": 5,
-        "selected_source_count": 0,
+        "status": "generation_failed_archive_recovery",
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 6,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Crime & Safety category eligibility contract",
+        "attempt_count": 2,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 5.41,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: new_development_missing — Police search for missing man last seen Monday morning in Port St. Lucie - WPEC"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 5.275,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: new_development_missing — Police search for missing man last seen Monday morning in Port St. Lucie - WPEC"
+          }
+        ],
+        "model_elapsed_seconds": 10.686,
+        "failure_code": "contextless_update_lead",
+        "failure_summary": "Contextless update lead for hero: new_development_missing — Police search for missing man last seen Monday morning in Port St. Lucie - WPEC",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5533,7 +5499,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -5551,7 +5517,7 @@
             "source_url": "https://cbs12.com/news/local/homes-cars-flooded-in-indiantown-martin-county-county-booker-park-neighborhood-despite-2-million-drainage-project-flooding-drainage-stormwater-swales-driveway-culverts-homes-cars-flooded-damage-carpets?teaserSource=trending"
           }
         ],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -5575,32 +5541,12 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOVkJ1VDl4c0VTM1ExUExBaUVmWWp0RlB6dnNBZFl6eERnc3dGbFNhLXRUM1R5RjJfTWZKV0o2T1ZCQlhIN3VWRzUwMWxkZWpFRWsxbmZ1MDRQbjhtUl9kU1l2LVFxTGswTGY5RUhsVnluYnRKTU9rb0hMT2RIVXNOOXVjN2FXY21CNTZldXRwcm1wV2FxVXM4X3dhSGdkOS1OakpRbzdaX2hFdw",
-            "editorial_story_id": "story_007379",
-            "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-            "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
             "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years",
             "editorial_story_id": "story_007384",
             "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
             "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Lanes reopen after crash on I-95 North near Congress Ave. exit causes major delays in Palm Beach County",
-            "source_url": "https://www.wptv.com/traffic/traffic-news/crash-on-i-95-north-in-southern-palm-beach-county-shuts-down-5-lanes",
-            "editorial_story_id": "story_007416",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5625,20 +5571,54 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "New data center proposed for western St. Lucie County near Interstate 95",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
-            "editorial_story_id": "story_007205",
-            "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
-            "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
-            "basis": "exact_source_and_persistent_story_skip",
+            "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQMzBycnh6TXRHOVhnckp4RXhaN19PeU5VQzhlVThsdWNNQ0pHR0ZETHpjM1ZDZmdRNkRITl95VXFYV3Mtc1J5Ukp4OWgzbUdYWkgzN2FLd2FrQmc2eWVSVkVGX1pSR3FBbG9FVDd5cnByY0dSeWJMM3hnaGMzMlgzSlljLWs0ODVxLXdnNGx1clRfZ1Z6cThBYmVsYlZBNDdSbGpJanBYb9IBuwFBVV95cUxNU3h0MDdldnQzRG9mbHlTVl9kOUJDZ2lqeWduWjdLd254LTlpdUJTN0FkV0htclZBV09RNXZueUhkUldxNXRxQmNlQnNuWkhLQlhEYnFwaVFwcmwxSmJqM3RLTVRkc21TRFlqRG8yNEJPcWRSUHlKdTR3WEdoT1l5T21LWWpMbVdZUDFoczB3RUdWX2QteU5XT3hyZFVpM1JfMlhWRER5TTdUSFlSN1NzMDFIZ3pOcjJyVEhN",
+            "editorial_story_id": "story_007379",
+            "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+            "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+            "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+            "editorial_story_id": "story_007106",
+            "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+            "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Police search for missing man last seen Monday morning in Port St. Lucie - WPEC",
+            "source_url": "https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
+            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "story:story_007416",
+              "source:https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=story:story_007416,source:https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 1,
-        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_cache_hit_count": 3,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -5695,42 +5675,12 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOVkJ1VDl4c0VTM1ExUExBaUVmWWp0RlB6dnNBZFl6eERnc3dGbFNhLXRUM1R5RjJfTWZKV0o2T1ZCQlhIN3VWRzUwMWxkZWpFRWsxbmZ1MDRQbjhtUl9kU1l2LVFxTGswTGY5RUhsVnluYnRKTU9rb0hMT2RIVXNOOXVjN2FXY21CNTZldXRwcm1wV2FxVXM4X3dhSGdkOS1OakpRbzdaX2hFdw",
-            "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-            "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
             "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years",
             "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
             "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Lanes reopen after crash on I-95 North near Congress Ave. exit causes major delays in Palm Beach County",
-            "source_url": "https://www.wptv.com/traffic/traffic-news/crash-on-i-95-north-in-southern-palm-beach-county-shuts-down-5-lanes",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5785,30 +5735,67 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "New data center proposed for western St. Lucie County near Interstate 95",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
-            "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
-            "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+            "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQMzBycnh6TXRHOVhnckp4RXhaN19PeU5VQzhlVThsdWNNQ0pHR0ZETHpjM1ZDZmdRNkRITl95VXFYV3Mtc1J5Ukp4OWgzbUdYWkgzN2FLd2FrQmc2eWVSVkVGX1pSR3FBbG9FVDd5cnByY0dSeWJMM3hnaGMzMlgzSlljLWs0ODVxLXdnNGx1clRfZ1Z6cThBYmVsYlZBNDdSbGpJanBYb9IBuwFBVV95cUxNU3h0MDdldnQzRG9mbHlTVl9kOUJDZ2lqeWduWjdLd254LTlpdUJTN0FkV0htclZBV09RNXZueUhkUldxNXRxQmNlQnNuWkhLQlhEYnFwaVFwcmwxSmJqM3RLTVRkc21TRFlqRG8yNEJPcWRSUHlKdTR3WEdoT1l5T21LWWpMbVdZUDFoczB3RUdWX2QteU5XT3hyZFVpM1JfMlhWRER5TTdUSFlSN1NzMDFIZ3pOcjJyVEhN",
+            "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+            "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+            "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+            "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+            "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Latoya Morrine Moye of Fort Pierce arrested",
+              "Former Treasure Coast Hospice employee",
+              "Theft of two rings from deceased patient",
+              "Report made to Stuart Police Department on Aug. 18",
+              "One ring pawned in Port St. Lucie",
+              "Third-degree grand theft charge",
+              "Ring pawned one day after report",
+              "One ring recovered, one still missing"
+            ],
+            "novel_facts": [
+              "Treasure Coast Hospice statement about taking trust seriously",
+              "Treasure Coast Hospice covering cost of retrieving recovered ring",
+              "Additional detail about surveillance video identifying Moye"
+            ],
+            "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
+            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.625
+        "generation_status": "failed",
+        "budget_seconds": 180.0,
+        "elapsed_seconds": 35.077
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 17,
-        "publishable_source_count": 7,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5846,7 +5833,7 @@
             "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/weekend-flooding-creates-drainage-worries-for-indiantown-neighborhoods"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -5876,16 +5863,6 @@
             "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
             "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Lanes reopen after crash on I-95 North near Congress Ave. exit causes major delays in Palm Beach County",
-            "source_url": "https://www.wptv.com/traffic/traffic-news/crash-on-i-95-north-in-southern-palm-beach-county-shuts-down-5-lanes",
-            "editorial_story_id": "story_007416",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5995,21 +5972,6 @@
           },
           {
             "category_key": "business",
-            "source_headline": "Lanes reopen after crash on I-95 North near Congress Ave. exit causes major delays in Palm Beach County",
-            "source_url": "https://www.wptv.com/traffic/traffic-news/crash-on-i-95-north-in-southern-palm-beach-county-shuts-down-5-lanes",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
             "source_headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie",
             "source_url": "https://www.wptv.com/shining-a-light/flavor-south-florida-returns-with-dining-deals-at-more-than-100-restaurants-from-boca-raton-to-port-st-lucie",
             "canonical_slug": "2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res",
@@ -6055,7 +6017,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.462
+        "elapsed_seconds": 16.544
       },
       {
         "category_key": "sports",
@@ -6120,7 +6082,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 10.147
+        "elapsed_seconds": 15.6
       },
       {
         "category_key": "things_to_do",
@@ -6128,7 +6090,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 22,
-        "publishable_source_count": 3,
+        "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6294,7 +6256,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 10.237
+        "elapsed_seconds": 14.024
       },
       {
         "category_key": "florida",
@@ -6385,21 +6347,28 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Florida orders removal of automated license plate readers from state highways within 30 days",
-        "elapsed_seconds": 9.452
+        "elapsed_seconds": 19.681
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "cache_hit",
-        "fetched_candidate_count": 30,
+        "status": "generated_live",
+        "fetched_candidate_count": 29,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
-        "cache_hit": true,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
+        "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 14.251,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 14.251,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6410,10 +6379,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -6427,12 +6396,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQMzBycnh6TXRHOVhnckp4RXhaN19PeU5VQzhlVThsdWNNQ0pHR0ZETHpjM1ZDZmdRNkRITl95VXFYV3Mtc1J5Ukp4OWgzbUdYWkgzN2FLd2FrQmc2eWVSVkVGX1pSR3FBbG9FVDd5cnByY0dSeWJMM3hnaGMzMlgzSlljLWs0ODVxLXdnNGx1clRfZ1Z6cThBYmVsYlZBNDdSbGpJanBYb9IBuwFBVV95cUxNU3h0MDdldnQzRG9mbHlTVl9kOUJDZ2lqeWduWjdLd254LTlpdUJTN0FkV0htclZBV09RNXZueUhkUldxNXRxQmNlQnNuWkhLQlhEYnFwaVFwcmwxSmJqM3RLTVRkc21TRFlqRG8yNEJPcWRSUHlKdTR3WEdoT1l5T21LWWpMbVdZUDFoczB3RUdWX2QteU5XT3hyZFVpM1JfMlhWRER5TTdUSFlSN1NzMDFIZ3pOcjJyVEhN",
+            "source_headline": "Tiger Woods set for change-of-plea hearing in Martin County DUI case - WPEC",
+            "source_url": "https://cbs12.com/news/local/tiger-woods-set-for-change-of-plea-hearing-in-martin-county-dui-case-wedneday-florida-golf-dui-property-damage-refusal-submit-test-jupiter-island-range-rover-hydrocodone-impaired-pga-tour",
             "editorial_story_id": "story_007379",
             "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
             "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6457,22 +6426,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMitAJBVV95cUxPNWtLTEQ0LVpwWFZZaVFWRThWNUd4Q1RjTmlVd1hBdl80R2QyYnA4TlpaR01tOHM5azljdWQ5OHZMaUZVQ21qS0F0cWZodHM0VjNSWmtvVU0zY2dLVlNzUldGQW1SeWc5cTdkM3ZpdmV0OEhXOG5yOWJ5UWpITThoUkdsOGhZVmV2Y3RwOFNMRWZiclUxX2U4NDQyRHVqdHNTNlBrcnNXYnR2cGJ4Z0tSREJzZWV6WExaa2t6NHlKRm96VG81bGNNQzEzeWxCQzFkaEwwVExWMWg0dm0tWUFGUUNtRmFCa1NpOUpvZEo1eENWS185cXEzSmwwODVQUHp6NHFvOG1faHBlYVB6YkZCNE9EWTF6VHNXT1RqYlZBS1I3d251cnJIRDBlWG9OeHQ4Zm9TaA",
-            "editorial_story_id": "story_005650",
-            "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-            "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
-            "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+            "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
             "editorial_story_id": "story_007106",
             "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
             "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6552,13 +6511,13 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQMzBycnh6TXRHOVhnckp4RXhaN19PeU5VQzhlVThsdWNNQ0pHR0ZETHpjM1ZDZmdRNkRITl95VXFYV3Mtc1J5Ukp4OWgzbUdYWkgzN2FLd2FrQmc2eWVSVkVGX1pSR3FBbG9FVDd5cnByY0dSeWJMM3hnaGMzMlgzSlljLWs0ODVxLXdnNGx1clRfZ1Z6cThBYmVsYlZBNDdSbGpJanBYb9IBuwFBVV95cUxNU3h0MDdldnQzRG9mbHlTVl9kOUJDZ2lqeWduWjdLd254LTlpdUJTN0FkV0htclZBV09RNXZueUhkUldxNXRxQmNlQnNuWkhLQlhEYnFwaVFwcmwxSmJqM3RLTVRkc21TRFlqRG8yNEJPcWRSUHlKdTR3WEdoT1l5T21LWWpMbVdZUDFoczB3RUdWX2QteU5XT3hyZFVpM1JfMlhWRER5TTdUSFlSN1NzMDFIZ3pOcjJyVEhN",
+            "source_headline": "Tiger Woods set for change-of-plea hearing in Martin County DUI case - WPEC",
+            "source_url": "https://cbs12.com/news/local/tiger-woods-set-for-change-of-plea-hearing-in-martin-county-dui-case-wedneday-florida-golf-dui-property-damage-refusal-submit-test-jupiter-island-range-rover-hydrocodone-impaired-pga-tour",
             "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
             "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6597,27 +6556,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMitAJBVV95cUxPNWtLTEQ0LVpwWFZZaVFWRThWNUd4Q1RjTmlVd1hBdl80R2QyYnA4TlpaR01tOHM5azljdWQ5OHZMaUZVQ21qS0F0cWZodHM0VjNSWmtvVU0zY2dLVlNzUldGQW1SeWc5cTdkM3ZpdmV0OEhXOG5yOWJ5UWpITThoUkdsOGhZVmV2Y3RwOFNMRWZiclUxX2U4NDQyRHVqdHNTNlBrcnNXYnR2cGJ4Z0tSREJzZWV6WExaa2t6NHlKRm96VG81bGNNQzEzeWxCQzFkaEwwVExWMWg0dm0tWUFGUUNtRmFCa1NpOUpvZEo1eENWS185cXEzSmwwODVQUHp6NHFvOG1faHBlYVB6YkZCNE9EWTF6VHNXT1RqYlZBS1I3d251cnJIRDBlWG9OeHQ4Zm9TaA",
-            "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-            "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
-            "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+            "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
             "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
             "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
@@ -6626,18 +6570,23 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 1.0,
+            "confidence": 0.98,
             "shared_anchors": [
               "Latoya Morrine Moye of Fort Pierce arrested",
-              "Treasure Coast Hospice employee",
-              "theft of two rings from deceased patient",
-              "report made to Stuart Police Department on Aug. 18",
-              "one ring pawned in Port St. Lucie",
-              "third-degree grand theft charge",
-              "identical source URL from WPEC/CBS12"
+              "Former Treasure Coast Hospice employee",
+              "Theft of two rings from deceased patient",
+              "Report made to Stuart Police Department on Aug. 18",
+              "One ring pawned in Port St. Lucie",
+              "Third-degree grand theft charge",
+              "Ring pawned one day after report",
+              "One ring recovered, one still missing"
             ],
-            "novel_facts": [],
-            "reason": "The incoming article is identical to the existing canonical - same suspect, same crime, same rings, same dates, same charges, and even the same source URL. The incoming article contains no new developments, no material updates such as sentencing, court proceedings, or recovery of the second ring. The body text appears to be the exact same reporting republished one day later.",
+            "novel_facts": [
+              "Treasure Coast Hospice statement about taking trust seriously",
+              "Treasure Coast Hospice covering cost of retrieving recovered ring",
+              "Additional detail about surveillance video identifying Moye"
+            ],
+            "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
             "validation_errors": []
           },
           {
@@ -6707,24 +6656,44 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
+        "generation_status": "success",
+        "budget_seconds": 180.0,
         "live_hero_headline": "Body found in Martin County mangroves believed to be missing Port St. Lucie man",
-        "elapsed_seconds": 12.274
+        "generated_card_count": 1,
+        "elapsed_seconds": 38.58
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 16,
-        "publishable_source_count": 1,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed St. Lucie County category eligibility contract",
+        "attempt_count": 2,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 4.431,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: new_development_missing — Police search for missing man last seen Monday morning in Port St. Lucie - WPEC"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 5.014,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: new_development_missing — Police search for missing man last seen Monday morning in Port St. Lucie - WPEC"
+          }
+        ],
+        "model_elapsed_seconds": 9.445,
+        "failure_code": "contextless_update_lead",
+        "failure_summary": "Contextless update lead for hero: new_development_missing — Police search for missing man last seen Monday morning in Port St. Lucie - WPEC",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6733,21 +6702,11 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 14,
+        "published_story_duplicate_suppression_count": 12,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Police search for missing man last seen Monday morning in Port St. Lucie - WPEC",
-            "source_url": "https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search",
-            "editorial_story_id": "story_007416",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "st_lucie",
             "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years - WPTV",
@@ -6755,16 +6714,6 @@
             "editorial_story_id": "story_007384",
             "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
             "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/01/flavor-south-florida-returns-with-dining-deals-more-than-100-restaurants-boca-raton-port-st-lucie",
-            "editorial_story_id": "story_007310",
-            "canonical_slug": "2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res",
-            "canonical_headline": "Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6800,11 +6749,21 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
-            "editorial_story_id": "story_006607",
-            "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
-            "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
+            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+            "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+            "editorial_story_id": "story_007106",
+            "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+            "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+            "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+            "editorial_story_id": "story_007106",
+            "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+            "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6841,7 +6800,7 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOTDJvTVltVFZ4cl9iOTM2QVYtb01aZFNraVdyNjZVdlMtWEMwV2NMOTRCYXQyT0hacWt1bUpacV9kMmxkSFA1c1BFYnk1YkxQcklaVE4tRWdxV0tuaG04UlZNaEJqdWVtSy1LYmpzNzhPejBhcjU5aTBUeTRPY1hvTTlGSDgxcUtRODg4WGxBbHRrU0tiSFFnQXU1enlVTklQYW1vYWZwN1VsUldVd1Z1dURyclV5WEFENXBubnZyenhUY294YVMzRVZ6VlV0SWRT",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
             "editorial_story_id": "story_006607",
             "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
             "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
@@ -6860,16 +6819,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
-            "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-            "editorial_story_id": "story_007416",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "basis": "authorized_canonical_identity_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
             "editorial_story_id": "story_005957",
@@ -6879,28 +6828,37 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
-        "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
           {
-            "category_key": "st_lucie",
             "source_headline": "Police search for missing man last seen Monday morning in Port St. Lucie - WPEC",
             "source_url": "https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search",
+            "publisher": "cbs12.com",
             "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
             "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "story:story_007416",
+              "source:https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=story:story_007416,source:https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_count": 0,
+        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
             "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years - WPTV",
@@ -6910,21 +6868,6 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/01/flavor-south-florida-returns-with-dining-deals-more-than-100-restaurants-boca-raton-port-st-lucie",
-            "canonical_slug": "2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res",
-            "canonical_headline": "Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6978,18 +6921,68 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
-            "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
-            "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
+            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+            "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+            "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+            "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 1.0,
+            "shared_anchors": [
+              "Latoya Morrine Moye of Fort Pierce arrested",
+              "Treasure Coast Hospice employee",
+              "theft of two rings from deceased patient",
+              "report made to Stuart Police Department on Aug. 18",
+              "one ring pawned in Port St. Lucie",
+              "third-degree grand theft charge",
+              "identical source URL from WPEC/CBS12"
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article is identical to the existing canonical - same suspect, same crime, same rings, same dates, same charges, and even the same source URL. The incoming article contains no new developments, no material updates such as sentencing, court proceedings, or recovery of the second ring. The body text appears to be the exact same reporting republished one day later.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+            "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+            "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+            "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
+            "cache_hit": true,
             "model_call": false,
-            "action": "preserve_existing_canonical"
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Latoya Morrine Moye of Fort Pierce arrested",
+              "Former Treasure Coast Hospice employee",
+              "Theft of two rings from deceased patient",
+              "Report made to Stuart Police Department on Aug. 18",
+              "One ring pawned in Port St. Lucie",
+              "Third-degree grand theft charge",
+              "Ring pawned one day after report",
+              "One ring recovered, one still missing"
+            ],
+            "novel_facts": [
+              "Treasure Coast Hospice statement about taking trust seriously",
+              "Treasure Coast Hospice covering cost of retrieving recovered ring",
+              "Additional detail about surveillance video identifying Moye"
+            ],
+            "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
+            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -7039,12 +7032,12 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOTDJvTVltVFZ4cl9iOTM2QVYtb01aZFNraVdyNjZVdlMtWEMwV2NMOTRCYXQyT0hacWt1bUpacV9kMmxkSFA1c1BFYnk1YkxQcklaVE4tRWdxV0tuaG04UlZNaEJqdWVtSy1LYmpzNzhPejBhcjU5aTBUeTRPY1hvTTlGSDgxcUtRODg4WGxBbHRrU0tiSFFnQXU1enlVTklQYW1vYWZwN1VsUldVd1Z1dURyclV5WEFENXBubnZyenhUY294YVMzRVZ6VlV0SWRT",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
             "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
             "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
+            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -7068,21 +7061,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
-            "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
             "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
@@ -7097,16 +7075,18 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 14.124
+        "new_publication_stale_rejected_count": 3,
+        "generation_status": "failed",
+        "budget_seconds": 180.0,
+        "elapsed_seconds": 26.615
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 16,
-        "publishable_source_count": 3,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -7123,10 +7103,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -7160,16 +7140,6 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years",
-            "editorial_story_id": "story_007384",
-            "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
-            "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years - WPTV",
             "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPaGd1RURRckJ3UW5yeFNPVGFzN1VmOHZXM0ZZY3hIQV9TUE5lR0hjYW15WXRXN3FINTlQNTBDSndLSWFta2JvTU4tQ1piQkZnYW1NbndNdzBaWlVmNUdUOWExeHNuZ2c3bXNjLTJyUjQ5eUJQMi1iajZtOUlZXzR3eUliQmNvNVBLUDRKYnNQNHY3UFBXdkJHYXVoMnJoTEpCSVBnUjdpVjFmQllVTEg1MmFoZWFQdVZ5SXo1c24xREF3Q2FaSXlvcWU2TmpKZk1BZlNR",
             "editorial_story_id": "story_007384",
@@ -7180,12 +7150,12 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Lanes reopen after crash on I-95 North near Congress Ave. exit causes major delays in Palm Beach County",
-            "source_url": "https://www.wptv.com/traffic/traffic-news/crash-on-i-95-north-in-southern-palm-beach-county-shuts-down-5-lanes",
-            "editorial_story_id": "story_007416",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-            "basis": "authorized_canonical_identity_skip",
+            "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
+            "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years",
+            "editorial_story_id": "story_007384",
+            "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
+            "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -7197,33 +7167,13 @@
             "canonical_headline": "Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "New data center proposed for western St. Lucie County near Interstate 95",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
-            "editorial_story_id": "story_007205",
-            "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
-            "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-            "editorial_story_id": "story_006379",
-            "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-            "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 1,
-        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -7295,21 +7245,6 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years",
-            "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
-            "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years - WPTV",
             "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPaGd1RURRckJ3UW5yeFNPVGFzN1VmOHZXM0ZZY3hIQV9TUE5lR0hjYW15WXRXN3FINTlQNTBDSndLSWFta2JvTU4tQ1piQkZnYW1NbndNdzBaWlVmNUdUOWExeHNuZ2c3bXNjLTJyUjQ5eUJQMi1iajZtOUlZXzR3eUliQmNvNVBLUDRKYnNQNHY3UFBXdkJHYXVoMnJoTEpCSVBnUjdpVjFmQllVTEg1MmFoZWFQdVZ5SXo1c24xREF3Q2FaSXlvcWU2TmpKZk1BZlNR",
             "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
@@ -7325,12 +7260,12 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Lanes reopen after crash on I-95 North near Congress Ave. exit causes major delays in Palm Beach County",
-            "source_url": "https://www.wptv.com/traffic/traffic-news/crash-on-i-95-north-in-southern-palm-beach-county-shuts-down-5-lanes",
-            "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-            "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
+            "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
+            "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years",
+            "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
+            "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
             "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -7352,59 +7287,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "New data center proposed for western St. Lucie County near Interstate 95",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
-            "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
-            "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-            "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-            "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
-            "shared_anchors": [
-              "Ocean Drive in Vero Beach flooding",
-              "Lee Olsen, general manager at Waldo's Restaurant and Bar",
-              "Wednesday's storm causing knee-high flooding",
-              "City stating fix could cost millions and take years",
-              "Same source URL (wptv.com)",
-              "Public works explanation about 1 inch per hour design capacity vs 2+ inches actual rainfall",
-              "No improvement project currently planned"
-            ],
-            "novel_facts": [
-              "Additional detail about Monday flooding earlier in the week",
-              "Aubrey Moxley and Leah Trodglen from Allure Gallery quoted",
-              "Minor additional witness color about daily thunderstorm pattern"
-            ],
-            "reason": "This is the exact same article from the same source (WPTV) about the same recurring flooding issue on Ocean Drive. The incoming article dated 2026-08-30 appears to be a republication or slight expansion of the canonical from 2026-08-27, with the same headline structure, same primary source (Lee Olsen), same Wednesday storm anchor, and identical city response about millions in costs. The added quotes from gallery workers and mention of Monday's flooding are routine scene detail and witness color, not material updates like an arrest, official cause determination, or policy decision. No new government action, casualty change, or accountability development has occurred.",
-            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.225
+        "elapsed_seconds": 20.938
       }
     ]
   }

@@ -4,35 +4,35 @@
 
 ## Hero
 
-- Current: **Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case**
-- Recommended: **Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case**
-- Recommendation: KEEP (not enforced)
+- Current: **St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases**
+- Recommended: **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**
+- Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | 66 | position locked: identity_conflict |
-| 2 | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 70 | importance 65; freshness 98.91; urgency 2/10 |
-| 3 | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 66 | importance 55; freshness 98.92; urgency 2/10 |
-| 4 | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | 60 | importance 65; freshness 58.76; urgency 2/10 |
-| 5 | Port St. Lucie police search for missing 38-year-old man last seen Monday morning | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | 56 | importance 25; freshness 98.92; urgency 2/10; -6 category saturation |
-| 6 | Data center proposed for 174 acres off West Midway Road in St. Lucie County | Port St. Lucie police search for missing 38-year-old man last seen Monday morning | 56 | importance 25; freshness 98.91; urgency 2/10; -12 category saturation |
-| 7 | Florida Department of Transportation revokes permits for automated license plate readers statewide | Data center proposed for 174 acres off West Midway Road in St. Lucie County | 43 | importance 10; freshness 63.91; urgency 2/10; -8 county saturation |
-| 8 | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | Florida Department of Transportation revokes permits for automated license plate readers statewide | 35 | importance 0; freshness 62.03; urgency 2/10 |
-| 9 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | 34 | importance 0; freshness 43.39; urgency 2/10 |
-| 10 | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 48 | importance 35; freshness 51.76; urgency 2/10; -18 category saturation; -4 county saturation |
+| 1 | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | 65 | position locked: identity_conflict |
+| 2 | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 69 | importance 65; freshness 96.5; urgency 2/10 |
+| 3 | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 66 | importance 55; freshness 96.51; urgency 2/10 |
+| 4 | Port St. Lucie police search for missing 38-year-old man last seen Monday morning | Port St. Lucie police search for missing 38-year-old man last seen Monday morning | 59 | importance 35; freshness 96.5; urgency 2/10 |
+| 5 | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | 57 | importance 10; freshness 96.5; urgency 2/10; validated material update |
+| 6 | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | 59 | importance 65; freshness 56.35; urgency 2/10; -6 category saturation |
+| 7 | Data center proposed for 174 acres off West Midway Road in St. Lucie County | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | 55 | importance 25; freshness 96.51; urgency 2/10; -12 category saturation; -8 county saturation |
+| 8 | Florida Department of Transportation revokes permits for automated license plate readers statewide | Florida Department of Transportation revokes permits for automated license plate readers statewide | 34 | importance 0; freshness 59.62; urgency 2/10 |
+| 9 | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | Data center proposed for 174 acres off West Midway Road in St. Lucie County | 42 | importance 10; freshness 61.5; urgency 2/10; -12 county saturation |
+| 10 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | 34 | importance 0; freshness 40.97; urgency 2/10; -4 county saturation |
+| 11 | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 48 | importance 35; freshness 49.35; urgency 2/10; -18 category saturation; -8 county saturation |
 
 ## Recommended moves
 
-- **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**: 8 → 4 — importance 65; freshness 58.76; urgency 2/10
-- **Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie**: 3 → 5 — importance 25; freshness 98.92; urgency 2/10; -6 category saturation
-- **Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds**: 4 → 3 — importance 55; freshness 98.92; urgency 2/10
-- **Port St. Lucie police search for missing 38-year-old man last seen Monday morning**: 5 → 6 — importance 25; freshness 98.91; urgency 2/10; -12 category saturation
-- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 9 → 10 — importance 35; freshness 51.76; urgency 2/10; -18 category saturation; -4 county saturation
-- **Data center proposed for 174 acres off West Midway Road in St. Lucie County**: 6 → 7 — importance 10; freshness 63.91; urgency 2/10; -8 county saturation
-- **Florida Department of Transportation revokes permits for automated license plate readers statewide**: 7 → 8 — importance 0; freshness 62.03; urgency 2/10
-- **Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns**: 10 → 9 — importance 0; freshness 43.39; urgency 2/10
+- **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**: 5 → 2 — importance 65; freshness 96.5; urgency 2/10
+- **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**: 9 → 6 — importance 65; freshness 56.35; urgency 2/10; -6 category saturation
+- **Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills**: 2 → 5 — importance 10; freshness 96.5; urgency 2/10; validated material update
+- **Data center proposed for 174 acres off West Midway Road in St. Lucie County**: 7 → 9 — importance 10; freshness 61.5; urgency 2/10; -12 county saturation
+- **Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie**: 6 → 7 — importance 25; freshness 96.51; urgency 2/10; -12 category saturation; -8 county saturation
+- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 10 → 11 — importance 35; freshness 49.35; urgency 2/10; -18 category saturation; -8 county saturation
+- **Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns**: 11 → 10 — importance 0; freshness 40.97; urgency 2/10; -4 county saturation
 
 ## Guardrails
 

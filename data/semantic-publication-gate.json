@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-01T20:48:00.240817+00:00",
+  "generated_at": "2026-09-01T22:14:41.842698+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -81,16 +81,16 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 10,
+    "pre_generation_materiality_evaluations": 12,
     "pre_generation_materiality_promotions": 6,
-    "pre_generation_materiality_duplicates": 4,
+    "pre_generation_materiality_duplicates": 6,
     "pre_generation_materiality_holds": 0,
     "pre_generation_materiality_model_calls": 0,
-    "pre_generation_materiality_cache_hits": 10,
+    "pre_generation_materiality_cache_hits": 12,
     "terminal_permalink_evaluations": 2,
     "terminal_permalink_candidate_pairs": 24,
-    "terminal_permalink_model_calls": 1,
-    "terminal_permalink_cache_hits": 1,
+    "terminal_permalink_model_calls": 2,
+    "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
@@ -98,7 +98,9 @@
     "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
-    "terminal_permalink_holds": 1
+    "terminal_permalink_holds": 1,
+    "late_published_skip_materiality_evaluations": 0,
+    "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
     {
@@ -204,6 +206,41 @@
       ],
       "novel_facts": [],
       "reason": "The incoming article is identical to the existing canonical - same suspect, same crime, same rings, same dates, same charges, and even the same source URL. The incoming article contains no new developments, no material updates such as sentencing, court proceedings, or recovery of the second ring. The body text appears to be the exact same reporting republished one day later.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+      "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+      "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+      "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Latoya Morrine Moye of Fort Pierce arrested",
+        "Former Treasure Coast Hospice employee",
+        "Theft of two rings from deceased patient",
+        "Report made to Stuart Police Department on Aug. 18",
+        "One ring pawned in Port St. Lucie",
+        "Third-degree grand theft charge",
+        "Ring pawned one day after report",
+        "One ring recovered, one still missing"
+      ],
+      "novel_facts": [
+        "Treasure Coast Hospice statement about taking trust seriously",
+        "Treasure Coast Hospice covering cost of retrieving recovered ring",
+        "Additional detail about surveillance video identifying Moye"
+      ],
+      "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
       "validation_errors": []
     },
     {
@@ -320,12 +357,12 @@
     },
     {
       "category_key": "martin",
-      "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
-      "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+      "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+      "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
       "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
       "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
       "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
@@ -334,18 +371,23 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
+      "confidence": 0.98,
       "shared_anchors": [
         "Latoya Morrine Moye of Fort Pierce arrested",
-        "Treasure Coast Hospice employee",
-        "theft of two rings from deceased patient",
-        "report made to Stuart Police Department on Aug. 18",
-        "one ring pawned in Port St. Lucie",
-        "third-degree grand theft charge",
-        "identical source URL from WPEC/CBS12"
+        "Former Treasure Coast Hospice employee",
+        "Theft of two rings from deceased patient",
+        "Report made to Stuart Police Department on Aug. 18",
+        "One ring pawned in Port St. Lucie",
+        "Third-degree grand theft charge",
+        "Ring pawned one day after report",
+        "One ring recovered, one still missing"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article is identical to the existing canonical - same suspect, same crime, same rings, same dates, same charges, and even the same source URL. The incoming article contains no new developments, no material updates such as sentencing, court proceedings, or recovery of the second ring. The body text appears to be the exact same reporting republished one day later.",
+      "novel_facts": [
+        "Treasure Coast Hospice statement about taking trust seriously",
+        "Treasure Coast Hospice covering cost of retrieving recovered ring",
+        "Additional detail about surveillance video identifying Moye"
+      ],
+      "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
       "validation_errors": []
     },
     {
@@ -384,6 +426,71 @@
       "validation_errors": []
     },
     {
+      "category_key": "st_lucie",
+      "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+      "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+      "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+      "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 1.0,
+      "shared_anchors": [
+        "Latoya Morrine Moye of Fort Pierce arrested",
+        "Treasure Coast Hospice employee",
+        "theft of two rings from deceased patient",
+        "report made to Stuart Police Department on Aug. 18",
+        "one ring pawned in Port St. Lucie",
+        "third-degree grand theft charge",
+        "identical source URL from WPEC/CBS12"
+      ],
+      "novel_facts": [],
+      "reason": "The incoming article is identical to the existing canonical - same suspect, same crime, same rings, same dates, same charges, and even the same source URL. The incoming article contains no new developments, no material updates such as sentencing, court proceedings, or recovery of the second ring. The body text appears to be the exact same reporting republished one day later.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
+      "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+      "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+      "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Latoya Morrine Moye of Fort Pierce arrested",
+        "Former Treasure Coast Hospice employee",
+        "Theft of two rings from deceased patient",
+        "Report made to Stuart Police Department on Aug. 18",
+        "One ring pawned in Port St. Lucie",
+        "Third-degree grand theft charge",
+        "Ring pawned one day after report",
+        "One ring recovered, one still missing"
+      ],
+      "novel_facts": [
+        "Treasure Coast Hospice statement about taking trust seriously",
+        "Treasure Coast Hospice covering cost of retrieving recovered ring",
+        "Additional detail about surveillance video identifying Moye"
+      ],
+      "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
+      "validation_errors": []
+    },
+    {
       "category_key": "indian_river",
       "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
       "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
@@ -418,40 +525,6 @@
         "Awaiting positive identification"
       ],
       "reason": "This is clearly the same missing person case involving Michael Anthony Debevec II. The incoming article contains a major material update: a body has been discovered that authorities believe belongs to Debevec. This represents a significant development from a missing person search to a likely death investigation. The discovery of a body (even pending formal identification) is exactly the type of material update that changes what readers need to know and should update the existing canonical story rather than create a duplicate.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "indian_river",
-      "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
-      "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-      "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-      "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Ocean Drive in Vero Beach flooding",
-        "Lee Olsen, general manager at Waldo's Restaurant and Bar",
-        "Wednesday's storm causing knee-high flooding",
-        "City stating fix could cost millions and take years",
-        "Same source URL (wptv.com)",
-        "Public works explanation about 1 inch per hour design capacity vs 2+ inches actual rainfall",
-        "No improvement project currently planned"
-      ],
-      "novel_facts": [
-        "Additional detail about Monday flooding earlier in the week",
-        "Aubrey Moxley and Leah Trodglen from Allure Gallery quoted",
-        "Minor additional witness color about daily thunderstorm pattern"
-      ],
-      "reason": "This is the exact same article from the same source (WPTV) about the same recurring flooding issue on Ocean Drive. The incoming article dated 2026-08-30 appears to be a republication or slight expansion of the canonical from 2026-08-27, with the same headline structure, same primary source (Lee Olsen), same Wednesday storm anchor, and identical city response about millions in costs. The added quotes from gallery workers and mention of Monday's flooding are routine scene detail and witness color, not material updates like an arrest, official cause determination, or policy decision. No new government action, casualty change, or accountability development has occurred.",
       "validation_errors": []
     }
   ],
@@ -1358,201 +1431,6 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Body found in Martin County mangroves believed to be missing Port St. Lucie man",
-      "incoming_source_url": "https://cbs12.com/news/local/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news",
-      "incoming_story_id": "story_007411",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Body found in Martin County mangroves believed to be missing Port St. Lucie man",
-      "incoming_source_url": "https://cbs12.com/news/local/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news",
-      "incoming_story_id": "story_007411",
-      "candidates": [
-        {
-          "slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-          "headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.7322,
-          "retrieval_score": 0.5922,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-          "headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6659,
-          "retrieval_score": 0.5499,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
-          "headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6121,
-          "retrieval_score": 0.4751,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6677,
-          "retrieval_score": 0.5927,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
-          "headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6038,
-          "retrieval_score": 0.5998,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-miami-woman-accused-of-posing-as-bank-representative-in-martin-county-credit-car",
-          "headline": "Miami woman accused of posing as bank representative in Martin County credit card scam",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6034,
-          "retrieval_score": 0.5534,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-          "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5902,
-          "retrieval_score": 0.5212,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
-          "headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5726,
-          "retrieval_score": 0.5006,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-          "headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5688,
-          "retrieval_score": 0.5028,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-martin-county-deputies-rescue-man-attempting-suicide-in-ocean",
-          "headline": "Martin County deputies rescue man attempting suicide in ocean",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5289,
-          "retrieval_score": 0.4789,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc",
-          "headline": "Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5232,
-          "retrieval_score": 0.4832,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
-          "headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.519,
-          "retrieval_score": 0.491,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.93,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Body found in Martin County mangroves near House of Refuge believed to be Michael Anthony Debevec",
-          "Debevec reported missing Aug. 27 after wallet found by Good Samaritan",
-          "Vehicle located at Chastain Beach; backpack with computer found in tree during search"
-        ],
-        "reason": "No candidate involves Michael Anthony Debevec, the House of Refuge/Chastain Beach location, or the Aug. 27 disappearance. The closest missing-person candidate (Justin Jasterzenski) is a different named individual with a different last-seen date and location, so this is a distinct real-world case with no existing canonical to update.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.93,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Body found in Martin County mangroves near House of Refuge believed to be Michael Anthony Debevec",
-          "Debevec reported missing Aug. 27 after wallet found by Good Samaritan",
-          "Vehicle located at Chastain Beach; backpack with computer found in tree during search"
-        ],
-        "reason": "No candidate involves Michael Anthony Debevec, the House of Refuge/Chastain Beach location, or the Aug. 27 disappearance. The closest missing-person candidate (Justin Jasterzenski) is a different named individual with a different last-seen date and location, so this is a distinct real-world case with no existing canonical to update.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
       "incoming_headline": "Florida orders removal of automated license plate readers from state highways within 30 days",
       "incoming_source_url": "https://www.wptv.com/news/state/florida-bans-license-plate-cameras-on-state-roads-after-desantis-called-surveillance-out-of-control",
       "incoming_story_id": "story_007307",
@@ -1706,29 +1584,16 @@
         "status": "invalid_model_response",
         "action": "hold",
         "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
-        "same_real_world_event": true,
-        "material_new_update": true,
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.78,
-        "shared_anchors": [
-          "Florida Department of Transportation",
-          "automated license plate readers / Flock cameras",
-          "state highways/roads",
-          "local law enforcement agencies affected",
-          "Gov. DeSantis surveillance concerns as backdrop",
-          "consecutive-day publication (Aug 31 to Sept 1)"
-        ],
-        "novel_facts": [
-          "Explicit 30-day deadline for physical removal of cameras (vs. earlier permit revocation blocking future requests)",
-          "More than 8,000 Flock cameras documented statewide",
-          "Public reaction quotes from Palm Beach County residents (Reid Mollway, David Vega)",
-          "Nikki Fried's criticism of Republicans over unchecked camera expansion",
-          "Note that local agencies have not yet responded to the order"
-        ],
-        "reason": "This is the same FDOT regulatory action against ALPR cameras as the Aug 31 canonical article, escalating from permit revocation to a concrete 30-day removal mandate. The specific removal deadline and camera count are material updates that change what readers need to know, but the story remains part of the same ongoing FDOT crackdown rather than introducing a distinct accountability or investigative angle warranting a new URL.",
+        "confidence": 0.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "",
         "validation_errors": [
-          "same_event_confidence_below_threshold"
+          "same_event_action_without_same_event"
         ],
         "consistency_repairs": []
       },
@@ -1737,30 +1602,222 @@
         "status": "invalid_model_response",
         "action": "hold",
         "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
-        "same_real_world_event": true,
-        "material_new_update": true,
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.78,
+        "confidence": 0.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "",
+        "validation_errors": [
+          "same_event_action_without_same_event"
+        ],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Body found in Martin County mangroves believed to be missing Port St. Lucie man",
+      "incoming_source_url": "https://cbs12.com/news/local/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news",
+      "incoming_story_id": "story_007411",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Body found in Martin County mangroves believed to be missing Port St. Lucie man",
+      "incoming_source_url": "https://cbs12.com/news/local/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news",
+      "incoming_story_id": "story_007411",
+      "candidates": [
+        {
+          "slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
+          "headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.732,
+          "retrieval_score": 0.592,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+          "headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6658,
+          "retrieval_score": 0.5498,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.612,
+          "retrieval_score": 0.475,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+          "headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6675,
+          "retrieval_score": 0.5925,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
+          "headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6036,
+          "retrieval_score": 0.5996,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-08-18-miami-woman-accused-of-posing-as-bank-representative-in-martin-county-credit-car",
+          "headline": "Miami woman accused of posing as bank representative in Martin County credit card scam",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6034,
+          "retrieval_score": 0.5534,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+          "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5901,
+          "retrieval_score": 0.5211,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
+          "headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5725,
+          "retrieval_score": 0.5005,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+          "headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5687,
+          "retrieval_score": 0.5027,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-18-martin-county-deputies-rescue-man-attempting-suicide-in-ocean",
+          "headline": "Martin County deputies rescue man attempting suicide in ocean",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5288,
+          "retrieval_score": 0.4788,
+          "reasons": [
+            "publication_gap_15_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+          "headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5274,
+          "retrieval_score": 0.4994,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc",
+          "headline": "Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5231,
+          "retrieval_score": 0.4831,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.9,
         "shared_anchors": [
-          "Florida Department of Transportation",
-          "automated license plate readers / Flock cameras",
-          "state highways/roads",
-          "local law enforcement agencies affected",
-          "Gov. DeSantis surveillance concerns as backdrop",
-          "consecutive-day publication (Aug 31 to Sept 1)"
+          "st-lucie/port-st-lucie locality",
+          "missing-person event family"
         ],
         "novel_facts": [
-          "Explicit 30-day deadline for physical removal of cameras (vs. earlier permit revocation blocking future requests)",
-          "More than 8,000 Flock cameras documented statewide",
-          "Public reaction quotes from Palm Beach County residents (Reid Mollway, David Vega)",
-          "Nikki Fried's criticism of Republicans over unchecked camera expansion",
-          "Note that local agencies have not yet responded to the order"
+          "Body found in Martin County mangroves near House of Refuge believed to be Michael Anthony Debevec",
+          "Wallet found by Good Samaritan led to missing person report",
+          "Vehicle found at Chastain Beach",
+          "Backpack with computer found in tree",
+          "Phone records showed movement between Chastain Beach and House of Refuge"
         ],
-        "reason": "This is the same FDOT regulatory action against ALPR cameras as the Aug 31 canonical article, escalating from permit revocation to a concrete 30-day removal mandate. The specific removal deadline and camera count are material updates that change what readers need to know, but the story remains part of the same ongoing FDOT crackdown rather than introducing a distinct accountability or investigative angle warranting a new URL.",
-        "validation_errors": [
-          "same_event_confidence_below_threshold"
+        "reason": "No candidate references Michael Anthony Debevec or this specific case. The closest missing-person candidate involves a different named individual (Justin Jasterzenski, last seen Monday on SE Avon Park Drive), a distinct person and circumstance with no shared name, location, or timeline anchors to the Debevec case in Martin County mangroves near House of Refuge/Chastain Beach.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.9,
+        "shared_anchors": [
+          "st-lucie/port-st-lucie locality",
+          "missing-person event family"
         ],
+        "novel_facts": [
+          "Body found in Martin County mangroves near House of Refuge believed to be Michael Anthony Debevec",
+          "Wallet found by Good Samaritan led to missing person report",
+          "Vehicle found at Chastain Beach",
+          "Backpack with computer found in tree",
+          "Phone records showed movement between Chastain Beach and House of Refuge"
+        ],
+        "reason": "No candidate references Michael Anthony Debevec or this specific case. The closest missing-person candidate involves a different named individual (Justin Jasterzenski, last seen Monday on SE Avon Park Drive), a distinct person and circumstance with no shared name, location, or timeline anchors to the Debevec case in Martin County mangroves near House of Refuge/Chastain Beach.",
+        "validation_errors": [],
         "consistency_repairs": []
       }
     }
