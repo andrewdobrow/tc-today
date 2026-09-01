@@ -269,6 +269,20 @@ function setMeterPaywallState(paywall, period, afterRead=false){
   qs('.tct-paywall-fade', paywall.parentElement || document)?.remove()
 }
 
+function placePostReadMeterAtArticleEnd(paywall){
+  const memberOnly = paywall?.closest('.tct-member-only')
+  if (!memberOnly) return
+  const articleRoot = paywall.closest('.article-main-column') || paywall.closest('.article-wrap') || document
+  const boundary = qs('.newsletter-inline-slot--article', articleRoot) || qs('.article-share', articleRoot)
+  if (boundary?.parentElement) {
+    boundary.parentElement.insertBefore(memberOnly, boundary)
+    return
+  }
+  const bodies = qsa('.article-body', articleRoot).filter(node => !node.closest('.tct-member-only'))
+  const lastBody = bodies[bodies.length - 1]
+  if (lastBody) lastBody.insertAdjacentElement('afterend', memberOnly)
+}
+
 function renderProtectedBody(protectedBody, paywall, access){
   const fullBodyMarker = '<!--tct-full-article-v2-->'
   const preview = qs('.tct-member-preview')
@@ -369,7 +383,10 @@ async function unlockArticle(statusOverride=null){
     endMemberPrepaint()
     endMeterPrepaint()
     setMessage(message, '')
-    if (rendered) setMeterPaywallState(paywall, String(data.period || reservation.period || ''), true)
+    if (rendered) {
+      placePostReadMeterAtArticleEnd(paywall)
+      setMeterPaywallState(paywall, String(data.period || reservation.period || ''), true)
+    }
     return
   }
 

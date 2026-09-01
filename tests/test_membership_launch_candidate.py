@@ -222,8 +222,8 @@ def test_sitewide_subscriber_chrome_loads_membership_state_and_prepaints(tmp_pat
     assert "data-tct-member-prepaint" in rendered
     assert "tct_member_entitled_hint" in rendered
     assert 'src="/membership-config.js"' in rendered
-    assert 'src="/membership.js?v=1.13.7.1"' in rendered
-    assert rendered.count('/membership.js?v=1.13.7.1') == 1
+    assert 'src="/membership.js?v=1.13.7.1b"' in rendered
+    assert rendered.count('/membership.js?v=1.13.7.1b') == 1
 
 
 def test_entitled_subscriber_chrome_replaces_sales_header_and_hides_membership_card():
