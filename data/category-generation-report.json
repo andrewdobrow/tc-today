@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-01T20:31:12Z",
+  "generated_at": "2026-09-01T20:45:02Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,25 +15,25 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 7,
-      "generated_live": 2
+      "cache_hit": 2,
+      "category_eligibility_archive_recovery": 7
     },
     "failures": {
       "no_category_eligible_sources": 7
     },
-    "model_attempt_count": 2,
-    "model_elapsed_seconds": 15.154,
+    "model_attempt_count": 0,
+    "model_elapsed_seconds": 0.0,
     "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 3,
-    "published_story_duplicate_suppression_count": 67,
+    "published_story_duplicate_suppression_count": 61,
     "story_aware_update_context_count": 1,
-    "material_update_promotion_evaluation_count": 15,
-    "material_update_promotion_count": 7,
-    "material_update_promotion_cache_hit_count": 9,
-    "material_update_promotion_model_call_count": 6
+    "material_update_promotion_evaluation_count": 10,
+    "material_update_promotion_count": 6,
+    "material_update_promotion_cache_hit_count": 10,
+    "material_update_promotion_model_call_count": 0
   },
   "categories": [
     {
@@ -136,6 +136,16 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
+          "editorial_story_id": "story_006607",
+          "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+          "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "New data center proposed for western St. Lucie County near Interstate 95 - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
           "editorial_story_id": "story_007205",
@@ -143,24 +153,14 @@
           "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
-          "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
-          "editorial_story_id": "story_006607",
-          "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
-          "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
@@ -173,8 +173,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": true,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "update_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "update_existing_canonical",
@@ -292,6 +292,21 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
+          "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+          "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "New data center proposed for western St. Lucie County near Interstate 95 - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
           "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
@@ -304,33 +319,18 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
-          "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
-          "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
-          "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 32.108
+      "elapsed_seconds": 19.607
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 16,
-      "publishable_source_count": 4,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -365,7 +365,7 @@
           "source_url": "https://cbs12.com/news/local/homes-cars-flooded-in-indiantown-martin-county-county-booker-park-neighborhood-despite-2-million-drainage-project-flooding-drainage-stormwater-swales-driveway-culverts-homes-cars-flooded-damage-carpets?teaserSource=trending"
         }
       ],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -399,32 +399,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Body found near Stuart beach; officials investigate if it is missing Oklahoma man - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMilgJBVV95cUxNanh0Mmc1dlBfU0hHbnFhcFdEVWtoN0xQMDRwY0NZb2lfbDQ4SVRJNXloSnluNE93U1FSa0RFN2JvSkhrMmJreHlLdFNBb3JudXhaTUZ0M2xsNEJyTkJ1ZW01dThUN0VKYmpEbng1czFxQW1HX1djUjJKdFo5d0h0RGhkUEZtU2xxX0FpeGVpNC1sWk9TemM3dnd3MDJnM2JnRm9RSWdvR1l3akJJeG1FY3N5cFU0aU9wSUpBcThWbTFVMHA4SHZ0c0RUenFydWUxT08teTRDY3A5M0RoYmpFR0ozSXVsaFk5WFF1T2h4UENId2dhR1dlZFppTWhMZFp4UjNpZVZIRngyczB5ZHVhWnVfUm1RUQ",
-          "editorial_story_id": "story_007353",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
           "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years",
           "editorial_story_id": "story_007384",
           "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
           "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Missing hospice patient’s ring leads Stuart police to Fort Pierce suspect - WQCS",
-          "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQMnV2eWUyNUNCV2hCakttMXZjOUZ0OFNoUXRrYjcwcU1vTnh0cXVMd0djUDBvZTNSS2tfQVYtRi0yZ05CZ1JYSkpsZ1BmNk9tY0xqTmFQOXRLX3FsZmxla3VYUVZkUm9xZ0ltQnRaT1l4aXZWZldidEZmRjNsTmVDRVZ3SEpKdmgzRlBpNHNHRWJhdmVHeFdTTVl1MzBqOVpzdXd6NWp0TWpQalY5M2podUxuSDJXejU4SUdwMTJtb1BBQQ",
-          "editorial_story_id": "story_007353",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -456,14 +436,24 @@
           "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "New data center proposed for western St. Lucie County near Interstate 95",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
+          "editorial_story_id": "story_007205",
+          "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+          "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
@@ -476,8 +466,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": true,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "update_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "update_existing_canonical",
@@ -534,21 +524,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Body found near Stuart beach; officials investigate if it is missing Oklahoma man - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMilgJBVV95cUxNanh0Mmc1dlBfU0hHbnFhcFdEVWtoN0xQMDRwY0NZb2lfbDQ4SVRJNXloSnluNE93U1FSa0RFN2JvSkhrMmJreHlLdFNBb3JudXhaTUZ0M2xsNEJyTkJ1ZW01dThUN0VKYmpEbng1czFxQW1HX1djUjJKdFo5d0h0RGhkUEZtU2xxX0FpeGVpNC1sWk9TemM3dnd3MDJnM2JnRm9RSWdvR1l3akJJeG1FY3N5cFU0aU9wSUpBcThWbTFVMHA4SHZ0c0RUenFydWUxT08teTRDY3A5M0RoYmpFR0ozSXVsaFk5WFF1T2h4UENId2dhR1dlZFppTWhMZFp4UjNpZVZIRngyczB5ZHVhWnVfUm1RUQ",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
           "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years",
           "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
@@ -556,21 +531,6 @@
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Missing hospice patient’s ring leads Stuart police to Fort Pierce suspect - WQCS",
-          "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQMnV2eWUyNUNCV2hCakttMXZjOUZ0OFNoUXRrYjcwcU1vTnh0cXVMd0djUDBvZTNSS2tfQVYtRi0yZ05CZ1JYSkpsZ1BmNk9tY0xqTmFQOXRLX3FsZmxla3VYUVZkUm9xZ0ltQnRaT1l4aXZWZldidEZmRjNsTmVDRVZ3SEpKdmgzRlBpNHNHRWJhdmVHeFdTTVl1MzBqOVpzdXd6NWp0TWpQalY5M2podUxuSDJXejU4SUdwMTJtb1BBQQ",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -636,10 +596,25 @@
           "novel_facts": [],
           "reason": "The incoming article is identical to the existing canonical - same suspect, same crime, same rings, same dates, same charges, and even the same source URL. The incoming article contains no new developments, no material updates such as sentencing, court proceedings, or recovery of the second ring. The body text appears to be the exact same reporting republished one day later.",
           "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "New data center proposed for western St. Lucie County near Interstate 95",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
+          "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+          "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.112
+      "elapsed_seconds": 11.625
     },
     {
       "category_key": "business",
@@ -894,7 +869,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.698
+      "elapsed_seconds": 12.462
     },
     {
       "category_key": "sports",
@@ -959,7 +934,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.749
+      "elapsed_seconds": 10.147
     },
     {
       "category_key": "things_to_do",
@@ -1133,28 +1108,21 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.212
+      "elapsed_seconds": 10.237
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 22,
       "publishable_source_count": 1,
       "selected_source_count": 1,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.346,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 9.346,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1230,32 +1198,22 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "Florida orders removal of automated license plate readers from state highways within 30 days",
-      "generated_card_count": 0,
-      "elapsed_seconds": 20.58
+      "elapsed_seconds": 9.452
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 19,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 1,
       "selected_source_count": 1,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.808,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 5.808,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1269,7 +1227,7 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 11,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -1283,12 +1241,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-          "editorial_story_id": "custom:8b07c4ab92b901c1752d49826291ed8a",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-          "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
+          "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQMzBycnh6TXRHOVhnckp4RXhaN19PeU5VQzhlVThsdWNNQ0pHR0ZETHpjM1ZDZmdRNkRITl95VXFYV3Mtc1J5Ukp4OWgzbUdYWkgzN2FLd2FrQmc2eWVSVkVGX1pSR3FBbG9FVDd5cnByY0dSeWJMM3hnaGMzMlgzSlljLWs0ODVxLXdnNGx1clRfZ1Z6cThBYmVsYlZBNDdSbGpJanBYb9IBuwFBVV95cUxNU3h0MDdldnQzRG9mbHlTVl9kOUJDZ2lqeWduWjdLd254LTlpdUJTN0FkV0htclZBV09RNXZueUhkUldxNXRxQmNlQnNuWkhLQlhEYnFwaVFwcmwxSmJqM3RLTVRkc21TRFlqRG8yNEJPcWRSUHlKdTR3WEdoT1l5T21LWWpMbVdZUDFoczB3RUdWX2QteU5XT3hyZFVpM1JfMlhWRER5TTdUSFlSN1NzMDFIZ3pOcjJyVEhN",
+          "editorial_story_id": "story_007379",
+          "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+          "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1308,26 +1266,6 @@
           "editorial_story_id": "story_007384",
           "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
           "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Body found near Stuart beach; officials investigate if it is missing Oklahoma man - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOZVYtb0pNR1VrVFJNUnRMZ24zeGFjanNXeXViUTBzbnA5UFZIU2N3WWlRT01GUGRqODAwYVVKeGxvQWFhb3BxQVUzTEI5emRQWTNkMWR0V0pwWlpvOGNWVGNRclZnWXZhcTNONGd2cDhxaFU5MlBOUVNyLS1jTTRIdWthQ2VQQUZ1OXdzY2JTb2ZuaGJRTkgzbmtZaE42SzBQODhuTGI4d1lPNF9xREJFYTNOYjBnNzRzV3pZaGZRSy1GdmNScG9zaHdYN21rU21XS3ZFaDJGQWRuLUFneTYyUTVuODR4MnRDSDI5S2pDdTVpaTRLZVVDYg",
-          "editorial_story_id": "story_007353",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Body found near Stuart beach; officials investigate if it is missing Oklahoma man - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxQRDdMRkpVX1hmNlBnSzU1a2lLQXlqUHkzbnZPUmJpQ3lDaDk1bGVmbENKODlzREtWdUwzV29nb3lpNllZdk5wS3BFaGF6OGxEUDd4a2tURFpUZ0tpa3BUSGVqeGRTcmhta3FYSGpvck9JYktVU0tCUm9uMDYzeE9wTDZlYU5UWGw1N2hOSnVfX2pKZFpKbEJaTGROTFhjM2IzNzA4UExCWTFhUk5kU0YtS3kyT0N5aHhuMzdwZXM5WkI2UmJjT3h4eFdfOTIxbkNaQkt3M1ZnRTRubFQxSGk1a0xGRjlyU2xlam05V29EYkx0Sy1iSlBpUnNpVjd4SllGakpQNg",
-          "editorial_story_id": "story_007353",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1384,10 +1322,10 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 4,
-      "material_update_promotion_count": 2,
+      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
@@ -1428,41 +1366,18 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": true,
+          "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQMzBycnh6TXRHOVhnckp4RXhaN19PeU5VQzhlVThsdWNNQ0pHR0ZETHpjM1ZDZmdRNkRITl95VXFYV3Mtc1J5Ukp4OWgzbUdYWkgzN2FLd2FrQmc2eWVSVkVGX1pSR3FBbG9FVDd5cnByY0dSeWJMM3hnaGMzMlgzSlljLWs0ODVxLXdnNGx1clRfZ1Z6cThBYmVsYlZBNDdSbGpJanBYb9IBuwFBVV95cUxNU3h0MDdldnQzRG9mbHlTVl9kOUJDZ2lqeWduWjdLd254LTlpdUJTN0FkV0htclZBV09RNXZueUhkUldxNXRxQmNlQnNuWkhLQlhEYnFwaVFwcmwxSmJqM3RLTVRkc21TRFlqRG8yNEJPcWRSUHlKdTR3WEdoT1l5T21LWWpMbVdZUDFoczB3RUdWX2QteU5XT3hyZFVpM1JfMlhWRER5TTdUSFlSN1NzMDFIZ3pOcjJyVEhN",
+          "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+          "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
           "cache_hit": false,
-          "model_call": true,
-          "action": "update_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "update_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Michael Anthony Debevec II",
-            "Martin County Sheriff's Office",
-            "Chastain Beach",
-            "missing person case",
-            "incident_anchor: missing-person:michael-debevec"
-          ],
-          "novel_facts": [
-            "Body discovered in mangroves north of House of Refuge",
-            "Body believed to belong to Debevec based on clothing matching surveillance video",
-            "Body found heavily decomposed",
-            "Debevec's wallet found on beach near House of Refuge",
-            "Debevec's backpack found hanging in tree",
-            "Debevec's car located at Chastain Beach",
-            "Medical Examiner working to determine cause of death",
-            "Family filed missing person report on Saturday",
-            "Search conducted by land, sea and air"
-          ],
-          "reason": "This is the same real-world event - the missing person case of Michael Anthony Debevec II in Martin County, confirmed by the matching incident_anchor. The incoming article contains a material update: the discovery of a body believed to be Debevec, which fundamentally changes the story from a search for a missing person to a death investigation. This is a major development that readers need to know. However, this is not independently newsworthy as a separate follow-up - it is the natural progression/resolution of the missing person case and should update the existing canonical rather than create a new URL.",
-          "validation_errors": []
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "martin",
@@ -1485,36 +1400,6 @@
           "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPaGd1RURRckJ3UW5yeFNPVGFzN1VmOHZXM0ZZY3hIQV9TUE5lR0hjYW15WXRXN3FINTlQNTBDSndLSWFta2JvTU4tQ1piQkZnYW1NbndNdzBaWlVmNUdUOWExeHNuZ2c3bXNjLTJyUjQ5eUJQMi1iajZtOUlZXzR3eUliQmNvNVBLUDRKYnNQNHY3UFBXdkJHYXVoMnJoTEpCSVBnUjdpVjFmQllVTEg1MmFoZWFQdVZ5SXo1c24xREF3Q2FaSXlvcWU2TmpKZk1BZlNR",
           "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
           "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Body found near Stuart beach; officials investigate if it is missing Oklahoma man - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOZVYtb0pNR1VrVFJNUnRMZ24zeGFjanNXeXViUTBzbnA5UFZIU2N3WWlRT01GUGRqODAwYVVKeGxvQWFhb3BxQVUzTEI5emRQWTNkMWR0V0pwWlpvOGNWVGNRclZnWXZhcTNONGd2cDhxaFU5MlBOUVNyLS1jTTRIdWthQ2VQQUZ1OXdzY2JTb2ZuaGJRTkgzbmtZaE42SzBQODhuTGI4d1lPNF9xREJFYTNOYjBnNzRzV3pZaGZRSy1GdmNScG9zaHdYN21rU21XS3ZFaDJGQWRuLUFneTYyUTVuODR4MnRDSDI5S2pDdTVpaTRLZVVDYg",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Body found near Stuart beach; officials investigate if it is missing Oklahoma man - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxQRDdMRkpVX1hmNlBnSzU1a2lLQXlqUHkzbnZPUmJpQ3lDaDk1bGVmbENKODlzREtWdUwzV29nb3lpNllZdk5wS3BFaGF6OGxEUDd4a2tURFpUZ0tpa3BUSGVqeGRTcmhta3FYSGpvck9JYktVU0tCUm9uMDYzeE9wTDZlYU5UWGw1N2hOSnVfX2pKZFpKbEJaTGROTFhjM2IzNzA4UExCWTFhUk5kU0YtS3kyT0N5aHhuMzdwZXM5WkI2UmJjT3h4eFdfOTIxbkNaQkt3M1ZnRTRubFQxSGk1a0xGRjlyU2xlam05V29EYkx0Sy1iSlBpUnNpVjd4SllGakpQNg",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
@@ -1636,18 +1521,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "Body found in Martin County mangroves believed to be missing Port St. Lucie man",
-      "generated_card_count": 0,
-      "elapsed_seconds": 27.763
+      "elapsed_seconds": 12.274
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 13,
+      "fresh_candidate_count": 16,
       "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1668,7 +1550,7 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 17,
+      "published_story_duplicate_suppression_count": 14,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1678,16 +1560,6 @@
           "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
           "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOWW91VklCZjdZTy1ZRmhIakh6eFBkYVdicDJXckItUGtqZVhnQVBqSEFEcXFaTlJsME83S2FqU0xHSUJCOVMxeWo3XzA1LXkwOFVfTEJpQXNiYWtoZmF2N0h2aF95WlJFdUJkNlhzT3VoRnhudHNhOS1hTkU1bVhMaVBsalZ2V1pKblJnN2k2QlN1bzlxVHRFajBNcVJGcnNfdExkMmRRS2tnT1diajBieDZiRklmS2xMV0dJVDNMTFFUX2xKcGdhcFFBcnlMUdIBzgFBVV95cUxOWW91VklCZjdZTy1ZRmhIakh6eFBkYVdicDJXckItUGtqZVhnQVBqSEFEcXFaTlJsME83S2FqU0xHSUJCOVMxeWo3XzA1LXkwOFVfTEJpQXNiYWtoZmF2N0h2aF95WlJFdUJkNlhzT3VoRnhudHNhOS1hTkU1bVhMaVBsalZ2V1pKblJnN2k2QlN1bzlxVHRFajBNcVJGcnNfdExkMmRRS2tnT1diajBieDZiRklmS2xMV0dJVDNMTFFUX2xKcGdhcFFBcnlMUQ",
-          "editorial_story_id": "story_007384",
-          "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
-          "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1724,10 +1596,10 @@
           "category_key": "st_lucie",
           "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
           "source_url": "https://news.google.com/rss/articles/CBMikAJBVV95cUxNUTlaeXBrWkxNNDkycEZqZmFaY1M4MnZxSTNSUVg0c1lpOUdLemFYbWxRVnhzaXBJZVdHb2ZQalRER1F6SWxNOGtFTjByenpvS0ZaYjBidVltT0k3aTVkMl9xYk02Q09yNHNWMEFUaDdSYTRhOWFkOVVick5mUV8tazQ5bVktbnNPS0JkUWxidnllcHN5THllX3hTWmRSSlhmMzYycEFFYjU4Y0dGS1FGOGxiemY0WDZPVzhMZ1d0UXBqZmtBdVJ2N01iZV9ZcHF6N0RBZ1VSRy1sSkNXQXY3NmxhdnlyX1hPVzlnR2ZFR3dUZ1R1UmRLdnZ5anUtN1plc213SnFuY2c3NjhlYnVQcg",
-          "editorial_story_id": "story_007352",
+          "editorial_story_id": "story_005618",
           "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
           "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "basis": "authorized_canonical_identity_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1742,11 +1614,11 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
-          "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
-          "editorial_story_id": "story_007106",
-          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
-          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+          "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
+          "editorial_story_id": "story_006607",
+          "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+          "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1783,7 +1655,7 @@
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
-          "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
+          "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOTDJvTVltVFZ4cl9iOTM2QVYtb01aZFNraVdyNjZVdlMtWEMwV2NMOTRCYXQyT0hacWt1bUpacV9kMmxkSFA1c1BFYnk1YkxQcklaVE4tRWdxV0tuaG04UlZNaEJqdWVtSy1LYmpzNzhPejBhcjU5aTBUeTRPY1hvTTlGSDgxcUtRODg4WGxBbHRrU0tiSFFnQXU1enlVTklQYW1vYWZwN1VsUldVd1Z1dURyclV5WEFENXBubnZyenhUY294YVMzRVZ6VlV0SWRT",
           "editorial_story_id": "story_006607",
           "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
           "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
@@ -1804,20 +1676,10 @@
           "category_key": "st_lucie",
           "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
           "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-          "editorial_story_id": "story_007353",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime?teaserSource=trending",
-          "editorial_story_id": "story_007353",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "editorial_story_id": "story_007416",
+          "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
+          "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
+          "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1829,24 +1691,14 @@
           "canonical_headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
-          "editorial_story_id": "story_007353",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 4,
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 3,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1857,21 +1709,6 @@
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOWW91VklCZjdZTy1ZRmhIakh6eFBkYVdicDJXckItUGtqZVhnQVBqSEFEcXFaTlJsME83S2FqU0xHSUJCOVMxeWo3XzA1LXkwOFVfTEJpQXNiYWtoZmF2N0h2aF95WlJFdUJkNlhzT3VoRnhudHNhOS1hTkU1bVhMaVBsalZ2V1pKblJnN2k2QlN1bzlxVHRFajBNcVJGcnNfdExkMmRRS2tnT1diajBieDZiRklmS2xMV0dJVDNMTFFUX2xKcGdhcFFBcnlMUdIBzgFBVV95cUxOWW91VklCZjdZTy1ZRmhIakh6eFBkYVdicDJXckItUGtqZVhnQVBqSEFEcXFaTlJsME83S2FqU0xHSUJCOVMxeWo3XzA1LXkwOFVfTEJpQXNiYWtoZmF2N0h2aF95WlJFdUJkNlhzT3VoRnhudHNhOS1hTkU1bVhMaVBsalZ2V1pKblJnN2k2QlN1bzlxVHRFajBNcVJGcnNfdExkMmRRS2tnT1diajBieDZiRklmS2xMV0dJVDNMTFFUX2xKcGdhcFFBcnlMUQ",
-          "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
-          "canonical_headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1930,7 +1767,7 @@
           "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
           "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
           "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
@@ -1955,38 +1792,18 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
-          "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
-          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
-          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+          "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
+          "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+          "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
           "promoted": false,
-          "cache_hit": true,
+          "cache_hit": false,
           "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Latoya Morrine Moye of Fort Pierce arrested",
-            "Former Treasure Coast Hospice employee",
-            "Theft of two rings from deceased patient",
-            "Report made to Stuart Police Department on Aug. 18",
-            "One ring pawned in Port St. Lucie",
-            "Third-degree grand theft charge",
-            "Ring pawned one day after report",
-            "One ring recovered, one still missing"
-          ],
-          "novel_facts": [
-            "Treasure Coast Hospice statement about taking trust seriously",
-            "Treasure Coast Hospice covering cost of retrieving recovered ring",
-            "Additional detail about surveillance video identifying Moye"
-          ],
-          "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
-          "validation_errors": []
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -2036,12 +1853,12 @@
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
-          "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
+          "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOTDJvTVltVFZ4cl9iOTM2QVYtb01aZFNraVdyNjZVdlMtWEMwV2NMOTRCYXQyT0hacWt1bUpacV9kMmxkSFA1c1BFYnk1YkxQcklaVE4tRWdxV0tuaG04UlZNaEJqdWVtSy1LYmpzNzhPejBhcjU5aTBUeTRPY1hvTTlGSDgxcUtRODg4WGxBbHRrU0tiSFFnQXU1enlVTklQYW1vYWZwN1VsUldVd1Z1dURyclV5WEFENXBubnZyenhUY294YVMzRVZ6VlV0SWRT",
           "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
           "canonical_headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -2067,64 +1884,16 @@
           "category_key": "st_lucie",
           "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
           "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
+          "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
+          "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
           "promoted": false,
           "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 1.0,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Drug arrests at Sam's Drive Thru convenience store at 1502 Avenue Drive on Friday August 29, 2026",
-            "Three named suspects: Ayhem Jaber Ubayda (21), John Alvin J. Mobley (71), Melvin James Kelly (60)",
-            "Recovery of 14 grams of crack cocaine and 128 grams of marijuana",
-            "St. Lucie County Sheriff's Office search warrant execution",
-            "Specific charges including Possession of Marijuana with Intent to Sell within 1,000 Feet of a Convenience Store"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime?teaserSource=trending",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 1.0,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Search warrant executed at Sam's Drive Thru convenience store at 1502 Avenue Drive on Friday",
-            "Ayhem Jaber Ubayda, 21, arrested",
-            "John Alvin J. Mobley, 71, arrested",
-            "Melvin James Kelly, 60, arrested",
-            "14 grams of crack cocaine recovered",
-            "128 grams of marijuana packaged for sale recovered",
-            "Charges include Possession of Marijuana with Intent to Sell within 1,000 Feet of a Convenience Store",
-            "Kelly had outstanding warrant for Sale of Cocaine"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -2140,40 +1909,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
-          "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
-          "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 1.0,
-          "shared_anchors": [],
-          "novel_facts": [
-            "SWAT operation at Southeast West Dunbrooke Circle in Port St. Lucie on Thursday",
-            "Search warrant execution by St. Lucie County Sheriff's Office SWAT",
-            "Social media rumor of active shooter dispelled by Port St. Lucie Police",
-            "Flash-bang devices used during operation",
-            "Ongoing criminal investigation"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
         }
       ],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 36.309
+      "new_publication_stale_rejected_count": 2,
+      "elapsed_seconds": 14.124
     },
     {
       "category_key": "indian_river",
@@ -2479,7 +2218,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.697
+      "elapsed_seconds": 11.225
     }
   ]
 }
