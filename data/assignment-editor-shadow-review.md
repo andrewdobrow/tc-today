@@ -4,41 +4,32 @@ The live publisher was not changed. All displayed variants are final-pipeline co
 
 Judge the final newsroom result, not verbosity. Score: (1) hero/story choice, (2) supporting-story selection and omissions, (3) ordering, (4) angle/new-development focus, (5) source mapping, (6) headline accuracy and strength, (7) lead/context, (8) factual fidelity, (9) completeness, (10) unnecessary filler, and (11) overall publishability. Record the winning variant letter or Tie before opening the answer key.
 
-## Local Government
+## Florida
 
 ### Source pool
 
-1. Weekend flooding creates drainage worries for Indiantown neighborhoods
-2. Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com
+1. Florida bans license plate cameras on state roads after DeSantis called surveillance 'out of control'
 
 ### Variant A
 
-**Hero:** Port St. Lucie schedules community meetings on 2026 ballot issues, city budget
+**Hero:** DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary
 **Urgency:** 2
 
-The city has scheduled 11 meetings at locations across Port St. Lucie beginning in September and running through October. The meetings will be held at venues including The Saints Golf Course, Lewis Library, City Hall Council Chambers, Temple Beth El Israel, Oxbow Eco Center, PSL Botanical Gardens, Keiser University, Indian River State
+Gov. Ron DeSantis and Republican gubernatorial nominee Byron Donalds are scheduled to share a stage Tuesday at a Republican leadership forum in Tampa. Attorney General James Uthmeier, Chief Financial Officer Blaise Ingoglia and Agriculture Commissioner Wilton Simpson are also expected at the event. The appearance follows a primary
 
 ### Variant B
 
-**Hero:** Port St. Lucie schedules community meetings on 2026 ballot issues, city budget
+**Hero:** DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary
 **Urgency:** 2
 
-The city has scheduled 11 meetings at locations across Port St. Lucie beginning in September and running through October. The meetings will be held at venues including The Saints Golf Course, Lewis Library, City Hall Council Chambers, Temple Beth El Israel, Oxbow Eco Center, PSL Botanical Gardens, Keiser University, Indian River State
-
-**Additional stories**
-
-**1. Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement**
-Source #2: Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com
-Teaser: Thousands of homeowners in Port St. Lucie will receive credits applied to their solid waste bills this year following a $24 million settlement the city received from its former tra
-
-Thousands of homeowners in Port St. Lucie will receive credits applied to their solid waste bills this year following a $24 million settlement the city received from its former trash hauler, Waste Pro, after a legal dispute related to its prior solid waste collection contract. The city has begun mailing flyers to residents explaining the
+Gov. Ron DeSantis and Republican gubernatorial nominee Byron Donalds are scheduled to share a stage Tuesday at a Republican leadership forum in Tampa. Attorney General James Uthmeier, Chief Financial Officer Blaise Ingoglia and Agriculture Commissioner Wilton Simpson are also expected at the event. The appearance follows a primary
 
 ### Variant C
 
-**Hero:** Port St. Lucie schedules community meetings on 2026 ballot issues, city budget
+**Hero:** DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary
 **Urgency:** 2
 
-The city has scheduled 11 meetings at locations across Port St. Lucie beginning in September and running through October. The meetings will be held at venues including The Saints Golf Course, Lewis Library, City Hall Council Chambers, Temple Beth El Israel, Oxbow Eco Center, PSL Botanical Gardens, Keiser University, Indian River State
+Gov. Ron DeSantis and Republican gubernatorial nominee Byron Donalds are scheduled to share a stage Tuesday at a Republican leadership forum in Tampa. Attorney General James Uthmeier, Chief Financial Officer Blaise Ingoglia and Agriculture Commissioner Wilton Simpson are also expected at the event. The appearance follows a primary
 
 **Scorecard**
 
@@ -56,37 +47,39 @@ The city has scheduled 11 meetings at locations across Port St. Lucie beginning 
 
 ---
 
-## St. Lucie County
+## Martin County
 
 ### Source pool
 
-1. Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC
-2. New data center proposed for western St. Lucie County near Interstate 95 - WFLX
+1. Body believed to be missing Port St. Lucie man found in Martin County mangroves - WPEC
 
 ### Variant A
 
-**Hero:** Data center proposed for 174 acres off West Midway Road in St. Lucie County
-**Hero source choice:** Source #2: New data center proposed for western St. Lucie County near Interstate 95 - WFLX
-**Urgency:** 6
+**Hero:** Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case
+**Urgency:** 2
 
-Willow Lakes LLC submitted a rezoning application in June to St. Lucie County to change 174 acres of its 203-acre property off West Midway Road and Interstate 95 to light industrial use for a data center. The rezoning application states the applicant intends to develop a data center on the portion of the property to be zoned light
+Tiger Woods is scheduled to appear in court Wednesday morning for a change-of-plea hearing in the DUI case stemming from his March rollover crash on Jupiter Island. Court records show the hearing for Eldrick Tiger Woods is set for 8:30 a.m. before Judge Darren Steele in Martin County. The State Attorney's Office confirmed the hearing.
 
 ### Variant B
 
-**Hero:** Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart
-**Urgency:** 2
+**Hero:** Body found in Martin County mangroves near House of Refuge believed to be missing Port St. Lucie man
+**Hero source choice:** Source #1: Body believed to be missing Port St. Lucie man found in Martin County mangroves - WPEC
+**Urgency:** 7
 
-A former Treasure Coast Hospice employee was arrested after Stuart police say she stole two rings from a deceased patient and pawned one of them in Port St. Lucie. Latoya Morrine Moye of Fort Pierce faces a third-degree grand theft charge in connection with the theft.
+A body was recovered from deep within the mangroves near the House of Refuge in Martin County on Tuesday morning, and investigators believe it is Michael Anthony Debevec, a Port St. Lucie man reported missing in late August. Martin County Sheriff John Budensiek said the body has not been officially identified, but the deceased person was wearing clothing matching what Debevec was believed to have been wearing when he disappeared.
 
- Stuart Police Department officers received a report on Aug. 18 that two
+The search began Saturday when a Good Samaritan found a wallet belonging to Debevec and went to his home to return it, prompting his family to file a missing person report. Investigators found Debevec's vehicle Saturday afternoon at Chastain Beach, a little more than two miles from where the body was discovered. The discoveries prompted detectives and ground and aerial units to launch an extensive search of the area.
+
+Investigators determined that Debevec traveled from the Port St. Lucie area to Martin County at about 3 a.m. on August 27 and parked at Chastain Beach. Phone records showed that his phone was in use Friday morning and moving back and forth between Chastain Beach and the House of Refuge. On Tuesday morning, investigators found a backpack belonging to Debevec hanging high in a tree with his computer inside. A deeper search into the mangroves led investigators to the body.
+
+Budensiek said investigators had not officially confirmed whether the body was Debevec's. He said there was a lot of decomposition that had taken place, making it impossible to determine cause of death. Debevec's family was notified that a body was found. The sheriff said the investigation is ongoing.
 
 ### Variant C
 
-**Hero:** Data center proposed for 174 acres off West Midway Road in St. Lucie County
-**Hero source choice:** Source #2: New data center proposed for western St. Lucie County near Interstate 95 - WFLX
-**Urgency:** 6
+**Hero:** Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case
+**Urgency:** 2
 
-Willow Lakes LLC submitted a rezoning application in June to St. Lucie County to change 174 acres of its 203-acre property off West Midway Road and Interstate 95 to light industrial use for a data center. The rezoning application states the applicant intends to develop a data center on the portion of the property to be zoned light
+Tiger Woods is scheduled to appear in court Wednesday morning for a change-of-plea hearing in the DUI case stemming from his March rollover crash on Jupiter Island. Court records show the hearing for Eldrick Tiger Woods is set for 8:30 a.m. before Judge Darren Steele in Martin County. The State Attorney's Office confirmed the hearing.
 
 **Scorecard**
 
