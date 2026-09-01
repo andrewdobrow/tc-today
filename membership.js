@@ -269,18 +269,40 @@ function setMeterPaywallState(paywall, period, afterRead=false){
   qs('.tct-paywall-fade', paywall.parentElement || document)?.remove()
 }
 
-function placePostReadMeterAtArticleEnd(paywall){
-  const memberOnly = paywall?.closest('.tct-member-only')
-  if (!memberOnly) return
+function placePostReadMeterAfterStory(paywall){
+  if (!paywall) return
+  const memberOnly = paywall.closest('.tct-member-only')
   const articleRoot = paywall.closest('.article-main-column') || paywall.closest('.article-wrap') || document
-  const boundary = qs('.newsletter-inline-slot--article', articleRoot) || qs('.article-share', articleRoot)
-  if (boundary?.parentElement) {
-    boundary.parentElement.insertBefore(memberOnly, boundary)
-    return
+
+  // Legacy protected rows can leave the unlocked continuation inside the same
+  // wrapper as the paywall. Normalize that continuation back into the article
+  // flow *before* moving the sales treatment, otherwise the card can sit between
+  // the public preview and the rest of the now-free story.
+  const unlockedTarget = qs('#tct-protected-content.is-unlocked', articleRoot)
+  if (memberOnly && unlockedTarget && memberOnly.contains(unlockedTarget)) {
+    memberOnly.parentElement?.insertBefore(unlockedTarget, memberOnly)
   }
-  const bodies = qsa('.article-body', articleRoot).filter(node => !node.closest('.tct-member-only'))
-  const lastBody = bodies[bodies.length - 1]
-  if (lastBody) lastBody.insertAdjacentElement('afterend', memberOnly)
+
+  // The paywall itself -- not its wrapper -- belongs after all story content.
+  // Prefer the stable post-story boundary. This remains correct even if a future
+  // article shell contains multiple article-body blocks.
+  const boundary = qs('.newsletter-inline-slot--article', articleRoot) || qs('.article-share', articleRoot)
+  let placed = false
+  if (boundary?.parentElement) {
+    boundary.parentElement.insertBefore(paywall, boundary)
+    placed = true
+  } else {
+    const bodies = qsa('.article-body', articleRoot).filter(node => !node.closest('.tct-member-only'))
+    const lastBody = bodies[bodies.length - 1]
+    if (lastBody) {
+      lastBody.insertAdjacentElement('afterend', paywall)
+      placed = true
+    }
+  }
+
+  // The original wrapper is now only scaffolding (fade and/or an empty protected
+  // target). Remove it only after the CTA has a proven destination.
+  if (placed) memberOnly?.remove()
 }
 
 function renderProtectedBody(protectedBody, paywall, access){
@@ -384,7 +406,7 @@ async function unlockArticle(statusOverride=null){
     endMeterPrepaint()
     setMessage(message, '')
     if (rendered) {
-      placePostReadMeterAtArticleEnd(paywall)
+      placePostReadMeterAfterStory(paywall)
       setMeterPaywallState(paywall, String(data.period || reservation.period || ''), true)
     }
     return

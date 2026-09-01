@@ -466,8 +466,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.1b"' in page
-    assert 'src="/membership.js?v=1.13.7.1b"' in page
+    assert 'href="/membership.css?v=1.13.7.1c"' in page
+    assert 'src="/membership.js?v=1.13.7.1c"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -497,8 +497,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.1b') == 1
-    assert first.count('/membership.js?v=1.13.7.1b') == 1
+    assert first.count('/membership.css?v=1.13.7.1c') == 1
+    assert first.count('/membership.js?v=1.13.7.1c') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -559,21 +559,26 @@ def test_one_free_article_monthly_meter_contract_is_server_signed_and_repeat_saf
     assert "data-meter-reset" in helper
 
 
-def test_first_free_article_keeps_conversion_card_after_full_story_but_member_removes_it():
+def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_content():
     browser = (ROOT / "membership.js").read_text()
     assert "if (access === 'member') memberOnly?.remove()" in browser
     assert "setMeterPaywallState(paywall" in browser
     assert "tct-paywall-metered-after-read" in browser
     assert "Thanks for reading. Get unlimited, ad-free access" in browser
-    assert "placePostReadMeterAtArticleEnd(paywall)" in browser
+    assert "placePostReadMeterAfterStory(paywall)" in browser
+    assert "#tct-protected-content.is-unlocked" in browser
+    assert "memberOnly.contains(unlockedTarget)" in browser
+    assert "insertBefore(unlockedTarget, memberOnly)" in browser
     assert "newsletter-inline-slot--article" in browser
     assert "article-share" in browser
-    assert "boundary.parentElement.insertBefore(memberOnly, boundary)" in browser
+    assert "boundary.parentElement.insertBefore(paywall, boundary)" in browser
+    assert "boundary.parentElement.insertBefore(memberOnly, boundary)" not in browser
+    assert "if (placed) memberOnly?.remove()" in browser
 
 
 def test_meter_asset_version_busts_cache_for_post_read_card_placement_fix():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.1b"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.1c"' in helper
 
 
 def test_update_workflow_auto_repairs_legacy_protected_article_endpoint_for_meter_launch():
