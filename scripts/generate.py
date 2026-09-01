@@ -32636,8 +32636,17 @@ def _filter_published_skip_candidates(headlines, archive, category_key=""):
     return kept, suppressed
 
 
-def _suppress_published_skip_placements(data, archive, category_key=""):
-    """Drop cached/model placements that escaped the pre-generation source guard."""
+def _suppress_published_skip_placements(
+    data, archive, category_key="", *, semantic_cache=None, semantic_report=None
+):
+    """Drop cached/model placements only after late materiality gets a chance.
+
+    A source can escape the pre-generation published-story guard when its canonical
+    identity is not resolved until the generated placement is stamped with the
+    current-run story identity.  That placement may contain a major follow-up.
+    Never destroy it merely because it now resolves to an existing canonical: run
+    the same late material-update write barrier used by forward publication first.
+    """
     if not isinstance(data, dict):
         return []
     suppressed = []
@@ -32646,6 +32655,32 @@ def _suppress_published_skip_placements(data, archive, category_key=""):
         canonical, basis = _published_skip_canonical(item, archive)
         if canonical is None:
             return False
+
+        # Production category generation supplies the semantic cache/report.  When
+        # present, a newly canonical-bound placement must receive a materiality
+        # decision before this destructive suppression point.  This closes the hole
+        # where a major generated follow-up could be deleted before reaching the
+        # later forward-publication safeguard.
+        if semantic_cache is not None and semantic_report is not None:
+            late_update, late_materiality = _late_published_skip_material_update_promotion(
+                item, canonical, basis, semantic_cache, semantic_report
+            )
+            if late_materiality is not None:
+                semantic_report.setdefault(
+                    "late_published_skip_materiality_decisions", []
+                ).append(copy.deepcopy(late_materiality))
+                summary = semantic_report.setdefault("summary", {})
+                summary["late_published_skip_materiality_evaluations"] = int(
+                    summary.get("late_published_skip_materiality_evaluations", 0) or 0
+                ) + int(bool(late_materiality.get("evaluated")))
+                summary["late_published_skip_materiality_promotions"] = int(
+                    summary.get("late_published_skip_materiality_promotions", 0) or 0
+                ) + int(bool(late_materiality.get("promoted")))
+            if late_update is not None:
+                item.clear()
+                item.update(late_update)
+                return False
+
         canonical_slug = str(canonical.get("slug") or "").strip()
         if canonical_slug:
             preferred = data.setdefault("_preferred_archive_recovery_slugs", [])
@@ -33807,7 +33842,11 @@ def main():
             data = copy.deepcopy(_cached_category.get("data", {}))
             _stamp_current_run_story_ids(data, headlines)
             _cached_published_suppressions = _suppress_published_skip_placements(
-                data, _pre_generation_archive, cat_key
+                data,
+                _pre_generation_archive,
+                cat_key,
+                semantic_cache=_pre_generation_semantic_gate_cache,
+                semantic_report=_semantic_gate_report,
             )
             if _cached_published_suppressions:
                 _category_record["published_story_duplicate_suppression_count"] += len(
@@ -34284,7 +34323,11 @@ def main():
                         "from current-run editorial decisions"
                     )
                 _generated_published_suppressions = _suppress_published_skip_placements(
-                    data, _pre_generation_archive, cat_key
+                    data,
+                    _pre_generation_archive,
+                    cat_key,
+                    semantic_cache=_pre_generation_semantic_gate_cache,
+                    semantic_report=_semantic_gate_report,
                 )
                 if _generated_published_suppressions:
                     _category_record["published_story_duplicate_suppression_count"] += len(

@@ -145,6 +145,76 @@ def test_cached_big_taste_rewrite_is_removed_before_live_reuse():
     assert data["hero"]["headline"] == "Different event"
 
 
+
+
+def test_generated_same_story_major_update_reaches_late_materiality_before_suppression(monkeypatch):
+    g = _load_generate()
+    canonical = _canonical()
+    generated = _incoming()
+    generated.update({
+        "headline": "Body found after search for missing man",
+        "body": "Authorities recovered a body during the search and are awaiting positive identification.",
+        "published": "2026-09-01T15:00:00+00:00",
+    })
+    data = {"hero": generated, "cards": []}
+    report = {"summary": {}}
+
+    def late_material_update(item, resolved, basis, cache, semantic_report):
+        assert resolved["slug"] == canonical["slug"]
+        updated = dict(item)
+        updated["headline"] = "Canonical refreshed with body recovery"
+        updated["_late_published_skip_material_update_promotion"] = True
+        return updated, {
+            "evaluated": True,
+            "promoted": True,
+            "action": "update_existing_canonical",
+        }
+
+    monkeypatch.setattr(
+        g, "_late_published_skip_material_update_promotion", late_material_update
+    )
+    removed = g._suppress_published_skip_placements(
+        data,
+        [canonical],
+        "martin",
+        semantic_cache={},
+        semantic_report=report,
+    )
+
+    assert removed == []
+    assert data["hero"]["headline"] == "Canonical refreshed with body recovery"
+    assert report["summary"]["late_published_skip_materiality_evaluations"] == 1
+    assert report["summary"]["late_published_skip_materiality_promotions"] == 1
+
+
+def test_generated_same_story_no_update_is_still_suppressed_after_late_materiality(monkeypatch):
+    g = _load_generate()
+    canonical = _canonical()
+    data = {"hero": _incoming(), "cards": [{"headline": "Different event", "enriched": True}]}
+    report = {"summary": {}}
+
+    monkeypatch.setattr(
+        g,
+        "_late_published_skip_material_update_promotion",
+        lambda *args, **kwargs: (None, {
+            "evaluated": True,
+            "promoted": False,
+            "action": "preserve_existing_canonical",
+        }),
+    )
+    removed = g._suppress_published_skip_placements(
+        data,
+        [canonical],
+        "things_to_do",
+        semantic_cache={},
+        semantic_report=report,
+    )
+
+    assert len(removed) == 1
+    assert data["hero"]["headline"] == "Different event"
+    assert report["summary"]["late_published_skip_materiality_evaluations"] == 1
+    assert report["summary"]["late_published_skip_materiality_promotions"] == 0
+
 def test_false_prospective_quarantine_is_repaired_and_newer_duplicate_redirected():
     g = _load_generate()
     old = _canonical()
