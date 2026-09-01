@@ -32647,13 +32647,35 @@ def _authorized_custom_material_update(item, canonical):
     return bool(pre_generation or late_write_barrier)
 
 def _filter_published_skip_candidates(headlines, archive, category_key=""):
-    """Remove already-published no-change sources before Claude sees them."""
+    """Remove already-published no-change sources before Claude sees them.
+
+    A source that has *already* passed the pre-generation semantic material-update
+    gate is not a no-change duplicate.  Durable custom identity intentionally still
+    resolves that source to its existing canonical after promotion, so this guard
+    must honor the target-bound promotion stamp instead of immediately deleting the
+    source it was told to keep.
+    """
     kept, suppressed = [], []
     for item in list(headlines or []):
         canonical, basis = _published_skip_canonical(item, archive)
         if canonical is None:
             kept.append(item)
             continue
+
+        canonical_slug = str(canonical.get("slug") or "").strip()
+        promoted_material_update = bool(
+            item.get("_semantic_material_update")
+            and item.get("_pre_generation_material_update_promotion")
+            and canonical_slug
+            and str(
+                item.get("_pre_generation_material_update_canonical_slug") or ""
+            ).strip() == canonical_slug
+            and _canonical_write_authorized(item, canonical)
+        )
+        if promoted_material_update:
+            kept.append(item)
+            continue
+
         suppressed.append({
             "category_key": category_key,
             "source_headline": item.get("title") or item.get("headline", ""),

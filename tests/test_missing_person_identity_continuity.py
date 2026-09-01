@@ -618,3 +618,93 @@ def test_named_missing_person_anchor_does_not_merge_different_people():
     assert michael == "missing-person:michael-debevec"
     assert jordan == "missing-person:jordan-smith"
     assert michael != jordan
+
+
+def test_validated_debevec_body_recovery_survives_immediate_published_story_guard(monkeypatch):
+    """Regression: promotion must not be undone by the very next duplicate guard.
+
+    Production on 2026-09-01 correctly validated the WPTV body-recovery source as a
+    material update to the authoritative Debevec custom canonical, then immediately
+    suppressed the same source as an already-published durable-custom duplicate.
+    """
+    g = _load_generate_module()
+    canonical = _debevec_custom_canonical()
+    canonical["incident_anchor_key"] = "missing-person:michael-debevec"
+    canonical["durable_custom_identity_key"] = "missing-person|michael-debevec"
+    body = (
+        "A body discovered deep in the mangroves on Hutchinson Island is believed "
+        "to belong to missing Oklahoma visitor Michael Anthony Debevec II. The "
+        "Martin County Sheriff's Office said the body was found just north of the "
+        "House of Refuge and the clothing matches surveillance video of Debevec. "
+        "Investigators are awaiting positive identification. The Medical Examiner's "
+        "Office is determining the cause of death."
+    )
+    source = {
+        "title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+        "headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+        "summary": body,
+        "article_text": body + " " + body,
+        "source_url": (
+            "https://www.wptv.com/news/treasure-coast/region-martin-county/"
+            "martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves"
+        ),
+        "link": (
+            "https://www.wptv.com/news/treasure-coast/region-martin-county/"
+            "martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves"
+        ),
+        "published": "Tue, 01 Sep 2026 20:02:41 GMT",
+        "source_quality": "full",
+        "source_type": "full_source",
+        "editorial_story_id": "story_fragmented_body_recovery",
+        "_editorial_story_id": "story_fragmented_body_recovery",
+        "_editorial_route": "skip",
+        "incident_anchor_key": "missing-person:michael-debevec",
+    }
+
+    canonical_slug = canonical["slug"]
+
+    monkeypatch.setattr(
+        g,
+        "_run_known_canonical_materiality_gate",
+        lambda *args, **kwargs: (
+            {
+                "status": "validated",
+                "action": g.SEMANTIC_ACTION_UPDATE,
+                "recommended_action": g.SEMANTIC_ACTION_UPDATE,
+                "selected_candidate_slug": canonical_slug,
+                "same_real_world_event": True,
+                "material_new_update": True,
+                "independently_newsworthy_followup": False,
+                "confidence": 1.0,
+                "shared_anchors": ["Michael Anthony Debevec II", "House of Refuge"],
+                "novel_facts": ["Body recovered", "Awaiting positive identification"],
+                "reason": "Body recovery is a major material update to the same missing-person case.",
+                "validation_errors": [],
+            },
+            [{"slug": canonical_slug, "article": {}, "evidence": {}}],
+            True,
+            False,
+        ),
+    )
+
+    headlines = [source]
+    promotion = g._promote_published_skip_material_updates(
+        headlines,
+        [canonical],
+        "martin",
+        cache={"entries": {}},
+    )
+
+    assert promotion["promoted_count"] == 1
+    assert source["_pre_generation_material_update_promotion"] is True
+    assert source["_semantic_material_update"] is True
+    assert source["_editorial_route"] == "update_existing"
+    assert source["_pre_generation_material_update_canonical_slug"] == canonical_slug
+
+    kept, suppressed = g._filter_published_skip_candidates(
+        headlines, [canonical], "martin"
+    )
+
+    assert kept == [source]
+    assert suppressed == []
+    assert g._source_candidate_publishable(source) is True
