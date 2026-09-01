@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-01T15:48:28Z",
+  "generated_at": "2026-09-01T20:06:57Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 20,
-    "rejected_count": 6,
+    "assessed_count": 28,
+    "rejected_count": 7,
     "enforced_categories": [
       "business",
       "crime",
@@ -35,8 +35,24 @@
       "mode": "enforce",
       "policy": "central_government_action_required",
       "assessed_count": 3,
-      "rejected_count": 1,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning",
+          "source_url": "https://www.wptv.com/sports/tiger-woods-scheduled-for-change-of-plea-hearing-in-dui-case-wednesday-morning"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -48,8 +64,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie",
-          "source_url": "https://www.wptv.com/shining-a-light/flavor-south-florida-returns-with-dining-deals-at-more-than-100-restaurants-from-boca-raton-to-port-st-lucie"
+          "headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years"
         }
       ]
     },
@@ -59,36 +75,8 @@
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
       "assessed_count": 3,
-      "rejected_count": 3,
+      "rejected_count": 1,
       "rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie",
-          "source_url": "https://www.wptv.com/shining-a-light/flavor-south-florida-returns-with-dining-deals-at-more-than-100-restaurants-from-boca-raton-to-port-st-lucie"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Weekend flooding creates drainage worries for Indiantown neighborhoods",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/weekend-flooding-creates-drainage-worries-for-indiantown-neighborhoods"
-        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -110,9 +98,48 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 1,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:jupiter island"
+          ],
+          "headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning",
+          "source_url": "https://www.wptv.com/sports/tiger-woods-scheduled-for-change-of-plea-hearing-in-dui-case-wednesday-morning"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:st lucie county",
+            "source_locality:indian river county",
+            "source_locality:port st lucie",
+            "source_locality:fort pierce"
+          ],
+          "headline": "9/11 anniversary events in Palm Beach, Martin, St. Lucie and Indian River counties mark 25 years",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/9-11-anniversary-events-in-palm-beach-martin-st-lucie-and-indian-river-counties-mark-25-years"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -137,7 +164,7 @@
       "category_label": "Sports",
       "mode": "observe_only",
       "policy": "existing_athletic_guard_retained",
-      "assessed_count": 0,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -146,7 +173,7 @@
       "category_label": "Things To Do",
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
-      "assessed_count": 2,
+      "assessed_count": 1,
       "rejected_count": 1,
       "rejections": [
         {
@@ -186,7 +213,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 0,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -195,7 +222,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -204,7 +231,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 5,
+      "assessed_count": 7,
       "rejected_count": 0,
       "rejections": []
     }
