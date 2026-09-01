@@ -4,28 +4,25 @@
 
 ## Hero
 
-- Current: **Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns**
+- Current: **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**
 - Recommended: **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**
-- Recommendation: CHANGE (not enforced)
+- Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Data center proposed for 174 acres off West Midway Road in St. Lucie County | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | 67 | importance 65; freshness 90.37; urgency 2/10 |
-| 2 | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 56 | importance 35; freshness 83.36; urgency 2/10 |
-| 3 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Data center proposed for 174 acres off West Midway Road in St. Lucie County | 50 | importance 10; freshness 95.52; urgency 2/10 |
-| 4 | Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend | Lightning strike injures man on boat near Sandsprit Park in Stuart | 46 | importance 35; freshness 43.26; urgency 2/10 |
-| 5 | Lightning strike injures man on boat near Sandsprit Park in Stuart | Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend | 38 | importance 10; freshness 46.17; urgency 2/10 |
-| 6 | One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie | One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie | 38 | importance 25; freshness 22.73; urgency 2/10; -6 category saturation; -4 county saturation |
+| 1 | Data center proposed for 174 acres off West Midway Road in St. Lucie County | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 52 | importance 35; freshness 68.33; urgency 2/10 |
+| 2 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Data center proposed for 174 acres off West Midway Road in St. Lucie County | 47 | importance 10; freshness 80.48; urgency 2/10 |
+| 3 | Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend | Lightning strike injures man on boat near Sandsprit Park in Stuart | 43 | importance 35; freshness 28.23; urgency 2/10 |
+| 4 | Lightning strike injures man on boat near Sandsprit Park in Stuart | Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend | 35 | importance 10; freshness 31.14; urgency 2/10 |
 
 ## Recommended moves
 
-- **Data center proposed for 174 acres off West Midway Road in St. Lucie County**: 1 → 3 — importance 10; freshness 95.52; urgency 2/10
-- **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**: 2 → 1 — importance 65; freshness 90.37; urgency 2/10
-- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 3 → 2 — importance 35; freshness 83.36; urgency 2/10
-- **Lightning strike injures man on boat near Sandsprit Park in Stuart**: 5 → 4 — importance 35; freshness 43.26; urgency 2/10
-- **Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend**: 4 → 5 — importance 10; freshness 46.17; urgency 2/10
+- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 2 → 1 — importance 35; freshness 68.33; urgency 2/10
+- **Data center proposed for 174 acres off West Midway Road in St. Lucie County**: 1 → 2 — importance 10; freshness 80.48; urgency 2/10
+- **Lightning strike injures man on boat near Sandsprit Park in Stuart**: 4 → 3 — importance 35; freshness 28.23; urgency 2/10
+- **Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend**: 3 → 4 — importance 10; freshness 31.14; urgency 2/10
 
 ## Guardrails
 
