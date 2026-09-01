@@ -271,3 +271,55 @@ def test_authority_report_fails_closed_on_unauthorized_destructive_action(tmp_pa
         (tmp_path / "data" / "event-identity-authority.json").read_text()
     )
     assert authority["passed"] is False
+
+
+def test_precise_location_body_contamination_cannot_authorize_without_headline_subject_continuity():
+    from tct_engine.event_identity_authority import decide_cross_source_identity
+
+    decision = decide_cross_source_identity(
+        conflict_reason="",
+        exact_incident_anchor=False,
+        exact_known_event_key=False,
+        shared_named_people=0,
+        shared_precise_locations=1,
+        shared_agencies=0,
+        shared_subject_phrases=0,
+        shared_headline_topic_core=1,
+        shared_distinctive_facts=12,
+        shared_locality=True,
+        shared_event_family=True,
+        policy_family=False,
+        time_safe=True,
+        locality_safe=True,
+        family_safe=True,
+        near_duplicate_headline=False,
+    )
+
+    assert decision.write_authorized is False
+    assert decision.outcome == "possible_relationship"
+
+
+def test_precise_location_composite_remains_authorized_with_two_shared_headline_concepts():
+    from tct_engine.event_identity_authority import decide_cross_source_identity
+
+    decision = decide_cross_source_identity(
+        conflict_reason="",
+        exact_incident_anchor=False,
+        exact_known_event_key=False,
+        shared_named_people=0,
+        shared_precise_locations=1,
+        shared_agencies=0,
+        shared_subject_phrases=0,
+        shared_headline_topic_core=3,
+        shared_distinctive_facts=12,
+        shared_locality=True,
+        shared_event_family=True,
+        policy_family=False,
+        time_safe=True,
+        locality_safe=True,
+        family_safe=True,
+        near_duplicate_headline=False,
+    )
+
+    assert decision.write_authorized is True
+    assert decision.proof_type == "precise_location_plus_distinctive_facts"

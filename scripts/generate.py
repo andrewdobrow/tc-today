@@ -620,6 +620,9 @@ CURRENT_RUN_QUARANTINED_STORY_IDS = set()
 CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
 CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
 CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+# main() owns this only until write_archives() consumes it. It carries semantic
+# decisions made at the pre-archive generated/cached placement suppression boundary.
+CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT = {}
 CROSS_SOURCE_UPDATE_IDENTITY_SCHEMA_VERSION = 2
 CUSTOM_RETIREMENTS_PATH = OUTPUT_DIR / "data" / "custom-retirements.json"
 DEFAULT_AFFILIATE_DISCLOSURE = (
@@ -29301,6 +29304,7 @@ def _reconcile_archive_publication_identity(archive, identity_index):
 
 def write_archives(all_categories, top_cat):
     global CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
+    global CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT
     CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
@@ -29359,6 +29363,32 @@ def write_archives(all_categories, top_cat):
     _semantic_gate_report["summary"]["pre_generation_materiality_cache_hits"] = sum(
         1 for row in _pregen_rows if row.get("cache_hit")
     )
+
+    # main() can perform the same late-published-skip materiality barrier before
+    # write_archives() exists, when a generated/cached placement gains canonical
+    # identity after story-ID stamping.  Merge that audit into the one persisted
+    # semantic report so the protection is both executable and observable.
+    _prearchive_semantic_report = CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT
+    CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT = {}
+    if isinstance(_prearchive_semantic_report, dict):
+        _placement_rows = copy.deepcopy(
+            _prearchive_semantic_report.get(
+                "late_published_skip_materiality_decisions", []
+            )
+            or []
+        )
+        if _placement_rows:
+            _semantic_gate_report.setdefault(
+                "late_published_skip_materiality_decisions", []
+            ).extend(_placement_rows)
+        _placement_summary = _prearchive_semantic_report.get("summary", {}) or {}
+        for _summary_key in (
+            "late_published_skip_materiality_evaluations",
+            "late_published_skip_materiality_promotions",
+        ):
+            _semantic_gate_report["summary"][_summary_key] = int(
+                _semantic_gate_report["summary"].get(_summary_key, 0) or 0
+            ) + int(_placement_summary.get(_summary_key, 0) or 0)
 
     # Canonical cleanup is handled below. Never unlink an already-published
     # duplicate URL: it is retained as a redirect destination so readers and search
@@ -32146,6 +32176,7 @@ def _run_known_canonical_materiality_gate(
     source materially advances the known canonical.  Ambiguity fails closed.
     """
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS
+    global CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT
 
     incoming_payload = _semantic_gate_article_payload(item, include_archive_body=False)
     canonical_payload = _semantic_gate_article_payload(
@@ -33487,6 +33518,15 @@ def main():
     # category generation so a proven same-story source can be adjudicated for
     # materiality before the no-change duplicate guard suppresses it.
     _pre_generation_semantic_gate_cache = _load_semantic_publication_gate_cache()
+    # Generated/cached placements can resolve to an existing canonical only after
+    # current-run identity stamping.  Keep a main()-scoped semantic report for that
+    # pre-archive destructive boundary; write_archives() later merges these rows into
+    # the persisted semantic publication report.  Do not reference write_archives()'s
+    # local _semantic_gate_report from main().
+    _pre_generation_placement_semantic_report = _new_semantic_publication_gate_report()
+    CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT = (
+        _pre_generation_placement_semantic_report
+    )
     all_categories = []
     category_generation_records = []
     category_generation_report = {}
@@ -33846,7 +33886,7 @@ def main():
                 _pre_generation_archive,
                 cat_key,
                 semantic_cache=_pre_generation_semantic_gate_cache,
-                semantic_report=_semantic_gate_report,
+                semantic_report=_pre_generation_placement_semantic_report,
             )
             if _cached_published_suppressions:
                 _category_record["published_story_duplicate_suppression_count"] += len(
@@ -34327,7 +34367,7 @@ def main():
                     _pre_generation_archive,
                     cat_key,
                     semantic_cache=_pre_generation_semantic_gate_cache,
-                    semantic_report=_semantic_gate_report,
+                    semantic_report=_pre_generation_placement_semantic_report,
                 )
                 if _generated_published_suppressions:
                     _category_record["published_story_duplicate_suppression_count"] += len(

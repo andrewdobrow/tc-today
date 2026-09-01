@@ -1056,3 +1056,15 @@ def test_custom_canonical_still_rejects_unverified_external_overwrite():
     }
 
     assert g._authorized_custom_material_update(incoming, canonical) is False
+
+
+def test_main_uses_main_scoped_semantic_report_for_prearchive_placement_suppression():
+    g = _load_generate()
+    import inspect
+
+    source = inspect.getsource(g.main)
+    assert "semantic_report=_semantic_gate_report" not in source
+    assert source.count(
+        "semantic_report=_pre_generation_placement_semantic_report"
+    ) == 2
+    assert "_current_regression_report = write_archives(all_categories, top_cat)" in source

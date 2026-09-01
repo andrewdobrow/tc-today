@@ -224,6 +224,14 @@ def decide_cross_source_identity(
         and shared_locality
         and shared_precise_locations
         and shared_distinctive_facts >= 5
+        # A precise-location composite is intentionally weaker than a named-person
+        # composite, so it also needs headline-level subject continuity. Publisher
+        # article extraction can contain related-story modules from the same site;
+        # those modules may contribute a street plus many distinctive tokens from an
+        # unrelated incident. Two shared headline topic concepts prevent that
+        # contaminated body text from granting canonical write authority while
+        # preserving genuine rewritten same-incident reports.
+        and shared_headline_topic_core >= 2
     ):
         return _decision(
             OUTCOME_VERIFIED,
