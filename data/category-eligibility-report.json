@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-01T22:10:33Z",
+  "generated_at": "2026-09-01T22:52:06Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 13,
-    "rejected_count": 3,
+    "assessed_count": 21,
+    "rejected_count": 6,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,16 +34,31 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 0,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 2,
+      "rejected_count": 1,
+      "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves"
+        }
+      ]
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 2,
+      "assessed_count": 3,
       "rejected_count": 1,
       "rejections": [
         {
@@ -67,9 +82,50 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 1,
-      "rejected_count": 1,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county",
+            "source_locality:st lucie county",
+            "source_locality:indian river county",
+            "source_locality:stuart",
+            "source_locality:port st lucie"
+          ],
+          "headline": "Florida license plate reader removal order raises safety concerns from law enforcement on the Treasure Coast",
+          "source_url": "https://www.wptv.com/news/treasure-coast/florida-license-plate-reader-removal-order-raises-safety-concerns-from-law-enforcement-on-the-treasure-coast"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county",
+            "source_locality:hutchinson island"
+          ],
+          "headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -143,7 +199,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 2,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -161,7 +217,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     }
