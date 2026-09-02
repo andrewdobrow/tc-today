@@ -121,3 +121,121 @@ def test_unrelated_animal_story_survives_custom_incident_lock():
     )
     assert removed == []
     assert categories[0]["hero"] is not None
+
+
+def _debevec_custom_canonical(g):
+    return {
+        "slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+        "headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
+        "teaser": "Deputies are searching for Michael Anthony Debevec II after he was last seen at Chastain Beach.",
+        "body": "Michael Anthony Debevec II was reported missing after visiting Chastain Beach in Martin County.",
+        "category_key": "martin",
+        "category_keys": ["martin", "crime"],
+        "county_keys": ["martin"],
+        "date": "2026-08-29",
+        "first_published": "Sat, 29 Aug 2026 21:48:09 -0400",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "incident_anchor_key": "missing-person:michael-debevec",
+        "durable_custom_identity_key": "missing-person|michael-debevec",
+        "editorial_story_id": "custom:debevec",
+    }
+
+
+def _validated_debevec_generated_update(g, canonical, headline):
+    decision = {
+        "status": "validated",
+        "action": g.SEMANTIC_ACTION_UPDATE,
+        "recommended_action": g.SEMANTIC_ACTION_UPDATE,
+        "selected_candidate_slug": canonical["slug"],
+        "same_real_world_event": True,
+        "material_new_update": True,
+        "confidence": 0.99,
+        "shared_anchors": ["Michael Anthony Debevec II", "Chastain Beach"],
+        "novel_facts": ["A body believed to be Debevec was recovered near the House of Refuge"],
+        "reason": "The body recovery is a major development in the existing missing-person case.",
+        "validation_errors": [],
+    }
+    item = {
+        "headline": headline,
+        "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
+        "body": (
+            "A body was recovered in mangroves near the House of Refuge during the search for "
+            "Michael Anthony Debevec II. Investigators said the clothing matched what Debevec "
+            "was believed to be wearing, while formal identification remained pending."
+        ),
+        "editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_route": "update_existing",
+        "editorial_route": "update_existing",
+        "story_form": "update",
+        "_semantic_material_update": True,
+        "_semantic_material_update_decision": decision,
+        "_pre_generation_material_update_promotion": True,
+        "_pre_generation_material_update_canonical_slug": canonical["slug"],
+        "canonical_slug": canonical["slug"],
+        "_protected_material_update": True,
+    }
+    g._stamp_canonical_write_authorization(
+        item,
+        canonical,
+        {
+            "outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "identity_outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "evidence_tier": "known_canonical_plus_semantic_materiality",
+            "write_authorized": True,
+            "proof_type": "published_skip_canonical_plus_semantic_materiality",
+            "reason": "Major body-recovery development.",
+            "reason_codes": ["semantic_material_update_validated"],
+        },
+        basis="pre_generation_material_update_promotion",
+    )
+    return item
+
+
+def test_authoritative_custom_incident_lock_preserves_target_bound_debevec_material_update():
+    """2026-09-01 regression: custom lock must not erase a pending canonical update transaction."""
+    g = _load_generate()
+    canonical = _debevec_custom_canonical(g)
+    crime = _validated_debevec_generated_update(
+        g, canonical,
+        "Body found in Hutchinson Island mangroves believed to be missing Port St. Lucie man",
+    )
+    martin = _validated_debevec_generated_update(
+        g, canonical,
+        "Martin County Sheriff's Office finds body believed to be missing Michael Debevec",
+    )
+    categories = [
+        {"category_key": "crime", "hero": crime, "cards": []},
+        {"category_key": "martin", "hero": martin, "cards": []},
+    ]
+
+    removed = g.suppress_authoritative_custom_incidents_from_live(
+        categories, archived_customs=[canonical], current_customs=[]
+    )
+
+    assert removed == []
+    assert categories[0]["hero"] is crime
+    assert categories[1]["hero"] is martin
+    assert g._has_target_bound_pre_generation_material_update_authority(crime, canonical)
+    assert g._has_target_bound_pre_generation_material_update_authority(martin, canonical)
+
+
+def test_authoritative_custom_incident_lock_still_removes_unapproved_debevec_reprint():
+    g = _load_generate()
+    canonical = _debevec_custom_canonical(g)
+    ordinary = {
+        "headline": "Body found in Hutchinson Island mangroves believed to be missing Michael Debevec",
+        "body": "Deputies found a body during the search for Michael Anthony Debevec II near Chastain Beach.",
+        "source_url": "https://example.com/unapproved-reprint",
+        "incident_anchor_key": "missing-person:michael-debevec",
+    }
+    categories = [{"category_key": "martin", "hero": ordinary, "cards": []}]
+
+    removed = g.suppress_authoritative_custom_incidents_from_live(
+        categories, archived_customs=[canonical], current_customs=[]
+    )
+
+    assert len(removed) == 1
+    assert categories[0]["hero"] is None

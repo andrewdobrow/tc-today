@@ -698,6 +698,14 @@ def test_authorized_custom_material_update_rewrites_one_canonical_without_duplic
     hero = data["hero"]
     assert g._authorized_custom_material_update(hero, canonical) is True
 
+    # Production order regression: the global custom-incident lock runs before
+    # write_archives().  A validated canonical-update transaction must survive it.
+    removed_by_custom_lock = g.suppress_authoritative_custom_incidents_from_live(
+        [data], archived_customs=[canonical], current_customs=[]
+    )
+    assert removed_by_custom_lock == []
+    assert data["hero"] is hero
+
     identity_index = types.SimpleNamespace(
         safe_story_ids={canonical["editorial_story_id"]},
         all_story_ids={canonical["editorial_story_id"]},

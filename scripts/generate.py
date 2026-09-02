@@ -19293,8 +19293,22 @@ def suppress_authoritative_custom_incidents_from_live(all_categories, archived_c
     Unlike guarded stage suppression, this contract is cross-stage and cross-category.
     It prevents a rescue/community-update wording change from surviving in Crime while
     another copy is suppressed in Martin County.  Custom content itself is untouched.
+
+    A generated placement that already carries a validated, target-bound material-update
+    authorization for the *same* custom canonical is not a duplicate.  It is a pending
+    canonical write transaction.  Removing it here would strand the validated update
+    before ``write_archives()`` can compose and commit it.
     """
     removed = []
+    protected = []
+
+    def _protected_update_for_match(item, match):
+        return bool(
+            isinstance(item, dict)
+            and isinstance(match, dict)
+            and _has_target_bound_pre_generation_material_update_authority(item, match)
+        )
+
     for category in all_categories or []:
         category_key = str(category.get("category_key") or "")
 
@@ -19303,16 +19317,28 @@ def suppress_authoritative_custom_incidents_from_live(all_categories, archived_c
             hero, archived_customs, current_customs
         ) if hero else (None, 0, "")
         if match:
-            removed.append({
-                "headline": hero.get("headline", ""),
-                "category_key": category_key,
-                "placement": "hero",
-                "canonical_slug": match.get("slug", ""),
-                "canonical_headline": match.get("headline", ""),
-                "confidence": confidence,
-                "basis": basis,
-            })
-            category["hero"] = None
+            if _protected_update_for_match(hero, match):
+                protected.append({
+                    "headline": hero.get("headline", ""),
+                    "category_key": category_key,
+                    "placement": "hero",
+                    "canonical_slug": match.get("slug", ""),
+                    "canonical_headline": match.get("headline", ""),
+                    "confidence": confidence,
+                    "basis": basis,
+                    "action": "preserve_validated_material_update_transaction",
+                })
+            else:
+                removed.append({
+                    "headline": hero.get("headline", ""),
+                    "category_key": category_key,
+                    "placement": "hero",
+                    "canonical_slug": match.get("slug", ""),
+                    "canonical_headline": match.get("headline", ""),
+                    "confidence": confidence,
+                    "basis": basis,
+                })
+                category["hero"] = None
 
         kept_cards = []
         for card in category.get("cards", []) or []:
@@ -19320,15 +19346,28 @@ def suppress_authoritative_custom_incidents_from_live(all_categories, archived_c
                 card, archived_customs, current_customs
             )
             if match:
-                removed.append({
-                    "headline": card.get("headline", ""),
-                    "category_key": category_key,
-                    "placement": "card",
-                    "canonical_slug": match.get("slug", ""),
-                    "canonical_headline": match.get("headline", ""),
-                    "confidence": confidence,
-                    "basis": basis,
-                })
+                if _protected_update_for_match(card, match):
+                    protected.append({
+                        "headline": card.get("headline", ""),
+                        "category_key": category_key,
+                        "placement": "card",
+                        "canonical_slug": match.get("slug", ""),
+                        "canonical_headline": match.get("headline", ""),
+                        "confidence": confidence,
+                        "basis": basis,
+                        "action": "preserve_validated_material_update_transaction",
+                    })
+                    kept_cards.append(card)
+                else:
+                    removed.append({
+                        "headline": card.get("headline", ""),
+                        "category_key": category_key,
+                        "placement": "card",
+                        "canonical_slug": match.get("slug", ""),
+                        "canonical_headline": match.get("headline", ""),
+                        "confidence": confidence,
+                        "basis": basis,
+                    })
             else:
                 kept_cards.append(card)
         category["cards"] = kept_cards
@@ -19339,6 +19378,11 @@ def suppress_authoritative_custom_incidents_from_live(all_categories, archived_c
         print(
             "  Authoritative custom incident lock removed "
             f"{len(removed)} duplicate live placement(s)"
+        )
+    if protected:
+        print(
+            "  Authoritative custom incident lock preserved "
+            f"{len(protected)} validated material-update placement(s) for canonical commit"
         )
     return removed
 
