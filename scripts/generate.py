@@ -222,6 +222,95 @@ def _apply_mediavine_script_sitewide(output_root):
     return {"scanned": len(html_paths), "updated": updated}
 
 
+# v1.13.7.1m: subscribers remain eligible for display advertising. Older retained
+# HTML can outlive the release that created its membership copy, so remove only
+# known TCT ad-free membership promises and leave ordinary editorial prose alone.
+_MEMBERSHIP_AD_PROMISE_REPLACEMENTS = (
+    (
+        "Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties.",
+        "Get unlimited access to independent local reporting across Martin, St. Lucie and Indian River counties.",
+    ),
+    (
+        "Get your first month for $1, then keep unlimited ad-free access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.",
+        "Get your first month for $1, then keep unlimited access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.",
+    ),
+    ("<span>Ad-free reading</span>", "<span>Unlimited article access</span>"),
+    ("<li>Ad-free reading</li>", "<li>Independent local reporting</li>"),
+    (
+        "<span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Completely ad-free</span>",
+        "<span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Supports local journalism</span>",
+    ),
+    (
+        "Comprehensive local coverage. No ads. Less than $5 a month.",
+        "Comprehensive local coverage. Unlimited access. Less than $5 a month.",
+    ),
+    (
+        "Unlimited articles · No ads · Support independent local journalism",
+        "Unlimited articles · Full local coverage · Support independent local journalism",
+    ),
+    (
+        "Unlimited articles. No ads. Help fund independent Treasure Coast reporting.",
+        "Unlimited articles. Help fund independent Treasure Coast reporting.",
+    ),
+    (
+        "Unlimited, ad-free access to Treasure Coast Today and support for independent local journalism across Martin, St. Lucie and Indian River counties.",
+        "Unlimited access to Treasure Coast Today and support for independent local journalism across Martin, St. Lucie and Indian River counties.",
+    ),
+    (
+        "Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties — and help sustain journalism focused on the communities you live in.",
+        "Get unlimited access to independent local reporting across Martin, St. Lucie and Indian River counties — and help sustain journalism focused on the communities you live in.",
+    ),
+    (
+        '<article><span class="membership-value-number">02</span><h3>Ad-free reading</h3><p>Read the news without display ads competing for your attention.</p></article>',
+        '<article><span class="membership-value-number">02</span><h3>Unlimited access</h3><p>Read every Treasure Coast Today story while your membership is active.</p></article>',
+    ),
+    (
+        "Both plans include the same unlimited, ad-free access to Treasure Coast Today.",
+        "Both plans include the same unlimited access to Treasure Coast Today.",
+    ),
+    (
+        "Membership includes unlimited access to Treasure Coast Today articles and an ad-free reading experience while your membership is active.",
+        "Membership includes unlimited access to Treasure Coast Today articles while your membership is active.",
+    ),
+)
+
+_MEMBERSHIP_AD_PROMISE_FORBIDDEN = tuple(old for old, _new in _MEMBERSHIP_AD_PROMISE_REPLACEMENTS)
+
+
+def _normalize_membership_ad_promises_in_html(page_html):
+    """Remove only known TCT membership promises that subscribers will be ad-free."""
+    updated = page_html
+    for old, new in _MEMBERSHIP_AD_PROMISE_REPLACEMENTS:
+        updated = updated.replace(old, new)
+    return updated
+
+
+def _apply_membership_ad_promise_contract_sitewide(output_root):
+    """Normalize retained HTML and fail if a known obsolete ad-free promise survives."""
+    root = Path(output_root)
+    scanned = 0
+    updated_count = 0
+    failures = []
+    for page in sorted(root.rglob("*.html")):
+        try:
+            original = page.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        scanned += 1
+        normalized = _normalize_membership_ad_promises_in_html(original)
+        if normalized != original:
+            page.write_text(normalized, encoding="utf-8")
+            updated_count += 1
+        for forbidden in _MEMBERSHIP_AD_PROMISE_FORBIDDEN:
+            if forbidden in normalized:
+                failures.append(f"{page.relative_to(root)}: {forbidden[:80]}")
+    if failures:
+        raise RuntimeError(
+            "Membership advertising promise contract FAILED: " + "; ".join(failures[:10])
+        )
+    return {"scanned": scanned, "updated": updated_count}
+
+
 def _header_primary_cta_html():
     if MEMBERSHIP_UI_ENABLED:
         href = html_lib.escape(MEMBERSHIP_SUBSCRIBE_URL, quote=True)
@@ -247,9 +336,9 @@ def _homepage_support_card_html():
         <div class="tct-membership-card-inner">
           <span class="tct-membership-kicker">Treasure Coast Today Membership</span>
           <h2 class="tct-membership-headline">Unlimited local news for $1 your first month.</h2>
-          <p class="tct-membership-copy">Get your first month for $1, then keep unlimited ad-free access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.</p>
+          <p class="tct-membership-copy">Get your first month for $1, then keep unlimited access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.</p>
           <span class="tct-membership-options" aria-hidden="true">
-            <span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Completely ad-free</span>
+            <span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Supports local journalism</span>
           </span>
           <span class="tct-membership-cta">Get your first month for $1 <b>&rarr;</b></span>
         </div>
@@ -20057,6 +20146,72 @@ def _reconcile_topic_groups(topic_groups, active_flags=None):
     return groups
 
 
+def _revision_history_state(entry):
+    """Return the editorial state represented by a registry revision receipt.
+
+    Run timestamps and monotonically increasing revision counters are observations, not
+    editorial state.  Treating them as state caused every no-op production run to append
+    another large receipt for every persistent story.
+    """
+    if not isinstance(entry, dict):
+        return None
+    return (
+        int(entry.get("article_count", 0) or 0),
+        str(entry.get("latest_stage", "") or ""),
+        str(entry.get("latest_date", "") or ""),
+        str(entry.get("canonical_slug", "") or ""),
+    )
+
+
+def _compact_revision_history(entries, limit=100):
+    """Collapse consecutive no-op revision observations while preserving transitions."""
+    compacted = []
+    last_state = object()
+    for entry in entries or []:
+        if not isinstance(entry, dict):
+            continue
+        state = _revision_history_state(entry)
+        if state == last_state:
+            continue
+        compacted.append(dict(entry))
+        last_state = state
+    return compacted[-max(1, int(limit or 1)):]
+
+
+def _confidence_history_state(entry):
+    """Return attachment state for one article, excluding the observation run id."""
+    if not isinstance(entry, dict):
+        return None
+    return (
+        int(entry.get("confidence", 100) or 0),
+        str(entry.get("matched_prior_slug", "") or ""),
+        str(entry.get("attachment_basis", "") or ""),
+    )
+
+
+def _compact_confidence_history(entries, limit=500):
+    """Keep only real per-article attachment-state transitions.
+
+    Entries for multiple slugs are interleaved by run, so deduplication must be tracked
+    independently per slug.  A later A -> B -> A transition is retained; repeated A -> A
+    observations across ordinary runs are not.
+    """
+    compacted = []
+    last_state_by_slug = {}
+    for entry in entries or []:
+        if not isinstance(entry, dict):
+            continue
+        slug = str(entry.get("slug", "") or "").strip()
+        if not slug:
+            continue
+        state = _confidence_history_state(entry)
+        if last_state_by_slug.get(slug) == state:
+            continue
+        compacted.append(dict(entry))
+        last_state_by_slug[slug] = state
+    return compacted[-max(1, int(limit or 1)):]
+
+
 def _merge_persistent_story_registry(previous_payload, computed_stories, run_id):
     """Persist authoritative story identity, revisions, aliases, and confidence history."""
     previous_by_id = {
@@ -20112,12 +20267,17 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
             "latest_date": current.get("latest_date", ""),
             "canonical_slug": current.get("canonical_slug", ""),
         }
-        revisions = list(prior.get("revision_history", []))
-        if not revisions or revisions[-1] != revision_entry:
+        revisions = _compact_revision_history(prior.get("revision_history", []), limit=100)
+        if not revisions or _revision_history_state(revisions[-1]) != _revision_history_state(revision_entry):
             revisions.append(revision_entry)
-        current["revision_history"] = revisions[-100:]
+        current["revision_history"] = _compact_revision_history(revisions, limit=100)
 
-        confidence_history = list(prior.get("confidence_history", []))
+        confidence_history = _compact_confidence_history(prior.get("confidence_history", []), limit=500)
+        latest_confidence_state = {}
+        for existing in confidence_history:
+            slug = str(existing.get("slug", "") or "").strip()
+            if slug:
+                latest_confidence_state[slug] = _confidence_history_state(existing)
         for article in current.get("articles", []):
             entry = {
                 "run_id": run_id,
@@ -20126,12 +20286,12 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
                 "matched_prior_slug": article.get("matched_prior_slug", ""),
                 "attachment_basis": article.get("attachment_basis", ""),
             }
-            if entry["slug"] and not any(
-                x.get("run_id") == run_id and x.get("slug") == entry["slug"]
-                for x in confidence_history[-max(1, len(current.get("articles", []))) * 2:]
-            ):
+            slug = str(entry["slug"] or "").strip()
+            state = _confidence_history_state(entry)
+            if slug and latest_confidence_state.get(slug) != state:
                 confidence_history.append(entry)
-        current["confidence_history"] = confidence_history[-500:]
+                latest_confidence_state[slug] = state
+        current["confidence_history"] = _compact_confidence_history(confidence_history, limit=500)
 
         current["archive_immutable"] = True
         current["public_urls_changed"] = False
@@ -20147,6 +20307,8 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
         preserved = dict(prior)
         preserved["status"] = "inactive"
         preserved["last_registry_check_at"] = run_id
+        preserved["revision_history"] = _compact_revision_history(preserved.get("revision_history", []), limit=100)
+        preserved["confidence_history"] = _compact_confidence_history(preserved.get("confidence_history", []), limit=500)
         merged.append(preserved)
         for slug in preserved.get("historical_slugs", []) or []:
             article_to_story.setdefault(slug, sid)
@@ -20165,6 +20327,13 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
         "article_membership_count": len(article_to_story),
         "retired_story_ids": retired_id_map,
         "article_to_story": article_to_story,
+        "history_compaction": {
+            "revision_entries_before": sum(len((previous_by_id.get(s.get("story_id"), {}) or {}).get("revision_history", []) or []) for s in merged if isinstance(s, dict)),
+            "revision_entries_after": sum(len(s.get("revision_history", []) or []) for s in merged if isinstance(s, dict)),
+            "confidence_entries_before": sum(len((previous_by_id.get(s.get("story_id"), {}) or {}).get("confidence_history", []) or []) for s in merged if isinstance(s, dict)),
+            "confidence_entries_after": sum(len(s.get("confidence_history", []) or []) for s in merged if isinstance(s, dict)),
+            "policy": "semantic-state-transitions-only",
+        },
         "stories": merged,
     }
 
@@ -20576,7 +20745,18 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "article_membership_count": persistent_registry.get("article_membership_count", 0)},
         "clustering_links": clustering_links, "decisions": decisions,
         "notice": "V7.1 makes the persistent registry authoritative for story identity, reconciles duplicate story IDs conservatively, and records revision and attachment-confidence history without changing public URLs or archive records."}
+    history_compaction = persistent_registry.get("history_compaction", {}) or {}
+    print(
+        "  Persistent story registry history compacted: "
+        f"revisions {history_compaction.get('revision_entries_before', 0)} -> {history_compaction.get('revision_entries_after', 0)}; "
+        f"confidence {history_compaction.get('confidence_entries_before', 0)} -> {history_compaction.get('confidence_entries_after', 0)}"
+    )
     _atomic_write_json(data_dir / STORY_REGISTRY_FILENAME, persistent_registry)
+    try:
+        registry_mib = (data_dir / STORY_REGISTRY_FILENAME).stat().st_size / (1024 * 1024)
+        print(f"  Persistent story registry size after compaction: {registry_mib:.2f} MiB")
+    except OSError:
+        pass
     _atomic_write_json(data_dir / "stories.json", registry)
     _atomic_write_json(data_dir / "story-shadow-log.json", shadow)
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
@@ -20953,7 +21133,7 @@ def _page_footer():
     if MEMBERSHIP_UI_ENABLED:
         connect_column = """<div class="footer-column footer-connect footer-membership-ask">
         <strong>Support local journalism</strong>
-        <p>Unlimited articles. No ads. Help fund independent Treasure Coast reporting.</p>
+        <p>Unlimited articles. Help fund independent Treasure Coast reporting.</p>
         <a class="footer-subscribe-cta" href="/subscribe.html"><span>Get first month for $1</span><small>Limited time &middot; $1 first month</small></a>
       </div>"""
     else:
@@ -35642,6 +35822,12 @@ def main():
     _content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
     if _content_override_count:
         print(f"  Article content overrides applied to {_content_override_count} canonical article(s)")
+    _membership_ad_promises = _apply_membership_ad_promise_contract_sitewide(OUTPUT_DIR)
+    print(
+        "  Membership advertising promise contract PASSED: "
+        f"{_membership_ad_promises['scanned']} HTML page(s) verified; "
+        f"{_membership_ad_promises['updated']} obsolete ad-free promise page(s) normalized"
+    )
     _mediavine_sitewide = _apply_mediavine_script_sitewide(OUTPUT_DIR)
     print(
         "  Mediavine loader contract PASSED: "
