@@ -772,14 +772,10 @@ CURRENT_RUN_QUARANTINED_STORY_IDS = set()
 CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
 CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
 CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
-# Canonical targets that survived the category writer AND the immediate publication
-# guards with validated pre-generation material-update authority. Generation attempts
-# that are retried/discarded must never become terminal commit obligations.
+# Canonical targets that the LIVE category writer actually selected from a source
+# carrying validated pre-generation material-update authority. This is narrower than
+# every source-level promotion and drives the terminal no-silent-loss invariant.
 CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
-# Deep copies of those accepted placements are retained as a canonical-update commit
-# queue. Later live-surface ranking/activation may remove a placement from a section,
-# but that must not erase an already-selected material update before write_archives().
-CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS = {}
 # main() owns this only until write_archives() consumes it. It carries semantic
 # decisions made at the pre-archive generated/cached placement suppression boundary.
 CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT = {}
@@ -22370,15 +22366,116 @@ def validate_nonstory_publication_contract(all_categories, top_cat, output_root)
     return report
 
 
-def _resolve_custom_publication_target(hero, archive, existing, headline):
-    """Authorize custom updates only through immutable exact-headline identity.
+def _is_current_manual_custom_submission(item):
+    """Return True only for a payload loaded from the active custom queue.
 
-    A new custom headline may never reuse an archive slug already owned by another
-    article. This fails closed whether the collision came from a queue editing error,
-    a persistent-story false match, or a stale live/archive clone.
+    ``is_custom`` / ``authoritative_custom`` are durable provenance flags and survive
+    after publication. They therefore cannot, by themselves, mean that a live clone
+    is a new manual submission. ``load_custom_articles`` stamps the transaction-only
+    ``_custom_active_queue`` marker on current editor payloads.
+    """
+    return bool(
+        isinstance(item, dict)
+        and item.get("_custom_active_queue")
+        and (item.get("is_custom") or item.get("authoritative_custom"))
+    )
+
+
+def _nonqueue_authoritative_custom_target(hero, archive, existing):
+    """Resolve durable custom provenance back to its already-owned permalink.
+
+    A published custom story can later receive a validated semantic/material update
+    whose display headline legitimately changes. That inherited custom provenance must
+    never be interpreted as a fresh manual queue submission merely because the current
+    headline differs from the immutable ``custom_headline_key``. Only an explicit
+    canonical/live slug binding may authorize this non-queue path.
+    """
+    bound_slugs = []
+    for field in ("canonical_slug", "_archived_slug", "_current_custom_publication_slug"):
+        slug = _normalize_custom_slug(hero.get(field))
+        if slug and slug not in bound_slugs:
+            bound_slugs.append(slug)
+
+    if not bound_slugs:
+        raise RuntimeError(
+            "Authoritative custom canonical lost established permalink binding: "
+            f"'{str(hero.get('headline') or '')[:90]}'. Non-queue custom provenance "
+            "cannot mint a new article; generation stopped before permalink creation."
+        )
+
+    if isinstance(existing, dict) and (
+        existing.get("is_custom") or existing.get("authoritative_custom")
+    ) and not existing.get("retired_custom"):
+        existing_slug = _normalize_custom_slug(existing.get("slug"))
+        if existing_slug in bound_slugs:
+            return existing
+
+    by_slug = {
+        _normalize_custom_slug(entry.get("slug")): entry
+        for entry in archive or []
+        if isinstance(entry, dict)
+        and (entry.get("is_custom") or entry.get("authoritative_custom"))
+        and not entry.get("retired_custom")
+        and _normalize_custom_slug(entry.get("slug"))
+    }
+    for slug in bound_slugs:
+        target = by_slug.get(slug)
+        if target is not None:
+            return target
+
+    raise RuntimeError(
+        "Authoritative custom canonical binding does not resolve to an active custom "
+        f"archive row: '{str(hero.get('headline') or '')[:90]}' -> "
+        f"{', '.join(bound_slugs)}. Generation stopped before permalink creation."
+    )
+
+
+def _refresh_current_manual_custom_metadata(existing, hero, headline):
+    """Refresh immutable custom-payload metadata only for a current queue payload."""
+    if not isinstance(existing, dict) or not _is_current_manual_custom_submission(hero):
+        return False
+    existing["is_custom"] = True
+    existing["authoritative_custom"] = True
+    existing["custom_fingerprint"] = _custom_story_fingerprint(
+        headline, hero.get("teaser", "") or hero.get("body", "")[:180]
+    )
+    existing["custom_body_hash"] = hero.get("custom_body_hash") or _custom_body_hash(
+        hero.get("body", "")
+    )
+    existing["custom_headline_key"] = _exact_custom_headline(headline)
+    existing["article_type"] = str(hero.get("article_type") or "custom_article")
+    existing["product_guide_hash"] = _product_guide_hash(hero)
+    existing["product_count"] = len(hero.get("products") or [])
+    existing["has_affiliate_links"] = bool(hero.get("has_affiliate_links"))
+    existing["custom_event_key"] = _custom_event_identity_key(hero) or _known_event_key(
+        " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
+    )
+    existing["custom_series_key"] = _custom_series_key(hero)
+    existing["custom_edition_key"] = _custom_edition_marker(hero)
+    return True
+
+
+def _resolve_custom_publication_target(hero, archive, existing, headline):
+    """Resolve a custom-origin placement without confusing provenance and submission.
+
+    Active manual queue payloads retain the immutable exact-headline contract: a
+    changed headline is a new article. Published custom canonicals that merely carry
+    durable custom provenance must instead stay on their already-established permalink
+    when a validated update advances the display headline.
     """
     if not (hero.get("is_custom") or hero.get("authoritative_custom")):
         return existing, None, None
+
+    if not _is_current_manual_custom_submission(hero):
+        target = _nonqueue_authoritative_custom_target(hero, archive, existing)
+        story_id = str(
+            target.get("editorial_story_id")
+            or hero.get("editorial_story_id")
+            or hero.get("_editorial_story_id")
+            or ""
+        ).strip()
+        return target, None, story_id or None
+
     headline_key = _exact_custom_headline(headline)
     matches = [
         entry for entry in archive or []
@@ -22449,20 +22546,13 @@ def _publication_copy_rank(entry):
     _ck, _cl, item = entry
     is_custom = 1 if item.get("is_custom") or item.get("authoritative_custom") else 0
     active_custom_payload = 1 if is_custom and not item.get("_archive_only") else 0
-    validated_material_update = 1 if (
-        not is_custom and _has_self_consistent_pre_generation_material_update_authority(item)
-    ) else 0
     has_real_img = 1 if (item.get("image_url") and not item.get("image_from_google")) else 0
     is_hero_copy = 1 if item.get("_is_hero_copy") else 0
     body_words = _word_count(item.get("body", ""))
-    # A current queue payload must outrank an archive-recovery clone. Among generated
-    # copies of the same persistent story, a target-bound validated material update
-    # must outrank an ordinary hero/image copy or coalescing can erase the update
-    # receipt before the canonical writer sees it.
-    return (
-        is_custom, active_custom_payload, validated_material_update,
-        has_real_img, is_hero_copy, body_words
-    )
+    # A current queue payload must outrank an archive-recovery clone, even when the
+    # clone is currently a hero. Otherwise the clone wins coalescing and is then
+    # silently skipped by the archive-only guard before the custom permalink exists.
+    return (is_custom, active_custom_payload, has_real_img, is_hero_copy, body_words)
 
 
 
@@ -30150,18 +30240,6 @@ def write_archives(all_categories, top_cat):
                 continue
             all_articles.append((cat["category_key"], cat["category_label"], card))
 
-    # Canonical-update commit queue. A validated material update that survived its
-    # category's immediate guards is editorial work even if a later live-surface
-    # activation/deduping decision removes that placement. Feed a hidden copy to the
-    # permalink writer so surface ranking cannot silently cancel the canonical update.
-    _commit_entries = _selected_material_update_commit_entries()
-    if _commit_entries:
-        all_articles.extend(_commit_entries)
-        print(
-            "  Material-update commit queue: preserved "
-            f"{len(_commit_entries)} accepted canonical update placement(s) for archive write"
-        )
-
     # A story classified into multiple categories (e.g. a Hobe Sound business opening
     # is both Business and Martin County) appears once per category in all_articles,
     # each writing to the SAME slug. Whichever is processed last wins — which meant the
@@ -31238,27 +31316,10 @@ def write_archives(all_categories, top_cat):
             # Only advance lastmod (freshness/staleness, card ordering) on real change.
             if _content_changed:
                 existing["lastmod"] = today
-            # If a custom article is writing here, permanently mark the entry custom so
-            # it can never be overwritten by a later feed story (see the PROTECTED guard).
-            if hero.get("is_custom"):
-                existing["is_custom"] = True
-                existing["authoritative_custom"] = True
-                existing["custom_fingerprint"] = _custom_story_fingerprint(
-                    headline, hero.get("teaser", "") or hero.get("body", "")[:180]
-                )
-                existing["custom_body_hash"] = hero.get("custom_body_hash") or _custom_body_hash(
-                    hero.get("body", "")
-                )
-                existing["custom_headline_key"] = _exact_custom_headline(headline)
-                existing["article_type"] = str(hero.get("article_type") or "custom_article")
-                existing["product_guide_hash"] = _product_guide_hash(hero)
-                existing["product_count"] = len(hero.get("products") or [])
-                existing["has_affiliate_links"] = bool(hero.get("has_affiliate_links"))
-                existing["custom_event_key"] = _custom_event_identity_key(hero) or _known_event_key(
-                    " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
-                )
-                existing["custom_series_key"] = _custom_series_key(hero)
-                existing["custom_edition_key"] = _custom_edition_marker(hero)
+            # Durable custom provenance is not the same thing as a current manual
+            # submission. A semantic/material update may advance the display headline
+            # while the original exact-headline identity key remains immutable.
+            _refresh_current_manual_custom_metadata(existing, hero, headline)
             if normalized_source_url:
                 if hero.get("_semantic_material_update"):
                     existing["latest_source_url"] = normalized_source_url
@@ -33092,15 +33153,8 @@ def _has_self_consistent_pre_generation_material_update_authority(item):
     )
 
 
-def _remember_selected_material_update_target(item, *, surface=""):
-    """Record one accepted material-update placement as a canonical commit obligation.
-
-    This function is intentionally called only after a category result has survived
-    generation retries, prose/category quality checks, and the immediate published-story
-    suppression barrier. Merely attaching a source or stamping identity is too early: a
-    discarded model attempt is not a publication selection.
-    """
-    global CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS
+def _remember_selected_material_update_target(item):
+    """Record one live-writer-selected canonical material-update target for commit checks."""
     if not _has_self_consistent_pre_generation_material_update_authority(item):
         return False
     slug = str(item.get("_pre_generation_material_update_canonical_slug") or "").strip()
@@ -33113,9 +33167,6 @@ def _remember_selected_material_update_target(item, *, surface=""):
         "selected_headlines": [],
         "source_headlines": [],
         "source_urls": [],
-        "selection_surfaces": [],
-        "novel_facts": [],
-        "source_published": [],
         "max_confidence": 0.0,
     })
     if not row.get("canonical_headline"):
@@ -33131,90 +33182,11 @@ def _remember_selected_material_update_target(item, *, surface=""):
         row["source_headlines"].append(headline)
     if source_url and source_url not in row["source_urls"]:
         row["source_urls"].append(source_url)
-    if surface and surface not in row["selection_surfaces"]:
-        row["selection_surfaces"].append(surface)
-    source_published = str(item.get("source_published") or "").strip()
-    if source_published and source_published not in row["source_published"]:
-        row["source_published"].append(source_published)
-    for fact in list(decision.get("novel_facts") or []):
-        fact = str(fact or "").strip()
-        if fact and fact not in row["novel_facts"]:
-            row["novel_facts"].append(fact)
     row["max_confidence"] = max(
         float(row.get("max_confidence") or 0.0),
         float(decision.get("confidence") or 0.0),
     )
-
-    # Keep the strongest accepted copy available for canonical commit even if later
-    # live-surface activation/ranking removes that placement. Prefer newer source time,
-    # then semantic confidence, then body depth.
-    candidate = copy.deepcopy(item)
-    candidate["_selected_material_update_surface"] = str(surface or "")
-    candidate["_material_update_commit_only"] = True
-
-    def _rank(value):
-        dt = _material_update_reference_datetime(value, canonical=False)
-        stamp = dt.timestamp() if dt is not None else 0.0
-        dec = value.get("_semantic_material_update_decision") or {}
-        try:
-            confidence = float(dec.get("confidence") or 0.0)
-        except (TypeError, ValueError):
-            confidence = 0.0
-        return (stamp, confidence, _word_count(value.get("body", "")))
-
-    existing = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS.get(slug)
-    if not isinstance(existing, dict) or _rank(candidate) > _rank(existing):
-        CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS[slug] = candidate
     return True
-
-
-def _remember_surviving_selected_material_update_targets(data, category_key=""):
-    """Track only accepted hero/card placements after immediate suppression."""
-    if not isinstance(data, dict):
-        return 0
-    remembered = 0
-    hero = data.get("hero")
-    if isinstance(hero, dict):
-        remembered += int(_remember_selected_material_update_target(
-            hero, surface=f"{category_key or data.get('category_key') or 'unknown'}:hero"
-        ))
-    for index, card in enumerate(list(data.get("cards") or []), start=1):
-        if not isinstance(card, dict):
-            continue
-        remembered += int(_remember_selected_material_update_target(
-            card, surface=f"{category_key or data.get('category_key') or 'unknown'}:card:{index}"
-        ))
-    return remembered
-
-
-def _selected_material_update_commit_entries():
-    """Return hidden archive-write entries for accepted material updates."""
-    entries = []
-    for slug, stored in sorted((CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS or {}).items()):
-        if not isinstance(stored, dict):
-            continue
-        item = copy.deepcopy(stored)
-        if not _has_self_consistent_pre_generation_material_update_authority(item):
-            continue
-        if str(item.get("_pre_generation_material_update_canonical_slug") or "").strip() != str(slug):
-            continue
-        category_key = str(item.get("category_key") or "").strip()
-        if not category_key:
-            surface = str(item.get("_selected_material_update_surface") or "")
-            category_key = surface.split(":", 1)[0] if ":" in surface else ""
-        if category_key not in CATEGORIES:
-            # Missing/invalid category provenance means this was not recorded through
-            # the accepted-category boundary. Fail closed by omitting the hidden commit
-            # copy; the terminal invariant will then expose the missing commit instead
-            # of silently routing it through an arbitrary section.
-            continue
-        item["category_key"] = category_key
-        item["category_label"] = CATEGORIES.get(category_key, {}).get(
-            "label", category_key.replace("_", " ").title()
-        )
-        item["_material_update_commit_only"] = True
-        entries.append((category_key, item["category_label"], item))
-    return entries
 
 
 def _carry_pre_generation_material_update_authority(item, source):
@@ -33245,6 +33217,7 @@ def _carry_pre_generation_material_update_authority(item, source):
         if source.get(published_key):
             item["source_published"] = source.get(published_key)
             break
+    _remember_selected_material_update_target(item)
     return True
 
 
@@ -33801,6 +33774,7 @@ def _stamp_current_run_story_ids(data, headlines):
                 item["canonical_publication_id"] = _stable_publication_id(
                     item["canonical_slug"]
                 )
+            _remember_selected_material_update_target(item)
         stamped += 1
     return stamped
 
@@ -34403,11 +34377,11 @@ def ensure_final_live_visual_images(all_categories, top_cat, output_root=None):
 def _validate_promoted_material_updates_committed(output_root=None):
     """Fail a green build when a selected validated material update vanished.
 
-    Source-level promotion can occur in broad feeds and model generation attempts can
-    be retried or discarded. The hard invariant therefore tracks only canonical
-    targets that survived the accepted category result plus its immediate publication
-    guards. Once accepted, that validated development must produce a committed canonical
-    material update before the workflow may succeed.
+    Source-level promotion can occur in broad feeds for categories that later reject
+    that source as off-topic. The hard invariant therefore tracks only canonical
+    targets the live category writer actually selected (including cached selections
+    re-stamped in the current run). Once selected, that validated development must
+    produce a committed canonical material update before the workflow may succeed.
     """
     expected = {
         str(slug): copy.deepcopy(row)
@@ -34445,7 +34419,7 @@ def _validate_promoted_material_updates_committed(output_root=None):
     report = {
         "schema_version": 2,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "policy": "every_accepted_validated_material_update_must_commit_and_advance_headline",
+        "policy": "every_selected_validated_material_update_must_commit_and_advance_headline",
         "expected_canonical_count": len(expected),
         "applied_canonical_count": len(set(expected) & applied),
         "missing_canonical_count": len(missing),
@@ -34480,7 +34454,7 @@ def _validate_promoted_material_updates_committed(output_root=None):
     if expected:
         print(
             "  Material-update publication invariant PASSED: "
-            f"{len(expected)} accepted canonical update(s) committed with refreshed headline(s)"
+            f"{len(expected)} selected canonical update(s) committed with refreshed headline(s)"
         )
     return report
 
@@ -34492,7 +34466,6 @@ def main():
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS
     global CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS
-    global CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS
     _build_started = time.perf_counter()
     _stage_started = _build_started
     GENERATION_CACHE.reset_stats()
@@ -34504,7 +34477,6 @@ def main():
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
     CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
-    CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS = {}
     # The publication-to-shadow identity bridge is strictly per build. A reused
     # interpreter (tests, local tooling, or a future worker process) must never let a
     # prior run's canonical decision influence the next shadow comparison.
@@ -35062,14 +35034,6 @@ def main():
 
             if data.get("hero") and not data.get("_drop_category") and data.get("category_key") == cat_key:
                 all_categories.append(data)
-                _accepted_updates = _remember_surviving_selected_material_update_targets(
-                    data, cat_key
-                )
-                if _accepted_updates:
-                    print(
-                        f"  Material-update commit queue accepted {_accepted_updates} "
-                        f"surviving {cat_config['label']} placement(s)"
-                    )
                 GENERATION_CACHE.stats["category_generation_skipped"] += 1
                 print(
                     f"  Incremental generation cache hit: reused {cat_config['label']} "
@@ -35466,14 +35430,6 @@ def main():
                     print(
                         f"  Published-story guard removed {len(_generated_published_suppressions)} "
                         "generated placement(s)"
-                    )
-                _accepted_updates = _remember_surviving_selected_material_update_targets(
-                    data, cat_key
-                )
-                if _accepted_updates:
-                    print(
-                        f"  Material-update commit queue accepted {_accepted_updates} "
-                        f"surviving {cat_config['label']} placement(s)"
                     )
                 GENERATION_CACHE.put(
                     "categories",

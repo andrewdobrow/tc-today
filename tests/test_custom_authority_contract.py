@@ -33,8 +33,8 @@ def test_custom_copy_outranks_generated_copy():
 def test_only_exact_same_headline_can_update_custom_permalink():
     g = _load_generate()
     old = {"slug": "custom-page", "headline": "Exact Headline", "is_custom": True, "editorial_story_id": "custom:old"}
-    same = {"headline": "Exact Headline", "body": "changed body", "is_custom": True}
-    different = {"headline": "Exact Headline!", "body": "changed body", "is_custom": True}
+    same = {"headline": "Exact Headline", "body": "changed body", "is_custom": True, "_custom_active_queue": True}
+    different = {"headline": "Exact Headline!", "body": "changed body", "is_custom": True, "_custom_active_queue": True}
     target, forced, story_id = g._resolve_custom_publication_target(same, [old], None, same["headline"])
     assert target is old and forced is None and story_id == "custom:old"
     target, forced, story_id = g._resolve_custom_publication_target(different, [old], old, different["headline"])
@@ -44,7 +44,7 @@ def test_only_exact_same_headline_can_update_custom_permalink():
 def test_explicit_replace_slug_cannot_override_different_headline():
     g = _load_generate()
     old = {"slug": "existing-custom", "headline": "Old Headline", "is_custom": True}
-    new = {"headline": "New Headline", "body": "new", "is_custom": True, "replace_slug": "existing-custom"}
+    new = {"headline": "New Headline", "body": "new", "is_custom": True, "_custom_active_queue": True, "replace_slug": "existing-custom"}
     target, forced, _ = g._resolve_custom_publication_target(new, [old], old, new["headline"])
     assert target is None
     assert forced is None

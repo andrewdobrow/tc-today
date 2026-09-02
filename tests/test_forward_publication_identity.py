@@ -127,6 +127,7 @@ def test_recurring_custom_report_rejects_previous_edition_slug():
         "headline": "Treasure Coast Traffic Report: I-95 Work Planned July 26-31",
         "body": "Complete manually authored report body.",
         "is_custom": True,
+        "_custom_active_queue": True,
         "slug": "2026-07-10-treasure-coast-traffic-report-july-12-17",
     }
     archive = [{
@@ -269,6 +270,7 @@ def test_editor_supplied_custom_slug_preserves_suffix_beyond_generic_slug_limit(
         "headline": "Treasure Coast Traffic Report: I-95 Ramp and Road Closures Planned Aug. 2-7",
         "body": "Complete manually authored traffic report.",
         "is_custom": True,
+        "_custom_active_queue": True,
         "_custom_requested_slug": requested,
     }
 

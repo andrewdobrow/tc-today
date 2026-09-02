@@ -86,7 +86,7 @@ def test_same_exact_headline_updates_even_when_body_changes(tmp_path, monkeypatc
 def test_any_headline_difference_creates_a_new_article():
     g = _load_generate()
     old = {"slug": "old", "headline": "Weekly Report July 12-17", "is_custom": True}
-    new = {"headline": "Weekly Report July 26-31", "body": "new", "is_custom": True}
+    new = {"headline": "Weekly Report July 26-31", "body": "new", "is_custom": True, "_custom_active_queue": True}
     target, forced, story_id = g._resolve_custom_publication_target(new, [old], old, new["headline"])
     assert target is None
     assert forced is None
@@ -98,7 +98,7 @@ def test_case_or_punctuation_change_is_not_exact():
     old = {"slug": "old", "headline": "City Budget Update", "is_custom": True}
     for headline in ("city Budget Update", "City Budget Update!", "City  Budget Update"):
         target, _, _ = g._resolve_custom_publication_target(
-            {"headline": headline, "body": "new", "is_custom": True}, [old], old, headline
+            {"headline": headline, "body": "new", "is_custom": True, "_custom_active_queue": True}, [old], old, headline
         )
         assert target is None
 

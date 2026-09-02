@@ -1,72 +1,74 @@
-# TCT v1.13.7.1p — Current-State Restoration + Accepted Material-Update Commit Queue Integrity
+# v1.13.7.1p — Non-Queue Custom Canonical Transaction Integrity
 
-## Why this patch exists
+## Production failure
+The September 2 production run reached final rendering with the Debevec material-update story correctly promoted to the front-page hero, but then failed the fail-closed Custom RSS publication contract.
 
-The prior `v1.13.7.1i-accepted-material-update-commit-queue-integrity` overlay was built from an obsolete `v1.13.7.1h` `scripts/generate.py` instead of the actual current repository state, which had already advanced through the later `1i`–`1o` increments. Because that overlay contained a complete `scripts/generate.py`, applying it reverted later production code.
+The run had minted a second permalink for the already-established Debevec canonical:
 
-The Test Editorial Engine run exposed that regression directly: 13 failures, including missing/current-state functionality for authoritative custom material-update preservation, semantic material-update headline repair, category-hero Top Stories projection, the sitewide Mediavine loader, current membership copy, and persistent story-registry history compaction.
+`2026-09-02-martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangr`
 
-`1p` is a corrective cumulative overlay. It restores `scripts/generate.py` to the current `1o` line first, then ports only the intended accepted-material-update commit-queue correction on top of that current code. It also restores the current `tests/test_published_story_skip_dedup.py` before adding the new regression coverage, so the newer headline-invariant and custom-lock regressions are not lost.
+instead of keeping the existing canonical:
 
-## Material-update correction retained
+`2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach`
 
-The terminal material-update invariant remains fail-closed, but a terminal obligation is no longer created merely because a generated attempt inherited a validated source receipt.
+The later canonical consolidation removed the duplicate, leaving a current-custom publication receipt for a URL that was correctly absent from RSS. The RSS contract therefore failed rather than silently syndicating an invalid publication.
 
-A canonical update becomes an obligation only after the final category result survives the immediate generation/publication guards. This prevents a discarded/retried generation attempt from poisoning the end-of-run invariant.
+## Observed failure point
+`is_custom` and `authoritative_custom` are durable provenance flags. They remain on a published custom-origin story after it leaves `custom_articles.json`.
 
-Accepted target-bound updates are retained in a hidden canonical-write commit queue. Later surface ranking, activation, or cross-category deduplication can remove a visible placement without silently cancelling the already-accepted canonical update transaction.
+`_resolve_custom_publication_target()` was treating those durable flags as if they meant the live object was a **new current manual submission**. The custom manual-publishing contract intentionally says a changed exact headline is a new article. That rule is correct for a current queue payload, but incorrect for an already-published custom canonical whose display headline advances through a validated semantic/material update.
 
-When publication copies of the same persistent story are coalesced, a validated target-bound material-update copy outranks an ordinary generated hero/image clone. Custom payload priority remains above generated copies.
+The Debevec archive row therefore had:
+- the original August 29 canonical slug;
+- the advanced body-found display headline;
+- the immutable original manual `custom_headline_key`;
+- durable `is_custom` / `authoritative_custom` provenance;
+- no `_custom_active_queue` transaction marker.
 
-The existing `1j` headline progression contract is preserved: every accepted validated update must both commit and advance the canonical headline when the canonical headline is stale.
+The resolver saw the headline difference and created a new custom identity/permalink.
 
-## Production regression covered
+## Candidate correction
+1. Adds `_is_current_manual_custom_submission()`.
+   - Only an active `custom_articles.json` payload carrying `_custom_active_queue` receives manual exact-headline publication semantics.
+   - Durable custom provenance alone is not a submission transaction.
 
-The Sept. 2 failure for:
+2. Adds fail-closed non-queue canonical resolution.
+   - A non-queue authoritative-custom placement must resolve through an already-established `canonical_slug`, `_archived_slug`, or current custom publication slug.
+   - It may reuse only an active custom archive row owning that permalink.
+   - If no established binding exists, generation stops before a new permalink can be minted.
 
-`2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county`
+3. Preserves immutable manual custom identity metadata during semantic/material headline progression.
+   - A non-queue material update may change the public headline/body on the established canonical.
+   - It does not rewrite the original manual `custom_headline_key`, custom payload hash, series key, or edition metadata as though the update were a new editor submission.
 
-is covered explicitly. Source attachment alone no longer creates the terminal obligation; an accepted surviving placement does, and the accepted copy remains available to `write_archives()`.
+4. Preserves the existing manual queue contract.
+   - Same exact manual headline may update its custom permalink.
+   - Any manual headline difference still creates a new article.
+   - Explicit custom slug collision protection remains fail-closed.
 
-## Restoration verification
+## Regression coverage
+Adds the exact Debevec production state as a regression:
+- advanced body-found headline;
+- original August 29 canonical slug;
+- original immutable custom headline key;
+- durable custom provenance;
+- no active queue marker.
 
-The exact feature families that failed after the stale overlay were re-run together with the material-update suite:
+The regression requires the resolver to retain the August 29 canonical, preserve the original manual identity metadata, create an RSS receipt for the retained canonical only, and pass the Custom RSS publication contract without the erroneous September 2 slug.
 
-- authoritative custom incident lock
-- sitewide Mediavine loader
-- membership UI dark launch
-- semantic material-update routing/headline repair
-- persistent story-registry history compaction
-- Top Stories category-hero freshness projection
-- published-story/material-update deduplication
+Also adds a fail-closed regression proving that non-queue custom provenance without an established canonical binding cannot mint a new article.
 
-Result: **79 passed, 0 failed**.
+Existing direct unit fixtures that model current manual submissions now explicitly carry `_custom_active_queue`, matching the production transaction contract.
 
-Production-equivalent Test Editorial Engine command:
-
-`python -m pytest tests -q --ignore=tests/test_canonical_identity.py --ignore=tests/test_matcher_contract.py`
-
-Result: **1104 passed, 0 failed**, 44 existing deprecation warnings.
-
-Package validation:
-
-`python scripts/validate_package.py`
-
-Result: **passed — 38 modules imported, 122 public exports verified**.
-
-`python -m py_compile scripts/generate.py` also passed.
-
-## Files
-
-- `scripts/generate.py`
-- `tests/test_published_story_skip_dedup.py`
-- `PATCH_NOTES_v1.13.7.1p.md`
+## Local validation
+- Focused affected tests: `90 passed`
+- Test Editorial Engine equivalent: `1103 passed, 0 failed` (44 existing deprecation warnings)
+- Package validation: `38 modules imported, 122 public exports verified`
 
 ## Production acceptance
-
-This patch is locally/workflow validated but is not considered production-proven until one real Generate News run completes successfully. For the next run, verify:
-
-1. the terminal material-update invariant no longer fails on the Martin County motorcycle story unless a genuinely accepted update is actually lost;
-2. Tiger Woods updates selected by the live writer are committed to the existing canonical and the headline/body advance appropriately;
-3. `data/material-update-publication-invariant.json` reports the accepted canonical obligations and passes;
-4. no later guard removes a validated accepted update before canonical write.
+After Test Editorial Engine is green, run one Generate News. The candidate correction is production-proven only if:
+- no new September 2 Debevec permalink is created;
+- the August 29 Debevec canonical remains the publication target;
+- `Custom RSS publication contract PASSED` appears;
+- the overall Generate News command exits successfully;
+- the front-page/canonical surface contracts remain green.
