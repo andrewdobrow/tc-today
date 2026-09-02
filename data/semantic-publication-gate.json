@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-02T02:47:01.017237+00:00",
+  "generated_at": "2026-09-02T03:28:05.067054+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -36,7 +36,7 @@
     "angle_shifted_event_recall": "dense shared article facts may nominate a recent candidate even when headlines diverge; nomination never merges without model adjudication",
     "independent_followup_policy": "same-event angle changes default to canonical update; a second permalink requires model-confirmed independent public-interest value plus a distinct persistent story identity",
     "material_update_composer": {
-      "version": "1.0",
+      "version": "1.1",
       "model": "claude-sonnet-4-5",
       "timeout_seconds": 60.0,
       "failure_behavior": "preserve_both_pages_and_retry",
@@ -63,39 +63,39 @@
   },
   "summary": {
     "evaluations": 47,
-    "candidate_pairs": 0,
+    "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "model_calls": 1,
     "cache_hits": 0,
-    "no_candidate_passes": 47,
+    "no_candidate_passes": 46,
     "duplicates_preserved": 0,
-    "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
+    "canonical_updates_selected": 1,
+    "new_stories_allowed": 0,
     "retroactive_rows_retained": 46,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
-    "material_update_composer_calls": 0,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
+    "material_update_composer_calls": 1,
     "material_updates_applied": 1,
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 14,
-    "pre_generation_materiality_promotions": 6,
-    "pre_generation_materiality_duplicates": 3,
-    "pre_generation_materiality_holds": 5,
-    "pre_generation_materiality_model_calls": 6,
-    "pre_generation_materiality_cache_hits": 8,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_evaluations": 7,
+    "pre_generation_materiality_promotions": 1,
+    "pre_generation_materiality_duplicates": 2,
+    "pre_generation_materiality_holds": 4,
+    "pre_generation_materiality_model_calls": 4,
+    "pre_generation_materiality_cache_hits": 3,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -103,109 +103,6 @@
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
-    {
-      "category_key": "local_gov",
-      "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-      "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-      "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-      "canonical_is_custom": true,
-      "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": true,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "update_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "update_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Michael Anthony Debevec II by name",
-        "Martin County Sheriff's Office investigation",
-        "Chastain Beach location",
-        "Last seen Aug. 26",
-        "Missing person case with same incident_anchor: missing-person:michael-debevec"
-      ],
-      "novel_facts": [
-        "Body discovered in mangroves near House of Refuge on Hutchinson Island",
-        "Body heavily decomposed",
-        "Clothing matches what Debevec was last seen wearing in surveillance video",
-        "Wallet found on beach Saturday prompting missing person report",
-        "Backpack found hanging in tree",
-        "Medical Examiner working to determine cause of death",
-        "Family says Debevec has history of substance abuse but had gotten clean"
-      ],
-      "reason": "This is definitively the same real-world event: the search for Michael Anthony Debevec II who went missing from Chastain Beach on Aug. 26. The incoming article reports a material new update—the discovery of a body believed to be Debevec's. This is a critical development that transforms the story from an active missing person search to a death investigation with pending identification. This major update belongs in the existing canonical rather than creating a new URL, as it is the resolution of the same missing person case, not an independently newsworthy follow-up investigation.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "crime",
-      "source_headline": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - WPEC",
-      "source_url": "https://cbs12.com/news/crime/ircso-assists-fellsmere-pd-in-search-for-machete-stabbing-suspect-florida-news-florida-crime-local-news-local-crime-stabbing-knife-machete",
-      "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-      "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-      "canonical_is_custom": false,
-      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 0.95,
-      "shared_anchors": [],
-      "novel_facts": [
-        "Machete stabbing incident in Fellsmere on Monday evening around 8:04 p.m.",
-        "Indian River County Sheriff's Office assisting Fellsmere Police Department",
-        "Search occurred in area of 147 S.",
-        "Suspect armed with machete",
-        "Suspect captured and taken into custody Tuesday evening"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
-    },
-    {
-      "category_key": "crime",
-      "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-      "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-      "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-      "canonical_is_custom": true,
-      "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": true,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "update_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "update_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Michael Anthony Debevec II",
-        "Martin County Sheriff's Office",
-        "Chastain Beach",
-        "Last seen Aug. 26",
-        "Same missing person case with incident_anchor: missing-person:michael-debevec"
-      ],
-      "novel_facts": [
-        "Body discovered in mangroves near House of Refuge",
-        "Body heavily decomposed",
-        "Clothing matches what Debevec was last seen wearing in surveillance video",
-        "Wallet found on beach near House of Refuge by good Samaritan",
-        "Backpack found hanging in tree",
-        "Medical Examiner working to determine cause of death",
-        "Toxicology report pending",
-        "Family filed missing person report on Saturday (Aug. 30)"
-      ],
-      "reason": "This is the same missing person case involving Michael Anthony Debevec II. The incoming article reports a major material update: the discovery of a body believed to be Debevec's. This represents a critical development from a missing person search to a death investigation. This is a textbook material update that should update the existing canonical story rather than create a new URL, as it's the resolution of the same underlying incident.",
-      "validation_errors": []
-    },
     {
       "category_key": "crime",
       "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
@@ -239,43 +136,6 @@
         "Additional detail about surveillance video identifying Moye"
       ],
       "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "business",
-      "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-      "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-      "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-      "canonical_is_custom": true,
-      "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": true,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "update_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "update_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Michael Anthony Debevec II",
-        "Martin County Sheriff's Office",
-        "Chastain Beach",
-        "Last seen Aug. 26",
-        "Same missing person case with incident_anchor: missing-person:michael-debevec"
-      ],
-      "novel_facts": [
-        "Body discovered in mangroves near House of Refuge",
-        "Body heavily decomposed",
-        "Clothing matches what Debevec was last seen wearing in surveillance video",
-        "Wallet found on beach near House of Refuge by good Samaritan",
-        "Backpack found hanging in tree",
-        "Medical Examiner working to determine cause of death",
-        "Toxicology report pending",
-        "Family filed missing person report on Saturday (Aug. 30)"
-      ],
-      "reason": "This is the same missing person case involving Michael Anthony Debevec II. The incoming article reports a major material update: the discovery of a body believed to be Debevec's. This represents a critical development from a missing person search to a death investigation. This is a textbook material update that should update the existing canonical story rather than create a new URL, as it's the resolution of the same underlying incident.",
       "validation_errors": []
     },
     {
@@ -318,53 +178,10 @@
     },
     {
       "category_key": "martin",
-      "source_headline": "Tiger Woods set for change-of-plea hearing in Martin County DUI case - WPEC",
-      "source_url": "https://cbs12.com/news/local/tiger-woods-set-for-change-of-plea-hearing-in-martin-county-dui-case-wedneday-florida-golf-dui-property-damage-refusal-submit-test-jupiter-island-range-rover-hydrocodone-impaired-pga-tour",
-      "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-      "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
-      "canonical_is_custom": false,
-      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Tiger Woods",
-        "Change-of-plea hearing Wednesday 8:30 a.m.",
-        "Judge Darren Steele",
-        "Martin County court",
-        "DUI case from March rollover crash on Jupiter Island"
-      ],
-      "novel_facts": [
-        "Attorney Douglas Duncan filed the notice Tuesday",
-        "Hearing at Martin County Courthouse in Stuart",
-        "Woods entered not guilty plea in March",
-        "Charges are DUI with property damage and refusal to submit to test",
-        "March 27 crash on South Beach Road details",
-        "Attempted to pass pickup truck towing trailer",
-        "Crossed double solid lines and struck trailer",
-        "Range Rover rolled onto side",
-        "Bloodshot/glassy eyes, dilated pupils, slow movements reported",
-        "Two hydrocodone pills found in pocket",
-        "Woods said he was looking at phone and adjusting radio",
-        "Breath test showed no alcohol",
-        "Refused urine test",
-        "Judge ruled prosecutors can access medical records"
-      ],
-      "reason": "Both articles cover the exact same scheduled court hearing: Tiger Woods' change-of-plea hearing on Wednesday at 8:30 a.m. before Judge Darren Steele in Martin County regarding his March Jupiter Island DUI case. The incoming article provides extensive background details about the crash, the charges, and the investigation, but these are contextual elaborations, not material new developments. The core newsworthy fact—that the hearing is scheduled—is identical in both articles. The additional background does not constitute a material update that changes what readers need to know about the hearing itself.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "martin",
-      "source_headline": "Police search for missing man last seen Monday morning in Port St. Lucie - WPEC",
-      "source_url": "https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search",
-      "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-      "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+      "source_headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves - WPEC",
+      "source_url": "https://cbs12.com/newsletter-daily/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news",
+      "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
+      "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
       "canonical_is_custom": false,
       "identity_basis": "registry_same_event_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
@@ -378,54 +195,19 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Missing person is Justin Jasterzenski, 38-year-old man",
-        "Last seen Monday morning (approximately August 30, 2026) around 8:30 a.m.",
-        "Missing from SE Avon Park Drive in Port St. Lucie",
-        "Driving silver older-model Toyota Tacoma",
-        "Wearing Bay Pointe collared shirt and khaki shorts",
-        "Contact Detective Nieves at Port St. Lucie Police Department"
+        "Body found in Martin County mangroves near House of Refuge",
+        "Michael Anthony Debevec reported missing",
+        "Good Samaritan found wallet on Saturday",
+        "Vehicle found at Chastain Beach",
+        "Phone records show movement between Chastain Beach and House of Refuge on Aug 27",
+        "Backpack with computer found in tree",
+        "Body wearing clothing matching missing person",
+        "Extensive decomposition prevents cause of death determination"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
-    },
-    {
-      "category_key": "martin",
-      "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-      "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-      "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-      "canonical_is_custom": true,
-      "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": true,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "update_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "update_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Michael Anthony Debevec II",
-        "Martin County Sheriff's Office",
-        "Chastain Beach",
-        "Last seen Aug. 26",
-        "Same missing person case with incident_anchor: missing-person:michael-debevec"
-      ],
-      "novel_facts": [
-        "Body discovered in mangroves near House of Refuge",
-        "Body heavily decomposed",
-        "Clothing matches what Debevec was last seen wearing in surveillance video",
-        "Wallet found on beach near House of Refuge by good Samaritan",
-        "Backpack found hanging in tree",
-        "Medical Examiner working to determine cause of death",
-        "Toxicology report pending",
-        "Family filed missing person report on Saturday (Aug. 30)"
-      ],
-      "reason": "This is the same missing person case involving Michael Anthony Debevec II. The incoming article reports a major material update: the discovery of a body believed to be Debevec's. This represents a critical development from a missing person search to a death investigation. This is a textbook material update that should update the existing canonical story rather than create a new URL, as it's the resolution of the same underlying incident.",
-      "validation_errors": []
     },
     {
       "category_key": "martin",
@@ -464,8 +246,8 @@
     },
     {
       "category_key": "st_lucie",
-      "source_headline": "Port St. Lucie police limiting use of license plate readers after state directive - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-suspend-license-plate-readers/73585310",
+      "source_headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves - WPEC",
+      "source_url": "https://cbs12.com/newsletter-daily/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news",
       "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
       "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
       "canonical_is_custom": false,
@@ -478,17 +260,16 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Port St. Lucie Police Department",
-        "Port St. Lucie locality"
-      ],
+      "confidence": 1.0,
+      "shared_anchors": [],
       "novel_facts": [
-        "FDOT memorandum issued August 31, 2026 revoking permits for license plate readers in state highway rights-of-way",
-        "Port St. Lucie Police Department limiting use of automated license plate reader technology",
-        "Seven cameras to be removed within 30 days",
-        "Chief Leo Niemczyk requiring prior approval for ALPR access",
-        "St. Lucie County Sheriff Richard Del Toro also updating ALPR policy"
+        "Body found in mangroves near House of Refuge in Martin County",
+        "Missing person Michael Anthony Debevec from Port St. Lucie",
+        "Good Samaritan found wallet on Saturday",
+        "Vehicle found at Chastain Beach",
+        "Phone records show movement between Chastain Beach and House of Refuge on Aug 27",
+        "Backpack with computer found in tree",
+        "Body discovered Tuesday wearing clothing matching Debevec's"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -514,11 +295,11 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Justin Jasterzenski, 38-year-old man missing from Port St. Lucie",
-        "Last seen Monday morning around 8:30 a.m.",
-        "Missing from SE Avon Park Drive area",
+        "Justin Jasterzenski, 38-year-old male missing from Port St. Lucie",
+        "Last seen Monday morning around 8:30 a.m. on SE Avon Park Drive",
         "Driving silver older-model Toyota Tacoma",
         "Wearing Bay Pointe collared shirt and khaki shorts",
+        "5'11\", 240 lbs, brown hair, brown eyes",
         "Contact Detective Nieves at 772-871-5037"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -527,13 +308,13 @@
       ]
     },
     {
-      "category_key": "indian_river",
-      "source_headline": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - WPEC",
-      "source_url": "https://cbs12.com/news/crime/ircso-assists-fellsmere-pd-in-search-for-machete-stabbing-suspect-florida-news-florida-crime-local-news-local-crime-stabbing-knife-machete",
-      "canonical_slug": "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
-      "canonical_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
+      "category_key": "st_lucie",
+      "source_headline": "Port St. Lucie police limiting use of license plate readers after state directive - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-suspend-license-plate-readers/73585310",
+      "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
+      "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
       "canonical_is_custom": false,
-      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
@@ -542,56 +323,22 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
-      "shared_anchors": [],
+      "confidence": 0.99,
+      "shared_anchors": [
+        "Port St. Lucie Police Department",
+        "Port St. Lucie locality"
+      ],
       "novel_facts": [
-        "Machete stabbing incident in Fellsmere on Monday evening around 8:04 p.m.",
-        "Indian River County Sheriff's Office assisted Fellsmere Police Department",
-        "Search conducted in area of 147 S.",
-        "Suspect armed with machete was captured Tuesday evening",
-        "Helicopters used in search"
+        "FDOT memorandum issued Aug 31, 2026 revoking permits for license plate readers on state highway rights-of-way",
+        "Port St. Lucie PD placing operational pause on automated license plate reader technology",
+        "Seven cameras to be removed from FDOT rights-of-way",
+        "Access limited to exigent circumstances requiring Chief Leo Niemczyk approval",
+        "St. Lucie County Sheriff also updating ALPR policy"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
-    },
-    {
-      "category_key": "indian_river",
-      "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-      "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-      "canonical_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-      "canonical_is_custom": true,
-      "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": true,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "update_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "update_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Michael Anthony Debevec II",
-        "Martin County Sheriff's Office",
-        "Chastain Beach",
-        "Last seen Aug. 26",
-        "Same missing person case with incident_anchor: missing-person:michael-debevec"
-      ],
-      "novel_facts": [
-        "Body discovered in mangroves near House of Refuge",
-        "Body heavily decomposed",
-        "Clothing matches what Debevec was last seen wearing in surveillance video",
-        "Wallet found on beach near House of Refuge by good Samaritan",
-        "Backpack found hanging in tree",
-        "Medical Examiner working to determine cause of death",
-        "Toxicology report pending",
-        "Family filed missing person report on Saturday (Aug. 30)"
-      ],
-      "reason": "This is the same missing person case involving Michael Anthony Debevec II. The incoming article reports a major material update: the discovery of a body believed to be Debevec's. This represents a critical development from a missing person search to a death investigation. This is a textbook material update that should update the existing canonical story rather than create a new URL, as it's the resolution of the same underlying incident.",
-      "validation_errors": []
     }
   ],
   "decisions": [
@@ -1397,26 +1144,6 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Port St. Lucie police search for missing 38-year-old man last seen Monday morning",
-      "incoming_source_url": "https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search",
-      "incoming_story_id": "story_007416",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Indian River County Sheriff's Office employee dies in Brevard County vehicle crash",
       "incoming_source_url": "https://www.wpbf.com/article/cassi-taylor-indian-river-county-sheriffs-office-employee-dies-crash-brevard/73582980",
       "incoming_story_id": "story_007419",
@@ -1499,7 +1226,27 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County",
       "incoming_source_url": "https://cbs12.com/news/florida/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county-florida-news-florida-crash-traffic-news-local-traffic-jam",
-      "incoming_story_id": "story_007487",
+      "incoming_story_id": "story_007505",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Port St. Lucie police pause Flock camera use after state revokes permits",
+      "incoming_source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
+      "incoming_story_id": "story_007515",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1517,294 +1264,274 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Port St. Lucie police pause Flock camera use after state revokes permits",
-      "incoming_source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
-      "incoming_story_id": "story_007515",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Port St. Lucie police pause Flock camera use after state revokes permits",
-      "incoming_source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
-      "incoming_story_id": "story_007515",
+      "incoming_headline": "Martin County Sheriff warns residents less safe after state orders license plate reader removal",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/florida-license-plate-reader-removal-order-raises-safety-concerns-from-law-enforcement-on-the-treasure-coast",
+      "incoming_story_id": "story_007353",
       "candidates": [
         {
-          "slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
-          "headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5464,
-          "retrieval_score": 0.4954,
+          "slug": "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
+          "headline": "Port St. Lucie police pause Flock camera use after state revokes permits",
+          "retrieval_score": 0.4257,
+          "headline_similarity": 0.2597,
+          "similarity_basis": "source_headline",
+          "shared_headline_tokens": [],
+          "shared_topic_tokens": [],
+          "content_similarity": {
+            "score": 0.3453,
+            "overlap": 0.4545,
+            "jaccard": 0.0645,
+            "shared_token_count": 10,
+            "shared_tokens": [
+              "camera",
+              "cameras",
+              "flock",
+              "license",
+              "pausing",
+              "plate",
+              "police",
+              "reader",
+              "technology",
+              "use"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 0,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
           "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
-          "headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.518,
-          "retrieval_score": 0.499,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-desantis-seeks-statewide-review-of-license-plate-camera-use-amid-surveillance-co",
-          "headline": "DeSantis seeks statewide review of license plate camera use amid surveillance concerns",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5088,
-          "retrieval_score": 0.4898,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-08-19-port-st-lucie-mayoral-candidates-debate-growth-traffic-and-infrastructure-ahead",
-          "headline": "Port St. Lucie mayoral candidates debate growth, traffic, and infrastructure ahead of Election Day",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5004,
-          "retrieval_score": 0.5004,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
-          "headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4791,
-          "retrieval_score": 0.4421,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-08-20-st-lucie-county-deputy-found-guilty-of-dui-remains-on-unpaid-leave-during-intern",
-          "headline": "St. Lucie County deputy found guilty of DUI, remains on unpaid leave during internal review",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.466,
-          "retrieval_score": 0.415,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
-          "headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4569,
-          "retrieval_score": 0.3939,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-08-19-port-st-lucie-mayor-race-heads-to-november-runoff-between-shannon-martin-and-ste",
-          "headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin and Steven Giordano",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4552,
-          "retrieval_score": 0.4552,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
-          "headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4461,
-          "retrieval_score": 0.4461,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
-          "headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4422,
-          "retrieval_score": 0.4202,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
-          "headline": "Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4371,
-          "retrieval_score": 0.4181,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc",
-          "headline": "Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4313,
-          "retrieval_score": 0.3943,
-          "reasons": [
-            "publication_gap_1_days"
+            "strong_content_event_continuity",
+            "publication_gap_0_days"
           ]
         }
       ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.82,
-        "shared_anchors": [
-          "license plate reader / ALPR policy topic",
-          "Governor DeSantis surveillance concerns referenced as background"
-        ],
-        "novel_facts": [
-          "FDOT revoked ALPR permits for state roads and ordered removal within 30 days",
-          "Port St. Lucie Police Department pausing all Flock/ALPR use except exigent circumstances",
-          "Statement from PSLPD Chief Leo Niemczyk",
-          "St. Lucie County Sheriff's Office limiting ALPR use to forcible felonies and missing/endangered persons"
-        ],
-        "reason": "The closest candidate (DeSantis seeks statewide review of license plate camera use, 2026-08-26) covers an earlier, separate event—DeSantis announcing he wants an overview of ALPR use. This incoming article reports a distinct, later governmental action (FDOT formally revoking permits and ordering removal) and a specific agency response (PSLPD pausing camera use), which is a new concrete event in the unfolding policy story, not a rehash of the DeSantis announcement. No candidate covers the FDOT permit revocation or the PSLPD pause specifically, so this warrants a new story rather than updating an unrelated candidate.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
       "decision": {
         "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
+        "same_real_world_event": true,
+        "material_new_update": true,
         "independently_newsworthy_followup": false,
-        "confidence": 0.82,
+        "confidence": 0.95,
         "shared_anchors": [
-          "license plate reader / ALPR policy topic",
-          "Governor DeSantis surveillance concerns referenced as background"
+          "FDOT memorandum ordering removal of license plate readers from state highways within 30 days",
+          "Port St. Lucie police pausing use of Flock cameras/license plate readers",
+          "State permit revocation this week (both published September 1, 2026)",
+          "Response to Gov. Ron DeSantis concerns about the technology"
         ],
         "novel_facts": [
-          "FDOT revoked ALPR permits for state roads and ordered removal within 30 days",
-          "Port St. Lucie Police Department pausing all Flock/ALPR use except exigent circumstances",
-          "Statement from PSLPD Chief Leo Niemczyk",
-          "St. Lucie County Sheriff's Office limiting ALPR use to forcible felonies and missing/endangered persons"
+          "Martin County Sheriff John Budensiek's specific warning that residents are less safe",
+          "Budensiek's examples of major arrests aided by cameras (Trump assassin, kidnapping rescue, burglary crew)",
+          "Indian River County Sheriff Eric Flowers' praise after homicide arrest last month",
+          "St. Lucie County Sheriff's Office limiting use to forcible felonies and missing persons",
+          "Former Sheriff William Snyder's call for regulatory legislation",
+          "Budensiek's specific proposals (case number requirement, public auditing system)",
+          "Resident reactions from Sean Reilly, Brandee Bailey, and Kristina Ramsey"
         ],
-        "reason": "The closest candidate (DeSantis seeks statewide review of license plate camera use, 2026-08-26) covers an earlier, separate event—DeSantis announcing he wants an overview of ALPR use. This incoming article reports a distinct, later governmental action (FDOT formally revoking permits and ordering removal) and a specific agency response (PSLPD pausing camera use), which is a new concrete event in the unfolding policy story, not a rehash of the DeSantis announcement. No candidate covers the FDOT permit revocation or the PSLPD pause specifically, so this warrants a new story rather than updating an unrelated candidate.",
+        "reason": "Both articles cover the same governmental action: FDOT's memorandum this week ordering removal of license plate readers from state roads, prompted by Gov. DeSantis. The candidate focuses narrowly on Port St. Lucie police pausing camera use. The incoming article provides material new updates including Martin County Sheriff's strong public warning, multiple sheriffs' responses across the region, specific arrest examples demonstrating impact, proposed regulatory solutions, and community reaction. These are substantive developments that expand understanding of the controversy's scope and stakeholder positions, warranting an update to the existing story rather than a separate URL.",
         "validation_errors": [],
         "consistency_repairs": []
       }
     }
   ],
   "archive_repairs": [],
-  "material_update_compositions": [],
+  "material_update_compositions": [
+    {
+      "phase": "forward_publication",
+      "canonical_slug": "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
+      "incoming_slug": "",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 313,
+      "paragraph_count": 4,
+      "baseline_lead_hits": [
+        "flock",
+        "lucie",
+        "permits",
+        "police",
+        "port",
+        "state",
+        "use"
+      ],
+      "novelty_lead_hits": [
+        "agencies",
+        "budensiek",
+        "called",
+        "came",
+        "control",
+        "days",
+        "decision",
+        "desantis",
+        "fundamentally",
+        "gov",
+        "highways",
+        "john",
+        "last",
+        "less",
+        "makes",
+        "martin",
+        "monday",
+        "ordered",
+        "out",
+        "prompting",
+        "publicly",
+        "readers",
+        "remove",
+        "residents",
+        "ron",
+        "safe",
+        "sheriff",
+        "tuesday",
+        "warn",
+        "within"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "validated_canonical_headline_evolution",
+        "token_similarity": 1.0,
+        "date_gap_days": 1,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "prospective": true,
+        "existing_headline": "Port St. Lucie police pause Flock camera use after state revokes permits",
+        "incoming_headline": "Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal",
+        "candidate_slug": "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
+        "prospective_lastmod": "2026-09-02",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 89,
+        "baseline_anchor": "",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "flock",
+          "lucie",
+          "permits",
+          "police",
+          "port",
+          "state"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Port St. Lucie police pause Flock camera use after state revokes permits",
+        "novelty_anchor": "semantic_gate_novel_fact",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "florida",
+          "license",
+          "plate",
+          "reader"
+        ],
+        "semantic_novel_fact_hits": [
+          "budensiek",
+          "john",
+          "last",
+          "less",
+          "martin",
+          "residents",
+          "safe",
+          "sheriff",
+          "that"
+        ],
+        "semantic_novel_fact_token_count": 56,
+        "missing": [],
+        "source_title": "Florida license plate reader removal order raises safety concerns from law enforcement on the Treasure Coast",
+        "headline": "Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal"
+      },
+      "headline": "Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal"
+    }
+  ],
   "material_updates": [
     {
       "phase": "forward_publication",
       "source_slug": "",
-      "target_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-      "source_story_id": "",
-      "target_story_id": "custom:8b07c4ab92b901c1752d49826291ed8a",
-      "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-      "updated_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-      "confidence": 0.98,
+      "target_slug": "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
+      "source_story_id": "story_007353",
+      "target_story_id": "story_007515",
+      "source_headline": "Florida license plate reader removal order raises safety concerns from law enforcement on the Treasure Coast",
+      "updated_headline": "Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal",
+      "confidence": 0.95,
       "shared_anchors": [
-        "Michael Anthony Debevec II",
-        "Martin County Sheriff's Office",
-        "Chastain Beach",
-        "Last seen Aug. 26",
-        "Same missing person case with incident_anchor: missing-person:michael-debevec"
+        "FDOT memorandum ordering removal of license plate readers from state highways within 30 days",
+        "Port St. Lucie police pausing use of Flock cameras/license plate readers",
+        "State permit revocation this week (both published September 1, 2026)",
+        "Response to Gov. Ron DeSantis concerns about the technology"
       ],
       "novel_facts": [
-        "Body discovered in mangroves near House of Refuge",
-        "Body heavily decomposed",
-        "Clothing matches what Debevec was last seen wearing in surveillance video",
-        "Wallet found on beach near House of Refuge by good Samaritan",
-        "Backpack found hanging in tree",
-        "Medical Examiner working to determine cause of death",
-        "Toxicology report pending",
-        "Family filed missing person report on Saturday (Aug. 30)"
+        "Martin County Sheriff John Budensiek's specific warning that residents are less safe",
+        "Budensiek's examples of major arrests aided by cameras (Trump assassin, kidnapping rescue, burglary crew)",
+        "Indian River County Sheriff Eric Flowers' praise after homicide arrest last month",
+        "St. Lucie County Sheriff's Office limiting use to forcible felonies and missing persons",
+        "Former Sheriff William Snyder's call for regulatory legislation",
+        "Budensiek's specific proposals (case number requirement, public auditing system)",
+        "Resident reactions from Sean Reilly, Brandee Bailey, and Kristina Ramsey"
       ],
-      "updated_at": "2026-09-02T02:45:31Z",
+      "updated_at": "2026-09-02T03:26:34Z",
       "composition": {
-        "phase": "generated_material_update_quality_repair",
-        "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+        "phase": "forward_publication",
+        "canonical_slug": "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
         "incoming_slug": "",
         "status": "validated",
         "validation_errors": [],
-        "word_count": 219,
+        "word_count": 313,
         "paragraph_count": 4,
         "baseline_lead_hits": [
-          "beach",
-          "chastain",
-          "last",
-          "martin",
-          "missing",
-          "office",
-          "oklahoma",
-          "seen",
-          "sheriff",
-          "visitor"
+          "flock",
+          "lucie",
+          "permits",
+          "police",
+          "port",
+          "state",
+          "use"
         ],
         "novelty_lead_hits": [
-          "believed",
-          "believes",
-          "belong",
-          "belongs",
-          "body",
+          "agencies",
           "budensiek",
-          "but",
-          "clothing",
-          "found",
-          "house",
-          "hutchinson",
-          "identification",
-          "investigating",
-          "investigators",
-          "island",
+          "called",
+          "came",
+          "control",
+          "days",
+          "decision",
+          "desantis",
+          "fundamentally",
+          "gov",
+          "highways",
           "john",
-          "just",
-          "mangroves",
-          "matches",
-          "north",
-          "positive",
-          "refuge",
-          "reported",
-          "surveillance",
-          "video",
-          "waiting",
-          "wearing",
-          "what"
+          "last",
+          "less",
+          "makes",
+          "martin",
+          "monday",
+          "ordered",
+          "out",
+          "prompting",
+          "publicly",
+          "readers",
+          "remove",
+          "residents",
+          "ron",
+          "safe",
+          "sheriff",
+          "tuesday",
+          "warn",
+          "within"
         ],
         "headline_alignment": {
           "aligned": true,
           "reason": "validated_canonical_headline_evolution",
-          "token_similarity": 0.8333,
-          "date_gap_days": 4,
+          "token_similarity": 1.0,
+          "date_gap_days": 1,
           "meaningful_update_basis": "semantic_material_update_gate",
           "prospective": true,
-          "existing_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
-          "incoming_headline": "Body found in Hutchinson Island mangroves believed to be missing Oklahoma visitor",
-          "candidate_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "existing_headline": "Port St. Lucie police pause Flock camera use after state revokes permits",
+          "incoming_headline": "Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal",
+          "candidate_slug": "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
           "prospective_lastmod": "2026-09-02",
           "timestamp_evidence": "stored_archive_timestamp"
         },
@@ -1812,62 +1539,55 @@
           "required": true,
           "passed": true,
           "story_form": "update",
-          "lead_word_count": 83,
-          "baseline_anchor": "missing_person",
+          "lead_word_count": 89,
+          "baseline_anchor": "",
           "baseline_present": true,
           "baseline_anchor_present": true,
           "baseline_details_present": true,
           "baseline_context_hits": [
-            "beach",
-            "chastain",
-            "last",
-            "martin",
-            "missing",
-            "office",
-            "oklahoma",
-            "seen",
-            "sheriff",
-            "visitor"
+            "flock",
+            "lucie",
+            "permits",
+            "police",
+            "port",
+            "state"
           ],
           "baseline_context_required": 2,
           "canonical_context_available": true,
-          "canonical_context_headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
+          "canonical_context_headline": "Port St. Lucie police pause Flock camera use after state revokes permits",
           "novelty_anchor": "semantic_gate_novel_fact",
           "novelty_present": true,
           "novelty_token_hits": [
-            "body",
-            "found",
-            "hutchinson",
-            "island",
-            "mangroves"
+            "florida",
+            "license",
+            "plate",
+            "reader"
           ],
           "semantic_novel_fact_hits": [
-            "body",
-            "clothing",
-            "found",
-            "house",
-            "mangroves",
-            "matches",
-            "refuge",
-            "surveillance",
-            "video",
-            "wearing",
-            "what"
+            "budensiek",
+            "john",
+            "last",
+            "less",
+            "martin",
+            "residents",
+            "safe",
+            "sheriff",
+            "that"
           ],
-          "semantic_novel_fact_token_count": 35,
+          "semantic_novel_fact_token_count": 56,
           "missing": [],
-          "source_title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-          "headline": "Body found in Hutchinson Island mangroves believed to be missing Oklahoma visitor"
+          "source_title": "Florida license plate reader removal order raises safety concerns from law enforcement on the Treasure Coast",
+          "headline": "Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal"
         },
-        "headline": "Body found in Hutchinson Island mangroves believed to be missing Oklahoma visitor"
+        "headline": "Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal"
       }
     }
   ],
   "registry_consolidation": {
-    "status": "no_changes",
+    "status": "consolidated",
     "directives_considered": 1,
-    "story_records_merged": 0,
-    "aliases_written": 0,
+    "story_records_merged": 1,
+    "aliases_written": 1,
     "already_consolidated": 0,
     "skipped": [
       {
@@ -1932,6 +1652,33 @@
       }
     ],
     "rejected_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_007353",
+        "target_story_id": "story_007515",
+        "target_slug": "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
+        "incoming_headline": "Martin County Sheriff warns residents less safe after state orders license plate reader removal",
+        "confidence": 0.95,
+        "shared_anchors": [
+          "FDOT memorandum ordering removal of license plate readers from state highways within 30 days",
+          "Port St. Lucie police pausing use of Flock cameras/license plate readers",
+          "State permit revocation this week (both published September 1, 2026)",
+          "Response to Gov. Ron DeSantis concerns about the technology"
+        ],
+        "reason": "Both articles cover the same governmental action: FDOT's memorandum this week ordering removal of license plate readers from state roads, prompted by Gov. DeSantis. The candidate focuses narrowly on Port St. Lucie police pausing camera use. The incoming article provides material new updates including Martin County Sheriff's strong public warning, multiple sheriffs' responses across the region, specific arrest examples demonstrating impact, proposed regulatory solutions, and community reaction. These are substantive developments that expand understanding of the controversy's scope and stakeholder positions, warranting an update to the existing story rather than a separate URL.",
+        "relationship_type": "material_update",
+        "novel_facts": [
+          "Martin County Sheriff John Budensiek's specific warning that residents are less safe",
+          "Budensiek's examples of major arrests aided by cameras (Trump assassin, kidnapping rescue, burglary crew)",
+          "Indian River County Sheriff Eric Flowers' praise after homicide arrest last month",
+          "St. Lucie County Sheriff's Office limiting use to forcible felonies and missing persons",
+          "Former Sheriff William Snyder's call for regulatory legislation",
+          "Budensiek's specific proposals (case number requirement, public auditing system)",
+          "Resident reactions from Sean Reilly, Brandee Bailey, and Kristina Ramsey"
+        ],
+        "resolved_source_story_id": "story_007353",
+        "resolved_target_story_id": "story_007515"
+      }
+    ]
   }
 }
