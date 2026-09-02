@@ -149,6 +149,19 @@ except Exception:
 
 TCT_PRESENTATION_VERSION = "6.7.4-stale-source-identity-guard"
 
+MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
+MEDIAVINE_SCRIPT_TAG = (
+    '<script type="text/javascript" async="async" data-noptimize="1" '
+    'data-cfasync="false" '
+    f'src="{MEDIAVINE_SCRIPT_SRC}"></script>'
+)
+_MEDIAVINE_SCRIPT_RE = re.compile(
+    r"<script\b[^>]*\bsrc=[\"'](?:https?:)?//scripts\.mediavine\.com/"
+    r"tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf\.js[\"'][^>]*>"
+    r'\s*</script>\s*',
+    re.IGNORECASE,
+)
+
 # Membership launch safety. This remains OFF until live Stripe checkout,
 # webhook-backed entitlement, authentication, article unlock and account
 # management are all verified end-to-end. While off, current readers continue
@@ -157,6 +170,145 @@ MEMBERSHIP_UI_ENABLED = os.getenv("TCT_MEMBERSHIP_UI_ENABLED", "0").strip().lowe
     "1", "true", "yes", "on",
 }
 MEMBERSHIP_SUBSCRIBE_URL = os.getenv("TCT_SUBSCRIBE_URL", "/subscribe.html").strip() or "/subscribe.html"
+
+
+def _normalize_mediavine_script_in_html(page_html):
+    """Place the Mediavine loader exactly once, immediately before </head>."""
+    text = str(page_html or "")
+    head_match = re.search(r'</head\s*>', text, flags=re.IGNORECASE)
+    if head_match is None:
+        raise RuntimeError("Mediavine script injection FAILED: </head> not found")
+
+    # Remove any prior copy of this exact Mediavine tag so the operation is
+    # idempotent and its location is deterministic.
+    text = _MEDIAVINE_SCRIPT_RE.sub("", text)
+    head_match = re.search(r'</head\s*>', text, flags=re.IGNORECASE)
+    insertion = MEDIAVINE_SCRIPT_TAG + "\n"
+    return text[:head_match.start()] + insertion + text[head_match.start():]
+
+
+def _apply_mediavine_script_sitewide(output_root):
+    """Normalize the required Mediavine loader across every rendered HTML page."""
+    root = Path(output_root)
+    html_paths = sorted(path for path in root.rglob("*.html") if path.is_file())
+    updated = 0
+    for path in html_paths:
+        original = path.read_text(encoding="utf-8")
+        normalized = _normalize_mediavine_script_in_html(original)
+        if normalized != original:
+            path.write_text(normalized, encoding="utf-8")
+            updated += 1
+
+    failures = []
+    expected_tail = MEDIAVINE_SCRIPT_TAG + "\n</head>"
+    for path in html_paths:
+        text = path.read_text(encoding="utf-8")
+        if text.count(MEDIAVINE_SCRIPT_SRC) != 1:
+            failures.append(f"{path}:loader_count={text.count(MEDIAVINE_SCRIPT_SRC)}")
+            continue
+        head_match = re.search(r'</head\s*>', text, flags=re.IGNORECASE)
+        if head_match is None:
+            failures.append(f"{path}:missing_head_close")
+            continue
+        prefix = text[:head_match.start()].rstrip()
+        if not prefix.endswith(MEDIAVINE_SCRIPT_TAG):
+            failures.append(f"{path}:not_immediately_before_head_close")
+
+    if failures:
+        raise RuntimeError(
+            "Mediavine sitewide contract FAILED: " + "; ".join(failures[:10])
+        )
+
+    return {"scanned": len(html_paths), "updated": updated}
+
+
+# v1.13.7.1m: subscribers remain eligible for display advertising. Older retained
+# HTML can outlive the release that created its membership copy, so remove only
+# known TCT ad-free membership promises and leave ordinary editorial prose alone.
+_MEMBERSHIP_AD_PROMISE_REPLACEMENTS = (
+    (
+        "Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties.",
+        "Get unlimited access to independent local reporting across Martin, St. Lucie and Indian River counties.",
+    ),
+    (
+        "Get your first month for $1, then keep unlimited ad-free access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.",
+        "Get your first month for $1, then keep unlimited access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.",
+    ),
+    ("<span>Ad-free reading</span>", "<span>Unlimited article access</span>"),
+    ("<li>Ad-free reading</li>", "<li>Independent local reporting</li>"),
+    (
+        "<span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Completely ad-free</span>",
+        "<span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Supports local journalism</span>",
+    ),
+    (
+        "Comprehensive local coverage. No ads. Less than $5 a month.",
+        "Comprehensive local coverage. Unlimited access. Less than $5 a month.",
+    ),
+    (
+        "Unlimited articles · No ads · Support independent local journalism",
+        "Unlimited articles · Full local coverage · Support independent local journalism",
+    ),
+    (
+        "Unlimited articles. No ads. Help fund independent Treasure Coast reporting.",
+        "Unlimited articles. Help fund independent Treasure Coast reporting.",
+    ),
+    (
+        "Unlimited, ad-free access to Treasure Coast Today and support for independent local journalism across Martin, St. Lucie and Indian River counties.",
+        "Unlimited access to Treasure Coast Today and support for independent local journalism across Martin, St. Lucie and Indian River counties.",
+    ),
+    (
+        "Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties — and help sustain journalism focused on the communities you live in.",
+        "Get unlimited access to independent local reporting across Martin, St. Lucie and Indian River counties — and help sustain journalism focused on the communities you live in.",
+    ),
+    (
+        '<article><span class="membership-value-number">02</span><h3>Ad-free reading</h3><p>Read the news without display ads competing for your attention.</p></article>',
+        '<article><span class="membership-value-number">02</span><h3>Unlimited access</h3><p>Read every Treasure Coast Today story while your membership is active.</p></article>',
+    ),
+    (
+        "Both plans include the same unlimited, ad-free access to Treasure Coast Today.",
+        "Both plans include the same unlimited access to Treasure Coast Today.",
+    ),
+    (
+        "Membership includes unlimited access to Treasure Coast Today articles and an ad-free reading experience while your membership is active.",
+        "Membership includes unlimited access to Treasure Coast Today articles while your membership is active.",
+    ),
+)
+
+_MEMBERSHIP_AD_PROMISE_FORBIDDEN = tuple(old for old, _new in _MEMBERSHIP_AD_PROMISE_REPLACEMENTS)
+
+
+def _normalize_membership_ad_promises_in_html(page_html):
+    """Remove only known TCT membership promises that subscribers will be ad-free."""
+    updated = page_html
+    for old, new in _MEMBERSHIP_AD_PROMISE_REPLACEMENTS:
+        updated = updated.replace(old, new)
+    return updated
+
+
+def _apply_membership_ad_promise_contract_sitewide(output_root):
+    """Normalize retained HTML and fail if a known obsolete ad-free promise survives."""
+    root = Path(output_root)
+    scanned = 0
+    updated_count = 0
+    failures = []
+    for page in sorted(root.rglob("*.html")):
+        try:
+            original = page.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        scanned += 1
+        normalized = _normalize_membership_ad_promises_in_html(original)
+        if normalized != original:
+            page.write_text(normalized, encoding="utf-8")
+            updated_count += 1
+        for forbidden in _MEMBERSHIP_AD_PROMISE_FORBIDDEN:
+            if forbidden in normalized:
+                failures.append(f"{page.relative_to(root)}: {forbidden[:80]}")
+    if failures:
+        raise RuntimeError(
+            "Membership advertising promise contract FAILED: " + "; ".join(failures[:10])
+        )
+    return {"scanned": scanned, "updated": updated_count}
 
 
 def _header_primary_cta_html():
@@ -184,9 +336,9 @@ def _homepage_support_card_html():
         <div class="tct-membership-card-inner">
           <span class="tct-membership-kicker">Treasure Coast Today Membership</span>
           <h2 class="tct-membership-headline">Unlimited local news for $1 your first month.</h2>
-          <p class="tct-membership-copy">Get your first month for $1, then keep unlimited ad-free access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.</p>
+          <p class="tct-membership-copy">Get your first month for $1, then keep unlimited access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.</p>
           <span class="tct-membership-options" aria-hidden="true">
-            <span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Completely ad-free</span>
+            <span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Supports local journalism</span>
           </span>
           <span class="tct-membership-cta">Get your first month for $1 <b>&rarr;</b></span>
         </div>
@@ -13909,6 +14061,35 @@ def _select_top_story_cards(cards, archive_entries=(), *, hero_headline="", limi
     return selected, report
 
 
+def _category_hero_top_story_candidates(all_categories):
+    """Project live category heroes into the Top Stories candidate pool.
+
+    Category heroes are real live stories and must be allowed to compete for the
+    all-news Top Stories deck.  They are cloned so homepage-card metadata cannot
+    mutate the category hero itself.  Rendering treats these projected copies as
+    Top-News-only placements, preventing a duplicate card beneath the same hero on
+    its category view.
+    """
+    candidates = []
+    for category in all_categories or []:
+        if not isinstance(category, dict):
+            continue
+        hero = category.get("hero")
+        if not isinstance(hero, dict) or not str(hero.get("headline") or "").strip():
+            continue
+        cat_key = str(category.get("category_key") or "").strip()
+        cat_label = str(category.get("category_label") or "").strip()
+        candidate = copy.deepcopy(hero)
+        candidate["cat_key"] = cat_key or str(candidate.get("cat_key") or "")
+        candidate["category_key"] = str(candidate.get("category_key") or cat_key)
+        candidate["cat_label"] = cat_label or str(candidate.get("cat_label") or "")
+        candidate["enriched"] = True
+        candidate["_top_stories_category_hero_candidate"] = True
+        _apply_category_memberships(candidate, cat_key)
+        candidates.append(candidate)
+    return candidates
+
+
 def _write_top_stories_ranking_report(report, output_root):
     path = Path(output_root) / "data" / "top-stories-ranking-report.json"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -14082,8 +14263,16 @@ def render_index(all_categories, top_cat):
             _apply_category_memberships(card, cat["category_key"])
             all_cards_pool.append(card)
 
-    # Only enriched cards appear on the homepage. Unenriched cards are dropped.
-    enriched_pool = [c for c in all_cards_pool if c.get("enriched")]
+    # A category hero is still a current newsroom story.  Project every live
+    # category hero into the all-news candidate pool so leading a county/topic
+    # cannot accidentally disqualify that story from Top Stories.  These are
+    # cloned Top-News-only placements; category views continue to show the hero
+    # itself rather than a duplicate grid card underneath it.
+    _category_hero_candidates = _category_hero_top_story_candidates(all_categories)
+
+    # Only enriched cards appear on the homepage. Unenriched ordinary cards are
+    # dropped, while live category heroes are always eligible to compete.
+    enriched_pool = _category_hero_candidates + [c for c in all_cards_pool if c.get("enriched")]
 
     # Backfill from the archive: recent enriched stories (last 3 days) that aren't in
     # this run's fresh cards. Feeds rotate stories off quickly, so a story from
@@ -14394,18 +14583,46 @@ def render_index(all_categories, top_cat):
         # Fallback: the story's own published display string
         return card.get("published", "")
 
+    # Canonical category-hero identities are rendered as Top-News-only cards when
+    # selected for the all-news deck.  This prevents a selected Martin/Crime/etc.
+    # hero from appearing a second time beneath itself when the reader switches to
+    # that category.
+    _category_hero_permalink_keys = set()
+    for _category in all_categories:
+        _category_hero = _category.get("hero") if isinstance(_category, dict) else None
+        if not isinstance(_category_hero, dict):
+            continue
+        _category_hero_permalink = _raw_surface_permalink(_category_hero, allow_fallback=False)
+        _category_hero_key = _homepage_permalink_key(_category_hero_permalink)
+        if _category_hero_key:
+            _category_hero_permalink_keys.add(_category_hero_key)
+
     cards_html = ""
     rendered_card_count = 0
     for card in all_cards_display:
         permalink = card_permalink(card)
         if not permalink:
             continue  # No article page exists for this card — skip it
+        _is_category_hero_equivalent = (
+            _homepage_permalink_key(permalink) in _category_hero_permalink_keys
+        )
+        if (
+            card.get("_top_stories_category_hero_candidate")
+            and id(card) not in topnews_ids
+        ):
+            # The real category hero already renders on its category surface.  A
+            # projected hero that did not win a Top Stories slot needs no hidden
+            # duplicate DOM card.
+            continue
         if rendered_card_count == 4:
             cards_html += support_card
         ck        = card.get("cat_key", "all")
         cl        = card.get("cat_label", "")
         category_keys = _apply_category_memberships(card, ck)
         data_cats = " ".join(category_keys)
+        _render_data_cat = "all" if _is_category_hero_equivalent else ck
+        if _is_category_hero_equivalent:
+            data_cats = "all"
         card_time = card_display_date(card)
         _restore_archive_source_image(card, archive_for_links)
         img_url   = card.get("image_url", "")
@@ -14431,7 +14648,7 @@ def render_index(all_categories, top_cat):
         _urgency_text = f"{cl} {card.get('headline','')}".strip().lower()
         urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if card.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
         cards_html += f"""
-      <a href="{permalink}" class="grid-card fade-in" data-cat="{ck}" data-cats="{data_cats}"{topnews_attr}>
+      <a href="{permalink}" class="grid-card fade-in" data-cat="{_render_data_cat}" data-cats="{data_cats}"{topnews_attr}>
         <div class="grid-card-image-wrap">
           <img class="grid-card-image" src="{img_url}" alt="" loading="lazy">
         </div>
@@ -19297,8 +19514,22 @@ def suppress_authoritative_custom_incidents_from_live(all_categories, archived_c
     Unlike guarded stage suppression, this contract is cross-stage and cross-category.
     It prevents a rescue/community-update wording change from surviving in Crime while
     another copy is suppressed in Martin County.  Custom content itself is untouched.
+
+    A generated placement that already carries a validated, target-bound material-update
+    authorization for the *same* custom canonical is not a duplicate.  It is a pending
+    canonical write transaction.  Removing it here would strand the validated update
+    before ``write_archives()`` can compose and commit it.
     """
     removed = []
+    protected = []
+
+    def _protected_update_for_match(item, match):
+        return bool(
+            isinstance(item, dict)
+            and isinstance(match, dict)
+            and _has_target_bound_pre_generation_material_update_authority(item, match)
+        )
+
     for category in all_categories or []:
         category_key = str(category.get("category_key") or "")
 
@@ -19307,16 +19538,28 @@ def suppress_authoritative_custom_incidents_from_live(all_categories, archived_c
             hero, archived_customs, current_customs
         ) if hero else (None, 0, "")
         if match:
-            removed.append({
-                "headline": hero.get("headline", ""),
-                "category_key": category_key,
-                "placement": "hero",
-                "canonical_slug": match.get("slug", ""),
-                "canonical_headline": match.get("headline", ""),
-                "confidence": confidence,
-                "basis": basis,
-            })
-            category["hero"] = None
+            if _protected_update_for_match(hero, match):
+                protected.append({
+                    "headline": hero.get("headline", ""),
+                    "category_key": category_key,
+                    "placement": "hero",
+                    "canonical_slug": match.get("slug", ""),
+                    "canonical_headline": match.get("headline", ""),
+                    "confidence": confidence,
+                    "basis": basis,
+                    "action": "preserve_validated_material_update_transaction",
+                })
+            else:
+                removed.append({
+                    "headline": hero.get("headline", ""),
+                    "category_key": category_key,
+                    "placement": "hero",
+                    "canonical_slug": match.get("slug", ""),
+                    "canonical_headline": match.get("headline", ""),
+                    "confidence": confidence,
+                    "basis": basis,
+                })
+                category["hero"] = None
 
         kept_cards = []
         for card in category.get("cards", []) or []:
@@ -19324,15 +19567,28 @@ def suppress_authoritative_custom_incidents_from_live(all_categories, archived_c
                 card, archived_customs, current_customs
             )
             if match:
-                removed.append({
-                    "headline": card.get("headline", ""),
-                    "category_key": category_key,
-                    "placement": "card",
-                    "canonical_slug": match.get("slug", ""),
-                    "canonical_headline": match.get("headline", ""),
-                    "confidence": confidence,
-                    "basis": basis,
-                })
+                if _protected_update_for_match(card, match):
+                    protected.append({
+                        "headline": card.get("headline", ""),
+                        "category_key": category_key,
+                        "placement": "card",
+                        "canonical_slug": match.get("slug", ""),
+                        "canonical_headline": match.get("headline", ""),
+                        "confidence": confidence,
+                        "basis": basis,
+                        "action": "preserve_validated_material_update_transaction",
+                    })
+                    kept_cards.append(card)
+                else:
+                    removed.append({
+                        "headline": card.get("headline", ""),
+                        "category_key": category_key,
+                        "placement": "card",
+                        "canonical_slug": match.get("slug", ""),
+                        "canonical_headline": match.get("headline", ""),
+                        "confidence": confidence,
+                        "basis": basis,
+                    })
             else:
                 kept_cards.append(card)
         category["cards"] = kept_cards
@@ -19343,6 +19599,11 @@ def suppress_authoritative_custom_incidents_from_live(all_categories, archived_c
         print(
             "  Authoritative custom incident lock removed "
             f"{len(removed)} duplicate live placement(s)"
+        )
+    if protected:
+        print(
+            "  Authoritative custom incident lock preserved "
+            f"{len(protected)} validated material-update placement(s) for canonical commit"
         )
     return removed
 
@@ -19889,6 +20150,72 @@ def _reconcile_topic_groups(topic_groups, active_flags=None):
     return groups
 
 
+def _revision_history_state(entry):
+    """Return the editorial state represented by a registry revision receipt.
+
+    Run timestamps and monotonically increasing revision counters are observations, not
+    editorial state.  Treating them as state caused every no-op production run to append
+    another large receipt for every persistent story.
+    """
+    if not isinstance(entry, dict):
+        return None
+    return (
+        int(entry.get("article_count", 0) or 0),
+        str(entry.get("latest_stage", "") or ""),
+        str(entry.get("latest_date", "") or ""),
+        str(entry.get("canonical_slug", "") or ""),
+    )
+
+
+def _compact_revision_history(entries, limit=100):
+    """Collapse consecutive no-op revision observations while preserving transitions."""
+    compacted = []
+    last_state = object()
+    for entry in entries or []:
+        if not isinstance(entry, dict):
+            continue
+        state = _revision_history_state(entry)
+        if state == last_state:
+            continue
+        compacted.append(dict(entry))
+        last_state = state
+    return compacted[-max(1, int(limit or 1)):]
+
+
+def _confidence_history_state(entry):
+    """Return attachment state for one article, excluding the observation run id."""
+    if not isinstance(entry, dict):
+        return None
+    return (
+        int(entry.get("confidence", 100) or 0),
+        str(entry.get("matched_prior_slug", "") or ""),
+        str(entry.get("attachment_basis", "") or ""),
+    )
+
+
+def _compact_confidence_history(entries, limit=500):
+    """Keep only real per-article attachment-state transitions.
+
+    Entries for multiple slugs are interleaved by run, so deduplication must be tracked
+    independently per slug.  A later A -> B -> A transition is retained; repeated A -> A
+    observations across ordinary runs are not.
+    """
+    compacted = []
+    last_state_by_slug = {}
+    for entry in entries or []:
+        if not isinstance(entry, dict):
+            continue
+        slug = str(entry.get("slug", "") or "").strip()
+        if not slug:
+            continue
+        state = _confidence_history_state(entry)
+        if last_state_by_slug.get(slug) == state:
+            continue
+        compacted.append(dict(entry))
+        last_state_by_slug[slug] = state
+    return compacted[-max(1, int(limit or 1)):]
+
+
 def _merge_persistent_story_registry(previous_payload, computed_stories, run_id):
     """Persist authoritative story identity, revisions, aliases, and confidence history."""
     previous_by_id = {
@@ -19944,12 +20271,17 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
             "latest_date": current.get("latest_date", ""),
             "canonical_slug": current.get("canonical_slug", ""),
         }
-        revisions = list(prior.get("revision_history", []))
-        if not revisions or revisions[-1] != revision_entry:
+        revisions = _compact_revision_history(prior.get("revision_history", []), limit=100)
+        if not revisions or _revision_history_state(revisions[-1]) != _revision_history_state(revision_entry):
             revisions.append(revision_entry)
-        current["revision_history"] = revisions[-100:]
+        current["revision_history"] = _compact_revision_history(revisions, limit=100)
 
-        confidence_history = list(prior.get("confidence_history", []))
+        confidence_history = _compact_confidence_history(prior.get("confidence_history", []), limit=500)
+        latest_confidence_state = {}
+        for existing in confidence_history:
+            slug = str(existing.get("slug", "") or "").strip()
+            if slug:
+                latest_confidence_state[slug] = _confidence_history_state(existing)
         for article in current.get("articles", []):
             entry = {
                 "run_id": run_id,
@@ -19958,12 +20290,12 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
                 "matched_prior_slug": article.get("matched_prior_slug", ""),
                 "attachment_basis": article.get("attachment_basis", ""),
             }
-            if entry["slug"] and not any(
-                x.get("run_id") == run_id and x.get("slug") == entry["slug"]
-                for x in confidence_history[-max(1, len(current.get("articles", []))) * 2:]
-            ):
+            slug = str(entry["slug"] or "").strip()
+            state = _confidence_history_state(entry)
+            if slug and latest_confidence_state.get(slug) != state:
                 confidence_history.append(entry)
-        current["confidence_history"] = confidence_history[-500:]
+                latest_confidence_state[slug] = state
+        current["confidence_history"] = _compact_confidence_history(confidence_history, limit=500)
 
         current["archive_immutable"] = True
         current["public_urls_changed"] = False
@@ -19979,6 +20311,8 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
         preserved = dict(prior)
         preserved["status"] = "inactive"
         preserved["last_registry_check_at"] = run_id
+        preserved["revision_history"] = _compact_revision_history(preserved.get("revision_history", []), limit=100)
+        preserved["confidence_history"] = _compact_confidence_history(preserved.get("confidence_history", []), limit=500)
         merged.append(preserved)
         for slug in preserved.get("historical_slugs", []) or []:
             article_to_story.setdefault(slug, sid)
@@ -19997,6 +20331,13 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
         "article_membership_count": len(article_to_story),
         "retired_story_ids": retired_id_map,
         "article_to_story": article_to_story,
+        "history_compaction": {
+            "revision_entries_before": sum(len((previous_by_id.get(s.get("story_id"), {}) or {}).get("revision_history", []) or []) for s in merged if isinstance(s, dict)),
+            "revision_entries_after": sum(len(s.get("revision_history", []) or []) for s in merged if isinstance(s, dict)),
+            "confidence_entries_before": sum(len((previous_by_id.get(s.get("story_id"), {}) or {}).get("confidence_history", []) or []) for s in merged if isinstance(s, dict)),
+            "confidence_entries_after": sum(len(s.get("confidence_history", []) or []) for s in merged if isinstance(s, dict)),
+            "policy": "semantic-state-transitions-only",
+        },
         "stories": merged,
     }
 
@@ -20408,7 +20749,18 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "article_membership_count": persistent_registry.get("article_membership_count", 0)},
         "clustering_links": clustering_links, "decisions": decisions,
         "notice": "V7.1 makes the persistent registry authoritative for story identity, reconciles duplicate story IDs conservatively, and records revision and attachment-confidence history without changing public URLs or archive records."}
+    history_compaction = persistent_registry.get("history_compaction", {}) or {}
+    print(
+        "  Persistent story registry history compacted: "
+        f"revisions {history_compaction.get('revision_entries_before', 0)} -> {history_compaction.get('revision_entries_after', 0)}; "
+        f"confidence {history_compaction.get('confidence_entries_before', 0)} -> {history_compaction.get('confidence_entries_after', 0)}"
+    )
     _atomic_write_json(data_dir / STORY_REGISTRY_FILENAME, persistent_registry)
+    try:
+        registry_mib = (data_dir / STORY_REGISTRY_FILENAME).stat().st_size / (1024 * 1024)
+        print(f"  Persistent story registry size after compaction: {registry_mib:.2f} MiB")
+    except OSError:
+        pass
     _atomic_write_json(data_dir / "stories.json", registry)
     _atomic_write_json(data_dir / "story-shadow-log.json", shadow)
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
@@ -20785,7 +21137,7 @@ def _page_footer():
     if MEMBERSHIP_UI_ENABLED:
         connect_column = """<div class="footer-column footer-connect footer-membership-ask">
         <strong>Support local journalism</strong>
-        <p>Unlimited articles. No ads. Help fund independent Treasure Coast reporting.</p>
+        <p>Unlimited articles. Help fund independent Treasure Coast reporting.</p>
         <a class="footer-subscribe-cta" href="/subscribe.html"><span>Get first month for $1</span><small>Limited time &middot; $1 first month</small></a>
       </div>"""
     else:
@@ -24782,6 +25134,187 @@ def _apply_semantic_gate_update_identity(item, canonical, decision, candidates):
     )
     return canonical_story_id
 
+
+
+def _strip_material_update_source_headline_suffix(headline, source_url=""):
+    """Remove a known publisher attribution suffix from one source headline."""
+    value = str(headline or "").strip()
+    if not value:
+        return ""
+    try:
+        host = (urlsplit(str(source_url or "")).netloc or "").lower()
+    except Exception:
+        host = ""
+    host = host[4:] if host.startswith("www.") else host
+    brands = []
+    for domain, names in _MEDIA_PUBLISHER_BRANDS.items():
+        if host == domain or host.endswith("." + domain):
+            brands.extend(names)
+    # Common Treasure Coast source suffixes are safe to recognize even when a
+    # legacy normalized URL no longer maps cleanly to the publisher table.
+    brands.extend(("WPTV", "WPEC", "WPBF", "CBS12", "CW34", "TCPalm"))
+    for brand in dict.fromkeys(str(name) for name in brands if str(name).strip()):
+        value = re.sub(
+            r"\s*(?:[-|—–]\s*)" + re.escape(brand) + r"\s*$",
+            "", value, flags=re.I,
+        ).strip()
+    return value
+
+
+def _repair_stale_semantic_material_update_headlines(archive, articles_dir, output_root=None):
+    """Repair a previously committed material update whose headline stayed stale.
+
+    v1.13.7.1i could successfully merge a material update into the canonical body
+    while leaving the pre-update headline intact.  Because that source is then marked
+    absorbed, a later run will not naturally replay the composer.  Repair those rows
+    from the persisted *latest material-update source headline* only when the old
+    permalink-origin headline is known and the source headline demonstrably advances
+    one of the semantic gate's recorded novel facts.  The canonical slug and custom
+    headline identity key remain untouched.
+    """
+    try:
+        from tct_engine.semantic_material_update import _headline_progression
+    except Exception:
+        return {"repaired_count": 0, "repaired": [], "skipped": []}
+
+    articles_dir = Path(articles_dir)
+    repaired = []
+    skipped = []
+    for entry in archive or []:
+        if not isinstance(entry, dict):
+            continue
+        if not entry.get("meaningful_update_validated"):
+            continue
+        if str(entry.get("meaningful_update_basis") or "") != "semantic_material_update_gate":
+            continue
+        novel_facts = list(entry.get("semantic_material_update_novel_facts") or [])
+        origin = str(entry.get("permalink_origin_headline") or "").strip()
+        current = str(entry.get("headline") or "").strip()
+        latest_source = str(entry.get("latest_source_headline") or "").strip()
+        if not (novel_facts and origin and current and latest_source):
+            continue
+        decision = {"novel_facts": novel_facts}
+        current_diag = _headline_progression(
+            current,
+            canonical={"headline": origin},
+            incoming={"headline": latest_source},
+            decision=decision,
+        )
+        if current_diag.get("passed"):
+            continue
+        candidate = _strip_material_update_source_headline_suffix(
+            latest_source, entry.get("latest_source_url") or ""
+        )
+        candidate_diag = _headline_progression(
+            candidate,
+            canonical={"headline": origin},
+            incoming={"headline": latest_source},
+            decision=decision,
+        )
+        if (
+            not candidate_diag.get("passed")
+            or len(candidate.split()) < 5
+            or len(candidate) > 180
+        ):
+            skipped.append({
+                "slug": str(entry.get("slug") or ""),
+                "headline": current,
+                "candidate_headline": candidate,
+                "reason": "persisted_source_headline_not_safe_for_material_update_repair",
+                "candidate_novelty_hits": list(candidate_diag.get("novelty_hits") or []),
+            })
+            continue
+
+        slug = str(entry.get("slug") or "").strip()
+        if not slug:
+            continue
+        page = articles_dir / f"{slug}.html"
+        if not page.is_file():
+            skipped.append({
+                "slug": slug,
+                "headline": current,
+                "candidate_headline": candidate,
+                "reason": "canonical_article_page_missing",
+            })
+            continue
+
+        text = page.read_text(encoding="utf-8", errors="ignore")
+        escaped = html_lib.escape(candidate, quote=True)
+        text = re.sub(
+            r"<title>.*?</title>",
+            f"<title>{escaped} | Treasure Coast Today</title>",
+            text, count=1, flags=re.I | re.S,
+        )
+        text = re.sub(
+            r'<meta property="og:title" content="[^"]*">',
+            f'<meta property="og:title" content="{escaped} | Treasure Coast Today">',
+            text, count=1, flags=re.I,
+        )
+        text = re.sub(
+            r'<meta name="twitter:title" content="[^"]*">',
+            f'<meta name="twitter:title" content="{escaped} | Treasure Coast Today">',
+            text, count=1, flags=re.I,
+        )
+        text = re.sub(
+            r'<h1 class="article-headline">.*?</h1>',
+            f'<h1 class="article-headline">{html_lib.escape(candidate)}</h1>',
+            text, count=1, flags=re.I | re.S,
+        )
+        # Keep every user-visible/share-facing headline projection synchronized.
+        # These are exact replacements of the stale canonical headline only; body
+        # prose is deliberately not rewritten by this repair.
+        old_attr = html_lib.escape(current, quote=True)
+        new_attr = html_lib.escape(candidate, quote=True)
+        # Legacy renderers did not consistently entity-escape apostrophes inside
+        # double-quoted alt attributes, so recognize both stored forms.
+        text = text.replace(f'alt="{current}"', f'alt="{new_attr}"')
+        text = text.replace(f'alt="{old_attr}"', f'alt="{new_attr}"')
+        old_js = json.dumps(current, ensure_ascii=False)
+        new_js = json.dumps(candidate, ensure_ascii=False)
+        text = text.replace(f'text: {old_js}', f'text: {new_js}')
+        schema = re.search(r'<script type="application/ld\+json">(.*?)</script>', text, re.I | re.S)
+        if schema:
+            try:
+                payload = json.loads(schema.group(1))
+                if isinstance(payload, dict):
+                    payload["headline"] = candidate[:110]
+                    rendered = json.dumps(payload, ensure_ascii=False)
+                    text = text[:schema.start(1)] + rendered + text[schema.end(1):]
+            except Exception:
+                pass
+        page.write_text(text, encoding="utf-8")
+
+        entry["headline"] = candidate
+        entry["semantic_material_update_headline_repaired"] = True
+        entry["semantic_material_update_headline_repair_basis"] = "persisted_latest_source_headline"
+        entry["semantic_material_update_headline_repaired_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        repaired.append({
+            "slug": slug,
+            "previous_headline": current,
+            "updated_headline": candidate,
+            "latest_source_url": str(entry.get("latest_source_url") or ""),
+            "novelty_hits": list(candidate_diag.get("novelty_hits") or []),
+        })
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "policy": "repair_committed_semantic_material_update_headline_without_changing_permalink",
+        "repaired_count": len(repaired),
+        "skipped_count": len(skipped),
+        "repaired": repaired,
+        "skipped": skipped,
+    }
+    if output_root is not None:
+        path = Path(output_root) / "data" / "material-update-headline-repair.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if repaired:
+        print(
+            "  Material-update headline repair refreshed "
+            f"{len(repaired)} stale canonical headline(s) without changing permalinks"
+        )
+    return report
 
 
 def _semantic_material_update_source_record(item, role):
@@ -29461,6 +29994,10 @@ def write_archives(all_categories, top_cat):
     if _current_customs:
         _backfill_active_custom_archive_authority(archive, _current_customs)
 
+    _repair_stale_semantic_material_update_headlines(
+        archive, articles_dir, OUTPUT_DIR
+    )
+
     archive, _canonical_redirects = apply_canonical_story_cleanup(archive, articles_dir, OUTPUT_DIR)
 
     # Repair existing generated pages before forward publication decisions. The lead
@@ -32572,6 +33109,8 @@ def _remember_selected_material_update_target(item, *, surface=""):
     decision = item.get("_semantic_material_update_decision") or {}
     row = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS.setdefault(slug, {
         "canonical_slug": slug,
+        "canonical_headline": str(item.get("_canonical_context_headline") or "").strip(),
+        "selected_headlines": [],
         "source_headlines": [],
         "source_urls": [],
         "selection_surfaces": [],
@@ -32579,6 +33118,11 @@ def _remember_selected_material_update_target(item, *, surface=""):
         "source_published": [],
         "max_confidence": 0.0,
     })
+    if not row.get("canonical_headline"):
+        row["canonical_headline"] = str(item.get("_canonical_context_headline") or "").strip()
+    selected_headline = str(item.get("headline") or "").strip()
+    if selected_headline and selected_headline not in row["selected_headlines"]:
+        row["selected_headlines"].append(selected_headline)
     headline = str(item.get("source_headline") or item.get("source_title") or item.get("title") or item.get("headline") or "").strip()
     source_url = _normalized_external_source_url(
         item.get("source_url") or item.get("_source_url") or item.get("link")
@@ -33873,23 +34417,44 @@ def _validate_promoted_material_updates_committed(output_root=None):
 
     root = Path(output_root or OUTPUT_DIR)
     gate = _read_json_file(root / "data" / "semantic-publication-gate.json", {})
-    applied = {
-        str(row.get("target_slug") or "").strip()
+    applied_rows = {
+        str(row.get("target_slug") or "").strip(): row
         for row in (gate.get("material_updates", []) if isinstance(gate, dict) else [])
         if isinstance(row, dict) and str(row.get("target_slug") or "").strip()
     }
+    applied = set(applied_rows)
     missing = sorted(set(expected) - applied)
+    stale_headlines = []
+    for slug in sorted(set(expected) & applied):
+        expected_row = expected.get(slug) or {}
+        applied_row = applied_rows.get(slug) or {}
+        canonical_headline = str(expected_row.get("canonical_headline") or "").strip()
+        updated_headline = str(applied_row.get("updated_headline") or "").strip()
+        if canonical_headline and (
+            not updated_headline
+            or _normalized_generated_headline_key(updated_headline)
+            == _normalized_generated_headline_key(canonical_headline)
+        ):
+            stale_headlines.append({
+                "canonical_slug": slug,
+                "canonical_headline": canonical_headline,
+                "updated_headline": updated_headline,
+                "selected_headlines": list(expected_row.get("selected_headlines") or []),
+                "reason": "material_update_headline_did_not_advance",
+            })
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "policy": "every_accepted_validated_material_update_must_commit",
+        "policy": "every_accepted_validated_material_update_must_commit_and_advance_headline",
         "expected_canonical_count": len(expected),
         "applied_canonical_count": len(set(expected) & applied),
         "missing_canonical_count": len(missing),
+        "stale_headline_count": len(stale_headlines),
         "expected": [copy.deepcopy(expected[slug]) for slug in sorted(expected)],
         "applied_target_slugs": sorted(applied),
         "missing_target_slugs": missing,
-        "passed": not missing,
+        "stale_headlines": stale_headlines,
+        "passed": not missing and not stale_headlines,
     }
     path = root / "data" / "material-update-publication-invariant.json"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -33903,10 +34468,19 @@ def _validate_promoted_material_updates_committed(output_root=None):
             "MATERIAL UPDATE PUBLICATION INVARIANT FAILED: selected validated update(s) "
             "were absent from committed canonical updates — " + "; ".join(details)
         )
+    if stale_headlines:
+        details = [
+            f"{row['canonical_slug']}: {row['canonical_headline'][:70]} -> {row['updated_headline'][:70]}"
+            for row in stale_headlines[:5]
+        ]
+        raise RuntimeError(
+            "MATERIAL UPDATE HEADLINE INVARIANT FAILED: committed material update(s) "
+            "did not advance the visible canonical headline — " + "; ".join(details)
+        )
     if expected:
         print(
             "  Material-update publication invariant PASSED: "
-            f"{len(expected)} selected canonical update(s) committed"
+            f"{len(expected)} accepted canonical update(s) committed with refreshed headline(s)"
         )
     return report
 
@@ -35376,6 +35950,18 @@ def main():
     _content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
     if _content_override_count:
         print(f"  Article content overrides applied to {_content_override_count} canonical article(s)")
+    _membership_ad_promises = _apply_membership_ad_promise_contract_sitewide(OUTPUT_DIR)
+    print(
+        "  Membership advertising promise contract PASSED: "
+        f"{_membership_ad_promises['scanned']} HTML page(s) verified; "
+        f"{_membership_ad_promises['updated']} obsolete ad-free promise page(s) normalized"
+    )
+    _mediavine_sitewide = _apply_mediavine_script_sitewide(OUTPUT_DIR)
+    print(
+        "  Mediavine loader contract PASSED: "
+        f"{_mediavine_sitewide['scanned']} HTML page(s) verified; "
+        f"{_mediavine_sitewide['updated']} normalized this run"
+    )
     validate_custom_rss_publication_contract(OUTPUT_DIR)
     validate_rss_social_image_contract(OUTPUT_DIR)
     validate_nonstory_publication_contract(all_categories, top_cat, OUTPUT_DIR)

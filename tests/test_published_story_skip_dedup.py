@@ -698,6 +698,14 @@ def test_authorized_custom_material_update_rewrites_one_canonical_without_duplic
     hero = data["hero"]
     assert g._authorized_custom_material_update(hero, canonical) is True
 
+    # Production order regression: the global custom-incident lock runs before
+    # write_archives().  A validated canonical-update transaction must survive it.
+    removed_by_custom_lock = g.suppress_authoritative_custom_incidents_from_live(
+        [data], archived_customs=[canonical], current_customs=[]
+    )
+    assert removed_by_custom_lock == []
+    assert data["hero"] is hero
+
     identity_index = types.SimpleNamespace(
         safe_story_ids={canonical["editorial_story_id"]},
         all_story_ids={canonical["editorial_story_id"]},
@@ -1480,6 +1488,8 @@ def test_material_update_publication_invariant_fails_when_promoted_update_vanish
     g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
         canonical["slug"]: {
             "canonical_slug": canonical["slug"],
+            "canonical_headline": canonical["headline"],
+            "selected_headlines": ["Body found in Hutchinson Island mangroves believed to be missing Michael Debevec"],
             "source_headlines": [source["title"]],
             "source_urls": [source["source_url"]],
             "max_confidence": 0.99,
@@ -1506,6 +1516,8 @@ def test_material_update_publication_invariant_passes_after_canonical_commit(tmp
     g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
         canonical["slug"]: {
             "canonical_slug": canonical["slug"],
+            "canonical_headline": canonical["headline"],
+            "selected_headlines": ["Body found in Hutchinson Island mangroves believed to be missing Michael Debevec"],
             "source_headlines": [source["title"]],
             "source_urls": [source["source_url"]],
             "max_confidence": 0.99,
@@ -1514,13 +1526,53 @@ def test_material_update_publication_invariant_passes_after_canonical_commit(tmp
     data_dir = tmp_path / "data"
     data_dir.mkdir()
     (data_dir / "semantic-publication-gate.json").write_text(
-        json.dumps({"material_updates": [{"target_slug": canonical["slug"]}]}),
+        json.dumps({"material_updates": [{
+            "target_slug": canonical["slug"],
+            "updated_headline": "Body found in Hutchinson Island mangroves believed to be missing Michael Debevec",
+        }]}),
         encoding="utf-8",
     )
 
     report = g._validate_promoted_material_updates_committed(tmp_path)
     assert report["passed"] is True
     assert report["missing_target_slugs"] == []
+    assert report["stale_headline_count"] == 0
+
+
+def test_material_update_publication_invariant_fails_when_headline_stays_stale(tmp_path):
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
+        canonical["slug"]: {
+            "canonical_slug": canonical["slug"],
+            "canonical_headline": canonical["headline"],
+            "selected_headlines": [
+                "Body found in Hutchinson Island mangroves believed to be missing Michael Debevec"
+            ],
+            "source_headlines": [source["title"]],
+            "source_urls": [source["source_url"]],
+            "max_confidence": 0.99,
+        }
+    }
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "semantic-publication-gate.json").write_text(
+        json.dumps({"material_updates": [{
+            "target_slug": canonical["slug"],
+            "updated_headline": canonical["headline"],
+        }]}),
+        encoding="utf-8",
+    )
+
+    import pytest
+    with pytest.raises(RuntimeError, match="MATERIAL UPDATE HEADLINE INVARIANT FAILED"):
+        g._validate_promoted_material_updates_committed(tmp_path)
+
+    report = json.loads((data_dir / "material-update-publication-invariant.json").read_text())
+    assert report["passed"] is False
+    assert report["missing_target_slugs"] == []
+    assert report["stale_headline_count"] == 1
+    assert report["stale_headlines"][0]["canonical_slug"] == canonical["slug"]
 
 
 def test_debevec_contextless_generated_hero_is_not_deleted_before_recomposition(monkeypatch):
@@ -1613,7 +1665,6 @@ def test_protected_material_update_does_not_bypass_dangerous_jurisdiction_failur
         generated, diagnostics, guard="article_framing"
     ) is False
     assert generated.get("_force_semantic_material_update_recomposition") is not True
-
 
 def test_material_update_commit_obligation_ignores_discarded_generation_attempt():
     """A failed/retried model attempt must not poison the terminal invariant."""
