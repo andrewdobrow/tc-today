@@ -50,5 +50,6 @@ def test_membership_ui_prebuild_has_locked_subscribe_copy_but_only_when_enabled(
     assert "Unlimited local news for $1 your first month." in card
     assert "$4.99/month after" in card
     assert "$49 annually" in card
-    assert "Completely ad-free" in card
+    assert "Supports local journalism" in card
+    assert "ad-free" not in card.lower()
     assert "Martin, St. Lucie and Indian River counties" in card
