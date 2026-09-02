@@ -33199,6 +33199,7 @@ def _remember_selected_material_update_target(item, selection_surface=""):
         "source_headlines": [],
         "source_urls": [],
         "selection_surfaces": [],
+        "novel_facts": list(decision.get("novel_facts") or []),
         "max_confidence": 0.0,
     })
     # Be compatible with a row created by older in-process code while still making
@@ -33207,6 +33208,7 @@ def _remember_selected_material_update_target(item, selection_surface=""):
     row.setdefault("source_headlines", [])
     row.setdefault("source_urls", [])
     row.setdefault("selection_surfaces", [])
+    row.setdefault("novel_facts", list(decision.get("novel_facts") or []))
     if not row.get("canonical_headline"):
         row["canonical_headline"] = str(item.get("_canonical_context_headline") or "").strip()
     selected_headline = str(item.get("headline") or "").strip()
@@ -33277,6 +33279,7 @@ def _remember_surviving_selected_material_update_targets(data, category_key):
         commit_copy = copy.deepcopy(item)
         commit_copy["_material_update_selection_surface"] = selection_surface
         commit_copy["_material_update_commit_copy"] = True
+        commit_copy["_material_update_commit_only"] = True
         commit_copy["_material_update_category_key"] = category_key
         commit_copy["_material_update_category_label"] = category_label
         commit_copy["category_key"] = category_key or commit_copy.get("category_key", "")
@@ -33322,6 +33325,7 @@ def _selected_material_update_commit_entries():
         )
         commit_copy.setdefault("canonical_slug", str(target_slug or "").strip())
         commit_copy["_material_update_commit_copy"] = True
+        commit_copy["_material_update_commit_only"] = True
         commit_key = str(
             commit_copy.get("_material_update_category_key")
             or commit_copy.get("category_key")
