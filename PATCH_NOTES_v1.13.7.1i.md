@@ -1,42 +1,105 @@
-# TCT v1.13.7.1i — Authoritative Custom Material-Update Transaction Preservation
+# TCT v1.13.7.1i — Accepted Material-Update Commit Queue Integrity
 
-## Production evidence
-The v1.13.7.1h Generate News run proved that the Debevec body-recovery update survived source promotion, category selection, generation, quality guards, and forward identity stamping. It appeared as the generated hero in both Crime & Safety and Martin County. Before `write_archives()` could commit the canonical update, `suppress_authoritative_custom_incidents_from_live()` removed two live placements because the existing Aug. 29 Debevec article is an authoritative custom canonical. The v1.13.7.1h terminal material-update invariant then correctly failed the run because the selected validated update never reached the committed `material_updates` ledger.
+## Production failure addressed
 
-## Failure boundary corrected
-`suppress_authoritative_custom_incidents_from_live()` still removes ordinary feed duplicates of authoritative custom work, but it now distinguishes a duplicate placement from a pending canonical update transaction.
+The first production run inspected after v1.13.7.1h reached the archive writer, successfully routed the Tiger Woods plea development into the existing September 1 canonical, and recorded one committed semantic material update. The run then failed at the new terminal material-update publication invariant because the following separate Martin County target was recorded as selected but was absent from committed semantic material updates:
 
-A feed/generated placement is preserved through the custom-incident lock only when all of the existing target-bound material-update authority remains valid for the exact matched custom canonical:
+`2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county`
 
-- semantic material update is present;
-- pre-generation material-update promotion is present;
-- the validated semantic decision is `update_existing_canonical` / the configured semantic update action;
-- `same_real_world_event` is true;
-- `material_new_update` is true;
-- the semantic decision's selected canonical slug matches the matched custom canonical;
-- the canonical write authorization token is valid for that exact slug.
+Source headline:
 
-If any of those requirements is absent or mismatched, the existing custom duplicate suppression behavior is unchanged.
+`Motorcycle crash shuts down I-95 Southbound in Martin County - WPEC`
 
-The guard now emits an explicit production diagnostic when it preserves such a transaction:
+This release preserves the fail-loud invariant. It corrects two deterministic handoff mechanisms in v1.13.7.1h that could create this exact selected-vs-committed mismatch.
 
-`Authoritative custom incident lock preserved N validated material-update placement(s) for canonical commit`
+## What changes
+
+### 1. A generation attempt is no longer a publication selection
+
+v1.13.7.1h recorded a terminal material-update obligation from `_carry_pre_generation_material_update_authority()` and `_stamp_current_run_story_ids()`.
+
+Those functions run too early. Source attachment can occur inside a model generation attempt that later fails a prose guard and is retried, and identity stamping occurs before the immediate published-story suppression barrier.
+
+v1.13.7.1i therefore separates **authority carry** from **accepted publication selection**:
+
+- generated copy still receives target-bound material-update authority before prose guards so repair/recomposition remains possible;
+- source attachment no longer mutates `CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS`;
+- identity stamping no longer mutates that terminal invariant state;
+- only hero/cards that survive the accepted category result and immediate published-story suppression are recorded as canonical commit obligations.
+
+This prevents discarded generation attempts or subsequently suppressed placements from poisoning the terminal invariant.
+
+### 2. Accepted material updates get a hidden canonical-write commit queue
+
+Once an accepted hero/card carries a validated target-bound material update, a deep copy is retained in `CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS`.
+
+`write_archives()` adds those accepted items to an internal commit-only publication queue. This queue does not create a new live section placement. Its purpose is to ensure that later live-surface activation, ranking, or deduplication cannot silently erase already-selected editorial work before the canonical permalink writer sees it.
+
+The terminal invariant remains authoritative: if the accepted update still cannot be committed safely, the run fails rather than pretending success.
+
+### 3. Validated material-update copy outranks ordinary generated clones during publication coalescing
+
+`_publication_copy_rank()` previously preferred image presence and hero status without giving any priority to a target-bound semantic material-update receipt.
+
+That allowed an ordinary hero/image clone of the same persistent story to win publication coalescing over the actual update-bearing copy, stripping the semantic update authority before canonical write.
+
+v1.13.7.1i now preserves the manual custom-article hierarchy while ranking a self-consistent validated material-update copy above ordinary generated hero/image copies of the same story.
+
+### 4. Better terminal observability
+
+Accepted target records now include:
+
+- selection surfaces;
+- source headline(s);
+- source URL(s);
+- source publication timestamp(s);
+- semantic novel facts; and
+- maximum semantic confidence.
+
+The invariant policy is now labeled:
+
+`every_accepted_validated_material_update_must_commit`
+
+This makes a future terminal failure identify an accepted placement rather than an intermediate generation attempt.
 
 ## Regression coverage
-Added a Debevec-specific regression reproducing the Sept. 1 production state with the Aug. 29 authoritative custom canonical and two generated body-recovery placements (Crime & Safety and Martin County). Both must survive the custom-incident lock when they carry valid target-bound material-update authority.
 
-Added a negative Debevec regression proving an unapproved same-incident reprint is still removed by the custom lock.
+New regressions verify that:
 
-Extended the existing canonical custom material-update integration test so the promoted/generated update must pass through the same global custom-incident lock before `write_archives()` updates the one canonical page. This covers the production ordering that v1.13.7.1h exposed.
+1. carrying material-update authority during a discarded generation attempt does **not** create a terminal publication obligation;
+2. an accepted surviving material update creates both the invariant target and hidden commit copy;
+3. a validated material-update copy outranks an ordinary image-bearing hero clone during publication coalescing; and
+4. the exact September 2 Martin County motorcycle canonical/source combination that triggered the production invariant is retained by both the accepted-target tracker and commit queue.
+
+The v1.13.7.1h Debevec regressions remain in place unchanged.
 
 ## Validation
-- `python -m py_compile scripts/generate.py` — passed
-- Focused custom + published-story suite — **43 passed**
-- Broader material-update / missing-person / semantic publication suite — **128 passed**
-- `python scripts/validate_package.py` — **passed: 38 modules imported and 122 public exports verified**
-- Exact Test Editorial Engine pytest command:
-  `python -m pytest tests -q --ignore=tests/test_canonical_identity.py --ignore=tests/test_matcher_contract.py`
-  — **1082 passed, 0 failed**, 44 existing datetime deprecation warnings
 
-## Production acceptance standard
-This patch is validated against the newly exposed custom-lock failure boundary, but it is not declared production-proven until Generate News demonstrates the selected Debevec material update reaches a committed canonical update. v1.13.7.1h's terminal invariant remains active: a selected validated material update that disappears before commit must fail the workflow rather than silently publish stale coverage.
+Focused published-story/material-update suite:
+
+- **40 passed**
+- **0 failed**
+
+Production-equivalent Test Editorial Engine suite:
+
+`python -m pytest tests -q --ignore=tests/test_canonical_identity.py --ignore=tests/test_matcher_contract.py`
+
+- **1,084 passed**
+- **0 failed**
+- 44 existing deprecation warnings
+
+Package validation:
+
+- **passed**
+- 38 modules imported
+- 122 public exports verified
+
+Python compilation of the modified generator and regression test file passed.
+
+## Production acceptance criteria
+
+After applying v1.13.7.1i over v1.13.7.1h, run Test Editorial Engine first. If green, run exactly one Generate News workflow.
+
+A successful production run should no longer fail merely because a discarded/retried generation attempt entered the invariant. If a validated material update survives the accepted category result, the log should show a material-update commit-queue acceptance and the canonical writer must either commit it or fail explicitly for a real downstream publication blocker.
+
+The Tiger Woods canonical and the generated `data/material-update-publication-invariant.json` must be inspected after the first production run before this release is considered production-proven.

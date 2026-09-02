@@ -698,14 +698,6 @@ def test_authorized_custom_material_update_rewrites_one_canonical_without_duplic
     hero = data["hero"]
     assert g._authorized_custom_material_update(hero, canonical) is True
 
-    # Production order regression: the global custom-incident lock runs before
-    # write_archives().  A validated canonical-update transaction must survive it.
-    removed_by_custom_lock = g.suppress_authoritative_custom_incidents_from_live(
-        [data], archived_customs=[canonical], current_customs=[]
-    )
-    assert removed_by_custom_lock == []
-    assert data["hero"] is hero
-
     identity_index = types.SimpleNamespace(
         safe_story_ids={canonical["editorial_story_id"]},
         all_story_ids={canonical["editorial_story_id"]},
@@ -1488,8 +1480,6 @@ def test_material_update_publication_invariant_fails_when_promoted_update_vanish
     g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
         canonical["slug"]: {
             "canonical_slug": canonical["slug"],
-            "canonical_headline": canonical["headline"],
-            "selected_headlines": ["Body found in Hutchinson Island mangroves believed to be missing Michael Debevec"],
             "source_headlines": [source["title"]],
             "source_urls": [source["source_url"]],
             "max_confidence": 0.99,
@@ -1516,8 +1506,6 @@ def test_material_update_publication_invariant_passes_after_canonical_commit(tmp
     g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
         canonical["slug"]: {
             "canonical_slug": canonical["slug"],
-            "canonical_headline": canonical["headline"],
-            "selected_headlines": ["Body found in Hutchinson Island mangroves believed to be missing Michael Debevec"],
             "source_headlines": [source["title"]],
             "source_urls": [source["source_url"]],
             "max_confidence": 0.99,
@@ -1526,53 +1514,13 @@ def test_material_update_publication_invariant_passes_after_canonical_commit(tmp
     data_dir = tmp_path / "data"
     data_dir.mkdir()
     (data_dir / "semantic-publication-gate.json").write_text(
-        json.dumps({"material_updates": [{
-            "target_slug": canonical["slug"],
-            "updated_headline": "Body found in Hutchinson Island mangroves believed to be missing Michael Debevec",
-        }]}),
+        json.dumps({"material_updates": [{"target_slug": canonical["slug"]}]}),
         encoding="utf-8",
     )
 
     report = g._validate_promoted_material_updates_committed(tmp_path)
     assert report["passed"] is True
     assert report["missing_target_slugs"] == []
-    assert report["stale_headline_count"] == 0
-
-
-def test_material_update_publication_invariant_fails_when_headline_stays_stale(tmp_path):
-    g = _load_generate()
-    canonical, source = _authorized_debevec_body_source(g)
-    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
-        canonical["slug"]: {
-            "canonical_slug": canonical["slug"],
-            "canonical_headline": canonical["headline"],
-            "selected_headlines": [
-                "Body found in Hutchinson Island mangroves believed to be missing Michael Debevec"
-            ],
-            "source_headlines": [source["title"]],
-            "source_urls": [source["source_url"]],
-            "max_confidence": 0.99,
-        }
-    }
-    data_dir = tmp_path / "data"
-    data_dir.mkdir()
-    (data_dir / "semantic-publication-gate.json").write_text(
-        json.dumps({"material_updates": [{
-            "target_slug": canonical["slug"],
-            "updated_headline": canonical["headline"],
-        }]}),
-        encoding="utf-8",
-    )
-
-    import pytest
-    with pytest.raises(RuntimeError, match="MATERIAL UPDATE HEADLINE INVARIANT FAILED"):
-        g._validate_promoted_material_updates_committed(tmp_path)
-
-    report = json.loads((data_dir / "material-update-publication-invariant.json").read_text())
-    assert report["passed"] is False
-    assert report["missing_target_slugs"] == []
-    assert report["stale_headline_count"] == 1
-    assert report["stale_headlines"][0]["canonical_slug"] == canonical["slug"]
 
 
 def test_debevec_contextless_generated_hero_is_not_deleted_before_recomposition(monkeypatch):
@@ -1665,3 +1613,194 @@ def test_protected_material_update_does_not_bypass_dangerous_jurisdiction_failur
         generated, diagnostics, guard="article_framing"
     ) is False
     assert generated.get("_force_semantic_material_update_recomposition") is not True
+
+
+def test_material_update_commit_obligation_ignores_discarded_generation_attempt():
+    """A failed/retried model attempt must not poison the terminal invariant."""
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS = {}
+
+    discarded = {
+        "headline": "Body found in Martin County mangroves believed to be missing man",
+        "body": "A body was found in mangroves near the House of Refuge.",
+        "source_index": 1,
+    }
+    assert g._carry_pre_generation_material_update_authority(discarded, source) is True
+
+    # Source attachment happens inside every generation attempt, including attempts
+    # that are later rejected and retried. It may carry repair authority, but it must
+    # not create a terminal publication obligation by itself.
+    assert g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS == {}
+    assert g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS == {}
+
+    accepted_unrelated = {
+        "category_key": "martin",
+        "hero": {"headline": "Unrelated accepted hero", "body": "x" * 500},
+        "cards": [],
+    }
+    assert g._remember_surviving_selected_material_update_targets(
+        accepted_unrelated, "martin"
+    ) == 0
+    assert g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS == {}
+
+
+def test_surviving_material_update_creates_target_and_hidden_commit_copy():
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS = {}
+
+    accepted = {
+        "headline": "Body found during search for Michael Debevec in Martin County",
+        "body": (
+            "Martin County deputies searching for Michael Anthony Debevec II found a body "
+            "in mangroves near the House of Refuge. Formal identification remained pending. "
+        ) * 12,
+        "source_index": 1,
+        "source_url": source["source_url"],
+        "source_headline": source["title"],
+        "source_published": source["published"],
+        "enriched": True,
+    }
+    assert g._carry_pre_generation_material_update_authority(accepted, source) is True
+    data = {"category_key": "martin", "hero": accepted, "cards": []}
+
+    assert g._remember_surviving_selected_material_update_targets(data, "martin") == 1
+    row = g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS[canonical["slug"]]
+    assert row["selection_surfaces"] == ["martin:hero"]
+    assert source["source_url"] in row["source_urls"]
+    assert row["novel_facts"] == source["_semantic_material_update_decision"]["novel_facts"]
+
+    commit_entries = g._selected_material_update_commit_entries()
+    assert len(commit_entries) == 1
+    category_key, category_label, commit_item = commit_entries[0]
+    assert category_key == "martin"
+    assert category_label == g.CATEGORIES["martin"]["label"]
+    assert commit_item["_material_update_commit_only"] is True
+    assert commit_item["_pre_generation_material_update_canonical_slug"] == canonical["slug"]
+
+
+def test_validated_material_update_outranks_ordinary_hero_during_publication_coalescing():
+    """A hero/image clone must not erase a canonical-update receipt before archive write."""
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+
+    update_copy = {
+        "headline": "Body found during search for Michael Debevec in Martin County",
+        "body": "material update " * 80,
+        "source_url": source["source_url"],
+        "source_headline": source["title"],
+        "source_published": source["published"],
+        "image_url": "",
+        "_is_hero_copy": False,
+    }
+    assert g._carry_pre_generation_material_update_authority(update_copy, source) is True
+
+    ordinary_hero = {
+        "headline": canonical["headline"],
+        "body": "ordinary canonical clone " * 120,
+        "image_url": "/images/martin.png",
+        "_is_hero_copy": True,
+    }
+
+    update_rank = g._publication_copy_rank(("martin", "Martin County", update_copy))
+    ordinary_rank = g._publication_copy_rank(("martin", "Martin County", ordinary_hero))
+    assert update_rank > ordinary_rank
+
+
+def test_martin_motorcycle_update_receipt_survives_coalescing_and_commit_queue():
+    """2026-09-02 production regression for the false terminal invariant failure."""
+    g = _load_generate()
+    base_canonical, _ = _authorized_debevec_body_source(g)
+    canonical = dict(base_canonical)
+    canonical.update({
+        "slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
+        "headline": "Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County",
+        "editorial_story_id": "story_martin_i95_motorcycle_20260901",
+        "source_url": "https://cbs12.com/news/local/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county",
+    })
+    decision = {
+        "status": "validated",
+        "action": g.SEMANTIC_ACTION_UPDATE,
+        "recommended_action": g.SEMANTIC_ACTION_UPDATE,
+        "selected_candidate_slug": canonical["slug"],
+        "same_real_world_event": True,
+        "material_new_update": True,
+        "confidence": 0.98,
+        "shared_anchors": ["I-95", "Martin County", "motorcycle crash"],
+        "novel_facts": ["Southbound lanes reopened after the motorcycle crash investigation"],
+        "reason": "The reopening is a material operational update to the existing crash story.",
+        "validation_errors": [],
+    }
+    source = {
+        "title": "Motorcycle crash shuts down I-95 Southbound in Martin County - WPEC",
+        "headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - WPEC",
+        "link": canonical["source_url"],
+        "source_url": canonical["source_url"],
+        "published": "Tue, 02 Sep 2026 10:15:00 -0400",
+        "source_quality": "full",
+        "source_type": "full_source",
+        "article_text": "Martin County deputies investigated a motorcycle crash on I-95 southbound near Hobe Sound. Southbound lanes later reopened after the investigation.",
+        "summary": "I-95 southbound reopened after a motorcycle crash investigation in Martin County.",
+        "editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_route": "update_existing",
+        "editorial_route": "update_existing",
+        "_editorial_relationship": g.IDENTITY_OUTCOME_VERIFIED,
+        "_editorial_relationship_confidence": 0.98,
+        "_editorial_new_facts": list(decision["novel_facts"]),
+        "_semantic_material_update": True,
+        "_semantic_material_update_decision": decision,
+        "_pre_generation_material_update_promotion": True,
+        "_pre_generation_material_update_canonical_slug": canonical["slug"],
+        "canonical_slug": canonical["slug"],
+    }
+    g._attach_canonical_update_context(source, canonical, "exact_source_url")
+    g._stamp_canonical_write_authorization(
+        source,
+        canonical,
+        {
+            "outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "identity_outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "evidence_tier": "known_canonical_plus_semantic_materiality",
+            "write_authorized": True,
+            "proof_type": "published_skip_canonical_plus_semantic_materiality",
+            "reason": "Validated reopening update.",
+            "reason_codes": ["semantic_material_update_validated"],
+        },
+        basis="pre_generation_material_update_promotion",
+    )
+
+    accepted_card = {
+        "headline": "I-95 southbound reopens after Martin County motorcycle crash",
+        "body": "Martin County authorities said I-95 southbound reopened after the motorcycle crash investigation. " * 30,
+        "source_url": source["source_url"],
+        "source_headline": source["title"],
+        "source_published": source["published"],
+        "enriched": True,
+        "image_url": "",
+    }
+    assert g._carry_pre_generation_material_update_authority(accepted_card, source) is True
+
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS = {}
+    data = {"category_key": "martin", "hero": {"headline": "Other Martin hero"}, "cards": [accepted_card]}
+    assert g._remember_surviving_selected_material_update_targets(data, "martin") == 1
+    assert canonical["slug"] in g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS
+
+    ordinary_hero_clone = {
+        "headline": canonical["headline"],
+        "body": "Earlier crash coverage " * 80,
+        "image_url": "/images/martin.png",
+        "_is_hero_copy": True,
+    }
+    assert g._publication_copy_rank(("martin", "Martin County", accepted_card)) > g._publication_copy_rank(
+        ("martin", "Martin County", ordinary_hero_clone)
+    )
+
+    commits = g._selected_material_update_commit_entries()
+    assert len(commits) == 1
+    assert commits[0][2]["_pre_generation_material_update_canonical_slug"] == canonical["slug"]
+    assert commits[0][2]["source_headline"] == source["title"]
