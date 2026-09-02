@@ -24817,6 +24817,187 @@ def _apply_semantic_gate_update_identity(item, canonical, decision, candidates):
 
 
 
+def _strip_material_update_source_headline_suffix(headline, source_url=""):
+    """Remove a known publisher attribution suffix from one source headline."""
+    value = str(headline or "").strip()
+    if not value:
+        return ""
+    try:
+        host = (urlsplit(str(source_url or "")).netloc or "").lower()
+    except Exception:
+        host = ""
+    host = host[4:] if host.startswith("www.") else host
+    brands = []
+    for domain, names in _MEDIA_PUBLISHER_BRANDS.items():
+        if host == domain or host.endswith("." + domain):
+            brands.extend(names)
+    # Common Treasure Coast source suffixes are safe to recognize even when a
+    # legacy normalized URL no longer maps cleanly to the publisher table.
+    brands.extend(("WPTV", "WPEC", "WPBF", "CBS12", "CW34", "TCPalm"))
+    for brand in dict.fromkeys(str(name) for name in brands if str(name).strip()):
+        value = re.sub(
+            r"\s*(?:[-|—–]\s*)" + re.escape(brand) + r"\s*$",
+            "", value, flags=re.I,
+        ).strip()
+    return value
+
+
+def _repair_stale_semantic_material_update_headlines(archive, articles_dir, output_root=None):
+    """Repair a previously committed material update whose headline stayed stale.
+
+    v1.13.7.1i could successfully merge a material update into the canonical body
+    while leaving the pre-update headline intact.  Because that source is then marked
+    absorbed, a later run will not naturally replay the composer.  Repair those rows
+    from the persisted *latest material-update source headline* only when the old
+    permalink-origin headline is known and the source headline demonstrably advances
+    one of the semantic gate's recorded novel facts.  The canonical slug and custom
+    headline identity key remain untouched.
+    """
+    try:
+        from tct_engine.semantic_material_update import _headline_progression
+    except Exception:
+        return {"repaired_count": 0, "repaired": [], "skipped": []}
+
+    articles_dir = Path(articles_dir)
+    repaired = []
+    skipped = []
+    for entry in archive or []:
+        if not isinstance(entry, dict):
+            continue
+        if not entry.get("meaningful_update_validated"):
+            continue
+        if str(entry.get("meaningful_update_basis") or "") != "semantic_material_update_gate":
+            continue
+        novel_facts = list(entry.get("semantic_material_update_novel_facts") or [])
+        origin = str(entry.get("permalink_origin_headline") or "").strip()
+        current = str(entry.get("headline") or "").strip()
+        latest_source = str(entry.get("latest_source_headline") or "").strip()
+        if not (novel_facts and origin and current and latest_source):
+            continue
+        decision = {"novel_facts": novel_facts}
+        current_diag = _headline_progression(
+            current,
+            canonical={"headline": origin},
+            incoming={"headline": latest_source},
+            decision=decision,
+        )
+        if current_diag.get("passed"):
+            continue
+        candidate = _strip_material_update_source_headline_suffix(
+            latest_source, entry.get("latest_source_url") or ""
+        )
+        candidate_diag = _headline_progression(
+            candidate,
+            canonical={"headline": origin},
+            incoming={"headline": latest_source},
+            decision=decision,
+        )
+        if (
+            not candidate_diag.get("passed")
+            or len(candidate.split()) < 5
+            or len(candidate) > 180
+        ):
+            skipped.append({
+                "slug": str(entry.get("slug") or ""),
+                "headline": current,
+                "candidate_headline": candidate,
+                "reason": "persisted_source_headline_not_safe_for_material_update_repair",
+                "candidate_novelty_hits": list(candidate_diag.get("novelty_hits") or []),
+            })
+            continue
+
+        slug = str(entry.get("slug") or "").strip()
+        if not slug:
+            continue
+        page = articles_dir / f"{slug}.html"
+        if not page.is_file():
+            skipped.append({
+                "slug": slug,
+                "headline": current,
+                "candidate_headline": candidate,
+                "reason": "canonical_article_page_missing",
+            })
+            continue
+
+        text = page.read_text(encoding="utf-8", errors="ignore")
+        escaped = html_lib.escape(candidate, quote=True)
+        text = re.sub(
+            r"<title>.*?</title>",
+            f"<title>{escaped} | Treasure Coast Today</title>",
+            text, count=1, flags=re.I | re.S,
+        )
+        text = re.sub(
+            r'<meta property="og:title" content="[^"]*">',
+            f'<meta property="og:title" content="{escaped} | Treasure Coast Today">',
+            text, count=1, flags=re.I,
+        )
+        text = re.sub(
+            r'<meta name="twitter:title" content="[^"]*">',
+            f'<meta name="twitter:title" content="{escaped} | Treasure Coast Today">',
+            text, count=1, flags=re.I,
+        )
+        text = re.sub(
+            r'<h1 class="article-headline">.*?</h1>',
+            f'<h1 class="article-headline">{html_lib.escape(candidate)}</h1>',
+            text, count=1, flags=re.I | re.S,
+        )
+        # Keep every user-visible/share-facing headline projection synchronized.
+        # These are exact replacements of the stale canonical headline only; body
+        # prose is deliberately not rewritten by this repair.
+        old_attr = html_lib.escape(current, quote=True)
+        new_attr = html_lib.escape(candidate, quote=True)
+        # Legacy renderers did not consistently entity-escape apostrophes inside
+        # double-quoted alt attributes, so recognize both stored forms.
+        text = text.replace(f'alt="{current}"', f'alt="{new_attr}"')
+        text = text.replace(f'alt="{old_attr}"', f'alt="{new_attr}"')
+        old_js = json.dumps(current, ensure_ascii=False)
+        new_js = json.dumps(candidate, ensure_ascii=False)
+        text = text.replace(f'text: {old_js}', f'text: {new_js}')
+        schema = re.search(r'<script type="application/ld\+json">(.*?)</script>', text, re.I | re.S)
+        if schema:
+            try:
+                payload = json.loads(schema.group(1))
+                if isinstance(payload, dict):
+                    payload["headline"] = candidate[:110]
+                    rendered = json.dumps(payload, ensure_ascii=False)
+                    text = text[:schema.start(1)] + rendered + text[schema.end(1):]
+            except Exception:
+                pass
+        page.write_text(text, encoding="utf-8")
+
+        entry["headline"] = candidate
+        entry["semantic_material_update_headline_repaired"] = True
+        entry["semantic_material_update_headline_repair_basis"] = "persisted_latest_source_headline"
+        entry["semantic_material_update_headline_repaired_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        repaired.append({
+            "slug": slug,
+            "previous_headline": current,
+            "updated_headline": candidate,
+            "latest_source_url": str(entry.get("latest_source_url") or ""),
+            "novelty_hits": list(candidate_diag.get("novelty_hits") or []),
+        })
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "policy": "repair_committed_semantic_material_update_headline_without_changing_permalink",
+        "repaired_count": len(repaired),
+        "skipped_count": len(skipped),
+        "repaired": repaired,
+        "skipped": skipped,
+    }
+    if output_root is not None:
+        path = Path(output_root) / "data" / "material-update-headline-repair.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if repaired:
+        print(
+            "  Material-update headline repair refreshed "
+            f"{len(repaired)} stale canonical headline(s) without changing permalinks"
+        )
+    return report
+
+
 def _semantic_material_update_source_record(item, role):
     if not isinstance(item, dict):
         return {}
@@ -29494,6 +29675,10 @@ def write_archives(all_categories, top_cat):
     if _current_customs:
         _backfill_active_custom_archive_authority(archive, _current_customs)
 
+    _repair_stale_semantic_material_update_headlines(
+        archive, articles_dir, OUTPUT_DIR
+    )
+
     archive, _canonical_redirects = apply_canonical_story_cleanup(archive, articles_dir, OUTPUT_DIR)
 
     # Repair existing generated pages before forward publication decisions. The lead
@@ -32586,10 +32771,17 @@ def _remember_selected_material_update_target(item):
     decision = item.get("_semantic_material_update_decision") or {}
     row = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS.setdefault(slug, {
         "canonical_slug": slug,
+        "canonical_headline": str(item.get("_canonical_context_headline") or "").strip(),
+        "selected_headlines": [],
         "source_headlines": [],
         "source_urls": [],
         "max_confidence": 0.0,
     })
+    if not row.get("canonical_headline"):
+        row["canonical_headline"] = str(item.get("_canonical_context_headline") or "").strip()
+    selected_headline = str(item.get("headline") or "").strip()
+    if selected_headline and selected_headline not in row["selected_headlines"]:
+        row["selected_headlines"].append(selected_headline)
     headline = str(item.get("source_headline") or item.get("source_title") or item.get("title") or item.get("headline") or "").strip()
     source_url = _normalized_external_source_url(
         item.get("source_url") or item.get("_source_url") or item.get("link")
@@ -33807,23 +33999,44 @@ def _validate_promoted_material_updates_committed(output_root=None):
 
     root = Path(output_root or OUTPUT_DIR)
     gate = _read_json_file(root / "data" / "semantic-publication-gate.json", {})
-    applied = {
-        str(row.get("target_slug") or "").strip()
+    applied_rows = {
+        str(row.get("target_slug") or "").strip(): row
         for row in (gate.get("material_updates", []) if isinstance(gate, dict) else [])
         if isinstance(row, dict) and str(row.get("target_slug") or "").strip()
     }
+    applied = set(applied_rows)
     missing = sorted(set(expected) - applied)
+    stale_headlines = []
+    for slug in sorted(set(expected) & applied):
+        expected_row = expected.get(slug) or {}
+        applied_row = applied_rows.get(slug) or {}
+        canonical_headline = str(expected_row.get("canonical_headline") or "").strip()
+        updated_headline = str(applied_row.get("updated_headline") or "").strip()
+        if canonical_headline and (
+            not updated_headline
+            or _normalized_generated_headline_key(updated_headline)
+            == _normalized_generated_headline_key(canonical_headline)
+        ):
+            stale_headlines.append({
+                "canonical_slug": slug,
+                "canonical_headline": canonical_headline,
+                "updated_headline": updated_headline,
+                "selected_headlines": list(expected_row.get("selected_headlines") or []),
+                "reason": "material_update_headline_did_not_advance",
+            })
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "policy": "every_selected_validated_material_update_must_commit",
+        "policy": "every_selected_validated_material_update_must_commit_and_advance_headline",
         "expected_canonical_count": len(expected),
         "applied_canonical_count": len(set(expected) & applied),
         "missing_canonical_count": len(missing),
+        "stale_headline_count": len(stale_headlines),
         "expected": [copy.deepcopy(expected[slug]) for slug in sorted(expected)],
         "applied_target_slugs": sorted(applied),
         "missing_target_slugs": missing,
-        "passed": not missing,
+        "stale_headlines": stale_headlines,
+        "passed": not missing and not stale_headlines,
     }
     path = root / "data" / "material-update-publication-invariant.json"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -33837,10 +34050,19 @@ def _validate_promoted_material_updates_committed(output_root=None):
             "MATERIAL UPDATE PUBLICATION INVARIANT FAILED: selected validated update(s) "
             "were absent from committed canonical updates — " + "; ".join(details)
         )
+    if stale_headlines:
+        details = [
+            f"{row['canonical_slug']}: {row['canonical_headline'][:70]} -> {row['updated_headline'][:70]}"
+            for row in stale_headlines[:5]
+        ]
+        raise RuntimeError(
+            "MATERIAL UPDATE HEADLINE INVARIANT FAILED: committed material update(s) "
+            "did not advance the visible canonical headline — " + "; ".join(details)
+        )
     if expected:
         print(
             "  Material-update publication invariant PASSED: "
-            f"{len(expected)} selected canonical update(s) committed"
+            f"{len(expected)} selected canonical update(s) committed with refreshed headline(s)"
         )
     return report
 

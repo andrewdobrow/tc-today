@@ -17,7 +17,7 @@ import math
 import re
 from typing import Any, Mapping
 
-SEMANTIC_MATERIAL_UPDATE_VERSION = "1.0"
+SEMANTIC_MATERIAL_UPDATE_VERSION = "1.1"
 
 _STOP_WORDS = {
     "a", "an", "and", "are", "as", "at", "be", "been", "being", "by",
@@ -25,6 +25,15 @@ _STOP_WORDS = {
     "on", "or", "that", "the", "this", "to", "was", "were", "will", "with",
     "after", "before", "about", "over", "under", "near", "said", "says",
     "county", "local", "news", "update", "officials", "florida",
+}
+
+_TOKEN_CANONICAL = {
+    "directed": "directive", "directs": "directive", "direction": "directive",
+    "directions": "directive",
+    "aligned": "align", "aligning": "align", "alignment": "align",
+    "recovered": "recover", "recovery": "recover", "recovering": "recover",
+    "found": "find", "finding": "find",
+    "receives": "receive", "received": "receive", "receiving": "receive",
 }
 
 
@@ -36,11 +45,12 @@ def _plain(value: object) -> str:
 
 
 def _tokens(value: object) -> set[str]:
-    return {
-        token
-        for token in re.findall(r"[a-z0-9]+", _plain(value).casefold())
-        if len(token) >= 3 and token not in _STOP_WORDS
-    }
+    tokens = set()
+    for raw in re.findall(r"[a-z0-9]+", _plain(value).casefold()):
+        if len(raw) < 3 or raw in _STOP_WORDS:
+            continue
+        tokens.add(_TOKEN_CANONICAL.get(raw, raw))
+    return tokens
 
 
 def _paragraphs(value: object) -> list[str]:
@@ -52,6 +62,47 @@ def _paragraphs(value: object) -> list[str]:
         for part in re.split(r"\n\s*\n+", text)
         if re.sub(r"\s+", " ", part).strip()
     ]
+
+
+def _headline_progression(
+    headline: object,
+    *,
+    canonical: Mapping[str, Any],
+    incoming: Mapping[str, Any],
+    decision: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Verify that a material update's display headline advances the story state.
+
+    A canonical permalink is intentionally immutable, but its visible headline is
+    not.  If the semantic gate has already determined that new facts are material
+    enough to replace the canonical article, preserving the old headline makes the
+    update effectively invisible to readers.  Require the replacement headline to
+    differ from the old canonical wording and surface at least one fact-token that
+    was genuinely novel to the canonical article.
+    """
+    updated = _plain(headline)
+    canonical_headline = _plain(canonical.get("headline"))
+    canonical_headline_tokens = _tokens(canonical_headline)
+    explicit_novelty = " ".join(str(value) for value in decision.get("novel_facts") or [])
+    novelty_tokens = _tokens(explicit_novelty) - canonical_headline_tokens
+    if not novelty_tokens:
+        incoming_headline = str(
+            incoming.get("headline") or incoming.get("source_headline") or ""
+        )
+        novelty_tokens = _tokens(incoming_headline) - canonical_headline_tokens
+    updated_tokens = _tokens(updated)
+    novelty_hits = sorted(updated_tokens & novelty_tokens)
+    same_as_canonical = bool(
+        updated
+        and canonical_headline
+        and updated.casefold() == canonical_headline.casefold()
+    )
+    return {
+        "same_as_canonical": same_as_canonical,
+        "novelty_tokens": sorted(novelty_tokens)[:80],
+        "novelty_hits": novelty_hits[:40],
+        "passed": bool(updated and not same_as_canonical and (not novelty_tokens or novelty_hits)),
+    }
 
 
 def _json_object(raw: str) -> dict[str, Any]:
@@ -143,6 +194,14 @@ def validate_material_update(
     body_baseline_hits = sorted(canonical_context_tokens & body_tokens)
     body_incoming_hits = sorted(incoming_tokens & body_tokens)
 
+    headline_progression = _headline_progression(
+        headline, canonical=canonical, incoming=incoming, decision=decision
+    )
+    if headline_progression["same_as_canonical"]:
+        errors.append("headline_not_refreshed_for_material_update")
+    if headline_progression["novelty_tokens"] and not headline_progression["novelty_hits"]:
+        errors.append("headline_missing_material_development")
+
     baseline_required = min(2, len(canonical_headline_tokens))
     if baseline_required and len(baseline_hits) < baseline_required:
         errors.append("lead_missing_original_event_context")
@@ -169,6 +228,9 @@ def validate_material_update(
         "paragraph_count": len(paragraphs),
         "baseline_lead_hits": baseline_hits,
         "novelty_lead_hits": novelty_hits,
+        "headline_changed": not headline_progression["same_as_canonical"],
+        "headline_novelty_hits": headline_progression["novelty_hits"],
+        "headline_novelty_tokens": headline_progression["novelty_tokens"],
         "validation_errors": errors,
     }
 
@@ -208,7 +270,7 @@ Editorial requirements:
 - Write 3 to 6 full paragraphs and roughly 220 to 500 words.
 - Use direct, neutral local-news language. No markdown, section headings, datelines, bullet lists, or commentary.
 - Do not use direct quotes unless the exact quote appears in the supplied text.
-- The headline may be refreshed to reflect the new development, but it must remain accurate and locally specific.
+- The headline MUST be refreshed to foreground the material development. Do not reuse or lightly paraphrase the old canonical headline when the story state has changed. It must remain accurate and locally specific.
 - Every specific city, county, or monetary claim stated in the headline must also be explicitly stated in the FIRST paragraph.
 - The teaser must be one or two complete sentences and explain the new development in context.
 
@@ -252,31 +314,50 @@ def compose_material_update(
         }
 
     request_client = client
-    kwargs = {
-        "model": model,
-        "max_tokens": 1800,
-        "messages": [
-            {
-                "role": "user",
-                "content": _prompt(canonical, incoming, decision),
-            }
-        ],
-    }
-    try:
-        if hasattr(client, "with_options"):
-            request_client = client.with_options(
-                timeout=max(1.0, float(timeout_seconds)), max_retries=0
-            )
-        else:
+    if hasattr(client, "with_options"):
+        request_client = client.with_options(
+            timeout=max(1.0, float(timeout_seconds)), max_retries=0
+        )
+
+    def _request(prompt_text: str) -> dict[str, Any]:
+        kwargs = {
+            "model": model,
+            "max_tokens": 1800,
+            "messages": [{"role": "user", "content": prompt_text}],
+        }
+        if not hasattr(client, "with_options"):
             kwargs["timeout"] = max(1.0, float(timeout_seconds))
         response = request_client.messages.create(**kwargs)
         parsed = _json_object(_response_text(response))
-        result = validate_material_update(
+        return validate_material_update(
             parsed,
             canonical=canonical,
             incoming=incoming,
             decision=decision,
         )
+
+    try:
+        result = _request(_prompt(canonical, incoming, decision))
+        headline_errors = {
+            "headline_not_refreshed_for_material_update",
+            "headline_missing_material_development",
+        }
+        errors = set(result.get("validation_errors") or [])
+        # A headline-only miss is repairable without weakening any content or
+        # identity contract. Give the composer one explicit correction attempt; if
+        # it still cannot advance the headline, the caller fails closed.
+        if errors and errors.issubset(headline_errors):
+            retry_prompt = _prompt(canonical, incoming, decision) + (
+                "\n\nREVISION REQUIRED: Your previous article body passed validation, but "
+                "the headline did not visibly advance the material development. "
+                f"Rejected headline: {result.get('headline','')!r}. "
+                "Return the complete JSON object again with a NEW headline that "
+                "foregrounds at least one of the semantic gate's novel facts. "
+                "Do not reuse the existing canonical headline."
+            )
+            retry = _request(retry_prompt)
+            retry["headline_retry"] = True
+            result = retry
         result["composer_version"] = SEMANTIC_MATERIAL_UPDATE_VERSION
         return result
     except Exception as exc:

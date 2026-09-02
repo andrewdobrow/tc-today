@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import html as html_stdlib
 import json
 import os
 import sys
@@ -99,6 +100,22 @@ class _Messages:
 class _Client:
     def __init__(self, payload: dict):
         self.messages = _Messages(payload)
+
+
+class _SequenceMessages:
+    def __init__(self, payloads):
+        self.payloads = list(payloads)
+        self.calls = []
+
+    def create(self, **kwargs):
+        self.calls.append(kwargs)
+        index = min(len(self.calls) - 1, len(self.payloads) - 1)
+        return _Response(self.payloads[index])
+
+
+class _SequenceClient:
+    def __init__(self, payloads):
+        self.messages = _SequenceMessages(payloads)
 
 
 def _load_generate(tmp_path: Path):
@@ -237,6 +254,53 @@ def test_material_update_composer_calls_model_once_and_validates_result():
     assert "temperature" not in client.messages.calls[0]
 
 
+def test_material_update_rejects_stale_canonical_headline_even_when_body_is_valid():
+    canonical = {
+        "headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
+        "teaser": "Deputies are searching for Michael Anthony Debevec II after he disappeared near Chastain Beach.",
+        "body": CANONICAL_BODY,
+    }
+    incoming = {
+        "headline": "Body found in Hutchinson Island mangroves believed to be missing Michael Debevec",
+        "teaser": "A body believed to be Debevec was recovered near the House of Refuge.",
+        "body": UPDATE_BODY,
+    }
+    decision = {
+        **_decision(),
+        "novel_facts": [
+            "A body believed to be Michael Debevec was recovered in mangroves near the House of Refuge",
+            "Formal identification remained pending",
+        ],
+    }
+    payload = _composition_payload()
+    payload["headline"] = canonical["headline"]
+    result = validate_material_update(
+        payload, canonical=canonical, incoming=incoming, decision=decision
+    )
+    assert result["status"] == "invalid_composition"
+    assert "headline_not_refreshed_for_material_update" in result["validation_errors"]
+    assert "headline_missing_material_development" in result["validation_errors"]
+
+
+def test_material_update_composer_retries_once_when_only_headline_is_stale():
+    stale = _composition_payload()
+    stale["headline"] = CANONICAL_HEADLINE
+    refreshed = _composition_payload()
+    client = _SequenceClient([stale, refreshed])
+    result = compose_material_update(
+        client,
+        model="claude-sonnet-4-5",
+        canonical={"headline": CANONICAL_HEADLINE, "body": CANONICAL_BODY},
+        incoming={"headline": UPDATE_HEADLINE, "body": UPDATE_BODY},
+        decision=_decision(),
+    )
+    assert result["status"] == "validated"
+    assert result["headline"] == refreshed["headline"]
+    assert result["headline_retry"] is True
+    assert len(client.messages.calls) == 2
+    assert "REVISION REQUIRED" in client.messages.calls[1]["messages"][0]["content"]
+
+
 def test_retroactive_material_update_rewrites_canonical_and_redirects_later_url(
     tmp_path, monkeypatch
 ):
@@ -304,6 +368,8 @@ def test_retroactive_material_update_rewrites_canonical_and_redirects_later_url(
     assert redirects[0]["target_slug"] == CANONICAL_SLUG
     assert redirects[0]["story_stage"] == "semantic-material-update-routing"
     assert canonical["meaningful_update_validated"] is True
+    assert canonical["headline"] == _composition_payload()["headline"]
+    assert canonical["headline"] != CANONICAL_HEADLINE
     assert canonical["lastmod"]
     assert canonical["latest_source_url"] == "https://www.wptv.com/shark-state-directive"
     assert len(canonical["source_history"]) == 2
@@ -578,3 +644,141 @@ def test_waste_pro_semantic_update_passes_second_context_contract(tmp_path, monk
     assert result["context_diagnostics"]["passed"] is True
     assert result["context_diagnostics"]["novelty_anchor"] == "semantic_gate_novel_fact"
     assert "95000" in result["context_diagnostics"]["semantic_novel_fact_hits"]
+
+
+def test_committed_debevec_material_update_repairs_stale_headline_without_changing_permalink(tmp_path):
+    """Production regression: body can be current while the canonical H1 is stale.
+
+    Once a semantic material update has already been committed/absorbed, the source
+    may not naturally replay through the composer.  The persisted latest source
+    headline is therefore allowed to repair the visible headline only when it
+    demonstrably advances the recorded semantic novelty, while the original slug and
+    custom identity key remain immutable.
+    """
+    generate = _load_generate(tmp_path)
+    slug = (
+        "2026-08-29-martin-county-sheriffs-office-searches-for-missing-"
+        "oklahoma-visitor-last-seen-at-chastain-beach"
+    )
+    old_headline = (
+        "Martin County Sheriff's Office searches for missing Oklahoma visitor "
+        "last seen at Chastain Beach"
+    )
+    source_headline = (
+        "Martin County Sheriff's Office investigates body found in Hutchinson "
+        "Island mangroves - WPTV"
+    )
+    repaired_headline = (
+        "Martin County Sheriff's Office investigates body found in Hutchinson "
+        "Island mangroves"
+    )
+    updated_body = (
+        "A body discovered deep in the mangroves on Hutchinson Island is believed "
+        "to be Michael Anthony Debevec II, according to the Martin County Sheriff's "
+        "Office. Formal identification remained pending with the Medical Examiner."
+    )
+    entry = {
+        "slug": slug,
+        "headline": old_headline,
+        "permalink_origin_headline": old_headline,
+        "custom_headline_key": generate._exact_custom_headline(old_headline),
+        "authoritative_custom": True,
+        "meaningful_update_validated": True,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "semantic_material_update_novel_facts": [
+            "A body was discovered deep in mangroves near the House of Refuge on Hutchinson Island",
+            "The Sheriff's Office believes the body may be Michael Anthony Debevec II based on clothing",
+            "Formal identification remained pending with the Medical Examiner",
+        ],
+        "latest_source_headline": source_headline,
+        "latest_source_url": (
+            "https://www.wptv.com/news/treasure-coast/region-martin-county/"
+            "martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves"
+        ),
+    }
+    articles = tmp_path / "articles"
+    articles.mkdir(parents=True)
+    page = articles / f"{slug}.html"
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": old_headline,
+        "url": f"https://treasurecoast.today/articles/{slug}.html",
+    }
+    page.write_text(
+        "\n".join([
+            f"<title>{old_headline} | Treasure Coast Today</title>",
+            f'<meta property="og:title" content="{old_headline} | Treasure Coast Today">',
+            f'<meta name="twitter:title" content="{old_headline} | Treasure Coast Today">',
+            f'<script type="application/ld+json">{json.dumps(schema)}</script>',
+            f'<h1 class="article-headline">{old_headline}</h1>',
+            f'<figure><img src="image.jpg" alt="{old_headline}"></figure>',
+            f'<div class="article-body"><p>{updated_body}</p></div>',
+            f'<script>const data = {{ title: document.title, text: {json.dumps(old_headline)}, url: window.location.href }};</script>',
+        ]),
+        encoding="utf-8",
+    )
+    body_before = updated_body
+    custom_key_before = entry["custom_headline_key"]
+
+    report = generate._repair_stale_semantic_material_update_headlines(
+        [entry], articles, tmp_path
+    )
+
+    assert report["repaired_count"] == 1
+    assert report["repaired"][0]["slug"] == slug
+    assert report["repaired"][0]["updated_headline"] == repaired_headline
+    assert entry["slug"] == slug
+    assert entry["headline"] == repaired_headline
+    assert entry["permalink_origin_headline"] == old_headline
+    assert entry["custom_headline_key"] == custom_key_before
+    assert entry["semantic_material_update_headline_repaired"] is True
+
+    html = page.read_text(encoding="utf-8")
+    escaped_repaired = html_stdlib.escape(repaired_headline, quote=True)
+    assert f"<title>{escaped_repaired} | Treasure Coast Today</title>" in html
+    assert f'<meta property="og:title" content="{escaped_repaired} | Treasure Coast Today">' in html
+    assert f'<meta name="twitter:title" content="{escaped_repaired} | Treasure Coast Today">' in html
+    assert f'<h1 class="article-headline">{html_stdlib.escape(repaired_headline)}</h1>' in html
+    assert f'alt="{escaped_repaired}"' in html
+    assert f'text: {json.dumps(repaired_headline)}' in html
+    assert body_before in html
+    schema_text = html.split('<script type="application/ld+json">', 1)[1].split("</script>", 1)[0]
+    assert json.loads(schema_text)["headline"] == repaired_headline[:110]
+
+    repair_report = json.loads(
+        (tmp_path / "data" / "material-update-headline-repair.json").read_text(encoding="utf-8")
+    )
+    assert repair_report["repaired_count"] == 1
+
+
+def test_committed_material_update_headline_repair_is_noop_when_headline_already_advanced(tmp_path):
+    generate = _load_generate(tmp_path)
+    slug = "2026-08-29-example-missing-person"
+    old_headline = "Sheriff searches for missing Oklahoma visitor"
+    current_headline = "Body found in mangroves believed to be missing Oklahoma visitor"
+    entry = {
+        "slug": slug,
+        "headline": current_headline,
+        "permalink_origin_headline": old_headline,
+        "meaningful_update_validated": True,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "semantic_material_update_novel_facts": [
+            "A body was found in mangroves during the search",
+        ],
+        "latest_source_headline": "Body found in mangroves during missing-person search - WPTV",
+        "latest_source_url": "https://www.wptv.com/example",
+    }
+    articles = tmp_path / "articles"
+    articles.mkdir(parents=True)
+    page = articles / f"{slug}.html"
+    original_html = f'<h1 class="article-headline">{current_headline}</h1><p>Updated body.</p>'
+    page.write_text(original_html, encoding="utf-8")
+
+    report = generate._repair_stale_semantic_material_update_headlines(
+        [entry], articles, tmp_path
+    )
+
+    assert report["repaired_count"] == 0
+    assert entry["headline"] == current_headline
+    assert page.read_text(encoding="utf-8") == original_html
