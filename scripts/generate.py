@@ -30260,22 +30260,7 @@ def write_archives(all_categories, top_cat):
     # without reintroducing it as a second visible placement. Append these last so a
     # canonical update is the final publication transaction when its coalesce key differs
     # from an older durable-custom presentation clone.
-    for _target_slug, _commit_item in sorted(
-        (CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS or {}).items()
-    ):
-        if not isinstance(_commit_item, dict):
-            continue
-        _commit_key = str(
-            _commit_item.get("_material_update_category_key")
-            or _commit_item.get("category_key")
-            or "top_news"
-        )
-        _commit_label = str(
-            _commit_item.get("_material_update_category_label")
-            or (CATEGORIES.get(_commit_key, {}) or {}).get("label")
-            or _commit_key.replace("_", " ").title()
-        )
-        all_articles.append((_commit_key, _commit_label, copy.deepcopy(_commit_item)))
+    all_articles.extend(_selected_material_update_commit_entries())
 
     # A story classified into multiple categories (e.g. a Hobe Sound business opening
     # is both Business and Martin County) appears once per category in all_articles,
@@ -33193,8 +33178,14 @@ def _has_self_consistent_pre_generation_material_update_authority(item):
     )
 
 
-def _remember_selected_material_update_target(item):
-    """Record one live-writer-selected canonical material-update target for commit checks."""
+def _remember_selected_material_update_target(item, selection_surface=""):
+    """Record one FINAL live-writer-selected material-update target for commit checks.
+
+    ``selection_surface`` is observability for the exact surviving placement that
+    created the obligation (for example ``martin:hero`` or ``martin:card``).
+    Keeping it on the target receipt makes the terminal invariant auditable without
+    treating provisional generation attempts as committed selections.
+    """
     if not _has_self_consistent_pre_generation_material_update_authority(item):
         return False
     slug = str(item.get("_pre_generation_material_update_canonical_slug") or "").strip()
@@ -33207,8 +33198,15 @@ def _remember_selected_material_update_target(item):
         "selected_headlines": [],
         "source_headlines": [],
         "source_urls": [],
+        "selection_surfaces": [],
         "max_confidence": 0.0,
     })
+    # Be compatible with a row created by older in-process code while still making
+    # the v1.13.7.1r receipt shape deterministic.
+    row.setdefault("selected_headlines", [])
+    row.setdefault("source_headlines", [])
+    row.setdefault("source_urls", [])
+    row.setdefault("selection_surfaces", [])
     if not row.get("canonical_headline"):
         row["canonical_headline"] = str(item.get("_canonical_context_headline") or "").strip()
     selected_headline = str(item.get("headline") or "").strip()
@@ -33222,6 +33220,9 @@ def _remember_selected_material_update_target(item):
         row["source_headlines"].append(headline)
     if source_url and source_url not in row["source_urls"]:
         row["source_urls"].append(source_url)
+    selection_surface = str(selection_surface or "").strip()
+    if selection_surface and selection_surface not in row["selection_surfaces"]:
+        row["selection_surfaces"].append(selection_surface)
     row["max_confidence"] = max(
         float(row.get("max_confidence") or 0.0),
         float(decision.get("confidence") or 0.0),
@@ -33251,13 +33252,13 @@ def _remember_surviving_selected_material_update_targets(data, category_key):
     candidates = []
     hero = data.get("hero")
     if isinstance(hero, dict):
-        candidates.append(hero)
+        candidates.append(("hero", hero))
     candidates.extend(
-        card for card in (data.get("cards") or []) if isinstance(card, dict)
+        ("card", card) for card in (data.get("cards") or []) if isinstance(card, dict)
     )
 
     remembered = set()
-    for item in candidates:
+    for surface_kind, item in candidates:
         if not _has_self_consistent_pre_generation_material_update_authority(item):
             continue
         slug = str(
@@ -33267,10 +33268,14 @@ def _remember_surviving_selected_material_update_targets(data, category_key):
         ).strip()
         if not slug:
             continue
-        if not _remember_selected_material_update_target(item):
+        selection_surface = f"{category_key}:{surface_kind}" if category_key else surface_kind
+        if not _remember_selected_material_update_target(
+            item, selection_surface=selection_surface
+        ):
             continue
 
         commit_copy = copy.deepcopy(item)
+        commit_copy["_material_update_selection_surface"] = selection_surface
         commit_copy["_material_update_commit_copy"] = True
         commit_copy["_material_update_category_key"] = category_key
         commit_copy["_material_update_category_label"] = category_label
@@ -33295,6 +33300,45 @@ def _remember_surviving_selected_material_update_targets(data, category_key):
                 CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS[slug] = commit_copy
         remembered.add(slug)
     return len(remembered)
+
+
+def _selected_material_update_commit_entries():
+    """Return deterministic publication entries for FINAL surviving update receipts.
+
+    The helper is the single read boundary for the hidden commit queue.  Returning the
+    normal ``(category_key, category_label, item)`` publication-entry shape keeps the
+    queue directly compatible with ``_publication_copy_rank`` and ``write_archives``
+    while ensuring callers receive deep copies rather than mutable queue state.
+    """
+    entries = []
+    for target_slug, commit_item in sorted(
+        (CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS or {}).items()
+    ):
+        if not isinstance(commit_item, dict):
+            continue
+        commit_copy = copy.deepcopy(commit_item)
+        commit_copy.setdefault(
+            "_pre_generation_material_update_canonical_slug", str(target_slug or "").strip()
+        )
+        commit_copy.setdefault("canonical_slug", str(target_slug or "").strip())
+        commit_copy["_material_update_commit_copy"] = True
+        commit_key = str(
+            commit_copy.get("_material_update_category_key")
+            or commit_copy.get("category_key")
+            or "top_news"
+        ).strip() or "top_news"
+        commit_label = str(
+            commit_copy.get("_material_update_category_label")
+            or commit_copy.get("category_label")
+            or (CATEGORIES.get(commit_key, {}) or {}).get("label")
+            or commit_key.replace("_", " ").title()
+        ).strip()
+        commit_copy["_material_update_category_key"] = commit_key
+        commit_copy["_material_update_category_label"] = commit_label
+        commit_copy["category_key"] = commit_key
+        commit_copy["category_label"] = commit_label
+        entries.append((commit_key, commit_label, commit_copy))
+    return entries
 
 
 def _carry_pre_generation_material_update_authority(item, source):
