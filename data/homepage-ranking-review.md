@@ -4,38 +4,41 @@
 
 ## Hero
 
-- Current: **Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal**
-- Recommended: **Treasure Coast sheriffs warn residents less safe as state orders license plate reader removal**
-- Recommendation: KEEP (not enforced)
+- Current: **Indiantown Village Council fires manager, rejects data center pause after resident outcry**
+- Recommended: **Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect**
+- Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | 63 | position locked: identity_conflict |
-| 2 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 67 | importance 65; freshness 87.79; urgency 2/10 |
-| 3 | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 64 | importance 35; freshness 93.78; urgency 2/10; validated material update |
-| 4 | Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 64 | importance 55; freshness 87.8; urgency 2/10 |
-| 5 | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | 57 | importance 65; freshness 47.65; urgency 2/10 |
-| 6 | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | 54 | importance 10; freshness 87.8; urgency 2/10; validated material update |
-| 7 | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County | 58 | importance 35; freshness 93.76; urgency 2/10; -6 category saturation |
-| 8 | Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case | Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case | 60 | importance 45; freshness 87.78; urgency 2/10; -12 category saturation; -8 county saturation |
-| 9 | Data center proposed for 174 acres off West Midway Road in St. Lucie County | Florida Department of Transportation revokes permits for automated license plate readers statewide | 32 | importance 0; freshness 50.91; urgency 2/10 |
-| 10 | Florida Department of Transportation revokes permits for automated license plate readers statewide | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | 57 | importance 35; freshness 87.8; urgency 2/10; -18 category saturation; -8 county saturation |
-| 11 | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | Data center proposed for 174 acres off West Midway Road in St. Lucie County | 40 | importance 10; freshness 52.8; urgency 2/10; -6 category saturation; -12 county saturation |
-| 12 | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | 32 | importance 0; freshness 32.27; urgency 2/10; -12 county saturation |
+| 1 | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect | 79 | importance 55; freshness 99.94; urgency 8/10 |
+| 2 | Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | 75 | importance 35; freshness 99.94; urgency 9/10 |
+| 3 | St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases | Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case | 71 | importance 45; freshness 84.29; urgency 7/10 |
+| 4 | Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 66 | importance 65; freshness 84.31; urgency 2/10 |
+| 5 | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | 62 | position locked: identity_conflict |
+| 6 | Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 63 | importance 55; freshness 84.32; urgency 2/10 |
+| 7 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves | 65 | importance 35; freshness 95.32; urgency 2/10; validated material update; -8 county saturation |
+| 8 | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | 56 | importance 65; freshness 44.16; urgency 2/10 |
+| 9 | Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County | Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County | 57 | importance 35; freshness 90.27; urgency 2/10; -6 category saturation |
+| 10 | DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | 54 | importance 10; freshness 84.31; urgency 2/10; validated material update; -12 county saturation |
+| 11 | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases | 52 | importance 0; freshness 87.74; urgency 7/10; -12 county saturation |
+| 12 | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary | 40 | importance 0; freshness 84.31; urgency 2/10 |
 
 ## Recommended moves
 
-- **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**: 11 → 5 — importance 65; freshness 47.65; urgency 2/10
-- **Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie**: 6 → 10 — importance 35; freshness 87.8; urgency 2/10; -18 category saturation; -8 county saturation
-- **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**: 5 → 2 — importance 65; freshness 87.79; urgency 2/10
-- **Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds**: 7 → 4 — importance 55; freshness 87.8; urgency 2/10
-- **Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County**: 4 → 7 — importance 35; freshness 93.76; urgency 2/10; -6 category saturation
-- **Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills**: 3 → 6 — importance 10; freshness 87.8; urgency 2/10; validated material update
-- **Data center proposed for 174 acres off West Midway Road in St. Lucie County**: 9 → 11 — importance 10; freshness 52.8; urgency 2/10; -6 category saturation; -12 county saturation
-- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 2 → 3 — importance 35; freshness 93.78; urgency 2/10; validated material update
-- **Florida Department of Transportation revokes permits for automated license plate readers statewide**: 10 → 9 — importance 0; freshness 50.91; urgency 2/10
+- **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**: 47 → 8 — importance 65; freshness 44.16; urgency 2/10
+- **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**: 22 → 4 — importance 65; freshness 84.31; urgency 2/10
+- **St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases**: 3 → 11 — importance 0; freshness 87.74; urgency 7/10; -12 county saturation
+- **Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds**: 12 → 6 — importance 55; freshness 84.32; urgency 2/10
+- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 7 → 13 — importance 35; freshness 90.29; urgency 2/10; validated material update
+- **Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie**: 11 → 14 — importance 35; freshness 84.31; urgency 2/10
+- **Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills**: 8 → 10 — importance 10; freshness 84.31; urgency 2/10; validated material update; -12 county saturation
+- **DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary**: 10 → 12 — importance 0; freshness 84.31; urgency 2/10
+- **Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect**: 2 → 1 — importance 55; freshness 99.94; urgency 8/10
+- **Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County**: 1 → 2 — importance 35; freshness 99.94; urgency 9/10
+- **Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case**: 4 → 3 — importance 45; freshness 84.29; urgency 7/10
+- **Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves**: 6 → 7 — importance 35; freshness 95.32; urgency 2/10; validated material update; -8 county saturation
 
 ## Guardrails
 

@@ -84,6 +84,7 @@
 (function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1'){document.documentElement.classList.add('tct-member-preverified');return;}var z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit'}).formatToParts(new Date());var y=(z.find(function(p){return p.type==='year'})||{}).value||'';var m=(z.find(function(p){return p.type==='month'})||{}).value||'';var period=y+'-'+m;var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');var raw=localStorage.getItem('tct_monthly_free_article_v1');var state=raw?JSON.parse(raw):null;var stalePending=state&&state.pending&&!state.meter_token&&(Date.now()-Number(state.started_at||0)>120000);if(stalePending){localStorage.removeItem('tct_monthly_free_article_v1');state=null;}if(slug&&(!state||state.period!==period||state.slug===slug)){document.documentElement.classList.add('tct-meter-precheck');setTimeout(function(){document.documentElement.classList.remove('tct-meter-precheck')},5000);}}catch(_e){}})();
 </script>
   <link rel="stylesheet" href="/membership.css?v=1.13.7.1c">
+<script type="text/javascript" async="async" data-noptimize="1" data-cfasync="false" src="//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"></script>
 </head>
 <body data-article-slug="">
   <header>
@@ -158,7 +159,7 @@
       <div class="footer-column"><strong>Counties</strong><a href="/?cat=martin">Martin County</a><a href="/?cat=st_lucie">St. Lucie County</a><a href="/?cat=indian_river">Indian River County</a></div>
       <div class="footer-column footer-connect footer-membership-ask">
         <strong>Support local journalism</strong>
-        <p>Unlimited articles. No ads. Help fund independent Treasure Coast reporting.</p>
+        <p>Unlimited articles. Help fund independent Treasure Coast reporting.</p>
         <a class="footer-subscribe-cta" href="/subscribe.html"><span>Get first month for $1</span><small>Limited time &middot; $1 first month</small></a>
       </div>
     </div>
