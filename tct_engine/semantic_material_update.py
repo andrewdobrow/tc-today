@@ -209,6 +209,7 @@ Editorial requirements:
 - Use direct, neutral local-news language. No markdown, section headings, datelines, bullet lists, or commentary.
 - Do not use direct quotes unless the exact quote appears in the supplied text.
 - The headline may be refreshed to reflect the new development, but it must remain accurate and locally specific.
+- Every specific city, county, or monetary claim stated in the headline must also be explicitly stated in the FIRST paragraph.
 - The teaser must be one or two complete sentences and explain the new development in context.
 
 Return ONLY this JSON object:

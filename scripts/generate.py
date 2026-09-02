@@ -620,6 +620,10 @@ CURRENT_RUN_QUARANTINED_STORY_IDS = set()
 CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
 CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
 CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+# Canonical targets that the LIVE category writer actually selected from a source
+# carrying validated pre-generation material-update authority. This is narrower than
+# every source-level promotion and drives the terminal no-silent-loss invariant.
+CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
 # main() owns this only until write_archives() consumes it. It carries semantic
 # decisions made at the pre-archive generated/cached placement suppression boundary.
 CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT = {}
@@ -7775,6 +7779,10 @@ Return ONLY valid JSON:
                     if source.get(context_key) not in (None, ""):
                         item[context_key] = source.get(context_key)
                 item["feed_url"] = source.get("feed_url", "")
+                # Carry only a self-consistent current-run material-update receipt
+                # before prose guards run. Later publication identity stamping still
+                # re-verifies the source from scratch.
+                _carry_pre_generation_material_update_authority(item, source)
             except (IndexError, ValueError, TypeError):
                 item["link"]      = ""
                 item["image_url"] = ""
@@ -7806,17 +7814,36 @@ Return ONLY valid JSON:
     _hero_diag = _update_lead_diagnostics(data.get("hero", {}), data.get("hero", {}))
     if _hero_diag.get("required") and not _hero_diag.get("passed"):
         _contextual_update_lead_rejections.append({"surface": "hero", **_hero_diag})
-        raise ContextualUpdateLeadError(
-            "Contextless update lead for hero: "
-            + ",".join(_hero_diag.get("missing") or ["unknown"])
-            + f" — {_hero_diag.get('source_title','')[:120]}"
-        )
+        if _defer_protected_material_update_quality_failure(
+            data.get("hero", {}), _hero_diag, guard="contextual_update_lead"
+        ):
+            print(
+                "  Protected material update hero queued for grounded recomposition: "
+                f"'{data.get('hero', {}).get('headline','')[:65]}' "
+                f"({','.join(_hero_diag.get('missing') or ['unknown'])})"
+            )
+        else:
+            raise ContextualUpdateLeadError(
+                "Contextless update lead for hero: "
+                + ",".join(_hero_diag.get("missing") or ["unknown"])
+                + f" — {_hero_diag.get('source_title','')[:120]}"
+            )
 
     _contextual_cards = []
     for _card in data.get("cards", []) or []:
         _card_diag = _update_lead_diagnostics(_card, _card)
         if _card_diag.get("required") and not _card_diag.get("passed"):
             _contextual_update_lead_rejections.append({"surface": "card", **_card_diag})
+            if _defer_protected_material_update_quality_failure(
+                _card, _card_diag, guard="contextual_update_lead"
+            ):
+                print(
+                    "  Protected material update card queued for grounded recomposition: "
+                    f"'{_card.get('headline','')[:65]}' "
+                    f"({','.join(_card_diag.get('missing') or ['unknown'])})"
+                )
+                _contextual_cards.append(_card)
+                continue
             print(
                 "  Contextual update-lead guard removed card: "
                 f"'{_card.get('headline','')[:65]}' "
@@ -7834,17 +7861,36 @@ Return ONLY valid JSON:
     _hero_framing = _article_framing_diagnostics(data.get("hero", {}), data.get("hero", {}))
     if _hero_framing.get("required") and not _hero_framing.get("passed"):
         _article_framing_rejections.append({"surface": "hero", **_hero_framing})
-        raise ArticleFramingIntegrityError(
-            "Article framing integrity failed for hero: "
-            + ",".join(_hero_framing.get("missing") or ["unknown"])
-            + f" — {_hero_framing.get('headline','')[:120]}"
-        )
+        if _defer_protected_material_update_quality_failure(
+            data.get("hero", {}), _hero_framing, guard="article_framing"
+        ):
+            print(
+                "  Protected material update hero queued for framing recomposition: "
+                f"'{data.get('hero', {}).get('headline','')[:65]}' "
+                f"({','.join(_hero_framing.get('missing') or ['unknown'])})"
+            )
+        else:
+            raise ArticleFramingIntegrityError(
+                "Article framing integrity failed for hero: "
+                + ",".join(_hero_framing.get("missing") or ["unknown"])
+                + f" — {_hero_framing.get('headline','')[:120]}"
+            )
 
     _framed_cards = []
     for _card in data.get("cards", []) or []:
         _card_framing = _article_framing_diagnostics(_card, _card)
         if _card_framing.get("required") and not _card_framing.get("passed"):
             _article_framing_rejections.append({"surface": "card", **_card_framing})
+            if _defer_protected_material_update_quality_failure(
+                _card, _card_framing, guard="article_framing"
+            ):
+                print(
+                    "  Protected material update card queued for framing recomposition: "
+                    f"'{_card.get('headline','')[:65]}' "
+                    f"({','.join(_card_framing.get('missing') or ['unknown'])})"
+                )
+                _framed_cards.append(_card)
+                continue
             print(
                 "  Article-framing guard removed card: "
                 f"'{_card.get('headline','')[:65]}' "
@@ -32462,6 +32508,140 @@ def _promote_published_skip_material_updates(
 
 
 
+def _has_self_consistent_pre_generation_material_update_authority(item):
+    """Validate a promoted source without needing the archive row in hand."""
+    if not isinstance(item, dict):
+        return False
+    decision = item.get("_semantic_material_update_decision") or {}
+    canonical_slug = str(
+        item.get("_pre_generation_material_update_canonical_slug") or ""
+    ).strip()
+    authorization = item.get("_canonical_write_authorization")
+    return bool(
+        item.get("_semantic_material_update")
+        and item.get("_pre_generation_material_update_promotion")
+        and canonical_slug
+        and isinstance(decision, dict)
+        and str(decision.get("status") or "") == "validated"
+        and str(decision.get("action") or "") == SEMANTIC_ACTION_UPDATE
+        and decision.get("same_real_world_event") is True
+        and decision.get("material_new_update") is True
+        and str(decision.get("selected_candidate_slug") or "").strip() == canonical_slug
+        and authorization_matches_target is not None
+        and authorization_matches_target(authorization, canonical_slug)
+    )
+
+
+def _remember_selected_material_update_target(item):
+    """Record one live-writer-selected canonical material-update target for commit checks."""
+    if not _has_self_consistent_pre_generation_material_update_authority(item):
+        return False
+    slug = str(item.get("_pre_generation_material_update_canonical_slug") or "").strip()
+    if not slug:
+        return False
+    decision = item.get("_semantic_material_update_decision") or {}
+    row = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS.setdefault(slug, {
+        "canonical_slug": slug,
+        "source_headlines": [],
+        "source_urls": [],
+        "max_confidence": 0.0,
+    })
+    headline = str(item.get("source_headline") or item.get("source_title") or item.get("title") or item.get("headline") or "").strip()
+    source_url = _normalized_external_source_url(
+        item.get("source_url") or item.get("_source_url") or item.get("link")
+    )
+    if headline and headline not in row["source_headlines"]:
+        row["source_headlines"].append(headline)
+    if source_url and source_url not in row["source_urls"]:
+        row["source_urls"].append(source_url)
+    row["max_confidence"] = max(
+        float(row.get("max_confidence") or 0.0),
+        float(decision.get("confidence") or 0.0),
+    )
+    return True
+
+
+def _carry_pre_generation_material_update_authority(item, source):
+    """Carry the exact current-run material-update receipt into generated copy."""
+    if not isinstance(item, dict) or not _has_self_consistent_pre_generation_material_update_authority(source):
+        return False
+    for key in (
+        "editorial_story_id", "_editorial_story_id", "_editorial_route",
+        "editorial_route", "_editorial_relationship",
+        "_editorial_relationship_confidence", "_editorial_new_facts",
+        "_semantic_material_update", "_semantic_material_update_decision",
+        "_pre_generation_material_update_promotion",
+        "_pre_generation_material_update_canonical_slug",
+        "_canonical_write_authorization", "canonical_slug",
+        "canonical_publication_id", "_canonical_context_slug",
+        "_canonical_context_headline", "_canonical_context_body",
+        "_canonical_context_first_published", "_canonical_context_basis",
+        "_story_aware_update_context",
+    ):
+        value = source.get(key)
+        if value not in (None, "", [], {}):
+            item[key] = copy.deepcopy(value)
+    item["story_form"] = "update"
+    item["_protected_material_update"] = True
+    if _source_candidate_publishable(source):
+        item["_source_candidate_publishable_verified"] = True
+    for published_key in ("source_published", "published_raw", "published", "first_published", "date"):
+        if source.get(published_key):
+            item["source_published"] = source.get(published_key)
+            break
+    _remember_selected_material_update_target(item)
+    return True
+
+
+def _defer_protected_material_update_quality_failure(item, diagnostics, *, guard):
+    """Queue a repairable validated material update for grounded recomposition."""
+    if not _has_self_consistent_pre_generation_material_update_authority(item):
+        return False
+    missing = list((diagnostics or {}).get("missing") or [])
+    dangerous = {
+        "generated_copy_drifted_from_source_focus",
+        "generated_jurisdiction_not_supported_by_source",
+        "source_jurisdiction_conflicts_with_generated_county",
+    }
+    if dangerous.intersection(missing):
+        return False
+    item["_force_semantic_material_update_recomposition"] = True
+    item.setdefault("_protected_material_update_quality_holds", []).append({
+        "guard": str(guard or "publication_quality"),
+        "missing": missing,
+    })
+    return True
+
+
+def _protected_material_update_pending_recomposition(item):
+    """Return True only for a target-bound update explicitly queued for repair."""
+    return bool(
+        isinstance(item, dict)
+        and item.get("_force_semantic_material_update_recomposition")
+        and _has_self_consistent_pre_generation_material_update_authority(item)
+    )
+
+
+def _generated_item_passes_final_publication_quality(item, category_key, *, hero=False):
+    """Keep a protected update alive until the canonical recomposition barrier.
+
+    The ordinary article-depth contract remains authoritative for every other item.
+    A selected validated material update may be temporarily thin or context-poor only
+    because it has already been queued for grounded canonical recomposition. It still
+    must be eligible for the category; dangerous topic/jurisdiction mistakes are not
+    bypassed here.
+    """
+    if not isinstance(item, dict):
+        return False
+    return bool(
+        _hero_eligible(category_key, item)
+        and (
+            _publishable_article(item, hero=hero)
+            or _protected_material_update_pending_recomposition(item)
+        )
+    )
+
+
 def _has_target_bound_pre_generation_material_update_authority(item, canonical):
     """Return True when this exact canonical already passed pre-generation materiality.
 
@@ -32543,6 +32723,45 @@ def _late_published_skip_material_update_promotion(
             "validation_errors": list(decision.get("validation_errors") or []),
             "action": "update_existing_canonical",
         })
+        if item.get("_force_semantic_material_update_recomposition"):
+            composition_input = copy.deepcopy(item)
+            if item.get("article_text") or item.get("source_summary"):
+                composition_input["body"] = (
+                    item.get("article_text") or item.get("source_summary") or item.get("body") or ""
+                )
+            if item.get("source_headline") or item.get("source_title"):
+                composition_input["headline"] = (
+                    item.get("source_headline") or item.get("source_title") or item.get("headline") or ""
+                )
+            merged, composition = _semantic_material_update_composition(
+                canonical, composition_input, decision, report,
+                phase="generated_material_update_quality_repair",
+            )
+            row["composition_status"] = str((composition or {}).get("status") or "")
+            if merged is None:
+                row["promoted"] = False
+                row["action"] = "hold_protected_material_update_recomposition_failed"
+                row["validation_errors"] = list((composition or {}).get("validation_errors") or [])
+                return None, row
+            framing = _article_framing_diagnostics(merged, composition_input)
+            row["recomposition_framing_missing"] = list(framing.get("missing") or [])
+            if not framing.get("passed", False):
+                row["promoted"] = False
+                row["action"] = "hold_protected_material_update_recomposition_framing_failed"
+                row["validation_errors"] = list(framing.get("missing") or [])
+                return None, row
+            merged["_canonical_write_authorization"] = copy.deepcopy(
+                item.get("_canonical_write_authorization") or {}
+            )
+            merged["_semantic_material_update"] = True
+            merged["_semantic_material_update_decision"] = copy.deepcopy(decision)
+            merged["_semantic_material_update_composition"] = copy.deepcopy(composition or {})
+            merged["_pre_generation_material_update_promotion"] = True
+            merged["_pre_generation_material_update_canonical_slug"] = str(canonical.get("slug") or "")
+            merged["_protected_material_update"] = True
+            merged.pop("_force_semantic_material_update_recomposition", None)
+            row["eligibility_reason"] = "pre_generation_material_update_quality_recomposed"
+            return merged, row
         return copy.deepcopy(item), row
 
     if not should_check:
@@ -32927,6 +33146,7 @@ def _stamp_current_run_story_ids(data, headlines):
                 item["canonical_publication_id"] = _stable_publication_id(
                     item["canonical_slug"]
                 )
+            _remember_selected_material_update_target(item)
         stamped += 1
     return stamped
 
@@ -33526,12 +33746,68 @@ def ensure_final_live_visual_images(all_categories, top_cat, output_root=None):
     return report
 
 
+def _validate_promoted_material_updates_committed(output_root=None):
+    """Fail a green build when a selected validated material update vanished.
+
+    Source-level promotion can occur in broad feeds for categories that later reject
+    that source as off-topic. The hard invariant therefore tracks only canonical
+    targets the live category writer actually selected (including cached selections
+    re-stamped in the current run). Once selected, that validated development must
+    produce a committed canonical material update before the workflow may succeed.
+    """
+    expected = {
+        str(slug): copy.deepcopy(row)
+        for slug, row in (CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS or {}).items()
+        if str(slug or "").strip() and isinstance(row, dict)
+    }
+
+    root = Path(output_root or OUTPUT_DIR)
+    gate = _read_json_file(root / "data" / "semantic-publication-gate.json", {})
+    applied = {
+        str(row.get("target_slug") or "").strip()
+        for row in (gate.get("material_updates", []) if isinstance(gate, dict) else [])
+        if isinstance(row, dict) and str(row.get("target_slug") or "").strip()
+    }
+    missing = sorted(set(expected) - applied)
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "policy": "every_selected_validated_material_update_must_commit",
+        "expected_canonical_count": len(expected),
+        "applied_canonical_count": len(set(expected) & applied),
+        "missing_canonical_count": len(missing),
+        "expected": [copy.deepcopy(expected[slug]) for slug in sorted(expected)],
+        "applied_target_slugs": sorted(applied),
+        "missing_target_slugs": missing,
+        "passed": not missing,
+    }
+    path = root / "data" / "material-update-publication-invariant.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if missing:
+        details = []
+        for slug in missing[:5]:
+            headline = str((expected.get(slug) or {}).get("source_headlines", [""])[0] if (expected.get(slug) or {}).get("source_headlines") else "")
+            details.append(f"{slug}: {headline[:80]}")
+        raise RuntimeError(
+            "MATERIAL UPDATE PUBLICATION INVARIANT FAILED: selected validated update(s) "
+            "were absent from committed canonical updates — " + "; ".join(details)
+        )
+    if expected:
+        print(
+            "  Material-update publication invariant PASSED: "
+            f"{len(expected)} selected canonical update(s) committed"
+        )
+    return report
+
+
 def main():
     global CURRENT_RUN_EDITORIAL_IDENTITIES, CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
     global CROSS_SOURCE_IDENTITY_OBSERVATIONS, CURRENT_RUN_QUARANTINED_STORY_IDS
     global CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS
+    global CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS
     _build_started = time.perf_counter()
     _stage_started = _build_started
     GENERATION_CACHE.reset_stats()
@@ -33542,6 +33818,7 @@ def main():
     CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+    CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
     # The publication-to-shadow identity bridge is strictly per build. A reused
     # interpreter (tests, local tooling, or a future worker process) must never let a
     # prior run's canonical decision influence the next shadow comparison.
@@ -34303,11 +34580,20 @@ def main():
 
             _final_hero_update_diag = _update_lead_diagnostics(data.get("hero", {}), data.get("hero", {}))
             if _final_hero_update_diag.get("required") and not _final_hero_update_diag.get("passed"):
-                raise ContextualUpdateLeadError(
-                    "Contextless update lead after enrichment: "
-                    + ",".join(_final_hero_update_diag.get("missing") or ["unknown"])
-                    + f" — {_final_hero_update_diag.get('headline','')[:120]}"
-                )
+                if _defer_protected_material_update_quality_failure(
+                    data.get("hero", {}), _final_hero_update_diag,
+                    guard="contextual_update_lead_after_enrichment",
+                ):
+                    print(
+                        "  Protected material update hero retained after enrichment for grounded recomposition: "
+                        f"'{data.get('hero', {}).get('headline','')[:65]}'"
+                    )
+                else:
+                    raise ContextualUpdateLeadError(
+                        "Contextless update lead after enrichment: "
+                        + ",".join(_final_hero_update_diag.get("missing") or ["unknown"])
+                        + f" — {_final_hero_update_diag.get('headline','')[:120]}"
+                    )
             _final_contextual_cards = []
             for _card in data.get("cards", []) or []:
                 _final_card_update_diag = _update_lead_diagnostics(_card, _card)
@@ -34318,6 +34604,16 @@ def main():
                     _category_record.setdefault("contextual_update_lead_rejections", []).append(
                         {"surface": "card_after_enrichment", **_final_card_update_diag}
                     )
+                    if _defer_protected_material_update_quality_failure(
+                        _card, _final_card_update_diag,
+                        guard="contextual_update_lead_after_enrichment",
+                    ):
+                        print(
+                            "  Protected material update card retained after enrichment for grounded recomposition: "
+                            f"'{_card.get('headline','')[:65]}'"
+                        )
+                        _final_contextual_cards.append(_card)
+                        continue
                     print(
                         "  Final update-lead guard removed enriched card: "
                         f"'{_card.get('headline','')[:65]}'"
@@ -34330,11 +34626,20 @@ def main():
                 data.get("hero", {}), data.get("hero", {})
             )
             if _final_hero_framing.get("required") and not _final_hero_framing.get("passed"):
-                raise ArticleFramingIntegrityError(
-                    "Article framing integrity failed after enrichment: "
-                    + ",".join(_final_hero_framing.get("missing") or ["unknown"])
-                    + f" — {_final_hero_framing.get('headline','')[:120]}"
-                )
+                if _defer_protected_material_update_quality_failure(
+                    data.get("hero", {}), _final_hero_framing,
+                    guard="article_framing_after_enrichment",
+                ):
+                    print(
+                        "  Protected material update hero retained after framing recheck for grounded recomposition: "
+                        f"'{data.get('hero', {}).get('headline','')[:65]}'"
+                    )
+                else:
+                    raise ArticleFramingIntegrityError(
+                        "Article framing integrity failed after enrichment: "
+                        + ",".join(_final_hero_framing.get("missing") or ["unknown"])
+                        + f" — {_final_hero_framing.get('headline','')[:120]}"
+                    )
             _final_framed_cards = []
             for _card in data.get("cards", []) or []:
                 _final_card_framing = _article_framing_diagnostics(_card, _card)
@@ -34345,6 +34650,16 @@ def main():
                     _category_record.setdefault("article_framing_rejections", []).append(
                         {"surface": "card_after_enrichment", **_final_card_framing}
                     )
+                    if _defer_protected_material_update_quality_failure(
+                        _card, _final_card_framing,
+                        guard="article_framing_after_enrichment",
+                    ):
+                        print(
+                            "  Protected material update card retained after framing recheck for grounded recomposition: "
+                            f"'{_card.get('headline','')[:65]}'"
+                        )
+                        _final_framed_cards.append(_card)
+                        continue
                     print(
                         "  Final article-framing guard removed enriched card: "
                         f"'{_card.get('headline','')[:65]}'"
@@ -34367,14 +34682,16 @@ def main():
             # permanent archive recovery step will fill the section with older real work.
             publishable_cards = []
             for card in data.get("cards", []):
-                if _publishable_article(card, hero=False) and _hero_eligible(cat_key, card):
+                if _generated_item_passes_final_publication_quality(
+                    card, cat_key, hero=False
+                ):
                     card["enriched"] = True
                     publishable_cards.append(card)
             data["cards"] = publishable_cards
 
-            hero_ok = (
-                _hero_eligible(cat_key, data.get("hero", {}))
-                and _publishable_article(data.get("hero", {}), hero=True)
+            _hero_item = data.get("hero", {})
+            hero_ok = _generated_item_passes_final_publication_quality(
+                _hero_item, cat_key, hero=True
             )
             if hero_ok:
                 data["hero"]["enriched"] = True
@@ -34763,6 +35080,7 @@ def main():
     # Archive first — creates all article pages and populates archive.json so the
     # homepage grid can link to permalinks that actually exist with matching slugs.
     _current_regression_report = write_archives(all_categories, top_cat)
+    _validate_promoted_material_updates_committed(OUTPUT_DIR)
     apply_custom_retirements_to_archive(OUTPUT_DIR)
 
     # Publication identity reconciliation can remove duplicate archive rows and turn

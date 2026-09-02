@@ -1291,3 +1291,325 @@ def test_generated_promoted_custom_canonical_placement_is_not_deleted(monkeypatc
     decisions = report.get("late_published_skip_materiality_decisions") or []
     assert decisions and decisions[0]["promoted"] is True
     assert decisions[0]["eligibility_reason"] == "pre_generation_material_update_authority_reused"
+
+
+def _debevec_canonical():
+    return {
+        "slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+        "headline": "Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach",
+        "teaser": "Deputies are searching for Michael Anthony Debevec II after he was last seen near Chastain Beach.",
+        "body": (
+            "The Martin County Sheriff's Office is searching for Michael Anthony Debevec II, "
+            "an Oklahoma visitor who was last seen after going to Chastain Beach. His vehicle "
+            "was later found near the beach as deputies continued the missing-person search."
+        ),
+        "category_key": "martin",
+        "date": "2026-08-29",
+        "lastmod": "2026-08-29",
+        "source_url": "https://example.com/original-debevec-search",
+        "editorial_story_id": "story_007411",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "is_custom": True,
+        "authoritative_custom": True,
+    }
+
+
+def _authorized_debevec_body_source(g):
+    canonical = _debevec_canonical()
+    decision = {
+        "status": "validated",
+        "action": g.SEMANTIC_ACTION_UPDATE,
+        "recommended_action": g.SEMANTIC_ACTION_UPDATE,
+        "selected_candidate_slug": canonical["slug"],
+        "same_real_world_event": True,
+        "material_new_update": True,
+        "confidence": 0.99,
+        "shared_anchors": ["Michael Anthony Debevec II", "Chastain Beach"],
+        "novel_facts": [
+            "A body believed to be Debevec was recovered in mangroves near the House of Refuge",
+            "The body was wearing clothing matching what Debevec was believed to be wearing",
+            "Positive identification remained pending",
+        ],
+        "reason": "Body recovery is a major development in the existing missing-person case.",
+        "validation_errors": [],
+    }
+    source = {
+        "title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+        "headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+        "link": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
+        "published": "Mon, 01 Sep 2026 16:05:00 -0400",
+        "source_quality": "full",
+        "source_type": "full_source",
+        "article_text": (
+            "The Martin County Sheriff's Office recovered a body from mangroves near the House of Refuge "
+            "during the search for Michael Anthony Debevec II. Sheriff John Budensiek said investigators "
+            "believe the body may be Debevec because the clothing matched what he was believed to be wearing, "
+            "but positive identification was still pending. Investigators had found Debevec's vehicle at "
+            "Chastain Beach and later recovered his backpack before locating the body. The medical examiner "
+            "will work to determine identity and cause of death. Debevec's family was notified of the discovery."
+        ),
+        "summary": "A body believed to be missing man Michael Debevec was found in Martin County mangroves.",
+        "editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_route": "update_existing",
+        "editorial_route": "update_existing",
+        "_editorial_relationship": g.IDENTITY_OUTCOME_VERIFIED,
+        "_editorial_relationship_confidence": 0.99,
+        "_editorial_new_facts": list(decision["novel_facts"]),
+        "_semantic_material_update": True,
+        "_semantic_material_update_decision": decision,
+        "_pre_generation_material_update_promotion": True,
+        "_pre_generation_material_update_canonical_slug": canonical["slug"],
+        "canonical_slug": canonical["slug"],
+    }
+    g._attach_canonical_update_context(source, canonical, "test_debevec")
+    g._stamp_canonical_write_authorization(
+        source,
+        canonical,
+        {
+            "outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "identity_outcome": g.IDENTITY_OUTCOME_VERIFIED,
+            "evidence_tier": "known_canonical_plus_semantic_materiality",
+            "write_authorized": True,
+            "proof_type": "published_skip_canonical_plus_semantic_materiality",
+            "reason": "Major body-recovery development.",
+            "reason_codes": ["semantic_material_update_validated"],
+        },
+        basis="pre_generation_material_update_promotion",
+    )
+    return canonical, source
+
+
+def test_debevec_validated_material_update_survives_repairable_card_quality_guard():
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    generated_card = {
+        "headline": "Body found in Hutchinson Island mangroves believed to be missing Port St. Lucie man",
+        "body": (
+            "A body was recovered from deep within mangroves near the House of Refuge on Tuesday. "
+            "Investigators said the deceased person was wearing clothing matching the missing man."
+        ),
+        "source_index": 1,
+    }
+
+    assert g._carry_pre_generation_material_update_authority(generated_card, source) is True
+    update_diag = g._update_lead_diagnostics(generated_card, generated_card)
+    assert update_diag["passed"] is False
+    assert any(code.startswith("original_event_") for code in update_diag["missing"])
+    assert g._defer_protected_material_update_quality_failure(
+        generated_card, update_diag, guard="contextual_update_lead"
+    ) is True
+    assert generated_card["_force_semantic_material_update_recomposition"] is True
+    assert generated_card["_pre_generation_material_update_canonical_slug"] == canonical["slug"]
+
+
+def test_debevec_quality_held_generated_card_is_recomposed_not_suppressed(monkeypatch):
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    generated = {
+        "headline": "Body found in Hutchinson Island mangroves believed to be missing Port St. Lucie man",
+        "body": "A body was recovered from deep within the mangroves Tuesday.",
+        "source_index": 1,
+        "source_headline": source["title"],
+        "source_title": source["title"],
+        "article_text": source["article_text"],
+        "source_summary": source["summary"],
+        "source_url": source["source_url"],
+        "link": source["source_url"],
+    }
+    assert g._carry_pre_generation_material_update_authority(generated, source) is True
+    generated["_force_semantic_material_update_recomposition"] = True
+
+    repaired = dict(generated)
+    repaired.update({
+        "headline": "Body found during search for missing Michael Debevec in Martin County",
+        "teaser": "A body believed to be Michael Debevec was found during the Martin County search; formal identification remains pending.",
+        "body": (
+            "Martin County deputies searching for missing Oklahoma visitor Michael Anthony Debevec II recovered "
+            "a body Tuesday in mangroves near the House of Refuge, a major development in the search that began "
+            "after he was last seen near Chastain Beach. Investigators said the clothing matched what Debevec was "
+            "believed to be wearing, although formal identification remained pending.\n\n"
+            "Investigators had found Debevec's vehicle at Chastain Beach and later recovered his backpack before "
+            "locating the body deeper in the mangroves.\n\n"
+            "The medical examiner will work to confirm the identity and determine the cause of death."
+        ),
+    })
+
+    monkeypatch.setattr(
+        g,
+        "_published_skip_canonical",
+        lambda item, archive: (canonical, "durable_custom_incident_identity:missing-person|michael-anthony-debevec"),
+    )
+    monkeypatch.setattr(
+        g,
+        "_semantic_material_update_composition",
+        lambda canonical_arg, incoming_arg, decision_arg, report_arg, phase="": (
+            dict(repaired),
+            {"status": "validated", "validation_errors": []},
+        ),
+    )
+    monkeypatch.setattr(
+        g,
+        "_article_framing_diagnostics",
+        lambda item, source=None: {"required": True, "passed": True, "missing": []},
+    )
+
+    data = {"hero": generated, "cards": []}
+    report = {"summary": {}}
+    removed = g._suppress_published_skip_placements(
+        data,
+        [canonical],
+        "martin",
+        semantic_cache={},
+        semantic_report=report,
+    )
+
+    assert removed == []
+    assert data["hero"]["headline"].startswith("Body found during search")
+    assert data["hero"].get("_force_semantic_material_update_recomposition") is None
+    decisions = report.get("late_published_skip_materiality_decisions") or []
+    assert decisions[-1]["eligibility_reason"] == "pre_generation_material_update_quality_recomposed"
+    assert decisions[-1]["promoted"] is True
+
+
+def test_material_update_publication_invariant_fails_when_promoted_update_vanishes(tmp_path):
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
+        canonical["slug"]: {
+            "canonical_slug": canonical["slug"],
+            "source_headlines": [source["title"]],
+            "source_urls": [source["source_url"]],
+            "max_confidence": 0.99,
+        }
+    }
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "semantic-publication-gate.json").write_text(
+        json.dumps({"material_updates": []}), encoding="utf-8"
+    )
+
+    import pytest
+    with pytest.raises(RuntimeError, match="MATERIAL UPDATE PUBLICATION INVARIANT FAILED"):
+        g._validate_promoted_material_updates_committed(tmp_path)
+
+    report = json.loads((data_dir / "material-update-publication-invariant.json").read_text())
+    assert report["passed"] is False
+    assert report["missing_target_slugs"] == [canonical["slug"]]
+
+
+def test_material_update_publication_invariant_passes_after_canonical_commit(tmp_path):
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
+        canonical["slug"]: {
+            "canonical_slug": canonical["slug"],
+            "source_headlines": [source["title"]],
+            "source_urls": [source["source_url"]],
+            "max_confidence": 0.99,
+        }
+    }
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "semantic-publication-gate.json").write_text(
+        json.dumps({"material_updates": [{"target_slug": canonical["slug"]}]}),
+        encoding="utf-8",
+    )
+
+    report = g._validate_promoted_material_updates_committed(tmp_path)
+    assert report["passed"] is True
+    assert report["missing_target_slugs"] == []
+
+
+def test_debevec_contextless_generated_hero_is_not_deleted_before_recomposition(monkeypatch):
+    """Production regression: 2026-09-01 body-recovery copy must survive prose guards."""
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    source.update({
+        "hero_eligible": "yes",
+        "category_match_score": 99,
+        "feed_url": "https://example.com/rss",
+        "image_url": "",
+    })
+    payload = json.dumps({
+        "hero": {
+            "headline": "Body found in Hutchinson Island mangroves believed to be missing Port St. Lucie man",
+            "body": (
+                "A body was recovered from deep within mangroves near the House of Refuge on Tuesday. "
+                "Investigators said the deceased person was wearing clothing matching the missing man."
+            ),
+            "urgency_score": 9,
+            "published": "Mon, 01 Sep 2026 16:05:00 -0400",
+            "source_index": 1,
+        },
+        "cards": [],
+    })
+
+    class _Messages:
+        def create(self, **kwargs):
+            return types.SimpleNamespace(content=[types.SimpleNamespace(text=payload)])
+
+    monkeypatch.setattr(g, "client", types.SimpleNamespace(messages=_Messages()))
+    monkeypatch.setattr(g, "load_archive", lambda *args, **kwargs: [])
+
+    data = g.generate_category_content("martin", "Martin County", [source])
+
+    assert data["hero"]["headline"].startswith("Body found")
+    assert data["hero"]["_protected_material_update"] is True
+    assert data["hero"]["_force_semantic_material_update_recomposition"] is True
+    assert data["hero"]["_pre_generation_material_update_canonical_slug"] == canonical["slug"]
+    assert data["_contextual_update_lead_rejections"]
+    assert data["_article_framing_rejections"]
+
+
+def test_debevec_protected_material_update_bypasses_only_thinness_until_recomposition(monkeypatch):
+    """A selected validated update cannot be discarded as thin before its repair barrier."""
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    generated = {
+        "headline": "Body found in Hutchinson Island mangroves believed to be missing Port St. Lucie man",
+        "body": "A body was found in Hutchinson Island mangroves in Martin County.",
+        "source_title": source["title"],
+        "article_text": source["article_text"],
+        "source_summary": source["summary"],
+        "source_url": source["source_url"],
+        "link": source["source_url"],
+        "category_key": "martin",
+    }
+    assert g._carry_pre_generation_material_update_authority(generated, source) is True
+    generated["_force_semantic_material_update_recomposition"] = True
+
+    # Prove this fixture is actually too thin under the ordinary standalone-article rule.
+    assert g._publishable_article(generated, hero=False) is False
+    monkeypatch.setattr(g, "_hero_eligible", lambda category_key, item: category_key == "martin")
+
+    assert g._generated_item_passes_final_publication_quality(
+        generated, "martin", hero=False
+    ) is True
+
+    ordinary = dict(generated)
+    ordinary.pop("_force_semantic_material_update_recomposition", None)
+    assert g._generated_item_passes_final_publication_quality(
+        ordinary, "martin", hero=False
+    ) is False
+
+
+def test_protected_material_update_does_not_bypass_dangerous_jurisdiction_failure():
+    g = _load_generate()
+    _canonical, source = _authorized_debevec_body_source(g)
+    generated = {
+        "headline": "Unrelated generated framing",
+        "body": "Generated copy drifted outside the verified source jurisdiction.",
+    }
+    assert g._carry_pre_generation_material_update_authority(generated, source) is True
+    diagnostics = {
+        "required": True,
+        "passed": False,
+        "missing": ["generated_jurisdiction_not_supported_by_source"],
+    }
+    assert g._defer_protected_material_update_quality_failure(
+        generated, diagnostics, guard="article_framing"
+    ) is False
+    assert generated.get("_force_semantic_material_update_recomposition") is not True
