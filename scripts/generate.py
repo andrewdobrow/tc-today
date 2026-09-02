@@ -776,6 +776,11 @@ CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
 # carrying validated pre-generation material-update authority. This is narrower than
 # every source-level promotion and drives the terminal no-silent-loss invariant.
 CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
+# Deep copies of the FINAL category placements that created those obligations.
+# These are publication-only receipts: they are never added back to the visible
+# category deck, but write_archives() consumes them so later hero/card coalescing
+# cannot erase a validated canonical update before it reaches the commit barrier.
+CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS = {}
 # main() owns this only until write_archives() consumes it. It carries semantic
 # decisions made at the pre-archive generated/cached placement suppression boundary.
 CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT = {}
@@ -22537,22 +22542,31 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
     return None, forced_slug, story_id
 
 def _publication_copy_rank(entry):
-    """Rank competing generated copies for one public story.
+    """Rank competing copies for one public story without losing update receipts.
 
-    Manually authored custom copy is absolute editorial authority. It outranks hero
-    placement, images, body length, and every generated/feed version so coalescing can
-    never replace the submitted body while leaving only its headline on cards.
+    Current manual queue payloads remain the highest editorial authority. A validated,
+    target-bound material-update copy outranks ordinary hero/image/length preferences so
+    a visually stronger stale clone cannot erase the only copy authorized to refresh the
+    canonical. Durable custom provenance still outranks ordinary generated copy, but it
+    is distinct from a current manual submission.
     """
     _ck, _cl, item = entry
     is_custom = 1 if item.get("is_custom") or item.get("authoritative_custom") else 0
+    current_manual_custom = 1 if _is_current_manual_custom_submission(item) else 0
     active_custom_payload = 1 if is_custom and not item.get("_archive_only") else 0
+    material_update = 1 if _has_self_consistent_pre_generation_material_update_authority(item) else 0
     has_real_img = 1 if (item.get("image_url") and not item.get("image_from_google")) else 0
     is_hero_copy = 1 if item.get("_is_hero_copy") else 0
     body_words = _word_count(item.get("body", ""))
-    # A current queue payload must outrank an archive-recovery clone, even when the
-    # clone is currently a hero. Otherwise the clone wins coalescing and is then
-    # silently skipped by the archive-only guard before the custom permalink exists.
-    return (is_custom, active_custom_payload, has_real_img, is_hero_copy, body_words)
+    return (
+        current_manual_custom,
+        material_update,
+        is_custom,
+        active_custom_payload,
+        has_real_img,
+        is_hero_copy,
+        body_words,
+    )
 
 
 
@@ -30240,6 +30254,29 @@ def write_archives(all_categories, top_cat):
                 continue
             all_articles.append((cat["category_key"], cat["category_label"], card))
 
+    # A validated update can legitimately disappear from the visible deck later when
+    # homepage/category identity coalescing chooses a different presentation clone. The
+    # hidden receipt preserves the accepted source copy for the canonical write barrier
+    # without reintroducing it as a second visible placement. Append these last so a
+    # canonical update is the final publication transaction when its coalesce key differs
+    # from an older durable-custom presentation clone.
+    for _target_slug, _commit_item in sorted(
+        (CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS or {}).items()
+    ):
+        if not isinstance(_commit_item, dict):
+            continue
+        _commit_key = str(
+            _commit_item.get("_material_update_category_key")
+            or _commit_item.get("category_key")
+            or "top_news"
+        )
+        _commit_label = str(
+            _commit_item.get("_material_update_category_label")
+            or (CATEGORIES.get(_commit_key, {}) or {}).get("label")
+            or _commit_key.replace("_", " ").title()
+        )
+        all_articles.append((_commit_key, _commit_label, copy.deepcopy(_commit_item)))
+
     # A story classified into multiple categories (e.g. a Hobe Sound business opening
     # is both Business and Martin County) appears once per category in all_articles,
     # each writing to the SAME slug. Whichever is processed last wins — which meant the
@@ -30287,7 +30324,10 @@ def write_archives(all_categories, top_cat):
         headline = hero.get("headline", "").strip()
         if not headline:
             continue
-        if not _publishable_article(hero, hero=bool(hero.get("_is_hero_copy"))):
+        if not (
+            _publishable_article(hero, hero=bool(hero.get("_is_hero_copy")))
+            or _protected_material_update_pending_recomposition(hero)
+        ):
             hero["_publication_skip_reason"] = "thin_article_before_permalink"
             print(f"  Skipped thin article before permalink creation: {headline[:60]}")
             continue
@@ -33189,6 +33229,74 @@ def _remember_selected_material_update_target(item):
     return True
 
 
+def _remember_surviving_selected_material_update_targets(data, category_key):
+    """Create commit obligations only from FINAL surviving category placements.
+
+    ``_carry_pre_generation_material_update_authority`` runs while model attempts are
+    still provisional, so it must never create a terminal no-silent-loss obligation.
+    This function is called only after the category's enrichment, framing, publication
+    quality and published-story suppression gates have finished.  For each surviving
+    validated update it records both the canonical target and a hidden publication copy
+    that ``write_archives`` can consume even if later surface coalescing removes the
+    visible hero/card clone.
+    """
+    if not isinstance(data, dict):
+        return 0
+    category_key = str(category_key or data.get("category_key") or "").strip()
+    category_label = str(
+        (CATEGORIES.get(category_key, {}) or {}).get("label")
+        or data.get("category_label")
+        or category_key.replace("_", " ").title()
+    ).strip()
+    candidates = []
+    hero = data.get("hero")
+    if isinstance(hero, dict):
+        candidates.append(hero)
+    candidates.extend(
+        card for card in (data.get("cards") or []) if isinstance(card, dict)
+    )
+
+    remembered = set()
+    for item in candidates:
+        if not _has_self_consistent_pre_generation_material_update_authority(item):
+            continue
+        slug = str(
+            item.get("_pre_generation_material_update_canonical_slug")
+            or item.get("canonical_slug")
+            or ""
+        ).strip()
+        if not slug:
+            continue
+        if not _remember_selected_material_update_target(item):
+            continue
+
+        commit_copy = copy.deepcopy(item)
+        commit_copy["_material_update_commit_copy"] = True
+        commit_copy["_material_update_category_key"] = category_key
+        commit_copy["_material_update_category_label"] = category_label
+        commit_copy["category_key"] = category_key or commit_copy.get("category_key", "")
+        commit_copy["category_label"] = category_label or commit_copy.get("category_label", "")
+        # This copy is a publication receipt, not a visible hero placement. Keeping the
+        # hero flag would let image/placement preference defeat another update receipt.
+        commit_copy["_is_hero_copy"] = False
+        commit_copy["enriched"] = True
+
+        existing = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS.get(slug)
+        if existing is None:
+            CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS[slug] = commit_copy
+        else:
+            existing_entry = (
+                str(existing.get("_material_update_category_key") or category_key),
+                str(existing.get("_material_update_category_label") or category_label),
+                existing,
+            )
+            candidate_entry = (category_key, category_label, commit_copy)
+            if _publication_copy_rank(candidate_entry) > _publication_copy_rank(existing_entry):
+                CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS[slug] = commit_copy
+        remembered.add(slug)
+    return len(remembered)
+
+
 def _carry_pre_generation_material_update_authority(item, source):
     """Carry the exact current-run material-update receipt into generated copy."""
     if not isinstance(item, dict) or not _has_self_consistent_pre_generation_material_update_authority(source):
@@ -33217,7 +33325,6 @@ def _carry_pre_generation_material_update_authority(item, source):
         if source.get(published_key):
             item["source_published"] = source.get(published_key)
             break
-    _remember_selected_material_update_target(item)
     return True
 
 
@@ -33774,7 +33881,6 @@ def _stamp_current_run_story_ids(data, headlines):
                 item["canonical_publication_id"] = _stable_publication_id(
                     item["canonical_slug"]
                 )
-            _remember_selected_material_update_target(item)
         stamped += 1
     return stamped
 
@@ -34466,6 +34572,7 @@ def main():
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS
     global CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS
+    global CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS
     _build_started = time.perf_counter()
     _stage_started = _build_started
     GENERATION_CACHE.reset_stats()
@@ -34477,6 +34584,7 @@ def main():
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
     CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
+    CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS = {}
     # The publication-to-shadow identity bridge is strictly per build. A reused
     # interpreter (tests, local tooling, or a future worker process) must never let a
     # prior run's canonical decision influence the next shadow comparison.
@@ -35033,6 +35141,14 @@ def main():
                 GENERATION_CACHE.save()
 
             if data.get("hero") and not data.get("_drop_category") and data.get("category_key") == cat_key:
+                _remembered_updates = _remember_surviving_selected_material_update_targets(
+                    data, cat_key
+                )
+                if _remembered_updates:
+                    print(
+                        f"  Material-update commit queue: {_remembered_updates} surviving "
+                        f"canonical update(s) retained for {cat_config['label']}"
+                    )
                 all_categories.append(data)
                 GENERATION_CACHE.stats["category_generation_skipped"] += 1
                 print(
@@ -35430,6 +35546,14 @@ def main():
                     print(
                         f"  Published-story guard removed {len(_generated_published_suppressions)} "
                         "generated placement(s)"
+                    )
+                _remembered_updates = _remember_surviving_selected_material_update_targets(
+                    data, cat_key
+                )
+                if _remembered_updates:
+                    print(
+                        f"  Material-update commit queue: {_remembered_updates} surviving "
+                        f"canonical update(s) retained for {cat_config['label']}"
                     )
                 GENERATION_CACHE.put(
                     "categories",
