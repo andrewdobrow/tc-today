@@ -149,6 +149,19 @@ except Exception:
 
 TCT_PRESENTATION_VERSION = "6.7.4-stale-source-identity-guard"
 
+MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
+MEDIAVINE_SCRIPT_TAG = (
+    '<script type="text/javascript" async="async" data-noptimize="1" '
+    'data-cfasync="false" '
+    f'src="{MEDIAVINE_SCRIPT_SRC}"></script>'
+)
+_MEDIAVINE_SCRIPT_RE = re.compile(
+    r"<script\b[^>]*\bsrc=[\"'](?:https?:)?//scripts\.mediavine\.com/"
+    r"tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf\.js[\"'][^>]*>"
+    r'\s*</script>\s*',
+    re.IGNORECASE,
+)
+
 # Membership launch safety. This remains OFF until live Stripe checkout,
 # webhook-backed entitlement, authentication, article unlock and account
 # management are all verified end-to-end. While off, current readers continue
@@ -157,6 +170,56 @@ MEMBERSHIP_UI_ENABLED = os.getenv("TCT_MEMBERSHIP_UI_ENABLED", "0").strip().lowe
     "1", "true", "yes", "on",
 }
 MEMBERSHIP_SUBSCRIBE_URL = os.getenv("TCT_SUBSCRIBE_URL", "/subscribe.html").strip() or "/subscribe.html"
+
+
+def _normalize_mediavine_script_in_html(page_html):
+    """Place the Mediavine loader exactly once, immediately before </head>."""
+    text = str(page_html or "")
+    head_match = re.search(r'</head\s*>', text, flags=re.IGNORECASE)
+    if head_match is None:
+        raise RuntimeError("Mediavine script injection FAILED: </head> not found")
+
+    # Remove any prior copy of this exact Mediavine tag so the operation is
+    # idempotent and its location is deterministic.
+    text = _MEDIAVINE_SCRIPT_RE.sub("", text)
+    head_match = re.search(r'</head\s*>', text, flags=re.IGNORECASE)
+    insertion = MEDIAVINE_SCRIPT_TAG + "\n"
+    return text[:head_match.start()] + insertion + text[head_match.start():]
+
+
+def _apply_mediavine_script_sitewide(output_root):
+    """Normalize the required Mediavine loader across every rendered HTML page."""
+    root = Path(output_root)
+    html_paths = sorted(path for path in root.rglob("*.html") if path.is_file())
+    updated = 0
+    for path in html_paths:
+        original = path.read_text(encoding="utf-8")
+        normalized = _normalize_mediavine_script_in_html(original)
+        if normalized != original:
+            path.write_text(normalized, encoding="utf-8")
+            updated += 1
+
+    failures = []
+    expected_tail = MEDIAVINE_SCRIPT_TAG + "\n</head>"
+    for path in html_paths:
+        text = path.read_text(encoding="utf-8")
+        if text.count(MEDIAVINE_SCRIPT_SRC) != 1:
+            failures.append(f"{path}:loader_count={text.count(MEDIAVINE_SCRIPT_SRC)}")
+            continue
+        head_match = re.search(r'</head\s*>', text, flags=re.IGNORECASE)
+        if head_match is None:
+            failures.append(f"{path}:missing_head_close")
+            continue
+        prefix = text[:head_match.start()].rstrip()
+        if not prefix.endswith(MEDIAVINE_SCRIPT_TAG):
+            failures.append(f"{path}:not_immediately_before_head_close")
+
+    if failures:
+        raise RuntimeError(
+            "Mediavine sitewide contract FAILED: " + "; ".join(failures[:10])
+        )
+
+    return {"scanned": len(html_paths), "updated": updated}
 
 
 def _header_primary_cta_html():
@@ -35579,6 +35642,12 @@ def main():
     _content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
     if _content_override_count:
         print(f"  Article content overrides applied to {_content_override_count} canonical article(s)")
+    _mediavine_sitewide = _apply_mediavine_script_sitewide(OUTPUT_DIR)
+    print(
+        "  Mediavine loader contract PASSED: "
+        f"{_mediavine_sitewide['scanned']} HTML page(s) verified; "
+        f"{_mediavine_sitewide['updated']} normalized this run"
+    )
     validate_custom_rss_publication_contract(OUTPUT_DIR)
     validate_rss_social_image_contract(OUTPUT_DIR)
     validate_nonstory_publication_contract(all_categories, top_cat, OUTPUT_DIR)
