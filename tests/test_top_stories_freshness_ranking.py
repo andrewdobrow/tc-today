@@ -182,3 +182,64 @@ def test_render_index_no_longer_uses_claude_global_rank_for_top_stories():
     assert "topnews     = global_rank" not in render_source
     assert "_select_top_story_cards(" in render_source
     assert "limit=TOP_STORIES_LIMIT" in render_source
+
+
+def test_category_hero_is_projected_into_top_stories_candidate_pool_and_can_rank():
+    g = _load_generate()
+    now = datetime(2026, 9, 2, 3, 30, tzinfo=timezone.utc)
+    slug = "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach"
+    hero = {
+        "headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+        "body": "A body found in mangroves is believed to be the missing Oklahoma visitor pending formal identification.",
+        "teaser": "A body found in mangroves is believed to be the missing Oklahoma visitor pending formal identification.",
+        "published_raw": _stamp(now, 96),
+        "urgency_score": 8,
+        "_archived_slug": slug,
+        "link": f"https://treasurecoast.today/articles/{slug}.html",
+        # Archive-recovery heroes are not required to carry the ordinary card flag.
+        "enriched": False,
+    }
+    categories = [{
+        "category_key": "martin",
+        "category_label": "Martin County",
+        "hero": hero,
+        "cards": [],
+    }]
+
+    candidates = g._category_hero_top_story_candidates(categories)
+
+    assert len(candidates) == 1
+    candidate = candidates[0]
+    assert candidate is not hero
+    assert candidate["headline"] == hero["headline"]
+    assert candidate["cat_key"] == "martin"
+    assert candidate["enriched"] is True
+    assert candidate["_top_stories_category_hero_candidate"] is True
+    assert hero["enriched"] is False  # projection must not mutate the category hero
+
+    archive = [{
+        "slug": slug,
+        "headline": candidate["headline"],
+        "date": "2026-08-29",
+        "first_published": _stamp(now, 96),
+        "meaningful_update_validated": True,
+        "last_meaningful_update_at": _stamp(now, 1),
+    }]
+    selected, report = g._select_top_story_cards(candidates, archive, now=now, limit=12)
+
+    assert selected == [candidate]
+    assert report["input_count"] == 1
+    assert report["selected"][0]["timestamp_basis"] == "archive:last_meaningful_update_at"
+    assert report["selected"][0]["age_hours"] == 1.0
+
+
+def test_render_index_projects_category_heroes_and_renders_selected_copy_top_news_only():
+    source = Path("scripts/generate.py").read_text(encoding="utf-8")
+    render_source = source[source.index("def render_index("):source.index("\ndef slugify", source.index("def render_index("))]
+
+    assert "_category_hero_candidates = _category_hero_top_story_candidates(all_categories)" in render_source
+    assert "enriched_pool = _category_hero_candidates + [c for c in all_cards_pool if c.get(\"enriched\")]" in render_source
+    assert "_category_hero_permalink_keys" in render_source
+    assert 'card.get("_top_stories_category_hero_candidate")' in render_source
+    assert '_render_data_cat = "all" if _is_category_hero_equivalent else ck' in render_source
+    assert 'if _is_category_hero_equivalent:\n            data_cats = "all"' in render_source

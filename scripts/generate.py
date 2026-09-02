@@ -13905,6 +13905,35 @@ def _select_top_story_cards(cards, archive_entries=(), *, hero_headline="", limi
     return selected, report
 
 
+def _category_hero_top_story_candidates(all_categories):
+    """Project live category heroes into the Top Stories candidate pool.
+
+    Category heroes are real live stories and must be allowed to compete for the
+    all-news Top Stories deck.  They are cloned so homepage-card metadata cannot
+    mutate the category hero itself.  Rendering treats these projected copies as
+    Top-News-only placements, preventing a duplicate card beneath the same hero on
+    its category view.
+    """
+    candidates = []
+    for category in all_categories or []:
+        if not isinstance(category, dict):
+            continue
+        hero = category.get("hero")
+        if not isinstance(hero, dict) or not str(hero.get("headline") or "").strip():
+            continue
+        cat_key = str(category.get("category_key") or "").strip()
+        cat_label = str(category.get("category_label") or "").strip()
+        candidate = copy.deepcopy(hero)
+        candidate["cat_key"] = cat_key or str(candidate.get("cat_key") or "")
+        candidate["category_key"] = str(candidate.get("category_key") or cat_key)
+        candidate["cat_label"] = cat_label or str(candidate.get("cat_label") or "")
+        candidate["enriched"] = True
+        candidate["_top_stories_category_hero_candidate"] = True
+        _apply_category_memberships(candidate, cat_key)
+        candidates.append(candidate)
+    return candidates
+
+
 def _write_top_stories_ranking_report(report, output_root):
     path = Path(output_root) / "data" / "top-stories-ranking-report.json"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -14078,8 +14107,16 @@ def render_index(all_categories, top_cat):
             _apply_category_memberships(card, cat["category_key"])
             all_cards_pool.append(card)
 
-    # Only enriched cards appear on the homepage. Unenriched cards are dropped.
-    enriched_pool = [c for c in all_cards_pool if c.get("enriched")]
+    # A category hero is still a current newsroom story.  Project every live
+    # category hero into the all-news candidate pool so leading a county/topic
+    # cannot accidentally disqualify that story from Top Stories.  These are
+    # cloned Top-News-only placements; category views continue to show the hero
+    # itself rather than a duplicate grid card underneath it.
+    _category_hero_candidates = _category_hero_top_story_candidates(all_categories)
+
+    # Only enriched cards appear on the homepage. Unenriched ordinary cards are
+    # dropped, while live category heroes are always eligible to compete.
+    enriched_pool = _category_hero_candidates + [c for c in all_cards_pool if c.get("enriched")]
 
     # Backfill from the archive: recent enriched stories (last 3 days) that aren't in
     # this run's fresh cards. Feeds rotate stories off quickly, so a story from
@@ -14390,18 +14427,46 @@ def render_index(all_categories, top_cat):
         # Fallback: the story's own published display string
         return card.get("published", "")
 
+    # Canonical category-hero identities are rendered as Top-News-only cards when
+    # selected for the all-news deck.  This prevents a selected Martin/Crime/etc.
+    # hero from appearing a second time beneath itself when the reader switches to
+    # that category.
+    _category_hero_permalink_keys = set()
+    for _category in all_categories:
+        _category_hero = _category.get("hero") if isinstance(_category, dict) else None
+        if not isinstance(_category_hero, dict):
+            continue
+        _category_hero_permalink = _raw_surface_permalink(_category_hero, allow_fallback=False)
+        _category_hero_key = _homepage_permalink_key(_category_hero_permalink)
+        if _category_hero_key:
+            _category_hero_permalink_keys.add(_category_hero_key)
+
     cards_html = ""
     rendered_card_count = 0
     for card in all_cards_display:
         permalink = card_permalink(card)
         if not permalink:
             continue  # No article page exists for this card — skip it
+        _is_category_hero_equivalent = (
+            _homepage_permalink_key(permalink) in _category_hero_permalink_keys
+        )
+        if (
+            card.get("_top_stories_category_hero_candidate")
+            and id(card) not in topnews_ids
+        ):
+            # The real category hero already renders on its category surface.  A
+            # projected hero that did not win a Top Stories slot needs no hidden
+            # duplicate DOM card.
+            continue
         if rendered_card_count == 4:
             cards_html += support_card
         ck        = card.get("cat_key", "all")
         cl        = card.get("cat_label", "")
         category_keys = _apply_category_memberships(card, ck)
         data_cats = " ".join(category_keys)
+        _render_data_cat = "all" if _is_category_hero_equivalent else ck
+        if _is_category_hero_equivalent:
+            data_cats = "all"
         card_time = card_display_date(card)
         _restore_archive_source_image(card, archive_for_links)
         img_url   = card.get("image_url", "")
@@ -14427,7 +14492,7 @@ def render_index(all_categories, top_cat):
         _urgency_text = f"{cl} {card.get('headline','')}".strip().lower()
         urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if card.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
         cards_html += f"""
-      <a href="{permalink}" class="grid-card fade-in" data-cat="{ck}" data-cats="{data_cats}"{topnews_attr}>
+      <a href="{permalink}" class="grid-card fade-in" data-cat="{_render_data_cat}" data-cats="{data_cats}"{topnews_attr}>
         <div class="grid-card-image-wrap">
           <img class="grid-card-image" src="{img_url}" alt="" loading="lazy">
         </div>
