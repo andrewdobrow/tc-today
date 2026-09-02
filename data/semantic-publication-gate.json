@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-02T10:54:33.497778+00:00",
+  "generated_at": "2026-09-02T22:50:51.389191+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,47 +62,82 @@
     }
   },
   "summary": {
-    "evaluations": 42,
-    "candidate_pairs": 1,
+    "evaluations": 47,
+    "candidate_pairs": 2,
     "structured_conflict_overrides": 1,
     "model_calls": 1,
-    "cache_hits": 0,
-    "no_candidate_passes": 41,
+    "cache_hits": 1,
+    "no_candidate_passes": 45,
     "duplicates_preserved": 0,
-    "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
+    "canonical_updates_selected": 1,
+    "new_stories_allowed": 5,
     "retroactive_rows_retained": 41,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
-    "material_update_composer_calls": 0,
-    "material_updates_applied": 1,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
+    "material_update_composer_calls": 1,
+    "material_updates_applied": 2,
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 11,
-    "pre_generation_materiality_promotions": 2,
-    "pre_generation_materiality_duplicates": 3,
-    "pre_generation_materiality_holds": 6,
-    "pre_generation_materiality_model_calls": 8,
-    "pre_generation_materiality_cache_hits": 3,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_evaluations": 6,
+    "pre_generation_materiality_promotions": 4,
+    "pre_generation_materiality_duplicates": 0,
+    "pre_generation_materiality_holds": 2,
+    "pre_generation_materiality_model_calls": 5,
+    "pre_generation_materiality_cache_hits": 1,
+    "terminal_permalink_evaluations": 5,
+    "terminal_permalink_candidate_pairs": 60,
+    "terminal_permalink_model_calls": 5,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 4,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
-    "terminal_permalink_holds": 0,
+    "terminal_permalink_holds": 1,
     "late_published_skip_materiality_evaluations": 0,
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "local_gov",
+      "source_headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - cw34.com",
+      "source_url": "https://cw34.com/news/local/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county-florida-news-florida-crash-traffic-news-local-traffic-jam",
+      "canonical_slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
+      "canonical_headline": "Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": true,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "update_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "update_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "I-95 Southbound near mile marker 98 in southern Martin County",
+        "motorcycle crash",
+        "north of Hobe Sound and Exit 96 (Bridge Road)",
+        "south of Exit 101 (Kanner Highway/Stuart)",
+        "Martin County Sheriff's Office and Florida Highway Patrol",
+        "Tuesday evening timeframe"
+      ],
+      "novel_facts": [
+        "Crash occurred just before 7 p.m. (specific time)",
+        "Driver airlifted by LifeStar to hospital with traumatic injuries",
+        "Heavy flames from the bike required extinguishing by Martin County Fire Rescue",
+        "Lanes were reopened then closed again due to another crash",
+        "Martin County Fire Rescue involvement confirmed"
+      ],
+      "reason": "Same motorcycle crash at identical location (I-95 SB mile marker 98, Martin County) with same agencies involved. Incoming article provides material updates: specific crash time (just before 7 p.m.), confirmation of airlift transport via LifeStar, details about heavy flames requiring firefighter response, driver's traumatic injuries, and the significant detail that lanes reopened then closed again due to a second crash. These are concrete developments beyond the initial report, warranting an update to the existing canonical rather than a new story.",
+      "validation_errors": []
+    },
     {
       "category_key": "local_gov",
       "source_headline": "Police search for missing man last seen Monday morning in Port St. Lucie - cw34.com",
@@ -125,10 +160,9 @@
         "Justin Jasterzenski reported missing",
         "Last seen Monday morning around 8:30 a.m.",
         "Missing from SE Avon Park Drive area",
-        "38-year-old man, 5'11\", 240 lbs",
-        "Driving silver older-model Toyota Tacoma",
-        "Last seen wearing Bay Pointe collared shirt and khaki shorts",
-        "Detective Nieves handling case"
+        "Believed to be driving silver older-model Toyota Tacoma",
+        "Described as 5'11\", 240 lbs, brown hair and eyes",
+        "Last seen wearing Bay Pointe collared shirt and khaki shorts"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -137,37 +171,40 @@
     },
     {
       "category_key": "crime",
-      "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
-      "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
-      "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
-      "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
+      "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
+      "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+      "canonical_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
+      "canonical_is_custom": true,
+      "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
+      "promoted": true,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "update_existing_canonical",
       "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
+      "semantic_action": "update_existing_canonical",
+      "confidence": 1.0,
       "shared_anchors": [
-        "Latoya Morrine Moye of Fort Pierce arrested",
-        "Former Treasure Coast Hospice employee",
-        "Theft of two rings from deceased patient",
-        "Report made to Stuart Police Department on Aug. 18",
-        "One ring pawned in Port St. Lucie",
-        "Third-degree grand theft charge",
-        "Ring pawned one day after report",
-        "One ring recovered, one still missing"
+        "Michael Anthony Debevec (Michael Anthony Debevec II in candidate)",
+        "Body found in mangroves near House of Refuge on Hutchinson Island",
+        "Last seen at Chastain Beach",
+        "Martin County Sheriff's Office investigation",
+        "Missing person reported after Aug. 26",
+        "Same incident_anchor: missing-person:michael-debevec"
       ],
       "novel_facts": [
-        "Treasure Coast Hospice statement about taking trust seriously",
-        "Treasure Coast Hospice covering cost of retrieving recovered ring",
-        "Additional detail about surveillance video identifying Moye"
+        "Body positively confirmed as Michael Anthony Debevec (candidate only stated believed to belong)",
+        "No apparent signs of foul play found",
+        "Backpack found hanging in tree with computer inside",
+        "Traveled from Port St. Lucie area at 3 a.m. Aug. 27",
+        "Phone records showed movement between Chastain Beach and House of Refuge Friday morning",
+        "Wallet found by Good Samaritan on Saturday, prompting missing person report",
+        "Vehicle found at Chastain Beach, more than two miles from body location",
+        "Family has been notified of death"
       ],
-      "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
+      "reason": "Same real-world missing person case with material update: the body has been positively confirmed as Michael Anthony Debevec, whereas the canonical only stated it was 'believed to belong' to him. This is a significant development that changes what readers need to know, moving from suspected identity to confirmed identity, plus additional investigative details about timeline, evidence found, and no foul play suspected.",
       "validation_errors": []
     },
     {
@@ -210,12 +247,12 @@
     },
     {
       "category_key": "martin",
-      "source_headline": "Tiger Woods set for change-of-plea hearing in Martin County DUI case - WPEC",
-      "source_url": "https://cbs12.com/news/local/tiger-woods-set-for-change-of-plea-hearing-in-martin-county-dui-case-wedneday-florida-golf-dui-property-damage-refusal-submit-test-jupiter-island-range-rover-hydrocodone-impaired-pga-tour",
-      "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-      "canonical_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
+      "source_headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - WPEC",
+      "source_url": "https://cbs12.com/news/florida/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county-florida-news-florida-crash-traffic-news-local-traffic-jam",
+      "canonical_slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
+      "canonical_headline": "Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County",
       "canonical_is_custom": false,
-      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+      "identity_basis": "exact_source_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": true,
@@ -226,95 +263,20 @@
       "semantic_action": "update_existing_canonical",
       "confidence": 0.95,
       "shared_anchors": [
-        "Tiger Woods change-of-plea hearing",
-        "Wednesday 8:30 a.m. hearing time",
-        "Judge Darren Steele",
-        "Martin County court",
-        "March rollover crash on Jupiter Island",
-        "DUI case"
+        "I-95 southbound near mile marker 98 in southern Martin County",
+        "motorcycle crash",
+        "north of Hobe Sound and Exit 96 (Bridge Road)",
+        "south of Exit 101 (Kanner Highway/Stuart)",
+        "Martin County Sheriff's Office and Florida Highway Patrol",
+        "same source URL"
       ],
       "novel_facts": [
-        "Attorney Douglas Duncan filed the notice Tuesday",
-        "Martin County Courthouse in Stuart as specific venue",
-        "Legal analyst Robert Ellis commentary suggesting plea deal",
-        "Specific crash details: South Beach Road, passing pickup with trailer, crossed double solid lines, struck trailer",
-        "Deputy observations: bloodshot/glassy eyes, dilated pupils, slow movements",
-        "Two hydrocodone pills found in Woods' pocket",
-        "Woods told deputies he was looking at phone and adjusting radio",
-        "Breath test showed no alcohol",
-        "Woods refused urine test",
-        "Woods spent six weeks in Switzerland rehabilitation program",
-        "2017 Palm Beach County diversion program and reckless driving conviction",
-        "Judge's ruling allowing prosecutors access to medical records"
+        "crash occurred just before 7 p.m.",
+        "driver flown to hospital via LifeStar with traumatic injuries",
+        "Martin County Fire Rescue extinguished heavy flames from the bike",
+        "lanes were reopened then closed again due to another crash"
       ],
-      "reason": "Same event: both articles cover the identical Wednesday 8:30 a.m. change-of-plea hearing before Judge Darren Steele for Tiger Woods' March Jupiter Island DUI case. Material update present: the incoming article adds substantial new information beyond the bare scheduling notice in the canonical, including crash details, evidence found (hydrocodone pills), deputy observations, refusal to submit to urine test, rehabilitation treatment, prior 2017 case history, legal analysis suggesting plea negotiations, and medical records ruling. These facts materially expand what readers need to know about the case context and potential outcomes, warranting an update to the existing canonical rather than a new story.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "martin",
-      "source_headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves - WPEC",
-      "source_url": "https://cbs12.com/news/local/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news",
-      "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
-      "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 1.0,
-      "shared_anchors": [],
-      "novel_facts": [
-        "Body found in Martin County mangroves near House of Refuge",
-        "Missing person Michael Anthony Debevec from Port St. Lucie",
-        "Good Samaritan found wallet on Saturday",
-        "Vehicle found at Chastain Beach on August 27",
-        "Phone records show movement between Chastain Beach and House of Refuge",
-        "Backpack with computer found in tree Tuesday morning",
-        "Body found Tuesday in advanced decomposition"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
-    },
-    {
-      "category_key": "martin",
-      "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cw34.com",
-      "source_url": "https://cw34.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
-      "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
-      "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Latoya Morrine Moye of Fort Pierce arrested",
-        "Former Treasure Coast Hospice employee",
-        "Theft of two rings from deceased patient",
-        "Report made to Stuart Police Department on Aug. 18",
-        "One ring pawned in Port St. Lucie",
-        "Third-degree grand theft charge",
-        "Ring pawned one day after report",
-        "One ring recovered, one still missing"
-      ],
-      "novel_facts": [
-        "Treasure Coast Hospice statement about taking trust seriously",
-        "Treasure Coast Hospice covering cost of retrieving recovered ring",
-        "Additional detail about surveillance video identifying Moye"
-      ],
-      "reason": "Both articles cover the identical arrest of Latoya Morrine Moye for stealing rings from a deceased Treasure Coast Hospice patient. All core facts match: same suspect, same employer, same crime (two stolen rings from deceased patient), same report date (Aug. 18), same charge (third-degree grand theft), same pawn transaction in Port St. Lucie, same recovery of one ring. The incoming article adds only minor details like a hospice statement and that the hospice is covering retrieval costs - these are routine background details, not material updates like a court ruling, new charges, or identification of previously unknown information. No independently newsworthy accountability or policy angle exists.",
+      "reason": "This is clearly the same motorcycle crash event at the same specific location (I-95 southbound mile marker 98, Martin County). The incoming article provides material new updates: specific timing (just before 7 p.m.), condition details (traumatic injuries requiring airlift via LifeStar), fire response (heavy flames extinguished), and the significant development that lanes reopened but were closed again due to a subsequent crash. These are meaningful updates that readers need to know, not merely reworded background. The candidate article appears truncated mid-sentence, suggesting it needs updating with this fuller information.",
       "validation_errors": []
     },
     {
@@ -336,144 +298,17 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Justin Jasterzenski reported missing from SE Avon Park Drive on Monday morning around 8:30 a.m.",
-        "38-year-old man, 5'11\", 240 lbs, brown hair and eyes",
-        "Believed to be driving a silver older-model Toyota Tacoma",
-        "Last seen wearing Bay Pointe collared shirt and khaki shorts",
-        "Detective Nieves handling the case at 772-871-5037"
+        "Justin Jasterzenski, 38-year-old man reported missing",
+        "Last seen Monday morning around 8:30 a.m.",
+        "Missing from SE Avon Park Drive area",
+        "Driving silver older-model Toyota Tacoma",
+        "Wearing Bay Pointe collared shirt and khaki shorts",
+        "Contact Detective Nieves at 772-871-5037"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Police search for missing man last seen Monday morning in Port St. Lucie - WPEC",
-      "source_url": "https://cbs12.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search",
-      "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
-      "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 1.0,
-      "shared_anchors": [],
-      "novel_facts": [
-        "Justin Jasterzenski reported missing from SE Avon Park Drive around 8:30 a.m. Monday",
-        "38-year-old man, 5'11\", 240 lbs, brown hair and eyes",
-        "Last seen wearing Bay Pointe collared shirt and khaki shorts",
-        "Believed to be driving silver older-model Toyota Tacoma",
-        "Detective Nieves contact at 772-871-5037"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Port St. Lucie police limiting use of license plate readers after state directive - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-suspend-license-plate-readers/73585310",
-      "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
-      "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Port St. Lucie Police Department",
-        "Port St. Lucie locality"
-      ],
-      "novel_facts": [
-        "FDOT memorandum issued August 31, 2026 revoking permits for license plate readers on state highway rights-of-way",
-        "PSLPD placing operational pause on automated license plate reader technology",
-        "Seven PSLPD cameras to be removed from FDOT rights-of-way within 30 days",
-        "New policy requiring Chief Leo Niemczyk approval for ALPR access during pause",
-        "Limited use only for exigent circumstances involving immediate threat to life",
-        "St. Lucie County Sheriff Richard Del Toro also updating ALPR policy",
-        "17% decrease in auto burglaries since 2022 attributed partly to ALPR technology"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves - WPEC",
-      "source_url": "https://cbs12.com/news/local/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news",
-      "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
-      "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 1.0,
-      "shared_anchors": [],
-      "novel_facts": [
-        "Body found in Martin County mangroves near House of Refuge",
-        "Michael Anthony Debevec reported missing",
-        "Good Samaritan found Debevec's wallet Saturday",
-        "Debevec's vehicle found at Chastain Beach",
-        "Debevec traveled from Port St. Lucie to Martin County around 3 a.m. Aug 27",
-        "Body found wearing clothing matching Debevec's description",
-        "Backpack with computer found hanging in tree"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
-    },
-    {
-      "category_key": "indian_river",
-      "source_headline": "Indian River County Sheriff’s Office employee dies in crash in Brevard County - WPBF",
-      "source_url": "https://www.wpbf.com/article/cassi-taylor-indian-river-county-sheriffs-office-employee-dies-crash-brevard/73582980",
-      "canonical_slug": "2026-09-01-indian-river-county-sheriffs-office-employee-dies-in-brevard-county-vehicle-cras",
-      "canonical_headline": "Indian River County Sheriff's Office employee dies in Brevard County vehicle crash",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
-      "shared_anchors": [
-        "Cassi Taylor, Civilian Corrections Assistant",
-        "Indian River County Sheriff's Office employee",
-        "Vehicle crash in Brevard County",
-        "Announcement on Tuesday, Sept. 1, 2026",
-        "Daughter of Deputy Scott Burke",
-        "Joined office July 20, 2026",
-        "Scheduled to be sworn in Monday, Aug. 31",
-        "Same source URL: wpbf.com/article/cassi-taylor-indian-river-county-sheriffs-office-employee-dies-crash-brevard/73582980"
-      ],
-      "novel_facts": [],
-      "reason": "This is the exact same article from the same source URL. The incoming article and canonical candidate share identical facts about Cassi Taylor's death in a Brevard County crash, her employment details, her father Deputy Scott Burke, and the announcement date. The retrieval evidence confirms this is an 'exact_source_and_persistent_story_skip' match. No new material information is present in the incoming version—both are initial reports of the death with the same developing story disclaimer.",
-      "validation_errors": []
     }
   ],
   "decisions": [
@@ -1119,7 +954,7 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Jupiter Island DUI case",
+      "incoming_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case",
       "incoming_source_url": "https://www.wptv.com/sports/tiger-woods-scheduled-for-change-of-plea-hearing-in-dui-case-wednesday-morning",
       "incoming_story_id": "story_007379",
       "candidates": [],
@@ -1261,7 +1096,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County",
       "incoming_source_url": "http://cbs12.com/news/florida/i-95-south-blocked-near-martin-county-delays-expected-after-multi-vehicle-crash-florida-news-local-news-local-traffic-crash",
-      "incoming_story_id": "story_007530",
+      "incoming_story_id": "story_007573",
       "candidates": [
         {
           "slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
@@ -1360,9 +1195,9 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Port St. Lucie Police pause Flock camera use after state revokes permits on state roads",
-      "incoming_source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
-      "incoming_story_id": "story_007515",
+      "incoming_headline": "Port St. Lucie police pause license plate readers, limit use to life-threatening situations",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
+      "incoming_story_id": "story_007604",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1383,39 +1218,741 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Port St. Lucie Police pause Flock camera use after state revokes permits on state roads",
-      "incoming_source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
-      "incoming_story_id": "story_007515",
+      "incoming_headline": "Port St. Lucie police pause license plate readers, limit use to life-threatening situations",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
+      "incoming_story_id": "story_007604",
       "candidates": [
         {
           "slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
           "headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5545,
-          "retrieval_score": 0.5035,
+          "terminal_recall_score": 0.5518,
+          "retrieval_score": 0.5008,
           "reasons": [
             "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5297,
+          "retrieval_score": 0.4957,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+          "headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4836,
+          "retrieval_score": 0.4466,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+          "headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4698,
+          "retrieval_score": 0.4448,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-desantis-seeks-statewide-review-of-license-plate-camera-use-amid-surveillance-co",
+          "headline": "DeSantis seeks statewide review of license plate camera use amid surveillance concerns",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4696,
+          "retrieval_score": 0.4506,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc",
+          "headline": "Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4633,
+          "retrieval_score": 0.4263,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
+          "headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.46,
+          "retrieval_score": 0.438,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
+          "headline": "Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4599,
+          "retrieval_score": 0.4409,
+          "reasons": [
+            "publication_gap_8_days"
           ]
         },
         {
           "slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
           "headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5086,
-          "retrieval_score": 0.4896,
+          "terminal_recall_score": 0.4365,
+          "retrieval_score": 0.4175,
           "reasons": [
             "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+          "headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4325,
+          "retrieval_score": 0.4105,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
+          "headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4301,
+          "retrieval_score": 0.4141,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+          "headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4268,
+          "retrieval_score": 0.3928,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.82,
+        "shared_anchors": [
+          "port-st-lucie-police",
+          "license plate readers topic",
+          "Florida statewide LPR controversy context"
+        ],
+        "novel_facts": [
+          "Port St. Lucie PD's own operational pause on LPR use",
+          "limiting use to life-threatening situations",
+          "Chief Leo Niemczyk statements",
+          "126 readers citywide",
+          "17% reduction in auto burglaries statistic",
+          "resident reactions Joseph Hamm and Peter Schmitt"
+        ],
+        "reason": "This is a distinct local action: Port St. Lucie Police Department's own decision to pause and restrict LPR usage, announced by Chief Niemczyk. It differs from the DeSantis statewide review request and the FDOT permit revocation, which are separate state-level actions by different actors. No candidate covers this specific PD-level operational pause decision, so it is a new story rather than an update to any existing candidate.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.82,
+        "shared_anchors": [
+          "port-st-lucie-police",
+          "license plate readers topic",
+          "Florida statewide LPR controversy context"
+        ],
+        "novel_facts": [
+          "Port St. Lucie PD's own operational pause on LPR use",
+          "limiting use to life-threatening situations",
+          "Chief Leo Niemczyk statements",
+          "126 readers citywide",
+          "17% reduction in auto burglaries statistic",
+          "resident reactions Joseph Hamm and Peter Schmitt"
+        ],
+        "reason": "This is a distinct local action: Port St. Lucie Police Department's own decision to pause and restrict LPR usage, announced by Chief Niemczyk. It differs from the DeSantis statewide review request and the FDOT permit revocation, which are separate state-level actions by different actors. No candidate covers this specific PD-level operational pause decision, so it is a new story rather than an update to any existing candidate.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Data centers become battleground in Florida governor's race as candidates split on AI infrastructure",
+      "incoming_source_url": "https://www.wptv.com/news/politics/data-centers-divide-florida-governors-race-as-voters-question-the-ai-boom",
+      "incoming_story_id": "story_007605",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Data centers become battleground in Florida governor's race as candidates split on AI infrastructure",
+      "incoming_source_url": "https://www.wptv.com/news/politics/data-centers-divide-florida-governors-race-as-voters-question-the-ai-boom",
+      "incoming_story_id": "story_007605",
+      "candidates": [
+        {
+          "slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+          "headline": "Indiantown Village Council fires manager, rejects data center pause after resident outcry",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4946,
+          "retrieval_score": 0.4546,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-09-01-desantis-and-byron-donalds-to-share-tampa-stage-as-florida-republicans-seek-unit",
+          "headline": "DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4385,
+          "retrieval_score": 0.4015,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+          "headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4221,
+          "retrieval_score": 0.3881,
+          "reasons": [
+            "publication_gap_2_days"
           ]
         },
         {
           "slug": "2026-08-19-port-st-lucie-mayoral-candidates-debate-growth-traffic-and-infrastructure-ahead",
           "headline": "Port St. Lucie mayoral candidates debate growth, traffic, and infrastructure ahead of Election Day",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5004,
-          "retrieval_score": 0.5004,
+          "terminal_recall_score": 0.3991,
+          "retrieval_score": 0.3991,
           "reasons": [
             "publication_gap_15_days",
             "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-08-19-byron-donalds-wins-republican-nomination-for-florida-governor-david-jolly-takes",
+          "headline": "Byron Donalds wins Republican nomination for Florida governor, David Jolly takes Democratic nod",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3944,
+          "retrieval_score": 0.3944,
+          "reasons": [
+            "publication_gap_15_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-08-27-david-jolly-calls-for-reopened-hope-florida-investigation-after-grand-jury-finds",
+          "headline": "David Jolly calls for reopened Hope Florida investigation after grand jury finds $10 million in taxpayer money misappropriated",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3769,
+          "retrieval_score": 0.3549,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-08-19-angie-nixon-wins-democratic-nomination-for-florida-us-senate-special-primary-ele",
+          "headline": "Angie Nixon wins Democratic nomination for Florida U.S. Senate special primary election",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3581,
+          "retrieval_score": 0.3581,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+          "headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3539,
+          "retrieval_score": 0.3319,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
+          "headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3509,
+          "retrieval_score": 0.3319,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+          "headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3497,
+          "retrieval_score": 0.3217,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-desantis-seeks-statewide-review-of-license-plate-camera-use-amid-surveillance-co",
+          "headline": "DeSantis seeks statewide review of license plate camera use amid surveillance concerns",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3492,
+          "retrieval_score": 0.3302,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-st-petersburg-investor-cuts-41000-in-annual-costs-by-replacing-contractors-with",
+          "headline": "St. Petersburg investor cuts $41,000 in annual costs by replacing contractors with AI",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.346,
+          "retrieval_score": 0.345,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.85,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Byron Donalds' three-point data center regulatory platform",
+          "David Jolly's proposed one-year statewide data center moratorium if elected",
+          "UNF poll showing 68% opposition to local AI data centers",
+          "National Economist/YouGov poll on data center attitudes",
+          "DeSantis' May law on data center utility rates and water permitting"
+        ],
+        "reason": "This is a statewide political feature comparing gubernatorial candidates Donalds and Jolly's stances on data center policy ahead of the November election, citing polling data and the DeSantis-signed law. No candidate covers this specific comparison of governor's-race positions; the closest matches (Indiantown council vote, Martin County moratorium discussion, St. Lucie rezoning) are local government actions on specific data center proposals, not the statewide campaign-policy story, and the DeSantis/Donalds Tampa event and Donalds nomination win are different discrete events.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.85,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Byron Donalds' three-point data center regulatory platform",
+          "David Jolly's proposed one-year statewide data center moratorium if elected",
+          "UNF poll showing 68% opposition to local AI data centers",
+          "National Economist/YouGov poll on data center attitudes",
+          "DeSantis' May law on data center utility rates and water permitting"
+        ],
+        "reason": "This is a statewide political feature comparing gubernatorial candidates Donalds and Jolly's stances on data center policy ahead of the November election, citing polling data and the DeSantis-signed law. No candidate covers this specific comparison of governor's-race positions; the closest matches (Indiantown council vote, Martin County moratorium discussion, St. Lucie rezoning) are local government actions on specific data center proposals, not the statewide campaign-policy story, and the DeSantis/Donalds Tampa event and Donalds nomination win are different discrete events.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Tiger Woods avoids DUI conviction in Martin County crash, state attorney defends plea deal",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-state-attorney-defends-tiger-woods-dui-plea-deal-cites-lack-of-impairment-evidence",
+      "incoming_story_id": "story_007615",
+      "candidates": [
+        {
+          "slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+          "headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case",
+          "retrieval_score": 0.8001,
+          "headline_similarity": 0.4727,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "county",
+            "dui",
+            "martin",
+            "plea",
+            "tiger",
+            "woods"
+          ],
+          "shared_topic_tokens": [
+            "dui",
+            "plea",
+            "tiger",
+            "woods"
+          ],
+          "content_similarity": {
+            "score": 0.488,
+            "overlap": 0.65,
+            "jaccard": 0.0714,
+            "shared_token_count": 13,
+            "shared_tokens": [
+              "case",
+              "conference",
+              "court",
+              "crash",
+              "dui",
+              "his",
+              "island",
+              "jupiter",
+              "march",
+              "plea",
+              "rollover",
+              "tiger",
+              "woods"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 1,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "shared_incident_anchor",
+            "strong_content_event_continuity",
+            "publication_gap_1_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.98,
+        "shared_anchors": [
+          "Tiger Woods",
+          "March 27 rollover crash on Jupiter Island",
+          "Martin County Court",
+          "DUI and refusal to submit to lawful test charges",
+          "Wednesday plea proceeding"
+        ],
+        "novel_facts": [
+          "Woods pleaded no contest to reckless driving and refusal to submit",
+          "$1,000 fine for reckless driving, $500 for refusal, additional fine for careless driving",
+          "License suspended for five years",
+          "State Attorney Thomas Bakkedahl held press conference defending plea deal",
+          "Two toxicologists concluded insufficient evidence of hydrocodone impairment",
+          "Woods' long-term tolerance to medication from multiple back surgeries",
+          "Crash details: Woods clipped trailer of pickup truck hauling pressure-cleaning equipment at high speed"
+        ],
+        "reason": "Same real-world event: Tiger Woods' DUI case from March 27 Jupiter Island crash. Candidate covered the scheduled plea hearing; incoming reports the actual plea outcome with material updates including the no contest plea, sentencing details (fines, license suspension), State Attorney's press conference defending the plea deal, toxicology findings on impairment evidence, and crash specifics. This is the resolution of the case previewed in the candidate and belongs as an update to that story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Viral AI-generated Cat in the Hat threat targets Vero Beach High School, deemed not credible",
+      "incoming_source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
+      "incoming_story_id": "story_007607",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Viral AI-generated Cat in the Hat threat targets Vero Beach High School, deemed not credible",
+      "incoming_source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
+      "incoming_story_id": "story_007607",
+      "candidates": [
+        {
+          "slug": "2026-08-22-clear-the-shelters-waives-adoption-fees-saturday-at-vero-beach-animal-shelter",
+          "headline": "Clear the Shelters waives adoption fees Saturday at Vero Beach animal shelter",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5699,
+          "retrieval_score": 0.4629,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-08-27-colorado-man-indicted-on-attempted-murder-charges-after-vero-beach-shootout-with",
+          "headline": "Colorado man indicted on attempted murder charges after Vero Beach shootout with deputies",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5274,
+          "retrieval_score": 0.5054,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-08-25-vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush",
+          "headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5139,
+          "retrieval_score": 0.4479,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+          "headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4978,
+          "retrieval_score": 0.4408,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-29-vero-beach-hosts-atlantic-in-friday-night-football-opener",
+          "headline": "Vero Beach hosts Atlantic in Friday night football opener",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4963,
+          "retrieval_score": 0.4683,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-08-22-gun-used-in-vero-beach-homicide-belonged-to-suspects-ex-wife-indian-river-county",
+          "headline": "Gun used in Vero Beach homicide belonged to suspect's ex-wife, Indian River County sheriff says",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4838,
+          "retrieval_score": 0.4268,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
+          "headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4801,
+          "retrieval_score": 0.3931,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-09-02-indian-river-county-sheriffs-office-assists-fellsmere-police-in-search-for-mache",
+          "headline": "Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4495,
+          "retrieval_score": 0.3595,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-08-19-former-vero-beach-eagles-secretary-accused-of-spending-419000-on-guns-liquor-leg",
+          "headline": "Former Vero Beach Eagles secretary accused of spending $419,000 on guns, liquor, LEGOs",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4461,
+          "retrieval_score": 0.3961,
+          "reasons": [
+            "publication_gap_15_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-08-21-multi-million-dollar-crane-crashes-off-90th-avenue-in-vero-beach-as-residents-ra",
+          "headline": "Multi-million dollar crane remains stuck in ditch near Oslo Road in Vero Beach",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4429,
+          "retrieval_score": 0.4359,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-vero-beach-quarterback-champ-monds-commits-to-notre-dame",
+          "headline": "Vero Beach quarterback Champ Monds commits to Notre Dame",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4067,
+          "retrieval_score": 0.4057,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
+          "headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3958,
+          "retrieval_score": 0.3738,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Viral AI-generated 'Cat in the Hat' threat targeting Vero Beach High School",
+          "Indian River County Sheriff's Office deemed threat not credible",
+          "Part of nationwide viral trend affecting multiple school districts"
+        ],
+        "reason": "None of the candidates involve the AI-generated 'Cat in the Hat' school threat trend or Vero Beach High School specifically. Candidates cover unrelated events (shelter adoption event, shootout indictment, K9 chase, murder case, football game, embezzlement, crane crash, QB commitment, ICE custody, 9/11 ceremony, machete stabbing). No shared participants, case, or incident anchor exists with this new viral threat story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Viral AI-generated 'Cat in the Hat' threat targeting Vero Beach High School",
+          "Indian River County Sheriff's Office deemed threat not credible",
+          "Part of nationwide viral trend affecting multiple school districts"
+        ],
+        "reason": "None of the candidates involve the AI-generated 'Cat in the Hat' school threat trend or Vero Beach High School specifically. Candidates cover unrelated events (shelter adoption event, shootout indictment, K9 chase, murder case, football game, embezzlement, crane crash, QB commitment, ICE custody, 9/11 ceremony, machete stabbing). No shared participants, case, or incident anchor exists with this new viral threat story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Governor's race candidates propose different approaches to license plate camera restrictions",
+      "incoming_source_url": "https://www.wptv.com/news/state/florida-puts-license-plate-cameras-on-the-clock-as-calls-for-broader-limits-grow",
+      "incoming_story_id": "story_007648",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Governor's race candidates propose different approaches to license plate camera restrictions",
+      "incoming_source_url": "https://www.wptv.com/news/state/florida-puts-license-plate-cameras-on-the-clock-as-calls-for-broader-limits-grow",
+      "incoming_story_id": "story_007648",
+      "candidates": [
+        {
+          "slug": "2026-09-02-data-centers-become-battleground-in-florida-governors-race-as-candidates-split-o",
+          "headline": "Data centers become battleground in Florida governor's race as candidates split on AI infrastructure",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4973,
+          "retrieval_score": 0.4573,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-09-02-port-st-lucie-police-pause-license-plate-readers-limit-use-to-life-threatening-s",
+          "headline": "Port St. Lucie police pause license plate readers, limit use to life-threatening situations",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4914,
+          "retrieval_score": 0.4514,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-08-21-abandoned-boats-fill-wildcat-cove-near-fort-pierce-creating-safety-hazards-betwe",
+          "headline": "Abandoned boats fill Wildcat Cove near Fort Pierce, creating safety hazards between nature preserves",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4833,
+          "retrieval_score": 0.4793,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4791,
+          "retrieval_score": 0.4451,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+          "headline": "Indiantown Village Council fires manager, rejects data center pause after resident outcry",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4705,
+          "retrieval_score": 0.4305,
+          "reasons": [
+            "publication_gap_0_days"
           ]
         },
         {
@@ -1429,83 +1966,63 @@
           ]
         },
         {
-          "slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
-          "headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+          "slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
+          "headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4643,
-          "retrieval_score": 0.4013,
+          "terminal_recall_score": 0.4672,
+          "retrieval_score": 0.4542,
           "reasons": [
             "publication_gap_9_days"
           ]
         },
         {
-          "slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
-          "headline": "Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills",
+          "slug": "2026-09-02-indian-river-county-sheriffs-office-assists-fellsmere-police-in-search-for-mache",
+          "headline": "Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4619,
-          "retrieval_score": 0.4249,
+          "terminal_recall_score": 0.4499,
+          "retrieval_score": 0.4099,
           "reasons": [
-            "publication_gap_4_days"
+            "publication_gap_0_days"
           ]
         },
         {
-          "slug": "2026-08-19-port-st-lucie-mayor-race-heads-to-november-runoff-between-shannon-martin-and-ste",
-          "headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin and Steven Giordano",
+          "slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+          "headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4482,
-          "retrieval_score": 0.4482,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
-          "headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4462,
-          "retrieval_score": 0.4462,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-08-20-st-lucie-county-deputy-found-guilty-of-dui-remains-on-unpaid-leave-during-intern",
-          "headline": "St. Lucie County deputy found guilty of DUI, remains on unpaid leave during internal review",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4438,
-          "retrieval_score": 0.3928,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-08-29-st-lucie-county-school-bus-driver-faces-discipline-for-illegal-u-turn-on-i-95-in",
-          "headline": "St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4372,
-          "retrieval_score": 0.4092,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
-          "headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4362,
-          "retrieval_score": 0.4022,
+          "terminal_recall_score": 0.4369,
+          "retrieval_score": 0.4029,
           "reasons": [
             "publication_gap_2_days"
           ]
         },
         {
-          "slug": "2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc",
-          "headline": "Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie",
+          "slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
+          "headline": "Florida school camera lawsuits face dismissals as judges side with automated enforcement systems",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4313,
-          "retrieval_score": 0.3943,
+          "terminal_recall_score": 0.3986,
+          "retrieval_score": 0.3976,
           "reasons": [
-            "publication_gap_1_days"
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-29-florida-rejects-18-billion-meta-settlement-becomes-sole-state-to-pursue-independ",
+          "headline": "Florida rejects $18 billion Meta settlement, becomes sole state to pursue independent lawsuit over youth safety",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3826,
+          "retrieval_score": 0.3546,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
+          "headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3818,
+          "retrieval_score": 0.3598,
+          "reasons": [
+            "publication_gap_6_days"
           ]
         }
       ],
@@ -1519,17 +2036,14 @@
         "independently_newsworthy_followup": false,
         "confidence": 0.72,
         "shared_anchors": [
-          "FDOT permit revocation",
-          "license plate reader/ALPR technology",
-          "St. Lucie County region"
+          "license plate camera policy topic",
+          "Florida governor's race candidates Donalds/Jolly"
         ],
         "novel_facts": [
-          "Port St. Lucie Police Department's own operational pause announcement",
-          "Chief Leo Niemczyk's statement on balancing crime-solving tech with state direction",
-          "specific exigent-circumstances policy adopted by PSL PD",
-          "St. Lucie County Sheriff's separate policy limiting ALPR to forcible felonies and missing/endangered persons"
+          "Donalds' Fox Business interview supporting camera removal from highways",
+          "Jolly's warrant-requirement proposal and renewed call for special session"
         ],
-        "reason": "The closest candidate (2026-08-31 FDOT revokes permits) covers the state-level action itself, not the distinct local agency response. This incoming article reports a separate, agency-specific governmental action -- Port St. Lucie PD's own policy decision and Sheriff's Office parallel policy -- which is a downstream but distinct local event with its own named officials, agency-specific policy details, and public-safety consequence, not merely a repeat of the FDOT story.",
+        "reason": "This article focuses on gubernatorial candidates Donalds and Jolly staking out policy positions on license plate cameras, a distinct event from DeSantis's own press conference announcing a review, FDOT's permit revocation, or Port St. Lucie's local pause. No candidate covers the candidates' campaign-trail statements on this issue; the closest match (data center governor's race piece) shares format but not topic/event. Treated as a new story.",
         "validation_errors": [],
         "consistency_repairs": []
       },
@@ -1544,66 +2058,467 @@
         "independently_newsworthy_followup": false,
         "confidence": 0.72,
         "shared_anchors": [
-          "FDOT permit revocation",
-          "license plate reader/ALPR technology",
-          "St. Lucie County region"
+          "license plate camera policy topic",
+          "Florida governor's race candidates Donalds/Jolly"
         ],
         "novel_facts": [
-          "Port St. Lucie Police Department's own operational pause announcement",
-          "Chief Leo Niemczyk's statement on balancing crime-solving tech with state direction",
-          "specific exigent-circumstances policy adopted by PSL PD",
-          "St. Lucie County Sheriff's separate policy limiting ALPR to forcible felonies and missing/endangered persons"
+          "Donalds' Fox Business interview supporting camera removal from highways",
+          "Jolly's warrant-requirement proposal and renewed call for special session"
         ],
-        "reason": "The closest candidate (2026-08-31 FDOT revokes permits) covers the state-level action itself, not the distinct local agency response. This incoming article reports a separate, agency-specific governmental action -- Port St. Lucie PD's own policy decision and Sheriff's Office parallel policy -- which is a downstream but distinct local event with its own named officials, agency-specific policy details, and public-safety consequence, not merely a repeat of the FDOT story.",
+        "reason": "This article focuses on gubernatorial candidates Donalds and Jolly staking out policy positions on license plate cameras, a distinct event from DeSantis's own press conference announcing a review, FDOT's permit revocation, or Port St. Lucie's local pause. No candidate covers the candidates' campaign-trail statements on this issue; the closest match (data center governor's race piece) shares format but not topic/event. Treated as a new story.",
         "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Palm Beach County residents divided over license plate camera removal from state roads",
+      "incoming_source_url": "https://www.wptv.com/news/state/florida-bans-license-plate-cameras-on-state-roads-after-desantis-called-surveillance-out-of-control",
+      "incoming_story_id": "story_007307",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Palm Beach County residents divided over license plate camera removal from state roads",
+      "incoming_source_url": "https://www.wptv.com/news/state/florida-bans-license-plate-cameras-on-state-roads-after-desantis-called-surveillance-out-of-control",
+      "incoming_story_id": "story_007307",
+      "candidates": [
+        {
+          "slug": "2026-09-02-governors-race-candidates-propose-different-approaches-to-license-plate-camera-r",
+          "headline": "Governor's race candidates propose different approaches to license plate camera restrictions",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5598,
+          "retrieval_score": 0.5228,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5288,
+          "retrieval_score": 0.4918,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-desantis-seeks-statewide-review-of-license-plate-camera-use-amid-surveillance-co",
+          "headline": "DeSantis seeks statewide review of license plate camera use amid surveillance concerns",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5172,
+          "retrieval_score": 0.4952,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-08-19-palm-beach-county-clerk-michael-caruso-extradited-to-orange-county-jail-on-five",
+          "headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4337,
+          "retrieval_score": 0.4327,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
+          "headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4254,
+          "retrieval_score": 0.3854,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.42,
+          "retrieval_score": 0.398,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-08-19-palm-beach-county-voters-respond-to-arrest-of-clerk-and-comptroller-mike-caruso",
+          "headline": "Palm Beach County voters respond to arrest of Clerk and Comptroller Mike Caruso on primary election day",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4187,
+          "retrieval_score": 0.4177,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-29-florida-rejects-18-billion-meta-settlement-becomes-sole-state-to-pursue-independ",
+          "headline": "Florida rejects $18 billion Meta settlement, becomes sole state to pursue independent lawsuit over youth safety",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4121,
+          "retrieval_score": 0.3811,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-09-02-indian-river-county-sheriffs-office-assists-fellsmere-police-in-search-for-mache",
+          "headline": "Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4059,
+          "retrieval_score": 0.3689,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-09-02-port-st-lucie-police-pause-license-plate-readers-limit-use-to-life-threatening-s",
+          "headline": "Port St. Lucie police pause license plate readers, limit use to life-threatening situations",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4036,
+          "retrieval_score": 0.3666,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res",
+          "headline": "Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3989,
+          "retrieval_score": 0.3589,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+          "headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3977,
+          "retrieval_score": 0.3577,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "invalid_model_response",
+        "action": "hold",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.72,
+        "shared_anchors": [
+          "Florida Department of Transportation order removing automated license plate readers/Flock cameras from state roads",
+          "30-day removal deadline",
+          "statewide scope affecting local agencies"
+        ],
+        "novel_facts": [],
+        "reason": "Incoming article reports on the same FDOT directive to remove license plate cameras from state highways within 30 days, adding only local resident reaction (Mollway, Vega) and a political quote from Nikki Fried. This is color/reaction to the already-reported government action, not a material update like a new ruling, casualty, or official finding.",
+        "validation_errors": [
+          "same_event_confidence_below_threshold"
+        ],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "invalid_model_response",
+        "action": "hold",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.72,
+        "shared_anchors": [
+          "Florida Department of Transportation order removing automated license plate readers/Flock cameras from state roads",
+          "30-day removal deadline",
+          "statewide scope affecting local agencies"
+        ],
+        "novel_facts": [],
+        "reason": "Incoming article reports on the same FDOT directive to remove license plate cameras from state highways within 30 days, adding only local resident reaction (Mollway, Vega) and a political quote from Nikki Fried. This is color/reaction to the already-reported government action, not a material update like a new ruling, casualty, or official finding.",
+        "validation_errors": [
+          "same_event_confidence_below_threshold"
+        ],
         "consistency_repairs": []
       }
     }
   ],
   "archive_repairs": [],
-  "material_update_compositions": [],
+  "material_update_compositions": [
+    {
+      "phase": "forward_publication",
+      "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+      "incoming_slug": "",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 342,
+      "paragraph_count": 4,
+      "baseline_lead_hits": [
+        "dui",
+        "martin",
+        "plea",
+        "tiger",
+        "wednesday",
+        "woods"
+      ],
+      "novelty_lead_hits": [
+        "000",
+        "500",
+        "additional",
+        "careless",
+        "charge",
+        "connection",
+        "contest",
+        "driving",
+        "faced",
+        "fine",
+        "five",
+        "had",
+        "license",
+        "pleaded",
+        "reckless",
+        "sentenced",
+        "suspended",
+        "years"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "validated_canonical_headline_evolution",
+        "token_similarity": 0.9091,
+        "date_gap_days": 1,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "prospective": true,
+        "existing_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case",
+        "incoming_headline": "Tiger Woods pleads no contest to reckless driving in Martin County crash, receives $1,500 in fines and five-year license suspension",
+        "candidate_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+        "prospective_lastmod": "2026-09-02",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 95,
+        "baseline_anchor": "crash",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "martin",
+          "plea",
+          "tiger",
+          "wednesday",
+          "woods"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case",
+        "novelty_anchor": "semantic_gate_novel_fact",
+        "novelty_present": true,
+        "novelty_token_hits": [],
+        "semantic_novel_fact_hits": [
+          "1000",
+          "500",
+          "additional",
+          "careless",
+          "contest",
+          "driving",
+          "fine",
+          "five",
+          "license",
+          "pleaded",
+          "reckless",
+          "refusal",
+          "submit",
+          "suspended",
+          "years"
+        ],
+        "semantic_novel_fact_token_count": 46,
+        "missing": [],
+        "source_title": "Tiger Woods avoids DUI conviction as state attorney cites insufficient impairment evidence",
+        "headline": "Tiger Woods pleads no contest to reckless driving in Martin County crash, receives $1,500 in fines and five-year license suspension"
+      },
+      "headline": "Tiger Woods pleads no contest to reckless driving in Martin County crash, receives $1,500 in fines and five-year license suspension"
+    }
+  ],
   "material_updates": [
     {
       "phase": "forward_publication",
       "source_slug": "",
       "target_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-      "source_story_id": "",
+      "source_story_id": "story_007615",
       "target_story_id": "story_007379",
-      "source_headline": "Tiger Woods set for change-of-plea hearing in Martin County DUI case - WPEC",
-      "updated_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case",
-      "confidence": 0.95,
+      "source_headline": "Tiger Woods avoids DUI conviction as state attorney cites insufficient impairment evidence",
+      "updated_headline": "Tiger Woods pleads no contest to reckless driving in Martin County crash, receives $1,500 in fines and five-year license suspension",
+      "confidence": 0.98,
       "shared_anchors": [
-        "Tiger Woods change-of-plea hearing",
-        "Wednesday 8:30 a.m. hearing time",
-        "Judge Darren Steele",
-        "Martin County court",
-        "March rollover crash on Jupiter Island",
-        "DUI case"
+        "Tiger Woods",
+        "March 27 rollover crash on Jupiter Island",
+        "Martin County Court",
+        "DUI and refusal to submit to lawful test charges",
+        "Wednesday plea proceeding"
       ],
       "novel_facts": [
-        "Attorney Douglas Duncan filed the notice Tuesday",
-        "Martin County Courthouse in Stuart as specific venue",
-        "Legal analyst Robert Ellis commentary suggesting plea deal",
-        "Specific crash details: South Beach Road, passing pickup with trailer, crossed double solid lines, struck trailer",
-        "Deputy observations: bloodshot/glassy eyes, dilated pupils, slow movements",
-        "Two hydrocodone pills found in Woods' pocket",
-        "Woods told deputies he was looking at phone and adjusting radio",
-        "Breath test showed no alcohol",
-        "Woods refused urine test",
-        "Woods spent six weeks in Switzerland rehabilitation program",
-        "2017 Palm Beach County diversion program and reckless driving conviction",
-        "Judge's ruling allowing prosecutors access to medical records"
+        "Woods pleaded no contest to reckless driving and refusal to submit",
+        "$1,000 fine for reckless driving, $500 for refusal, additional fine for careless driving",
+        "License suspended for five years",
+        "State Attorney Thomas Bakkedahl held press conference defending plea deal",
+        "Two toxicologists concluded insufficient evidence of hydrocodone impairment",
+        "Woods' long-term tolerance to medication from multiple back surgeries",
+        "Crash details: Woods clipped trailer of pickup truck hauling pressure-cleaning equipment at high speed"
       ],
-      "updated_at": "2026-09-02T10:53:03Z",
+      "updated_at": "2026-09-02T22:48:49Z",
+      "composition": {
+        "phase": "forward_publication",
+        "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+        "incoming_slug": "",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 342,
+        "paragraph_count": 4,
+        "baseline_lead_hits": [
+          "dui",
+          "martin",
+          "plea",
+          "tiger",
+          "wednesday",
+          "woods"
+        ],
+        "novelty_lead_hits": [
+          "000",
+          "500",
+          "additional",
+          "careless",
+          "charge",
+          "connection",
+          "contest",
+          "driving",
+          "faced",
+          "fine",
+          "five",
+          "had",
+          "license",
+          "pleaded",
+          "reckless",
+          "sentenced",
+          "suspended",
+          "years"
+        ],
+        "headline_alignment": {
+          "aligned": true,
+          "reason": "validated_canonical_headline_evolution",
+          "token_similarity": 0.9091,
+          "date_gap_days": 1,
+          "meaningful_update_basis": "semantic_material_update_gate",
+          "prospective": true,
+          "existing_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case",
+          "incoming_headline": "Tiger Woods pleads no contest to reckless driving in Martin County crash, receives $1,500 in fines and five-year license suspension",
+          "candidate_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+          "prospective_lastmod": "2026-09-02",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 95,
+          "baseline_anchor": "crash",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "martin",
+            "plea",
+            "tiger",
+            "wednesday",
+            "woods"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case",
+          "novelty_anchor": "semantic_gate_novel_fact",
+          "novelty_present": true,
+          "novelty_token_hits": [],
+          "semantic_novel_fact_hits": [
+            "1000",
+            "500",
+            "additional",
+            "careless",
+            "contest",
+            "driving",
+            "fine",
+            "five",
+            "license",
+            "pleaded",
+            "reckless",
+            "refusal",
+            "submit",
+            "suspended",
+            "years"
+          ],
+          "semantic_novel_fact_token_count": 46,
+          "missing": [],
+          "source_title": "Tiger Woods avoids DUI conviction as state attorney cites insufficient impairment evidence",
+          "headline": "Tiger Woods pleads no contest to reckless driving in Martin County crash, receives $1,500 in fines and five-year license suspension"
+        },
+        "headline": "Tiger Woods pleads no contest to reckless driving in Martin County crash, receives $1,500 in fines and five-year license suspension"
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "source_slug": "",
+      "target_slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
+      "source_story_id": "",
+      "target_story_id": "story_007505",
+      "source_headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - WPEC",
+      "updated_headline": "Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "I-95 southbound near mile marker 98 in southern Martin County",
+        "motorcycle crash",
+        "north of Hobe Sound and Exit 96 (Bridge Road)",
+        "south of Exit 101 (Kanner Highway/Stuart)",
+        "Martin County Sheriff's Office and Florida Highway Patrol",
+        "same source URL"
+      ],
+      "novel_facts": [
+        "crash occurred just before 7 p.m.",
+        "driver flown to hospital via LifeStar with traumatic injuries",
+        "Martin County Fire Rescue extinguished heavy flames from the bike",
+        "lanes were reopened then closed again due to another crash"
+      ],
+      "updated_at": "2026-09-02T22:49:17Z",
       "composition": {}
     }
   ],
   "registry_consolidation": {
-    "status": "no_changes",
-    "directives_considered": 2,
-    "story_records_merged": 0,
-    "aliases_written": 0,
-    "already_consolidated": 1,
+    "status": "consolidated",
+    "directives_considered": 1,
+    "story_records_merged": 1,
+    "aliases_written": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_003665",
@@ -1667,6 +2582,34 @@
       }
     ],
     "rejected_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_007615",
+        "target_story_id": "story_007379",
+        "target_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+        "incoming_headline": "Tiger Woods avoids DUI conviction in Martin County crash, state attorney defends plea deal",
+        "confidence": 0.98,
+        "shared_anchors": [
+          "Tiger Woods",
+          "March 27 rollover crash on Jupiter Island",
+          "Martin County Court",
+          "DUI and refusal to submit to lawful test charges",
+          "Wednesday plea proceeding"
+        ],
+        "reason": "Same real-world event: Tiger Woods' DUI case from March 27 Jupiter Island crash. Candidate covered the scheduled plea hearing; incoming reports the actual plea outcome with material updates including the no contest plea, sentencing details (fines, license suspension), State Attorney's press conference defending the plea deal, toxicology findings on impairment evidence, and crash specifics. This is the resolution of the case previewed in the candidate and belongs as an update to that story.",
+        "relationship_type": "material_update",
+        "novel_facts": [
+          "Woods pleaded no contest to reckless driving and refusal to submit",
+          "$1,000 fine for reckless driving, $500 for refusal, additional fine for careless driving",
+          "License suspended for five years",
+          "State Attorney Thomas Bakkedahl held press conference defending plea deal",
+          "Two toxicologists concluded insufficient evidence of hydrocodone impairment",
+          "Woods' long-term tolerance to medication from multiple back surgeries",
+          "Crash details: Woods clipped trailer of pickup truck hauling pressure-cleaning equipment at high speed"
+        ],
+        "resolved_source_story_id": "story_007615",
+        "resolved_target_story_id": "story_007379"
+      }
+    ]
   }
 }

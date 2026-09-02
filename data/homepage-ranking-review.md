@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases**
-- Recommended: **Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case**
+- Current: **Port St. Lucie police pause license plate readers, limit use to life-threatening situations**
+- Recommended: **Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound**
 - Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case | Tiger Woods scheduled for change-of-plea hearing Wednesday in Martin County DUI case | 82 | importance 45; freshness 99.95; urgency 8/10; validated material update |
-| 2 | Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County | Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect | 64 | importance 55; freshness 91.03; urgency 2/10 |
-| 3 | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | 60 | position locked: identity_conflict |
-| 4 | Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 64 | importance 65; freshness 75.39; urgency 2/10 |
-| 5 | Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect | Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves | 63 | importance 35; freshness 86.4; urgency 2/10; validated material update |
-| 6 | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 61 | importance 55; freshness 75.4; urgency 2/10 |
-| 7 | Indiantown Village Council fires manager, rejects data center pause after resident outcry | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | 54 | importance 35; freshness 75.4; urgency 2/10 |
-| 8 | Data center proposed for 174 acres off West Midway Road in St. Lucie County | Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart | 54 | importance 65; freshness 35.25; urgency 2/10 |
-| 9 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County | 59 | importance 35; freshness 81.35; urgency 4/10; -6 category saturation |
-| 10 | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | 57 | importance 35; freshness 91.02; urgency 2/10; -12 category saturation |
-| 11 | DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | 51 | importance 10; freshness 75.4; urgency 2/10; validated material update; -12 county saturation |
-| 12 | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | DeSantis and Byron Donalds to share Tampa stage as Florida Republicans seek unity after primary | 38 | importance 0; freshness 75.39; urgency 2/10 |
+| 1 | Viral AI-generated Cat in the Hat threat targets Vero Beach High School, deemed not credible | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | 74 | importance 35; freshness 99.94; urgency 6/10; validated material update |
+| 2 | Data centers become battleground in Florida governor's race as candidates split on AI infrastructure | Viral AI-generated Cat in the Hat threat targets Vero Beach High School, deemed not credible | 61 | importance 0; freshness 99.93; urgency 8/10 |
+| 3 | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | Governor's race candidates propose different approaches to license plate camera restrictions | 61 | importance 25; freshness 99.94; urgency 6/10 |
+| 4 | Governor's race candidates propose different approaches to license plate camera restrictions | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 59 | importance 65; freshness 55.49; urgency 2/10 |
+| 5 | St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases | Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves | 58 | importance 35; freshness 66.5; urgency 2/10; validated material update |
+| 6 | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | 55 | position locked: identity_conflict |
+| 7 | Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 56 | importance 55; freshness 55.5; urgency 2/10 |
+| 8 | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | Data centers become battleground in Florida governor's race as candidates split on AI infrastructure | 55 | importance 0; freshness 99.92; urgency 7/10; -6 category saturation |
+| 9 | Indiantown Village Council fires manager, rejects data center pause after resident outcry | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | 49 | importance 35; freshness 55.5; urgency 2/10 |
+| 10 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 56 | importance 35; freshness 61.48; urgency 2/10; validated material update; -6 category saturation; -4 county saturation |
+| 11 | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | 47 | importance 10; freshness 55.5; urgency 2/10; validated material update; -4 county saturation |
+| 12 | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases | 46 | importance 0; freshness 58.93; urgency 7/10; -8 county saturation |
 
 ## Recommended moves
 
-- **Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds**: 46 → 6 — importance 55; freshness 75.4; urgency 2/10
-- **Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie**: 44 → 7 — importance 35; freshness 75.4; urgency 2/10
-- **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**: 45 → 8 — importance 65; freshness 35.25; urgency 2/10
-- **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**: 12 → 4 — importance 65; freshness 75.39; urgency 2/10
-- **Motorcycle crash shuts down I-95 southbound near Hobe Sound in Martin County**: 2 → 9 — importance 35; freshness 81.35; urgency 4/10; -6 category saturation
-- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 9 → 15 — importance 35; freshness 81.38; urgency 2/10; validated material update
-- **Indiantown Village Council fires manager, rejects data center pause after resident outcry**: 7 → 13 — importance 0; freshness 91.01; urgency 2/10
-- **Data center proposed for 174 acres off West Midway Road in St. Lucie County**: 8 → 14 — importance 10; freshness 40.39; urgency 5/10
-- **Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County**: 6 → 10 — importance 35; freshness 91.02; urgency 2/10; -12 category saturation
-- **Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect**: 5 → 2 — importance 55; freshness 91.03; urgency 2/10
-- **Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves**: 4 → 5 — importance 35; freshness 86.4; urgency 2/10; validated material update
-- **Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills**: 10 → 11 — importance 10; freshness 75.4; urgency 2/10; validated material update; -12 county saturation
+- **Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds**: 47 → 7 — importance 55; freshness 55.5; urgency 2/10
+- **Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie**: 45 → 9 — importance 35; freshness 55.5; urgency 2/10
+- **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**: 22 → 4 — importance 65; freshness 55.49; urgency 2/10
+- **St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases**: 5 → 12 — importance 0; freshness 58.93; urgency 7/10; -8 county saturation
+- **Data centers become battleground in Florida governor's race as candidates split on AI infrastructure**: 2 → 8 — importance 0; freshness 99.92; urgency 7/10; -6 category saturation
+- **Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County**: 8 → 13 — importance 25; freshness 71.12; urgency 2/10
+- **Indiantown Village Council fires manager, rejects data center pause after resident outcry**: 9 → 14 — importance 0; freshness 71.11; urgency 2/10
+- **Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns**: 12 → 15 — importance 0; freshness 0.0; urgency 4/10
+- **Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound**: 3 → 1 — importance 35; freshness 99.94; urgency 6/10; validated material update
+- **Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves**: 7 → 5 — importance 35; freshness 66.5; urgency 2/10; validated material update
+- **Viral AI-generated Cat in the Hat threat targets Vero Beach High School, deemed not credible**: 1 → 2 — importance 0; freshness 99.93; urgency 8/10
+- **Governor's race candidates propose different approaches to license plate camera restrictions**: 4 → 3 — importance 25; freshness 99.94; urgency 6/10
 
 ## Guardrails
 
