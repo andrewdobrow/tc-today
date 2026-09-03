@@ -79,6 +79,7 @@ from .incident_identity import (
     compare_story_incidents,
     find_matching_incident_story,
     incident_anchor_key,
+    incident_anchor_write_authoritative,
     named_person_death_subjects,
     timeline_incident_anchor,
 )
@@ -229,6 +230,7 @@ __all__ = [
     "compare_story_incidents",
     "find_matching_incident_story",
     "incident_anchor_key",
+    "incident_anchor_write_authoritative",
     "named_person_death_subjects",
     "timeline_incident_anchor",
     "SOURCE_IDENTITY_VERSION",

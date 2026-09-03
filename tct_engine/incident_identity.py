@@ -516,6 +516,49 @@ def _named_person_death_anchor(
     return f"named-person-death:{_slug(people[0])}", people
 
 
+def incident_anchor_write_authoritative(anchor_key: object) -> bool:
+    """Return whether a structured incident anchor may *by itself* own a canonical URL.
+
+    Incident anchors serve two different jobs: candidate retrieval and destructive
+    publication identity.  Only anchors that encode an incident-specific subject or
+    asset are strong enough for the latter.  Broad family+jurisdiction anchors remain
+    useful for retrieving possible matches, but they must be independently
+    corroborated before any merge, redirect, overwrite, or live-surface canonical
+    rebind.  Unknown future anchor families fail closed to candidate-only.
+    """
+
+    value = str(anchor_key or "").strip().casefold()
+    if not value:
+        return False
+
+    # Named subjects identify one continuing real-world incident rather than a
+    # jurisdiction-wide class of incidents.
+    for prefix in (
+        "missing-person:",
+        "named-person-death:",
+        "law-enforcement-operation:",
+    ):
+        if value.startswith(prefix):
+            subject = value[len(prefix):].strip(" :-")
+            return bool(subject)
+
+    # Infrastructure anchors encode an asset class, one specific road/corridor, and
+    # the failure state (currently ``nonoperational``).  That is materially narrower
+    # than a county/city class key and preserves the established traffic-signal
+    # continuity contract.
+    if value.startswith("infrastructure-condition:"):
+        parts = [part.strip() for part in value.split(":")]
+        return len(parts) >= 4 and bool(parts[1]) and bool(parts[2]) and bool(parts[3])
+
+    # ``mass-animal-hoarding:<area>`` intentionally contains only an event family
+    # plus a broad locality.  Multiple unrelated hoarding cases can occur in the same
+    # county, so this key is retrieval evidence only.
+    if value.startswith("mass-animal-hoarding:"):
+        return False
+
+    return False
+
+
 def incident_anchor_key(
     *,
     titles: Iterable[object],

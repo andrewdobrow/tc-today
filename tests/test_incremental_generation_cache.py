@@ -189,7 +189,8 @@ def test_category_generation_key_changes_with_source_content():
 
 def test_production_workflow_restores_and_sanitizes_versioned_incremental_cache():
     workflow = Path(".github/workflows/update.yml").read_text(encoding="utf-8")
-    assert "actions/cache@v4" in workflow
+    assert "actions/cache/restore@v4" in workflow
+    assert "actions/cache/save@v4" in workflow
     assert "data/generation-cache.json" in workflow
     assert "tct-generation-cache-v2-source-focus-" in workflow
     assert "tct-generation-cache-v1-" not in workflow
@@ -197,6 +198,15 @@ def test_production_workflow_restores_and_sanitizes_versioned_incremental_cache(
     assert workflow.index("Restore persistent generation cache") < workflow.index(
         "Sanitize persistent generation cache"
     ) < workflow.index("Run editorial engine tests")
+    assert workflow.index("Generate news") < workflow.index(
+        "Save generation cache even when generation fails"
+    )
+    save_block = workflow[
+        workflow.index("Save generation cache even when generation fails"):
+        workflow.index("Upload model bake-off review")
+    ]
+    assert "if: always()" in save_block
+    assert "actions/cache/save@v4" in save_block
     assert "timeout-minutes: 90" in workflow
     assert "ACTIVE_WORKFLOW=tct-bounded-runtime-v1.9.6" in workflow
 

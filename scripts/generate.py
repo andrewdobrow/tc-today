@@ -57,6 +57,7 @@ try:
         source_identity_requires_title_continuity,
         source_identity_title_compatible,
         incident_anchor_key,
+        incident_anchor_write_authoritative,
         SEMANTIC_PUBLICATION_GATE_VERSION,
         SEMANTIC_MATERIAL_UPDATE_VERSION,
         compose_semantic_material_update,
@@ -103,6 +104,7 @@ except Exception as exc:
     source_identity_requires_title_continuity = None
     source_identity_title_compatible = None
     incident_anchor_key = None
+    incident_anchor_write_authoritative = None
     SEMANTIC_PUBLICATION_GATE_VERSION = "unavailable"
     SEMANTIC_MATERIAL_UPDATE_VERSION = "unavailable"
     compose_semantic_material_update = None
@@ -12617,7 +12619,7 @@ def _build_final_canonical_surface_context(
     incident_groups = defaultdict(list)
     for row in archive_rows:
         anchor = str(row.get("incident_anchor_key") or "").strip()
-        if anchor:
+        if anchor and _incident_anchor_can_own_canonical(anchor):
             incident_groups[anchor].append(row)
     incident_anchor_canonical_slugs = {}
     for anchor, rows in incident_groups.items():
@@ -12662,9 +12664,13 @@ def _final_canonical_surface_identity(item, permalink, context):
         or ""
     ).strip()
 
-    incident_anchor = str(
+    persisted_incident_anchor = str(
         (canonical_entry or {}).get("incident_anchor_key")
         or (raw_entry or {}).get("incident_anchor_key")
+        or ""
+    ).strip()
+    incident_anchor = str(
+        persisted_incident_anchor
         or item.get("incident_anchor_key")
         or ""
     ).strip()
@@ -12689,12 +12695,20 @@ def _final_canonical_surface_identity(item, permalink, context):
         preferred_slug = context.get("custom_event_canonical_slugs", {}).get(event_key, "")
         identity_key = f"custom-event:{event_key}"
         identity_basis = "durable_custom_event"
-    elif incident_anchor:
+    elif incident_anchor and _incident_anchor_can_own_canonical(incident_anchor):
         preferred_slug = context.get("incident_anchor_canonical_slugs", {}).get(
             incident_anchor, ""
         )
         identity_key = f"incident:{incident_anchor}"
         identity_basis = "structured_incident_anchor"
+    elif incident_anchor and not persisted_incident_anchor:
+        # A live-only candidate anchor may keep two rich in-memory placements distinct
+        # until rendered URL projection self-heals them, but it cannot choose another
+        # canonical slug. Persisted candidate-only anchors are ignored entirely so a
+        # broad family+area label cannot collapse separate archive publications.
+        preferred_slug = canonical_slug
+        identity_key = f"candidate-incident:{incident_anchor}"
+        identity_basis = "candidate_structured_incident_anchor"
     elif story_id_safe:
         preferred_slug = context.get("story_canonical_slugs", {}).get(story_id, "")
         identity_key = f"story:{story_id}"
@@ -19559,13 +19573,18 @@ def _find_authoritative_custom_incident_match(item, archived_customs=None, curre
         authority_key = _known_event_key(_story_text(authority))
         if candidate_key and authority_key and candidate_key == authority_key:
             return authority_row, 100, "exact_known_event_key"
-        if not _same_event_items(candidate, authority):
+        evidence = _cross_source_same_event_evidence(
+            candidate, authority, allow_custom=True
+        )
+        if not evidence.get("write_authorized"):
             continue
-        confidence = _story_match_confidence(candidate, authority)
-        if confidence >= AUTO_SUPPRESSION_CONFIDENCE and confidence > best_confidence:
+        confidence = int(round(float(evidence.get("confidence") or 0.0) * 100))
+        if confidence > best_confidence:
             best = authority_row
             best_confidence = confidence
-            best_basis = "high_confidence_custom_incident"
+            best_basis = "event_identity_authority:" + str(
+                evidence.get("proof_type") or "verified_custom_incident"
+            )
     return best, best_confidence, best_basis
 
 
@@ -21137,9 +21156,11 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
 def _page_header(active=""):
     def cat_link(label, href, key):
         cls = "cat-btn active" if key == active else "cat-btn"
-        if key == active:
-            return f'<span class="{cls}">{label}</span>'
-        return f'<a href="{href}" class="{cls}" style="text-decoration:none">{label}</a>'
+        current = ' aria-current="page"' if key == active else ""
+        return (
+            f'<a href="{href}" class="{cls}" style="text-decoration:none"{current}>'
+            f'{label}</a>'
+        )
 
     # Build the category links from CATEGORIES so these labels always match the
     # homepage nav. Previously they were hardcoded abbreviations ("Crime",
@@ -21165,6 +21186,61 @@ def _page_header(active=""):
       </div>
     </div>
   </header>"""
+
+
+def _normalize_active_category_navigation_sitewide(output_root):
+    """Keep active header category tabs navigable on retained pages.
+
+    Article pages historically rendered the active category as a ``span``. That
+    made the highlighted tab inert, so a reader on a Sports article could not
+    click Sports to return to the Sports listing. New headers render active tabs
+    as normal links; this retained-page migration upgrades existing HTML too.
+    """
+    destinations = {
+        "Top News": "/",
+        **{cfg["label"]: f"/?cat={key}" for key, cfg in CATEGORIES.items()},
+        "Weather": "/weather.html",
+        "Archive": "/archive.html",
+    }
+    scanned = updated = 0
+    failures = []
+    root = Path(output_root)
+    for path in root.rglob("*.html"):
+        scanned += 1
+        original = path.read_text(encoding="utf-8", errors="ignore")
+        normalized = original
+        for label, href in destinations.items():
+            pattern = re.compile(
+                rf'<span\s+class=["\']cat-btn active["\']\s*>'
+                rf'{re.escape(label)}</span>',
+                re.I,
+            )
+            replacement = (
+                f'<a href="{href}" class="cat-btn active" '
+                f'style="text-decoration:none" aria-current="page">{label}</a>'
+            )
+            normalized = pattern.sub(replacement, normalized)
+        if normalized != original:
+            path.write_text(normalized, encoding="utf-8")
+            updated += 1
+
+        # Fail closed only for known category labels. A retained non-category
+        # nav item such as Events may intentionally use an active span.
+        for label in destinations:
+            if re.search(
+                rf'<span\s+class=["\']cat-btn active["\']\s*>'
+                rf'{re.escape(label)}</span>',
+                normalized,
+                re.I,
+            ):
+                failures.append(str(path.relative_to(root)))
+                break
+    if failures:
+        raise RuntimeError(
+            "Active category navigation contract FAILED: "
+            + ", ".join(failures[:10])
+        )
+    return {"scanned": scanned, "updated": updated}
 
 
 KIT_INLINE_FORM_UID = "30e15672d3"
@@ -22613,6 +22689,33 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
         ("headline|" + headline_key).encode("utf-8")
     ).hexdigest()[:32]
     return None, forced_slug, story_id
+
+def _incident_anchor_can_own_canonical(anchor):
+    """Return whether an incident anchor is strong enough for destructive identity.
+
+    Candidate retrieval may use broader structured anchors, but every merge, redirect,
+    overwrite, and final-surface canonical rebind must share this one authority rule.
+    Unknown anchors fail closed.
+    """
+    if incident_anchor_write_authoritative is None:
+        return False
+    try:
+        return bool(incident_anchor_write_authoritative(anchor))
+    except Exception:
+        return False
+
+
+def _publication_identity_key_can_consolidate(key, safe_story_ids=()):
+    """Single authority boundary for identity-graph destructive edges."""
+    value = str(key or "").strip()
+    if not value:
+        return False
+    if value.startswith("story:"):
+        return value.split(":", 1)[1] in set(safe_story_ids or ())
+    if value.startswith("incident:"):
+        return _incident_anchor_can_own_canonical(value.split(":", 1)[1])
+    return value.startswith(("source:", "custom-event:", "weather:"))
+
 
 def _publication_copy_rank(entry):
     """Rank competing copies for one public story without losing update receipts.
@@ -26370,7 +26473,7 @@ def _cross_source_candidate_slugs(features, ledger):
 
 
 def _cross_source_same_event_evidence(
-    left, right, *, left_features=None, right_features=None
+    left, right, *, left_features=None, right_features=None, allow_custom=False
 ):
     """Classify a cross-source pair under the canonical write authority boundary.
 
@@ -26403,9 +26506,12 @@ def _cross_source_same_event_evidence(
     if _is_nonstory_placeholder(left) or _is_nonstory_placeholder(right):
         result["reason"] = "nonstory_payload"
         return result
-    if any(
-        item.get("is_custom") or item.get("authoritative_custom")
-        for item in (left, right)
+    if (
+        not allow_custom
+        and any(
+            item.get("is_custom") or item.get("authoritative_custom")
+            for item in (left, right)
+        )
     ):
         result["reason"] = "custom_publication_outside_cross_source_fallback"
         return result
@@ -27312,7 +27418,9 @@ def _build_canonical_publication_ledger(archive, identity_index=None):
             continue
         canonical = min(unique.values(), key=_publication_canonical_key)
         key_to_slug[key] = canonical.get("slug", "")
-        enforce_conflict = not key.startswith("story:") or key.split(":", 1)[1] in safe_story_ids
+        enforce_conflict = _publication_identity_key_can_consolidate(
+            key, safe_story_ids
+        )
         if len(unique) > 1 and enforce_conflict:
             key_conflicts[key] = sorted(unique)
     return {
@@ -27636,6 +27744,8 @@ def _reconcile_canonical_publication_ledger(archive, identity_index, output_root
             if key.startswith("story:") and key.split(":", 1)[1] not in safe_story_ids:
                 continue
             keys.append(key)
+            if not _publication_identity_key_can_consolidate(key, safe_story_ids):
+                continue
             if key in key_owner:
                 union(index, key_owner[key])
             else:
@@ -27816,15 +27926,18 @@ def _strict_custom_duplicate_pair(candidate, canonical):
         return True, 100
     a = _event_audit_item(candidate, "archive")
     b = _event_audit_item(canonical, "archive")
-    # Major milestones are still part of the same event and must consolidate.
-    if not _same_story_topic(a, b):
-        return False, 0
-    confidence = _story_match_confidence(a, b)
+    # Narrow deterministic known-event contracts remain conclusive. Every other
+    # custom/archive consolidation must cross the same source-fact authority boundary
+    # used by forward publication; fuzzy topic confidence cannot own a redirect.
     known_a = _known_event_key(_story_text(a))
     known_b = _known_event_key(_story_text(b))
     if known_a and known_a == known_b:
-        confidence = max(confidence, 99)
-    return confidence >= CANONICAL_CLEANUP_CONFIDENCE, confidence
+        return True, 100
+    evidence = _cross_source_same_event_evidence(a, b, allow_custom=True)
+    if not evidence.get("write_authorized"):
+        return False, 0
+    confidence = int(round(float(evidence.get("confidence") or 0.0) * 100))
+    return True, confidence
 
 
 def apply_canonical_story_cleanup(archive, articles_dir, output_root):
@@ -27986,7 +28099,7 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
         if not slug or slug in removed_slugs:
             continue
         anchor = _durable_incident_anchor(entry, include_archive_body=True)
-        if anchor:
+        if anchor and _incident_anchor_can_own_canonical(anchor):
             incident_groups[anchor].append(entry)
 
     for anchor, members in incident_groups.items():
@@ -28517,7 +28630,7 @@ def validate_archive_incident_uniqueness(archive, output_root):
                 "headline": entry.get("headline", ""),
             })
         anchor = _durable_incident_anchor(entry, include_archive_body=True)
-        if anchor:
+        if anchor and _incident_anchor_can_own_canonical(anchor):
             groups[anchor].append({
                 "slug": slug,
                 "headline": entry.get("headline", ""),
@@ -36249,6 +36362,12 @@ def main():
     _membership_chrome_updates = _apply_membership_site_chrome(OUTPUT_DIR)
     if _membership_chrome_updates:
         print(f"  Membership site chrome normalized on {_membership_chrome_updates} retained page(s)")
+    _active_nav = _normalize_active_category_navigation_sitewide(OUTPUT_DIR)
+    print(
+        "  Active category navigation contract PASSED: "
+        f"{_active_nav['scanned']} HTML page(s) verified; "
+        f"{_active_nav['updated']} retained page(s) normalized"
+    )
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
     _content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
     if _content_override_count:

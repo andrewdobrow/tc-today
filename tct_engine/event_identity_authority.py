@@ -11,6 +11,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Iterable
 
+from .incident_identity import incident_anchor_write_authoritative
+
 OUTCOME_VERIFIED = "same_event_verified"
 OUTCOME_POSSIBLE = "possible_relationship"
 OUTCOME_NEW = "new_story"
@@ -69,7 +71,6 @@ def authorize_exact_identity_keys(
 
     for prefix, proof in (
         ("source:", "exact_source_url"),
-        ("incident:", "exact_structured_incident_key"),
         ("custom-event:", "exact_custom_event_key"),
         ("weather:", "exact_weather_event_key"),
     ):
@@ -82,6 +83,33 @@ def authorize_exact_identity_keys(
                 proof,
                 "deterministic_identity_key",
             )
+
+    incident_keys = [key for key in keys if key.startswith("incident:")]
+    if incident_keys:
+        authoritative = [
+            key for key in incident_keys
+            if incident_anchor_write_authoritative(key.split(":", 1)[1])
+        ]
+        if authoritative:
+            return _decision(
+                OUTCOME_VERIFIED,
+                TIER_EXACT,
+                True,
+                "exact_structured_incident_key",
+                "exact_structured_incident_key",
+                "deterministic_identity_key",
+                "incident_specific_anchor",
+            )
+        return _decision(
+            OUTCOME_POSSIBLE,
+            TIER_CANDIDATE,
+            False,
+            "broad_structured_incident_key",
+            "structured_incident_key_requires_independent_event_proof",
+            "candidate_only",
+            "write_forbidden",
+            "broad_incident_anchor",
+        )
 
     # A persistent story ID is retrieval evidence only. The registry may already
     # be contaminated by a broad event key, so circularly trusting that ID would

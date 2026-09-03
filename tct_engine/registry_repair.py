@@ -44,6 +44,7 @@ _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
 
 _BROAD_EVENT_PREFIXES = ("traffic-crash-", "fire-", "missing-person-")
+_BROAD_AREA_ONLY_INCIDENT_PREFIXES = ("mass-animal-hoarding:",)
 _BROAD_NAMED_DEATH_LOCATION_TOKENS = frozenset({
     "avenue", "beach", "boulevard", "bridge", "circle", "county",
     "drive", "highway", "interstate", "lane", "parkway", "road",
@@ -75,6 +76,11 @@ def is_broad_event_class_key(event_key: object) -> bool:
         # incident candidate; only the unsuffixed jurisdiction-level class remains
         # broad.
         return _HASH_SUFFIX_RE.search(value) is None
+    if value.startswith(_BROAD_AREA_ONLY_INCIDENT_PREFIXES):
+        # Area-only structured anchors describe a family of incidents in one
+        # jurisdiction, not one real-world occurrence. They may assist candidate
+        # retrieval but must never own a persistent event mapping.
+        return True
     if value.startswith("named-person-death:"):
         subject = value.split(":", 1)[1]
         ordered_tokens = tuple(token for token in subject.split("-") if token)
