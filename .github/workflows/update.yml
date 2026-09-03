@@ -47,7 +47,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Restore persistent generation cache
-        uses: actions/cache@v4
+        id: generation-cache-restore
+        uses: actions/cache/restore@v4
         with:
           path: data/generation-cache.json
           key: tct-generation-cache-v2-source-focus-${{ github.ref_name }}-${{ github.run_id }}
@@ -136,6 +137,13 @@ jobs:
           # editor vs Opus 5 editor, with the same Sonnet 4.5 writer. Runs only after
           # the normal production build and cannot write live publication state.
           TCT_ASSIGNMENT_EDITOR_SHADOW: ${{ inputs.assignment_editor_shadow }}
+
+      - name: Save generation cache even when generation fails
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/generation-cache.json
+          key: tct-generation-cache-v2-source-focus-${{ github.ref_name }}-${{ github.run_id }}
 
       - name: Upload model bake-off review
         if: ${{ inputs.model_bakeoff == true }}
