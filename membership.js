@@ -8,6 +8,8 @@ let membershipStatusPromise = null
 const MEMBER_HINT_KEY = 'tct_member_entitled_hint'
 const METER_STATE_KEY = 'tct_monthly_free_article_v1'
 const METER_PENDING_TTL_MS = 120000
+const MONTHLY_FREE_NEWSLETTER_UID = '2865b8d821'
+const MONTHLY_FREE_NEWSLETTER_SRC = 'https://treasure-coast-today.kit.com/2865b8d821/index.js'
 
 function setMemberHint(entitled){
   try {
@@ -244,6 +246,45 @@ async function openPortal(button){
   window.location.assign(data.url)
 }
 
+function placeMonthlyFreeNewsletter(){
+  const articleRoot = qs('.article-main-column') || qs('.article-wrap') || document
+  if (qs('[data-tct-monthly-free-newsletter]', articleRoot)) return false
+
+  // Keep the Kit form outside .article-body so article typography cannot bleed
+  // into the form. Split the unlocked story after paragraph two, but only when
+  // the complete article has at least five top-level story paragraphs.
+  const articleBody = qsa('.article-body', articleRoot).find(node =>
+    !node.closest('.tct-member-only') && !node.classList.contains('tct-protected-content')
+  )
+  if (!articleBody) return false
+  const paragraphs = Array.from(articleBody.children).filter(node => node.tagName === 'P')
+  if (paragraphs.length <= 4) return false
+
+  const secondParagraph = paragraphs[1]
+  if (!secondParagraph) return false
+
+  const continuation = document.createElement('div')
+  continuation.className = articleBody.className
+  continuation.classList.add('tct-monthly-free-continuation')
+  continuation.setAttribute('data-tct-monthly-free-continuation', 'true')
+  while (secondParagraph.nextSibling) continuation.appendChild(secondParagraph.nextSibling)
+
+  const slot = document.createElement('aside')
+  slot.className = 'newsletter-inline-slot newsletter-inline-slot--monthly-free'
+  slot.setAttribute('aria-label', 'Subscribe to the Treasure Coast Morning Brief')
+  slot.setAttribute('data-tct-monthly-free-newsletter', 'true')
+
+  articleBody.insertAdjacentElement('afterend', continuation)
+  articleBody.insertAdjacentElement('afterend', slot)
+
+  const script = document.createElement('script')
+  script.async = true
+  script.setAttribute('data-uid', MONTHLY_FREE_NEWSLETTER_UID)
+  script.src = MONTHLY_FREE_NEWSLETTER_SRC
+  slot.appendChild(script)
+  return true
+}
+
 function setMeterPaywallState(paywall, period, afterRead=false){
   if (!paywall) return
   const month = monthNameForPeriod(period)
@@ -406,6 +447,7 @@ async function unlockArticle(statusOverride=null){
     endMeterPrepaint()
     setMessage(message, '')
     if (rendered) {
+      placeMonthlyFreeNewsletter()
       placePostReadMeterAfterStory(paywall)
       setMeterPaywallState(paywall, String(data.period || reservation.period || ''), true)
     }
