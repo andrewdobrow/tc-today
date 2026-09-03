@@ -370,7 +370,9 @@ def test_assignment_editor_accepts_explicit_opus_model_without_changing_prompt_c
 
 def test_generator_shadow_is_opt_in_post_build_and_cannot_publish():
     source = Path("scripts/generate.py").read_text()
-    assert '"TCT_ASSIGNMENT_EDITOR_SHADOW", "false"' in source
+    assert '"TCT_ASSIGNMENT_EDITOR_LIVE", "true"' in source
+    assert 'not ASSIGNMENT_EDITOR_LIVE_ENABLED' in source
+    assert 'os.environ.get("TCT_ASSIGNMENT_EDITOR_SHADOW", "false")' in source
     assert '"TCT_ASSIGNMENT_EDITOR_MODEL", "claude-sonnet-5"' in source
     assert "_queue_assignment_editor_category(" in source
     assert "_run_assignment_editor_shadow_after_build(all_categories, _pre_generation_archive)" in source
@@ -475,21 +477,17 @@ def test_shadow_alignment_uses_same_final_recovery_hero_when_shadow_is_suppresse
     assert diagnostics["shared_archive_recovery_used"] is True
     assert diagnostics["published_story_suppressions"][0]["surface"] == "hero"
 
-def test_update_workflow_exposes_separate_assignment_editor_shadow_checkbox_and_artifact():
+def test_update_workflow_promotes_live_assignment_editor_and_retires_three_way_checkbox():
     workflow = Path(".github/workflows/update.yml").read_text()
-    assert "assignment_editor_shadow:" in workflow
-    assert 'description: "Run 3-way assignment-editor shadow: production vs Sonnet 5 vs Opus 5"' in workflow
-    assert "TCT_ASSIGNMENT_EDITOR_SHADOW: ${{ inputs.assignment_editor_shadow }}" in workflow
-    assert "Upload assignment editor shadow review" in workflow
-    assert "data/assignment-editor-shadow-report.json" in workflow
-    assert "data/assignment-editor-shadow-review.md" in workflow
-    assert "data/assignment-editor-shadow-answer-key.json" in workflow
-    assert "data/model-usage-report.json" in workflow
+    assert "assignment_editor_shadow:" not in workflow
+    assert "TCT_ASSIGNMENT_EDITOR_SHADOW:" not in workflow
+    assert "Upload assignment editor shadow review" not in workflow
+    assert "TCT_ASSIGNMENT_EDITOR_LIVE: ${{ vars.TCT_ASSIGNMENT_EDITOR_LIVE || 'true' }}" in workflow
 
 
-def test_model_usage_distinguishes_editor_and_writer_shadow_costs():
-    assert _WORKLOAD_CLASS_BY_FUNCTION["_run_assignment_editor"] == "assignment_editor_shadow"
-    assert _WORKLOAD_CLASS_BY_FUNCTION["_run_assignment_writer"] == "assignment_writer_shadow"
+def test_model_usage_tracks_promoted_editor_and_writer_as_live_workloads():
+    assert _WORKLOAD_CLASS_BY_FUNCTION["_run_assignment_editor"] == "assignment_editor"
+    assert _WORKLOAD_CLASS_BY_FUNCTION["_run_assignment_writer"] == "assignment_writer"
 
 
 def test_assignment_writer_uses_live_lead_and_headline_integrity_standard(monkeypatch):
@@ -1070,3 +1068,75 @@ def test_shadow_artifact_reports_final_mapping_validity_not_only_assignment_plan
     assert row["comparison_signals"]["challenger_source_mapping_valid"] is False
     assert row["comparison_signals"]["challenger_final_source_mapping"]["mismatches"][0]["source_index"] == 1
     assert "not scoreable" in review_path.read_text().lower()
+
+
+def test_promoted_live_path_runs_sonnet5_editor_then_sonnet45_single_source_writers(monkeypatch):
+    from scripts import generate
+
+    editor = _Response(
+        json.dumps({
+            "hero": {"source_index": 2, "angle": "Lead with the collision impact", "urgency_score": 8},
+            "cards": [{"source_index": 1, "angle": "Lead with the surrender", "urgency_score": 7}],
+        }),
+        model="claude-sonnet-5",
+    )
+    hero_writer = _Response(
+        json.dumps({
+            "headline": "Hobe Sound collision update",
+            "body": "Paragraph one about the Hobe Sound collision.\n\nParagraph two.\n\nParagraph three.\n\nParagraph four.",
+            "urgency_score": 999,
+            "published": "wrong",
+            "source_index": 999,
+        })
+    )
+    card_writer = _Response(
+        json.dumps({
+            "headline": "Palm City surrender update",
+            "teaser": "A concise Palm City teaser.",
+            "body": "Paragraph one about the Palm City surrender.\n\nParagraph two.",
+            "urgency_score": 999,
+            "published": "wrong",
+            "source_index": 999,
+        })
+    )
+    fake = _FakeClient([editor, hero_writer, card_writer])
+    monkeypatch.setattr(generate, "client", fake)
+
+    headlines = []
+    for row in _shadow_packet()["source_inputs"]:
+        source = dict(row)
+        source.update({
+            "summary": row["article_text"],
+            "link": f"https://example.com/source-{row['source_index']}",
+            "source_url": f"https://example.com/source-{row['source_index']}",
+            "image_url": "",
+            "feed_url": "https://example.com/rss",
+        })
+        headlines.append(source)
+
+    data = generate._run_live_assignment_editor_category(
+        "martin", "Martin County", headlines, timeout_seconds=120
+    )
+
+    assert len(fake.messages.calls) == 3
+    assert fake.messages.calls[0]["model"] == "claude-sonnet-5"
+    assert fake.messages.calls[1]["model"] == generate.MODEL_ARTICLES
+    assert fake.messages.calls[2]["model"] == generate.MODEL_ARTICLES
+    assert "Your job is ONLY editorial assignment" in fake.messages.calls[0]["messages"][0]["content"]
+    assert "UNIQUE_SOURCE_TWO_FACTS" in fake.messages.calls[1]["messages"][0]["content"]
+    assert "UNIQUE_SOURCE_ONE_FACTS" not in fake.messages.calls[1]["messages"][0]["content"]
+    assert "UNIQUE_SOURCE_ONE_FACTS" in fake.messages.calls[2]["messages"][0]["content"]
+    assert "UNIQUE_SOURCE_TWO_FACTS" not in fake.messages.calls[2]["messages"][0]["content"]
+    assert data["hero"]["source_index"] == 2
+    assert data["hero"]["urgency_score"] == 8
+    assert data["cards"][0]["source_index"] == 1
+    assert data["cards"][0]["urgency_score"] == 7
+
+
+def test_promoted_live_architecture_is_default_and_disables_three_way_shadow():
+    from scripts import generate
+
+    assert generate.ASSIGNMENT_EDITOR_LIVE_ENABLED is True
+    assert generate.ASSIGNMENT_EDITOR_MODEL == "claude-sonnet-5"
+    assert generate.MODEL_ARTICLES == "claude-sonnet-4-5"
+    assert generate.ASSIGNMENT_EDITOR_SHADOW_ENABLED is False

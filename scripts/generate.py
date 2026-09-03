@@ -924,16 +924,26 @@ MODEL_BAKEOFF_REVIEW_PATH = OUTPUT_DIR / "data" / "model-bakeoff-review.md"
 MODEL_BAKEOFF_ANSWER_KEY_PATH = OUTPUT_DIR / "data" / "model-bakeoff-answer-key.json"
 MODEL_BAKEOFF_PENDING = {}
 
-# v1.13.6.6 opt-in assignment-editor shadow experiment. Live category generation
-# remains untouched on MODEL_ARTICLES. The shadow path separates newsroom roles:
-# Sonnet 5 chooses exact source assignments/angles, then Sonnet 4.5 writes only the
-# assigned single source. All execution happens after the production build.
-ASSIGNMENT_EDITOR_SHADOW_ENABLED = os.environ.get(
-    "TCT_ASSIGNMENT_EDITOR_SHADOW", "false"
+# v1.13.7.1y production newsroom role separation. Sonnet 5 is the live assignment
+# editor: it chooses exact story assignments, hero/supporting order, angle and urgency.
+# Sonnet 4.5 remains the writer and receives one preassigned source at a time. A repo
+# variable can fail closed to the legacy mixed generator for emergency rollback, but
+# production defaults to the separated architecture.
+ASSIGNMENT_EDITOR_LIVE_ENABLED = os.environ.get(
+    "TCT_ASSIGNMENT_EDITOR_LIVE", "true"
 ).strip().lower() in {"1", "true", "yes", "on"}
 ASSIGNMENT_EDITOR_MODEL = os.environ.get(
     "TCT_ASSIGNMENT_EDITOR_MODEL", "claude-sonnet-5"
 ).strip() or "claude-sonnet-5"
+
+# The completed three-way Sonnet 4.5 / Sonnet 5 / Opus 5 experiment is retained only
+# as diagnostic code. It cannot run alongside the promoted live architecture, which
+# prevents routine production from paying for duplicate editor/writer shadow calls.
+ASSIGNMENT_EDITOR_SHADOW_ENABLED = (
+    (not ASSIGNMENT_EDITOR_LIVE_ENABLED)
+    and os.environ.get("TCT_ASSIGNMENT_EDITOR_SHADOW", "false").strip().lower()
+    in {"1", "true", "yes", "on"}
+)
 ASSIGNMENT_EDITOR_OPUS_MODEL = os.environ.get(
     "TCT_ASSIGNMENT_EDITOR_OPUS_MODEL", "claude-opus-5"
 ).strip() or "claude-opus-5"
@@ -953,7 +963,7 @@ ASSIGNMENT_EDITOR_PENDING = {}
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.0.3-source-focus-cache-integrity"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.1y-live-assignment-editor"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
 # writer. Keeping one literal contract prevents the Sonnet 5 editor -> Sonnet 4.5
@@ -1285,6 +1295,8 @@ def _category_generation_cache_key(category_key, headlines):
         "version": CATEGORY_GENERATION_PROMPT_VERSION,
         "model_articles": MODEL_ARTICLES,
         "model_selection": MODEL_SELECTION,
+        "assignment_editor_live": bool(ASSIGNMENT_EDITOR_LIVE_ENABLED),
+        "assignment_editor_model": ASSIGNMENT_EDITOR_MODEL if ASSIGNMENT_EDITOR_LIVE_ENABLED else "",
         "category_key": category_key,
         # Invalidate only the category whose explicit contract changed. Other beat
         # caches remain reusable because their generation policy is unchanged.
@@ -7807,95 +7819,39 @@ Return ONLY valid JSON:
 """
 
 
-    request_kwargs = {
-        "model": MODEL_ARTICLES,
-        "max_tokens": 5600,
-        "system": [{
-            "type": "text",
-            "text": system_prompt,
-            "cache_control": {"type": "ephemeral"}
-        }],
-        "messages": [{"role": "user", "content": prompt}],
-        "extra_headers": {"anthropic-beta": "prompt-caching-2024-07-31"},
-    }
-    request_client = client
-    if request_timeout_seconds is not None:
-        request_timeout = max(1.0, float(request_timeout_seconds))
-        # The Anthropic SDK retries transient failures by default. Disable those
-        # hidden retries here because this pipeline owns a visible, bounded retry
-        # policy and must keep the entire category inside its declared budget.
-        if hasattr(client, "with_options"):
-            request_client = client.with_options(timeout=request_timeout, max_retries=0)
-        else:
-            # Offline test clients generally expose only messages.create().
-            request_kwargs["timeout"] = request_timeout
-    response = request_client.messages.create(**request_kwargs)
-
-    raw = response.content[0].text.strip()
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    raw = raw.strip()
-
-    try:
-        from json_repair import repair_json
-        data = json.loads(repair_json(raw))
-    except Exception:
-        try:
-            data = json.loads(raw, strict=False)
-        except json.JSONDecodeError:
-            import re as _re
-            cleaned = raw.encode("ascii", "ignore").decode("ascii")
-            try:
-                data = json.loads(cleaned, strict=False)
-            except json.JSONDecodeError:
-                start = cleaned.find("{")
-                end   = cleaned.rfind("}") + 1
-                if start == -1 or end <= start:
-                    # The model returned no JSON object at all (empty string, a refusal,
-                    # or prose). Raise a clear error the caller handles gracefully instead
-                    # of crashing the whole run with a bare ValueError from .index().
-                    raise ValueError(
-                        f"Model returned no JSON object (got {len(cleaned)} chars of non-JSON)"
-                    )
-                data  = json.loads(cleaned[start:end], strict=False)
-    # The model must return a JSON object. If it returns a bare array (e.g. a list
-    # of story objects, or the object wrapped in a list), normalize it to the dict
-    # we expect so we don't crash on data["category_key"] below.
-    if isinstance(data, list):
-        if len(data) == 1 and isinstance(data[0], dict):
-            data = data[0]
-        elif data and isinstance(data[0], dict) and "hero" in data[0]:
-            data = data[0]
-        elif all(isinstance(x, dict) for x in data) and data:
-            # A list of story objects — treat first as hero, rest as cards
-            data = {"hero": data[0], "cards": data[1:]}
-        else:
-            data = {"hero": {}, "cards": []}
-    if not isinstance(data, dict):
-        data = {"hero": {}, "cards": []}
-
-    # Capture the exact successful production request packet and raw normalized
-    # Sonnet 4.5 output before any downstream TCT post-processing. The challenger
-    # runs later, after the normal build, from an in-memory copy only.
-    if MODEL_BAKEOFF_ENABLED:
-        _queue_model_bakeoff_category(
-            category_key=category_key,
-            category_label=category_label,
-            headlines=headlines,
-            request_kwargs=request_kwargs,
-            baseline_output=data,
-            baseline_response=response,
+    if ASSIGNMENT_EDITOR_LIVE_ENABLED:
+        data = _run_live_assignment_editor_category(
+            category_key,
+            category_label,
+            headlines,
+            timeout_seconds=request_timeout_seconds,
         )
-    if ASSIGNMENT_EDITOR_SHADOW_ENABLED:
-        _queue_assignment_editor_category(
-            category_key=category_key,
-            category_label=category_label,
-            headlines=headlines,
-            baseline_output=data,
-            baseline_response=response,
+    else:
+        data, response, request_kwargs = _run_legacy_mixed_category_request(
+            system_prompt=system_prompt,
+            prompt=prompt,
+            request_timeout_seconds=request_timeout_seconds,
         )
+
+        # Historical shadow tools remain available only when the live separated
+        # architecture is explicitly rolled back. They never run in normal production.
+        if MODEL_BAKEOFF_ENABLED:
+            _queue_model_bakeoff_category(
+                category_key=category_key,
+                category_label=category_label,
+                headlines=headlines,
+                request_kwargs=request_kwargs,
+                baseline_output=data,
+                baseline_response=response,
+            )
+        if ASSIGNMENT_EDITOR_SHADOW_ENABLED:
+            _queue_assignment_editor_category(
+                category_key=category_key,
+                category_label=category_label,
+                headlines=headlines,
+                baseline_output=data,
+                baseline_response=response,
+            )
 
     data["category_key"]   = category_key
     data["category_label"] = category_label
@@ -10295,76 +10251,89 @@ def _run_model_bakeoff_after_build():
 
 
 
+def _build_assignment_editor_packet(
+    *, category_key, category_label, headlines, baseline_output=None, baseline_response=None,
+):
+    """Build the exact source packet shared by live and historical shadow editors."""
+    source_inputs = []
+    source_pool = []
+    for source in headlines or []:
+        if not isinstance(source, dict):
+            continue
+        index = len(source_inputs) + 1
+        article_text = str(source.get("article_text") or source.get("summary") or "")[:14000]
+        source_inputs.append({
+            "source_index": index,
+            "title": str(source.get("title") or ""),
+            "published": str(source.get("published") or ""),
+            "source_type": str(source.get("source_type") or ""),
+            "source_quality": str(source.get("source_quality") or ""),
+            "hero_eligible": source.get("hero_eligible"),
+            "category_match_score": source.get("category_match_score"),
+            "story_form": _source_story_form(source),
+            "article_text": article_text,
+            "canonical_context_slug": str(source.get("_canonical_context_slug") or ""),
+            "canonical_context_headline": str(source.get("_canonical_context_headline") or ""),
+            "canonical_context_body": str(source.get("_canonical_context_body") or "")[:2400],
+            "_canonical_context_slug": str(source.get("_canonical_context_slug") or ""),
+            "_canonical_context_headline": str(source.get("_canonical_context_headline") or ""),
+            "_canonical_context_body": str(source.get("_canonical_context_body") or "")[:2400],
+            "link": str(source.get("link") or ""),
+            "source_url": str(source.get("source_url") or source.get("link") or ""),
+            "image_url": str(source.get("image_url") or ""),
+            "summary": str(source.get("summary") or ""),
+            "feed_url": str(source.get("feed_url") or ""),
+            "editorial_story_id": str(source.get("editorial_story_id") or source.get("_editorial_story_id") or ""),
+            "_editorial_event_key": str(source.get("_editorial_event_key") or ""),
+            "_editorial_route": str(source.get("_editorial_route") or ""),
+            "_editorial_relationship": str(source.get("_editorial_relationship") or ""),
+            "publication_relationship": str(source.get("publication_relationship") or ""),
+            "related_parent_slug": str(source.get("related_parent_slug") or ""),
+            "related_parent_story_id": str(source.get("related_parent_story_id") or ""),
+            "_semantic_independent_followup": bool(source.get("_semantic_independent_followup")),
+            "incident_anchor_key": str(source.get("incident_anchor_key") or ""),
+            "locality": list(source.get("locality") or []),
+            "event_families": list(source.get("event_families") or []),
+            "people": list(source.get("people") or []),
+            "precise_locations": list(source.get("precise_locations") or []),
+            "agencies": list(source.get("agencies") or []),
+        })
+        source_pool.append({
+            "title": str(source.get("title") or ""),
+            "published": str(source.get("published") or ""),
+            "source_type": str(source.get("source_type") or ""),
+            "source_quality": str(source.get("source_quality") or ""),
+            "hero_eligible": source.get("hero_eligible"),
+            "category_match_score": source.get("category_match_score"),
+            "source_url": str(source.get("source_url") or source.get("link") or ""),
+        })
+    baseline_model = str(
+        getattr(baseline_response, "model", None)
+        or MODEL_ARTICLES
+    )
+    return {
+        "category_key": str(category_key),
+        "category_label": str(category_label),
+        "source_inputs": source_inputs,
+        "source_pool": source_pool,
+        "raw_baseline_output": copy.deepcopy(baseline_output or {}),
+        "baseline_output": copy.deepcopy(baseline_output or {}),
+        "baseline_model": baseline_model,
+    }
+
+
 def _queue_assignment_editor_category(
     *, category_key, category_label, headlines, baseline_output, baseline_response,
 ):
-    """Queue a successful live category for post-build editor/writer shadow review."""
+    """Queue a successful legacy mixed category for post-build shadow review."""
     try:
-        source_inputs = []
-        source_pool = []
-        for source in headlines or []:
-            if not isinstance(source, dict):
-                continue
-            index = len(source_inputs) + 1
-            article_text = str(source.get("article_text") or source.get("summary") or "")[:14000]
-            source_inputs.append({
-                "source_index": index,
-                "title": str(source.get("title") or ""),
-                "published": str(source.get("published") or ""),
-                "source_type": str(source.get("source_type") or ""),
-                "source_quality": str(source.get("source_quality") or ""),
-                "hero_eligible": source.get("hero_eligible"),
-                "category_match_score": source.get("category_match_score"),
-                "story_form": _source_story_form(source),
-                "article_text": article_text,
-                "canonical_context_slug": str(source.get("_canonical_context_slug") or ""),
-                "canonical_context_headline": str(source.get("_canonical_context_headline") or ""),
-                "canonical_context_body": str(source.get("_canonical_context_body") or "")[:2400],
-                "_canonical_context_slug": str(source.get("_canonical_context_slug") or ""),
-                "_canonical_context_headline": str(source.get("_canonical_context_headline") or ""),
-                "_canonical_context_body": str(source.get("_canonical_context_body") or "")[:2400],
-                "link": str(source.get("link") or ""),
-                "source_url": str(source.get("source_url") or source.get("link") or ""),
-                "image_url": str(source.get("image_url") or ""),
-                "summary": str(source.get("summary") or ""),
-                "feed_url": str(source.get("feed_url") or ""),
-                "editorial_story_id": str(source.get("editorial_story_id") or source.get("_editorial_story_id") or ""),
-                "_editorial_event_key": str(source.get("_editorial_event_key") or ""),
-                "_editorial_route": str(source.get("_editorial_route") or ""),
-                "_editorial_relationship": str(source.get("_editorial_relationship") or ""),
-                "publication_relationship": str(source.get("publication_relationship") or ""),
-                "related_parent_slug": str(source.get("related_parent_slug") or ""),
-                "related_parent_story_id": str(source.get("related_parent_story_id") or ""),
-                "_semantic_independent_followup": bool(source.get("_semantic_independent_followup")),
-                "incident_anchor_key": str(source.get("incident_anchor_key") or ""),
-                "locality": list(source.get("locality") or []),
-                "event_families": list(source.get("event_families") or []),
-                "people": list(source.get("people") or []),
-                "precise_locations": list(source.get("precise_locations") or []),
-                "agencies": list(source.get("agencies") or []),
-            })
-            source_pool.append({
-                "title": str(source.get("title") or ""),
-                "published": str(source.get("published") or ""),
-                "source_type": str(source.get("source_type") or ""),
-                "source_quality": str(source.get("source_quality") or ""),
-                "hero_eligible": source.get("hero_eligible"),
-                "category_match_score": source.get("category_match_score"),
-                "source_url": str(source.get("source_url") or source.get("link") or ""),
-            })
-        baseline_model = str(
-            getattr(baseline_response, "model", None)
-            or MODEL_ARTICLES
+        ASSIGNMENT_EDITOR_PENDING[str(category_key)] = _build_assignment_editor_packet(
+            category_key=category_key,
+            category_label=category_label,
+            headlines=headlines,
+            baseline_output=baseline_output,
+            baseline_response=baseline_response,
         )
-        ASSIGNMENT_EDITOR_PENDING[str(category_key)] = {
-            "category_key": str(category_key),
-            "category_label": str(category_label),
-            "source_inputs": source_inputs,
-            "source_pool": source_pool,
-            "raw_baseline_output": copy.deepcopy(baseline_output),
-            "baseline_output": copy.deepcopy(baseline_output),
-            "baseline_model": baseline_model,
-        }
     except Exception as exc:
         print(
             f"  Assignment-editor shadow queue unavailable for {category_label} "
@@ -10452,8 +10421,8 @@ def _assignment_editor_source_listing(packet):
     return "\n\n".join(rows)
 
 
-def _run_assignment_editor(packet, *, model=None):
-    """A shadow assignment editor chooses assignments/angles; it never writes publication copy."""
+def _run_assignment_editor(packet, *, model=None, timeout_seconds=None):
+    """Assignment editor chooses exact sources/angles; it never writes publication copy."""
     sources = packet.get("source_inputs") or []
     if not sources:
         raise ValueError("No source inputs were queued for assignment editor")
@@ -10557,9 +10526,12 @@ Return ONLY valid JSON in exactly this shape:
         "messages": [{"role": "user", "content": prompt}],
     }
     request_client = client
+    editor_timeout = ASSIGNMENT_EDITOR_TIMEOUT_SECONDS
+    if timeout_seconds is not None:
+        editor_timeout = max(1.0, min(editor_timeout, float(timeout_seconds)))
     if hasattr(client, "with_options"):
         request_client = client.with_options(
-            timeout=ASSIGNMENT_EDITOR_TIMEOUT_SECONDS,
+            timeout=editor_timeout,
             max_retries=0,
         )
     started = time.perf_counter()
@@ -10606,7 +10578,7 @@ def _assignment_source_by_index(packet, source_index):
     return sources[index - 1]
 
 
-def _run_assignment_writer(packet, assignment, *, role):
+def _run_assignment_writer(packet, assignment, *, role, timeout_seconds=None):
     """Sonnet 4.5 writes one preassigned source only; selection is already closed."""
     source_index = int(assignment.get("source_index"))
     source = _assignment_source_by_index(packet, source_index)
@@ -10680,9 +10652,12 @@ Writing rules:
         "messages": [{"role": "user", "content": prompt}],
     }
     request_client = client
+    writer_timeout = ASSIGNMENT_WRITER_TIMEOUT_SECONDS
+    if timeout_seconds is not None:
+        writer_timeout = max(1.0, min(writer_timeout, float(timeout_seconds)))
     if hasattr(client, "with_options"):
         request_client = client.with_options(
-            timeout=ASSIGNMENT_WRITER_TIMEOUT_SECONDS,
+            timeout=writer_timeout,
             max_retries=0,
         )
     started = time.perf_counter()
@@ -10704,6 +10679,138 @@ Writing rules:
         raise ValueError("Assignment writer returned no card teaser")
     actual_model = str(getattr(response, "model", None) or MODEL_ARTICLES)
     return item, actual_model, duration
+
+
+
+
+def _run_legacy_mixed_category_request(*, system_prompt, prompt, request_timeout_seconds=None):
+    """Run the pre-v1.13.7.1y mixed selection+writing request for rollback only."""
+    request_kwargs = {
+        "model": MODEL_ARTICLES,
+        "max_tokens": 5600,
+        "system": [{
+            "type": "text",
+            "text": system_prompt,
+            "cache_control": {"type": "ephemeral"}
+        }],
+        "messages": [{"role": "user", "content": prompt}],
+        "extra_headers": {"anthropic-beta": "prompt-caching-2024-07-31"},
+    }
+    request_client = client
+    if request_timeout_seconds is not None:
+        request_timeout = max(1.0, float(request_timeout_seconds))
+        if hasattr(client, "with_options"):
+            request_client = client.with_options(timeout=request_timeout, max_retries=0)
+        else:
+            request_kwargs["timeout"] = request_timeout
+    response = request_client.messages.create(**request_kwargs)
+
+    raw = response.content[0].text.strip()
+    if raw.startswith("```"):
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+    raw = raw.strip()
+
+    try:
+        from json_repair import repair_json
+        data = json.loads(repair_json(raw))
+    except Exception:
+        try:
+            data = json.loads(raw, strict=False)
+        except json.JSONDecodeError:
+            cleaned = raw.encode("ascii", "ignore").decode("ascii")
+            try:
+                data = json.loads(cleaned, strict=False)
+            except json.JSONDecodeError:
+                start = cleaned.find("{")
+                end = cleaned.rfind("}") + 1
+                if start == -1 or end <= start:
+                    raise ValueError(
+                        f"Model returned no JSON object (got {len(cleaned)} chars of non-JSON)"
+                    )
+                data = json.loads(cleaned[start:end], strict=False)
+
+    if isinstance(data, list):
+        if len(data) == 1 and isinstance(data[0], dict):
+            data = data[0]
+        elif data and isinstance(data[0], dict) and "hero" in data[0]:
+            data = data[0]
+        elif all(isinstance(x, dict) for x in data) and data:
+            data = {"hero": data[0], "cards": data[1:]}
+        else:
+            data = {"hero": {}, "cards": []}
+    if not isinstance(data, dict):
+        data = {"hero": {}, "cards": []}
+    return data, response, request_kwargs
+
+
+def _run_live_assignment_editor_category(
+    category_key, category_label, headlines, *, timeout_seconds=None,
+):
+    """Run the promoted Sonnet 5 editor -> Sonnet 4.5 writer production path."""
+    packet = _build_assignment_editor_packet(
+        category_key=category_key,
+        category_label=category_label,
+        headlines=headlines,
+    )
+    started = time.perf_counter()
+    deadline = None
+    if timeout_seconds is not None:
+        deadline = started + max(1.0, float(timeout_seconds))
+
+    def remaining_timeout(default_timeout):
+        if deadline is None:
+            return default_timeout
+        remaining = deadline - time.perf_counter()
+        if remaining <= 1.0:
+            raise TimeoutError(
+                f"Live assignment-editor category budget exhausted for {category_label}"
+            )
+        return min(float(default_timeout), remaining)
+
+    plan, diagnostics, editor_actual_model, editor_duration = _run_assignment_editor(
+        packet,
+        model=ASSIGNMENT_EDITOR_MODEL,
+        timeout_seconds=remaining_timeout(ASSIGNMENT_EDITOR_TIMEOUT_SECONDS),
+    )
+    if not isinstance(plan.get("hero"), dict):
+        print(
+            f"  Live assignment editor found no eligible {category_label} hero; "
+            "using deterministic archive recovery"
+        )
+        return {"hero": {}, "cards": []}
+
+    hero, hero_writer_model, hero_writer_duration = _run_assignment_writer(
+        packet,
+        plan["hero"],
+        role="hero",
+        timeout_seconds=remaining_timeout(ASSIGNMENT_WRITER_TIMEOUT_SECONDS),
+    )
+    cards = []
+    writer_models = [hero_writer_model]
+    writer_duration = hero_writer_duration
+    for assignment in plan.get("cards") or []:
+        card, writer_model, duration = _run_assignment_writer(
+            packet,
+            assignment,
+            role="card",
+            timeout_seconds=remaining_timeout(ASSIGNMENT_WRITER_TIMEOUT_SECONDS),
+        )
+        cards.append(card)
+        writer_models.append(writer_model)
+        writer_duration += duration
+
+    selected_indexes = [int(plan["hero"]["source_index"])] + [
+        int(card["source_index"]) for card in plan.get("cards") or []
+    ]
+    print(
+        f"  Live assignment editor: {editor_actual_model} selected "
+        f"{len(selected_indexes)} source(s) for {category_label}; "
+        f"editor {editor_duration:.1f}s + {len(writer_models)} "
+        f"{MODEL_ARTICLES} writer call(s) {writer_duration:.1f}s"
+    )
+    return {"hero": hero, "cards": cards}
 
 
 def _assignment_shadow_restore_source_index(item, packet):

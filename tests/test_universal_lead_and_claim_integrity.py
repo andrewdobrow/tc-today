@@ -190,6 +190,7 @@ def test_generation_prompt_requires_definition_and_matching_claim(monkeypatch):
     fake = _Client(_payload(GOOD_LEAD_BODY))
     monkeypatch.setattr(g, "client", fake)
     monkeypatch.setattr(g, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(g, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     data = g.generate_category_content("st_lucie", "St. Lucie County", [_source()])
 
@@ -205,6 +206,7 @@ def test_contextless_standard_hero_raises_bounded_retry_error(monkeypatch):
     fake = _Client(_payload(BAD_LEAD_BODY))
     monkeypatch.setattr(g, "client", fake)
     monkeypatch.setattr(g, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(g, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     with pytest.raises(g.ArticleFramingIntegrityError, match="named_measure_undefined_in_lead"):
         g.generate_category_content("st_lucie", "St. Lucie County", [_source()])
@@ -223,6 +225,7 @@ def test_invalid_standard_card_is_dropped(monkeypatch):
     fake = _Client(_payload(GOOD_LEAD_BODY, cards=[card]))
     monkeypatch.setattr(g, "client", fake)
     monkeypatch.setattr(g, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(g, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     data = g.generate_category_content("st_lucie", "St. Lucie County", [_source()])
 
@@ -425,7 +428,7 @@ def test_release_versions_and_reports_are_bumped():
     import tct_engine.observability as observability
 
     assert g.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.13.0.3-source-focus-cache-integrity"
+        "v1.13.7.1y-live-assignment-editor"
     )
     assert g.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 7
     assert g.FORWARD_IDENTITY_VERSION == "1.7"

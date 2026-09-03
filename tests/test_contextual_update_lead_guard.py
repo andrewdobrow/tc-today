@@ -181,6 +181,7 @@ def test_generation_prompt_marks_update_and_requires_self_contained_lead(monkeyp
     fake = _Client(_generated_payload(GOOD_BODY))
     monkeypatch.setattr(generate, "client", fake)
     monkeypatch.setattr(generate, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(generate, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     data = generate.generate_category_content("crime", "Crime & Safety", [_source()])
 
@@ -197,6 +198,7 @@ def test_contextless_update_hero_triggers_fail_closed_retry_signal(monkeypatch):
     fake = _Client(_generated_payload(BAD_BODY))
     monkeypatch.setattr(generate, "client", fake)
     monkeypatch.setattr(generate, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(generate, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     with pytest.raises(generate.ContextualUpdateLeadError, match="original_event_context_missing"):
         generate.generate_category_content("crime", "Crime & Safety", [_source()])
@@ -258,7 +260,7 @@ def test_custom_article_is_never_suppressed_by_update_lead_guard():
 def test_category_cache_version_is_scoped_to_article_prompt_change():
     generate = _load_generate_module()
     assert generate.GENERATION_PROMPT_VERSION == "v1.9.4-incremental-generation-1"
-    assert generate.CATEGORY_GENERATION_PROMPT_VERSION == "v1.13.0.3-source-focus-cache-integrity"
+    assert generate.CATEGORY_GENERATION_PROMPT_VERSION == "v1.13.7.1y-live-assignment-editor"
 
 
 def test_standard_archive_entry_does_not_read_article_body(monkeypatch):

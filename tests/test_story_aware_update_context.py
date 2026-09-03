@@ -200,6 +200,7 @@ def test_category_prompt_receives_original_story_and_current_update_separately(m
     fake = _Client(_payload(GOOD_LEAD))
     monkeypatch.setattr(generate, "client", fake)
     monkeypatch.setattr(generate, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(generate, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     data = generate.generate_category_content("crime", "Crime & Safety", [source])
 

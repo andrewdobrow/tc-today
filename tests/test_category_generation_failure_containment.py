@@ -74,6 +74,7 @@ def test_null_hero_response_is_contained_without_attribute_error(monkeypatch):
     fake = _Client('{"hero": null, "cards": []}')
     monkeypatch.setattr(generate, "client", fake)
     monkeypatch.setattr(generate, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(generate, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     data = generate.generate_category_content(
         "indian_river",
@@ -229,6 +230,7 @@ def test_category_request_disables_hidden_sdk_retries(monkeypatch):
     fake = _OptionsClient()
     monkeypatch.setattr(generate, "client", fake)
     monkeypatch.setattr(generate, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(generate, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     generate.generate_category_content(
         "indian_river",

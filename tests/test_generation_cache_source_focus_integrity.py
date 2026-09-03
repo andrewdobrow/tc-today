@@ -180,7 +180,7 @@ def test_cached_output_is_revalidated_against_current_source_row():
 def test_category_cache_contract_version_invalidates_pre_guard_keys():
     generate = _load_generate_module()
     assert generate.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.13.0.3-source-focus-cache-integrity"
+        "v1.13.7.1y-live-assignment-editor"
     )
 
 
@@ -214,3 +214,21 @@ def test_cached_source_resolution_prefers_exact_url_over_stale_source_index():
     assert probe["source_url"] == wflx_url
     assert probe["source_title"].endswith("- WFLX")
     assert "multiple drones" not in probe["article_text"]
+
+
+def test_category_cache_key_separates_promoted_editor_writer_architecture(monkeypatch):
+    generate = _load_generate_module()
+    source = {
+        "title": "Palm City source",
+        "link": "https://example.com/palm-city",
+        "published": "Thu, 03 Sep 2026 12:00:00 -0400",
+        "source_type": "publisher",
+        "source_quality": "full",
+        "hero_eligible": "yes",
+        "category_match_score": 9,
+        "article_text": "Palm City source body",
+    }
+    live_key = generate._category_generation_cache_key("martin", [source])
+    monkeypatch.setattr(generate, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
+    legacy_key = generate._category_generation_cache_key("martin", [source])
+    assert live_key != legacy_key

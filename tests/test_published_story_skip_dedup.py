@@ -1611,6 +1611,7 @@ def test_debevec_contextless_generated_hero_is_not_deleted_before_recomposition(
 
     monkeypatch.setattr(g, "client", types.SimpleNamespace(messages=_Messages()))
     monkeypatch.setattr(g, "load_archive", lambda *args, **kwargs: [])
+    monkeypatch.setattr(g, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
 
     data = g.generate_category_content("martin", "Martin County", [source])
 
