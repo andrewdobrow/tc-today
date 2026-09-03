@@ -10,11 +10,6 @@ on:
         required: false
         default: false
         type: boolean
-      assignment_editor_shadow:
-        description: "Run 3-way assignment-editor shadow: production vs Sonnet 5 vs Opus 5"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: write
@@ -133,10 +128,10 @@ jobs:
           TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
           # Manual-only, publication-isolated model evaluation. Routine runs stay off.
           TCT_MODEL_BAKEOFF: ${{ inputs.model_bakeoff }}
-          # Manual-only three-way editor experiment: production Sonnet 4.5 vs Sonnet 5
-          # editor vs Opus 5 editor, with the same Sonnet 4.5 writer. Runs only after
-          # the normal production build and cannot write live publication state.
-          TCT_ASSIGNMENT_EDITOR_SHADOW: ${{ inputs.assignment_editor_shadow }}
+          # Production newsroom role separation: Sonnet 5 assigns exact stories/angles;
+          # Sonnet 4.5 writes only those assignments. Set the repository variable false
+          # only for emergency rollback to the legacy mixed selector/writer call.
+          TCT_ASSIGNMENT_EDITOR_LIVE: ${{ vars.TCT_ASSIGNMENT_EDITOR_LIVE || 'true' }}
 
       - name: Save generation cache even when generation fails
         if: always()
@@ -154,19 +149,6 @@ jobs:
             data/model-bakeoff-report.json
             data/model-bakeoff-review.md
             data/model-bakeoff-answer-key.json
-            data/model-usage-report.json
-          if-no-files-found: warn
-          retention-days: 14
-
-      - name: Upload assignment editor shadow review
-        if: ${{ inputs.assignment_editor_shadow == true }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: tct-assignment-editor-shadow-${{ github.run_id }}
-          path: |
-            data/assignment-editor-shadow-report.json
-            data/assignment-editor-shadow-review.md
-            data/assignment-editor-shadow-answer-key.json
             data/model-usage-report.json
           if-no-files-found: warn
           retention-days: 14
