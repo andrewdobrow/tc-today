@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **Port St. Lucie police pause license plate readers, limit use to life-threatening situations**
-- Recommended: **Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound**
+- Current: **Vero Beach man arrested for creating AI deepfake sexual images; police seek additional victims**
+- Recommended: **Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say**
 - Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Viral AI-generated Cat in the Hat threat targets Vero Beach High School, deemed not credible | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | 74 | importance 35; freshness 99.94; urgency 6/10; validated material update |
-| 2 | Data centers become battleground in Florida governor's race as candidates split on AI infrastructure | Viral AI-generated Cat in the Hat threat targets Vero Beach High School, deemed not credible | 61 | importance 0; freshness 99.93; urgency 8/10 |
-| 3 | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | Governor's race candidates propose different approaches to license plate camera restrictions | 61 | importance 25; freshness 99.94; urgency 6/10 |
-| 4 | Governor's race candidates propose different approaches to license plate camera restrictions | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 59 | importance 65; freshness 55.49; urgency 2/10 |
-| 5 | St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases | Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves | 58 | importance 35; freshness 66.5; urgency 2/10; validated material update |
-| 6 | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | 55 | position locked: identity_conflict |
-| 7 | Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 56 | importance 55; freshness 55.5; urgency 2/10 |
-| 8 | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | Data centers become battleground in Florida governor's race as candidates split on AI infrastructure | 55 | importance 0; freshness 99.92; urgency 7/10; -6 category saturation |
-| 9 | Indiantown Village Council fires manager, rejects data center pause after resident outcry | Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie | 49 | importance 35; freshness 55.5; urgency 2/10 |
-| 10 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 56 | importance 35; freshness 61.48; urgency 2/10; validated material update; -6 category saturation; -4 county saturation |
-| 11 | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | Port St. Lucie homeowners receive notice about Waste Pro settlement credits on property tax bills | 47 | importance 10; freshness 55.5; urgency 2/10; validated material update; -4 county saturation |
-| 12 | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases | 46 | importance 0; freshness 58.93; urgency 7/10; -8 county saturation |
+| 1 | Indiantown council rejects data center pause, will seek legal opinion after lawsuit threat | Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say | 80 | importance 45; freshness 99.9; urgency 7/10; validated material update |
+| 2 | Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust | Martin County authorities confirm body found in mangroves is missing Oklahoma visitor | 77 | importance 35; freshness 99.94; urgency 7/10; validated material update |
+| 3 | Martin County authorities confirm body found in mangroves is missing Oklahoma visitor | Indiantown council rejects data center pause, will seek legal opinion after lawsuit threat | 70 | importance 10; freshness 99.94; urgency 8/10; validated material update |
+| 4 | Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents | Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents | 68 | importance 10; freshness 99.92; urgency 7/10; validated material update |
+| 5 | Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | 64 | importance 35; freshness 94.31; urgency 2/10; validated material update |
+| 6 | St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases | Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust | 58 | importance 0; freshness 99.91; urgency 8/10 |
+| 7 | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 55 | importance 55; freshness 49.87; urgency 2/10 |
+| 8 | Governor's race candidates propose different approaches to license plate camera restrictions | Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect | 58 | importance 55; freshness 65.49; urgency 2/10; -6 category saturation |
+| 9 | Data centers become battleground in Florida governor's race as candidates split on AI infrastructure | Governor's race candidates propose different approaches to license plate camera restrictions | 51 | importance 25; freshness 94.3; urgency 2/10 |
+| 10 | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month | 54 | position locked: identity_conflict |
+| 11 | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 58 | importance 65; freshness 49.86; urgency 2/10; -6 category saturation; -12 county saturation |
+| 12 | Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 55 | importance 35; freshness 55.84; urgency 2/10; validated material update; -6 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds**: 47 → 7 — importance 55; freshness 55.5; urgency 2/10
-- **Speeding driver crashes into two parked trucks on SW Lucero Drive in Port St. Lucie**: 45 → 9 — importance 35; freshness 55.5; urgency 2/10
-- **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**: 22 → 4 — importance 65; freshness 55.49; urgency 2/10
-- **St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases**: 5 → 12 — importance 0; freshness 58.93; urgency 7/10; -8 county saturation
-- **Data centers become battleground in Florida governor's race as candidates split on AI infrastructure**: 2 → 8 — importance 0; freshness 99.92; urgency 7/10; -6 category saturation
-- **Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County**: 8 → 13 — importance 25; freshness 71.12; urgency 2/10
-- **Indiantown Village Council fires manager, rejects data center pause after resident outcry**: 9 → 14 — importance 0; freshness 71.11; urgency 2/10
-- **Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns**: 12 → 15 — importance 0; freshness 0.0; urgency 4/10
-- **Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound**: 3 → 1 — importance 35; freshness 99.94; urgency 6/10; validated material update
-- **Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves**: 7 → 5 — importance 35; freshness 66.5; urgency 2/10; validated material update
-- **Viral AI-generated Cat in the Hat threat targets Vero Beach High School, deemed not credible**: 1 → 2 — importance 0; freshness 99.93; urgency 8/10
-- **Governor's race candidates propose different approaches to license plate camera restrictions**: 4 → 3 — importance 25; freshness 99.94; urgency 6/10
+- **Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds**: 48 → 7 — importance 55; freshness 49.87; urgency 2/10
+- **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**: 47 → 11 — importance 65; freshness 49.86; urgency 2/10; -6 category saturation; -12 county saturation
+- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 44 → 12 — importance 35; freshness 55.84; urgency 2/10; validated material update; -6 category saturation; -12 county saturation
+- **St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases**: 6 → 13 — importance 0; freshness 53.29; urgency 7/10
+- **Data centers become battleground in Florida governor's race as candidates split on AI infrastructure**: 9 → 14 — importance 0; freshness 94.29; urgency 2/10
+- **Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say**: 5 → 1 — importance 45; freshness 99.9; urgency 7/10; validated material update
+- **Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust**: 2 → 6 — importance 0; freshness 99.91; urgency 8/10
+- **Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect**: 12 → 8 — importance 55; freshness 65.49; urgency 2/10; -6 category saturation
+- **Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County**: 11 → 15 — importance 25; freshness 65.49; urgency 2/10
+- **Indiantown council rejects data center pause, will seek legal opinion after lawsuit threat**: 1 → 3 — importance 10; freshness 99.94; urgency 8/10; validated material update
+- **Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound**: 7 → 5 — importance 35; freshness 94.31; urgency 2/10; validated material update
+- **Martin County authorities confirm body found in mangroves is missing Oklahoma visitor**: 3 → 2 — importance 35; freshness 99.94; urgency 7/10; validated material update
 
 ## Guardrails
 
