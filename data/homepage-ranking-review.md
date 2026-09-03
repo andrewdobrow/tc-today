@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **St. Lucie County votes to remove license plate readers from county roads over privacy concerns**
-- Recommended: **Body found in Martin County mangroves confirmed as missing visitor from Oklahoma**
+- Current: **Two teens fired at each other in Indian River County shootout, deputies say**
+- Recommended: **Woman facing 72 charges in Palm City dog hoarding case pleads not guilty after surrendering animals**
 - Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Body found in Martin County mangroves confirmed as missing visitor from Oklahoma | Body found in Martin County mangroves confirmed as missing visitor from Oklahoma | 79 | importance 35; freshness 99.96; urgency 8/10; validated material update |
-| 2 | Port St. Lucie police search for man missing since Monday morning | Port St. Lucie police search for man missing since Monday morning | 69 | importance 45; freshness 99.96; urgency 5/10 |
-| 3 | St. Lucie Mets rally past Jupiter 6-5 on Yovanny Rodriguez walk-off single | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | 67 | importance 100; freshness 37.39; urgency 2/10 |
-| 4 | Vero Beach man held on $1 million bond for creating AI deepfake sexual images | Vero Beach man held on $1 million bond for creating AI deepfake sexual images | 54 | position locked: identity_conflict |
-| 5 | Indiantown council rejects data center pause, will seek legal opinion after lawsuit threat | Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say | 63 | importance 45; freshness 71.8; urgency 2/10; validated material update; -6 category saturation; -4 county saturation |
-| 6 | Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents | Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds | 48 | importance 55; freshness 21.77; urgency 2/10 |
-| 7 | Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | 57 | importance 35; freshness 66.21; urgency 2/10; validated material update; -12 category saturation |
-| 8 | Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case | St. Lucie Mets rally past Jupiter 6-5 on Yovanny Rodriguez walk-off single | 45 | importance 0; freshness 76.35; urgency 5/10 |
-| 9 | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | Governor's race candidates propose different approaches to license plate camera restrictions | 44 | importance 25; freshness 66.21; urgency 2/10 |
-| 10 | Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 53 | importance 35; freshness 27.75; urgency 4/10; validated material update; -12 county saturation |
-| 11 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Indiantown council rejects data center pause, will seek legal opinion after lawsuit threat | 51 | importance 10; freshness 71.84; urgency 2/10; validated material update; -12 county saturation |
-| 12 | Governor's race candidates propose different approaches to license plate camera restrictions | Indian River County Sheriff's Office employee dies in Brevard County vehicle crash | 51 | importance 65; freshness 21.76; urgency 2/10; -12 county saturation |
+| 1 | Vero Beach police expect more charges, additional victims in AI deepfake sexual images case | Woman facing 72 charges in Palm City dog hoarding case pleads not guilty after surrendering animals | 81 | importance 55; freshness 99.9; urgency 6/10; validated material update |
+| 2 | DeSantis pledges to campaign for Amendment 3 as local leaders warn of service cuts and fee hikes | Vero Beach police expect more charges, additional victims in AI deepfake sexual images case | 72 | importance 10; freshness 99.89; urgency 9/10; validated material update |
+| 3 | Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme | Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County | 70 | importance 100; freshness 31.27; urgency 4/10 |
+| 4 | Thieves target Florida SNAP recipients, use stolen benefits to buy baby formula at California address | Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim | 66 | importance 10; freshness 99.88; urgency 6/10; validated material update |
+| 5 | Woman facing 72 charges in Palm City dog hoarding case pleads not guilty after surrendering animals | Port St. Lucie police search for man missing since Monday morning | 66 | importance 45; freshness 93.83; urgency 4/10 |
+| 6 | Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim | DeSantis pledges to campaign for Amendment 3 as local leaders warn of service cuts and fee hikes | 59 | importance 0; freshness 99.9; urgency 9/10 |
+| 7 | Port St. Lucie police search for man missing since Monday morning | Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound | 56 | importance 35; freshness 60.09; urgency 2/10; validated material update |
+| 8 | St. Lucie Mets rally past Jupiter 6-5 on Yovanny Rodriguez walk-off single | Thieves target Florida SNAP recipients, use stolen benefits to buy baby formula at California address | 55 | importance 0; freshness 99.91; urgency 7/10 |
+| 9 | Body found in Martin County mangroves confirmed as missing visitor from Oklahoma | Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect | 50 | importance 55; freshness 31.27; urgency 2/10 |
+| 10 | St. Lucie County votes to remove license plate readers from county roads over privacy concerns | Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme | 62 | importance 10; freshness 99.9; urgency 7/10; -6 category saturation; -12 county saturation |
+| 11 | Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents | St. Lucie Mets rally past Jupiter 6-5 on Yovanny Rodriguez walk-off single | 44 | importance 0; freshness 70.22; urgency 5/10 |
+| 12 | Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say | Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say | 61 | importance 45; freshness 65.67; urgency 2/10; validated material update; -6 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds**: 49 → 6 — importance 55; freshness 21.77; urgency 2/10
-- **Indian River County Sheriff's Office employee dies in Brevard County vehicle crash**: 48 → 12 — importance 65; freshness 21.76; urgency 2/10; -12 county saturation
-- **Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County**: 24 → 3 — importance 100; freshness 37.39; urgency 2/10
-- **Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents**: 6 → 13 — importance 10; freshness 71.83; urgency 2/10; validated material update
-- **Indiantown council rejects data center pause, will seek legal opinion after lawsuit threat**: 5 → 11 — importance 10; freshness 71.84; urgency 2/10; validated material update; -12 county saturation
-- **Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case**: 8 → 14 — importance 10; freshness 76.36; urgency 2/10
-- **St. Lucie Mets rally past Jupiter 6-5 on Yovanny Rodriguez walk-off single**: 3 → 8 — importance 0; freshness 76.35; urgency 5/10
-- **Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust**: 10 → 15 — importance 10; freshness 71.81; urgency 2/10
-- **Governor's race candidates propose different approaches to license plate camera restrictions**: 12 → 9 — importance 25; freshness 66.21; urgency 2/10
-- **Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say**: 7 → 5 — importance 45; freshness 71.8; urgency 2/10; validated material update; -6 category saturation; -4 county saturation
-- **Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound**: 9 → 7 — importance 35; freshness 66.21; urgency 2/10; validated material update; -12 category saturation
-- **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**: 11 → 10 — importance 35; freshness 27.75; urgency 4/10; validated material update; -12 county saturation
+- **Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect**: 51 → 9 — importance 55; freshness 31.27; urgency 2/10
+- **Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound**: 48 → 7 — importance 35; freshness 60.09; urgency 2/10; validated material update
+- **Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County**: 13 → 3 — importance 100; freshness 31.27; urgency 4/10
+- **Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme**: 3 → 10 — importance 10; freshness 99.9; urgency 7/10; -6 category saturation; -12 county saturation
+- **Woman facing 72 charges in Palm City dog hoarding case pleads not guilty after surrendering animals**: 5 → 1 — importance 55; freshness 99.9; urgency 6/10; validated material update
+- **DeSantis pledges to campaign for Amendment 3 as local leaders warn of service cuts and fee hikes**: 2 → 6 — importance 0; freshness 99.9; urgency 9/10
+- **Thieves target Florida SNAP recipients, use stolen benefits to buy baby formula at California address**: 4 → 8 — importance 0; freshness 99.91; urgency 7/10
+- **St. Lucie County votes to remove license plate readers from county roads over privacy concerns**: 10 → 14 — importance 0; freshness 93.83; urgency 2/10; validated material update
+- **Body found in Martin County mangroves confirmed as missing visitor from Oklahoma**: 9 → 13 — importance 0; freshness 93.83; urgency 2/10; validated material update
+- **Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents**: 11 → 15 — importance 10; freshness 65.7; urgency 2/10; validated material update
+- **St. Lucie Mets rally past Jupiter 6-5 on Yovanny Rodriguez walk-off single**: 8 → 11 — importance 0; freshness 70.22; urgency 5/10
+- **Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim**: 6 → 4 — importance 10; freshness 99.88; urgency 6/10; validated material update
 
 ## Guardrails
 
