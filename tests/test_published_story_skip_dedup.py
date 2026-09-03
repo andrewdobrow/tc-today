@@ -1579,7 +1579,13 @@ def test_debevec_contextless_generated_hero_is_not_deleted_before_recomposition(
     """Production regression: 2026-09-01 body-recovery copy must survive prose guards."""
     g = _load_generate()
     canonical, source = _authorized_debevec_body_source(g)
+    # This regression exercises the protected-update recomposition path, not source
+    # expiry. Keep the synthetic source inside the live generation freshness window
+    # so the test cannot start failing merely because the real 2026-09-01 incident
+    # ages past the 48-hour new-publication cutoff.
+    fresh_published = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S +0000")
     source.update({
+        "published": fresh_published,
         "hero_eligible": "yes",
         "category_match_score": 99,
         "feed_url": "https://example.com/rss",
@@ -1593,7 +1599,7 @@ def test_debevec_contextless_generated_hero_is_not_deleted_before_recomposition(
                 "Investigators said the deceased person was wearing clothing matching the missing man."
             ),
             "urgency_score": 9,
-            "published": "Mon, 01 Sep 2026 16:05:00 -0400",
+            "published": fresh_published,
             "source_index": 1,
         },
         "cards": [],
