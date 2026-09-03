@@ -106,8 +106,11 @@ def test_same_city_and_event_family_without_distinctive_continuity_stays_separat
 
 
 def test_editorial_engine_passes_source_evidence_into_registry(tmp_path: Path):
+    # This test exercises cross-source incident identity, not lifecycle aging.
+    # Keep the synthetic pair inside the active 30-day lifecycle window so the
+    # test cannot begin failing merely because its fixture date becomes archived.
     engine = EditorialEngine(
-        default_published_at=datetime(2026, 8, 4, 12, tzinfo=timezone.utc),
+        default_published_at=datetime.now(timezone.utc).replace(microsecond=0),
         registry_path=tmp_path / "registry.json",
     )
     original = engine.process(
