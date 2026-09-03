@@ -19272,18 +19272,78 @@ def _durable_custom_missing_person_identity_match(candidate, authority):
     return True, f"missing-person|{person}"
 
 
-def _durable_custom_identity_match(candidate, authority):
-    """Return a deterministic cross-origin match for archived custom authority.
+_LOCAL_ALPR_TOPIC_RE = re.compile(
+    r"\b(?:automated\s+license\s+plate\s+reader(?:s)?|license\s+plate\s+reader(?:s)?|"
+    r"alpr(?:s)?|flock(?:\s+safety)?\s+camera(?:s)?)\b",
+    re.I,
+)
+_LOCAL_ALPR_POLICY_ACTION_RE = re.compile(
+    r"\b(?:pause(?:d|s|ing)?|limit(?:ed|s|ing)?|restrict(?:ed|s|ing)?|"
+    r"suspend(?:ed|s|ing)?|remov(?:e|ed|es|al|ing)|revok(?:e|ed|es|ing)|"
+    r"directive|permit(?:s)?|rights?-of-way)\b",
+    re.I,
+)
+_LOCAL_ALPR_ST_LUCIE_RE = re.compile(r"\b(?:port\s+st\.?\s*lucie|st\.?\s*lucie(?:\s+county)?)\b", re.I)
 
-    Named missing-person incidents and recurring sports awards have durable identity
-    contracts because both are known to arrive later under materially different
-    publisher wording.  These contracts are intentionally narrow and require concrete
-    participant/event evidence rather than generic topic similarity.
+
+def _durable_custom_local_alpr_policy_identity_match(candidate, authority):
+    """Bind the short-lived St. Lucie ALPR restriction episode to custom authority.
+
+    This is intentionally headline/source-headline scoped. A crime story that merely
+    mentions Flock evidence in its body must not collapse into a policy article. Both
+    sides must independently advertise ALPR/Flock technology, a restriction/removal
+    action, St. Lucie locality, and publication dates within four days.
     """
     if not isinstance(candidate, dict) or not isinstance(authority, dict):
         return False, ""
     if not (authority.get("is_custom") or authority.get("authoritative_custom")):
         return False, ""
+
+    def _headline_text(item):
+        return " ".join(filter(None, (
+            str(item.get("headline") or item.get("title") or ""),
+            str(item.get("source_headline") or item.get("source_title") or ""),
+        )))
+
+    candidate_headline = _headline_text(candidate)
+    authority_headline = _headline_text(authority)
+    for text in (candidate_headline, authority_headline):
+        if not _LOCAL_ALPR_TOPIC_RE.search(text):
+            return False, ""
+        if not _LOCAL_ALPR_POLICY_ACTION_RE.search(text):
+            return False, ""
+        if not _LOCAL_ALPR_ST_LUCIE_RE.search(text):
+            return False, ""
+
+    candidate_date = _cross_source_date_value(candidate)
+    authority_date = _cross_source_date_value(authority)
+    if candidate_date is None or authority_date is None:
+        return False, ""
+    if abs((candidate_date - authority_date).days) > 4:
+        return False, ""
+
+    return True, f"local-alpr-policy|st-lucie|{authority_date.isoformat()}"
+
+
+def _durable_custom_identity_match(candidate, authority):
+    """Return a deterministic cross-origin match for archived custom authority.
+
+    Named missing-person incidents, short-lived local ALPR policy episodes and
+    recurring sports awards have durable identity contracts because each can arrive
+    later under materially different publisher wording. These contracts are
+    intentionally narrow and require concrete event evidence rather than generic
+    topic similarity.
+    """
+    if not isinstance(candidate, dict) or not isinstance(authority, dict):
+        return False, ""
+    if not (authority.get("is_custom") or authority.get("authoritative_custom")):
+        return False, ""
+
+    alpr_match, alpr_key = _durable_custom_local_alpr_policy_identity_match(
+        candidate, authority
+    )
+    if alpr_match:
+        return True, alpr_key
 
     missing_match, missing_key = _durable_custom_missing_person_identity_match(
         candidate, authority
@@ -21812,6 +21872,19 @@ DEBEVEC_MISSING_CANONICAL_SLUG = (
 )
 DEBEVEC_MISSING_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-08-30-martin-county-sheriffs-office-searches-for-missing-oklahoma-man-last-seen-at-hut",
+})
+
+# Permanent custom-authority regression for the Sept. 2026 St. Lucie automated
+# license-plate-reader policy episode. TCT's Sept. 1 custom sheriff-policy story is
+# the canonical local explainer. The generated PSLPD policy URLs are tightly related
+# agency developments in the same state-directive episode and must never survive as
+# parallel TCT permalinks.
+ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG = (
+    "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies"
+)
+ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-09-01-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits",
+    "2026-09-02-port-st-lucie-police-pause-license-plate-readers-limit-use-to-life-threatening-s",
 })
 
 
@@ -28222,6 +28295,64 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             })
             removed_slugs.add(source_slug)
 
+    # Permanent repair for the Sept. 2026 St. Lucie ALPR policy episode. The
+    # generalized durable matcher above prevents future same-window PSLPD policy
+    # copies from escaping; these explicit slugs repair URLs that already existed,
+    # including a stale Sept. 1 redirect that had been poisoned by an unrelated
+    # legacy missing-person/registry identity.
+    alpr_canonical = next(
+        (e for e in archive if e.get("slug") == ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG),
+        None,
+    )
+    if alpr_canonical:
+        alpr_canonical["is_custom"] = True
+        alpr_canonical["authoritative_custom"] = True
+        alpr_canonical.pop("exclude_from_live_recovery", None)
+        alpr_canonical.pop("identity_quarantine_reason", None)
+        alpr_canonical.pop("identity_quarantine_persistent", None)
+        alpr_canonical["legacy_identity_status"] = "identified"
+        alpr_canonical["ranking_eligible"] = True
+        alpr_canonical["durable_custom_identity_key"] = "local-alpr-policy|st-lucie|2026-09-01"
+        # The historical fact extractor treated the phrase "missing-person cases"
+        # as if this policy explainer were itself a missing-person incident. Remove
+        # only that known false family from the canonical's persisted display copy.
+        identity = alpr_canonical.get("event_identity")
+        if isinstance(identity, dict):
+            families = [
+                family for family in (identity.get("event_families") or [])
+                if str(family or "").strip().casefold() != "missing-person"
+            ]
+            identity["event_families"] = families
+
+        for source_slug in sorted(ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS):
+            duplicate = next((e for e in archive if e.get("slug") == source_slug), None)
+            if duplicate:
+                _merge_category_memberships(
+                    alpr_canonical,
+                    duplicate,
+                    alpr_canonical.get("category_key")
+                    or duplicate.get("category_key")
+                    or "st_lucie",
+                )
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "Port St. Lucie police pause or limit automated license plate reader use"
+                ),
+                "target_slug": ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG,
+                "target_headline": alpr_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": True,
+                "editorial_story_id": alpr_canonical.get("editorial_story_id", ""),
+                "event_key": "local-alpr-policy|st-lucie|2026-09-01",
+                "reason": (
+                    "Permanent regression migration for the same-window St. Lucie "
+                    "ALPR restriction episode; preserve the authoritative custom permalink."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
     # Permanent cleanup for the Port St. Lucie animal-cruelty duplicate that
     # escaped across two category runs.  This is intentionally slug-specific as a
     # production regression, while the generalized prevention mechanism lives in
@@ -28536,6 +28667,27 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         verification_by_source.get(slug, {}).get("passed") is True
         for slug in BIG_TASTE_REDIRECT_SOURCE_SLUGS
     )
+    alpr_redirect_by_source = {
+        r.get("source_slug"): r for r in redirects
+        if r.get("source_slug") in ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS
+    }
+    alpr_case_present = bool(
+        ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG in archive_slugs
+        or ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS & archive_slugs
+        or alpr_redirect_by_source
+    )
+    alpr_redirects_valid = all(
+        alpr_redirect_by_source.get(slug, {}).get("target_slug")
+        == ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG
+        and bool(alpr_redirect_by_source.get(slug, {}).get("canonical_is_custom"))
+        for slug in ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS
+    )
+    alpr_html_verified = all(
+        verification_by_source.get(slug, {}).get("passed") is True
+        and verification_by_source.get(slug, {}).get("target_slug")
+        == ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG
+        for slug in ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS
+    )
 
     checks = {
         "hoarding_is_one_story": len(hoarding_stories) == 1,
@@ -28581,6 +28733,24 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         "big_taste_redirect_html_verified": (
             not big_taste_case_present or big_taste_html_verified
         ),
+        "st_lucie_alpr_custom_article_remains_canonical": (
+            not alpr_case_present
+            or ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG in archive_slugs
+        ),
+        "st_lucie_alpr_duplicate_redirects_exist": (
+            not alpr_case_present
+            or ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS <= set(alpr_redirect_by_source)
+        ),
+        "st_lucie_alpr_duplicates_target_custom": (
+            not alpr_case_present or alpr_redirects_valid
+        ),
+        "st_lucie_alpr_duplicates_removed_from_archive": (
+            not alpr_case_present
+            or not bool(ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS & archive_slugs)
+        ),
+        "st_lucie_alpr_redirect_html_verified": (
+            not alpr_case_present or alpr_html_verified
+        ),
     }
     report = {
         "schema_version": 1,
@@ -28603,6 +28773,11 @@ def write_story_regression_report(output_root, archive, redirect_verification):
             "case_present": big_taste_case_present,
             "canonical_slug": BIG_TASTE_CANONICAL_SLUG,
             "redirect_sources": sorted(big_taste_redirect_by_source),
+        },
+        "st_lucie_alpr_policy_regression": {
+            "case_present": alpr_case_present,
+            "canonical_slug": ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG,
+            "redirect_sources": sorted(alpr_redirect_by_source),
         },
     }
     (data_dir / "story-regression-report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")

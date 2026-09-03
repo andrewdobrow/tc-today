@@ -195,3 +195,40 @@ def test_extracts_core_st_lucie_law_enforcement_agency():
     assert "Port St. Lucie" in result.locations
     assert "animal cruelty" in result.facts
 
+
+
+def test_missing_person_policy_language_does_not_create_missing_incident():
+    article = make_article(
+        title=(
+            "St. Lucie County sheriff restricts license plate reader use to "
+            "forcible felonies, missing-person cases"
+        ),
+        body=(
+            "The Sheriff's Office limited automated license plate reader access to "
+            "forcible felonies and cases involving missing or endangered people. "
+            "The technology has also been used for locating missing people."
+        ),
+        county="St. Lucie",
+    )
+
+    result = extract_article_facts(article)
+
+    assert "missing person" not in result.facts
+    assert "missing person" not in result.event_types
+
+
+def test_alpr_exigent_use_examples_do_not_create_missing_incident():
+    article = make_article(
+        title="Port St. Lucie police limit license plate readers after state directive",
+        body=(
+            "Access during the pause will be limited to immediate threats to life, "
+            "such as a missing or endangered child. Police said automated license "
+            "plate readers have helped with locating missing people and solving crimes."
+        ),
+        county="St. Lucie",
+    )
+
+    result = extract_article_facts(article)
+
+    assert "missing person" not in result.facts
+    assert "missing person" not in result.event_types

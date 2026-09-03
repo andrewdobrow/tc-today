@@ -158,12 +158,16 @@ def test_same_city_and_agency_without_shared_facts_is_not_enough(tmp_path):
     assert crash != arrest
 
 
-def test_exact_event_key_always_returns_existing_story(tmp_path):
+def test_exact_incident_specific_event_key_always_returns_existing_story(tmp_path):
     registry = StoryRegistry(Path(tmp_path) / "registry.json")
 
+    # Missing-person city keys are a broad class and intentionally cannot own a
+    # story mapping. Once the source/article-specific suffix establishes one
+    # incident key, exact follow-up use of that key remains stable.
+    event_key = "missing-person-vero-beach-a1b2c3d4e5"
     first = resolve(
         registry,
-        event_key="missing-person-vero-beach",
+        event_key=event_key,
         title="Police search for missing Vero Beach resident",
         facts=("missing person",),
         locations=("Vero Beach",),
@@ -171,7 +175,7 @@ def test_exact_event_key_always_returns_existing_story(tmp_path):
     )
     update = resolve(
         registry,
-        event_key="missing-person-vero-beach",
+        event_key=event_key,
         title="Search continues for missing Vero Beach resident",
         facts=("missing person", "search continues"),
         locations=("Vero Beach",),

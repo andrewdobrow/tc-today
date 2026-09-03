@@ -137,6 +137,38 @@ def _unique(values):
     return tuple(ordered)
 
 
+def _is_active_missing_person_incident(text: str) -> bool:
+    """Return True only when ``missing`` describes the article's active incident.
+
+    The word appears routinely in policy and public-safety stories as a permitted
+    use case (for example, ALPR access for a missing or endangered child).  A raw
+    substring check turns those stories into city-level missing-person events and
+    can merge unrelated coverage.  Require incident language that says somebody is
+    actually missing, being searched for, was last seen, or has been found/located.
+    """
+    lower = re.sub(r"\s+", " ", str(text or "").lower()).strip()
+    if not re.search(r"\bmissing\b", lower):
+        return False
+
+    active_patterns = (
+        # Search language must actually govern a missing subject. This deliberately
+        # excludes generic capability wording such as "locating missing people".
+        r"\b(?:search(?:ing|es|ed)?|look(?:ing)?|seek(?:ing|s|ed)?)\b[^.!?]{0,100}\bmissing\b",
+        r"\b(?:trying|asking the public|asked the public|help(?:ing)?)\b[^.!?]{0,60}\b(?:find|locate)\b[^.!?]{0,60}\bmissing\b",
+        # Direct subject phrasing, but not policy buckets such as
+        # "missing-person cases/investigations".
+        r"\bmissing[- ](?:person|man|woman|boy|girl|teen(?:ager)?|child|adult|senior|resident|visitor|student|juvenile)\b(?!\s+(?:case|cases|investigation|investigations|policy|policies))",
+        r"\b(?:man|woman|boy|girl|teen(?:ager)?|child|adult|senior|resident|visitor|student|juvenile|person)\b[^.!?]{0,45}\b(?:is|was|remains|reported)\s+missing\b",
+        r"\b(?:reported|remains|still)\s+missing\b",
+        r"\blast\s+seen\b",
+        r"\bwhereabouts\b[^.!?]{0,80}\b(?:unknown|remain unknown|are unknown)\b",
+        r"\b(?:amber|silver)\s+alert\b",
+        r"\bmissing\b[^.!?]{0,140}\b(?:found|located)\s+safe\b",
+        r"\b(?:found|located)\s+safe\b[^.!?]{0,140}\bmissing\b",
+    )
+    return any(re.search(pattern, lower, re.I) for pattern in active_patterns)
+
+
 def extract_article_facts(
     article: RawArticle,
 ) -> ExtractedArticleFacts:
@@ -189,7 +221,7 @@ def extract_article_facts(
     if "no injuries" in lower:
         facts.append("no injuries reported")
 
-    if "missing" in lower:
+    if _is_active_missing_person_incident(text):
         event_types.append("missing person")
         facts.append("missing person")
 

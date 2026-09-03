@@ -50,10 +50,12 @@ def _facts(article_id: str) -> ExtractedArticleFacts:
     )
 
 
-def test_broad_crash_and_fire_keys_are_not_incident_identity():
+def test_broad_crash_fire_and_missing_person_keys_are_not_incident_identity():
     assert is_broad_event_class_key("traffic-crash-port-st-lucie") is True
     assert is_broad_event_class_key("fire-fort-pierce") is True
+    assert is_broad_event_class_key("missing-person-port-st-lucie") is True
     assert is_broad_event_class_key("traffic-crash-port-st-lucie-a1b2c3d4e5") is False
+    assert is_broad_event_class_key("missing-person-port-st-lucie-a1b2c3d4e5") is False
 
 
 def test_same_city_crashes_receive_different_article_specific_event_keys():
@@ -71,6 +73,15 @@ def test_story_registry_never_maps_a_broad_event_key(tmp_path):
     assert first != second
     assert "traffic-crash-port-st-lucie" not in registry.data["event_to_story"]
 
+
+
+
+def test_story_registry_never_maps_a_broad_missing_person_key(tmp_path):
+    registry = StoryRegistry(tmp_path / "registry.json")
+    first = registry.resolve_story("missing-person-port-st-lucie")
+    second = registry.resolve_story("missing-person-port-st-lucie")
+    assert first != second
+    assert "missing-person-port-st-lucie" not in registry.data["event_to_story"]
 
 def test_registry_repair_quarantines_incoherent_broad_story():
     payload = {
@@ -483,3 +494,33 @@ def test_current_run_quarantine_revokes_candidate_authority_before_activation():
     finally:
         g.CURRENT_RUN_QUARANTINED_STORY_IDS = prior_denylist
         g.CURRENT_RUN_EDITORIAL_IDENTITIES = prior_identities
+
+
+def test_registry_repair_quarantines_port_st_lucie_missing_person_class_contamination():
+    payload = {
+        "next_story_id": 2,
+        "stories": {
+            "story_002646": {
+                "story_id": "story_002646",
+                "events": ["missing-person-port-st-lucie"],
+                "titles": [
+                    "77-year-old Port St. Lucie man found dead in nearby pond",
+                    "Horse reported missing after theft from pasture in Port St. Lucie",
+                    "Port St. Lucie police limit license plate readers after state directive",
+                    "Police search for unrelated missing Port St. Lucie teenager",
+                ],
+                "sources": [],
+                "timeline": [],
+            }
+        },
+        "event_to_story": {"missing-person-port-st-lucie": "story_002646"},
+        "story_aliases": {},
+        "quarantined_stories": {},
+    }
+
+    report = repair_registry_payload(payload)
+
+    assert report.changed is True
+    assert "story_002646" not in payload["stories"]
+    assert "story_002646" in payload["quarantined_stories"]
+    assert "missing-person-port-st-lucie" not in payload["event_to_story"]

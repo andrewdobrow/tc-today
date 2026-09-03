@@ -98,3 +98,26 @@ def test_same_sparse_article_keeps_same_event_key_across_runs():
     second = make_facts(article_id="stable-rss-id")
 
     assert generate_event_key(first) == generate_event_key(second)
+
+
+def test_same_city_missing_person_articles_receive_distinct_event_keys():
+    first = make_facts(
+        article_id="missing-alpha",
+        facts=("missing person",),
+        locations=("Port St. Lucie",),
+        event_types=("missing person",),
+    )
+    second = make_facts(
+        article_id="missing-beta",
+        facts=("missing person",),
+        locations=("Port St. Lucie",),
+        event_types=("missing person",),
+    )
+
+    first_key = generate_event_key(first)
+    second_key = generate_event_key(second)
+
+    assert first_key.startswith("missing-person-port-st-lucie-")
+    assert second_key.startswith("missing-person-port-st-lucie-")
+    assert first_key != second_key
+    assert first_key == generate_event_key(first)

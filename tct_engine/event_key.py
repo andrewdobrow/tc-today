@@ -34,8 +34,9 @@ def generate_event_key(
 
     Keys with an event type and a location retain their shared semantic form so
     duplicate coverage can still resolve at the event level. Sparse articles
-    that would otherwise become one global ``unknown-event``, ``fire`` or
-    ``traffic-crash`` key receive a stable article-derived suffix instead.
+    that would otherwise become one global ``unknown-event``, ``fire``,
+    ``traffic-crash`` or city-level ``missing-person`` key receive a stable
+    article-derived suffix instead.
     """
 
     if not facts.event_types:
@@ -50,10 +51,12 @@ def generate_event_key(
     else:
         parts.append(_identity_suffix(facts))
 
-    # Crash and fire labels identify a class of incidents, not one incident.
-    # Keep the useful semantic prefix for observability, but add a stable
-    # article-derived suffix so a city-level key can never merge unrelated events.
-    if parts[0] in {"traffic-crash", "fire"}:
+    # Crash, fire and missing-person labels identify a class of incidents, not
+    # one incident. Keep the useful semantic prefix for observability, but add a
+    # stable article-derived suffix so a city-level key can never merge unrelated
+    # events. Named missing-person continuity is resolved later by stronger
+    # participant/source identity rather than by a generic city key.
+    if parts[0] in {"traffic-crash", "fire", "missing-person"}:
         parts.append(_identity_suffix(facts))
 
     if "cats rescued" in facts.facts:

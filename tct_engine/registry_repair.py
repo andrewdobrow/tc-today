@@ -38,12 +38,12 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 15
+REPAIR_VERSION = 16
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
 
-_BROAD_EVENT_PREFIXES = ("traffic-crash-", "fire-")
+_BROAD_EVENT_PREFIXES = ("traffic-crash-", "fire-", "missing-person-")
 _BROAD_NAMED_DEATH_LOCATION_TOKENS = frozenset({
     "avenue", "beach", "boulevard", "bridge", "circle", "county",
     "drive", "highway", "interstate", "lane", "parkway", "road",
@@ -61,18 +61,19 @@ _DIRECTION_TOKENS = frozenset({
 def is_broad_event_class_key(event_key: object) -> bool:
     """Return True when a key describes an event class, not one incident.
 
-    City/county crash and fire keys were historically treated as canonical
-    identity.  That allowed every crash in one jurisdiction to inherit one
-    persistent story.  These keys may still be retained as descriptive metadata,
+    City/county crash, fire and missing-person keys were historically treated as
+    canonical identity. That allowed unrelated incidents in one jurisdiction to
+    inherit one persistent story. These keys may still be retained as descriptive metadata,
     but they must never own an ``event_to_story`` mapping or authorize a merge.
     """
     value = str(event_key or "").strip().casefold()
     if not value:
         return False
     if value.startswith(_BROAD_EVENT_PREFIXES):
-        # v1.12.0.8 appends a ten-character source/article hash to crash and
-        # fire keys. Those keys identify one incident; only the unsuffixed
-        # jurisdiction-level class remains broad.
+        # Current event-key generation appends a ten-character source/article hash
+        # to crash, fire and missing-person keys. Those keys identify one incoming
+        # incident candidate; only the unsuffixed jurisdiction-level class remains
+        # broad.
         return _HASH_SUFFIX_RE.search(value) is None
     if value.startswith("named-person-death:"):
         subject = value.split(":", 1)[1]
