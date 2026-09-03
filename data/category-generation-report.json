@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-03T10:52:37Z",
+  "generated_at": "2026-09-03T19:02:15Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,37 +16,35 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 5,
-      "generated_live": 2,
-      "generation_failed_archive_recovery": 1,
-      "quality_gate_archive_recovery": 1
+      "generated_live": 3,
+      "generation_failed_archive_recovery": 1
     },
     "failures": {
-      "contextless_update_lead": 1,
-      "no_category_eligible_sources": 5,
-      "publication_quality_rejected": 1
+      "article_framing_integrity": 1,
+      "no_category_eligible_sources": 5
     },
     "model_attempt_count": 5,
-    "model_elapsed_seconds": 144.241,
-    "archive_recovery_requested_count": 7,
+    "model_elapsed_seconds": 110.194,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 3,
-    "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 45,
-    "story_aware_update_context_count": 13,
-    "material_update_promotion_evaluation_count": 12,
-    "material_update_promotion_count": 1,
-    "material_update_promotion_cache_hit_count": 2,
-    "material_update_promotion_model_call_count": 10
+    "contextual_update_lead_rejection_count": 1,
+    "article_framing_rejection_count": 5,
+    "category_eligibility_rejection_count": 7,
+    "published_story_duplicate_suppression_count": 37,
+    "story_aware_update_context_count": 10,
+    "material_update_promotion_evaluation_count": 10,
+    "material_update_promotion_count": 5,
+    "material_update_promotion_cache_hit_count": 1,
+    "material_update_promotion_model_call_count": 9
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 9,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -63,8 +61,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -73,26 +71,34 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
           "local_nexus_signals": [],
-          "headline": "Police search for missing man last seen Monday morning in Port St. Lucie - cw34.com",
-          "source_url": "https://cw34.com/news/local/police-search-for-missing-man-last-seen-monday-morning-in-port-st-lucie-missing-man-38-year-old-man-missing-adult-florida-missing-person-st-lucie-county-treasure-coast-se-avon-park-drive-avon-park-drive-missing-from-port-st-lucie-police-search"
+          "headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cw34.com",
+          "source_url": "https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation?teaserSource=trending"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "local_gov",
-          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-          "editorial_story_id": "story_007607",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "local_gov",
           "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
@@ -115,27 +121,17 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Port St. Lucie police pause usage of  license plate readers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
-          "editorial_story_id": "story_007604",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
-          "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "editorial_story_id": "story_007607",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Data centers divide Florida governor's race as voters question the AI boom",
-          "source_url": "https://www.wptv.com/news/politics/data-centers-divide-florida-governors-race-as-voters-question-the-ai-boom",
-          "editorial_story_id": "story_007605",
-          "canonical_slug": "2026-09-02-data-centers-become-battleground-in-florida-governors-race-as-candidates-split-o",
-          "canonical_headline": "Data centers become battleground in Florida governor's race as candidates split on AI infrastructure",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - cbs12.com",
+          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
           "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
           "editorial_story_id": "story_007607",
           "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
@@ -145,37 +141,63 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county-florida-news-florida-crash-traffic-news-local-traffic-jam",
-          "editorial_story_id": "story_007505",
-          "canonical_slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
-          "canonical_headline": "Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Data center debate ends with Village Manager's termination in Indiantown - WPEC",
+          "source_url": "https://cbs12.com/news/local/data-center-debate-ends-with-village-managers-termination-in-indiantown",
+          "editorial_story_id": "story_007557",
+          "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+          "canonical_headline": "Indiantown council rejects data center pause, will seek legal opinion after lawsuit threat",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cw34.com",
+          "source_url": "https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation?teaserSource=trending",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
+          "canonical_headline": "Vero Beach man held on $1 million bond for creating AI deepfake sexual images",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_keys": [
+            "story:story_007724",
+            "source:https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation?teaserSource=trending"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=['burglary charge and', 'peter solomon ruma', 'vero beach man']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['deepfake-investigation-fear', 'deepfake-investigation-fear-victim', 'explicit-deepfake-investigation', 'explicit-deepfake-investigation-fear', 'investigation-fear-victim']",
+            "shared_headline_topic_core=['com', 'deepfake', 'explicit', 'fear', 'investigation', 'victim']",
+            "shared_distinctive_token_count=159",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "local_gov",
-          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "local_gov",
           "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
@@ -208,50 +230,13 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Port St. Lucie police pause usage of  license plate readers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "St. Lucie County area",
-            "license plate reader restrictions",
-            "similar timeframe (Sept 1-2, 2026)",
-            "similar policy concerns about privacy and technology use"
-          ],
-          "novel_facts": [
-            "Port St. Lucie Police Department (city police) action vs. St. Lucie County Sheriff's Office",
-            "126 license plate readers in Port St. Lucie specifically",
-            "Chief Leo Niemczyk's statements and rationale",
-            "17% reduction in auto burglaries cited",
-            "Operational pause vs. restrictions to forcible felonies",
-            "Call for state legislation and manufacturer accountability",
-            "Different scope and approach to restrictions"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Data centers divide Florida governor's race as voters question the AI boom",
-          "source_url": "https://www.wptv.com/news/politics/data-centers-divide-florida-governors-race-as-voters-question-the-ai-boom",
-          "canonical_slug": "2026-09-02-data-centers-become-battleground-in-florida-governors-race-as-candidates-split-o",
-          "canonical_headline": "Data centers become battleground in Florida governor's race as candidates split on AI infrastructure",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -260,7 +245,7 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - cbs12.com",
+          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
           "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
           "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
           "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
@@ -275,12 +260,12 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county-florida-news-florida-crash-traffic-news-local-traffic-jam",
-          "canonical_slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
-          "canonical_headline": "Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound",
+          "source_headline": "Data center debate ends with Village Manager's termination in Indiantown - WPEC",
+          "source_url": "https://cbs12.com/news/local/data-center-debate-ends-with-village-managers-termination-in-indiantown",
+          "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+          "canonical_headline": "Indiantown council rejects data center pause, will seek legal opinion after lawsuit threat",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -290,16 +275,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 46.24
+      "elapsed_seconds": 50.117
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 12,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 16,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -307,23 +292,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 40.504,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — 33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - cbs12.com"
+          "elapsed_seconds": 26.521,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach man arrested on $1 million bond for creating AI-generated explicit images of women"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 39.351,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — 33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - cbs12.com"
+          "elapsed_seconds": 30.735,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach man arrested on $1 million bond for creating AI deepfake sexual images of women"
         }
       ],
-      "model_elapsed_seconds": 79.855,
-      "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: new_development_missing — 33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - cbs12.com",
+      "model_elapsed_seconds": 57.256,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach man arrested on $1 million bond for creating AI deepfake sexual images of women",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -332,7 +317,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -346,8 +331,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Florida license plate reader removal order raises safety concerns from law enforcement on the Treasure Coast - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/01/florida-license-plate-reader-removal-order-raises-safety-concerns-law-enforcement-treasure-coast/"
+          "headline": "Vero Beach man jailed on $1 million bond accused of AI fake sexual images scheme - WPBF",
+          "source_url": "https://www.wpbf.com/article/vero-beach-ai-fake-sexual-images-case/73606237"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -360,32 +345,12 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/body-found-floating-near-stuart-beach-located-house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news"
+          "headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
+          "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - cw34.com",
-          "source_url": "https://cw34.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
-          "editorial_story_id": "story_007751",
-          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
-          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-          "editorial_story_id": "story_007607",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "crime",
           "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
@@ -408,27 +373,27 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-          "editorial_story_id": "story_007724",
-          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach man arrested on $1 million bond for creating AI deepfake sexual images",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "editorial_story_id": "story_007607",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie police pause usage of  license plate readers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
-          "editorial_story_id": "story_007604",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
-          "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
+          "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
+          "editorial_story_id": "story_006909",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
+          "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - cbs12.com",
+          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
           "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
           "editorial_story_id": "story_007607",
           "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
@@ -438,68 +403,51 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie Police pause Flock camera use after FDOT revokes state road permits - cbs12.com",
-          "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
-          "editorial_story_id": "story_007715",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
-          "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
+          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+          "editorial_story_id": "story_007629",
+          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 5,
+      "story_aware_update_context_count": 4,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
-          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
-          "basis": "event-identity-authority:participant_plus_precise_location",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
+          "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
+          "basis": "exact_structured_incident_key",
           "identity_keys": [
-            "story:story_007751",
-            "source:https://cbs12.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co"
+            "incident:missing-person:michael-debevec",
+            "story:custom:8b07c4ab92b901c1752d49826291ed8a",
+            "source:https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead"
           ],
-          "match_confidence": 0.95,
+          "match_confidence": 0.99,
           "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['delray beach tyrner', 'stacy tyrner']",
-            "shared_precise_locations=['cedar-place']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['150k-cash-guns', '150k-cash-guns-seiz', 'cash-guns-seiz', 'cash-guns-seiz-fort', 'fort-drug-bust', 'guns-seiz-fort', 'guns-seiz-fort-drug', 'marijuana-150k-cash', 'marijuana-150k-cash-guns', 'pound-marijuana-150k', 'pound-marijuana-150k-cash', 'seiz-fort-drug', 'seiz-fort-drug-bust']",
-            "shared_headline_topic_core=['150k', 'bust', 'cash', 'com', 'drug', 'fort', 'guns', 'marijuana', 'pound', 'seiz']",
-            "shared_distinctive_token_count=115",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
+            "deterministic_identity_keys=incident:missing-person:michael-debevec,story:custom:8b07c4ab92b901c1752d49826291ed8a",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation - cbs12.com",
-          "source_url": "https://cbs12.com/news/crime/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-          "publisher": "cbs12.com",
+          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cw34.com",
+          "source_url": "https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
+          "publisher": "cw34.com",
           "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach man arrested on $1 million bond for creating AI deepfake sexual images",
+          "canonical_headline": "Vero Beach man held on $1 million bond for creating AI deepfake sexual images",
           "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
           "identity_keys": [
-            "story:story_007777",
-            "source:https://cbs12.com/news/crime/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
+            "story:story_007724",
+            "source:https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -514,14 +462,14 @@
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
+            "publication_gap_days=1",
             "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
             "shared_event_families=['public-policy']",
             "shared_named_people=['burglary charge and', 'peter solomon ruma', 'vero beach man']",
             "shared_precise_locations=[]",
             "shared_agencies=[]",
-            "shared_subject_phrases=['explicit-deepfake-investigation']",
-            "shared_headline_topic_core=['cbs12', 'com', 'deepfake', 'explicit', 'investigation']",
+            "shared_subject_phrases=['deepfake-investigation-fear', 'deepfake-investigation-fear-victim', 'explicit-deepfake-investigation', 'explicit-deepfake-investigation-fear', 'investigation-fear-victim']",
+            "shared_headline_topic_core=['com', 'deepfake', 'explicit', 'fear', 'investigation', 'victim']",
             "shared_distinctive_token_count=159",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
@@ -531,68 +479,22 @@
           "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cbs12.com",
-          "source_url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxObERXcEFPTTBDQVBIN3d1Q296YnhfSmJUTktNc0VPR1NqWGtLRFY3WjRyc2F5NXB6Z0g3MWMwTFJMNVRTaGpiWDkxakQ2akZ6bXdDOGl2N1liSlFpRXNqcEFZV0dMVFZlVE9JLXVhYklWXzRmU3U2amJaWDg4TkJBSENzdnFJT0ZHdnBqaUVVQld5aTBhUi1CamZ1OHpqMUtaUjJ6Y2tKVkpfQ0RWaS1hNkhpdDlsV1pxSFFFX0FBSmJ3eHFqTUIzUzhxSQ",
-          "publisher": "news.google.com",
-          "canonical_slug": "2026-06-17-port-st-lucie-man-killed-in-head-on-crash-on-state-road-70",
-          "canonical_headline": "40-year-old driver killed in head-on crash on State Road 710 in Martin County",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:named-person-death:state-road",
-            "story:story_007813",
-            "source:https://news.google.com/rss/articles/CBMiywFBVV95cUxObERXcEFPTTBDQVBIN3d1Q296YnhfSmJUTktNc0VPR1NqWGtLRFY3WjRyc2F5NXB6Z0g3MWMwTFJMNVRTaGpiWDkxakQ2akZ6bXdDOGl2N1liSlFpRXNqcEFZV0dMVFZlVE9JLXVhYklWXzRmU3U2amJaWDg4TkJBSENzdnFJT0ZHdnBqaUVVQld5aTBhUi1CamZ1OHpqMUtaUjJ6Y2tKVkpfQ0RWaS1hNkhpdDlsV1pxSFFFX0FBSmJ3eHFqTUIzUzhxSQ"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:state-road",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
+          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
           "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-          "basis": "exact_source_url",
+          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
+          "canonical_headline": "Vero Beach man held on $1 million bond for creating AI deepfake sexual images",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
           "identity_keys": [
-            "story:story_007629",
-            "source:https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_007629,source:https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "I-95 South blocked near Martin County; delays expected after multi-vehicle crash - cbs12.com",
-          "source_url": "https://cbs12.com/news/florida/i-95-south-blocked-near-martin-county-delays-expected-after-multi-vehicle-crash-florida-news-local-news-local-traffic-crash",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-02-multi-vehicle-crash-blocks-i-95-southbound-near-kanner-highway-in-martin-county",
-          "canonical_headline": "Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_007692"
+            "story:story_007724",
+            "source:https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
             "bounded_time_window",
             "shared_locality",
             "shared_event_family",
-            "shared_precise_location",
-            "shared_agency",
+            "shared_named_people",
             "shared_subject_phrase",
             "shared_headline_topic",
             "distinctive_fact_overlap"
@@ -600,69 +502,98 @@
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county', 'st-lucie']",
-            "shared_event_families=['crash', 'drug-case']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['kanner-highway']",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['block-near-delay', 'block-near-delay-expect', 'delay-expect-multi', 'delay-expect-multi-vehicle', 'expect-multi-vehicle', 'expect-multi-vehicle-crash', 'multi-vehicle-crash', 'near-delay-expect', 'near-delay-expect-multi', 'south-block-near', 'south-block-near-delay']",
-            "shared_headline_topic_core=['block', 'crash', 'delay', 'expect', 'multi', 'near', 'south', 'vehicle']",
-            "shared_distinctive_token_count=91",
+            "publication_gap_days=1",
+            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=['burglary charge and', 'peter solomon ruma', 'vero beach man']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['deepfake-investigation-fear', 'deepfake-investigation-fear-victim', 'explicit-deepfake-investigation', 'explicit-deepfake-investigation-fear', 'investigation-fear-victim']",
+            "shared_headline_topic_core=['deepfake', 'explicit', 'fear', 'investigation', 'victim']",
+            "shared_distinctive_token_count=158",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Vero Beach man arrested in explicit deepfake investigation - WPEC",
+          "source_url": "https://cbs12.com/news/crime/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
+          "canonical_headline": "Vero Beach man held on $1 million bond for creating AI deepfake sexual images",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_007777",
+            "source:https://cbs12.com/news/crime/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=source:https://cbs12.com/news/crime/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 3,
-      "material_update_promotion_count": 0,
+      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 3,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - cw34.com",
-          "source_url": "https://cw34.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
-          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
-          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
+          "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
-          "promoted": false,
+          "promoted": true,
           "cache_hit": false,
           "model_call": true,
-          "action": "preserve_existing_canonical",
+          "action": "update_existing_canonical",
           "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.98,
           "shared_anchors": [
-            "Stacy Tyrner, 59-year-old convicted felon arrested",
-            "700 block of Cedar Place, Fort Pierce",
-            "33 pounds of marijuana seized",
-            "$150,000+ in cash seized",
-            "Multiple firearms seized",
-            "Wednesday morning execution of search warrant",
-            "St. Lucie County Sheriff's Office Special Investigations Division",
-            "Assisted by SWAT Team and U.S. Marshals Service",
-            "Charges include trafficking in marijuana, possession of firearm by convicted felon, drug paraphernalia"
+            "Michael Anthony Debevec - same missing person",
+            "Body found in mangroves near House of Refuge",
+            "Martin County Sheriff's Office investigation",
+            "Body found Tuesday after extensive search",
+            "Chastain Beach and House of Refuge area",
+            "Same incident_anchor: missing-person:michael-debevec"
           ],
-          "novel_facts": [],
-          "reason": "The incoming article covers the exact same drug bust event as the canonical candidate. All key details match precisely: same suspect (Stacy Tyrner), same location (700 block Cedar Place), same seizure amounts (33 pounds marijuana, $150K cash, firearms), same date (Wednesday morning), same agencies involved. The incoming article contains no material new updates—no new charges, no court proceedings, no additional arrests, no changed facts. It is simply the same story from the same source (cw34.com) with identical information, including the same Sheriff Del Toro quote. The retrieval evidence confirms this is an exact source match with persistent story ID match.",
+          "novel_facts": [
+            "Medical Examiner has not yet determined cause of death",
+            "No apparent signs of foul play found",
+            "Good Samaritan found wallet Saturday, prompting missing person report",
+            "Debevec's vehicle found at Chastain Beach, more than two miles from body",
+            "Debevec traveled from Port St. Lucie area to Martin County at about 3 a.m. on the 27th",
+            "Phone records showed movement between Chastain Beach and House of Refuge Friday morning",
+            "Backpack found hanging high in tree Tuesday morning",
+            "Computer was inside the backpack",
+            "Family has been notified of death"
+          ],
+          "reason": "Both articles cover the same real-world event: the discovery and identification of Michael Anthony Debevec's body in Martin County mangroves. The incoming article contains significant material updates including: investigative details about no foul play, timeline of his movements from Port St. Lucie at 3 a.m., phone records showing movement pattern, discovery of his backpack with computer in a tree, and confirmation that family has been notified. These are substantive new facts that readers need to know and should update the existing canonical rather than create a new URL.",
           "validation_errors": []
         },
         {
           "category_key": "crime",
-          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+          "source_headline": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn",
+          "canonical_slug": "2026-06-17-port-st-lucie-man-killed-in-head-on-crash-on-state-road-70",
+          "canonical_headline": "40-year-old driver killed in head-on crash on State Road 710 in Martin County",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
+          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -701,13 +632,13 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach man arrested on $1 million bond for creating AI deepfake sexual images",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -716,43 +647,22 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie police pause usage of  license plate readers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
+          "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
           "promoted": false,
           "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "St. Lucie County area",
-            "license plate reader technology restrictions",
-            "similar timing (Sept 1-2, 2026)",
-            "similar policy limiting ALPR usage"
-          ],
-          "novel_facts": [
-            "Port St. Lucie Police Department action (city police)",
-            "Chief Leo Niemczyk announcement",
-            "126 license plate readers in Port St. Lucie",
-            "17% reduction in auto burglaries cited",
-            "Operational pause rather than restriction to specific crime types",
-            "Call for state legislative action on ALPR usage guidelines"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "crime",
-          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - cbs12.com",
+          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
           "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
           "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
           "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
@@ -767,53 +677,32 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie Police pause Flock camera use after FDOT revokes state road permits - cbs12.com",
-          "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
           "promoted": false,
           "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.85,
-          "shared_anchors": [
-            "St. Lucie area",
-            "Automated License Plate Reader (ALPR/Flock camera) technology restrictions",
-            "Same timeframe (Sept 1-2, 2026)",
-            "Similar policy responses to concerns"
-          ],
-          "novel_facts": [
-            "Port St. Lucie Police Department (different agency than St. Lucie County Sheriff)",
-            "FDOT revoked permits for ALPR systems on state roads",
-            "FDOT memorandum as triggering event",
-            "Complete operational pause announced",
-            "Police Chief Leo Niemczyk statement",
-            "Port St. Lucie jurisdiction (different from St. Lucie County Sheriff's jurisdiction)"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 134.772
+      "elapsed_seconds": 93.837
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 16,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -831,8 +720,24 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
       "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:port st lucie"
+          ],
+          "headline": "Dawn Miller died hours after leaving the hospital. Her mother wants answers.",
+          "source_url": "https://www.wptv.com/wptv-investigates/dawn-miller-died-hours-after-leaving-the-hospital-her-mother-wants-answers"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -847,17 +752,14 @@
           ],
           "local_nexus_signals": [
             "source_locality:treasure coast",
-            "source_locality:martin county",
-            "source_locality:st lucie county",
             "source_locality:indian river county",
-            "source_locality:stuart",
-            "source_locality:port st lucie"
+            "source_locality:vero beach"
           ],
-          "headline": "Florida license plate reader removal order raises safety concerns from law enforcement on the Treasure Coast",
-          "source_url": "https://www.wptv.com/news/treasure-coast/florida-license-plate-reader-removal-order-raises-safety-concerns-from-law-enforcement-on-the-treasure-coast"
+          "headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -908,36 +810,6 @@
           "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
           "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-          "editorial_story_id": "story_006909",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
-          "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning",
-          "source_url": "https://www.wptv.com/sports/tiger-woods-scheduled-for-change-of-plea-hearing-in-dui-case-wednesday-morning",
-          "editorial_story_id": "story_007379",
-          "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-          "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "New data center proposed for western St. Lucie County near Interstate 95",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
-          "editorial_story_id": "story_007205",
-          "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
-          "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -993,20 +865,20 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.92,
+          "confidence": 0.95,
           "shared_anchors": [
             "St. Lucie County area",
             "License plate reader technology restrictions",
-            "September 2026 timeframe",
-            "Similar policy response to community concerns"
+            "Similar timeframe (Sept 1-2, 2026)",
+            "Similar policy concerns about ALPR usage"
           ],
           "novel_facts": [
-            "Port St. Lucie Police Department (city police) announces operational pause",
-            "Chief Leo Niemczyk makes the announcement",
-            "126 license plate readers in Port St. Lucie city",
-            "Pause limits use to immediate threats to human life",
+            "Port St. Lucie Police Department action (not St. Lucie County Sheriff)",
+            "126 license plate readers in Port St. Lucie specifically",
+            "Chief Leo Niemczyk as decision-maker",
             "17% reduction in auto burglaries cited",
-            "Chief calls for state legislative action and manufacturer accountability"
+            "Call for Tallahassee lawmakers to address Flock manufacturer data retention",
+            "Operational pause vs. restriction to forcible felonies"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1042,62 +914,17 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-investigates-body-found-in-hutchinson-island-mangroves",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning",
-          "source_url": "https://www.wptv.com/sports/tiger-woods-scheduled-for-change-of-plea-hearing-in-dui-case-wednesday-morning",
-          "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-          "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "New data center proposed for western St. Lucie County near Interstate 95",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
-          "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
-          "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 32.692
+      "elapsed_seconds": 29.398
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1118,15 +945,35 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
-          "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning",
-          "source_url": "https://www.wptv.com/sports/tiger-woods-scheduled-for-change-of-plea-hearing-in-dui-case-wednesday-morning",
+          "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/tiger-woods-license-is-suspended-can-he-drive-a-golf-cart",
           "editorial_story_id": "story_007379",
           "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
           "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "sports",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "editorial_story_id": "story_007607",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "sports",
+          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
+          "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
+          "editorial_story_id": "story_007607",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1140,10 +987,40 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "sports",
-          "source_headline": "Tiger Woods scheduled for change-of-plea hearing in DUI case Wednesday morning",
-          "source_url": "https://www.wptv.com/sports/tiger-woods-scheduled-for-change-of-plea-hearing-in-dui-case-wednesday-morning",
+          "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/tiger-woods-license-is-suspended-can-he-drive-a-golf-cart",
           "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
           "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "sports",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "sports",
+          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
+          "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1154,15 +1031,15 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 25.532
+      "new_publication_stale_rejected_count": 0,
+      "elapsed_seconds": 22.683
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
+      "fresh_candidate_count": 18,
       "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1228,7 +1105,7 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
           "source_headline": "Not every home is right for a border collie — here's what future adopters need to know",
@@ -1241,29 +1118,6 @@
             "incident:mass-animal-hoarding:martin-county",
             "story:story_003665",
             "source:https://www.wptv.com/shining-a-light/not-every-home-is-right-for-a-border-collie-heres-what-future-adopters-need-to-know"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Animals rescued from Martin County hoarding cases start to show signs of healing",
-          "source_url": "https://www.wptv.com/shining-a-light/animals-rescued-from-martin-county-hoarding-cases-start-to-show-signs-of-healing",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:mass-animal-hoarding:martin-county",
-            "story:story_003665",
-            "source:https://www.wptv.com/shining-a-light/animals-rescued-from-martin-county-hoarding-cases-start-to-show-signs-of-healing"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
@@ -1352,15 +1206,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.411
+      "elapsed_seconds": 20.453
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 2,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1377,10 +1231,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "florida",
@@ -1389,16 +1243,6 @@
           "editorial_story_id": "story_007605",
           "canonical_slug": "2026-09-02-data-centers-become-battleground-in-florida-governors-race-as-candidates-split-o",
           "canonical_headline": "Data centers become battleground in Florida governor's race as candidates split on AI infrastructure",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "Florida puts license plate cameras on the clock as calls for broader limits grow",
-          "source_url": "https://www.wptv.com/news/state/florida-puts-license-plate-cameras-on-the-clock-as-calls-for-broader-limits-grow",
-          "editorial_story_id": "story_007648",
-          "canonical_slug": "2026-09-02-governors-race-candidates-propose-different-approaches-to-license-plate-camera-r",
-          "canonical_headline": "Governor's race candidates propose different approaches to license plate camera restrictions",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1424,34 +1268,19 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "Florida puts license plate cameras on the clock as calls for broader limits grow",
-          "source_url": "https://www.wptv.com/news/state/florida-puts-license-plate-cameras-on-the-clock-as-calls-for-broader-limits-grow",
-          "canonical_slug": "2026-09-02-governors-race-candidates-propose-different-approaches-to-license-plate-camera-r",
-          "canonical_headline": "Governor's race candidates propose different approaches to license plate camera restrictions",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 24.719
+      "elapsed_seconds": 43.584
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
-      "selected_source_count": 5,
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 4,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1459,71 +1288,35 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 31.34,
+          "elapsed_seconds": 7.478,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 31.34,
+      "model_elapsed_seconds": 7.478,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 53,
-          "baseline_anchor": "crash",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "95",
-            "crash",
-            "hobe",
-            "martin",
-            "motorcycle",
-            "near",
-            "sound",
-            "southbound",
-            "southern"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
-          "semantic_novel_fact_hits": [],
-          "semantic_novel_fact_token_count": 0,
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "Motorcycle crash shuts down I-95 Southbound in Martin County - cbs12.com",
-          "headline": "Motorcycle crash shuts down I-95 southbound near Hobe Sound in southern Martin County"
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 1,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves near House of Refuge",
+          "headline": "Two crashes on I-95 southbound shut down Martin County traffic for hours",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves near House of Refuge",
-            "lead": "A body was recovered from deep within the mangroves near the House of Refuge in Martin County on Tuesday following an extensive search for a man reported missing Aug. 27. Martin County Sheriff John Budensiek said a Good Samaritan found a wallet Saturday belonging to Michael Anthony Debevec. In an attempt to return the wallet, the Good Samaritan went to Debevec's home, which led his family to file a missing person report. Investigators found Debevec's vehicle Saturday afternoon at Chastain Beach, more than two miles from where the body was discovered.",
-            "lead_word_count": 93,
-            "headline_overlap_ratio": 0.714,
-            "new_context_token_count": 44,
+            "headline": "Two crashes on I-95 southbound shut down Martin County traffic for hours",
+            "lead": "Two crashes on I-95 southbound between Kanner Highway and Bridge Road shut down traffic for several hours on Tuesday night. The first crash involved a motorcycle that was seen engulfed in flames. The driver was flown to an area hospital.",
+            "lead_word_count": 41,
+            "headline_overlap_ratio": 0.8,
+            "new_context_token_count": 19,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1537,20 +1330,17 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves near House of Refuge",
-            "lead": "A body was recovered from deep within the mangroves near the House of Refuge in Martin County on Tuesday following an extensive search for a man reported missing Aug. 27. Martin County Sheriff John Budensiek said a Good Samaritan found a wallet Saturday belonging to Michael Anthony Debevec. In an attempt to return the wallet, the Good Samaritan went to Debevec's home, which led his family to file a missing person report. Investigators found Debevec's vehicle Saturday afternoon at Chastain Beach, more than two miles from where the body was discovered.",
+            "headline": "Two crashes on I-95 southbound shut down Martin County traffic for hours",
+            "lead": "Two crashes on I-95 southbound between Kanner Highway and Bridge Road shut down traffic for several hours on Tuesday night. The first crash involved a motorcycle that was seen engulfed in flames. The driver was flown to an area hospital.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
             "headline_jurisdictions": [
-              "martin_county",
-              "port_st_lucie"
-            ],
-            "lead_jurisdictions": [
               "martin_county"
             ],
+            "lead_jurisdictions": [],
             "missing_jurisdictions": [
-              "port_st_lucie"
+              "martin_county"
             ],
             "headline_policy_references": [],
             "lead_policy_references": [],
@@ -1562,19 +1352,19 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves near House of Refuge",
-            "generated_lead": "A body was recovered from deep within the mangroves near the House of Refuge in Martin County on Tuesday following an extensive search for a man reported missing Aug. 27.",
-            "source_title": "Body believed to be missing Port St. Lucie man found in Martin County mangroves - cbs12.com",
-            "source_lead": "A body was found following an extensive search in Martin County, but the sheriff's office could not confirm whether it was that of a man reported missing Aug. On Tuesday, the Martin County Sheriff's Office announced that a body had been recovered from deep within the mangroves near the House of Refuge.",
+            "generated_headline": "Two crashes on I-95 southbound shut down Martin County traffic for hours",
+            "generated_lead": "Two crashes on I-95 southbound between Kanner Highway and Bridge Road shut down traffic for several hours on Tuesday night. The first crash involved a motorcycle that was seen engulfed in flames.",
+            "source_title": "Two crashes on I-95 southbound shut down traffic for hours in Martin County - WPBF",
+            "source_lead": "Two crashes on I-95 southbound between Kanner Highway and Bridge Road shut down traffic for several hours on Tuesday night. The first crash involved a motorcycle that was seen engulfed in flames.",
             "title_similarity": {
-              "score": 0.8145,
-              "overlap": 0.8462,
-              "jaccard": 0.7333,
-              "sorted_sequence": 0.8571,
-              "ordered_sequence": 0.882,
-              "shared_token_count": 11.0
+              "score": 0.9649,
+              "overlap": 1.0,
+              "jaccard": 0.9091,
+              "sorted_sequence": 0.9606,
+              "ordered_sequence": 0.7717,
+              "shared_token_count": 10.0
             },
-            "lead_token_overlap": 0.947,
+            "lead_token_overlap": 1.0,
             "missing": []
           },
           "source_jurisdiction": {
@@ -1586,7 +1376,7 @@
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 5,
@@ -1623,137 +1413,96 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Tiger Woods avoids DUI conviction as state attorney cites insufficient impairment evidence",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-state-attorney-defends-tiger-woods-dui-plea-deal-cites-lack-of-impairment-evidence",
-          "editorial_story_id": "story_007379",
-          "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-          "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
+          "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
+          "editorial_story_id": "story_006909",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
+          "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "martin",
-          "source_headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county-florida-news-florida-crash-traffic-news-local-traffic-jam",
-          "editorial_story_id": "story_007505",
-          "canonical_slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
-          "canonical_headline": "Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+          "editorial_story_id": "story_007629",
+          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 3,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-          "basis": "exact_source_url",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
+          "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead?teaserSource=trending",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
+          "basis": "exact_structured_incident_key",
           "identity_keys": [
-            "story:story_007629",
-            "source:https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations"
+            "incident:missing-person:michael-debevec",
+            "story:custom:8b07c4ab92b901c1752d49826291ed8a",
+            "source:https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead?teaserSource=trending"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_007629,source:https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "I-95 South blocked near Martin County; delays expected after multi-vehicle crash - cbs12.com",
-          "source_url": "https://cbs12.com/news/florida/i-95-south-blocked-near-martin-county-delays-expected-after-multi-vehicle-crash-florida-news-local-news-local-traffic-crash",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-02-multi-vehicle-crash-blocks-i-95-southbound-near-kanner-highway-in-martin-county",
-          "canonical_headline": "Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_007692"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county', 'st-lucie']",
-            "shared_event_families=['crash', 'drug-case']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['kanner-highway']",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['block-near-delay', 'block-near-delay-expect', 'delay-expect-multi', 'delay-expect-multi-vehicle', 'expect-multi-vehicle', 'expect-multi-vehicle-crash', 'multi-vehicle-crash', 'near-delay-expect', 'near-delay-expect-multi', 'south-block-near', 'south-block-near-delay']",
-            "shared_headline_topic_core=['block', 'crash', 'delay', 'expect', 'multi', 'near', 'south', 'vehicle']",
-            "shared_distinctive_token_count=91",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - cbs12.com",
-          "source_url": "http://cbs12.com/news/florida/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county-florida-news-florida-crash-traffic-news-local-traffic-jam",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
-          "canonical_headline": "Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_007505"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['fellsmere', 'hobe-sound', 'martin-county', 'stuart']",
-            "shared_event_families=['crash']",
-            "shared_named_people=['captured and taken']",
-            "shared_precise_locations=['exit-101-kanner-highway', 'exit-96-bridge-road']",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['crash-shut-down', 'crash-shut-down-southbound', 'motorcycle-crash-shut', 'motorcycle-crash-shut-down', 'shut-down-southbound']",
-            "shared_headline_topic_core=['crash', 'down', 'motorcycle', 'shut', 'southbound']",
-            "shared_distinctive_token_count=50",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
+            "deterministic_identity_keys=incident:missing-person:michael-debevec,story:custom:8b07c4ab92b901c1752d49826291ed8a",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 0,
+      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
+          "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead?teaserSource=trending",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": true,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "update_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Michael Anthony Debevec",
+            "Body found in mangroves near House of Refuge",
+            "Martin County Sheriff's Office investigation",
+            "Reported missing last week",
+            "Chastain Beach area",
+            "Hutchinson Island location"
+          ],
+          "novel_facts": [
+            "Medical Examiner has not yet determined cause of death",
+            "No apparent signs of foul play found",
+            "Search began after Good Samaritan found wallet Saturday",
+            "Debevec's vehicle found at Chastain Beach, more than two miles from body",
+            "Debevec traveled from Port St. Lucie area to Martin County at about 3 a.m. on the 27th",
+            "Phone records showed movement between Chastain Beach and House of Refuge Friday morning",
+            "Backpack found hanging high in tree Tuesday morning with computer inside",
+            "Sheriff John Budensiek provided investigative details",
+            "Family has been notified of death"
+          ],
+          "reason": "Both articles cover the identical event: the discovery and confirmation of Michael Anthony Debevec's body in Martin County mangroves. The incoming article provides material new updates including investigative timeline details (3 a.m. arrival on the 27th, phone records, backpack discovery Tuesday), cause of death status (Medical Examiner not yet determined), no signs of foul play, and family notification. These are substantive developments that readers need to know beyond the initial body confirmation, warranting an update to the existing canonical rather than a new URL.",
+          "validation_errors": []
+        },
         {
           "category_key": "martin",
           "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
@@ -1800,17 +1549,17 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.98,
+          "confidence": 0.95,
           "shared_anchors": [
-            "Hutchinson Island location in general vicinity"
+            "Hutchinson Island location"
           ],
           "novel_facts": [
-            "Michael Anthony Debevec reported missing and found dead",
-            "Body discovered in mangroves near Chastain Beach",
-            "Victim was visiting from Oklahoma",
-            "Missing since Wednesday, Aug (specific date incomplete in article)",
+            "Michael Anthony Debevec found dead near Chastain Beach",
+            "Missing person from Oklahoma reported missing Wednesday",
+            "Body found in mangroves",
             "Car, wallet and backpack recovered at Chastain Beach",
-            "No signs of foul play according to authorities"
+            "No signs of foul play",
+            "Cause of death pending from medical examiner"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1819,12 +1568,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Tiger Woods avoids DUI conviction as state attorney cites insufficient impairment evidence",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-state-attorney-defends-tiger-woods-dui-plea-deal-cites-lack-of-impairment-evidence",
-          "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-          "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
+          "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Martin County authorities confirm body found in mangroves is missing Oklahoma visitor",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
           "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
@@ -1834,12 +1583,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Motorcycle crash shuts down I-95 Southbound in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/motorcycle-crash-shuts-down-i-95-southbound-in-martin-county-florida-news-florida-crash-traffic-news-local-traffic-jam",
-          "canonical_slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
-          "canonical_headline": "Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound",
+          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1851,32 +1600,32 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Former St. Lucie GOP chairman arrested in Martin County for harvesting saw palmetto berries at public parks",
-      "generated_card_count": 1,
-      "elapsed_seconds": 63.439
+      "live_hero_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
+      "generated_card_count": 0,
+      "elapsed_seconds": 55.111
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "quality_gate_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 24,
       "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
+      "archive_recovery_requested": false,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 26.761,
+          "elapsed_seconds": 31.276,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 26.761,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 31.276,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1887,17 +1636,17 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Body believed to be missing Port St. Lucie man Michael Debevec found in Martin County mangroves",
+          "headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Body believed to be missing Port St. Lucie man Michael Debevec found in Martin County mangroves",
-            "lead": "A body was found following an extensive search in Martin County, but the sheriff's office could not confirm whether it was that of a man reported missing August 27. On Tuesday, the Martin County Sheriff's Office announced that a body had been recovered from deep within the mangroves near the House of Refuge. Martin County Sheriff John Budensiek said a Good Samaritan found a wallet Saturday belonging to Michael Anthony Debevec. In an attempt to return the wallet, the Good Samaritan went to Debevec's home, which ultimately led his family to file a missing person report.",
-            "lead_word_count": 99,
-            "headline_overlap_ratio": 0.692,
+            "headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves",
+            "lead": "Martin County Sheriff's Office announced Tuesday that a body had been recovered from deep within the mangroves near the House of Refuge. A Good Samaritan found a wallet Saturday belonging to Michael Anthony Debevec and went to his home in an attempt to return it, which ultimately led his family to file a missing person report. Investigators found Debevec's vehicle Saturday afternoon at Chastain Beach, a little more than two miles from where the body was discovered.",
+            "lead_word_count": 79,
+            "headline_overlap_ratio": 0.545,
             "new_context_token_count": 43,
             "opaque_references": [],
             "undefined_references": [],
@@ -1912,8 +1661,8 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Body believed to be missing Port St. Lucie man Michael Debevec found in Martin County mangroves",
-            "lead": "A body was found following an extensive search in Martin County, but the sheriff's office could not confirm whether it was that of a man reported missing August 27. On Tuesday, the Martin County Sheriff's Office announced that a body had been recovered from deep within the mangroves near the House of Refuge. Martin County Sheriff John Budensiek said a Good Samaritan found a wallet Saturday belonging to Michael Anthony Debevec. In an attempt to return the wallet, the Good Samaritan went to Debevec's home, which ultimately led his family to file a missing person report.",
+            "headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves",
+            "lead": "Martin County Sheriff's Office announced Tuesday that a body had been recovered from deep within the mangroves near the House of Refuge. A Good Samaritan found a wallet Saturday belonging to Michael Anthony Debevec and went to his home in an attempt to return it, which ultimately led his family to file a missing person report. Investigators found Debevec's vehicle Saturday afternoon at Chastain Beach, a little more than two miles from where the body was discovered.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -1937,19 +1686,19 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Body believed to be missing Port St. Lucie man Michael Debevec found in Martin County mangroves",
-            "generated_lead": "A body was found following an extensive search in Martin County, but the sheriff's office could not confirm whether it was that of a man reported missing August 27. On Tuesday, the Martin County Sheriff's Office announced that a body had been recovered from deep within the mangroves near the House of Refuge.",
+            "generated_headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves",
+            "generated_lead": "Martin County Sheriff's Office announced Tuesday that a body had been recovered from deep within the mangroves near the House of Refuge. A Good Samaritan found a wallet Saturday belonging to Michael Anthony Debevec and went to his home in an attempt to return it, which ultimately led his family to file a missing person report.",
             "source_title": "Body believed to be missing Port St. Lucie man found in Martin County mangroves - cw34.com",
             "source_lead": "A body was found following an extensive search in Martin County, but the sheriff's office could not confirm whether it was that of a man reported missing Aug. On Tuesday, the Martin County Sheriff's Office announced that a body had been recovered from deep within the mangroves near the House of Refuge.",
             "title_similarity": {
-              "score": 0.8173,
-              "overlap": 0.8462,
-              "jaccard": 0.7333,
-              "sorted_sequence": 0.8712,
-              "ordered_sequence": 0.8466,
+              "score": 0.9416,
+              "overlap": 1.0,
+              "jaccard": 0.8462,
+              "sorted_sequence": 0.9388,
+              "ordered_sequence": 0.9388,
               "shared_token_count": 11.0
             },
-            "lead_token_overlap": 0.964,
+            "lead_token_overlap": 0.607,
             "missing": []
           },
           "source_jurisdiction": {
@@ -1968,22 +1717,22 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - cw34.com",
-          "source_url": "https://cw34.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
-          "editorial_story_id": "story_007751",
-          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
-          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "St. Lucie commissioners vote to remove Flock cameras from county property - WQCS",
+          "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPcEo5cEVPbzVCSi1GU0NycXlfdjhXQUhtdS1SUXBDa3VVWVRLWlhwcHdhMThLQXRyU2ltUEZvYWpQc2NQWUw5T0M0WlRNTWVlUWVDVF9qWDNtbTg2WWFKbUlhOWRHdWZweE10VWtVSmFGVU16bWlpYTlrcllDWTFDcDgtT0tycEJWeHRoaVh1UzF3bjhxV2JsTjg4SzNsVVk4T3ZrQ0w1ejd6WkhUbEstVlBmZXoyWVZlUDdJZUs0a3pOdw",
+          "editorial_story_id": "story_007898",
+          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
+          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
+          "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police pause usage of license plate readers - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
-          "editorial_story_id": "story_007604",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
-          "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
+          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - WPEC",
+          "source_url": "https://cbs12.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
+          "editorial_story_id": "story_007751",
+          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
+          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1998,19 +1747,9 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "I-95 South blocked near Martin County; delays expected after multi-vehicle crash - cbs12.com",
-          "source_url": "http://cbs12.com/news/florida/i-95-south-blocked-near-martin-county-delays-expected-after-multi-vehicle-crash-florida-news-local-news-local-traffic-crash",
-          "editorial_story_id": "story_007692",
-          "canonical_slug": "2026-09-02-multi-vehicle-crash-blocks-i-95-southbound-near-kanner-highway-in-martin-county",
-          "canonical_headline": "Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie Police pause Flock camera use after FDOT revokes state road permits - cbs12.com",
-          "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
-          "editorial_story_id": "story_007715",
+          "source_headline": "Port St. Lucie police pause usage of license plate readers - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
+          "editorial_story_id": "story_007604",
           "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
           "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
           "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
@@ -2018,136 +1757,139 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/01/flavor-south-florida-returns-with-dining-deals-more-than-100-restaurants-boca-raton-port-st-lucie",
-          "editorial_story_id": "story_007310",
-          "canonical_slug": "2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res",
-          "canonical_headline": "Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+          "editorial_story_id": "story_007629",
+          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie Police pause Flock camera use after FDOT revokes state road permits - WPEC",
+          "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
+          "editorial_story_id": "story_007715",
+          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
+          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
+          "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cbs12.com",
-          "source_url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxObERXcEFPTTBDQVBIN3d1Q296YnhfSmJUTktNc0VPR1NqWGtLRFY3WjRyc2F5NXB6Z0g3MWMwTFJMNVRTaGpiWDkxakQ2akZ6bXdDOGl2N1liSlFpRXNqcEFZV0dMVFZlVE9JLXVhYklWXzRmU3U2amJaWDg4TkJBSENzdnFJT0ZHdnBqaUVVQld5aTBhUi1CamZ1OHpqMUtaUjJ6Y2tKVkpfQ0RWaS1hNkhpdDlsV1pxSFFFX0FBSmJ3eHFqTUIzUzhxSQ",
-          "publisher": "news.google.com",
-          "canonical_slug": "2026-06-17-port-st-lucie-man-killed-in-head-on-crash-on-state-road-70",
-          "canonical_headline": "40-year-old driver killed in head-on crash on State Road 710 in Martin County",
-          "basis": "exact_structured_incident_key",
+          "source_headline": "New data center proposed for western St. Lucie County near Interstate 95 - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/31/203-acre-data-center-proposed-western-st-lucie-county-near-interstate-95",
+          "publisher": "www.wflx.com",
+          "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+          "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
-            "incident:named-person-death:state-road",
-            "story:story_007813",
-            "source:https://news.google.com/rss/articles/CBMiywFBVV95cUxObERXcEFPTTBDQVBIN3d1Q296YnhfSmJUTktNc0VPR1NqWGtLRFY3WjRyc2F5NXB6Z0g3MWMwTFJMNVRTaGpiWDkxakQ2akZ6bXdDOGl2N1liSlFpRXNqcEFZV0dMVFZlVE9JLXVhYklWXzRmU3U2amJaWDg4TkJBSENzdnFJT0ZHdnBqaUVVQld5aTBhUi1CamZ1OHpqMUtaUjJ6Y2tKVkpfQ0RWaS1hNkhpdDlsV1pxSFFFX0FBSmJ3eHFqTUIzUzhxSQ"
+            "story:story_007205",
+            "source:https://www.wflx.com/2026/08/31/203-acre-data-center-proposed-western-st-lucie-county-near-interstate-95"
           ],
-          "match_confidence": 0.99,
+          "match_confidence": 0.95,
           "evidence_dimensions": [
-            "incident"
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:state-road",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_007629",
-            "source:https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_007629,source:https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['west-midway-road']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['cent-western-near', 'cent-western-near-interstate', 'data-cent-western', 'data-cent-western-near', 'western-near-interstate']",
+            "shared_headline_topic_core=['cent', 'data', 'interstate', 'near', 'western']",
+            "shared_distinctive_token_count=147",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 4,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 3,
+      "material_update_promotion_evaluation_count": 5,
+      "material_update_promotion_count": 2,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 5,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - cw34.com",
-          "source_url": "https://cw34.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
-          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
-          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "source_headline": "St. Lucie commissioners vote to remove Flock cameras from county property - WQCS",
+          "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPcEo5cEVPbzVCSi1GU0NycXlfdjhXQUhtdS1SUXBDa3VVWVRLWlhwcHdhMThLQXRyU2ltUEZvYWpQc2NQWUw5T0M0WlRNTWVlUWVDVF9qWDNtbTg2WWFKbUlhOWRHdWZweE10VWtVSmFGVU16bWlpYTlrcllDWTFDcDgtT0tycEJWeHRoaVh1UzF3bjhxV2JsTjg4SzNsVVk4T3ZrQ0w1ejd6WkhUbEstVlBmZXoyWVZlUDdJZUs0a3pOdw",
+          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
+          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
           "promoted": false,
-          "cache_hit": true,
+          "cache_hit": false,
           "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
-          "shared_anchors": [
-            "Stacy Tyrner, 59-year-old convicted felon arrested",
-            "700 block of Cedar Place, Fort Pierce",
-            "33 pounds of marijuana seized",
-            "$150,000+ in cash seized",
-            "Multiple firearms seized",
-            "Wednesday morning execution of search warrant",
-            "St. Lucie County Sheriff's Office Special Investigations Division",
-            "Assisted by SWAT Team and U.S. Marshals Service",
-            "Charges include trafficking in marijuana, possession of firearm by convicted felon, drug paraphernalia"
-          ],
-          "novel_facts": [],
-          "reason": "The incoming article covers the exact same drug bust event as the canonical candidate. All key details match precisely: same suspect (Stacy Tyrner), same location (700 block Cedar Place), same seizure amounts (33 pounds marijuana, $150K cash, firearms), same date (Wednesday morning), same agencies involved. The incoming article contains no material new updates—no new charges, no court proceedings, no additional arrests, no changed facts. It is simply the same story from the same source (cw34.com) with identical information, including the same Sheriff Del Toro quote. The retrieval evidence confirms this is an exact source match with persistent story ID match.",
-          "validation_errors": []
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police pause usage of license plate readers - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
+          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - WPEC",
+          "source_url": "https://cbs12.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
+          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
+          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County votes to remove license plate readers over privacy concerns - WPBF",
+          "source_url": "https://www.wpbf.com/article/st-lucie-county-license-plate-readers-privacy-flock-cameras/73598008",
           "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
           "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
           "canonical_is_custom": true,
           "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
-          "promoted": false,
+          "promoted": true,
           "cache_hit": false,
           "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
+          "action": "update_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "update_existing_canonical",
           "confidence": 0.95,
           "shared_anchors": [
-            "St. Lucie area",
-            "license plate reader technology restrictions",
-            "similar timeframe (Sept 1-2, 2026)",
-            "same topic of ALPR policy changes"
+            "St. Lucie County",
+            "automated license plate reader restrictions",
+            "Sheriff Richard Del Toro",
+            "privacy concerns over ALPR technology",
+            "September 2026 timeframe",
+            "Flock cameras"
           ],
           "novel_facts": [
-            "Port St. Lucie Police Department action (vs. St. Lucie County Sheriff's Office)",
-            "Chief Leo Niemczyk's statements and rationale",
-            "126 license plate readers in Port St. Lucie specifically",
-            "17% reduction in auto burglaries cited",
-            "Different operational pause approach vs. restriction to forcible felonies",
-            "Call for state legislation from manufacturers like Flock"
+            "County commissioners voted 3-2 on Tuesday Sept. 2 to remove ALPRs from county roads and property",
+            "Commissioner James Clasby introduced the motion",
+            "Commissioners Erin Lowry and Jamie Fowler supported removal",
+            "Commissioner Cathy Townsend and one other dissented, wanting law enforcement input first",
+            "Decision extends beyond FDOT directive to include county-controlled rights of way",
+            "Vote includes halting new permits and potentially revoking existing permits",
+            "Police Chief John Bolduc announced operational pause on ALPRs"
           ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
+          "reason": "Both articles cover the same continuing story about license plate reader restrictions in St. Lucie County in early September 2026. The incoming article provides a material update: the county commissioners took formal action on Tuesday (Sept. 2) with a 3-2 vote to remove the cameras, going beyond the sheriff's Monday restrictions. This is a significant governmental development that changes what readers need to know—moving from a sheriff's office policy change to a broader county commission mandate affecting all county property. This belongs as an update to the existing canonical rather than a separate story.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -2170,15 +1912,14 @@
             "St. Lucie County area",
             "License plate reader technology restrictions",
             "Similar timing (Sept 1-2, 2026)",
-            "Similar policy concern about privacy and community trust"
+            "Similar operational pause/restriction approach"
           ],
           "novel_facts": [
-            "Port St. Lucie Police Department (city agency) implementing pause",
-            "Chief Leo Niemczyk's specific statements and rationale",
+            "Port St. Lucie Police Department taking action (different agency than St. Lucie County Sheriff)",
+            "Chief Leo Niemczyk leading the pause decision",
             "126 license plate readers in Port St. Lucie specifically",
             "17% reduction in auto burglaries cited",
-            "Specific resident quotes from Joseph Hamm and Peter Schmitt",
-            "Call for state legislative action from Tallahassee"
+            "Chief's specific call for Tallahassee lawmakers to work with manufacturers like Flock"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -2187,10 +1928,61 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "I-95 South blocked near Martin County; delays expected after multi-vehicle crash - cbs12.com",
-          "source_url": "http://cbs12.com/news/florida/i-95-south-blocked-near-martin-county-delays-expected-after-multi-vehicle-crash-florida-news-local-news-local-traffic-crash",
-          "canonical_slug": "2026-09-02-multi-vehicle-crash-blocks-i-95-southbound-near-kanner-highway-in-martin-county",
-          "canonical_headline": "Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County",
+          "source_headline": "Port St. Lucie police pause usage of license plate readers - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
+          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
+          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.92,
+          "shared_anchors": [
+            "St. Lucie County area",
+            "License plate reader technology restrictions",
+            "Similar timing (Sept 1-2, 2026)",
+            "Similar policy concerns about community trust and privacy"
+          ],
+          "novel_facts": [
+            "Port St. Lucie Police Department action (different agency than St. Lucie County Sheriff)",
+            "Chief Leo Niemczyk announcement",
+            "126 license plate readers in Port St. Lucie specifically",
+            "17% reduction in auto burglaries cited",
+            "Focus on Flock manufacturer specifically",
+            "Call for Tallahassee lawmakers to establish guidelines"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxObERXcEFPTTBDQVBIN3d1Q296YnhfSmJUTktNc0VPR1NqWGtLRFY3WjRyc2F5NXB6Z0g3MWMwTFJMNVRTaGpiWDkxakQ2akZ6bXdDOGl2N1liSlFpRXNqcEFZV0dMVFZlVE9JLXVhYklWXzRmU3U2amJaWDg4TkJBSENzdnFJT0ZHdnBqaUVVQld5aTBhUi1CamZ1OHpqMUtaUjJ6Y2tKVkpfQ0RWaS1hNkhpdDlsV1pxSFFFX0FBSmJ3eHFqTUIzUzhxSQ",
+          "canonical_slug": "2026-06-17-port-st-lucie-man-killed-in-head-on-crash-on-state-road-70",
+          "canonical_headline": "40-year-old driver killed in head-on crash on State Road 710 in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -2202,7 +1994,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie Police pause Flock camera use after FDOT revokes state road permits - cbs12.com",
+          "source_headline": "Port St. Lucie Police pause Flock camera use after FDOT revokes state road permits - WPEC",
           "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-pause-flock-camera-use-after-fdot-revokes-state-road-permits-florida-news-local-news-flock-cameras-alpr-leo-niemczyk",
           "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
           "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
@@ -2218,17 +2010,16 @@
           "semantic_action": "hold",
           "confidence": 0.9,
           "shared_anchors": [
-            "St. Lucie County geographic area",
-            "Automated License Plate Reader (ALPR/Flock camera) technology",
-            "Policy restrictions on ALPR use",
-            "Same timeframe (Sept 1-2, 2026)"
+            "St. Lucie area",
+            "automated license plate reader (ALPR/Flock camera) technology restrictions",
+            "similar September 2026 timeframe"
           ],
           "novel_facts": [
-            "Port St. Lucie Police Department (city agency) taking action",
-            "FDOT revoked permits for ALPR systems on state roads",
-            "Complete operational pause on all ALPR technology",
-            "Chief Leo Niemczyk quoted on the decision",
-            "Limited to exigent circumstances involving immediate threat to life"
+            "Port St. Lucie Police Department (PSLPD) pausing all ALPR use",
+            "FDOT revoking permits for ALPR systems on state roads",
+            "Police Chief Leo Niemczyk statement",
+            "Restriction to exigent circumstances only",
+            "FDOT memorandum as the triggering event"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -2237,33 +2028,57 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Flavor South Florida returns with dining deals at more than 100 restaurants from Boca Raton to Port St. Lucie - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/01/flavor-south-florida-returns-with-dining-deals-more-than-100-restaurants-boca-raton-port-st-lucie",
-          "canonical_slug": "2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res",
-          "canonical_headline": "Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September",
+          "source_headline": "New data center proposed for western St. Lucie County near Interstate 95 - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/31/203-acre-data-center-proposed-western-st-lucie-county-near-interstate-95",
+          "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+          "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": true,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "update_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Willow Lakes LLC",
+            "203 acres off West Midway Road and Interstate 95",
+            "174 acres rezoning to light industrial for data center",
+            "Rezoning application submitted in June",
+            "St. Lucie County location"
+          ],
+          "novel_facts": [
+            "Resident Parker Whiteside opposition quoted ('I hate that idea')",
+            "Previous Koa Bay Surf Park Community plans by Devcon Enterprises fell through due to insufficient capital",
+            "Attorney Lee Dobbins represents Willow Lakes LLC",
+            "Existing Florida Power Light transmission lines and man-made lake for cooling cited as advantages",
+            "Remaining 26 acres requested for general commercial zoning for hotel, gas station, restaurants",
+            "Fort Pierce City Commissioner Michael Broderick quoted with conditions (groundwater, power fees, noise)",
+            "Planning and Zoning Board meeting scheduled for September",
+            "Partner company would need separate site plan approval"
+          ],
+          "reason": "Same event: identical applicant (Willow Lakes LLC), property (203 acres off West Midway Road/I-95), rezoning details (174 acres to light industrial, June application). The incoming article contains material updates including resident opposition, City Commissioner conditions, Planning and Zoning Board scheduling, background on failed previous development plans, technical rationale for site selection, and additional commercial zoning details. These are substantive additions that readers need to know about this development proposal, but they do not constitute an independently newsworthy follow-up warranting a separate story.",
+          "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 0,
+      "new_publication_stale_rejected_count": 2,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 79.279
+      "live_hero_headline": "St. Lucie County votes to remove license plate readers from county roads over privacy concerns",
+      "generated_card_count": 1,
+      "elapsed_seconds": 98.201
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 9,
-      "selected_source_count": 1,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 13,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -2271,36 +2086,143 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 6.284,
+          "elapsed_seconds": 14.184,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 6.285,
+      "model_elapsed_seconds": 14.184,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 69,
+          "baseline_anchor": "criminal_case",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "fellsmere",
+            "indian",
+            "machete",
+            "office",
+            "police",
+            "river",
+            "search",
+            "sheriff",
+            "stabbing",
+            "suspect"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - WPEC",
+          "headline": "Fellsmere Police arrest machete stabbing suspect after search"
+        }
+      ],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Vero Beach woman arrested for depositing altered checks totaling more than $37,000",
+          "missing": [
+            "headline_money_claim_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Vero Beach woman arrested for depositing altered checks totaling more than $37,000",
+            "lead": "Chavi Rose-Marie Hammock was arrested August 28 on an active warrant charging her with grand theft and uttering a forged instrument. The Indian River County Sheriff's Office said the case originated after law enforcement in New York reported that two checks had allegedly been altered and deposited into a TD Bank account belonging to Hammock. One of the checks was changed from $800 to $17,658 before it was deposited, according to investigators.",
+            "lead_word_count": 75,
+            "headline_overlap_ratio": 0.25,
+            "new_context_token_count": 45,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Vero Beach woman arrested for depositing altered checks totaling more than $37,000",
+            "lead": "Chavi Rose-Marie Hammock was arrested August 28 on an active warrant charging her with grand theft and uttering a forged instrument. The Indian River County Sheriff's Office said the case originated after law enforcement in New York reported that two checks had allegedly been altered and deposited into a TD Bank account belonging to Hammock. One of the checks was changed from $800 to $17,658 before it was deposited, according to investigators.",
+            "headline_money_claims": [
+              37000
+            ],
+            "lead_money_claims": [
+              800,
+              17658
+            ],
+            "missing_money_claims": [
+              37000
+            ],
+            "headline_jurisdictions": [
+              "vero_beach"
+            ],
+            "lead_jurisdictions": [
+              "indian_river_county"
+            ],
+            "missing_jurisdictions": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_money_claim_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Vero Beach woman arrested for depositing altered checks totaling more than $37,000",
+            "generated_lead": "Chavi Rose-Marie Hammock was arrested August 28 on an active warrant charging her with grand theft and uttering a forged instrument. The Indian River County Sheriff's Office said the case originated after law enforcement in New York reported that two checks had allegedly been altered and deposited into a TD Bank account belonging to Hammock.",
+            "source_title": "Vero Beach woman arrested in alleged altered check scheme - WPBF",
+            "source_lead": "A 23-year-old Vero Beach woman has been arrested on felony charges after investigators said she deposited altered checks into a personal bank account and later withdrew large amounts of cash. Stay up to date: The latest headlines and weather from WPBF 25 According to the Indian River County Sheriff's Office, Chavi Rose-Marie Hammock was arrested Aug.",
+            "title_similarity": {
+              "score": 0.5733,
+              "overlap": 0.5556,
+              "jaccard": 0.3125,
+              "sorted_sequence": 0.6364,
+              "ordered_sequence": 0.6515,
+              "shared_token_count": 5.0
+            },
+            "lead_token_overlap": 0.425,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 13,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-          "editorial_story_id": "story_007607",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "indian_river",
           "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
@@ -2323,27 +2245,17 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-          "editorial_story_id": "story_007724",
-          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach man arrested on $1 million bond for creating AI deepfake sexual images",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "editorial_story_id": "story_007607",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Port St. Lucie police pause usage of  license plate readers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
-          "editorial_story_id": "story_007604",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
-          "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - cbs12.com",
+          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
           "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
           "editorial_story_id": "story_007607",
           "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
@@ -2352,18 +2264,18 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation - cbs12.com",
-          "source_url": "https://cbs12.com/news/crime/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
+          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
+          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach man arrested on $1 million bond for creating AI deepfake sexual images",
+          "canonical_headline": "Vero Beach man held on $1 million bond for creating AI deepfake sexual images",
           "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
           "identity_keys": [
             "story:story_007724",
-            "source:https://cbs12.com/news/crime/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
+            "source:https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -2378,15 +2290,56 @@
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
+            "publication_gap_days=1",
             "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
             "shared_event_families=['public-policy']",
             "shared_named_people=['burglary charge and', 'peter solomon ruma', 'vero beach man']",
             "shared_precise_locations=[]",
             "shared_agencies=[]",
-            "shared_subject_phrases=['explicit-deepfake-investigation']",
-            "shared_headline_topic_core=['cbs12', 'com', 'deepfake', 'explicit', 'investigation']",
-            "shared_distinctive_token_count=159",
+            "shared_subject_phrases=['deepfake-investigation-fear', 'deepfake-investigation-fear-victim', 'explicit-deepfake-investigation', 'explicit-deepfake-investigation-fear', 'investigation-fear-victim']",
+            "shared_headline_topic_core=['deepfake', 'explicit', 'fear', 'investigation', 'victim']",
+            "shared_distinctive_token_count=158",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - WPEC",
+          "source_url": "https://cbs12.com/news/crime/ircso-assists-fellsmere-pd-in-search-for-machete-stabbing-suspect-florida-news-florida-crime-local-news-local-crime-stabbing-knife-machete",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-02-indian-river-county-sheriffs-office-assists-fellsmere-police-in-search-for-mache",
+          "canonical_headline": "Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_keys": [
+            "story:story_007758",
+            "source:https://cbs12.com/news/crime/ircso-assists-fellsmere-pd-in-search-for-machete-stabbing-suspect-florida-news-florida-crime-local-news-local-crime-stabbing-knife-machete"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['fellsmere', 'indian-river', 'indian-river-county', 'martin-county', 'st-lucie']",
+            "shared_event_families=['crash']",
+            "shared_named_people=['armed with', 'involved in', 'machete stabbing suspect', 'search helicopters investigation']",
+            "shared_precise_locations=[]",
+            "shared_agencies=['indian-river-county-sheriff']",
+            "shared_subject_phrases=['assist-search-machete', 'assist-search-machete-stabb', 'ircso-assist-search', 'ircso-assist-search-machete', 'machete-stabb-suspect', 'search-machete-stabb', 'search-machete-stabb-suspect']",
+            "shared_headline_topic_core=['assist', 'ircso', 'machete', 'search', 'stabb', 'suspect']",
+            "shared_distinctive_token_count=56",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -2395,26 +2348,11 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "indian_river",
           "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
@@ -2447,13 +2385,13 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach man arrested on $1 million bond for creating AI deepfake sexual images",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -2462,43 +2400,7 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Port St. Lucie police pause usage of  license plate readers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-pause-usage-of-license-plate-readers",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County sheriff restricts license plate reader use to forcible felonies, missing-person cases",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "St. Lucie County area",
-            "License plate reader technology restrictions",
-            "Similar timeframe (Sept 1-2, 2026)",
-            "Community concerns about privacy"
-          ],
-          "novel_facts": [
-            "Port St. Lucie Police Department (city agency) pause announcement",
-            "Police Chief Leo Niemczyk's statements and position",
-            "126 license plate readers throughout Port St. Lucie city",
-            "17% reduction in auto burglaries cited",
-            "Specific policy: pause limits use to immediate threat to human life",
-            "Call for Tallahassee lawmakers to work with Flock manufacturers"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - cbs12.com",
+          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
           "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
           "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
           "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
@@ -2515,9 +2417,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Vero Beach man held on $1 million bond for creating AI deepfake sexual images",
+      "live_hero_headline": "Vero Beach man arrested for using AI to create fake sexual images of women, held on $1 million bond",
       "generated_card_count": 0,
-      "elapsed_seconds": 35.972
+      "elapsed_seconds": 40.381
     }
   ]
 }
