@@ -3,25 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Events — Treasure Coast Today</title>
-  <meta name="description" content="Treasure Coast events coming soon.">
+  <title>Treasure Coast Events — Things to Do in Martin, St. Lucie &amp; Indian River</title>
+  <meta name="description" content="Find upcoming Treasure Coast events, live music, festivals, markets, family activities and arts in Martin, St. Lucie and Indian River counties.">
   <link rel="canonical" href="https://treasurecoast.today/events.html">
-  <meta property="og:title" content="Events — Treasure Coast Today">
-  <meta property="og:description" content="Treasure Coast events coming soon.">
+  <link rel="alternate" type="application/rss+xml" title="Treasure Coast Today RSS Feed" href="/feed.xml">
+  <meta property="og:title" content="Treasure Coast Events — Treasure Coast Today">
+  <meta property="og:description" content="A local calendar of live music, festivals, markets, family activities, arts and community events across the Treasure Coast.">
   <meta property="og:url" content="https://treasurecoast.today/events.html">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://treasurecoast.today/og-image.png">
+  <meta property="og:image" content="https://treasurecoast.today/og-things_to_do.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://treasurecoast.today/og-image.png">
+  <meta name="twitter:image" content="https://treasurecoast.today/og-things_to_do.png">
   <meta name="geo.region" content="US-FL">
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GLJY7M6F3G"></script>
   <script>
@@ -31,22 +32,92 @@
     gtag('config', 'G-GLJY7M6F3G');
   </script>
   <style>
-    .cs-wrap { max-width: 600px; margin: 80px auto; padding: 0 24px; text-align: center; }
-    .cs-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 16px; }
-    .cs-headline { font-family: 'Fraunces', serif; font-size: clamp(28px, 5vw, 44px); font-weight: 600; line-height: 1.15; color: var(--text); margin: 0 0 20px; }
-    .cs-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 40px; }
-    .cs-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 16px; }
-    .cs-input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; }
-    .cs-input:focus { border-color: var(--accent); }
-    .cs-btn { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
-    .cs-fine { font-size: 12px; color: var(--text-secondary); }
-    .cs-success { display: none; color: var(--accent); font-size: 15px; font-weight: 500; margin-top: 12px; }
+    .events-page { max-width: 1180px; margin: 0 auto; padding: 0 24px 70px; }
+    .events-hero { padding: 58px 0 30px; border-bottom: 1px solid var(--border); }
+    .events-eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 13px; color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
+    .events-eyebrow::before { content: ""; width: 28px; height: 2px; background: currentColor; }
+    .events-hero h1 { max-width: 850px; margin: 0; color: var(--text); font-family: 'Fraunces', serif; font-size: clamp(38px, 6.5vw, 66px); font-weight: 600; line-height: .99; letter-spacing: -.035em; text-wrap: balance; }
+    .events-deck { max-width: 760px; margin: 20px 0 0; color: var(--text-secondary); font-size: 17px; line-height: 1.65; }
+    .events-trust { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 22px 0 0; padding: 0; list-style: none; color: var(--text-secondary); font-size: 12px; }
+    .events-trust li { display: inline-flex; align-items: center; gap: 7px; }
+    .events-trust li::before { content: "✓"; color: var(--accent); font-weight: 700; }
+
+    .events-toolbar { position: relative; margin: 28px 0 22px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-secondary); }
+    .events-search-wrap { position: relative; }
+    .events-search { width: 100%; box-sizing: border-box; padding: 13px 15px 13px 42px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; }
+    .events-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
+    .events-search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 16px; pointer-events: none; }
+    .events-filter-section { margin-top: 15px; }
+    .events-filter-label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 10px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; }
+    .events-filter-row { display: flex; flex-wrap: wrap; gap: 7px; }
+    .event-filter { appearance: none; border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; background: var(--bg); color: var(--text-secondary); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: border-color .15s ease, background .15s ease, color .15s ease; }
+    .event-filter:hover { border-color: var(--accent); color: var(--text); }
+    .event-filter.is-active { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .events-reset { margin-left: auto; border: 0; background: transparent; color: var(--accent); font: 600 12px 'DM Sans', sans-serif; cursor: pointer; padding: 8px 4px; }
+
+    .events-results { margin-top: 4px; }
+    .events-results-head { display: flex; justify-content: space-between; gap: 18px; align-items: baseline; margin-bottom: 14px; color: var(--text-secondary); font-size: 12px; }
+    .events-results-head p { margin: 0; }
+    .events-results-head strong { color: var(--text); font-size: 14px; }
+    .events-updated { text-align: right; }
+    .events-list { display: grid; gap: 12px; }
+
+    .event-card { display: grid; grid-template-columns: 86px minmax(0, 1fr); overflow: hidden; border: 1px solid var(--border); border-radius: 14px; background: var(--bg); transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+    .event-card:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 38%, var(--border)); box-shadow: 0 7px 24px rgba(19, 54, 38, .07); }
+    .event-datebox { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; padding: 16px 10px; border-right: 1px solid var(--border); background: color-mix(in srgb, var(--accent) 6%, var(--bg-secondary)); text-align: center; }
+    .event-datebox span { color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .13em; }
+    .event-datebox strong { margin-top: 5px; color: var(--text); font-family: 'Fraunces', serif; font-size: 21px; font-weight: 600; line-height: 1.05; }
+    .event-card-body { min-width: 0; padding: 18px 20px 16px; }
+    .event-card-meta { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-bottom: 7px; }
+    .event-category { color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+    .event-price { color: var(--text-secondary); font-size: 11px; }
+    .event-title { margin: 0; font-family: 'Fraunces', serif; font-size: clamp(20px, 3vw, 27px); font-weight: 600; line-height: 1.13; letter-spacing: -.015em; }
+    .event-title a { color: var(--text); text-decoration: none; }
+    .event-title a:hover { color: var(--accent); }
+    .event-whenwhere { margin: 8px 0 0; color: var(--text-secondary); font-size: 13px; line-height: 1.45; }
+    .event-whenwhere strong { color: var(--text); font-weight: 600; }
+    .event-desc { max-width: 800px; margin: 10px 0 0; color: var(--text-secondary); font-size: 13px; line-height: 1.55; }
+    .event-card-footer { display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 10px; }
+    .event-card-footer a { color: inherit; }
+    .event-actions { display: flex; gap: 14px; flex-shrink: 0; font-size: 11px; font-weight: 600; }
+    .event-actions a { color: var(--accent); text-decoration: none; }
+    .event-actions a:hover { text-decoration: underline; }
+    .events-empty { display: flex; flex-direction: column; gap: 5px; padding: 38px 22px; border: 1px dashed var(--border); border-radius: 14px; color: var(--text-secondary); text-align: center; }
+    .events-empty strong { color: var(--text); font-family: 'Fraunces', serif; font-size: 21px; }
+    .events-empty--initial { grid-column: 1 / -1; }
+
+    .events-note { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; margin-top: 28px; padding: 20px 22px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .events-note h2 { margin: 0 0 5px; font-family: 'Fraunces', serif; font-size: 19px; color: var(--text); }
+    .events-note p { max-width: 760px; margin: 0; color: var(--text-secondary); font-size: 12px; line-height: 1.55; }
+    .events-submit { display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; border: 1px solid var(--accent); border-radius: 999px; padding: 9px 14px; color: var(--accent); font-size: 12px; font-weight: 600; text-decoration: none; }
+    .events-submit:hover { background: var(--accent); color: #fff; }
+
+    @media (max-width: 760px) {
+      .events-page { padding: 0 16px 54px; }
+      .events-hero { padding-top: 38px; }
+      .events-deck { font-size: 15px; }
+      .events-toolbar { margin-top: 22px; padding: 14px; }
+      .events-results-head { display: block; }
+      .events-updated { margin-top: 3px !important; text-align: left; }
+      .event-card { grid-template-columns: 66px minmax(0, 1fr); border-radius: 12px; }
+      .event-datebox { min-height: 130px; padding: 12px 6px; }
+      .event-datebox strong { font-size: 17px; }
+      .event-card-body { padding: 15px 14px 13px; }
+      .event-title { font-size: 20px; }
+      .event-card-footer { display: block; }
+      .event-actions { margin-top: 8px; }
+      .events-note { grid-template-columns: 1fr; }
+      .events-submit { justify-self: start; }
+    }
   </style>
+  <!-- TCT_EVENTS_JSONLD_START -->
+<script type="application/ld+json" data-tct-events-jsonld>{"@context":"https://schema.org","@type":"ItemList","name":"Treasure Coast Events","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Event","name":"Greg & Brian","startDate":"2026-09-04T15:00-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":2,"item":{"@type":"Event","name":"First Friday Art Walk","startDate":"2026-09-04T17:00-04:00","url":"https://www.stuartfl.gov/Calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T21:00-04:00","location":{"@type":"Place","name":"The Creek District of Arts & Entertainment","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":3,"item":{"@type":"Event","name":"Food Trucks and Tributes – Johnny Cash Tribute","startDate":"2026-09-04T17:00-04:00","url":"https://visitstlucie.com/events/list/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T21:00-04:00","location":{"@type":"Place","name":"Tradition Square","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":4,"item":{"@type":"Event","name":"Friday Fest","startDate":"2026-09-04T17:30-04:00","url":"https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T20:30-04:00","location":{"@type":"Place","name":"Marina Square","address":{"@type":"PostalAddress","streetAddress":"1 Avenue A, Fort Pierce, FL 34950","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":5,"item":{"@type":"Event","name":"Pippin & Willin'","startDate":"2026-09-04T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":6,"item":{"@type":"Event","name":"Jupiter Hammerheads @ St. Lucie Mets","startDate":"2026-09-04T18:10-04:00","url":"https://visitstlucie.com/events/list/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T21:10-04:00","location":{"@type":"Place","name":"Clover Park","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":7,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-04T19:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":8,"item":{"@type":"Event","name":"RAELYN NELSON","startDate":"2026-09-04T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":9,"item":{"@type":"Event","name":"A.C.T Studio Theatre presents \"Fools\"","startDate":"2026-09-04T19:30-04:00","url":"https://www.martinarts.org/resources/cultural_calendar.html","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T21:00-04:00","location":{"@type":"Place","name":"A.C.T. Studio Theatre","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":10,"item":{"@type":"Event","name":"Hypersona Duo","startDate":"2026-09-04T19:30-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":11,"item":{"@type":"Event","name":"Downtown Fort Pierce Farmers Market","startDate":"2026-09-05T08:00-04:00","url":"https://visitstlucie.com/events/list/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T12:00-04:00","location":{"@type":"Place","name":"Downtown Farmers’ Market of Fort Pierce","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":12,"item":{"@type":"Event","name":"Hobe Sound Farmers Market","startDate":"2026-09-05T09:00-04:00","url":"https://hobesoundfarms.com/plan-your-visit/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T14:00-04:00","location":{"@type":"Place","name":"Hobe Sound Farms","address":{"@type":"PostalAddress","streetAddress":"1425 SE Bridge Rd, Hobe Sound, FL 33455","addressLocality":"Hobe Sound","addressRegion":"FL"}}}},{"@type":"ListItem","position":13,"item":{"@type":"Event","name":"Bank of America Museums on Us","startDate":"2026-09-05T10:00-04:00","url":"https://www.childrensmuseumtc.org/events-calendar-1","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T16:00-04:00","location":{"@type":"Place","name":"Children's Museum of the Treasure Coast","address":{"@type":"PostalAddress","streetAddress":"1707 NE Indian River Dr, Jensen Beach, FL 34957","addressLocality":"Jensen Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":14,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-05T14:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":15,"item":{"@type":"Event","name":"Innuendo Duo","startDate":"2026-09-05T15:00-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":16,"item":{"@type":"Event","name":"Collins & Company","startDate":"2026-09-05T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":17,"item":{"@type":"Event","name":"FREEBIRD ATL - The Ultimate Lynyrd Skynyrd Experience","startDate":"2026-09-05T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":18,"item":{"@type":"Event","name":"A.C.T Studio Theatre presents \"Fools\"","startDate":"2026-09-05T19:30-04:00","url":"https://www.martinarts.org/resources/cultural_calendar.html","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T21:00-04:00","location":{"@type":"Place","name":"A.C.T. Studio Theatre","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":19,"item":{"@type":"Event","name":"Hypersona Duo","startDate":"2026-09-05T19:30-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":20,"item":{"@type":"Event","name":"Hobe Sound Farmers Market","startDate":"2026-09-06T09:00-04:00","url":"https://hobesoundfarms.com/plan-your-visit/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T14:00-04:00","location":{"@type":"Place","name":"Hobe Sound Farms","address":{"@type":"PostalAddress","streetAddress":"1425 SE Bridge Rd, Hobe Sound, FL 33455","addressLocality":"Hobe Sound","addressRegion":"FL"}}}},{"@type":"ListItem","position":21,"item":{"@type":"Event","name":"Neighborhood Farmer’s Market at Tradition Square","startDate":"2026-09-06T09:00-04:00","url":"https://traditionfl.com/events/neighborhood-farmers-market-at-tradition-square/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T14:00-04:00","location":{"@type":"Place","name":"Tradition Square","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":22,"item":{"@type":"Event","name":"Sunday Funday Live Music at Sailfish Brewing","startDate":"2026-09-06T12:00-04:00","url":"https://sailfishbrewingco.com/vero-beach/taproom-events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T15:00-04:00","location":{"@type":"Place","name":"Sailfish Brewing Company — Vero Beach","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":23,"item":{"@type":"Event","name":"Rock'n Riverwalk","startDate":"2026-09-06T13:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T16:00-04:00","location":{"@type":"Place","name":"Riverwalk Stage","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":24,"item":{"@type":"Event","name":"Caribbean Chillers","startDate":"2026-09-06T14:00-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":25,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-06T14:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":26,"item":{"@type":"Event","name":"A.C.T Studio Theatre presents \"Fools\"","startDate":"2026-09-06T15:00-04:00","url":"https://www.martinarts.org/resources/cultural_calendar.html","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T16:30-04:00","location":{"@type":"Place","name":"A.C.T. Studio Theatre","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":27,"item":{"@type":"Event","name":"SPIRAL LIGHT - Grateful Labor Day Weekend w/Billy Gilmore","startDate":"2026-09-06T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":28,"item":{"@type":"Event","name":"Brad Brock","startDate":"2026-09-07T11:00-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":29,"item":{"@type":"Event","name":"AnnaLee Talley","startDate":"2026-09-07T16:00-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":30,"item":{"@type":"Event","name":"Live Music Wednesday at Sailfish Brewing","startDate":"2026-09-09T17:00-04:00","url":"https://sailfishbrewingco.com/vero-beach/taproom-events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-09T20:00-04:00","location":{"@type":"Place","name":"Sailfish Brewing Company — Vero Beach","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":31,"item":{"@type":"Event","name":"GARDENS JAM","startDate":"2026-09-09T18:30-04:00","url":"https://www.jazzsociety.org/p/31/calendar-list","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-09T21:00-04:00","location":{"@type":"Place","name":"Port St. Lucie Botanical Gardens","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":32,"item":{"@type":"Event","name":"LEATHER & LACE DUO","startDate":"2026-09-09T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":33,"item":{"@type":"Event","name":"Leaf It to the E","startDate":"2026-09-10T17:00-04:00","url":"https://hsmc-fl.com/calendar/leaf-it-to-the-e/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-10T19:00-04:00","location":{"@type":"Place","name":"Elliott Museum","address":{"@type":"PostalAddress","streetAddress":"825 NE Ocean Blvd, Stuart, FL 34996","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":34,"item":{"@type":"Event","name":"Abby Owens","startDate":"2026-09-10T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-10T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":35,"item":{"@type":"Event","name":"Picnic in the Park","startDate":"2026-09-10T18:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-10T20:00-04:00","location":{"@type":"Place","name":"Memorial Park Amphitheater","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":36,"item":{"@type":"Event","name":"TERRA THURSDAY JAM","startDate":"2026-09-10T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":37,"item":{"@type":"Event","name":"The Barn Theatre presents \"Sister Act\"","startDate":"2026-09-10T20:00-04:00","url":"https://www.martinarts.org/resources/cultural_calendar.html","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-10T22:30-04:00","location":{"@type":"Place","name":"The Barn Theatre","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":38,"item":{"@type":"Event","name":"Breakfast in the Square","startDate":"2026-09-11T09:00-04:00","url":"https://traditionfl.com/events/breakfast-in-the-square-12/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-11T12:00-04:00","location":{"@type":"Place","name":"Tradition Square","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":39,"item":{"@type":"Event","name":"Lunch & Learn Lecture Series","startDate":"2026-09-11T12:00-04:00","url":"https://manateecenter.org/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-11T13:00-04:00","location":{"@type":"Place","name":"Fort Pierce Yacht Club","address":{"@type":"PostalAddress","streetAddress":"700 N Indian River Dr, Fort Pierce, FL","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":40,"item":{"@type":"Event","name":"Chemistry","startDate":"2026-09-11T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-11T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":41,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-11T19:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":42,"item":{"@type":"Event","name":"THE CHILI POPPERS - Red Hot Chili Peppers Tribute Band","startDate":"2026-09-11T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":43,"item":{"@type":"Event","name":"Cover Up","startDate":"2026-09-11T19:30-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":44,"item":{"@type":"Event","name":"The Barn Theatre presents \"Sister Act\"","startDate":"2026-09-11T20:00-04:00","url":"https://www.martinarts.org/resources/cultural_calendar.html","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-11T22:30-04:00","location":{"@type":"Place","name":"The Barn Theatre","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":45,"item":{"@type":"Event","name":"Hobe Sound Farmers Market","startDate":"2026-09-12T09:00-04:00","url":"https://hobesoundfarms.com/plan-your-visit/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-12T14:00-04:00","location":{"@type":"Place","name":"Hobe Sound Farms","address":{"@type":"PostalAddress","streetAddress":"1425 SE Bridge Rd, Hobe Sound, FL 33455","addressLocality":"Hobe Sound","addressRegion":"FL"}}}},{"@type":"ListItem","position":46,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-12T14:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":47,"item":{"@type":"Event","name":"Glory Days","startDate":"2026-09-12T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-12T20:00-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":48,"item":{"@type":"Event","name":"CRAZY HORSES Neil Young Tribute by Leo Lee Rock Band","startDate":"2026-09-12T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":49,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-12T19:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":50,"item":{"@type":"Event","name":"The Spazmatics","startDate":"2026-09-12T19:30-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":51,"item":{"@type":"Event","name":"The Barn Theatre presents \"Sister Act\"","startDate":"2026-09-12T20:00-04:00","url":"https://www.martinarts.org/resources/cultural_calendar.html","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-12T22:30-04:00","location":{"@type":"Place","name":"The Barn Theatre","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":52,"item":{"@type":"Event","name":"Hobe Sound Farmers Market","startDate":"2026-09-13T09:00-04:00","url":"https://hobesoundfarms.com/plan-your-visit/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-13T14:00-04:00","location":{"@type":"Place","name":"Hobe Sound Farms","address":{"@type":"PostalAddress","streetAddress":"1425 SE Bridge Rd, Hobe Sound, FL 33455","addressLocality":"Hobe Sound","addressRegion":"FL"}}}},{"@type":"ListItem","position":53,"item":{"@type":"Event","name":"Sensory Friendly Day","startDate":"2026-09-13T09:30-04:00","url":"https://www.childrensmuseumtc.org/events-calendar-1","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-13T11:00-04:00","location":{"@type":"Place","name":"Children's Museum of the Treasure Coast","address":{"@type":"PostalAddress","streetAddress":"1707 NE Indian River Dr, Jensen Beach, FL 34957","addressLocality":"Jensen Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":54,"item":{"@type":"Event","name":"Rock'n Riverwalk","startDate":"2026-09-13T13:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-13T16:00-04:00","location":{"@type":"Place","name":"Riverwalk Stage","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":55,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-13T14:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":56,"item":{"@type":"Event","name":"The Barn Theatre presents \"Sister Act\"","startDate":"2026-09-13T14:00-04:00","url":"https://www.martinarts.org/resources/cultural_calendar.html","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-13T16:30-04:00","location":{"@type":"Place","name":"The Barn Theatre","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":57,"item":{"@type":"Event","name":"FORT PIERCE - Yacht Club","startDate":"2026-09-15T18:30-04:00","url":"https://www.jazzsociety.org/p/31/calendar-list","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-15T21:00-04:00","location":{"@type":"Place","name":"Fort Pierce Yacht Club","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":58,"item":{"@type":"Event","name":"ManaTales – Thursdays","startDate":"2026-09-17T09:30-04:00","url":"https://manateecenter.org/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-17T12:00-04:00","description":"Two sessions are offered: 9:30–10:30 a.m. and 11 a.m.–noon.","location":{"@type":"Place","name":"Manatee Center","address":{"@type":"PostalAddress","streetAddress":"480 N Indian River Dr, Fort Pierce, FL 34950","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":59,"item":{"@type":"Event","name":"Brad Brock's One Man Band","startDate":"2026-09-17T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-17T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":60,"item":{"@type":"Event","name":"SoulTime","startDate":"2026-09-18T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-18T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":61,"item":{"@type":"Event","name":"Where the Gardens Waits: An 80’s Glow Party Book Event!","startDate":"2026-09-18T18:00-04:00","url":"https://heathcotebotanicalgardens.org/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-18T20:00-04:00","location":{"@type":"Place","name":"Heathcote Botanical Gardens","address":{"@type":"PostalAddress","streetAddress":"210 Savannah Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":62,"item":{"@type":"Event","name":"GAZEBO - Silver Mullets","startDate":"2026-09-19T09:00-04:00","url":"https://www.jazzsociety.org/p/31/calendar-list","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-19T12:00-04:00"}},{"@type":"ListItem","position":63,"item":{"@type":"Event","name":"Twenty Years of the Met in Cinemas: An Anniversary Celebration","startDate":"2026-09-19T13:00-04:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Majestic 11","address":{"@type":"PostalAddress","streetAddress":"940 14th Ln, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":64,"item":{"@type":"Event","name":"Joe Reid & Heartland Band","startDate":"2026-09-19T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-19T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":65,"item":{"@type":"Event","name":"BROTHERS AFTER ALL - Allman Brothers Tribute","startDate":"2026-09-19T19:30-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":66,"item":{"@type":"Event","name":"Metalucious","startDate":"2026-09-19T19:30-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":67,"item":{"@type":"Event","name":"Rock'n Riverwalk","startDate":"2026-09-20T13:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-20T16:00-04:00","location":{"@type":"Place","name":"Riverwalk Stage","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":68,"item":{"@type":"Event","name":"DEAD ALL OVER","startDate":"2026-09-20T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":69,"item":{"@type":"Event","name":"The Artimus Pyle Band - Honoring Ronnie Van Zant’s Lynyrd Skynyrd","startDate":"2026-09-20T19:00-04:00","url":"https://www.lyrictheatre.com/the-lyric-theatre","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Lyric Theatre","address":{"@type":"PostalAddress","streetAddress":"59 SW Flagler Ave, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":70,"item":{"@type":"Event","name":"The Hidden History of WWII in Florida","startDate":"2026-09-23T13:00-04:00","url":"https://hsmc-fl.com/calendar/the-hidden-history-of-wwii-in-florida/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-23T14:30-04:00","location":{"@type":"Place","name":"Elliott Museum","address":{"@type":"PostalAddress","streetAddress":"825 NE Ocean Blvd, Stuart, FL 34996","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":71,"item":{"@type":"Event","name":"GARDENS JAM","startDate":"2026-09-23T18:30-04:00","url":"https://www.jazzsociety.org/p/31/calendar-list","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-23T21:00-04:00","location":{"@type":"Place","name":"Port St. Lucie Botanical Gardens","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":72,"item":{"@type":"Event","name":"Turkish Mosaic Candle Holder & Lamp Workshop","startDate":"2026-09-24T13:00-04:00","url":"https://hsmc-fl.com/calendar/turkish-mosaic-candle-holder-lamp-workshop/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-24T16:00-04:00","location":{"@type":"Place","name":"Elliott Museum","address":{"@type":"PostalAddress","streetAddress":"825 NE Ocean Blvd, Stuart, FL 34996","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":73,"item":{"@type":"Event","name":"Dave & the Wave","startDate":"2026-09-24T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-24T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":74,"item":{"@type":"Event","name":"Kevin Nealon","startDate":"2026-09-24T19:00-04:00","url":"https://www.lyrictheatre.com/the-lyric-theatre","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Lyric Theatre","address":{"@type":"PostalAddress","streetAddress":"59 SW Flagler Ave, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":75,"item":{"@type":"Event","name":"Vince Love and Soul Cats","startDate":"2026-09-25T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-25T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":76,"item":{"@type":"Event","name":"NAACP 6th Annual 5K / 10K Race","startDate":"2026-09-26T07:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-26T09:00-04:00","location":{"@type":"Place","name":"Memorial Park","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":77,"item":{"@type":"Event","name":"Downtown Stuart Car & Bike Show","startDate":"2026-09-26T09:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-26T13:00-04:00","location":{"@type":"Place","name":"Stuart City Hall and Annex Parking Lots","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":78,"item":{"@type":"Event","name":"FARMERS MARKET - Latin Band","startDate":"2026-09-26T09:00-04:00","url":"https://www.jazzsociety.org/p/31/calendar-list","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-26T12:00-04:00","location":{"@type":"Place","name":"Downtown Fort Pierce Farmers Market","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"","addressRegion":"FL"}}}},{"@type":"ListItem","position":79,"item":{"@type":"Event","name":"ManaTales – Saturdays","startDate":"2026-09-26T09:30-04:00","url":"https://manateecenter.org/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-26T12:00-04:00","description":"Two sessions are offered: 9:30–10:30 a.m. and 11 a.m.–noon.","location":{"@type":"Place","name":"Manatee Center","address":{"@type":"PostalAddress","streetAddress":"480 N Indian River Dr, Fort Pierce, FL 34950","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":80,"item":{"@type":"Event","name":"Treasure Fest & Worldwide Day of Play","startDate":"2026-09-26T10:00-04:00","url":"https://www.childrensmuseumtc.org/events-calendar-1","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-26T13:00-04:00","location":{"@type":"Place","name":"Children's Museum of the Treasure Coast","address":{"@type":"PostalAddress","streetAddress":"1707 NE Indian River Dr, Jensen Beach, FL 34957","addressLocality":"Jensen Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":81,"item":{"@type":"Event","name":"Little Lamb Family Festival","startDate":"2026-09-26T11:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-26T15:00-04:00","location":{"@type":"Place","name":"Memorial Park Amphitheater","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":82,"item":{"@type":"Event","name":"Dottie Kelly & the Rock House Band","startDate":"2026-09-26T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-26T20:30-04:00","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":83,"item":{"@type":"Event","name":"Dancing with the Martin Stars","startDate":"2026-09-26T19:00-04:00","url":"https://www.lyrictheatre.com/the-lyric-theatre","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Lyric Theatre","address":{"@type":"PostalAddress","streetAddress":"59 SW Flagler Ave, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":84,"item":{"@type":"Event","name":"Rock'n Riverwalk","startDate":"2026-09-27T13:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-27T16:00-04:00","location":{"@type":"Place","name":"Riverwalk Stage","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":85,"item":{"@type":"Event","name":"Free Community Day","startDate":"2026-09-30T10:00-04:00","url":"https://manateecenter.org/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-30T15:00-04:00","location":{"@type":"Place","name":"Manatee Center","address":{"@type":"PostalAddress","streetAddress":"480 N Indian River Dr, Fort Pierce, FL 34950","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":86,"item":{"@type":"Event","name":"Learn at the Lagoon with a Creekside Chat at the Manatee Center","startDate":"2026-09-30T11:00-04:00","url":"https://manateecenter.org/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-30T13:00-04:00","location":{"@type":"Place","name":"Manatee Center","address":{"@type":"PostalAddress","streetAddress":"480 N Indian River Dr, Fort Pierce, FL 34950","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":87,"item":{"@type":"Event","name":"Così fan tutte (Mozart)","startDate":"2026-10-03T13:00-04:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Majestic 11","address":{"@type":"PostalAddress","streetAddress":"940 14th Ln, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":88,"item":{"@type":"Event","name":"Macbeth (Verdi – New Production)","startDate":"2026-10-17T13:00-04:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Majestic 11","address":{"@type":"PostalAddress","streetAddress":"940 14th Ln, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":89,"item":{"@type":"Event","name":"Carmen by Bizet","startDate":"2026-11-14T13:00-05:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Majestic 11","address":{"@type":"PostalAddress","streetAddress":"940 14th Ln, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":90,"item":{"@type":"Event","name":"Go Now! The Music of the Moody Blues - The Tribute","startDate":"2026-11-19T19:00-05:00","url":"https://www.musicworksconcerts.com/buy-tickets-v2","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Emerson Center","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":91,"item":{"@type":"Event","name":"Samson et Dalila (Saint-Saëns)","startDate":"2026-12-05T12:00-05:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Majestic 11","address":{"@type":"PostalAddress","streetAddress":"940 14th Ln, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":92,"item":{"@type":"Event","name":"The Magic Flute by Mozart","startDate":"2026-12-12T13:00-05:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Majestic 11","address":{"@type":"PostalAddress","streetAddress":"940 14th Ln, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":93,"item":{"@type":"Event","name":"TOSCA by Puccini","startDate":"2027-01-10T15:00-05:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"VBHS Performing Arts Center","address":{"@type":"PostalAddress","streetAddress":"1707 16th St, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":94,"item":{"@type":"Event","name":"One More Night, The Music of Phil Collins and Genesis","startDate":"2027-01-14T19:00-05:00","url":"https://www.musicworksconcerts.com/buy-tickets-v2","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Emerson Center","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":95,"item":{"@type":"Event","name":"Jay and The Americans","startDate":"2027-01-21T19:00-05:00","url":"https://www.musicworksconcerts.com/buy-tickets-v2","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Emerson Center","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":96,"item":{"@type":"Event","name":"La Fanciulla del West (Puccini)","startDate":"2027-01-23T13:00-05:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Majestic 11","address":{"@type":"PostalAddress","streetAddress":"940 14th Ln, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":97,"item":{"@type":"Event","name":"The Drifters","startDate":"2027-01-28T19:00-05:00","url":"https://www.musicworksconcerts.com/buy-tickets-v2","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Emerson Center","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":98,"item":{"@type":"Event","name":"The Docksiders - A Yacht Rock Experience","startDate":"2027-02-04T19:00-05:00","url":"https://www.musicworksconcerts.com/buy-tickets-v2","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Emerson Center","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":99,"item":{"@type":"Event","name":"Rising Stars Competition — Semifinals","startDate":"2027-02-11T15:00-05:00","url":"https://verobeachopera.org/opera","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"VBHS Performing Arts Center","address":{"@type":"PostalAddress","streetAddress":"1707 16th St, Vero Beach, FL 32960","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":100,"item":{"@type":"Event","name":"MJ Live! Michael Jackson Tribute Concert","startDate":"2027-02-11T19:00-05:00","url":"https://www.musicworksconcerts.com/buy-tickets-v2","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"The Emerson Center","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Vero Beach","addressRegion":"FL"}}}}]}</script>
+<!-- TCT_EVENTS_JSONLD_END -->
   <script data-tct-member-prepaint>
 (function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1')document.documentElement.classList.add('tct-member-preverified')}catch(_e){}})();
 </script>
   <link rel="stylesheet" href="/membership.css?v=1.13.7.3">
-<script type="text/javascript" async="async" data-noptimize="1" data-cfasync="false" src="//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"></script>
+  <script type="text/javascript" async="async" data-noptimize="1" data-cfasync="false" src="//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"></script>
 </head>
 <body data-article-slug="">
   <header>
@@ -67,27 +138,1137 @@
         <a href="/?cat=indian_river" class="cat-btn" style="text-decoration:none">Indian River Co.</a>
         <a href="/weather.html" class="cat-btn" style="text-decoration:none">Weather</a>
         <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
-        <span class="cat-btn active">Events</span>
+        <a href="/events.html" class="cat-btn active" aria-current="page" style="text-decoration:none">Events</a>
       </nav>
       <div class="header-actions">
         <a href="/subscribe.html" class="support-btn membership-subscribe-btn" style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today — $1 first month"><span class="membership-subscribe-label">Subscribe</span><span class="membership-subscribe-price">Limited time &middot; $1 first month</span></a><a href="/subscribe.html?signin=1" class="membership-header-signin">Sign in</a><a href="/subscribe.html" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>
       </div>
     </div>
   </header>
-  <main>
-    <div class="cs-wrap">
-      <span class="cs-eyebrow">Coming Soon</span>
-      <h1 class="cs-headline">List your Treasure Coast event for free.</h1>
-      <p class="cs-sub">We're building a local events calendar. Leave your email and we'll notify you when it launches.</p>
-      <form class="cs-form" id="csForm" action="https://formspree.io/f/mqejrpdv" method="POST">
-        <input type="hidden" name="_subject" value="Events calendar interest">
-        <input class="cs-input" type="email" name="email" placeholder="your@email.com" required>
-        <button class="cs-btn" type="submit">Notify me</button>
-      </form>
-      <p class="cs-fine">No spam. Just a heads-up when the calendar is live.</p>
-      <p class="cs-success" id="csSuccess">You're on the list!</p>
-    </div>
+
+  <main class="events-page">
+    <section class="events-hero">
+      <span class="events-eyebrow">Treasure Coast Events</span>
+      <h1>What’s happening on the Treasure Coast.</h1>
+      <p class="events-deck">Live music, festivals, markets, family activities, arts, outdoor events and more across Martin, St. Lucie and Indian River counties — gathered from official local calendars and venue schedules.</p>
+      <ul class="events-trust" aria-label="Calendar information">
+        <li>Official local and venue sources</li>
+        <li>Automatic updates</li>
+        <li>Duplicate listings combined</li>
+      </ul>
+    </section>
+
+    <section class="events-toolbar" aria-label="Filter Treasure Coast events">
+      <div class="events-search-wrap">
+        <span class="events-search-icon" aria-hidden="true">⌕</span>
+        <label class="sr-only" for="eventsSearch">Search events</label>
+        <input class="events-search" id="eventsSearch" type="search" placeholder="Search events, venues or cities…" autocomplete="off" data-events-search>
+      </div>
+
+      <div class="events-filter-section">
+        <span class="events-filter-label">When</span>
+        <div class="events-filter-row" data-filter-group="range">
+          <button class="event-filter is-active" type="button" data-range="all" aria-pressed="true">All upcoming</button>
+          <button class="event-filter" type="button" data-range="today" aria-pressed="false">Today</button>
+          <button class="event-filter" type="button" data-range="weekend" aria-pressed="false">This weekend</button>
+        </div>
+      </div>
+
+      <div class="events-filter-section">
+        <span class="events-filter-label">County</span>
+        <div class="events-filter-row" data-filter-group="county">
+          <button class="event-filter is-active" type="button" data-county-filter="all" aria-pressed="true">All counties</button>
+          <button class="event-filter" type="button" data-county-filter="Martin" aria-pressed="false">Martin</button>
+          <button class="event-filter" type="button" data-county-filter="St. Lucie" aria-pressed="false">St. Lucie</button>
+          <button class="event-filter" type="button" data-county-filter="Indian River" aria-pressed="false">Indian River</button>
+        </div>
+      </div>
+
+      <div class="events-filter-section">
+        <span class="events-filter-label">Type</span>
+        <div class="events-filter-row" data-filter-group="category">
+          <button class="event-filter is-active" type="button" data-category-filter="all" aria-pressed="true">All types</button>
+          <button class="event-filter" type="button" data-category-filter="Live Music" aria-pressed="false">Live Music</button>
+          <button class="event-filter" type="button" data-category-filter="Arts &amp; Culture" aria-pressed="false">Arts &amp; Culture</button>
+          <button class="event-filter" type="button" data-category-filter="Family" aria-pressed="false">Family</button>
+          <button class="event-filter" type="button" data-category-filter="Food &amp; Markets" aria-pressed="false">Food &amp; Markets</button>
+          <button class="event-filter" type="button" data-category-filter="Sports &amp; Recreation" aria-pressed="false">Sports &amp; Recreation</button>
+          <button class="event-filter" type="button" data-category-filter="Outdoors &amp; Nature" aria-pressed="false">Outdoors &amp; Nature</button>
+          <button class="event-filter" type="button" data-category-filter="Community" aria-pressed="false">Community</button>
+          <button class="event-filter" type="button" data-category-filter="Classes &amp; Workshops" aria-pressed="false">Classes &amp; Workshops</button>
+          <button class="events-reset" type="button" data-events-reset>Reset filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TCT_EVENTS_DYNAMIC_START -->
+<section class="events-results" aria-live="polite">
+  <div class="events-results-head"><p><strong data-events-count>105</strong> upcoming events</p><p class="events-updated">Updated Sep 4, 2026 at 5:45 PM ET · Sources refresh automatically</p></div>
+  <div class="events-list" data-events-list>
+<article class="event-card" data-event-id="e86488e1b8c97b9dde" data-county="Indian River" data-category="Live Music" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Greg &amp; Brian</a></h2>
+    <p class="event-whenwhere"><strong>3 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="19a7908a9f3ae5ecef" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/Calendar.aspx" target="_blank" rel="noopener noreferrer external">First Friday Art Walk</a></h2>
+    <p class="event-whenwhere"><strong>5 PM–9 PM</strong> · The Creek District of Arts &amp; Entertainment · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/Calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="f8a4e2f319da5702a1" data-county="St. Lucie" data-category="Live Music" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Food Trucks and Tributes – Johnny Cash Tribute</a></h2>
+    <p class="event-whenwhere"><strong>5 PM–9 PM</strong> · Tradition Square · Port St. Lucie</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Visit St. Lucie</a></span><div class="event-actions"><a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="ebc3042e936bf11cc3" data-county="St. Lucie" data-category="Community" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Community</span></div>
+    <h2 class="event-title"><a href="https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026" target="_blank" rel="noopener noreferrer external">Friday Fest</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Marina Square · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://mainstreetfortpierce.org/local-events-calendar" target="_blank" rel="noopener noreferrer external">Main Street Fort Pierce</a></span><div class="event-actions"><a href="https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="10cbb19bbe627f28fc" data-county="Indian River" data-category="Live Music" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Pippin &amp; Willin&#x27;</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="36ac1886c44fb9979b" data-county="St. Lucie" data-category="Sports &amp; Recreation" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Sports &amp; Recreation</span></div>
+    <h2 class="event-title"><a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Jupiter Hammerheads @ St. Lucie Mets</a></h2>
+    <p class="event-whenwhere"><strong>6:10 PM–9:10 PM</strong> · Clover Park · Port St. Lucie</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Visit St. Lucie</a></span><div class="event-actions"><a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="cf0804e41c97205739" data-county="St. Lucie" data-category="Arts &amp; Culture" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Proof</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Pineapple Playhouse · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.pineappleplayhouse.com/" target="_blank" rel="noopener noreferrer external">Pineapple Playhouse</a></span><div class="event-actions"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Event details →</a><a class="event-ticket" href="https://thepineappleplayhouse.ludus.com/" target="_blank" rel="noopener noreferrer external">Tickets</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="990d6177cb243c082a" data-county="Martin" data-category="Live Music" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span><span class="event-price">Advance tickets $17.85 total cost</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">RAELYN NELSON</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="368a905bc44edd1c0c" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">A.C.T Studio Theatre presents &quot;Fools&quot;</a></h2>
+    <p class="event-whenwhere"><strong>7:30 PM–9 PM</strong> · A.C.T. Studio Theatre</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">MartinArts — Cultural Calendar</a></span><div class="event-actions"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="eaca5221edbd8b92a0" data-county="Indian River" data-category="Live Music" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Hypersona Duo</a></h2>
+    <p class="event-whenwhere"><strong>7:30 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="53257bdb3d8af5ef2b" data-county="St. Lucie" data-category="Food &amp; Markets" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Food &amp; Markets</span></div>
+    <h2 class="event-title"><a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Downtown Fort Pierce Farmers Market</a></h2>
+    <p class="event-whenwhere"><strong>8 AM–12 PM</strong> · Downtown Farmers’ Market of Fort Pierce · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Visit St. Lucie</a></span><div class="event-actions"><a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="7fdd989ac5deccb2e1" data-county="Martin" data-category="Food &amp; Markets" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Food &amp; Markets</span></div>
+    <h2 class="event-title"><a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Hobe Sound Farmers Market</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–2 PM</strong> · Hobe Sound Farms · Hobe Sound</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Hobe Sound Farms</a></span><div class="event-actions"><a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="a532bba17122395c77" data-county="Martin" data-category="Family" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Family</span></div>
+    <h2 class="event-title"><a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Bank of America Museums on Us</a></h2>
+    <p class="event-whenwhere"><strong>10 AM–4 PM</strong> · Children&#x27;s Museum of the Treasure Coast · Jensen Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Children&#x27;s Museum of the Treasure Coast</a></span><div class="event-actions"><a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="cc8310c36795a5f905" data-county="St. Lucie" data-category="Arts &amp; Culture" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Proof</a></h2>
+    <p class="event-whenwhere"><strong>2 PM</strong> · Pineapple Playhouse · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.pineappleplayhouse.com/" target="_blank" rel="noopener noreferrer external">Pineapple Playhouse</a></span><div class="event-actions"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Event details →</a><a class="event-ticket" href="https://thepineappleplayhouse.ludus.com/" target="_blank" rel="noopener noreferrer external">Tickets</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="757d89291ddd3a55f8" data-county="Indian River" data-category="Live Music" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Innuendo Duo</a></h2>
+    <p class="event-whenwhere"><strong>3 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="429119e6ac1617c98c" data-county="Indian River" data-category="Live Music" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Collins &amp; Company</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="32b55843524da46413" data-county="Martin" data-category="Live Music" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span><span class="event-price">Advance $14.20 total; $20 at the door</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">FREEBIRD ATL - The Ultimate Lynyrd Skynyrd Experience</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="73e9d5f883cb0c691b" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">A.C.T Studio Theatre presents &quot;Fools&quot;</a></h2>
+    <p class="event-whenwhere"><strong>7:30 PM–9 PM</strong> · A.C.T. Studio Theatre</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">MartinArts — Cultural Calendar</a></span><div class="event-actions"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="2562ec76e9acfad36c" data-county="Indian River" data-category="Live Music" data-date="2026-09-05">
+  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Hypersona Duo</a></h2>
+    <p class="event-whenwhere"><strong>7:30 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="0ebcbb4064d4ca58cf" data-county="Martin" data-category="Food &amp; Markets" data-date="2026-09-06">
+  <div class="event-datebox" aria-label="Sunday, September 6, 2026"><span>SUN</span><strong>SEP 6</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Food &amp; Markets</span></div>
+    <h2 class="event-title"><a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Hobe Sound Farmers Market</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–2 PM</strong> · Hobe Sound Farms · Hobe Sound</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Hobe Sound Farms</a></span><div class="event-actions"><a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="caa3bc6e19d57e34dd" data-county="St. Lucie" data-category="Food &amp; Markets" data-date="2026-09-06">
+  <div class="event-datebox" aria-label="Sunday, September 6, 2026"><span>SUN</span><strong>SEP 6</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Food &amp; Markets</span></div>
+    <h2 class="event-title"><a href="https://traditionfl.com/events/neighborhood-farmers-market-at-tradition-square/" target="_blank" rel="noopener noreferrer external">Neighborhood Farmer’s Market at Tradition Square</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–2 PM</strong> · Tradition Square · Port St. Lucie</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://traditionfl.com/events-calendar/" target="_blank" rel="noopener noreferrer external">Tradition — Events Calendar</a></span><div class="event-actions"><a href="https://traditionfl.com/events/neighborhood-farmers-market-at-tradition-square/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="0582210ff33897d2b3" data-county="Indian River" data-category="Live Music" data-date="2026-09-06">
+  <div class="event-datebox" aria-label="Sunday, September 6, 2026"><span>SUN</span><strong>SEP 6</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://sailfishbrewingco.com/vero-beach/taproom-events/" target="_blank" rel="noopener noreferrer external">Sunday Funday Live Music at Sailfish Brewing</a></h2>
+    <p class="event-whenwhere"><strong>12 PM–3 PM</strong> · Sailfish Brewing Company — Vero Beach · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://sailfishbrewingco.com/vero-beach/taproom-events/" target="_blank" rel="noopener noreferrer external">Sailfish Brewing Company — Vero Beach</a></span><div class="event-actions"><a href="https://sailfishbrewingco.com/vero-beach/taproom-events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="7d9858c37401e5610e" data-county="Martin" data-category="Live Music" data-date="2026-09-06">
+  <div class="event-datebox" aria-label="Sunday, September 6, 2026"><span>SUN</span><strong>SEP 6</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Rock&#x27;n Riverwalk</a></h2>
+    <p class="event-whenwhere"><strong>1 PM–4 PM</strong> · Riverwalk Stage · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="770a64733c13dfc30e" data-county="Indian River" data-category="Live Music" data-date="2026-09-06">
+  <div class="event-datebox" aria-label="Sunday, September 6, 2026"><span>SUN</span><strong>SEP 6</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Caribbean Chillers</a></h2>
+    <p class="event-whenwhere"><strong>2 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="1d975d22f213be6f8e" data-county="St. Lucie" data-category="Arts &amp; Culture" data-date="2026-09-06">
+  <div class="event-datebox" aria-label="Sunday, September 6, 2026"><span>SUN</span><strong>SEP 6</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Proof</a></h2>
+    <p class="event-whenwhere"><strong>2 PM</strong> · Pineapple Playhouse · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.pineappleplayhouse.com/" target="_blank" rel="noopener noreferrer external">Pineapple Playhouse</a></span><div class="event-actions"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Event details →</a><a class="event-ticket" href="https://thepineappleplayhouse.ludus.com/" target="_blank" rel="noopener noreferrer external">Tickets</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="2472215a83c4a64430" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-06">
+  <div class="event-datebox" aria-label="Sunday, September 6, 2026"><span>SUN</span><strong>SEP 6</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">A.C.T Studio Theatre presents &quot;Fools&quot;</a></h2>
+    <p class="event-whenwhere"><strong>3 PM–4:30 PM</strong> · A.C.T. Studio Theatre</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">MartinArts — Cultural Calendar</a></span><div class="event-actions"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="f84e6b3ec1509fa5f6" data-county="Martin" data-category="Live Music" data-date="2026-09-06">
+  <div class="event-datebox" aria-label="Sunday, September 6, 2026"><span>SUN</span><strong>SEP 6</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span><span class="event-price">$10 advance; $15 at the door</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">SPIRAL LIGHT - Grateful Labor Day Weekend w/Billy Gilmore</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="f3cd67ac2e69e22877" data-county="Indian River" data-category="Live Music" data-date="2026-09-07">
+  <div class="event-datebox" aria-label="Monday, September 7, 2026"><span>MON</span><strong>SEP 7</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Brad Brock</a></h2>
+    <p class="event-whenwhere"><strong>11 AM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="1c7ceb7163bb28fcf8" data-county="Indian River" data-category="Live Music" data-date="2026-09-07">
+  <div class="event-datebox" aria-label="Monday, September 7, 2026"><span>MON</span><strong>SEP 7</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">AnnaLee Talley</a></h2>
+    <p class="event-whenwhere"><strong>4 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="8e872b4092c2b5942d" data-county="Indian River" data-category="Live Music" data-date="2026-09-09">
+  <div class="event-datebox" aria-label="Wednesday, September 9, 2026"><span>WED</span><strong>SEP 9</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://sailfishbrewingco.com/vero-beach/taproom-events/" target="_blank" rel="noopener noreferrer external">Live Music Wednesday at Sailfish Brewing</a></h2>
+    <p class="event-whenwhere"><strong>5 PM–8 PM</strong> · Sailfish Brewing Company — Vero Beach · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://sailfishbrewingco.com/vero-beach/taproom-events/" target="_blank" rel="noopener noreferrer external">Sailfish Brewing Company — Vero Beach</a></span><div class="event-actions"><a href="https://sailfishbrewingco.com/vero-beach/taproom-events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="5d4d780a635ec57cdf" data-county="St. Lucie" data-category="Live Music" data-date="2026-09-09">
+  <div class="event-datebox" aria-label="Wednesday, September 9, 2026"><span>WED</span><strong>SEP 9</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">GARDENS JAM</a></h2>
+    <p class="event-whenwhere"><strong>6:30 PM–9 PM</strong> · Port St. Lucie Botanical Gardens</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Fort Pierce Jazz &amp; Blues Society</a></span><div class="event-actions"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="f52d84d2f3924235e6" data-county="Martin" data-category="Live Music" data-date="2026-09-09">
+  <div class="event-datebox" aria-label="Wednesday, September 9, 2026"><span>WED</span><strong>SEP 9</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span><span class="event-price">$5 admission</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">LEATHER &amp; LACE DUO</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="054692febc2aa3aa44" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-10">
+  <div class="event-datebox" aria-label="Thursday, September 10, 2026"><span>THU</span><strong>SEP 10</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://hsmc-fl.com/calendar/leaf-it-to-the-e/" target="_blank" rel="noopener noreferrer external">Leaf It to the E</a></h2>
+    <p class="event-whenwhere"><strong>5 PM–7 PM</strong> · Elliott Museum · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hsmc-fl.com/calendar-events/" target="_blank" rel="noopener noreferrer external">Historical Society of Martin County — Elliott Museum</a></span><div class="event-actions"><a href="https://hsmc-fl.com/calendar/leaf-it-to-the-e/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="f71eeefd45d366d974" data-county="Indian River" data-category="Live Music" data-date="2026-09-10">
+  <div class="event-datebox" aria-label="Thursday, September 10, 2026"><span>THU</span><strong>SEP 10</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Abby Owens</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="602d489a0816445df8" data-county="Martin" data-category="Community" data-date="2026-09-10">
+  <div class="event-datebox" aria-label="Thursday, September 10, 2026"><span>THU</span><strong>SEP 10</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Community</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Picnic in the Park</a></h2>
+    <p class="event-whenwhere"><strong>6 PM–8 PM</strong> · Memorial Park Amphitheater · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="591b04d9e53af97ad6" data-county="Martin" data-category="Live Music" data-date="2026-09-10">
+  <div class="event-datebox" aria-label="Thursday, September 10, 2026"><span>THU</span><strong>SEP 10</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span><span class="event-price">No cover</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">TERRA THURSDAY JAM</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="88e9334f6d4d7ff480" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-10">
+  <div class="event-datebox" aria-label="Thursday, September 10, 2026"><span>THU</span><strong>SEP 10</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">The Barn Theatre presents &quot;Sister Act&quot;</a></h2>
+    <p class="event-whenwhere"><strong>8 PM–10:30 PM</strong> · The Barn Theatre</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">MartinArts — Cultural Calendar</a></span><div class="event-actions"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="697b23b68ba66bee6a" data-county="St. Lucie" data-category="Food &amp; Markets" data-date="2026-09-11">
+  <div class="event-datebox" aria-label="Friday, September 11, 2026"><span>FRI</span><strong>SEP 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Food &amp; Markets</span></div>
+    <h2 class="event-title"><a href="https://traditionfl.com/events/breakfast-in-the-square-12/" target="_blank" rel="noopener noreferrer external">Breakfast in the Square</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–12 PM</strong> · Tradition Square · Port St. Lucie</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://traditionfl.com/events-calendar/" target="_blank" rel="noopener noreferrer external">Tradition — Events Calendar</a></span><div class="event-actions"><a href="https://traditionfl.com/events/breakfast-in-the-square-12/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="26aef9e4c6129625c1" data-county="St. Lucie" data-category="Outdoors &amp; Nature" data-date="2026-09-11">
+  <div class="event-datebox" aria-label="Friday, September 11, 2026"><span>FRI</span><strong>SEP 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Outdoors &amp; Nature</span></div>
+    <h2 class="event-title"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">Lunch &amp; Learn Lecture Series</a></h2>
+    <p class="event-whenwhere"><strong>12 PM–1 PM</strong> · Fort Pierce Yacht Club · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">The Manatee Center</a></span><div class="event-actions"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="ea3a44c02bb461e981" data-county="Indian River" data-category="Live Music" data-date="2026-09-11">
+  <div class="event-datebox" aria-label="Friday, September 11, 2026"><span>FRI</span><strong>SEP 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Chemistry</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="363b373605fde0bae2" data-county="St. Lucie" data-category="Arts &amp; Culture" data-date="2026-09-11">
+  <div class="event-datebox" aria-label="Friday, September 11, 2026"><span>FRI</span><strong>SEP 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Proof</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Pineapple Playhouse · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.pineappleplayhouse.com/" target="_blank" rel="noopener noreferrer external">Pineapple Playhouse</a></span><div class="event-actions"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Event details →</a><a class="event-ticket" href="https://thepineappleplayhouse.ludus.com/" target="_blank" rel="noopener noreferrer external">Tickets</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="c1bd4cd2e4b74d206a" data-county="Martin" data-category="Live Music" data-date="2026-09-11">
+  <div class="event-datebox" aria-label="Friday, September 11, 2026"><span>FRI</span><strong>SEP 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span><span class="event-price">Advance tickets $17.85 total cost</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">THE CHILI POPPERS - Red Hot Chili Peppers Tribute Band</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="497ccaf23bfb283155" data-county="Indian River" data-category="Live Music" data-date="2026-09-11">
+  <div class="event-datebox" aria-label="Friday, September 11, 2026"><span>FRI</span><strong>SEP 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Cover Up</a></h2>
+    <p class="event-whenwhere"><strong>7:30 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="71ea9319d185f9b9c5" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-11">
+  <div class="event-datebox" aria-label="Friday, September 11, 2026"><span>FRI</span><strong>SEP 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">The Barn Theatre presents &quot;Sister Act&quot;</a></h2>
+    <p class="event-whenwhere"><strong>8 PM–10:30 PM</strong> · The Barn Theatre</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">MartinArts — Cultural Calendar</a></span><div class="event-actions"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="7ef014216012688290" data-county="Martin" data-category="Food &amp; Markets" data-date="2026-09-12">
+  <div class="event-datebox" aria-label="Saturday, September 12, 2026"><span>SAT</span><strong>SEP 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Food &amp; Markets</span></div>
+    <h2 class="event-title"><a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Hobe Sound Farmers Market</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–2 PM</strong> · Hobe Sound Farms · Hobe Sound</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Hobe Sound Farms</a></span><div class="event-actions"><a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="ad9020946be6d0b440" data-county="St. Lucie" data-category="Arts &amp; Culture" data-date="2026-09-12">
+  <div class="event-datebox" aria-label="Saturday, September 12, 2026"><span>SAT</span><strong>SEP 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Proof</a></h2>
+    <p class="event-whenwhere"><strong>2 PM</strong> · Pineapple Playhouse · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.pineappleplayhouse.com/" target="_blank" rel="noopener noreferrer external">Pineapple Playhouse</a></span><div class="event-actions"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Event details →</a><a class="event-ticket" href="https://thepineappleplayhouse.ludus.com/" target="_blank" rel="noopener noreferrer external">Tickets</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="8d47179f8ef3508891" data-county="Indian River" data-category="Live Music" data-date="2026-09-12">
+  <div class="event-datebox" aria-label="Saturday, September 12, 2026"><span>SAT</span><strong>SEP 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Glory Days</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="d6692efebe769914a7" data-county="Martin" data-category="Live Music" data-date="2026-09-12">
+  <div class="event-datebox" aria-label="Saturday, September 12, 2026"><span>SAT</span><strong>SEP 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span><span class="event-price">Advance $10.20 total; $15 at the door</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">CRAZY HORSES Neil Young Tribute by Leo Lee Rock Band</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="0f6fc2916c3a68b3ad" data-county="St. Lucie" data-category="Arts &amp; Culture" data-date="2026-09-12">
+  <div class="event-datebox" aria-label="Saturday, September 12, 2026"><span>SAT</span><strong>SEP 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Proof</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Pineapple Playhouse · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.pineappleplayhouse.com/" target="_blank" rel="noopener noreferrer external">Pineapple Playhouse</a></span><div class="event-actions"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Event details →</a><a class="event-ticket" href="https://thepineappleplayhouse.ludus.com/" target="_blank" rel="noopener noreferrer external">Tickets</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="a930ca42c7e39c031a" data-county="Indian River" data-category="Live Music" data-date="2026-09-12">
+  <div class="event-datebox" aria-label="Saturday, September 12, 2026"><span>SAT</span><strong>SEP 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">The Spazmatics</a></h2>
+    <p class="event-whenwhere"><strong>7:30 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="164dab761563103438" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-12">
+  <div class="event-datebox" aria-label="Saturday, September 12, 2026"><span>SAT</span><strong>SEP 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">The Barn Theatre presents &quot;Sister Act&quot;</a></h2>
+    <p class="event-whenwhere"><strong>8 PM–10:30 PM</strong> · The Barn Theatre</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">MartinArts — Cultural Calendar</a></span><div class="event-actions"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="23a4524368710ab0fc" data-county="Martin" data-category="Food &amp; Markets" data-date="2026-09-13">
+  <div class="event-datebox" aria-label="Sunday, September 13, 2026"><span>SUN</span><strong>SEP 13</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Food &amp; Markets</span></div>
+    <h2 class="event-title"><a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Hobe Sound Farmers Market</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–2 PM</strong> · Hobe Sound Farms · Hobe Sound</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Hobe Sound Farms</a></span><div class="event-actions"><a href="https://hobesoundfarms.com/plan-your-visit/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="11d5e29eb26125c5ab" data-county="Martin" data-category="Family" data-date="2026-09-13">
+  <div class="event-datebox" aria-label="Sunday, September 13, 2026"><span>SUN</span><strong>SEP 13</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Family</span></div>
+    <h2 class="event-title"><a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Sensory Friendly Day</a></h2>
+    <p class="event-whenwhere"><strong>9:30 AM–11 AM</strong> · Children&#x27;s Museum of the Treasure Coast · Jensen Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Children&#x27;s Museum of the Treasure Coast</a></span><div class="event-actions"><a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="3e49191c5583ae78b9" data-county="Martin" data-category="Live Music" data-date="2026-09-13">
+  <div class="event-datebox" aria-label="Sunday, September 13, 2026"><span>SUN</span><strong>SEP 13</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Rock&#x27;n Riverwalk</a></h2>
+    <p class="event-whenwhere"><strong>1 PM–4 PM</strong> · Riverwalk Stage · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="699535c237e9ada9bf" data-county="St. Lucie" data-category="Arts &amp; Culture" data-date="2026-09-13">
+  <div class="event-datebox" aria-label="Sunday, September 13, 2026"><span>SUN</span><strong>SEP 13</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Proof</a></h2>
+    <p class="event-whenwhere"><strong>2 PM</strong> · Pineapple Playhouse · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.pineappleplayhouse.com/" target="_blank" rel="noopener noreferrer external">Pineapple Playhouse</a></span><div class="event-actions"><a href="https://www.pineappleplayhouse.com/seasonal-shows/proof" target="_blank" rel="noopener noreferrer external">Event details →</a><a class="event-ticket" href="https://thepineappleplayhouse.ludus.com/" target="_blank" rel="noopener noreferrer external">Tickets</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="86685dd222e12e8fec" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-13">
+  <div class="event-datebox" aria-label="Sunday, September 13, 2026"><span>SUN</span><strong>SEP 13</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">The Barn Theatre presents &quot;Sister Act&quot;</a></h2>
+    <p class="event-whenwhere"><strong>2 PM–4:30 PM</strong> · The Barn Theatre</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">MartinArts — Cultural Calendar</a></span><div class="event-actions"><a href="https://www.martinarts.org/resources/cultural_calendar.html" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="0e986816066d5d93e9" data-county="St. Lucie" data-category="Live Music" data-date="2026-09-15">
+  <div class="event-datebox" aria-label="Tuesday, September 15, 2026"><span>TUE</span><strong>SEP 15</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">FORT PIERCE - Yacht Club</a></h2>
+    <p class="event-whenwhere"><strong>6:30 PM–9 PM</strong> · Fort Pierce Yacht Club</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Fort Pierce Jazz &amp; Blues Society</a></span><div class="event-actions"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="d7ddf5164839361f13" data-county="St. Lucie" data-category="Outdoors &amp; Nature" data-date="2026-09-17">
+  <div class="event-datebox" aria-label="Thursday, September 17, 2026"><span>THU</span><strong>SEP 17</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Outdoors &amp; Nature</span></div>
+    <h2 class="event-title"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">ManaTales – Thursdays</a></h2>
+    <p class="event-whenwhere"><strong>9:30 AM–12 PM</strong> · Manatee Center · Fort Pierce</p>
+    <p class="event-desc">Two sessions are offered: 9:30–10:30 a.m. and 11 a.m.–noon.</p>
+    <div class="event-card-footer"><span>Source: <a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">The Manatee Center</a></span><div class="event-actions"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="91b3fddeb357bbe2f1" data-county="Indian River" data-category="Live Music" data-date="2026-09-17">
+  <div class="event-datebox" aria-label="Thursday, September 17, 2026"><span>THU</span><strong>SEP 17</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Brad Brock&#x27;s One Man Band</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="4b5cc856809dcd9ec8" data-county="Indian River" data-category="Live Music" data-date="2026-09-18">
+  <div class="event-datebox" aria-label="Friday, September 18, 2026"><span>FRI</span><strong>SEP 18</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">SoulTime</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="beee6b88ed92be525b" data-county="St. Lucie" data-category="Outdoors &amp; Nature" data-date="2026-09-18">
+  <div class="event-datebox" aria-label="Friday, September 18, 2026"><span>FRI</span><strong>SEP 18</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Outdoors &amp; Nature</span></div>
+    <h2 class="event-title"><a href="https://heathcotebotanicalgardens.org/" target="_blank" rel="noopener noreferrer external">Where the Gardens Waits: An 80’s Glow Party Book Event!</a></h2>
+    <p class="event-whenwhere"><strong>6 PM–8 PM</strong> · Heathcote Botanical Gardens · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://heathcotebotanicalgardens.org/" target="_blank" rel="noopener noreferrer external">Heathcote Botanical Gardens</a></span><div class="event-actions"><a href="https://heathcotebotanicalgardens.org/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="24d595654ebf467b33" data-county="St. Lucie" data-category="Live Music" data-date="2026-09-19">
+  <div class="event-datebox" aria-label="Saturday, September 19, 2026"><span>SAT</span><strong>SEP 19</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">GAZEBO - Silver Mullets</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–12 PM</strong> · St. Lucie County</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Fort Pierce Jazz &amp; Blues Society</a></span><div class="event-actions"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="08bfe3ac73bac16228" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2026-09-19">
+  <div class="event-datebox" aria-label="Saturday, September 19, 2026"><span>SAT</span><strong>SEP 19</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Twenty Years of the Met in Cinemas: An Anniversary Celebration</a></h2>
+    <p class="event-whenwhere"><strong>1 PM</strong> · The Majestic 11 · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="24949dd0223ea58fb5" data-county="Indian River" data-category="Live Music" data-date="2026-09-19">
+  <div class="event-datebox" aria-label="Saturday, September 19, 2026"><span>SAT</span><strong>SEP 19</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Joe Reid &amp; Heartland Band</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="99842d3e68c3e7b96f" data-county="Martin" data-category="Live Music" data-date="2026-09-19">
+  <div class="event-datebox" aria-label="Saturday, September 19, 2026"><span>SAT</span><strong>SEP 19</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">BROTHERS AFTER ALL - Allman Brothers Tribute</a></h2>
+    <p class="event-whenwhere"><strong>7:30 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="00342bb8708c65aa1a" data-county="Indian River" data-category="Live Music" data-date="2026-09-19">
+  <div class="event-datebox" aria-label="Saturday, September 19, 2026"><span>SAT</span><strong>SEP 19</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Metalucious</a></h2>
+    <p class="event-whenwhere"><strong>7:30 PM</strong> · Capt Hiram&#x27;s Resort · Sebastian</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="c0ff8f35118a8901f6" data-county="Martin" data-category="Live Music" data-date="2026-09-20">
+  <div class="event-datebox" aria-label="Sunday, September 20, 2026"><span>SUN</span><strong>SEP 20</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Rock&#x27;n Riverwalk</a></h2>
+    <p class="event-whenwhere"><strong>1 PM–4 PM</strong> · Riverwalk Stage · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="6c3ff256a30dc6a101" data-county="Martin" data-category="Live Music" data-date="2026-09-20">
+  <div class="event-datebox" aria-label="Sunday, September 20, 2026"><span>SUN</span><strong>SEP 20</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">DEAD ALL OVER</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · Terra Fermata · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Terra Fermata</a></span><div class="event-actions"><a href="https://www.terrafermata.com/_events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="d4a9d6f4ce5f25c671" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-20">
+  <div class="event-datebox" aria-label="Sunday, September 20, 2026"><span>SUN</span><strong>SEP 20</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">The Artimus Pyle Band - Honoring Ronnie Van Zant’s Lynyrd Skynyrd</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Lyric Theatre · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">The Lyric Theatre</a></span><div class="event-actions"><a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="a4e90ff890c43e5c7b" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-23">
+  <div class="event-datebox" aria-label="Wednesday, September 23, 2026"><span>WED</span><strong>SEP 23</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://hsmc-fl.com/calendar/the-hidden-history-of-wwii-in-florida/" target="_blank" rel="noopener noreferrer external">The Hidden History of WWII in Florida</a></h2>
+    <p class="event-whenwhere"><strong>1 PM–2:30 PM</strong> · Elliott Museum · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hsmc-fl.com/calendar-events/" target="_blank" rel="noopener noreferrer external">Historical Society of Martin County — Elliott Museum</a></span><div class="event-actions"><a href="https://hsmc-fl.com/calendar/the-hidden-history-of-wwii-in-florida/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="897bf5eb54255d3d65" data-county="St. Lucie" data-category="Live Music" data-date="2026-09-23">
+  <div class="event-datebox" aria-label="Wednesday, September 23, 2026"><span>WED</span><strong>SEP 23</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">GARDENS JAM</a></h2>
+    <p class="event-whenwhere"><strong>6:30 PM–9 PM</strong> · Port St. Lucie Botanical Gardens</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Fort Pierce Jazz &amp; Blues Society</a></span><div class="event-actions"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="b31f4da84c8e498b35" data-county="Martin" data-category="Classes &amp; Workshops" data-date="2026-09-24">
+  <div class="event-datebox" aria-label="Thursday, September 24, 2026"><span>THU</span><strong>SEP 24</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Classes &amp; Workshops</span></div>
+    <h2 class="event-title"><a href="https://hsmc-fl.com/calendar/turkish-mosaic-candle-holder-lamp-workshop/" target="_blank" rel="noopener noreferrer external">Turkish Mosaic Candle Holder &amp; Lamp Workshop</a></h2>
+    <p class="event-whenwhere"><strong>1 PM–4 PM</strong> · Elliott Museum · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://hsmc-fl.com/calendar-events/" target="_blank" rel="noopener noreferrer external">Historical Society of Martin County — Elliott Museum</a></span><div class="event-actions"><a href="https://hsmc-fl.com/calendar/turkish-mosaic-candle-holder-lamp-workshop/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="b1d224e6b79c406af8" data-county="Indian River" data-category="Live Music" data-date="2026-09-24">
+  <div class="event-datebox" aria-label="Thursday, September 24, 2026"><span>THU</span><strong>SEP 24</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Dave &amp; the Wave</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="0568bae6f7d3693ef0" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-24">
+  <div class="event-datebox" aria-label="Thursday, September 24, 2026"><span>THU</span><strong>SEP 24</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">Kevin Nealon</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Lyric Theatre · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">The Lyric Theatre</a></span><div class="event-actions"><a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="d3b58e6ee266d7125c" data-county="Indian River" data-category="Live Music" data-date="2026-09-25">
+  <div class="event-datebox" aria-label="Friday, September 25, 2026"><span>FRI</span><strong>SEP 25</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Vince Love and Soul Cats</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="3763373268476576ea" data-county="Martin" data-category="Sports &amp; Recreation" data-date="2026-09-26">
+  <div class="event-datebox" aria-label="Saturday, September 26, 2026"><span>SAT</span><strong>SEP 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Sports &amp; Recreation</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">NAACP 6th Annual 5K / 10K Race</a></h2>
+    <p class="event-whenwhere"><strong>7 AM–9 AM</strong> · Memorial Park · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="4f5378de65f3453a78" data-county="Martin" data-category="Community" data-date="2026-09-26">
+  <div class="event-datebox" aria-label="Saturday, September 26, 2026"><span>SAT</span><strong>SEP 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Community</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Downtown Stuart Car &amp; Bike Show</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–1 PM</strong> · Stuart City Hall and Annex Parking Lots · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="8c9d1d0bd0130fe03e" data-county="St. Lucie" data-category="Live Music" data-date="2026-09-26">
+  <div class="event-datebox" aria-label="Saturday, September 26, 2026"><span>SAT</span><strong>SEP 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">FARMERS MARKET - Latin Band</a></h2>
+    <p class="event-whenwhere"><strong>9 AM–12 PM</strong> · Downtown Fort Pierce Farmers Market</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Fort Pierce Jazz &amp; Blues Society</a></span><div class="event-actions"><a href="https://www.jazzsociety.org/p/31/calendar-list" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="da9037f38a3f8c036d" data-county="St. Lucie" data-category="Outdoors &amp; Nature" data-date="2026-09-26">
+  <div class="event-datebox" aria-label="Saturday, September 26, 2026"><span>SAT</span><strong>SEP 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Outdoors &amp; Nature</span></div>
+    <h2 class="event-title"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">ManaTales – Saturdays</a></h2>
+    <p class="event-whenwhere"><strong>9:30 AM–12 PM</strong> · Manatee Center · Fort Pierce</p>
+    <p class="event-desc">Two sessions are offered: 9:30–10:30 a.m. and 11 a.m.–noon.</p>
+    <div class="event-card-footer"><span>Source: <a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">The Manatee Center</a></span><div class="event-actions"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="c6d646f1ad72911f29" data-county="Martin" data-category="Family" data-date="2026-09-26">
+  <div class="event-datebox" aria-label="Saturday, September 26, 2026"><span>SAT</span><strong>SEP 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Family</span></div>
+    <h2 class="event-title"><a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Treasure Fest &amp; Worldwide Day of Play</a></h2>
+    <p class="event-whenwhere"><strong>10 AM–1 PM</strong> · Children&#x27;s Museum of the Treasure Coast · Jensen Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Children&#x27;s Museum of the Treasure Coast</a></span><div class="event-actions"><a href="https://www.childrensmuseumtc.org/events-calendar-1" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="a14e0fa13a4b5725f6" data-county="Martin" data-category="Family" data-date="2026-09-26">
+  <div class="event-datebox" aria-label="Saturday, September 26, 2026"><span>SAT</span><strong>SEP 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Family</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Little Lamb Family Festival</a></h2>
+    <p class="event-whenwhere"><strong>11 AM–3 PM</strong> · Memorial Park Amphitheater · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="c433f8c4441a3a6c4d" data-county="Indian River" data-category="Live Music" data-date="2026-09-26">
+  <div class="event-datebox" aria-label="Saturday, September 26, 2026"><span>SAT</span><strong>SEP 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Dottie Kelly &amp; the Rock House Band</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Riverside Theatre · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="5798e0f745ac175c7c" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-26">
+  <div class="event-datebox" aria-label="Saturday, September 26, 2026"><span>SAT</span><strong>SEP 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">Dancing with the Martin Stars</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Lyric Theatre · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">The Lyric Theatre</a></span><div class="event-actions"><a href="https://www.lyrictheatre.com/the-lyric-theatre" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="d13b72d20ac01e2256" data-county="Martin" data-category="Live Music" data-date="2026-09-27">
+  <div class="event-datebox" aria-label="Sunday, September 27, 2026"><span>SUN</span><strong>SEP 27</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Rock&#x27;n Riverwalk</a></h2>
+    <p class="event-whenwhere"><strong>1 PM–4 PM</strong> · Riverwalk Stage · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="e4027994cf4d45e93f" data-county="St. Lucie" data-category="Outdoors &amp; Nature" data-date="2026-09-30">
+  <div class="event-datebox" aria-label="Wednesday, September 30, 2026"><span>WED</span><strong>SEP 30</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Outdoors &amp; Nature</span></div>
+    <h2 class="event-title"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">Free Community Day</a></h2>
+    <p class="event-whenwhere"><strong>10 AM–3 PM</strong> · Manatee Center · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">The Manatee Center</a></span><div class="event-actions"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="6a8ee6bd5ce573d7a7" data-county="St. Lucie" data-category="Outdoors &amp; Nature" data-date="2026-09-30">
+  <div class="event-datebox" aria-label="Wednesday, September 30, 2026"><span>WED</span><strong>SEP 30</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Outdoors &amp; Nature</span></div>
+    <h2 class="event-title"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">Learn at the Lagoon with a Creekside Chat at the Manatee Center</a></h2>
+    <p class="event-whenwhere"><strong>11 AM–1 PM</strong> · Manatee Center · Fort Pierce</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">The Manatee Center</a></span><div class="event-actions"><a href="https://manateecenter.org/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="3b1df45f192b0f3154" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2026-10-03">
+  <div class="event-datebox" aria-label="Saturday, October 3, 2026"><span>SAT</span><strong>OCT 3</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Così fan tutte (Mozart)</a></h2>
+    <p class="event-whenwhere"><strong>1 PM</strong> · The Majestic 11 · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="be1e6610edd3b4ae13" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2026-10-17">
+  <div class="event-datebox" aria-label="Saturday, October 17, 2026"><span>SAT</span><strong>OCT 17</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Macbeth (Verdi – New Production)</a></h2>
+    <p class="event-whenwhere"><strong>1 PM</strong> · The Majestic 11 · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="aeb0625b4ff798eb84" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2026-11-14">
+  <div class="event-datebox" aria-label="Saturday, November 14, 2026"><span>SAT</span><strong>NOV 14</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Carmen by Bizet</a></h2>
+    <p class="event-whenwhere"><strong>1 PM</strong> · The Majestic 11 · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="31df1c9ea4b42c0850" data-county="Indian River" data-category="Live Music" data-date="2026-11-19">
+  <div class="event-datebox" aria-label="Thursday, November 19, 2026"><span>THU</span><strong>NOV 19</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Go Now! The Music of the Moody Blues - The Tribute</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="ca8570c555e26d1534" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2026-12-05">
+  <div class="event-datebox" aria-label="Saturday, December 5, 2026"><span>SAT</span><strong>DEC 5</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Samson et Dalila (Saint-Saëns)</a></h2>
+    <p class="event-whenwhere"><strong>12 PM</strong> · The Majestic 11 · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="26a7589a0ceaf402f3" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2026-12-12">
+  <div class="event-datebox" aria-label="Saturday, December 12, 2026"><span>SAT</span><strong>DEC 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">The Magic Flute by Mozart</a></h2>
+    <p class="event-whenwhere"><strong>1 PM</strong> · The Majestic 11 · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="1c52b77a20fb116538" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2027-01-10">
+  <div class="event-datebox" aria-label="Sunday, January 10, 2027"><span>SUN</span><strong>JAN 10</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">TOSCA by Puccini</a></h2>
+    <p class="event-whenwhere"><strong>3 PM</strong> · VBHS Performing Arts Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="667ed17a7897a57693" data-county="Indian River" data-category="Live Music" data-date="2027-01-14">
+  <div class="event-datebox" aria-label="Thursday, January 14, 2027"><span>THU</span><strong>JAN 14</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">One More Night, The Music of Phil Collins and Genesis</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="df06b464c5c3f086cb" data-county="Indian River" data-category="Live Music" data-date="2027-01-21">
+  <div class="event-datebox" aria-label="Thursday, January 21, 2027"><span>THU</span><strong>JAN 21</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Jay and The Americans</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="881a95471c51645385" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2027-01-23">
+  <div class="event-datebox" aria-label="Saturday, January 23, 2027"><span>SAT</span><strong>JAN 23</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">La Fanciulla del West (Puccini)</a></h2>
+    <p class="event-whenwhere"><strong>1 PM</strong> · The Majestic 11 · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="7c49e65330db7cd01c" data-county="Indian River" data-category="Live Music" data-date="2027-01-28">
+  <div class="event-datebox" aria-label="Thursday, January 28, 2027"><span>THU</span><strong>JAN 28</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">The Drifters</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="059d4af33a6830e197" data-county="Indian River" data-category="Live Music" data-date="2027-02-04">
+  <div class="event-datebox" aria-label="Thursday, February 4, 2027"><span>THU</span><strong>FEB 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">The Docksiders - A Yacht Rock Experience</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="c9555fc2e439aa021a" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2027-02-11">
+  <div class="event-datebox" aria-label="Thursday, February 11, 2027"><span>THU</span><strong>FEB 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Rising Stars Competition — Semifinals</a></h2>
+    <p class="event-whenwhere"><strong>3 PM</strong> · VBHS Performing Arts Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="6de610b553aff2616d" data-county="Indian River" data-category="Live Music" data-date="2027-02-11">
+  <div class="event-datebox" aria-label="Thursday, February 11, 2027"><span>THU</span><strong>FEB 11</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MJ Live! Michael Jackson Tribute Concert</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="d3c8b76845724ecb30" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2027-02-12">
+  <div class="event-datebox" aria-label="Friday, February 12, 2027"><span>FRI</span><strong>FEB 12</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Rising Stars Competition — Finals</a></h2>
+    <p class="event-whenwhere"><strong>3 PM</strong> · VBHS Performing Arts Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="9594c93498e1c9bce5" data-county="Indian River" data-category="Arts &amp; Culture" data-date="2027-02-13">
+  <div class="event-datebox" aria-label="Saturday, February 13, 2027"><span>SAT</span><strong>FEB 13</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Rising Stars Competition — Awards Concert</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · VBHS Performing Arts Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Vero Beach Opera</a></span><div class="event-actions"><a href="https://verobeachopera.org/opera" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="20c3d10ccc21b4bebf" data-county="Indian River" data-category="Live Music" data-date="2027-02-18">
+  <div class="event-datebox" aria-label="Thursday, February 18, 2027"><span>THU</span><strong>FEB 18</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Celebrating Meat Loaf</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="36bbeb05549201650e" data-county="Indian River" data-category="Live Music" data-date="2027-02-25">
+  <div class="event-datebox" aria-label="Thursday, February 25, 2027"><span>THU</span><strong>FEB 25</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Eaglemania, The World’s Greatest Eagles Tribute Band</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="493fc6f95a90825ab0" data-county="Indian River" data-category="Live Music" data-date="2027-02-26">
+  <div class="event-datebox" aria-label="Friday, February 26, 2027"><span>FRI</span><strong>FEB 26</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Eaglemania, The World’s Greatest Eagles Tribute Band</a></h2>
+    <p class="event-whenwhere"><strong>7 PM</strong> · The Emerson Center · Vero Beach</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">MusicWorks Concerts</a></span><div class="event-actions"><a href="https://www.musicworksconcerts.com/buy-tickets-v2" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+  </div>
+  <div class="events-empty" data-events-empty hidden><strong>No events match those filters.</strong><span>Try another county, category or date range.</span></div>
+</section>
+<!-- TCT_EVENTS_DYNAMIC_END -->
+
+    <aside class="events-note">
+      <div>
+        <h2>Know an event we’re missing?</h2>
+        <p>Event details can change. TCT links back to the organizer or official calendar so readers can confirm times, prices and ticket availability. Send us a public Treasure Coast event and we’ll review it for inclusion.</p>
+      </div>
+      <a class="events-submit" href="mailto:hello@treasurecoast.today?subject=Treasure%20Coast%20event%20submission">Send us an event</a>
+    </aside>
   </main>
+
   <footer>
     <div class="footer-inner">
       <span class="footer-wordmark">Treasure Coast Today</span>
@@ -106,12 +1287,87 @@
   </footer>
   <script src="/main.js"></script>
   <script>
-    const f=document.getElementById('csForm'),s=document.getElementById('csSuccess');
-    f.addEventListener('submit',async(e)=>{
-      e.preventDefault();
-      const r=await fetch(f.action,{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'}});
-      if(r.ok){f.style.display='none';s.style.display='block';}
+  (() => {
+    const cards = () => Array.from(document.querySelectorAll('.event-card'));
+    const search = document.querySelector('[data-events-search]');
+    const count = document.querySelector('[data-events-count]');
+    const empty = document.querySelector('[data-events-empty]');
+    const reset = document.querySelector('[data-events-reset]');
+    const state = { range: 'all', county: 'all', category: 'all', query: '' };
+
+    const treasureCoastToday = () => {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short'
+      }).formatToParts(new Date()).reduce((acc, part) => (acc[part.type] = part.value, acc), {});
+      return { iso: `${parts.year}-${parts.month}-${parts.day}`, weekday: parts.weekday };
+    };
+    const isoAddDays = (iso, amount) => {
+      const [y,m,d] = iso.split('-').map(Number);
+      const date = new Date(Date.UTC(y, m - 1, d + amount));
+      return `${date.getUTCFullYear()}-${String(date.getUTCMonth()+1).padStart(2,'0')}-${String(date.getUTCDate()).padStart(2,'0')}`;
+    };
+    const weekendBounds = () => {
+      const today = treasureCoastToday();
+      const dayMap = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
+      const day = dayMap[today.weekday];
+      const toFriday = day <= 4 ? 5 - day : day === 5 ? 0 : -1;
+      const start = day === 6 ? isoAddDays(today.iso, -1) : isoAddDays(today.iso, toFriday);
+      return [start, isoAddDays(start, 2)];
+    };
+    const setPressed = (button, groupSelector) => {
+      document.querySelectorAll(groupSelector).forEach(btn => {
+        const active = btn === button;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    };
+    const apply = () => {
+      const today = treasureCoastToday().iso;
+      const [weekendStart, weekendEnd] = weekendBounds();
+      const needle = state.query.trim().toLowerCase();
+      let visible = 0;
+      cards().forEach(card => {
+        const date = card.dataset.date || '';
+        const rangeOk = state.range === 'all' || (state.range === 'today' && date === today) ||
+          (state.range === 'weekend' && date >= weekendStart && date <= weekendEnd);
+        const countyOk = state.county === 'all' || card.dataset.county === state.county;
+        const categoryOk = state.category === 'all' || card.dataset.category === state.category;
+        const queryOk = !needle || card.textContent.toLowerCase().includes(needle);
+        const show = rangeOk && countyOk && categoryOk && queryOk;
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      if (count) count.textContent = String(visible);
+      if (empty) empty.hidden = visible !== 0 || cards().length === 0;
+    };
+
+    document.querySelectorAll('[data-range]').forEach(button => button.addEventListener('click', () => {
+      state.range = button.dataset.range;
+      setPressed(button, '[data-range]');
+      apply();
+    }));
+    document.querySelectorAll('[data-county-filter]').forEach(button => button.addEventListener('click', () => {
+      state.county = button.dataset.countyFilter;
+      setPressed(button, '[data-county-filter]');
+      apply();
+    }));
+    document.querySelectorAll('[data-category-filter]').forEach(button => button.addEventListener('click', () => {
+      state.category = button.dataset.categoryFilter;
+      setPressed(button, '[data-category-filter]');
+      apply();
+    }));
+    if (search) search.addEventListener('input', () => { state.query = search.value; apply(); });
+    if (reset) reset.addEventListener('click', () => {
+      state.range = state.county = state.category = 'all'; state.query = '';
+      if (search) search.value = '';
+      ['[data-range="all"]','[data-county-filter="all"]','[data-category-filter="all"]'].forEach(selector => {
+        const button = document.querySelector(selector);
+        if (button) setPressed(button, selector.includes('range') ? '[data-range]' : selector.includes('county') ? '[data-county-filter]' : '[data-category-filter]');
+      });
+      apply();
     });
+    apply();
+  })();
   </script>
   <script src="/membership-config.js"></script>
   <script type="module" src="/membership.js?v=1.13.7.3"></script>
