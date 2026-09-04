@@ -31,6 +31,7 @@ ARTICLES = ROOT / "articles"
 BODY_RE = re.compile(
     r'<div class="article-body">(.*?)</div>'
     r'(?=\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?'
+    r'(?:<aside class="event-link-box"[^>]*>.*?</aside>\s*)?'
     r'<div class="article-share">)',
     re.I | re.S,
 )
@@ -39,6 +40,14 @@ PAYWALLED_RE = re.compile(
     r'<div class="article-body tct-member-preview">(.*?)</div>\s*'
     r'<div class="tct-member-only">.*?'
     r'<div id="tct-protected-content"[^>]*></div>\s*</div>',
+    re.I | re.S,
+)
+# ``data-tct-paywall-newsletter`` is a dormant newsletter-slot marker, not the
+# membership paywall itself. Keep this exact so the newsletter attribute can never
+# make an unprotected full article look like an already-paywalled page.
+ACTUAL_PAYWALL_MARKER_RE = re.compile(r'(?<![\w-])data-tct-paywall(?![\w-])', re.I)
+PAYWALL_NEWSLETTER_SLOT_RE = re.compile(
+    r'\s*<aside\b(?=[^>]*data-tct-paywall-newsletter)[^>]*>.*?</aside>',
     re.I | re.S,
 )
 CURRENT_PREVIEW_P_RE = re.compile(
@@ -107,10 +116,10 @@ def _rehydrate_legacy_body(preview_html: str, protected_body: str) -> str:
     return (preview_html.strip() + protected_body.strip()).strip()
 
 
-def _rehydrate_paywalled_page(page_html: str, protected_body: str) -> str:
+def _rehydrate_paywalled_page(page_html: str, protected_body: str, slug: str = "") -> str:
     match = PAYWALLED_RE.search(page_html)
     if not match:
-        raise RuntimeError("Existing paywall markup could not be rehydrated safely")
+        raise RuntimeError(f"Existing paywall markup could not be rehydrated safely: {slug or 'unknown slug'}")
     full_body = _rehydrate_legacy_body(match.group(1), protected_body)
     replacement = '<div class="article-body">' + full_body + '</div>'
     return page_html[:match.start()] + replacement + page_html[match.end():]
@@ -140,10 +149,10 @@ def main() -> None:
             continue
 
         slug = path.stem
-        if 'data-tct-paywall' in text:
+        if ACTUAL_PAYWALL_MARKER_RE.search(text):
             stored = snapshot.get(slug)
             if stored:
-                text = _rehydrate_paywalled_page(text, stored)
+                text = _rehydrate_paywalled_page(text, stored, slug=slug)
                 rehydrated += 1
                 was_rehydrated = True
             elif snapshot_expected:
@@ -160,9 +169,15 @@ def main() -> None:
         if not split:
             short += 1
             # If this was a rehydrated legacy page, leave the original paywall on
-            # disk rather than accidentally publishing the full article.
+            # disk rather than accidentally publishing the full article. Otherwise
+            # remove the dormant paywall-only newsletter slot from a genuinely
+            # unprotected short article so it has no post-article signup surface.
             if was_rehydrated:
                 assert path.read_text(encoding="utf-8", errors="ignore") == original_text
+            else:
+                cleaned = PAYWALL_NEWSLETTER_SLOT_RE.sub("", text)
+                if cleaned != original_text:
+                    path.write_text(cleaned, encoding="utf-8")
             continue
 
         protected.append({"slug": slug, "protected_body": split.protected_html})

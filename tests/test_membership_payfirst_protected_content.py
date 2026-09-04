@@ -630,3 +630,107 @@ def test_update_workflow_auto_repairs_legacy_protected_article_endpoint_for_mete
     assert "one_free_article_per_month" in workflow
     assert "Deploy monthly free-article protected endpoint" in workflow
     assert "supabase functions deploy protected-article --use-api" in workflow
+
+
+def test_dormant_paywall_newsletter_slot_is_not_mistaken_for_existing_paywall(tmp_path, monkeypatch):
+    """Regression for v1.13.7.3: newsletter attr shares the paywall prefix."""
+    script_path = ROOT / "scripts/prepare_membership_paywall.py"
+    spec = importlib.util.spec_from_file_location("prepare_membership_dormant_slot", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+
+    root = tmp_path / "repo"
+    articles = root / "articles"
+    articles.mkdir(parents=True)
+    slug = "fresh-full-article"
+    body = (
+        "<p>A fresh local article begins with enough reporting to create a useful public preview without exposing the complete story to anonymous readers.</p>"
+        "<p>The second paragraph adds names, context and a clear development while leaving additional verified details for the protected remainder.</p>"
+        "<p>The third paragraph contains the substantive details that should remain available only after the membership access decision succeeds.</p>"
+        "<p>A final paragraph provides more context and makes the article long enough for the current bounded teaser contract.</p>"
+    )
+    page = (
+        '<html><head><script type="application/ld+json">{"@type":"NewsArticle","isAccessibleForFree":true}</script></head><body>'
+        '<h1 class="article-headline">Fresh full article</h1>'
+        f'<div class="article-body">{body}</div>'
+        '<aside class="newsletter-inline-slot newsletter-inline-slot--paywall" '
+        'data-tct-paywall-newsletter="true" hidden></aside>'
+        '<div class="article-share">share</div></body></html>'
+    )
+    (articles / f"{slug}.html").write_text(page, encoding="utf-8")
+
+    # The protected store can already contain this slug from an earlier canonical
+    # version. Before the fix, the dormant newsletter attribute triggered the broad
+    # substring check and sent this full article into legacy-paywall rehydration,
+    # which raised "Existing paywall markup could not be rehydrated safely".
+    snapshot = tmp_path / "snapshot.json"
+    snapshot.write_text(json.dumps({"articles": [{
+        "slug": slug,
+        "protected_body": "<!--tct-full-article-v2--><p>older protected copy</p>",
+    }]}), encoding="utf-8")
+    export = tmp_path / "protected.json"
+
+    monkeypatch.setattr(module, "ROOT", root)
+    monkeypatch.setattr(module, "ARTICLES", articles)
+    monkeypatch.setenv("TCT_MEMBERSHIP_UI_ENABLED", "true")
+    monkeypatch.setenv("TCT_PROTECTED_EXPORT_PATH", str(export))
+    monkeypatch.setenv("TCT_PROTECTED_SNAPSHOT_PATH", str(snapshot))
+    module.main()
+
+    public = (articles / f"{slug}.html").read_text(encoding="utf-8")
+    payload = json.loads(export.read_text(encoding="utf-8"))
+    assert module.ACTUAL_PAYWALL_MARKER_RE.search(public)
+    assert public.count("data-tct-paywall-newsletter") == 1
+    assert payload["articles"] and payload["articles"][0]["slug"] == slug
+    assert "older protected copy" not in payload["articles"][0]["protected_body"]
+
+
+def test_prepare_protects_event_link_article_and_short_public_article_drops_dormant_slot(tmp_path, monkeypatch):
+    script_path = ROOT / "scripts/prepare_membership_paywall.py"
+    spec = importlib.util.spec_from_file_location("prepare_membership_event_link_contract", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+
+    root = tmp_path / "repo"
+    articles = root / "articles"
+    articles.mkdir(parents=True)
+    event_slug = "local-event-story"
+    event_body = (
+        "<p>A local event opens this weekend with a full schedule for Treasure Coast residents and visitors who plan to attend.</p>"
+        "<p>Organizers released additional details about parking, admission and the activities planned throughout the day for families.</p>"
+        "<p>The complete article includes more reporting, timing details and context that should remain protected for readers with access.</p>"
+        "<p>Officials also advised attendees to confirm the latest schedule before traveling because event details can change.</p>"
+    )
+    slot = ('<aside class="newsletter-inline-slot newsletter-inline-slot--paywall" '
+            'data-tct-paywall-newsletter="true" hidden></aside>')
+    (articles / f"{event_slug}.html").write_text(
+        '<html><head><script type="application/ld+json">{"@type":"NewsArticle","isAccessibleForFree":true}</script></head><body>'
+        f'<div class="article-body">{event_body}</div>{slot}'
+        '<aside class="event-link-box"><a href="https://example.com/event">Official event page</a></aside>'
+        '<div class="article-share">share</div></body></html>',
+        encoding="utf-8",
+    )
+    short_slug = "short-public-story"
+    (articles / f"{short_slug}.html").write_text(
+        '<html><body><div class="article-body"><p>Brief item.</p></div>'
+        f'{slot}<div class="article-share">share</div></body></html>',
+        encoding="utf-8",
+    )
+    export = tmp_path / "protected.json"
+
+    monkeypatch.setattr(module, "ROOT", root)
+    monkeypatch.setattr(module, "ARTICLES", articles)
+    monkeypatch.setenv("TCT_MEMBERSHIP_UI_ENABLED", "true")
+    monkeypatch.setenv("TCT_PROTECTED_EXPORT_PATH", str(export))
+    monkeypatch.delenv("TCT_PROTECTED_SNAPSHOT_PATH", raising=False)
+    module.main()
+
+    event_public = (articles / f"{event_slug}.html").read_text(encoding="utf-8")
+    short_public = (articles / f"{short_slug}.html").read_text(encoding="utf-8")
+    payload = json.loads(export.read_text(encoding="utf-8"))
+    assert module.ACTUAL_PAYWALL_MARKER_RE.search(event_public)
+    assert "event-link-box" in event_public
+    assert any(row["slug"] == event_slug for row in payload["articles"])
+    assert "data-tct-paywall-newsletter" not in short_public
