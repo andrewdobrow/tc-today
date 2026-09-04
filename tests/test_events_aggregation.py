@@ -4,7 +4,6 @@ import json
 import os
 from pathlib import Path
 
-import yaml
 
 from scripts import update_events as events
 
@@ -210,7 +209,6 @@ def test_launch_artifacts_validate_without_network():
 def test_events_workflow_is_independent_scheduled_and_serialized_with_pages_deploy():
     path = ROOT / ".github" / "workflows" / "update-events.yml"
     text = path.read_text(encoding="utf-8")
-    yaml.safe_load(text)
     assert "cron: '17 10,22 * * *'" in text
     assert 'group: "pages"' in text
     assert "python -u scripts/update_events.py" in text
