@@ -51,7 +51,7 @@ def test_generator_active_release_contracts_survive_together(tmp_path, monkeypat
     g._apply_membership_site_chrome(tmp_path)
     rendered = page.read_text()
     assert "data-tct-member-prepaint" in rendered
-    assert 'src="/membership.js?v=1.13.7.1e"' in rendered
+    assert 'src="/membership.js?v=1.13.7.3"' in rendered
 
     # Martin cocaine production regression: a drug seizure is not an animal case,
     # and the deterministic historical fallback remains callable.

@@ -176,6 +176,53 @@ def test_routine_sports_recap_drops_after_24_hours():
     assert report["excluded"][0]["eligibility_reason"] == "routine_sports_recap_older_than_24_hours"
 
 
+
+def test_homepage_updated_canonical_date_uses_exact_slug_before_older_same_event_and_localizes_update_time():
+    g = _load_generate()
+    canonical_slug = "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept"
+    card = {
+        "headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
+        "link": f"https://treasurecoast.today/articles/{canonical_slug}.html",
+        "published": "Aug 25, 2026",
+    }
+    archive = [
+        {
+            "slug": "2026-08-11-palm-city-woman-arrested-after-36-border-collies-found-living-in-feces-covered-h",
+            "headline": "Palm City woman held on $275,000 bond after 36 Border Collies rescued from home",
+            "date": "2026-08-11",
+            "lastmod": "2026-08-15",
+            "meaningful_update_validated": True,
+            "last_meaningful_update_at": "2026-08-15T01:36:53Z",
+        },
+        {
+            "slug": canonical_slug,
+            "canonical_slug": canonical_slug,
+            "headline": card["headline"],
+            "date": "2026-08-25",
+            "lastmod": "2026-09-04",
+            "meaningful_update_validated": True,
+            # 00:16 UTC on Sept. 4 is still Sept. 3 on the Treasure Coast.
+            "canonical_last_material_update_at": "2026-09-04T00:16:00Z",
+            "last_meaningful_update_at": "2026-09-04T00:16:00Z",
+        },
+    ]
+
+    matched = g._homepage_card_archive_entry(card, archive)
+    assert matched is archive[1]
+    assert g._homepage_card_display_date(card, archive) == "Sep 3, 2026"
+
+
+def test_homepage_card_date_falls_back_to_archive_lastmod_for_non_material_updates():
+    g = _load_generate()
+    slug = "ordinary-story"
+    card = {
+        "headline": "Ordinary story",
+        "link": f"https://treasurecoast.today/articles/{slug}.html",
+        "published": "Aug 20, 2026",
+    }
+    archive = [{"slug": slug, "headline": "Ordinary story", "date": "2026-08-20", "lastmod": "2026-08-22"}]
+    assert g._homepage_card_display_date(card, archive) == "Aug 22, 2026"
+
 def test_render_index_no_longer_uses_claude_global_rank_for_top_stories():
     source = Path("scripts/generate.py").read_text(encoding="utf-8")
     render_source = source[source.index("def render_index("):source.index("\ndef slugify", source.index("def render_index("))]

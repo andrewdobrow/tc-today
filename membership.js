@@ -246,24 +246,46 @@ async function openPortal(button){
   window.location.assign(data.url)
 }
 
+function removePostArticleNewsletter(){
+  const articleRoot = qs('.article-main-column') || qs('.article-wrap') || document
+  qsa('[data-tct-paywall-newsletter], .newsletter-inline-slot--article', articleRoot).forEach(node => node.remove())
+}
+
+function showPaywallNewsletter(){
+  const articleRoot = qs('.article-main-column') || qs('.article-wrap') || document
+  const slot = qs('[data-tct-paywall-newsletter]', articleRoot)
+  if (!slot) return false
+  slot.hidden = false
+  if (qs(`script[data-uid="${FULL_ARTICLE_NEWSLETTER_UID}"]`, slot)) return true
+  const script = document.createElement('script')
+  script.async = true
+  script.setAttribute('data-uid', FULL_ARTICLE_NEWSLETTER_UID)
+  script.src = FULL_ARTICLE_NEWSLETTER_SRC
+  slot.appendChild(script)
+  return true
+}
+
 function placeFullArticleNewsletter(){
   const articleRoot = qs('.article-main-column') || qs('.article-wrap') || document
   if (qs('[data-tct-full-article-newsletter]', articleRoot)) return false
 
-  // Keep the Kit form outside .article-body so article typography cannot bleed
-  // into the form. This runs only after full article access has been granted
-  // (paid member or monthly-free reader), and only for stories with at least
-  // five top-level paragraphs.
-  const articleBody = qsa('.article-body', articleRoot).find(node =>
-    !node.closest('.tct-member-only') && !node.classList.contains('tct-protected-content')
+  // Full-access readers get the Morning Brief immediately after paragraph two,
+  // regardless of total story length. Keep the Kit form outside .article-body so
+  // article typography cannot bleed into the form. Legacy unlocked pages may use
+  // more than one article-body block, so locate paragraph two across the complete
+  // visible story rather than assuming the first block contains five paragraphs.
+  const articleBodies = qsa('.article-body', articleRoot).filter(node =>
+    !node.closest('.tct-member-only') &&
+    (!node.classList.contains('tct-protected-content') || node.classList.contains('is-unlocked'))
   )
-  if (!articleBody) return false
-  const paragraphs = Array.from(articleBody.children).filter(node => node.tagName === 'P')
-  if (paragraphs.length <= 4) return false
-
+  const paragraphs = articleBodies.flatMap(node =>
+    Array.from(node.children).filter(child => child.tagName === 'P')
+  )
   const secondParagraph = paragraphs[1]
   if (!secondParagraph) return false
 
+  const articleBody = secondParagraph.parentElement
+  if (!articleBody) return false
   const continuation = document.createElement('div')
   continuation.className = articleBody.className
   continuation.classList.add('tct-full-article-continuation')
@@ -275,7 +297,7 @@ function placeFullArticleNewsletter(){
   slot.setAttribute('aria-label', 'Subscribe to the Treasure Coast Morning Brief')
   slot.setAttribute('data-tct-full-article-newsletter', 'true')
 
-  articleBody.insertAdjacentElement('afterend', continuation)
+  if (continuation.childNodes.length) articleBody.insertAdjacentElement('afterend', continuation)
   articleBody.insertAdjacentElement('afterend', slot)
 
   const script = document.createElement('script')
@@ -328,7 +350,7 @@ function placePostReadMeterAfterStory(paywall){
   // The paywall itself -- not its wrapper -- belongs after all story content.
   // Prefer the stable post-story boundary. This remains correct even if a future
   // article shell contains multiple article-body blocks.
-  const boundary = qs('.newsletter-inline-slot--article', articleRoot) || qs('.article-share', articleRoot)
+  const boundary = qs('.article-share', articleRoot)
   let placed = false
   if (boundary?.parentElement) {
     boundary.parentElement.insertBefore(paywall, boundary)
@@ -400,13 +422,14 @@ async function unlockArticle(statusOverride=null){
     if (error || !data?.protected_body) {
       endMemberPrepaint()
       endMeterPrepaint()
+      showPaywallNewsletter()
       setMessage(message, `We couldn't load the member portion of this article. ${data?.error || error?.message || ''}`.trim(), true)
       return
     }
     const rendered = renderProtectedBody(String(data.protected_body || ''), paywall, 'member')
     endMemberPrepaint()
     endMeterPrepaint()
-    if (rendered) placeFullArticleNewsletter()
+    if (rendered) { removePostArticleNewsletter(); placeFullArticleNewsletter() }
     return
   }
 
@@ -421,6 +444,7 @@ async function unlockArticle(statusOverride=null){
     setMessage(message, '')
     plans?.classList.remove('hidden')
     setMeterPaywallState(paywall, reservation.state?.period || currentMeterPeriod(), false)
+    showPaywallNewsletter()
     return
   }
 
@@ -434,7 +458,7 @@ async function unlockArticle(statusOverride=null){
     const rendered = renderProtectedBody(String(data.protected_body || ''), paywall, 'member')
     endMemberPrepaint()
     endMeterPrepaint()
-    if (rendered) placeFullArticleNewsletter()
+    if (rendered) { removePostArticleNewsletter(); placeFullArticleNewsletter() }
     return
   }
   if (!error && data?.protected_body && data?.access === 'monthly_free') {
@@ -450,6 +474,7 @@ async function unlockArticle(statusOverride=null){
     endMeterPrepaint()
     setMessage(message, '')
     if (rendered) {
+      removePostArticleNewsletter()
       placeFullArticleNewsletter()
       placePostReadMeterAfterStory(paywall)
       setMeterPaywallState(paywall, String(data.period || reservation.period || ''), true)
@@ -468,6 +493,7 @@ async function unlockArticle(statusOverride=null){
     plans?.classList.remove('hidden')
     setMessage(message, '')
     setMeterPaywallState(paywall, String(data?.period || errorPayload?.period || reservation.state?.period || currentMeterPeriod()), false)
+    showPaywallNewsletter()
     return
   }
 
@@ -475,6 +501,7 @@ async function unlockArticle(statusOverride=null){
   endMemberPrepaint()
   endMeterPrepaint()
   plans?.classList.remove('hidden')
+  showPaywallNewsletter()
   if (status?.error) {
     setMessage(message, `Membership check failed: ${status.error}`, true)
   } else {
@@ -496,6 +523,7 @@ function revealRequestedSignIn(){
 }
 
 if (!configured) {
+  showPaywallNewsletter()
   endMeterPrepaint()
   qsa('[data-membership-message]').forEach(el => setMessage(el, 'Membership configuration is unavailable. Please try again shortly.', true))
 } else {

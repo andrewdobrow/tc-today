@@ -20,12 +20,13 @@ def test_inline_kit_embed_is_defined_once_and_is_async_https():
     assert 'src="{KIT_INLINE_FORM_SRC}"></script>' in source
 
 
-def test_inline_form_is_rendered_after_every_article_body():
+def test_article_template_uses_dormant_paywall_newsletter_slot_after_body():
     source = _source()
     body = '<div class="article-body">{body}</div>'
-    slot = '{_newsletter_inline_embed("article")}'
+    slot = '{_paywall_newsletter_slot()}'
     assert body in source
     assert slot in source
+    assert '{_newsletter_inline_embed("article")}' not in source
     assert source.index(body) < source.index(slot)
 
 
