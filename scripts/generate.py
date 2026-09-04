@@ -21731,6 +21731,73 @@ def _normalize_article_newsletter_delivery_sitewide(root):
     return {"scanned": scanned, "updated": updated}
 
 
+RSS_FOOTER_LINK = '<a href="/feed.xml" type="application/rss+xml">RSS Feed</a>'
+
+
+def _normalize_footer_rss_link_sitewide(output_root):
+    """Expose the existing TCT RSS feed from every rendered page footer.
+
+    New pages receive the link from ``_page_footer``. This retained-page migration
+    upgrades older article/static footers too, including legacy relative/absolute
+    Archive links and the membership landing footer that has no Archive link.
+    """
+    root = Path(output_root)
+    footer_re = re.compile(r"<footer\b.*?</footer>", re.I | re.S)
+    archive_re = re.compile(
+        r'(<a\b[^>]*href=["\'](?:https://treasurecoast\.today/)?/?archive\.html["\'][^>]*>\s*Archive\s*</a>)',
+        re.I,
+    )
+    privacy_re = re.compile(
+        r'(<a\b[^>]*href=["\'](?:https://treasurecoast\.today/)?/?privacy\.html["\'][^>]*>\s*Privacy\s*</a>)',
+        re.I,
+    )
+    feed_re = re.compile(
+        r'<a\b[^>]*href=["\'](?:https://treasurecoast\.today)?/feed\.xml["\'][^>]*>.*?</a>',
+        re.I | re.S,
+    )
+
+    scanned = updated = 0
+    failures = []
+    for path in root.rglob("*.html"):
+        original = path.read_text(encoding="utf-8", errors="ignore")
+        footer_match = footer_re.search(original)
+        if not footer_match:
+            continue
+        scanned += 1
+        footer = footer_match.group(0)
+        links = feed_re.findall(footer)
+        if not links:
+            archive_match = archive_re.search(footer)
+            if archive_match:
+                insert_at = archive_match.end()
+                footer = footer[:insert_at] + "\n        " + RSS_FOOTER_LINK + footer[insert_at:]
+            else:
+                privacy_match = privacy_re.search(footer)
+                if not privacy_match:
+                    failures.append(str(path.relative_to(root)))
+                    continue
+                insert_at = privacy_match.start()
+                footer = footer[:insert_at] + RSS_FOOTER_LINK + "\n        " + footer[insert_at:]
+
+            normalized = original[:footer_match.start()] + footer + original[footer_match.end():]
+            path.write_text(normalized, encoding="utf-8")
+            updated += 1
+        else:
+            normalized = original
+
+        final_footer_match = footer_re.search(normalized)
+        final_footer = final_footer_match.group(0) if final_footer_match else ""
+        final_links = feed_re.findall(final_footer)
+        if len(final_links) != 1 or "RSS Feed" not in final_links[0]:
+            failures.append(str(path.relative_to(root)))
+
+    if failures:
+        raise RuntimeError(
+            "Footer RSS link contract FAILED: " + ", ".join(sorted(set(failures))[:10])
+        )
+    return {"scanned": scanned, "updated": updated}
+
+
 def _page_footer():
     membership_link = '<a href="/subscribe.html">Membership</a>' if MEMBERSHIP_UI_ENABLED else ''
     if MEMBERSHIP_UI_ENABLED:
@@ -21752,6 +21819,7 @@ def _page_footer():
         <a href="/ownership.html">Ownership</a>
         <a href="/weather.html">Weather</a>
         <a href="/archive.html">Archive</a>
+        {RSS_FOOTER_LINK}
         {membership_link}
         <a href="/advertise.html">Advertise</a>
         <a href="/privacy.html">Privacy</a>
@@ -36839,6 +36907,12 @@ def main():
         "  Active category navigation contract PASSED: "
         f"{_active_nav['scanned']} HTML page(s) verified; "
         f"{_active_nav['updated']} retained page(s) normalized"
+    )
+    _footer_rss = _normalize_footer_rss_link_sitewide(OUTPUT_DIR)
+    print(
+        "  Footer RSS link contract PASSED: "
+        f"{_footer_rss['scanned']} HTML footer(s) verified; "
+        f"{_footer_rss['updated']} retained page(s) normalized"
     )
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
     _content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
