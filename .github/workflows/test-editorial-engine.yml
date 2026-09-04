@@ -12,6 +12,9 @@ on:
       - "membership*.css"
       - "subscribe.html"
       - "custom_articles.json"
+      - "events.html"
+      - "data/events*.json"
+      - ".github/workflows/update-events.yml"
       - "data/custom-retirements.json"
       - "data/generation-cache.json"
       - "manifest.json"
@@ -40,7 +43,7 @@ jobs:
           # Publisher regression tests import scripts/generate.py and therefore
           # require the generator's runtime dependencies even though all network
           # and AI calls remain disabled during tests.
-          python -m pip install feedparser anthropic requests json-repair pytest
+          python -m pip install feedparser anthropic requests beautifulsoup4 json-repair pytest
 
       - name: Sanitize persistent generation cache
         run: python scripts/sanitize_generation_cache.py

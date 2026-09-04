@@ -1,0 +1,115 @@
+name: Update Treasure Coast Events
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 10,22 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Share the publication lock with Generate News so the two workflows never race
+# while committing or deploying the same static site.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Refresh official events calendars
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      committed: ${{ steps.push.outputs.committed }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install event ingestion dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests beautifulsoup4
+
+      - name: Refresh Treasure Coast events
+        run: python -u scripts/update_events.py
+
+      - name: Validate event artifacts
+        run: python scripts/update_events.py --validate-only
+
+      - name: Remove transient Python artifacts
+        run: |
+          find . -type d -name '__pycache__' -prune -exec rm -rf {} +
+          find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+
+      - name: Commit changed event data
+        id: push
+        run: |
+          git config user.name "TCT Events Bot"
+          git config user.email "bot@treasurecoast.today"
+          git add events.html data/events.json data/events-source-cache.json data/events-source-status.json
+          if git diff --staged --quiet; then
+            echo "No event changes to publish."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "Events: refresh $(date -u '+%b %d %Y %H:%M UTC')"
+          git pull --rebase
+          git push
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: update
+    if: needs.update.outputs.committed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.d1.outputs.page_url || steps.d2.outputs.page_url || steps.d3.outputs.page_url }}
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy attempt 1
+        id: d1
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before retry 1
+        if: steps.d1.outcome == 'failure'
+        run: sleep 45
+
+      - name: Deploy attempt 2
+        id: d2
+        if: steps.d1.outcome == 'failure'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before retry 2
+        if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
+        run: sleep 90
+
+      - name: Deploy attempt 3
+        id: d3
+        if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
+        uses: actions/deploy-pages@v4
