@@ -973,6 +973,8 @@ LEAD_AND_HEADLINE_INTEGRITY_STANDARD = """LEAD AND HEADLINE INTEGRITY STANDARD:
 - The lead must make sense without the headline. It must still make sense if the headline is completely removed. Do not use the headline as a substitute for context, and do not merely paraphrase it.
 - If the headline or lead names an amendment, bill, ordinance, referendum, resolution, program, proposal, measure, or numbered initiative, define what it would do in the FIRST paragraph. A phrase such as 'if Amendment 3 passes' is not a definition.
 - Every specific jurisdiction and monetary amount stated in the headline must also appear accurately in the FIRST paragraph. The headline and lead must describe the same government entity, amount, event, and central claim.
+- Preserve official jurisdiction titles exactly. Never turn an event location into an office title: if the source says a Martin County judge, do not rewrite that person as a Stuart judge merely because the case is in Stuart.
+- On first reference in the article body, identify a named person with the person's first and last name (plus title/role when useful) before using only the surname. The body must not assume the headline introduced the person.
 - For items marked [story_form:update], the FIRST paragraph must explicitly state BOTH the original incident, decision, dispute, or event AND the new development being reported.
 - Never open an update only with a quote, scene description, official reaction, investigative procedure, or newly disclosed detail before identifying the underlying event.
 
@@ -7060,6 +7062,109 @@ def _missing_headline_jurisdiction_claims(headline_claims, lead_claims):
     )
 
 
+def _extract_jurisdictional_judge_claims(text):
+    """Return local-jurisdiction judicial title claims such as ``Stuart judge``.
+
+    Ordinary geographic headline framing may use city/county containment, but an
+    official's jurisdiction is not interchangeable with the location of the event.
+    A Martin County judge does not become a Stuart judge merely because the case is
+    heard in Stuart.
+    """
+    value = re.sub(r"[-_]", " ", str(text or ""))
+    claims = set()
+    for canonical, pattern in _LOCAL_JURISDICTION_PATTERNS:
+        for match in pattern.finditer(value):
+            suffix = value[match.end():]
+            if re.match(r"\s+(?:circuit\s+|county\s+|trial\s+)?judges?\b", suffix, re.I):
+                claims.add(f"{canonical}:judge")
+    return claims
+
+
+_PERSON_NAME_STOP_TOKENS = {
+    "former", "county", "city", "police", "sheriff", "office", "department",
+    "board", "commission", "council", "school", "district", "state", "attorney",
+    "republican", "democratic", "executive", "committee", "florida", "treasure",
+    "coast", "port", "saint", "st", "lucie", "indian", "river", "palm",
+    "beach", "hobe", "sound", "jensen", "stuart", "vero", "fort", "pierce",
+}
+
+
+def _source_title_person_candidates(source):
+    """Extract conservative first/last-name candidates from the source title only."""
+    source = source if isinstance(source, dict) else {}
+    title = str(
+        source.get("source_title")
+        or source.get("source_headline")
+        or source.get("title")
+        or ""
+    ).strip()
+    if not title:
+        return []
+    candidates = []
+    seen = set()
+    # Titles are the safest place to infer the central named person. Restrict to
+    # ordinary title-case names so agencies, acronyms and location labels do not
+    # become pseudo-people.
+    for match in re.finditer(
+        r"\b([A-Z][a-z]+(?:\s+(?:[A-Z]\.|[A-Z][a-z]+)){1,3})\b",
+        title,
+    ):
+        tokens = [token.rstrip(".") for token in match.group(1).split()]
+        lowered = {token.casefold() for token in tokens}
+        if len(tokens) < 2 or lowered & _PERSON_NAME_STOP_TOKENS:
+            continue
+        first = tokens[0]
+        last = tokens[-1]
+        if len(first) < 2 or len(last) < 2:
+            continue
+        key = (first.casefold(), last.casefold())
+        if key in seen:
+            continue
+        seen.add(key)
+        candidates.append({
+            "full": match.group(1),
+            "first": first,
+            "last": last,
+        })
+    return candidates
+
+
+def _surname_first_reference_diagnostics(lead, source):
+    """Reject a surname-only first reference when the source title supplies a name."""
+    lead = str(lead or "").strip()
+    if not lead:
+        return {"required": False, "passed": True, "missing": []}
+    words = list(re.finditer(r"\b[A-Za-z][A-Za-z'’-]*\b", lead))
+    candidates = _source_title_person_candidates(source)
+    for person in candidates:
+        last = person["last"]
+        surname_match = re.search(
+            rf"\b{re.escape(last)}(?:['’]s)?\b", lead, re.I
+        )
+        if not surname_match:
+            continue
+        word_index = sum(1 for word in words if word.start() < surname_match.start())
+        # Keep this focused on the opening reference rather than later shorthand.
+        if word_index > 24:
+            continue
+        prior_text = lead[:surname_match.start()]
+        if re.search(rf"\b{re.escape(person['first'])}\b", prior_text, re.I):
+            continue
+        return {
+            "required": True,
+            "passed": False,
+            "missing": ["surname_only_first_reference"],
+            "person": person,
+            "surname_word_index": word_index,
+        }
+    return {
+        "required": bool(candidates),
+        "passed": True,
+        "missing": [],
+        "candidates": candidates,
+    }
+
+
 def _extract_opaque_policy_references(text):
     value = re.sub(r"\s+", " ", str(text or "")).strip()
     references = []
@@ -7186,6 +7291,10 @@ def _lead_independence_diagnostics(item, source=None):
     if undefined:
         missing.append("named_measure_undefined_in_lead")
 
+    surname_diag = _surname_first_reference_diagnostics(lead, source)
+    if surname_diag.get("required") and not surname_diag.get("passed"):
+        missing.extend(surname_diag.get("missing") or [])
+
     update_diag = _update_lead_diagnostics(item, source)
     if update_diag.get("required") and not update_diag.get("passed"):
         missing.extend(update_diag.get("missing") or [])
@@ -7202,6 +7311,7 @@ def _lead_independence_diagnostics(item, source=None):
         "opaque_references": [ref["text"] for ref in references],
         "undefined_references": undefined,
         "story_form": update_diag.get("story_form", _source_story_form(source)),
+        "surname_first_reference": surname_diag,
         "update_diagnostics": update_diag,
         "missing": missing,
     }
@@ -7219,6 +7329,8 @@ def _headline_lead_claim_diagnostics(item):
     lead_money = _extract_money_claims(lead)
     headline_jurisdictions = _extract_jurisdiction_claims(headline)
     lead_jurisdictions = _extract_jurisdiction_claims(lead)
+    headline_judge_claims = _extract_jurisdictional_judge_claims(headline)
+    lead_judge_claims = _extract_jurisdictional_judge_claims(lead)
     headline_references = {
         ref["normalized"] for ref in _extract_opaque_policy_references(headline)
     }
@@ -7235,6 +7347,9 @@ def _headline_lead_claim_diagnostics(item):
     )
     if missing_jurisdictions:
         missing.append("headline_jurisdiction_missing_from_lead")
+    missing_judge_claims = sorted(headline_judge_claims - lead_judge_claims)
+    if missing_judge_claims:
+        missing.append("headline_official_jurisdiction_missing_from_lead")
     missing_references = sorted(headline_references - lead_references)
     if missing_references:
         missing.append("headline_named_measure_missing_from_lead")
@@ -7250,6 +7365,9 @@ def _headline_lead_claim_diagnostics(item):
         "headline_jurisdictions": sorted(headline_jurisdictions),
         "lead_jurisdictions": sorted(lead_jurisdictions),
         "missing_jurisdictions": missing_jurisdictions,
+        "headline_judge_claims": sorted(headline_judge_claims),
+        "lead_judge_claims": sorted(lead_judge_claims),
+        "missing_judge_claims": missing_judge_claims,
         "headline_policy_references": sorted(headline_references),
         "lead_policy_references": sorted(lead_references),
         "missing_policy_references": missing_references,
@@ -7367,6 +7485,40 @@ def _source_only_jurisdiction_blob(source):
     return _source_county_authority_blob(source)
 
 
+def _official_jurisdiction_source_diagnostics(item, source=None):
+    """Require jurisdictional judge titles in generated copy to be source-backed."""
+    item = item if isinstance(item, dict) else {}
+    source = source if isinstance(source, dict) else item
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return {"required": False, "passed": True, "custom_exempt": True, "missing": []}
+    headline = str(item.get("headline") or item.get("title") or "")
+    headline_claims = _extract_jurisdictional_judge_claims(headline)
+    if not headline_claims:
+        return {"required": False, "passed": True, "missing": []}
+    source_blob = " ".join(
+        str(value or "")
+        for value in (
+            source.get("source_title"),
+            source.get("source_headline"),
+            source.get("title"),
+            source.get("article_text"),
+            source.get("source_text"),
+            source.get("summary"),
+        )
+        if value
+    )
+    source_claims = _extract_jurisdictional_judge_claims(source_blob)
+    missing_claims = sorted(headline_claims - source_claims)
+    return {
+        "required": True,
+        "passed": not missing_claims,
+        "headline_claims": sorted(headline_claims),
+        "source_claims": sorted(source_claims),
+        "missing_claims": missing_claims,
+        "missing": (["headline_official_jurisdiction_not_supported_by_source"] if missing_claims else []),
+    }
+
+
 def _source_jurisdiction_diagnostics(item, source=None):
     item = item if isinstance(item, dict) else {}
     source = source if isinstance(source, dict) else item
@@ -7415,11 +7567,13 @@ def _article_framing_diagnostics(item, source=None):
     claim_diag = _headline_lead_claim_diagnostics(item)
     source_focus_diag = _source_focus_diagnostics(item, source)
     source_jurisdiction_diag = _source_jurisdiction_diagnostics(item, source)
+    official_jurisdiction_diag = _official_jurisdiction_source_diagnostics(item, source)
     missing = list(dict.fromkeys(
         list(lead_diag.get("missing") or [])
         + list(claim_diag.get("missing") or [])
         + list(source_focus_diag.get("missing") or [])
         + list(source_jurisdiction_diag.get("missing") or [])
+        + list(official_jurisdiction_diag.get("missing") or [])
     ))
     return {
         "required": True,
@@ -7430,6 +7584,7 @@ def _article_framing_diagnostics(item, source=None):
         "claim_consistency": claim_diag,
         "source_focus": source_focus_diag,
         "source_jurisdiction": source_jurisdiction_diag,
+        "official_jurisdiction": official_jurisdiction_diag,
     }
 
 

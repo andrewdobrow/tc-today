@@ -198,6 +198,8 @@ def test_generation_prompt_requires_definition_and_matching_claim(monkeypatch):
     assert "Do not use the headline as a substitute for context" in prompt
     assert "define what it would do in the FIRST paragraph" in prompt
     assert "Every specific jurisdiction and monetary amount stated in the headline" in prompt
+    assert "Never turn an event location into an office title" in prompt
+    assert "identify a named person with the person's first and last name" in prompt
     assert data["hero"]["headline"] == CURRENT_HEADLINE
 
 
@@ -421,6 +423,147 @@ def test_ordinary_same_story_headline_update_keeps_existing_permalink():
 
     assert valid is True
     assert reason == "exact_source_url"
+
+
+
+def test_exact_kenneth_nail_surname_only_lead_is_rejected():
+    g = _load_generate()
+    item = {
+        "headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+        "body": (
+            "A Martin County sheriff's deputy stopped Nail's gray Kia Soul after noticing "
+            "an expired temporary tag. Deputies later said saw palmetto berries were found "
+            "in the vehicle and connected the stop to harvesting at public parks."
+        ),
+        "source_title": (
+            "Former St. Lucie County GOP chairman Kenneth Nail arrested in Martin County "
+            "saw palmetto berry case"
+        ),
+        "article_text": (
+            "Kenneth Ford Nail was arrested in Martin County after deputies said he harvested "
+            "saw palmetto berries from public parks without authorization for those locations."
+        ),
+    }
+
+    diagnostics = g._article_framing_diagnostics(item, item)
+
+    assert diagnostics["passed"] is False
+    assert "surname_only_first_reference" in diagnostics["missing"]
+    assert diagnostics["lead_independence"]["surname_first_reference"]["person"]["last"] == "Nail"
+
+
+def test_full_name_first_reference_then_surname_is_allowed():
+    g = _load_generate()
+    item = {
+        "headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+        "body": (
+            "Former St. Lucie County Republican Executive Committee Chairman Kenneth Nail "
+            "was arrested in Martin County after deputies said he harvested saw palmetto "
+            "berries from public parks without authorization. Nail was later booked into jail."
+        ),
+        "source_title": (
+            "Former St. Lucie County GOP chairman Kenneth Nail arrested in Martin County "
+            "saw palmetto berry case"
+        ),
+        "article_text": (
+            "Kenneth Ford Nail was arrested in Martin County after deputies said he harvested "
+            "saw palmetto berries from public parks without authorization for those locations."
+        ),
+    }
+
+    diagnostics = g._article_framing_diagnostics(item, item)
+
+    assert "surname_only_first_reference" not in diagnostics["missing"]
+
+
+def test_exact_stuart_judge_regression_rejects_city_for_county_judicial_title():
+    g = _load_generate()
+    item = {
+        "headline": (
+            "Stuart judge rules man incompetent to stand trial in fatal stabbing of "
+            "73-year-old woman"
+        ),
+        "body": (
+            "A Martin County judge ruled that Kersten Francilus, who is charged with fatally "
+            "stabbing 73-year-old Joyce Ellen Thompson Adams in a Stuart neighborhood, is "
+            "incompetent to stand trial, according to the State Attorney's Office."
+        ),
+        "source_title": (
+            "Man found incompetent to stand trial in random stabbing death of Martin County woman"
+        ),
+        "article_text": (
+            "A Martin County judge ruled that a man charged with fatally stabbing a "
+            "73-year-old woman in a Stuart neighborhood is incompetent to stand trial."
+        ),
+    }
+
+    diagnostics = g._article_framing_diagnostics(item, item)
+
+    assert diagnostics["passed"] is False
+    assert "headline_official_jurisdiction_missing_from_lead" in diagnostics["missing"]
+    assert "headline_official_jurisdiction_not_supported_by_source" in diagnostics["missing"]
+    assert diagnostics["claim_consistency"]["headline_judge_claims"] == ["stuart:judge"]
+    assert diagnostics["claim_consistency"]["lead_judge_claims"] == ["martin_county:judge"]
+
+
+def test_martin_county_judge_headline_is_source_and_lead_aligned():
+    g = _load_generate()
+    item = {
+        "headline": (
+            "Martin County judge rules man incompetent to stand trial in fatal stabbing of "
+            "73-year-old woman"
+        ),
+        "body": (
+            "A Martin County judge ruled that Kersten Francilus, who is charged with fatally "
+            "stabbing 73-year-old Joyce Ellen Thompson Adams in a Stuart neighborhood, is "
+            "incompetent to stand trial, according to the State Attorney's Office."
+        ),
+        "source_title": (
+            "Man found incompetent to stand trial in random stabbing death of Martin County woman"
+        ),
+        "article_text": (
+            "A Martin County judge ruled that a man charged with fatally stabbing a "
+            "73-year-old woman in a Stuart neighborhood is incompetent to stand trial."
+        ),
+    }
+
+    diagnostics = g._article_framing_diagnostics(item, item)
+
+    assert "headline_official_jurisdiction_missing_from_lead" not in diagnostics["missing"]
+    assert "headline_official_jurisdiction_not_supported_by_source" not in diagnostics["missing"]
+
+
+
+def test_archive_recovery_rejects_stuart_judge_title_mismatch():
+    g = _load_generate()
+    entry = {
+        "headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
+        "body": (
+            "A Martin County judge ruled that Kersten Francilus, who is charged with fatally "
+            "stabbing 73-year-old Joyce Ellen Thompson Adams in a Stuart neighborhood, is "
+            "incompetent to stand trial."
+        ),
+        "source_title": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
+    }
+
+    assert g._archive_entry_has_article_framing_failure(entry) is True
+
+
+def test_archive_recovery_rejects_kenneth_nail_surname_only_opening():
+    g = _load_generate()
+    entry = {
+        "headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+        "body": (
+            "A Martin County sheriff's deputy stopped Nail's gray Kia Soul after noticing an "
+            "expired temporary tag. Deputies later linked the stop to saw palmetto harvesting."
+        ),
+        "source_title": (
+            "Former St. Lucie County GOP chairman Kenneth Nail arrested in Martin County "
+            "saw palmetto berry case"
+        ),
+    }
+
+    assert g._archive_entry_has_article_framing_failure(entry) is True
 
 
 def test_release_versions_and_reports_are_bumped():
