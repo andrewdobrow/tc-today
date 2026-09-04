@@ -17,13 +17,20 @@ import requests
 
 from tct_engine.membership_paywall import split_article_body
 BODY_RE = re.compile(r'<div class="article-body">(.*?)</div>', re.I | re.S)
+# Keep this exact: data-tct-paywall-newsletter is a dormant newsletter slot,
+# not the membership paywall itself.
+ACTUAL_PAYWALL_MARKER_RE = re.compile(r'(?<![\w-])data-tct-paywall(?![\w-])', re.I)
 
 
 def scan_public_articles() -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     for path in sorted((ROOT / "articles").glob("*.html")):
         text = path.read_text(encoding="utf-8", errors="ignore")
-        if 'http-equiv="refresh"' in text or "window.location.replace" in text or 'data-tct-paywall' in text:
+        if (
+            'http-equiv="refresh"' in text
+            or "window.location.replace" in text
+            or ACTUAL_PAYWALL_MARKER_RE.search(text)
+        ):
             continue
         match = BODY_RE.search(text)
         if not match:

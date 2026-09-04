@@ -116,6 +116,33 @@ def test_public_service_articles_are_not_exempt_from_protected_content_scan(tmp_
     assert all(row["protected_body"].startswith("<!--tct-full-article-v2-->") for row in rows)
 
 
+def test_protected_content_scan_does_not_mistake_dormant_newsletter_slot_for_paywall(tmp_path, monkeypatch):
+    """Regression: the newsletter marker shares the paywall attribute prefix."""
+    script_path = ROOT / "scripts/sync_protected_articles.py"
+    spec = importlib.util.spec_from_file_location("sync_protected_articles_newsletter_prefix", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    slug = "full-article-with-dormant-newsletter"
+    body = _public_service_fixture_body()
+    (articles / f"{slug}.html").write_text(
+        '<html><body>'
+        f'<div class="article-body">{body}</div>'
+        '<aside class="newsletter-inline-slot newsletter-inline-slot--paywall" '
+        'data-tct-paywall-newsletter="true" hidden></aside>'
+        '</body></html>',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+
+    rows = module.scan_public_articles()
+    assert [row["slug"] for row in rows] == [slug]
+    assert rows[0]["protected_body"].startswith("<!--tct-full-article-v2-->")
+
+
 def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
     script_path = ROOT / "scripts/prepare_membership_paywall.py"
     spec = importlib.util.spec_from_file_location("prepare_membership_no_exemptions", script_path)

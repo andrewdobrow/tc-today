@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 SLUG='2026-08-06-martin-county-sheriffs-office-seeks-public-help-finding-missing-14-year-old-auti'
@@ -18,7 +19,7 @@ def test_canonical_page_keeps_permalink_image_and_resolution_update():
     assert 'https://treasurecoast.today/images/ethan-boyd.png' in text
     assert f'<link rel="canonical" href="https://treasurecoast.today/articles/{SLUG}.html">' in text
     assert text.count('Original report:') <= 1
-    assert text.count('data-tct-paywall') == 1
+    assert len(re.findall(r'(?<![\w-])data-tct-paywall(?![\w-])', text, re.I)) == 1
     assert text.count('<div id="tct-protected-content"') == 1
     assert text.count('<aside class="article-side-rail">') == 1
     assert text.count('<div class="article-share">') == 1
