@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-04T10:48:50Z",
+  "generated_at": "2026-09-04T15:48:31Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 17,
-    "rejected_count": 5,
+    "assessed_count": 32,
+    "rejected_count": 8,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,9 +34,25 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 3,
-      "rejected_count": 2,
+      "assessed_count": 4,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -72,7 +88,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 2,
+      "assessed_count": 7,
       "rejected_count": 2,
       "rejections": [
         {
@@ -86,8 +102,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Vero Beach man jailed on $1 million bond accused of AI fake sexual images scheme - WPBF",
-          "source_url": "https://www.wpbf.com/article/vero-beach-ai-fake-sexual-images-case/73606237"
+          "headline": "Finding work in South Florida: Job seekers and experts weigh in on a cooling job market",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/finding-work-in-south-florida-job-seekers-and-experts-weigh-in-on-a-cooling-job-market"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -100,8 +116,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Finding work in South Florida: Job seekers and experts weigh in on a cooling job market",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/finding-work-in-south-florida-job-seekers-and-experts-weigh-in-on-a-cooling-job-market"
+          "headline": "Vero Beach man jailed on $1 million bond accused of AI fake sexual images scheme - WPBF",
+          "source_url": "https://www.wpbf.com/article/vero-beach-ai-fake-sexual-images-case/73606237"
         }
       ]
     },
@@ -110,9 +126,28 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 1,
+      "assessed_count": 4,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:shooting"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:fort pierce"
+          ],
+          "headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -128,6 +163,26 @@
           ],
           "headline": "Dawn Miller died hours after leaving the hospital. Her mother wants answers.",
           "source_url": "https://www.wptv.com/wptv-investigates/dawn-miller-died-hours-after-leaving-the-hospital-her-mother-wants-answers"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:indian river county",
+            "source_locality:vero beach"
+          ],
+          "headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women"
         }
       ]
     },
@@ -163,7 +218,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 1,
+      "assessed_count": 2,
       "rejected_count": 0,
       "rejections": []
     },
@@ -172,7 +227,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 0,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -181,7 +236,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 9,
+      "assessed_count": 12,
       "rejected_count": 0,
       "rejections": []
     }

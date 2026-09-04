@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-04T10:55:02Z",
+  "generated_at": "2026-09-04T15:53:17Z",
   "mode": "enforce",
-  "publication_behavior_changed": false,
+  "publication_behavior_changed": true,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,16 +19,72 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
-    "applied_action_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
+    "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 4,
-    "placements_after": 4,
-    "publication_behavior_changed": false,
+    "placements_before": 8,
+    "placements_after": 7,
+    "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
-    "recommendations": [],
-    "applied_actions": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.95,
+        "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+        "headline": "Man dies after Fort Pierce shooting, three masked suspects sought",
+        "source_title_key": "man dies after fort pierce shooting three masked suspects sought",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-16th-772-467-6800-about-according-adult-3f2f3590",
+        "canonical_is_custom": false,
+        "canonical_title": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+        "reason": "Same story and safe normalized stage 'investigation' at 95% confidence.",
+        "category": "st_lucie",
+        "placement": "hero"
+      }
+    ],
+    "applied_actions": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.95,
+        "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+        "headline": "Man dies after Fort Pierce shooting, three masked suspects sought",
+        "source_title_key": "man dies after fort pierce shooting three masked suspects sought",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-16th-772-467-6800-about-according-adult-3f2f3590",
+        "canonical_is_custom": false,
+        "canonical_title": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+        "reason": "Same story and safe normalized stage 'investigation' at 95% confidence.",
+        "category": "st_lucie",
+        "placement": "hero",
+        "slug": "",
+        "source_title": "Man dies after Fort Pierce shooting, three masked suspects sought",
+        "date": "10:12 AM ET",
+        "category_key": "st_lucie",
+        "is_custom": false,
+        "story_stage": "investigation",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 95,
+        "matched_prior_slug": "",
+        "matched_prior_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      }
+    ],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -49,30 +105,77 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 179,
+    "candidates_processed": 185,
     "routes": {
-      "generate_new": 33,
-      "skip": 146
+      "generate_new": 47,
+      "skip": 138
     },
     "eligibility": {
-      "low_value": 116,
-      "publishable": 63
+      "low_value": 121,
+      "publishable": 64
     },
     "source_classes": {
-      "aggregator": 116,
-      "local_news": 36,
-      "regional_news": 23,
-      "unknown": 4
+      "aggregator": 121,
+      "local_news": 38,
+      "regional_news": 24,
+      "unknown": 2
     },
     "rejected_count": 0,
     "rejected_examples": []
   },
   "relationships": {
     "counts": {
-      "new_story": 25,
-      "same_event": 154
+      "new_story": 37,
+      "same_event": 148
     },
     "examples": [
+      {
+        "story_id": "story_008092",
+        "title": "Oxbridge Academy bans cell phones for upperclassmen as no-phone trend sweeps schools nationwide",
+        "event_key": "unknown-event-95471578b6",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007001",
+        "title": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+        "event_key": "fire-fort-pierce-3428a9d8b4",
+        "relationship": "same_event",
+        "confidence": 0.94,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: shooting",
+          "Shared people: fort pierce",
+          "Shared person aliases: none",
+          "Shared locations: fort pierce",
+          "Shared agencies: fort pierce police department",
+          "Shared concepts: none",
+          "Shared distinctive tokens: 10",
+          "Distinctive-token overlap: 0.21",
+          "Title overlap: 0.25",
+          "Identity anchors qualified: True",
+          "Confidence: 0.94"
+        ]
+      },
+      {
+        "story_id": "story_008093",
+        "title": "Marion County responds to potential Wyomina Park Elementary School closure - 352today",
+        "event_key": "unknown-event-a0f4b1d512",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_008029",
         "title": "Delray Beach woman searches for missing grandparents' graves amid long-standing cemetery neglect",
@@ -105,12 +208,14 @@
         "story_id": "story_008060",
         "title": "Why the feds hung a ‘Do not enter’ sign on certain driving schools - New York Post",
         "event_key": "unknown-event-80e2bcb82b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -299,48 +404,6 @@
         "story_id": "story_007844",
         "title": "White finance director sues Riviera Beach, alleging racism and retaliation - WPEC",
         "event_key": "unknown-event-ded0cb22b1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007845",
-        "title": "West Palm Beach police officer hit by vehicle while on bike patrol",
-        "event_key": "unknown-event-87fc21a36b",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007968",
-        "title": "Democrat Darren Soto wants to win over our red county - Vero News",
-        "event_key": "unknown-event-5083ad3f73",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007846",
-        "title": "Dawn Miller died hours after leaving the hospital. Her mother wants answers.",
-        "event_key": "named-person-death:dawn-miller",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -354,6 +417,56 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_008092",
+        "title": "Oxbridge Academy bans cell phones for upperclassmen as no-phone trend sweeps schools nationwide",
+        "event_key": "unknown-event-95471578b6",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007001",
+        "title": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+        "event_key": "fire-fort-pierce-3428a9d8b4",
+        "relationship": "same_event",
+        "confidence": 0.94,
+        "matched_existing": true,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: shooting",
+          "Shared people: fort pierce",
+          "Shared person aliases: none",
+          "Shared locations: fort pierce",
+          "Shared agencies: fort pierce police department",
+          "Shared concepts: none",
+          "Shared distinctive tokens: 10",
+          "Distinctive-token overlap: 0.21",
+          "Title overlap: 0.25",
+          "Identity anchors qualified: True",
+          "Confidence: 0.94"
+        ]
+      },
+      {
+        "story_id": "story_008093",
+        "title": "Marion County responds to potential Wyomina Park Elementary School closure - 352today",
+        "event_key": "unknown-event-a0f4b1d512",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_008029",
         "title": "Delray Beach woman searches for missing grandparents' graves amid long-standing cemetery neglect",
         "event_key": "missing-person-589fdc4d0a-589fdc4d0a",
@@ -387,13 +500,15 @@
         "story_id": "story_008060",
         "title": "Why the feds hung a ‘Do not enter’ sign on certain driving schools - New York Post",
         "event_key": "unknown-event-80e2bcb82b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -595,51 +710,6 @@
         "story_id": "story_007844",
         "title": "White finance director sues Riviera Beach, alleging racism and retaliation - WPEC",
         "event_key": "unknown-event-ded0cb22b1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007845",
-        "title": "West Palm Beach police officer hit by vehicle while on bike patrol",
-        "event_key": "unknown-event-87fc21a36b",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007968",
-        "title": "Democrat Darren Soto wants to win over our red county - Vero News",
-        "event_key": "unknown-event-5083ad3f73",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007846",
-        "title": "Dawn Miller died hours after leaving the hospital. Her mother wants answers.",
-        "event_key": "named-person-death:dawn-miller",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -656,13 +726,95 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 2,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
+    "current_relationships": {
+      "new_story": 2
+    },
+    "milestones": {
+      "arrest": 1,
+      "death": 1
+    },
+    "reason_codes": {
+      "agency_match": 2,
+      "entity_match": 2,
+      "event_type_conflict": 1,
+      "identity_anchor_qualified": 2,
+      "location_match": 2,
+      "novel_milestone": 2,
+      "title_continuity": 1
+    },
+    "examples": [
+      {
+        "headline": "3 masked suspects flee scene after man fatally shot in Fort Pierce - WPEC",
+        "event_key": "traffic-crash-port-st-lucie-890018bc9b",
+        "current_story_id": "story_008120",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_007682",
+        "candidate_confidence": 0.67,
+        "candidate_milestones": [
+          "arrest"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
+          "entity_match",
+          "identity_anchor_qualified",
+          "event_type_conflict"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_007682",
+          "Novel milestones: arrest",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.30",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: True",
+          "Candidate confidence: 0.67"
+        ]
+      },
+      {
+        "headline": "Witnesses saw three masked males run after deadly shooting in Fort Pierce - WPBF",
+        "event_key": "unknown-event-a56b1baf08",
+        "current_story_id": "story_008121",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_002380",
+        "candidate_confidence": 0.736364,
+        "candidate_milestones": [
+          "death"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
+          "entity_match",
+          "title_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_002380",
+          "Novel milestones: death",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.36",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.74"
+        ]
+      }
+    ],
     "retrospective_candidate_count": 33,
     "retrospective_high_confidence_candidate_count": 8,
     "retrospective_activation_eligible_candidate_count": 5,
@@ -670,8 +822,8 @@
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
       "stories_with_timelines": 1183,
-      "timeline_entries_examined": 3345,
-      "transitions_examined": 2051,
+      "timeline_entries_examined": 3333,
+      "transitions_examined": 2040,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 33,
       "high_confidence_candidate_count": 8,
@@ -1710,11 +1862,11 @@
         "timeline_identity_unanchored": 22,
         "weak_title_continuity": 9
       },
-      "excluded_entry_count": 120,
+      "excluded_entry_count": 119,
       "exclusion_reasons": {
         "insufficient_title_detail": 34,
         "low_value_title": 11,
-        "social_source": 76
+        "social_source": 75
       },
       "examples": [
         {
@@ -4006,28 +4158,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1079,
+      "florida": 1083,
       "treasure_coast_local": 861,
-      "treasure_coast_region": 411,
-      "unknown": 2039
+      "treasure_coast_region": 413,
+      "unknown": 2041
     },
-    "average_score": 60.74
+    "average_score": 60.75
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1079,
+      "florida": 1083,
       "treasure_coast_local": 861,
-      "treasure_coast_region": 411,
-      "unknown": 2039
+      "treasure_coast_region": 413,
+      "unknown": 2041
     },
-    "average_priority": 3.81
+    "average_priority": 3.84
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3518,
-      "breaking": 1,
-      "developing": 208,
-      "ongoing": 662,
+      "active": 3550,
+      "breaking": 2,
+      "developing": 206,
+      "ongoing": 639,
       "resolved": 1
     }
   },
@@ -4035,8 +4187,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 6382,
-    "active_stories_after": 6382,
+    "active_stories_before": 6406,
+    "active_stories_after": 6406,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -4065,20 +4217,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-04T10:43:19Z",
-    "quarantined_story_records_retained": 919,
-    "active_story_count": 6408
+    "generated_at": "2026-09-04T15:42:40Z",
+    "quarantined_story_records_retained": 929,
+    "active_story_count": 6441
   },
   "stories": {
-    "total": 4390,
+    "total": 4398,
     "importance_levels": {
-      "breaking": 5,
+      "breaking": 6,
       "high": 90,
-      "normal": 692,
-      "low": 3603,
+      "normal": 695,
+      "low": 3607,
       "archived": 0
     },
-    "average_importance": 9.32,
+    "average_importance": 9.33,
     "top": [
       {
         "story_id": "story_007976",
@@ -4090,10 +4242,10 @@
           "score": 100,
           "importance": 100,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 11.33
+          "age_hours": 0.07
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4149,17 +4301,83 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 50,
-        "timeline_entries": 37,
+        "event_count": 51,
+        "timeline_entries": 38,
         "relationship_decisions": 11,
-        "canonical_source_candidates": 37,
+        "canonical_source_candidates": 38,
         "lifecycle": {
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
-          "last_updated": "2026-09-03T23:27:52.005400+00:00",
-          "hours_since_update": 11.33,
-          "event_count": 50,
-          "timeline_entries": 37
+          "last_updated": "2026-09-04T15:42:16.034092+00:00",
+          "hours_since_update": 0.07,
+          "event_count": 51,
+          "timeline_entries": 38
+        }
+      },
+      {
+        "story_id": "story_007001",
+        "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
+        "score": 85,
+        "editorial_priority": 96,
+        "editorial_score": 96,
+        "score_breakdown": {
+          "score": 96,
+          "importance": 85,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.03
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 12,
+        "timeline_entries": 12,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 12,
+        "lifecycle": {
+          "state": "breaking",
+          "reason": "Breaking importance with a current or undated update",
+          "last_updated": "2026-09-04T15:42:16.034092+00:00",
+          "hours_since_update": 0.03,
+          "event_count": 12,
+          "timeline_entries": 12
         }
       },
       {
@@ -4175,7 +4393,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 62.73
+          "age_hours": 67.72
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4223,7 +4441,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 62.73,
+          "hours_since_update": 67.72,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4241,7 +4459,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 11.29
+          "age_hours": 16.27
         },
         "level": "high",
         "importance_reasons": [
@@ -4284,7 +4502,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-03T23:27:52.005400+00:00",
-          "hours_since_update": 11.29,
+          "hours_since_update": 16.27,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4302,7 +4520,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 162.27
+          "age_hours": 167.26
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4356,7 +4574,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 162.27,
+          "hours_since_update": 167.26,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -4374,7 +4592,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 62.73
+          "age_hours": 67.72
         },
         "level": "high",
         "importance_reasons": [
@@ -4417,7 +4635,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 62.73,
+          "hours_since_update": 67.72,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4435,7 +4653,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 32.8
+          "age_hours": 37.79
         },
         "level": "high",
         "importance_reasons": [
@@ -4478,7 +4696,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-03T01:55:34.516844+00:00",
-          "hours_since_update": 32.8,
+          "hours_since_update": 37.79,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4496,7 +4714,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 62.73
+          "age_hours": 67.72
         },
         "level": "high",
         "importance_reasons": [
@@ -4539,7 +4757,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 62.73,
+          "hours_since_update": 67.72,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4557,7 +4775,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 62.73
+          "age_hours": 67.72
         },
         "level": "high",
         "importance_reasons": [
@@ -4601,7 +4819,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 62.73,
+          "hours_since_update": 67.72,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4619,7 +4837,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 15.86
+          "age_hours": 20.85
         },
         "level": "high",
         "importance_reasons": [
@@ -4657,7 +4875,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-03T18:52:55.532200+00:00",
-          "hours_since_update": 15.86,
+          "hours_since_update": 20.85,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4675,7 +4893,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 12.26
+          "age_hours": 17.24
         },
         "level": "high",
         "importance_reasons": [
@@ -4714,7 +4932,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-03T22:29:06.904955+00:00",
-          "hours_since_update": 12.26,
+          "hours_since_update": 17.24,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4732,7 +4950,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 60.65
+          "age_hours": 65.63
         },
         "level": "high",
         "importance_reasons": [
@@ -4773,7 +4991,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-01T22:05:22.131106+00:00",
-          "hours_since_update": 60.65,
+          "hours_since_update": 65.63,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4791,7 +5009,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 36.15
+          "age_hours": 41.13
         },
         "level": "high",
         "importance_reasons": [
@@ -4834,7 +5052,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-02T22:35:25.973298+00:00",
-          "hours_since_update": 36.15,
+          "hours_since_update": 41.13,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4852,7 +5070,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 62.74
+          "age_hours": 67.73
         },
         "level": "high",
         "importance_reasons": [
@@ -4888,7 +5106,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 62.74,
+          "hours_since_update": 67.73,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4906,7 +5124,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 32.81
+          "age_hours": 37.8
         },
         "level": "high",
         "importance_reasons": [
@@ -4944,13 +5162,13 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-03T01:55:34.516844+00:00",
-          "hours_since_update": 32.81,
+          "hours_since_update": 37.8,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_008053",
+        "story_id": "story_008086",
         "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4962,7 +5180,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.02
         },
         "level": "high",
         "importance_reasons": [
@@ -5012,8 +5230,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-04T10:42:47.520682+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-04T15:42:16.034092+00:00",
+          "hours_since_update": 0.02,
           "event_count": 7,
           "timeline_entries": 6
         }
@@ -5031,7 +5249,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 10.67
+          "age_hours": 15.66
         },
         "level": "high",
         "importance_reasons": [
@@ -5081,12 +5299,12 @@
         "event_count": 92,
         "timeline_entries": 89,
         "relationship_decisions": 10,
-        "canonical_source_candidates": 133,
+        "canonical_source_candidates": 134,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-04T00:06:11.306271+00:00",
-          "hours_since_update": 10.67,
+          "hours_since_update": 15.66,
           "event_count": 92,
           "timeline_entries": 89
         }
@@ -5104,7 +5322,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 513.04
+          "age_hours": 518.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5152,7 +5370,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 513.04,
+          "hours_since_update": 518.03,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -5170,7 +5388,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 504.04
+          "age_hours": 509.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5216,7 +5434,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 504.04,
+          "hours_since_update": 509.03,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -5234,7 +5452,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 48.03
+          "age_hours": 53.01
         },
         "level": "high",
         "importance_reasons": [
@@ -5287,79 +5505,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-02T10:42:50.702129+00:00",
-          "hours_since_update": 48.03,
+          "hours_since_update": 53.01,
           "event_count": 4,
           "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_007358",
-        "title": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - WPEC",
-        "score": 55,
-        "editorial_priority": 52,
-        "editorial_score": 52,
-        "score_breakdown": {
-          "score": 52,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 62.73
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Stuart",
-            "Port St. Lucie",
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 4,
-        "timeline_entries": 3,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 62.73,
-          "event_count": 4,
-          "timeline_entries": 3
         }
       }
     ]
@@ -5367,7 +5515,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-04T10:48:50Z",
+    "generated_at": "2026-09-04T15:48:31Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5382,26 +5530,26 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 6,
-        "generated_live": 1,
-        "no_publishable_sources": 2
+        "category_eligibility_archive_recovery": 4,
+        "generated_live": 4,
+        "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 6
+        "no_category_eligible_sources": 4
       },
-      "model_attempt_count": 1,
-      "model_elapsed_seconds": 30.529,
-      "archive_recovery_requested_count": 8,
+      "model_attempt_count": 4,
+      "model_elapsed_seconds": 89.061,
+      "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 66,
-      "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 3,
-      "material_update_promotion_count": 1,
+      "category_eligibility_rejection_count": 8,
+      "published_story_duplicate_suppression_count": 49,
+      "story_aware_update_context_count": 3,
+      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 2
+      "material_update_promotion_model_call_count": 1
     },
     "categories": [
       {
@@ -5409,8 +5557,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 14,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 16,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5427,9 +5575,25 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 4,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_government_action",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_incident:shooting"
+            ],
+            "local_nexus_signals": [],
+            "headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot"
+          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -5459,7 +5623,7 @@
             "source_url": "https://cbs12.com/news/local/567-million-eggs-head-to-florida-food-banks-including-palm-beach-county"
           }
         ],
-        "published_story_duplicate_suppression_count": 10,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -5499,16 +5663,6 @@
             "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
             "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5631,21 +5785,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
             "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
@@ -5721,23 +5860,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 28.847
+        "elapsed_seconds": 25.302
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 15,
-        "publishable_source_count": 8,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 13,
+        "selected_source_count": 5,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Crime & Safety category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 27.332,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 27.332,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5746,7 +5892,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
@@ -5760,8 +5906,8 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "Vero Beach man jailed on $1 million bond accused of AI fake sexual images scheme - WPBF",
-            "source_url": "https://www.wpbf.com/article/vero-beach-ai-fake-sexual-images-case/73606237"
+            "headline": "Finding work in South Florida: Job seekers and experts weigh in on a cooling job market",
+            "source_url": "https://www.wptv.com/news/palm-beach-county/finding-work-in-south-florida-job-seekers-and-experts-weigh-in-on-a-cooling-job-market"
           },
           {
             "contract_version": "1.0-primary-crime-safety-focus",
@@ -5774,11 +5920,11 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "Finding work in South Florida: Job seekers and experts weigh in on a cooling job market",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/finding-work-in-south-florida-job-seekers-and-experts-weigh-in-on-a-cooling-job-market"
+            "headline": "Vero Beach man jailed on $1 million bond accused of AI fake sexual images scheme - WPBF",
+            "source_url": "https://www.wpbf.com/article/vero-beach-ai-fake-sexual-images-case/73606237"
           }
         ],
-        "published_story_duplicate_suppression_count": 15,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -5812,16 +5958,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - WPEC",
-            "source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
-            "editorial_story_id": "story_007989",
-            "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
-            "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Thieves stealing SNAP benefits from Florida families are using the tax dollars to buy baby formula",
             "source_url": "https://www.wptv.com/news/state/thieves-stealing-snap-benefits-from-florida-families-are-using-the-tax-dollars-to-buy-baby-formula",
             "editorial_story_id": "story_007920",
@@ -5842,8 +5978,8 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
+            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/03/woman-facing-72-charges-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs?outputType=amp",
             "editorial_story_id": "story_003665",
             "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
             "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
@@ -5852,31 +5988,11 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Vero Beach police: More victims, charges expected in AI-generated sexual image case - WPEC",
-            "source_url": "https://cbs12.com/news/crime/vero-beach-police-more-victims-more-charges-expected-in-ai-deepfake-generated-sexual-images-of-women-case-peter-solomon-ruma-deepfake-cyberstalking",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Former DeSantis spokesperson's public relations firm lands more than $700K in government contracts",
-            "source_url": "https://www.wptv.com/wptv-investigates/former-desantis-spokespersons-pr-firm-lands-more-than-700k-in-government-contracts",
-            "editorial_story_id": "story_007923",
-            "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
-            "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/03/vero-beach-man-arrested-using-ai-create-share-fake-sexual-images-women",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
+            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
+            "editorial_story_id": "story_003665",
+            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+            "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5889,50 +6005,50 @@
             "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cw34.com",
-            "source_url": "https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
-            "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
-            "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
-            "editorial_story_id": "story_007976",
-            "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-            "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
-            "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
+            "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
+            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
+            "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+            "identity_keys": [
+              "source:https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_named_people",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=1",
+              "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
+              "shared_event_families=['public-policy']",
+              "shared_named_people=['burglary charge and', 'peter solomon ruma', 'vero beach man']",
+              "shared_precise_locations=[]",
+              "shared_agencies=[]",
+              "shared_subject_phrases=['deepfake-investigation-fear', 'deepfake-investigation-fear-victim', 'explicit-deepfake-investigation', 'explicit-deepfake-investigation-fear', 'investigation-fear-victim']",
+              "shared_headline_topic_core=['deepfake', 'explicit', 'fear', 'investigation', 'victim']",
+              "shared_distinctive_token_count=158",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
@@ -6001,21 +6117,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - WPEC",
-            "source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
-            "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
-            "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Thieves stealing SNAP benefits from Florida families are using the tax dollars to buy baby formula",
             "source_url": "https://www.wptv.com/news/state/thieves-stealing-snap-benefits-from-florida-families-are-using-the-tax-dollars-to-buy-baby-formula",
             "canonical_slug": "2026-09-03-thieves-target-florida-snap-recipients-use-stolen-benefits-to-buy-baby-formula-a",
@@ -6046,42 +6147,12 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
+            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/03/woman-facing-72-charges-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs?outputType=amp",
             "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
             "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach police: More victims, charges expected in AI-generated sexual image case - WPEC",
-            "source_url": "https://cbs12.com/news/crime/vero-beach-police-more-victims-more-charges-expected-in-ai-deepfake-generated-sexual-images-of-women-case-peter-solomon-ruma-deepfake-cyberstalking",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Former DeSantis spokesperson's public relations firm lands more than $700K in government contracts",
-            "source_url": "https://www.wptv.com/wptv-investigates/former-desantis-spokespersons-pr-firm-lands-more-than-700k-in-government-contracts",
-            "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
-            "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6091,10 +6162,10 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/03/vero-beach-man-arrested-using-ai-create-share-fake-sexual-images-women",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
+            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
+            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+            "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "material_update_source_already_absorbed",
@@ -6118,78 +6189,22 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cw34.com",
-            "source_url": "https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
-            "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
-            "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
-            "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-            "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
-            "canonical_is_custom": true,
-            "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.817
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+        "generated_card_count": 1,
+        "elapsed_seconds": 49.77
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 10,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 13,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6206,9 +6221,28 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 1,
+        "category_eligibility_assessed_count": 4,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_public_safety:shooting"
+            ],
+            "local_nexus_signals": [
+              "source_locality:treasure coast",
+              "source_locality:fort pierce"
+            ],
+            "headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot"
+          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -6224,9 +6258,29 @@
             ],
             "headline": "Dawn Miller died hours after leaving the hospital. Her mother wants answers.",
             "source_url": "https://www.wptv.com/wptv-investigates/dawn-miller-died-hours-after-leaving-the-hospital-her-mother-wants-answers"
+          },
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_public_safety:arrested"
+            ],
+            "local_nexus_signals": [
+              "source_locality:treasure coast",
+              "source_locality:indian river county",
+              "source_locality:vero beach"
+            ],
+            "headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -6266,26 +6320,6 @@
             "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
             "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/tiger-woods-license-is-suspended-can-he-drive-a-golf-cart",
-            "editorial_story_id": "story_007379",
-            "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-            "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6355,48 +6389,18 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/tiger-woods-license-is-suspended-can-he-drive-a-golf-cart",
-            "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-            "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 23.061
+        "elapsed_seconds": 16.35
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 5,
+        "fetched_candidate_count": 25,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6478,7 +6482,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.662
+        "elapsed_seconds": 16.102
       },
       {
         "category_key": "things_to_do",
@@ -6486,7 +6490,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 6,
+        "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6575,11 +6579,13 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Mango Music and Art Festival on Saturday in Lake Worth Beach",
-              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
-              "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
-              "SoFlo Market one-year anniversary celebration on Saturday in Boca Raton",
-              "11th annual Northwest BBQ Brews Blues Festival on Saturday"
+              "Mango Music and Art Festival on September 4, 2026 in Lake Worth Beach",
+              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on September 4",
+              "Barrio Fiesta Labor Day Picnic in Port St. Lucie on September 5",
+              "SoFlo Market 1-year anniversary celebration in Boca Raton on September 4",
+              "Northwest BBQ Brews Blues 11th annual festival on September 4",
+              "Peachfest 5-Year Anniversary Art Walk on September 4",
+              "Hurricane Alley Blowout Rodeo in Vero Beach September 3-4"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6633,7 +6639,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 22.723
+        "elapsed_seconds": 23.696
       },
       {
         "category_key": "florida",
@@ -6748,23 +6754,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 26.951
+        "elapsed_seconds": 31.975
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 1,
-        "selected_source_count": 0,
+        "status": "generated_live",
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Martin County category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 11.048,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 11.048,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6773,10 +6786,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -6810,16 +6823,6 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-            "editorial_story_id": "story_003665",
-            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-            "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
             "source_headline": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
             "editorial_story_id": "story_007976",
@@ -6836,16 +6839,6 @@
             "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
             "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
             "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
-            "editorial_story_id": "story_007629",
-            "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-            "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6903,21 +6896,6 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-            "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
             "source_headline": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
             "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
@@ -6945,39 +6923,35 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
-            "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-            "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 28.972
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
+        "generated_card_count": 0,
+        "elapsed_seconds": 33.263
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 3,
+        "selected_source_count": 3,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 12.676,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 12.676,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6988,21 +6962,11 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 10,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - WPEC",
-            "source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
-            "editorial_story_id": "story_007989",
-            "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
-            "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme - cw34.com",
@@ -7065,6 +7029,16 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMixwJBVV95cUxPVVNGdEhRTlR3S2RkX0ViTVl2dmNnY3R3bVVib2ZBOWJJTU41UTZPbmZRMXlNZ09zRXhIT2ozamxuMnZ1VS1KTURjNEF2UjBoRWhXRUw5bm04aWtMRE9VbDlDaUJjNXhEVnZxckoyOHREVDAxamM1N0VCSzZiOU0tcjVDVGtqUlhnSWp1dV84elhaMkNsc1RuMEZ2RjRRcjUtVEtFNlVxMFdra0ZaNDI5bnpxSHhRQXgwM2NDd0RvOV9lOUQ0MGlmLWNldkhLeUpKOWppdjRkc0FiSWFGZDZSbXpja05yZzZhZnl5dk10TlFCODc0Y0x1S29sNGhfWHN0SjVhUHpCYV9oaXJtSldhU0pRYUV3aUozN1gwQlpkZkM0bjJRSW51cEl6TkpyWm96cld5dnNaYVFVNE9GT056Slc3OG1zVHM",
+            "editorial_story_id": "story_007629",
+            "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+            "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
             "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
             "editorial_story_id": "story_007629",
@@ -7082,40 +7056,56 @@
             "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
-            "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-            "editorial_story_id": "story_007976",
-            "canonical_slug": "2026-09-02-multi-vehicle-crash-blocks-i-95-southbound-near-kanner-highway-in-martin-county",
-            "canonical_headline": "Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "3 masked suspects flee scene after man fatally shot in Fort Pierce - WPEC",
+            "source_url": "https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
+            "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+            "identity_keys": [
+              "story:story_008120",
+              "source:https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_named_people",
+              "shared_agency",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=1",
+              "shared_locality=['fort-pierce', 'martin-county', 'st-lucie']",
+              "shared_event_families=['crash', 'drug-case']",
+              "shared_named_people=['chairman kenneth nail']",
+              "shared_precise_locations=[]",
+              "shared_agencies=['fort-pierce-police']",
+              "shared_subject_phrases=[]",
+              "shared_headline_topic_core=['fort', 'suspect', 'wpec']",
+              "shared_distinctive_token_count=68",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - WPEC",
-            "source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
-            "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
-            "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme - cw34.com",
@@ -7208,6 +7198,21 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMixwJBVV95cUxPVVNGdEhRTlR3S2RkX0ViTVl2dmNnY3R3bVVib2ZBOWJJTU41UTZPbmZRMXlNZ09zRXhIT2ozamxuMnZ1VS1KTURjNEF2UjBoRWhXRUw5bm04aWtMRE9VbDlDaUJjNXhEVnZxckoyOHREVDAxamM1N0VCSzZiOU0tcjVDVGtqUlhnSWp1dV84elhaMkNsc1RuMEZ2RjRRcjUtVEtFNlVxMFdra0ZaNDI5bnpxSHhRQXgwM2NDd0RvOV9lOUQ0MGlmLWNldkhLeUpKOWppdjRkc0FiSWFGZDZSbXpja05yZzZhZnl5dk10TlFCODc0Y0x1S29sNGhfWHN0SjVhUHpCYV9oaXJtSldhU0pRYUV3aUozN1gwQlpkZkM0bjJRSW51cEl6TkpyWm96cld5dnNaYVFVNE9GT056Slc3OG1zVHM",
+            "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+            "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
             "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
             "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
@@ -7235,34 +7240,23 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
-            "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-            "canonical_slug": "2026-09-02-multi-vehicle-crash-blocks-i-95-southbound-near-kanner-highway-in-martin-county",
-            "canonical_headline": "Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.016
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Man dies after Fort Pierce shooting, three masked suspects sought",
+        "generated_card_count": 0,
+        "elapsed_seconds": 30.498
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "generated_live",
         "fetched_candidate_count": 29,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 9,
-        "selected_source_count": 3,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 12,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -7270,11 +7264,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 30.529,
+            "elapsed_seconds": 38.005,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 30.529,
+        "model_elapsed_seconds": 38.005,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -7285,19 +7279,19 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 12,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
-            "source_headline": "Vero Beach police: More victims, charges expected in AI-generated sexual image case - WPEC",
-            "source_url": "https://cbs12.com/news/local/vero-beach-police-more-victims-more-charges-expected-in-ai-deepfake-generated-sexual-images-of-women-case-peter-solomon-ruma-deepfake-cyberstalking",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "'Boom, boom, boom, boom': Deputies investigate shootout between teens in Indian River County - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-shootout-teens/73608302",
+            "editorial_story_id": "story_007964",
+            "canonical_slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
+            "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -7322,51 +7316,11 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-            "editorial_story_id": "story_003665",
-            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-            "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/03/vero-beach-man-arrested-using-ai-create-share-fake-sexual-images-women",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
             "editorial_story_id": "story_007607",
             "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
             "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
-            "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-            "editorial_story_id": "story_007724",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -7384,82 +7338,59 @@
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "'Boom, boom, boom, boom': Deputies investigate shootout between teens in Indian River County - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-shootout-teens/73608302",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
-            "canonical_headline": "Two teens fired at each other in Indian River County shootout, deputies say",
-            "basis": "exact_source_url",
+            "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
+            "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
+            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
+            "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
             "identity_keys": [
-              "story:story_007964",
-              "source:https://www.wpbf.com/article/florida-indian-river-county-shootout-teens/73608302"
+              "source:https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
             ],
-            "match_confidence": 0.99,
+            "match_confidence": 0.95,
             "evidence_dimensions": [
-              "story",
-              "source"
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_named_people",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
             ],
             "decision_trace": [
-              "deterministic_identity_keys=story:story_007964,source:https://www.wpbf.com/article/florida-indian-river-county-shootout-teens/73608302",
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=1",
+              "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
+              "shared_event_families=['public-policy']",
+              "shared_named_people=['burglary charge and', 'peter solomon ruma', 'vero beach man']",
+              "shared_precise_locations=[]",
+              "shared_agencies=[]",
+              "shared_subject_phrases=['deepfake-investigation-fear', 'deepfake-investigation-fear-victim', 'explicit-deepfake-investigation', 'explicit-deepfake-investigation-fear', 'investigation-fear-victim']",
+              "shared_headline_topic_core=['deepfake', 'explicit', 'fear', 'investigation', 'victim']",
+              "shared_distinctive_token_count=158",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
               "write_authorized=True"
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
-        "material_update_promotion_count": 1,
+        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
             "source_headline": "'Boom, boom, boom, boom': Deputies investigate shootout between teens in Indian River County - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-indian-river-county-shootout-teens/73608302",
             "canonical_slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
-            "canonical_headline": "Two teens fired at each other in Indian River County shootout, deputies say",
+            "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": true,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "update_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "update_existing_canonical",
-            "confidence": 1.0,
-            "shared_anchors": [
-              "Indian River County Sheriff's Office investigation",
-              "Two teenagers ages 15 and 17",
-              "Shootout Wednesday night",
-              "1100 block of 12th Court Southwest",
-              "Around 7:30 p.m.",
-              "Multiple 911 calls",
-              "Bullet casings found at scene",
-              "Residential neighborhood"
-            ],
-            "novel_facts": [
-              "17-year-old suspect taken into custody Thursday morning",
-              "Photo of weapon released by authorities - short-barreled pistol/rifle",
-              "Video obtained showing both teens shooting at each other",
-              "Shootout stemmed from ongoing feud between the two teens",
-              "Officials confirm no threat to community, incident appears isolated",
-              "Witness quotes from Julio Pitts and spokesperson Kevin Jaworski",
-              "Confirmation that nearby home and vehicle were struck by gunfire"
-            ],
-            "reason": "Same event with material updates. The incoming article reports the arrest of the 17-year-old suspect on Thursday morning, release of weapon photo by authorities, confirmation of video evidence, and official statements about the ongoing feud and isolated nature of the incident. The arrest and weapon recovery are material developments that change what readers need to know about this specific shootout.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach police: More victims, charges expected in AI-generated sexual image case - WPEC",
-            "source_url": "https://cbs12.com/news/local/vero-beach-police-more-victims-more-charges-expected-in-ai-deepfake-generated-sexual-images-of-women-case-peter-solomon-ruma-deepfake-cyberstalking",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -7498,36 +7429,6 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-            "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/03/vero-beach-man-arrested-using-ai-create-share-fake-sexual-images-women",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
             "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
@@ -7535,36 +7436,6 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach man arrested for using AI to create, share fake sexual images of women - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-man-arrested-for-using-ai-to-create-share-fake-sexual-images-of-women",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
-            "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-            "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-            "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -7590,9 +7461,9 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Vero Beach man jailed on $1 million bond accused of using AI to create fake sexual images",
+        "live_hero_headline": "Boca nonprofit warns Treasure Coast parents after Vero Beach AI pornography arrest",
         "generated_card_count": 2,
-        "elapsed_seconds": 62.713
+        "elapsed_seconds": 59.864
       }
     ]
   }
