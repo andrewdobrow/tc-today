@@ -466,8 +466,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.1d"' in page
-    assert 'src="/membership.js?v=1.13.7.1d"' in page
+    assert 'href="/membership.css?v=1.13.7.1e"' in page
+    assert 'src="/membership.js?v=1.13.7.1e"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -497,8 +497,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.1d') == 1
-    assert first.count('/membership.js?v=1.13.7.1d') == 1
+    assert first.count('/membership.css?v=1.13.7.1e') == 1
+    assert first.count('/membership.js?v=1.13.7.1e') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -578,28 +578,38 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_post_read_card_placement_fix():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.1d"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.1e"' in helper
 
 
-def test_monthly_free_article_inserts_compact_kit_form_after_second_paragraph_only_for_long_stories():
+def test_full_article_access_inserts_compact_kit_form_after_second_paragraph_only_for_long_stories():
     browser = (ROOT / "membership.js").read_text()
 
-    assert "const MONTHLY_FREE_NEWSLETTER_UID = '2865b8d821'" in browser
-    assert "const MONTHLY_FREE_NEWSLETTER_SRC = 'https://treasure-coast-today.kit.com/2865b8d821/index.js'" in browser
-    assert "function placeMonthlyFreeNewsletter()" in browser
+    assert "const FULL_ARTICLE_NEWSLETTER_UID = '2865b8d821'" in browser
+    assert "const FULL_ARTICLE_NEWSLETTER_SRC = 'https://treasure-coast-today.kit.com/2865b8d821/index.js'" in browser
+    assert "function placeFullArticleNewsletter()" in browser
     assert "const paragraphs = Array.from(articleBody.children).filter(node => node.tagName === 'P')" in browser
     assert "if (paragraphs.length <= 4) return false" in browser
     assert "const secondParagraph = paragraphs[1]" in browser
     assert "while (secondParagraph.nextSibling) continuation.appendChild(secondParagraph.nextSibling)" in browser
-    assert "newsletter-inline-slot newsletter-inline-slot--monthly-free" in browser
-    assert "script.setAttribute('data-uid', MONTHLY_FREE_NEWSLETTER_UID)" in browser
-    assert "script.src = MONTHLY_FREE_NEWSLETTER_SRC" in browser
-    # One definition plus one invocation: the new form is tied only to the
-    # successful monthly-free unlock path, never normal member access/paywall views.
-    assert browser.count("placeMonthlyFreeNewsletter()") == 2
-    monthly_free = browser.index("data?.access === 'monthly_free'")
-    invocation = browser.rindex("placeMonthlyFreeNewsletter()")
-    assert invocation > monthly_free
+    assert "newsletter-inline-slot newsletter-inline-slot--full-article" in browser
+    assert "script.setAttribute('data-uid', FULL_ARTICLE_NEWSLETTER_UID)" in browser
+    assert "script.src = FULL_ARTICLE_NEWSLETTER_SRC" in browser
+    # One definition plus three successful full-access invocations: direct paid
+    # member unlock, server-authoritative member unlock, and monthly-free unlock.
+    assert browser.count("placeFullArticleNewsletter()") == 4
+
+
+def test_paid_members_and_monthly_free_readers_both_receive_midarticle_newsletter():
+    browser = (ROOT / "membership.js").read_text()
+
+    direct_member = browser.index("if (status?.authenticated && status?.entitled)")
+    direct_member_call = browser.index("if (rendered) placeFullArticleNewsletter()", direct_member)
+    server_member = browser.index("data?.access === 'member'", direct_member_call)
+    server_member_call = browser.index("if (rendered) placeFullArticleNewsletter()", server_member)
+    monthly_free = browser.index("data?.access === 'monthly_free'", server_member_call)
+    monthly_free_call = browser.index("placeFullArticleNewsletter()", monthly_free)
+
+    assert direct_member < direct_member_call < server_member < server_member_call < monthly_free < monthly_free_call
 
 
 def test_update_workflow_auto_repairs_legacy_protected_article_endpoint_for_meter_launch():
