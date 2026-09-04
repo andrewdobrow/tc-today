@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-04T15:48:31Z",
+  "generated_at": "2026-09-04T20:51:29Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,43 +15,51 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 4,
-      "generated_live": 4,
-      "no_publishable_sources": 1
+      "category_eligibility_archive_recovery": 3,
+      "generated_live": 5,
+      "generation_failed_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 4
+      "article_framing_integrity": 1,
+      "no_category_eligible_sources": 3
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 89.061,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 8,
+    "model_elapsed_seconds": 217.231,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 8,
-    "published_story_duplicate_suppression_count": 49,
-    "story_aware_update_context_count": 3,
-    "material_update_promotion_evaluation_count": 2,
-    "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 1,
-    "material_update_promotion_model_call_count": 1
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 11,
+    "published_story_duplicate_suppression_count": 43,
+    "story_aware_update_context_count": 1,
+    "material_update_promotion_evaluation_count": 5,
+    "material_update_promotion_count": 1,
+    "material_update_promotion_cache_hit_count": 0,
+    "material_update_promotion_model_call_count": 5
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 16,
-      "selected_source_count": 0,
+      "publishable_source_count": 15,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 8.623,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 8.623,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -60,8 +68,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -70,14 +78,40 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
+          "reason": "missing_central_government_action",
           "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:shooting"
-          ],
+          "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot"
+          "headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/humane-society-of-the-treasure-coast-begins-placing-rescued-border-collies-in-new-homes"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Fort Pierce Central High evacuated after reported bomb threat - WPBF",
+          "source_url": "https://www.wpbf.com/article/st-lucie-county-high-school-bomb-threat-investigation/73617597"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "St. Lucie County Sheriff's Office gives all clear after bomb threat at Fort Pierce Central High School",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-sheriffs-office-responding-to-bomb-threat-at-fort-pierce-central-high-school"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -100,16 +134,28 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
           "local_nexus_signals": [],
-          "headline": "5.67 million eggs head to Florida food banks, including PBC, Treasure Coast - WPEC",
-          "source_url": "https://cbs12.com/news/local/567-million-eggs-head-to-florida-food-banks-including-palm-beach-county"
+          "headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cw34.com",
+          "source_url": "https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation?teaserSource=trending"
         }
       ],
       "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "editorial_story_id": "story_007001",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
@@ -142,16 +188,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Former DeSantis spokesperson's public relations firm lands more than $700K in government contracts",
-          "source_url": "https://www.wptv.com/wptv-investigates/former-desantis-spokespersons-pr-firm-lands-more-than-700k-in-government-contracts",
-          "editorial_story_id": "story_007923",
-          "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
-          "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
           "editorial_story_id": "story_007607",
@@ -162,12 +198,12 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cw34.com",
-          "source_url": "https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation?teaserSource=trending",
-          "editorial_story_id": "story_007724",
-          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
+          "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead?teaserSource=trending",
+          "editorial_story_id": "story_007976",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
+          "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -182,6 +218,16 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - WPEC",
+          "source_url": "https://cbs12.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
+          "editorial_story_id": "story_007751",
+          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
+          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Indiantown council fires village manager, appoints interim leader during contentious meeting - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-indiantown-village-manager-fired-data-centers/73597754",
           "editorial_story_id": "story_007557",
@@ -189,25 +235,64 @@
           "canonical_headline": "Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
-          "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
-          "editorial_story_id": "story_007976",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
-          "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
+      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/humane-society-of-the-treasure-coast-begins-placing-rescued-border-collies-in-new-homes",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": true,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "update_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "36 Border Collies rescued from Palm City home",
+            "Paige O'Donnell defendant",
+            "72 charges stemming from animal hoarding case",
+            "Humane Society of the Treasure Coast",
+            "Martin County",
+            "Described as worst animal hoarding case in shelter's history"
+          ],
+          "novel_facts": [
+            "Adoptions have actually begun (not just scheduled)",
+            "First successful adoptions completed with photos shared",
+            "Shelter providing follow-up support and training classes to adopters",
+            "Privacy protection measures for adopters during transition"
+          ],
+          "reason": "Same real-world event: the Palm City Border Collie hoarding case involving Paige O'Donnell and 36 dogs. The incoming article provides a material update that adoptions have now begun (Sept 4) after the candidate reported they would open Sept 1. This is a significant development in the ongoing case - the dogs are now being placed in homes rather than just being available for adoption. This update belongs in the existing canonical story rather than creating a standalone article about routine adoption progress.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
@@ -255,21 +340,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Former DeSantis spokesperson's public relations firm lands more than $700K in government contracts",
-          "source_url": "https://www.wptv.com/wptv-investigates/former-desantis-spokespersons-pr-firm-lands-more-than-700k-in-government-contracts",
-          "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
-          "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
           "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
@@ -285,12 +355,27 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "Body found in Martin County mangroves confirmed as missing man - cw34.com",
+          "source_url": "https://cw34.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead?teaserSource=trending",
+          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
+          "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - cw34.com",
           "source_url": "https://cw34.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation?teaserSource=trending",
           "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
           "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -315,6 +400,21 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - WPEC",
+          "source_url": "https://cbs12.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
+          "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
+          "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Indiantown council fires village manager, appoints interim leader during contentious meeting - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-indiantown-village-manager-fired-data-centers/73597754",
           "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
@@ -327,46 +427,43 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
-          "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 25.302
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Fort Pierce opens public survey through Oct. 15 to help shape strategic plan through 2041",
+      "generated_card_count": 0,
+      "elapsed_seconds": 48.405
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 13,
-      "selected_source_count": 5,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 11,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 27.332,
+          "elapsed_seconds": 20.276,
+          "result": "invalid_json",
+          "error_type": "ValueError",
+          "error_summary": "Assignment editor returned no valid hero source"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 54.126,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 27.332,
+      "model_elapsed_seconds": 74.402,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -377,8 +474,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 7,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 9,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -391,29 +488,35 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Finding work in South Florida: Job seekers and experts weigh in on a cooling job market",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/finding-work-in-south-florida-job-seekers-and-experts-weigh-in-on-a-cooling-job-market"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Vero Beach man jailed on $1 million bond accused of AI fake sexual images scheme - WPBF",
-          "source_url": "https://www.wpbf.com/article/vero-beach-ai-fake-sexual-images-case/73606237"
+          "headline": "Fort Pierce seeks community input to help shape new strategic plan for the city's future",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-seeks-community-input-to-help-shape-new-strategic-plan-for-the-citys-future"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman - WFLX",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "editorial_story_id": "story_007001",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMirAJBVV95cUxQN3U5VmNMbnUwcXRzdTBQRFZTM2NoRmZnQUE2UU9KWm5mNGlnR0V5SjVOT2pVNXRfWEhuY2c4ZmxvUHlKTU9qTmtkTVdwd25icWcwTVZ2M3pfZGhueDIwQVRpNGUwWEtPNTVFdnVNd3g0bkhWUzhlRWFkLWZvZTNyQ1JKR1M5VHNTZmttS0tPUFhyNGk2dGFxYnNZTDVxU2dLNGgteEYyWkRyOXZOeGUtRDF6cUgxRGwzZ1JLZUxLT2tkOTVxTWQzeGJ6UXFmcmpoclVTeVEwekZvako1OU1qMEpqQVZWQ2MzaGY2SUhWcXBRcllVLXhyTWV6UnUtZmlnbDV4TmpobHFVOVlJdW9FaEJWcUtWUWVHLWtzVFcxclFoT2tfcUU4YWRHYlA",
+          "editorial_story_id": "story_007989",
+          "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
+          "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman - wflx.com",
           "source_url": "https://www.wflx.com/2026/09/03/man-found-incompetent-stand-trial-random-stabbing-death-martin-county-woman",
           "editorial_story_id": "story_007979",
           "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
@@ -433,115 +536,65 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-found-incompetent-to-stand-trial-in-random-stabbing-death-of-martin-county-woman",
-          "editorial_story_id": "story_007979",
-          "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-          "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Thieves stealing SNAP benefits from Florida families are using the tax dollars to buy baby formula",
-          "source_url": "https://www.wptv.com/news/state/thieves-stealing-snap-benefits-from-florida-families-are-using-the-tax-dollars-to-buy-baby-formula",
-          "editorial_story_id": "story_007920",
-          "canonical_slug": "2026-09-03-thieves-target-florida-snap-recipients-use-stolen-benefits-to-buy-baby-formula-a",
-          "canonical_headline": "Thieves target Florida SNAP recipients, use stolen benefits to buy baby formula at California address",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme - WPEC",
-          "source_url": "https://cbs12.com/news/crime/florida-crime-news-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme-us-department-of-justice-wire-fraud-false-claims-money-laundering",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme-us-department-of-justice-wire-fraud-false-claims-money-laundering",
           "editorial_story_id": "story_007930",
           "canonical_slug": "2026-09-03-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme",
           "canonical_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - WFLX",
+          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - wflx.com",
           "source_url": "https://www.wflx.com/2026/09/03/woman-facing-72-charges-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs?outputType=amp",
           "editorial_story_id": "story_003665",
           "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
           "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-          "editorial_story_id": "story_003665",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-          "editorial_story_id": "story_007607",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
-          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "source:https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=['burglary charge and', 'peter solomon ruma', 'vero beach man']",
-            "shared_precise_locations=[]",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['deepfake-investigation-fear', 'deepfake-investigation-fear-victim', 'explicit-deepfake-investigation', 'explicit-deepfake-investigation-fear', 'investigation-fear-victim']",
-            "shared_headline_topic_core=['deepfake', 'explicit', 'fear', 'investigation', 'victim']",
-            "shared_distinctive_token_count=158",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman - WFLX",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMirAJBVV95cUxQN3U5VmNMbnUwcXRzdTBQRFZTM2NoRmZnQUE2UU9KWm5mNGlnR0V5SjVOT2pVNXRfWEhuY2c4ZmxvUHlKTU9qTmtkTVdwd25icWcwTVZ2M3pfZGhueDIwQVRpNGUwWEtPNTVFdnVNd3g0bkhWUzhlRWFkLWZvZTNyQ1JKR1M5VHNTZmttS0tPUFhyNGk2dGFxYnNZTDVxU2dLNGgteEYyWkRyOXZOeGUtRDF6cUgxRGwzZ1JLZUxLT2tkOTVxTWQzeGJ6UXFmcmpoclVTeVEwekZvako1OU1qMEpqQVZWQ2MzaGY2SUhWcXBRcllVLXhyTWV6UnUtZmlnbDV4TmpobHFVOVlJdW9FaEJWcUtWUWVHLWtzVFcxclFoT2tfcUU4YWRHYlA",
+          "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
+          "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman - wflx.com",
           "source_url": "https://www.wflx.com/2026/09/03/man-found-incompetent-stand-trial-random-stabbing-death-martin-county-woman",
           "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
           "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
@@ -550,24 +603,29 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.98,
           "shared_anchors": [
-            "Kersten Francilus, 25, charged in fatal stabbing",
-            "Victim Joyce Ellen Thompson Adams, 73",
-            "Southwood community near Stuart",
+            "Kersten Francilus, 25, charged in stabbing death",
+            "Joyce Ellen Thompson Adams, 73-year-old victim",
             "Martin County judge ruled incompetent to stand trial",
-            "Two doctors examined during hearing on Aug.",
-            "Remanded to state mental hospital for restoration",
-            "April 2025 stabbing death",
-            "Southeast Black Oak Lane and Woods Edge Trail intersection"
+            "Two doctors examined during hearing in Aug",
+            "April 2025 stabbing in Southwood community near Stuart",
+            "Southeast Black Oak Lane and Woods Edge Trail location",
+            "Remanded to state mental hospital for competency restoration"
           ],
-          "novel_facts": [],
-          "reason": "Both articles report the identical court ruling that Francilus was found incompetent to stand trial in the stabbing death of Adams. The incoming article from WFLX contains extensive background details about the stabbing (50+ times, neighbors' reports, medication non-compliance, prior Baker Act) but these are historical context about the April 2025 incident, not new developments in the competency case. The canonical from WPTV already reports the core competency ruling with the same key facts (two doctors, Aug hearing, state mental hospital). The additional background in the incoming article does not constitute a material new update to the competency ruling itself—it's explanatory context that another outlet included in their coverage of the same ruling.",
+          "novel_facts": [
+            "Additional background details about the attack being worse than initially reported (50+ stabs vs 16-17)",
+            "More witness/neighbor quotes and color",
+            "Extended background about prior law enforcement encounters",
+            "Mother's interview details about knives and medication",
+            "Francilus's comments about victim being Jewish (which was incorrect)"
+          ],
+          "reason": "Both articles report the identical court ruling: a Martin County judge finding Kersten Francilus incompetent to stand trial in the fatal stabbing of Joyce Ellen Thompson Adams. The core legal development (incompetency ruling, two-doctor examination, remand to state hospital) is the same. The incoming article contains substantially more background detail about the underlying April 2025 stabbing incident, but no new material update to the competency ruling itself. The additional details are explanatory background and color, not a development that changes what readers need to know about the competency determination.",
           "validation_errors": []
         },
         {
@@ -587,42 +645,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-found-incompetent-to-stand-trial-in-random-stabbing-death-of-martin-county-woman",
-          "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-          "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Thieves stealing SNAP benefits from Florida families are using the tax dollars to buy baby formula",
-          "source_url": "https://www.wptv.com/news/state/thieves-stealing-snap-benefits-from-florida-families-are-using-the-tax-dollars-to-buy-baby-formula",
-          "canonical_slug": "2026-09-03-thieves-target-florida-snap-recipients-use-stolen-benefits-to-buy-baby-formula-a",
-          "canonical_headline": "Thieves target Florida SNAP recipients, use stolen benefits to buy baby formula at California address",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme - WPEC",
-          "source_url": "https://cbs12.com/news/crime/florida-crime-news-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme-us-department-of-justice-wire-fraud-false-claims-money-laundering",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme-us-department-of-justice-wire-fraud-false-claims-money-laundering",
           "canonical_slug": "2026-09-03-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme",
           "canonical_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -632,7 +660,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - WFLX",
+          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - wflx.com",
           "source_url": "https://www.wflx.com/2026/09/03/woman-facing-72-charges-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs?outputType=amp",
           "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
           "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
@@ -644,44 +672,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
-      "generated_card_count": 1,
-      "elapsed_seconds": 49.77
+      "live_hero_headline": "Vero Beach mother, Michigan boyfriend arrested after ICAC investigation into livestreamed child sex abuse",
+      "generated_card_count": 3,
+      "elapsed_seconds": 112.339
     },
     {
       "category_key": "business",
@@ -689,7 +687,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 13,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -706,9 +704,43 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:fort pierce"
+          ],
+          "headline": "Fort Pierce seeks community input to help shape new strategic plan for the city's future",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-seeks-community-input-to-help-shape-new-strategic-plan-for-the-citys-future"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county",
+            "source_locality:palm city"
+          ],
+          "headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/humane-society-of-the-treasure-coast-begins-placing-rescued-border-collies-in-new-homes"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -719,14 +751,15 @@
           "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [],
           "competing_signals": [
-            "crime_public_safety:shooting"
+            "schools_education:students"
           ],
           "local_nexus_signals": [
             "source_locality:treasure coast",
+            "source_locality:st lucie county",
             "source_locality:fort pierce"
           ],
-          "headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot"
+          "headline": "St. Lucie County Sheriff's Office gives all clear after bomb threat at Fort Pierce Central High School",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-sheriffs-office-responding-to-bomb-threat-at-fort-pierce-central-high-school"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -769,6 +802,16 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "editorial_story_id": "story_007001",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
           "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-found-incompetent-to-stand-trial-in-random-stabbing-death-of-martin-county-woman",
           "editorial_story_id": "story_007979",
@@ -796,16 +839,6 @@
           "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Former DeSantis spokesperson's public relations firm lands more than $700K in government contracts",
-          "source_url": "https://www.wptv.com/wptv-investigates/former-desantis-spokespersons-pr-firm-lands-more-than-700k-in-government-contracts",
-          "editorial_story_id": "story_007923",
-          "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
-          "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -815,6 +848,21 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "business",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "business",
           "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
@@ -859,25 +907,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Former DeSantis spokesperson's public relations firm lands more than $700K in government contracts",
-          "source_url": "https://www.wptv.com/wptv-investigates/former-desantis-spokespersons-pr-firm-lands-more-than-700k-in-government-contracts",
-          "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
-          "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.35
+      "elapsed_seconds": 14.415
     },
     {
       "category_key": "sports",
@@ -885,7 +918,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 6,
+      "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -909,11 +942,11 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
-          "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/tiger-woods-license-is-suspended-can-he-drive-a-golf-cart",
-          "editorial_story_id": "story_007379",
-          "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-          "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "editorial_story_id": "story_007607",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -937,10 +970,10 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "sports",
-          "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/tiger-woods-license-is-suspended-can-he-drive-a-golf-cart",
-          "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-          "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
+          "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -967,14 +1000,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.102
+      "elapsed_seconds": 17.183
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -995,7 +1028,7 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
@@ -1026,16 +1059,6 @@
           "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "things_to_do",
-          "source_headline": "Martin County PAL hosting Jeep Duck Scavenger Hunt fundraiser",
-          "source_url": "https://www.wptv.com/shining-a-light/martin-county-pal-hosting-jeep-duck-scavenger-hunt-fundraiser",
-          "editorial_story_id": "story_006045",
-          "canonical_slug": "2026-08-26-martin-county-pal-jeep-duck-scavenger-hunt-fundraiser-set-for-sept-19",
-          "canonical_headline": "Martin County PAL Jeep Duck Scavenger Hunt fundraiser set for Sept. 19",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -1064,13 +1087,13 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Mango Music and Art Festival on September 4, 2026 in Lake Worth Beach",
+            "Mango Music and Art Festival on September 4 in Lake Worth Beach",
             "National Deaf Awareness Month event at Busch Wildlife Sanctuary on September 4",
-            "Barrio Fiesta Labor Day Picnic in Port St. Lucie on September 5",
-            "SoFlo Market 1-year anniversary celebration in Boca Raton on September 4",
-            "Northwest BBQ Brews Blues 11th annual festival on September 4",
+            "Barrio Fiesta Labor Day Picnic on September 5 in Port St. Lucie",
+            "SoFlo Market 1-year anniversary on September 4 in Boca Raton",
+            "Northwest BBQ Brews Blues on September 4",
             "Peachfest 5-Year Anniversary Art Walk on September 4",
-            "Hurricane Alley Blowout Rodeo in Vero Beach September 3-4"
+            "Hurricane Alley Blowout Rodeo September 3-4 in Vero Beach"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1106,39 +1129,31 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "things_to_do",
-          "source_headline": "Martin County PAL hosting Jeep Duck Scavenger Hunt fundraiser",
-          "source_url": "https://www.wptv.com/shining-a-light/martin-county-pal-hosting-jeep-duck-scavenger-hunt-fundraiser",
-          "canonical_slug": "2026-08-26-martin-county-pal-jeep-duck-scavenger-hunt-fundraiser-set-for-sept-19",
-          "canonical_headline": "Martin County PAL Jeep Duck Scavenger Hunt fundraiser set for Sept. 19",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.696
+      "elapsed_seconds": 22.617
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 9.311,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 9.311,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1149,10 +1164,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "florida",
@@ -1173,16 +1188,6 @@
           "canonical_headline": "Thieves target Florida SNAP recipients, use stolen benefits to buy baby formula at California address",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "Former DeSantis spokesperson's public relations firm lands more than $700K in government contracts",
-          "source_url": "https://www.wptv.com/wptv-investigates/former-desantis-spokespersons-pr-firm-lands-more-than-700k-in-government-contracts",
-          "editorial_story_id": "story_007923",
-          "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
-          "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -1221,224 +1226,47 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "Former DeSantis spokesperson's public relations firm lands more than $700K in government contracts",
-          "source_url": "https://www.wptv.com/wptv-investigates/former-desantis-spokespersons-pr-firm-lands-more-than-700k-in-government-contracts",
-          "canonical_slug": "2026-09-03-former-desantis-spokespersons-pr-firm-awarded-more-than-700k-in-state-contracts",
-          "canonical_headline": "Former DeSantis spokesperson's PR firm awarded more than $700K in state contracts, drawing watchdog scrutiny",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 31.975
-    },
-    {
-      "category_key": "martin",
-      "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 2,
-      "selected_source_count": 1,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.048,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 11.048,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Palm City Border Collie hoarding suspect posts bond, released from jail - WPEC",
-          "source_url": "https://cbs12.com/news/crime/palm-city-border-collie-hoarding-suspect-posts-bond-released-from-jail-florida-news-border-collies-72-charges-36-dogs-hoarding-case-local-news-florida-crime-local-crime-martin-county",
-          "editorial_story_id": "story_003665",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-found-incompetent-to-stand-trial-in-random-stabbing-death-of-martin-county-woman",
-          "editorial_story_id": "story_007979",
-          "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-          "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-          "editorial_story_id": "story_003665",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
-          "editorial_story_id": "story_007976",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
-          "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
-          "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
-          "editorial_story_id": "story_007976",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
-          "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Palm City Border Collie hoarding suspect posts bond, released from jail - WPEC",
-          "source_url": "https://cbs12.com/news/crime/palm-city-border-collie-hoarding-suspect-posts-bond-released-from-jail-florida-news-border-collies-72-charges-36-dogs-hoarding-case-local-news-florida-crime-local-crime-martin-county",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-found-incompetent-to-stand-trial-in-random-stabbing-death-of-martin-county-woman",
-          "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-          "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Body found in Martin County mangroves confirmed as missing man - WPEC",
-          "source_url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
-          "canonical_slug": "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach",
-          "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:missing-person|michael-debevec",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
+      "live_hero_headline": "Florida drivers face record-high Labor Day gas prices as Strait of Hormuz tensions drive fuel costs up",
       "generated_card_count": 0,
-      "elapsed_seconds": 33.263
+      "elapsed_seconds": 34.435
     },
     {
-      "category_key": "st_lucie",
-      "category_label": "St. Lucie County",
-      "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 21,
+      "category_key": "martin",
+      "category_label": "Martin County",
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.676,
-          "result": "success"
+          "elapsed_seconds": 23.692,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Border Collies from Palm City hoarding rescue begin finding new homes"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 19.954,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — First Border Collies from Palm City hoarding case placed in adoptive homes"
         }
       ],
-      "model_elapsed_seconds": 12.676,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 43.646,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: surname_only_first_reference — First Border Collies from Palm City hoarding case placed in adoptive homes",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1450,16 +1278,236 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Dolly Parton films return to Florida theaters in Royal Palm Beach, Jensen Beach - WPEC",
+          "source_url": "https://cbs12.com/news/florida/dolly-parton-films-regal-cinemas-jensen-beach-royal-palm-beach-jolene-imagination-library-hannah-montana-miley-cyrus-florida-news",
+          "editorial_story_id": "story_008115",
+          "canonical_slug": "2026-09-04-jensen-beach-theater-screens-dolly-parton-films-this-weekend-to-benefit-children",
+          "canonical_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Dolly Parton films return to Florida theaters in Royal Palm Beach, Jensen Beach - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPdW9DQkFCUDdsOG9SZ2YybVdRSG1LaHlMTXhDa0p0Mm9mUDktOXZocVFSZlQzNFU0Z2k0elFFclpLcFZnTm8xMW1mZmhLMGh3OTNmLUlmOEFUNHFreHdRUWllVGE2Z2NrSks3MG5SNHRjbXRkbGRCdXZvdDBtSE92Vkc0eXBPMFI1bmFyX044UjV2YUhPazhTbldCWWZCWUV1czI1T2xGNmtLZHVZU2lXWU9RMkhUTkhieWJxNFZPQUc4YzVoSGRibm5OV2F3WDRtakFQZzlsVjdmUVFldmZSMklWRnF4TUI1X2dTbzJEb0hFem1FNE41Sw",
+          "editorial_story_id": "story_008115",
+          "canonical_slug": "2026-09-04-jensen-beach-theater-screens-dolly-parton-films-this-weekend-to-benefit-children",
+          "canonical_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Palm City Border Collie hoarding suspect posts bond, released from jail - WPEC",
+          "source_url": "https://cbs12.com/news/crime/palm-city-border-collie-hoarding-suspect-posts-bond-released-from-jail-florida-news-border-collies-72-charges-36-dogs-hoarding-case-local-news-florida-crime-local-crime-martin-county",
+          "editorial_story_id": "story_003665",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
+          "editorial_story_id": "story_003665",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "First Border Collies adopted after Palm City hoarding rescue, Humane Society says - WPEC",
+          "source_url": "https://cbs12.com/news/local/first-border-collies-adopted-after-palm-city-hoarding-rescue-humane-society-says",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_003665",
+            "source:https://cbs12.com/news/local/first-border-collies-adopted-after-palm-city-hoarding-rescue-humane-society-says"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=10",
+            "shared_locality=['palm-city']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['southwest-alligator-street']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['bord', 'coll', 'palm', 'wpec']",
+            "shared_distinctive_token_count=79",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Dolly Parton films return to Florida theaters in Royal Palm Beach, Jensen Beach - WPEC",
+          "source_url": "https://cbs12.com/news/florida/dolly-parton-films-regal-cinemas-jensen-beach-royal-palm-beach-jolene-imagination-library-hannah-montana-miley-cyrus-florida-news",
+          "canonical_slug": "2026-09-04-jensen-beach-theater-screens-dolly-parton-films-this-weekend-to-benefit-children",
+          "canonical_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Dolly Parton films return to Florida theaters in Royal Palm Beach, Jensen Beach - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPdW9DQkFCUDdsOG9SZ2YybVdRSG1LaHlMTXhDa0p0Mm9mUDktOXZocVFSZlQzNFU0Z2k0elFFclpLcFZnTm8xMW1mZmhLMGh3OTNmLUlmOEFUNHFreHdRUWllVGE2Z2NrSks3MG5SNHRjbXRkbGRCdXZvdDBtSE92Vkc0eXBPMFI1bmFyX044UjV2YUhPazhTbldCWWZCWUV1czI1T2xGNmtLZHVZU2lXWU9RMkhUTkhieWJxNFZPQUc4YzVoSGRibm5OV2F3WDRtakFQZzlsVjdmUVFldmZSMklWRnF4TUI1X2dTbzJEb0hFem1FNE41Sw",
+          "canonical_slug": "2026-09-04-jensen-beach-theater-screens-dolly-parton-films-this-weekend-to-benefit-children",
+          "canonical_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Palm City Border Collie hoarding suspect posts bond, released from jail - WPEC",
+          "source_url": "https://cbs12.com/news/crime/palm-city-border-collie-hoarding-suspect-posts-bond-released-from-jail-florida-news-border-collies-72-charges-36-dogs-hoarding-case-local-news-florida-crime-local-crime-martin-county",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 72.762
+    },
+    {
+      "category_key": "st_lucie",
+      "category_label": "St. Lucie County",
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 9,
+      "selected_source_count": 9,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 40.38,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 40.38,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 9,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMisAJBVV95cUxPaU1DY2RSVzN6N1lDeVI4Wllhd2FNaVQ4WFJPUnk1Q1NXa3I5QTFHRFdyMWtaTGJqcUo1VE9YVi05RTFCNDdjOW4tOHBPbkxvSDlUN0dIYjdVNzNoTi1wZUpEVHZVelc1c0tUVWs2M1NYUXM2dnR5bV8tbFBnTkFTU3JSUXBWMXNpLU5tRUlUanhmdUVtdHRZMnMwTkdOSGlTeVByVElwNVFoNFIwdWFLYndMNS04Q0JrT2dSRGNkMDRyMnR5elRKWExxUWJmdE9OTG8tV2UzeW9ndEdHemk4R0hxdFloeEpmd1hfeWtjNW16UHp1NU90VFRfQ3lBbGkyM2dKUVp1eTFYeTJvY1JsREdDVzdWcmZqX0pjTHVtZEVadGFZQ19HMG5ESEdvNnl5",
-          "editorial_story_id": "story_007930",
-          "canonical_slug": "2026-09-03-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme",
-          "canonical_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Dolly Parton films return to Florida theaters in Royal Palm Beach, Jensen Beach - WPEC",
+          "source_url": "https://cbs12.com/news/florida/dolly-parton-films-regal-cinemas-jensen-beach-royal-palm-beach-jolene-imagination-library-hannah-montana-miley-cyrus-florida-news",
+          "editorial_story_id": "story_008115",
+          "canonical_slug": "2026-09-04-jensen-beach-theater-screens-dolly-parton-films-this-weekend-to-benefit-children",
+          "canonical_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "3 masked suspects flee scene after man fatally shot in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news",
+          "editorial_story_id": "story_007989",
+          "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
+          "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "editorial_story_id": "story_007001",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - WPEC",
+          "source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
+          "editorial_story_id": "story_007989",
+          "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
+          "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1470,16 +1518,6 @@
           "canonical_slug": "2026-09-03-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme",
           "canonical_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie commissioners vote to remove Flock cameras from county property - WQCS",
-          "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPcEo5cEVPbzVCSi1GU0NycXlfdjhXQUhtdS1SUXBDa3VVWVRLWlhwcHdhMThLQXRyU2ltUEZvYWpQc2NQWUw5T0M0WlRNTWVlUWVDVF9qWDNtbTg2WWFKbUlhOWRHdWZweE10VWtVSmFGVU16bWlpYTlrcllDWTFDcDgtT0tycEJWeHRoaVh1UzF3bjhxV2JsTjg4SzNsVVk4T3ZrQ0w1ejd6WkhUbEstVlBmZXoyWVZlUDdJZUs0a3pOdw",
-          "editorial_story_id": "story_007898",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County votes to remove license plate readers from county roads over privacy concerns",
-          "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1514,16 +1552,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMixwJBVV95cUxPVVNGdEhRTlR3S2RkX0ViTVl2dmNnY3R3bVVib2ZBOWJJTU41UTZPbmZRMXlNZ09zRXhIT2ozamxuMnZ1VS1KTURjNEF2UjBoRWhXRUw5bm04aWtMRE9VbDlDaUJjNXhEVnZxckoyOHREVDAxamM1N0VCSzZiOU0tcjVDVGtqUlhnSWp1dV84elhaMkNsc1RuMEZ2RjRRcjUtVEtFNlVxMFdra0ZaNDI5bnpxSHhRQXgwM2NDd0RvOV9lOUQ0MGlmLWNldkhLeUpKOWppdjRkc0FiSWFGZDZSbXpja05yZzZhZnl5dk10TlFCODc0Y0x1S29sNGhfWHN0SjVhUHpCYV9oaXJtSldhU0pRYUV3aUozN1gwQlpkZkM0bjJRSW51cEl6TkpyWm96cld5dnNaYVFVNE9GT056Slc3OG1zVHM",
-          "editorial_story_id": "story_007629",
-          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
           "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
           "editorial_story_id": "story_007629",
@@ -1543,63 +1571,83 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "3 masked suspects flee scene after man fatally shot in Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
-          "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_008120",
-            "source:https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['fort-pierce', 'martin-county', 'st-lucie']",
-            "shared_event_families=['crash', 'drug-case']",
-            "shared_named_people=['chairman kenneth nail']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['fort-pierce-police']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['fort', 'suspect', 'wpec']",
-            "shared_distinctive_token_count=68",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMisAJBVV95cUxPaU1DY2RSVzN6N1lDeVI4Wllhd2FNaVQ4WFJPUnk1Q1NXa3I5QTFHRFdyMWtaTGJqcUo1VE9YVi05RTFCNDdjOW4tOHBPbkxvSDlUN0dIYjdVNzNoTi1wZUpEVHZVelc1c0tUVWs2M1NYUXM2dnR5bV8tbFBnTkFTU3JSUXBWMXNpLU5tRUlUanhmdUVtdHRZMnMwTkdOSGlTeVByVElwNVFoNFIwdWFLYndMNS04Q0JrT2dSRGNkMDRyMnR5elRKWExxUWJmdE9OTG8tV2UzeW9ndEdHemk4R0hxdFloeEpmd1hfeWtjNW16UHp1NU90VFRfQ3lBbGkyM2dKUVp1eTFYeTJvY1JsREdDVzdWcmZqX0pjTHVtZEVadGFZQ19HMG5ESEdvNnl5",
-          "canonical_slug": "2026-09-03-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme",
-          "canonical_headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme",
+          "source_headline": "Dolly Parton films return to Florida theaters in Royal Palm Beach, Jensen Beach - WPEC",
+          "source_url": "https://cbs12.com/news/florida/dolly-parton-films-regal-cinemas-jensen-beach-royal-palm-beach-jolene-imagination-library-hannah-montana-miley-cyrus-florida-news",
+          "canonical_slug": "2026-09-04-jensen-beach-theater-screens-dolly-parton-films-this-weekend-to-benefit-children",
+          "canonical_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "3 masked suspects flee scene after man fatally shot in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news",
+          "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
+          "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [],
+          "novel_facts": [
+            "Fatal shooting on Thursday around 6:30 p.m.",
+            "Victim died from multiple gunshot wounds at HCA Florida Lawnwood Hospital",
+            "Three masked suspects fled on foot",
+            "Verbal altercation preceded shooting",
+            "Firearm found near victim",
+            "Multiple shell casings recovered"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - WPEC",
+          "source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
+          "canonical_slug": "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c",
+          "canonical_headline": "Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1615,21 +1663,6 @@
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie commissioners vote to remove Flock cameras from county property - WQCS",
-          "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPcEo5cEVPbzVCSi1GU0NycXlfdjhXQUhtdS1SUXBDa3VVWVRLWlhwcHdhMThLQXRyU2ltUEZvYWpQc2NQWUw5T0M0WlRNTWVlUWVDVF9qWDNtbTg2WWFKbUlhOWRHdWZweE10VWtVSmFGVU16bWlpYTlrcllDWTFDcDgtT0tycEJWeHRoaVh1UzF3bjhxV2JsTjg4SzNsVVk4T3ZrQ0w1ejd6WkhUbEstVlBmZXoyWVZlUDdJZUs0a3pOdw",
-          "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
-          "canonical_headline": "St. Lucie County votes to remove license plate readers from county roads over privacy concerns",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
-          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1683,21 +1716,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMixwJBVV95cUxPVVNGdEhRTlR3S2RkX0ViTVl2dmNnY3R3bVVib2ZBOWJJTU41UTZPbmZRMXlNZ09zRXhIT2ozamxuMnZ1VS1KTURjNEF2UjBoRWhXRUw5bm04aWtMRE9VbDlDaUJjNXhEVnZxckoyOHREVDAxamM1N0VCSzZiOU0tcjVDVGtqUlhnSWp1dV84elhaMkNsc1RuMEZ2RjRRcjUtVEtFNlVxMFdra0ZaNDI5bnpxSHhRQXgwM2NDd0RvOV9lOUQ0MGlmLWNldkhLeUpKOWppdjRkc0FiSWFGZDZSbXpja05yZzZhZnl5dk10TlFCODc0Y0x1S29sNGhfWHN0SjVhUHpCYV9oaXJtSldhU0pRYUV3aUozN1gwQlpkZkM0bjJRSW51cEl6TkpyWm96cld5dnNaYVFVNE9GT056Slc3OG1zVHM",
-          "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-          "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
           "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
           "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
@@ -1730,18 +1748,18 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Man dies after Fort Pierce shooting, three masked suspects sought",
-      "generated_card_count": 0,
-      "elapsed_seconds": 30.498
+      "live_hero_headline": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear",
+      "generated_card_count": 2,
+      "elapsed_seconds": 69.106
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
+      "fetched_candidate_count": 27,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 12,
-      "selected_source_count": 4,
+      "publishable_source_count": 10,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1749,11 +1767,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 38.005,
+          "elapsed_seconds": 40.869,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 38.005,
+      "model_elapsed_seconds": 40.869,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1764,10 +1782,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 12,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1781,21 +1799,11 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-found-incompetent-to-stand-trial-in-random-stabbing-death-of-martin-county-woman",
-          "editorial_story_id": "story_007979",
-          "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-          "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Thieves stealing SNAP benefits from Florida families are using the tax dollars to buy baby formula",
-          "source_url": "https://www.wptv.com/news/state/thieves-stealing-snap-benefits-from-florida-families-are-using-the-tax-dollars-to-buy-baby-formula",
-          "editorial_story_id": "story_007920",
-          "canonical_slug": "2026-09-03-thieves-target-florida-snap-recipients-use-stolen-benefits-to-buy-baby-formula-a",
-          "canonical_headline": "Thieves target Florida SNAP recipients, use stolen benefits to buy baby formula at California address",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "editorial_story_id": "story_007001",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1808,64 +1816,14 @@
           "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
-          "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
-          "editorial_story_id": "story_007607",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
-          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "source:https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=['burglary charge and', 'peter solomon ruma', 'vero beach man']",
-            "shared_precise_locations=[]",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['deepfake-investigation-fear', 'deepfake-investigation-fear-victim', 'explicit-deepfake-investigation', 'explicit-deepfake-investigation-fear', 'investigation-fear-victim']",
-            "shared_headline_topic_core=['deepfake', 'explicit', 'fear', 'investigation', 'victim']",
-            "shared_distinctive_token_count=158",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
@@ -1875,34 +1833,46 @@
           "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Indian River County Sheriff's Office investigation",
+            "Shootout between 17-year-old and 15-year-old teenagers",
+            "Wednesday night incident in residential neighborhood",
+            "1100 block of 12th Court Southwest location",
+            "Around 7:30 p.m. timeframe",
+            "17-year-old taken into custody Thursday morning",
+            "Weapon recovered",
+            "Video evidence showing teens shooting at each other in roadway",
+            "Bullet casings found at scene",
+            "Home and vehicle struck by gunfire",
+            "Ongoing feud between the two teens as motive",
+            "Identical source URL (wpbf.com/article/florida-indian-river-county-shootout-teens/73608302)"
+          ],
+          "novel_facts": [
+            "Resident Julio Pitts quoted describing hearing shots",
+            "Kevin Jaworski quote about weapon being short-barreled pistol/rifle",
+            "Photo of weapon released by authorities",
+            "Multiple 911 calls mentioned",
+            "Officials stating no threat to community",
+            "Pitts calling for crime watch action"
+          ],
+          "reason": "This is the exact same incident with identical source URL. The incoming article adds resident quotes, scene color, and background details about the weapon type, but contains no material update. The canonical already reports the key facts: the shootout between two teens, the custody of the 17-year-old, and weapon recovery. The additional quotes and descriptive details are routine witness color and scene elaboration that do not change what readers need to know about the event.",
+          "validation_errors": []
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-found-incompetent-to-stand-trial-in-random-stabbing-death-of-martin-county-woman",
-          "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-          "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Thieves stealing SNAP benefits from Florida families are using the tax dollars to buy baby formula",
-          "source_url": "https://www.wptv.com/news/state/thieves-stealing-snap-benefits-from-florida-families-are-using-the-tax-dollars-to-buy-baby-formula",
-          "canonical_slug": "2026-09-03-thieves-target-florida-snap-recipients-use-stolen-benefits-to-buy-baby-formula-a",
-          "canonical_headline": "Thieves target Florida SNAP recipients, use stolen benefits to buy baby formula at California address",
+          "source_headline": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/man-dies-after-shooting-in-fort-pierce-3-masked-suspects-flee-on-foot",
+          "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1929,12 +1899,12 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
-          "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
-          "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-          "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+          "source_headline": "Vero Beach man arrested in explicit deepfake investigation; police fear more victims - WPEC",
+          "source_url": "https://cbs12.com/news/local/vero-beach-man-arrested-in-ai-generated-sexual-image-investigation",
+          "canonical_slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
+          "canonical_headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1946,9 +1916,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Boca nonprofit warns Treasure Coast parents after Vero Beach AI pornography arrest",
+      "live_hero_headline": "Vero Beach woman held without bond after Michigan ICAC investigation leads to arrest for livestreamed sexual abuse of two toddlers",
       "generated_card_count": 2,
-      "elapsed_seconds": 59.864
+      "elapsed_seconds": 65.904
     }
   ]
 }
