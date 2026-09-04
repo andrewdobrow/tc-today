@@ -13838,79 +13838,6 @@ def _top_story_effective_datetime(card, archive_by_slug=None):
     return None, "missing"
 
 
-def _homepage_card_archive_entry(card, archive_entries):
-    """Resolve the archive row that owns a homepage card, exact permalink first.
-
-    Material updates can substantially rewrite a canonical headline. For display
-    metadata, an exact TCT canonical slug must outrank broad event/headline matching;
-    otherwise an older same-event article can donate its stale date to the updated
-    canonical card.
-    """
-    if not isinstance(card, dict):
-        return None
-    slug = _top_story_archive_slug(card)
-    if slug:
-        for entry in archive_entries or []:
-            if not isinstance(entry, dict):
-                continue
-            entry_slug = _normalize_existing_article_slug(
-                entry.get("canonical_slug") or entry.get("slug")
-            )
-            if entry_slug == slug:
-                return entry
-    return find_matching_entry(
-        card.get("headline", ""),
-        archive_entries or [],
-        card.get("source_url", ""),
-        is_weather_alert=bool(card.get("is_weather_alert")),
-    )
-
-
-def _format_homepage_calendar_date(raw, *, localize_timestamp=False):
-    raw = str(raw or "").strip()
-    if not raw:
-        return ""
-    dt = _parse_any_datetime(raw)
-    if dt is None:
-        return raw
-    if localize_timestamp and dt.tzinfo is not None:
-        dt = dt.astimezone(ZoneInfo("America/New_York"))
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    return f"{months[dt.month - 1]} {dt.day}, {dt.year}"
-
-
-def _homepage_card_display_date(card, archive_entries):
-    """Return the date visible on a homepage card.
-
-    A validated material update displays its latest meaningful-update date in
-    Treasure Coast local time. Otherwise preserve the existing archive lastmod/date
-    behavior. Exact canonical ownership is resolved before any fuzzy fallback.
-    """
-    matched = _homepage_card_archive_entry(card, archive_entries)
-    if isinstance(matched, dict):
-        if matched.get("meaningful_update_validated"):
-            for key in (
-                "canonical_last_material_update_at",
-                "last_meaningful_update_at",
-                "updated_at",
-            ):
-                value = matched.get(key)
-                if value:
-                    formatted = _format_homepage_calendar_date(
-                        value, localize_timestamp=True
-                    )
-                    if formatted:
-                        return formatted
-        for key in ("lastmod", "date"):
-            value = matched.get(key)
-            if value:
-                formatted = _format_homepage_calendar_date(value)
-                if formatted:
-                    return formatted
-    return str((card or {}).get("published") or "")
-
-
 def _top_story_is_transient(card):
     text = " ".join([
         str((card or {}).get("headline") or ""),
@@ -14761,7 +14688,22 @@ def render_index(all_categories, top_cat):
     support_card = _homepage_support_card_html()
 
     def card_display_date(card):
-        return _homepage_card_display_date(card, archive_for_links)
+        # Show the date the story was last updated ON OUR SITE (archive lastmod/date),
+        # not the original RSS published date, which can be weeks old for a story that
+        # has since been updated in place. Falls back to formatted published age.
+        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""), is_weather_alert=bool(card.get("is_weather_alert")))
+        if matched:
+            d = matched.get("lastmod") or matched.get("date", "")
+            if d:
+                try:
+                    from datetime import timezone as _tzc
+                    dt = datetime.strptime(d[:10], "%Y-%m-%d")
+                    months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                    return f"{months[dt.month-1]} {dt.day}, {dt.year}"
+                except Exception:
+                    return d
+        # Fallback: the story's own published display string
+        return card.get("published", "")
 
     # Canonical category-hero identities are rendered as Top-News-only cards when
     # selected for the all-news deck.  This prevents a selected Martin/Crime/etc.
@@ -16950,7 +16892,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         <div class="article-main-column">
           {img_html}
           <div class="article-body">{body}</div>
-          {_paywall_newsletter_slot()}
+          {_newsletter_inline_embed("article")}
           {event_link_html}
           <div class="article-share">
             <span class="article-share-label">Share this story</span>
@@ -21469,21 +21411,6 @@ KIT_INLINE_FORM_UID = "30e15672d3"
 KIT_INLINE_FORM_SRC = (
     "https://treasure-coast-today.kit.com/30e15672d3/index.js"
 )
-PAYWALL_NEWSLETTER_SLOT_ATTR = "data-tct-paywall-newsletter"
-
-
-def _paywall_newsletter_slot():
-    """Return the dormant post-article Morning Brief slot for a full paywall.
-
-    The browser reveals and hydrates this slot with the current full-article Kit
-    form only when the reader remains fully paywalled. Full-access readers remove
-    it and instead receive the same form after paragraph two.
-    """
-    return (
-        '\n      <aside class="newsletter-inline-slot newsletter-inline-slot--paywall" '
-        'aria-label="Subscribe to the Treasure Coast Morning Brief" '
-        f'{PAYWALL_NEWSLETTER_SLOT_ATTR}="true" hidden></aside>'
-    )
 
 
 def _newsletter_inline_embed(placement):
@@ -21504,76 +21431,6 @@ def _newsletter_inline_embed(placement):
         f'src="{KIT_INLINE_FORM_SRC}"></script>\n'
         '      </aside>'
     )
-
-
-_ARTICLE_POST_NEWSLETTER_SLOT_RE = re.compile(
-    r'\s*<aside\b(?=[^>]*class=["\'][^"\']*newsletter-inline-slot--(?:article|paywall)[^"\']*["\'])'
-    r'[^>]*>.*?</aside>',
-    re.I | re.S,
-)
-
-
-def _normalize_article_newsletter_delivery_sitewide(root):
-    """Enforce one newsletter surface per article access state.
-
-    Retained article HTML keeps only a dormant post-article slot on protected
-    membership pages. membership.js reveals that slot with the current Kit form
-    only when the reader remains fully paywalled; successful full access removes
-    it and inserts the same form after paragraph two. Unprotected articles have no
-    post-article newsletter slot at all.
-    """
-    root = Path(root)
-    articles_dir = root / "articles"
-    scanned = updated = 0
-    failures = []
-    if not articles_dir.exists():
-        return {"scanned": 0, "updated": 0}
-
-    desired_slot = _paywall_newsletter_slot()
-    for path in sorted(articles_dir.glob("*.html")):
-        scanned += 1
-        original = path.read_text(encoding="utf-8", errors="ignore")
-        normalized = _ARTICLE_POST_NEWSLETTER_SLOT_RE.sub("", original)
-        has_full_paywall = bool(re.search(r"\bdata-tct-paywall\b", normalized, re.I))
-        if has_full_paywall:
-            boundary = None
-            for pattern in (
-                r'<div class="article-share">',
-                r'<hr class="article-divider"',
-                r'<p class="article-more"',
-            ):
-                boundary = re.search(pattern, normalized, re.I)
-                if boundary:
-                    break
-            if not boundary:
-                failures.append(str(path.relative_to(root)))
-                continue
-            normalized = (
-                normalized[:boundary.start()]
-                + desired_slot
-                + "\n          "
-                + normalized[boundary.start():]
-            )
-        if normalized != original:
-            path.write_text(normalized, encoding="utf-8")
-            updated += 1
-
-        final = normalized
-        old_article_slot = re.search(r"newsletter-inline-slot--article", final, re.I)
-        old_article_uid = re.search(
-            r'<aside\b[^>]*newsletter-inline-slot--(?:article|paywall)[^>]*>.*?30e15672d3.*?</aside>',
-            final,
-            re.I | re.S,
-        )
-        paywall_slots = len(re.findall(r"data-tct-paywall-newsletter", final, re.I))
-        if old_article_slot or old_article_uid or (has_full_paywall and paywall_slots != 1) or (not has_full_paywall and paywall_slots):
-            failures.append(str(path.relative_to(root)))
-
-    if failures:
-        raise RuntimeError(
-            "Article newsletter delivery contract FAILED: " + ", ".join(sorted(set(failures))[:10])
-        )
-    return {"scanned": scanned, "updated": updated}
 
 
 def _page_footer():
@@ -36673,12 +36530,6 @@ def main():
     _membership_chrome_updates = _apply_membership_site_chrome(OUTPUT_DIR)
     if _membership_chrome_updates:
         print(f"  Membership site chrome normalized on {_membership_chrome_updates} retained page(s)")
-    _article_newsletter_contract = _normalize_article_newsletter_delivery_sitewide(OUTPUT_DIR)
-    print(
-        "  Article newsletter delivery contract PASSED: "
-        f"{_article_newsletter_contract['scanned']} article page(s) verified; "
-        f"{_article_newsletter_contract['updated']} retained page(s) normalized"
-    )
     _active_nav = _normalize_active_category_navigation_sitewide(OUTPUT_DIR)
     print(
         "  Active category navigation contract PASSED: "

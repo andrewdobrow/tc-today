@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-INCIDENT_IDENTITY_VERSION = "3.3"
+INCIDENT_IDENTITY_VERSION = "3.4"
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _ANIMAL_QUANTITY_RE = re.compile(r"\b(\d{1,3})\s+(?:cats?|dogs?|animals?|pets?)\b", re.IGNORECASE)
@@ -134,6 +134,13 @@ _MISSING_PERSON_EXCLUDED_NAME_TOKENS = {
     "county", "sheriff", "police", "office", "department", "beach", "island",
     "park", "city", "school", "hospital", "highway", "road", "street",
 }
+# Title-cased role phrases can look like conventional names to the movement-sentence
+# fallback (for example, ``Good Samaritan went to ...``).  Keep these as exact
+# phrases rather than token bans so a real person whose surname happens to be
+# ``Good`` is not discarded.
+_MISSING_PERSON_EXCLUDED_NAME_PHRASES = {
+    "good samaritan",
+}
 
 def _missing_person_subject_key(text: str) -> str:
     """Return ``first-surname`` for one explicitly framed missing-person subject."""
@@ -169,6 +176,9 @@ def _missing_person_subject_key(text: str) -> str:
             ]
             first = normalized_words[0]
             last = normalized_words[-1]
+            normalized_phrase = " ".join(normalized_words)
+            if normalized_phrase in _MISSING_PERSON_EXCLUDED_NAME_PHRASES:
+                continue
             if any(
                 token in _MISSING_PERSON_EXCLUDED_NAME_TOKENS or token == "the"
                 for token in normalized_words

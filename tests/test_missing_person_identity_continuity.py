@@ -477,6 +477,45 @@ def _debevec_actual_followup_source():
     }
 
 
+
+def _debevec_good_samaritan_body_source():
+    """Exact Sept. 1 source framing that resurfaced as a Sept. 3 duplicate hero."""
+    body = (
+        "A body was found following an extensive search in Martin County, but the sheriff's office "
+        "could not confirm whether it was that of a man reported missing Aug. 26. On Tuesday, the "
+        "Martin County Sheriff's Office announced that a body had been recovered from deep within "
+        "the mangroves near the House of Refuge. During a news conference, Martin County Sheriff "
+        "John Budensiek said a Good Samaritan found a wallet Saturday belonging to Michael Anthony "
+        "Debevec. In an attempt to return the wallet, the Good Samaritan went to Debevec's home, "
+        "which ultimately led his family to file a missing person report. Investigators later found "
+        "Debevec's vehicle at Chastain Beach. Phone records showed Debevec moving between Chastain "
+        "Beach and the House of Refuge. Investigators then found Debevec's backpack before locating "
+        "a body in the mangroves."
+    )
+    return {
+        "title": "Body believed to be missing Port St. Lucie man found in Martin County mangroves",
+        "headline": "Body believed to be missing Port St. Lucie man found in Martin County mangroves",
+        "summary": body,
+        "teaser": body,
+        "article_text": body,
+        "body": body,
+        "source_url": (
+            "https://cw34.com/news/local/body-found-floating-near-stuart-beach-located-"
+            "house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news"
+        ),
+        "link": (
+            "https://cw34.com/news/local/body-found-floating-near-stuart-beach-located-"
+            "house-of-refuge-martin-county-sheriffs-office-investigate-missing-oklahoma-man-florida-news"
+        ),
+        "published": "Wed, 02 Sep 2026 06:07:31 GMT",
+        "source_quality": "full",
+        "source_type": "full_source",
+        "editorial_story_id": "story_fragmented_body_believed",
+        "_editorial_story_id": "story_fragmented_body_believed",
+        "_editorial_route": "skip",
+    }
+
+
 def test_named_missing_person_anchor_survives_middle_name_and_suffix_drop():
     original = _debevec_custom_canonical()
     followup = _debevec_actual_followup_source()
@@ -489,6 +528,50 @@ def test_named_missing_person_anchor_survives_middle_name_and_suffix_drop():
         body=followup["body"],
     )
     assert original_anchor == followup_anchor == "missing-person:michael-debevec"
+
+
+
+def test_good_samaritan_role_phrase_cannot_become_missing_person_subject():
+    source = _debevec_good_samaritan_body_source()
+    anchor = incident_anchor_key(
+        titles=(source["headline"], source["teaser"]),
+        body=source["body"],
+    )
+    assert anchor != "missing-person:good-samaritan"
+
+
+def test_good_samaritan_debevec_source_still_matches_authoritative_custom():
+    g = _load_generate_module()
+    custom = _debevec_custom_canonical()
+    source = _debevec_good_samaritan_body_source()
+
+    matched, key = g._durable_custom_identity_match(source, custom)
+    assert matched is True
+    assert key == "missing-person|michael-debevec"
+
+    canonical, basis = g._published_skip_canonical(source, [custom])
+    assert canonical is custom
+    assert basis == "durable_custom_incident_identity:missing-person|michael-debevec"
+
+
+def test_sept3_debevec_duplicate_slug_is_permanent_redirect(tmp_path: Path):
+    g = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    custom = _debevec_custom_canonical()
+    escaped_slug = (
+        "2026-09-03-body-found-in-martin-county-mangroves-believed-to-be-missing-"
+        "port-st-lucie-man-m"
+    )
+    assert escaped_slug in g.DEBEVEC_MISSING_REDIRECT_SOURCE_SLUGS
+
+    cleaned, redirects = g.apply_canonical_story_cleanup([custom], articles, tmp_path)
+    assert [row["slug"] for row in cleaned] == [custom["slug"]]
+    redirect = next(row for row in redirects if row["source_slug"] == escaped_slug)
+    assert redirect["target_slug"] == g.DEBEVEC_MISSING_CANONICAL_SLUG
+    rendered = (articles / f"{escaped_slug}.html").read_text(encoding="utf-8")
+    assert f"/articles/{g.DEBEVEC_MISSING_CANONICAL_SLUG}.html" in rendered
+    assert "noindex,follow" in rendered
 
 
 def test_unified_missing_person_identity_accepts_first_surname_alias_when_other_side_is_unambiguous():
