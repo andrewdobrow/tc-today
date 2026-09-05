@@ -114,3 +114,50 @@ def test_category_hero_synthetic_midnight_becomes_date_label():
     }
     display = generate._format_category_hero_timestamp(item, [])
     assert display == "Jul 27, 2026"
+
+
+def test_category_hero_prefers_validated_material_update_time_over_first_publish():
+    item = {
+        "headline": "Updated Treasure Coast story",
+        "link": "https://publisher.example/updated-story",
+        "published_raw": "Thu, 03 Sep 2026 16:54:00 -0400",
+    }
+    archive = [
+        {
+            "headline": "Updated Treasure Coast story",
+            "slug": "2026-09-03-updated-treasure-coast-story",
+            "source_url": "https://publisher.example/updated-story",
+            "first_published": "Thu, 03 Sep 2026 16:54:00 -0400",
+            "meaningful_update_validated": True,
+            "canonical_last_material_update_at": "2026-09-05T16:20:00Z",
+            "last_meaningful_update_at": "2026-09-05T16:20:00Z",
+            "updated_at": "2026-09-05T16:20:00Z",
+        }
+    ]
+
+    display = generate._format_category_hero_timestamp(item, archive)
+
+    assert "12:20 PM ET" in display
+    assert "4:54 PM ET" not in display
+
+
+def test_category_hero_does_not_use_unvalidated_updated_at():
+    item = {
+        "headline": "Routine maintenance story",
+        "link": "https://publisher.example/maintenance-story",
+    }
+    archive = [
+        {
+            "headline": "Routine maintenance story",
+            "slug": "2026-09-03-routine-maintenance-story",
+            "source_url": "https://publisher.example/maintenance-story",
+            "first_published": "Thu, 03 Sep 2026 16:54:00 -0400",
+            "updated_at": "2026-09-05T16:20:00Z",
+            "meaningful_update_validated": False,
+        }
+    ]
+
+    display = generate._format_category_hero_timestamp(item, archive)
+
+    assert "4:54 PM ET" in display
+    assert "12:20 PM ET" not in display

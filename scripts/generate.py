@@ -9522,10 +9522,10 @@ def _format_category_hero_timestamp(item, archive_entries=None):
     Generated category items often inherit a publisher timestamp. Some feeds expose
     only a calendar date and normalize that value to midnight, which made newly
     published category heroes display ``12:00 AM``. Once an article has been written,
-    its TCT archive row is the authoritative publication receipt and contains the
-    actual ``first_published`` time. Prefer that value. When only a date or a synthetic
-    midnight timestamp exists, show the date instead of pretending midnight was a
-    meaningful publication time.
+    its TCT archive row is authoritative. For a validated material update, prefer the
+    canonical update timestamp; otherwise prefer the actual ``first_published`` time.
+    When only a date or a synthetic midnight timestamp exists, show the date instead
+    of pretending midnight was a meaningful publication time.
     """
     archive_entries = archive_entries or []
     matched = None
@@ -9561,6 +9561,24 @@ def _format_category_hero_timestamp(item, archive_entries=None):
             )
 
     candidates = []
+
+    # Hero display metadata must follow the same validated-update authority as
+    # homepage cards. A materially updated canonical story should show when the
+    # story was actually updated, not its original TCT publication time. Routine
+    # archive maintenance (lastmod/image/shell repairs) must not refresh the clock,
+    # so update timestamps are considered only when the meaningful-update contract
+    # has been validated.
+    for source in (matched, item if isinstance(item, dict) else None):
+        if not isinstance(source, dict) or not source.get("meaningful_update_validated"):
+            continue
+        candidates.extend(
+            [
+                source.get("canonical_last_material_update_at"),
+                source.get("last_meaningful_update_at"),
+                source.get("updated_at"),
+            ]
+        )
+
     if matched:
         candidates.extend(
             [
@@ -9617,6 +9635,16 @@ def _format_category_hero_timestamp(item, archive_entries=None):
             return f"{parsed.strftime('%b')} {parsed.day}, {parsed.year}"
 
         formatted = format_age(raw)
+        if not formatted:
+            # ``format_age`` historically accepted RFC-822 feed timestamps only,
+            # while validated material-update receipts are stored as ISO-8601.
+            # Re-encode the already-parsed instant as RFC-822 so both timestamp
+            # shapes receive identical human-readable hero formatting.
+            try:
+                from email.utils import format_datetime
+                formatted = format_age(format_datetime(parsed))
+            except Exception:
+                formatted = ""
         if formatted:
             return formatted
 
