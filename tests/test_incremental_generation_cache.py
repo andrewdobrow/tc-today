@@ -5,6 +5,8 @@ import json
 import os
 import sys
 import types
+from datetime import datetime, timedelta, timezone
+from email.utils import format_datetime
 from pathlib import Path
 
 
@@ -186,6 +188,103 @@ def test_full_article_depth_contract_is_identical_for_hero_and_card():
     for hero in (False, True):
         assert generate._publishable_article(dict(base, body=thin_body), hero=hero) is False
         assert generate._publishable_article(dict(base, body=rich_body), hero=hero) is True
+
+
+def test_fresh_source_constrained_breaking_brief_is_publishable_for_hero_and_card():
+    """A real breaking story must not disappear just because the first report is short."""
+    generate = _load_generate_module()
+    fresh_pub = format_datetime(datetime.now(timezone.utc) - timedelta(hours=2))
+    brief = {
+        "headline": "76-year-old man ejected after golf cart hits tractor in Martin County",
+        "source_quality": "full",
+        "source_type": "full_source",
+        "source_word_count": 98,
+        "published_raw": fresh_pub,
+        "urgency_score": 6,
+        "body": _publishable_body(96),
+    }
+
+    assert generate._source_constrained_breaking_brief(brief) is True
+    assert generate._article_depth_requirements(brief) == (80, 2)
+    for hero in (False, True):
+        assert generate._publishable_article(brief, hero=hero) is True
+
+
+def test_final_category_quality_gate_keeps_selected_fresh_breaking_brief(monkeypatch):
+    generate = _load_generate_module()
+    fresh_pub = format_datetime(datetime.now(timezone.utc) - timedelta(hours=2))
+    item = {
+        "headline": "Golf cart driver ejected after striking tractor in Tropical Farms",
+        "source_title": "76-year-old man ejected after golf cart crashes into tractor",
+        "source_quality": "full",
+        "source_type": "full_source",
+        "source_word_count": 98,
+        "published_raw": fresh_pub,
+        "urgency_score": 6,
+        "body": _publishable_body(96),
+    }
+    monkeypatch.setattr(generate, "_hero_eligible", lambda category_key, candidate: True)
+
+    assert generate._generated_item_passes_final_publication_quality(
+        item, "martin", hero=True
+    ) is True
+
+
+def test_breaking_brief_exception_does_not_apply_to_stale_or_low_priority_short_sources():
+    generate = _load_generate_module()
+    base = {
+        "headline": "Short local brief",
+        "source_quality": "full",
+        "source_type": "full_source",
+        "source_word_count": 98,
+        "body": _publishable_body(96),
+        "urgency_score": 6,
+    }
+
+    stale = dict(
+        base,
+        published_raw=format_datetime(datetime.now(timezone.utc) - timedelta(hours=30)),
+    )
+    low_priority = dict(
+        base,
+        published_raw=format_datetime(datetime.now(timezone.utc) - timedelta(hours=2)),
+        urgency_score=4,
+    )
+
+    assert generate._source_constrained_breaking_brief(stale) is False
+    assert generate._publishable_article(stale, hero=True) is False
+    assert generate._source_constrained_breaking_brief(low_priority) is False
+    assert generate._publishable_article(low_priority, hero=True) is False
+
+
+def test_fresh_developing_report_below_normal_source_floor_reaches_editor_then_requires_urgency():
+    generate = _load_generate_module()
+    fresh_pub = format_datetime(datetime.now(timezone.utc) - timedelta(minutes=45))
+    source = {
+        "title": "Developing Martin County crash",
+        "headline": "Developing Martin County crash",
+        "source_quality": "full",
+        "source_type": "full_source",
+        "source_word_count": 55,
+        "published_raw": fresh_pub,
+    }
+
+    # The old 80-word source floor no longer hides a fresh developing report from
+    # the assignment editor before importance can be judged.
+    assert generate._source_candidate_publishable(source) is True
+
+    selected = dict(
+        source,
+        urgency_score=6,
+        body=_publishable_body(62),
+    )
+    assert generate._source_constrained_breaking_brief(selected) is True
+    assert generate._article_depth_requirements(selected) == (60, 2)
+    assert generate._publishable_article(selected, hero=True) is True
+
+    unimportant = dict(selected, urgency_score=4)
+    assert generate._source_constrained_breaking_brief(unimportant) is False
+    assert generate._publishable_article(unimportant, hero=True) is False
 
 
 def test_category_generation_key_changes_with_source_content():

@@ -180,7 +180,7 @@ def test_cached_output_is_revalidated_against_current_source_row():
 def test_category_cache_contract_version_invalidates_pre_guard_keys():
     generate = _load_generate_module()
     assert generate.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.13.7.2-full-article-parity"
+        "v1.13.7.3-breaking-brief-continuity"
     )
 
 

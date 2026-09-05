@@ -2,6 +2,8 @@ import json
 import os
 import sys
 import types
+from datetime import datetime, timedelta, timezone
+from email.utils import format_datetime
 from pathlib import Path
 
 import pytest
@@ -320,6 +322,61 @@ def test_writer_receives_only_preassigned_single_source(monkeypatch):
     assert item["urgency_score"] == 8
     assert item["published"] == "Fri, 21 Aug 2026 20:00:00 -0400"
     assert actual_model == "claude-sonnet-4-5-20250929"
+
+
+def test_writer_uses_concise_breaking_contract_for_fresh_short_verified_source(monkeypatch):
+    from scripts import generate
+
+    published = format_datetime(datetime.now(timezone.utc) - timedelta(hours=1))
+    source_text = " ".join(
+        [
+            "Martin County Fire Rescue transported a 76-year-old man after a golf cart crash in Tropical Farms."
+        ]
+        * 7
+    )
+    packet = {
+        "category_key": "martin",
+        "category_label": "Martin County",
+        "source_inputs": [
+            {
+                "source_index": 1,
+                "title": "76-year-old man ejected after golf cart crashes into tractor",
+                "published": published,
+                "source_type": "full_source",
+                "source_quality": "full",
+                "hero_eligible": True,
+                "category_match_score": 10,
+                "story_form": "standard",
+                "article_text": source_text,
+                "canonical_context_headline": "",
+                "canonical_context_body": "",
+            }
+        ],
+    }
+    # Keep the fixture inside the breaking-brief source ceiling.
+    assert 80 <= generate._word_count(source_text) <= generate.BREAKING_BRIEF_MAX_SOURCE_WORDS
+
+    response = _Response(json.dumps({
+        "headline": "76-year-old man ejected after Martin County golf cart crash",
+        "body": "Paragraph one with verified facts.\n\nParagraph two with verified facts.",
+        "urgency_score": 6,
+        "published": published,
+        "source_index": 1,
+    }))
+    fake = _FakeClient([response])
+    monkeypatch.setattr(generate, "client", fake)
+
+    generate._run_assignment_writer(
+        packet,
+        {"source_index": 1, "angle": "Lead with the ejection and hospitalization", "urgency_score": 6},
+        role="hero",
+    )
+
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+    assert "fresh source-constrained breaking brief" in prompt
+    assert "Cover it now rather than rejecting it for being short" in prompt
+    assert "roughly 90-160 words in 2-3 short paragraphs" in prompt
+    assert "do not add generic background" in prompt
 
 
 def test_editor_has_selection_authority_but_no_publication_writing_task(monkeypatch):
