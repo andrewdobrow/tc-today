@@ -15234,6 +15234,7 @@ def render_index(all_categories, top_cat):
       <nav class="category-nav">
         {nav_buttons}
         <a href="/weather.html" class="cat-btn" style="text-decoration:none">Weather</a>
+        <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
         <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
       </nav>
       <div class="header-actions">
@@ -21556,6 +21557,7 @@ def _page_header(active=""):
         {cat_link("Top News", "/", "news")}
         {cat_links}
         {cat_link("Weather", "/weather.html", "weather")}
+        {cat_link("Events", "/events.html", "events")}
         {cat_link("Archive", "/archive.html", "archive")}
       </nav>
       <div class="header-actions">
@@ -21577,6 +21579,7 @@ def _normalize_active_category_navigation_sitewide(output_root):
         "Top News": "/",
         **{cfg["label"]: f"/?cat={key}" for key, cfg in CATEGORIES.items()},
         "Weather": "/weather.html",
+        "Events": "/events.html",
         "Archive": "/archive.html",
     }
     scanned = updated = 0
@@ -21616,6 +21619,84 @@ def _normalize_active_category_navigation_sitewide(output_root):
         raise RuntimeError(
             "Active category navigation contract FAILED: "
             + ", ".join(failures[:10])
+        )
+    return {"scanned": scanned, "updated": updated}
+
+
+def _normalize_events_navigation_sitewide(output_root):
+    """Expose Events immediately before Archive in every category navigation.
+
+    The Events launch page originally carried its own one-off tab after Archive,
+    while retained pages had no Events tab at all. Normalize the sitewide header
+    so Events is discoverable consistently and Archive remains the final nav item.
+    """
+    root = Path(output_root)
+    nav_re = re.compile(r'<nav\s+class=["\']category-nav["\'][^>]*>.*?</nav>', re.I | re.S)
+    events_re = re.compile(
+        r'<a\b[^>]*href=["\'](?:https://treasurecoast\.today)?/?events\.html["\'][^>]*>\s*Events\s*</a>',
+        re.I | re.S,
+    )
+    archive_re = re.compile(
+        r'<a\b[^>]*href=["\'](?:https://treasurecoast\.today)?/?archive\.html["\'][^>]*>\s*Archive\s*</a>',
+        re.I | re.S,
+    )
+
+    scanned = updated = 0
+    failures = []
+    for path in root.rglob("*.html"):
+        original = path.read_text(encoding="utf-8", errors="ignore")
+        nav_match = nav_re.search(original)
+        if not nav_match:
+            continue
+        scanned += 1
+        nav = nav_match.group(0)
+        active = path.name.lower() == "events.html" and path.parent == root
+        existing_events = events_re.findall(nav)
+        existing_archive = archive_re.search(nav)
+        existing_is_active = bool(
+            existing_events and 'aria-current="page"' in existing_events[0]
+        )
+        already_correct = bool(
+            len(existing_events) == 1
+            and existing_archive is not None
+            and nav.find(existing_events[0]) < existing_archive.start()
+            and existing_is_active == active
+        )
+
+        if already_correct:
+            normalized = original
+        else:
+            nav = events_re.sub("", nav)
+            archive_match = archive_re.search(nav)
+            if not archive_match:
+                failures.append(str(path.relative_to(root)))
+                continue
+            current = ' aria-current="page"' if active else ""
+            cls = "cat-btn active" if active else "cat-btn"
+            events_link = (
+                f'<a href="/events.html" class="{cls}" style="text-decoration:none"{current}>Events</a>'
+            )
+            nav = nav[:archive_match.start()] + events_link + "\n        " + nav[archive_match.start():]
+            normalized = original[:nav_match.start()] + nav + original[nav_match.end():]
+        if normalized != original:
+            path.write_text(normalized, encoding="utf-8")
+            updated += 1
+
+        final_nav_match = nav_re.search(normalized)
+        final_nav = final_nav_match.group(0) if final_nav_match else ""
+        final_events = events_re.findall(final_nav)
+        final_archive = archive_re.search(final_nav)
+        if (
+            len(final_events) != 1
+            or final_archive is None
+            or final_nav.find(final_events[0]) > final_archive.start()
+            or (active and 'aria-current="page"' not in final_events[0])
+        ):
+            failures.append(str(path.relative_to(root)))
+
+    if failures:
+        raise RuntimeError(
+            "Events navigation contract FAILED: " + ", ".join(sorted(set(failures))[:10])
         )
     return {"scanned": scanned, "updated": updated}
 
@@ -36907,6 +36988,12 @@ def main():
         "  Active category navigation contract PASSED: "
         f"{_active_nav['scanned']} HTML page(s) verified; "
         f"{_active_nav['updated']} retained page(s) normalized"
+    )
+    _events_nav = _normalize_events_navigation_sitewide(OUTPUT_DIR)
+    print(
+        "  Events navigation contract PASSED: "
+        f"{_events_nav['scanned']} HTML page(s) verified; "
+        f"{_events_nav['updated']} retained page(s) normalized"
     )
     _footer_rss = _normalize_footer_rss_link_sitewide(OUTPUT_DIR)
     print(

@@ -256,6 +256,37 @@ def _source_url(source: dict[str, Any]) -> str:
     return _clean(source.get("page_url") or source.get("url"))
 
 
+def _absolute_event_url(value: Any, source: dict[str, Any]) -> str:
+    """Return an absolute URL for an event/ticket link from a source adapter.
+
+    Several municipal iCalendar feeds emit root-relative ``URL`` properties.
+    If those strings are written directly into events.html, the browser resolves
+    them against treasurecoast.today and creates a dead TCT link. Resolve all
+    relative source links against the source's own origin before publication.
+    """
+    raw = _clean(value)
+    if not raw:
+        return ""
+    if raw.startswith("//"):
+        return "https:" + raw
+    parsed = urlparse(raw)
+    if parsed.scheme in {"http", "https"}:
+        return raw
+    if parsed.scheme:
+        return raw
+    base = _clean(source.get("page_url") or source.get("url"))
+    return urljoin(base, raw) if base else raw
+
+
+def _standalone_http_url(value: Any) -> str:
+    """Return *value* only when it is effectively just one HTTP(S) URL."""
+    text = _clean(value)
+    if not text:
+        return ""
+    match = re.fullmatch(r"https?://[^\s<>]+", text, re.I)
+    return match.group(0).rstrip(".,;)") if match else ""
+
+
 def _county_from_locality(city: Any, address: Any = "") -> str:
     city_key = _slug_text(_clean(city))
     if city_key in CITY_TO_COUNTY:
@@ -335,8 +366,10 @@ def _normalize_event(raw: dict[str, Any], source: dict[str, Any], window: Window
         "category": _clean(raw.get("category")),
         "price": _clip(raw.get("price"), 100),
         "description": _clip(raw.get("description"), 260),
-        "event_url": _clean(raw.get("event_url") or raw.get("url") or _source_url(source)),
-        "ticket_url": _clean(raw.get("ticket_url")),
+        "event_url": _absolute_event_url(
+            raw.get("event_url") or raw.get("url") or _source_url(source), source
+        ),
+        "ticket_url": _absolute_event_url(raw.get("ticket_url"), source),
         "source_name": _clean(source.get("name")),
         "source_url": _source_url(source),
         "source_id": _clean(source.get("id")),
@@ -410,14 +443,18 @@ def _parse_ical(text_value: str, source: dict[str, Any], window: Window) -> list
             if current:
                 start, all_day = _parse_ical_datetime(current.get("DTSTART_KEY", "DTSTART"), current.get("DTSTART", ""))
                 end, _ = _parse_ical_datetime(current.get("DTEND_KEY", "DTEND"), current.get("DTEND", "")) if current.get("DTEND") else (None, False)
+                description = _unescape_ical(current.get("DESCRIPTION", ""))
+                description_url = _standalone_http_url(description)
                 raw = {
                     "title": _unescape_ical(current.get("SUMMARY", "")),
                     "starts_at": _iso_local(start),
                     "ends_at": _iso_local(end),
                     "all_day": all_day,
                     "venue": _unescape_ical(current.get("LOCATION", "")),
-                    "description": _unescape_ical(current.get("DESCRIPTION", "")),
-                    "event_url": _unescape_ical(current.get("URL", "")) or _source_url(source),
+                    # CivicEngage municipal feeds commonly put the real event-detail
+                    # page in DESCRIPTION while URL points back to the calendar feed.
+                    "description": "" if description_url else description,
+                    "event_url": description_url or _unescape_ical(current.get("URL", "")) or _source_url(source),
                 }
                 event = _normalize_event(raw, source, window)
                 if event:
@@ -1275,13 +1312,21 @@ def _cached_source_events(cache: dict[str, Any], source_id: str, source: dict[st
     for raw in entry.get("events", []):
         if not isinstance(raw, dict):
             continue
-        # Cached rows already have normalized source metadata; still revalidate dates and locality.
-        event = _normalize_event(raw, source, window)
+        # Cached rows already have normalized source metadata; still revalidate dates,
+        # locality, and URL authority. Older CivicEngage cache rows may contain the
+        # same relative feed links that caused the live TCT-link regression.
+        cached_raw = dict(raw)
+        description_url = _standalone_http_url(cached_raw.get("description"))
+        if source.get("adapter") == "ical" and description_url:
+            cached_raw["event_url"] = description_url
+            cached_raw["description"] = ""
+        event = _normalize_event(cached_raw, source, window)
         if event:
-            # Preserve authoritative URLs/details from cached normalized row.
-            for field in ("event_url", "ticket_url", "description", "price", "venue", "address", "city", "category"):
-                if raw.get(field):
-                    event[field] = raw[field]
+            # Preserve authoritative descriptive fields from cache, but never restore
+            # raw URL strings after _normalize_event has made them absolute.
+            for field in ("description", "price", "venue", "address", "city", "category"):
+                if cached_raw.get(field):
+                    event[field] = cached_raw[field]
             events.append(event)
     return events
 
@@ -1365,7 +1410,7 @@ def _render_dynamic(events: list[dict[str, Any]], status: dict[str, Any]) -> str
         cards = '''<div class="events-empty events-empty--initial"><strong>The calendar is refreshing.</strong><span>We couldn't load a current event listing yet. Check back shortly.</span></div>'''
     return f'''{DYNAMIC_START}
 <section class="events-results" aria-live="polite">
-  <div class="events-results-head"><p><strong data-events-count>{len(events)}</strong> upcoming events</p><p class="events-updated">Updated {html_lib.escape(updated)} ET · Sources refresh automatically</p></div>
+  <div class="events-results-head"><p><strong data-events-count>{len(events)}</strong> upcoming events</p><p class="events-updated">Updated {html_lib.escape(updated)} ET</p></div>
   <div class="events-list" data-events-list>
 {cards}
   </div>
@@ -1441,6 +1486,12 @@ def validate_outputs() -> None:
             raise RuntimeError(f"events.json row {index} has invalid category")
         if event["id"] in ids:
             raise RuntimeError(f"events.json has duplicate event id {event['id']}")
+        for link_field in ("event_url", "ticket_url"):
+            link_value = _clean(event.get(link_field))
+            if link_value.startswith("/"):
+                raise RuntimeError(
+                    f"events.json row {index} has unresolved relative {link_field}: {link_value}"
+                )
         ids.add(event["id"])
         if prior_start and event["starts_at"] < prior_start:
             raise RuntimeError("events.json is not chronologically sorted")

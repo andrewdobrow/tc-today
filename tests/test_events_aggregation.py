@@ -436,3 +436,128 @@ def test_hobe_sound_farms_recurring_rules_generate_both_weekend_market_days_only
     assert {events._parse_iso_datetime(row["starts_at"]).weekday() for row in parsed} == {5, 6}
     assert all(row["category"] == "Food & Markets" for row in parsed)
     assert events._recurring_events("<p>Farm Stand Hours Monday - Friday</p>", source, _window(10)) == []
+
+
+def test_civicengage_ical_uses_real_event_detail_url_instead_of_relative_feed_link():
+    source = _source(
+        id="stuart-city-events",
+        name="City of Stuart — City Events",
+        url="https://www.stuartfl.gov/common/modules/iCalendar/iCalendar.aspx?catID=22&feed=calendar",
+        page_url="https://www.stuartfl.gov/calendar.aspx",
+        kind="government",
+        adapter="ical",
+    )
+    ical = """BEGIN:VCALENDAR
+BEGIN:VEVENT
+DTSTART:20260904T170000
+DTEND:20260904T210000
+SUMMARY:First Friday Art Walk
+LOCATION:The Creek District of Arts & Entertainment
+DESCRIPTION:https://www.stuartfl.gov/calendar.aspx?EID=6186
+URL:/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=22
+END:VEVENT
+END:VCALENDAR
+"""
+    parsed = events._parse_ical(ical, source, _window())
+    assert len(parsed) == 1
+    assert parsed[0]["event_url"] == "https://www.stuartfl.gov/calendar.aspx?EID=6186"
+    assert parsed[0]["description"] == ""
+    assert not parsed[0]["event_url"].startswith("/")
+
+
+def test_relative_event_and_ticket_urls_resolve_against_source_not_tct():
+    source = _source(
+        url="https://venue.example/calendar/list",
+        page_url="https://venue.example/calendar",
+    )
+    row = events._normalize_event(
+        {
+            "title": "Local Show",
+            "starts_at": "2026-09-10T19:00:00-04:00",
+            "event_url": "/events/local-show",
+            "ticket_url": "/tickets/local-show",
+        },
+        source,
+        _window(),
+    )
+    assert row
+    assert row["event_url"] == "https://venue.example/events/local-show"
+    assert row["ticket_url"] == "https://venue.example/tickets/local-show"
+
+
+def test_events_page_omits_backend_process_copy_and_puts_events_before_archive():
+    page = (ROOT / "events.html").read_text(encoding="utf-8")
+    assert "Automatic updates" not in page
+    assert "Duplicate listings combined" not in page
+    assert "Sources refresh automatically" not in page
+    nav_start = page.index('<nav class="category-nav">')
+    nav_end = page.index("</nav>", nav_start)
+    nav = page[nav_start:nav_end]
+    assert nav.count('href="/events.html"') == 1
+    assert nav.index('href="/events.html"') < nav.index('href="/archive.html"')
+
+
+def test_sitewide_events_nav_normalizer_inserts_events_before_archive(tmp_path):
+    import ast
+    import re
+
+    source = (ROOT / "scripts" / "generate.py").read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    node = next(
+        item for item in tree.body
+        if isinstance(item, ast.FunctionDef) and item.name == "_normalize_events_navigation_sitewide"
+    )
+    module = ast.Module(body=[node], type_ignores=[])
+    namespace = {"Path": Path, "re": re}
+    exec(compile(module, "generate.py", "exec"), namespace)
+    normalize = namespace["_normalize_events_navigation_sitewide"]
+
+    sample = tmp_path / "index.html"
+    sample.write_text(
+        '<nav class="category-nav">'
+        '<a href="/weather.html" class="cat-btn">Weather</a>'
+        '<a href="/archive.html" class="cat-btn">Archive</a>'
+        '</nav>',
+        encoding="utf-8",
+    )
+    result = normalize(tmp_path)
+    rendered = sample.read_text(encoding="utf-8")
+    assert result == {"scanned": 1, "updated": 1}
+    assert rendered.count('href="/events.html"') == 1
+    assert rendered.index('href="/events.html"') < rendered.index('href="/archive.html"')
+
+    # A second pass is stable rather than appending another Events tab.
+    again = normalize(tmp_path)
+    assert again == {"scanned": 1, "updated": 0}
+
+
+def test_cached_civicengage_rows_cannot_restore_relative_event_links():
+    source = _source(
+        id="stuart-city-events",
+        name="City of Stuart — City Events",
+        url="https://www.stuartfl.gov/common/modules/iCalendar/iCalendar.aspx?catID=22&feed=calendar",
+        page_url="https://www.stuartfl.gov/calendar.aspx",
+        kind="government",
+        adapter="ical",
+    )
+    cache = {
+        "schema_version": 1,
+        "sources": {
+            "stuart-city-events": {
+                "events": [{
+                    "title": "First Friday Art Walk",
+                    "starts_at": "2026-09-04T17:00:00-04:00",
+                    "ends_at": "2026-09-04T21:00:00-04:00",
+                    "county": "Martin",
+                    "city": "Stuart",
+                    "category": "Arts & Culture",
+                    "description": "https://www.stuartfl.gov/calendar.aspx?EID=6186",
+                    "event_url": "/common/modules/iCalendar/iCalendar.aspx?feed=calendar&catID=22",
+                }]
+            }
+        },
+    }
+    parsed = events._cached_source_events(cache, "stuart-city-events", source, _window())
+    assert len(parsed) == 1
+    assert parsed[0]["event_url"] == "https://www.stuartfl.gov/calendar.aspx?EID=6186"
+    assert parsed[0]["description"] == ""
