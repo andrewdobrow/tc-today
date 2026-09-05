@@ -5,40 +5,40 @@
 ## Hero
 
 - Current: **Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case**
-- Recommended: **Body found in Martin County mangroves confirmed as missing visitor from Oklahoma**
+- Recommended: **Man killed in Fort Pierce shooting as three masked suspects remain at large**
 - Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Rollover crash on I-95 southbound in Palm City leaves driver with traumatic injuries, requiring airlift | Body found in Martin County mangroves confirmed as missing visitor from Oklahoma | 76 | importance 100; freshness 48.49; urgency 2/10; validated material update |
-| 2 | Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma | Man killed in Fort Pierce shooting as three masked suspects remain at large | 73 | importance 85; freshness 83.12; urgency 2/10 |
-| 3 | Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim | Palm City woman charged in Border Collie hoarding case released from jail on $500 bond | 68 | importance 70; freshness 57.16; urgency 2/10; validated material update |
-| 4 | Florida drivers face record-high Labor Day gas prices as Strait of Hormuz tensions drive fuel costs up | Rollover crash on I-95 southbound in Palm City leaves driver with traumatic injuries, requiring airlift | 67 | importance 25; freshness 99.91; urgency 7/10 |
-| 5 | Fort Pierce Central High evacuated after bomb threat; deputies give all-clear | Fort Pierce Central High evacuated after bomb threat; deputies give all-clear | 61 | importance 45; freshness 91.55; urgency 2/10 |
-| 6 | Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach | Port St. Lucie police search for man missing since Monday morning | 55 | importance 45; freshness 48.49; urgency 4/10 |
-| 7 | Fort Pierce opens public survey through Oct. 15 to help shape strategic plan through 2041 | Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma | 59 | importance 10; freshness 60.16; urgency 7/10; validated material update; -12 county saturation |
-| 8 | Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case | Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim | 59 | importance 35; freshness 54.54; urgency 4/10; validated material update; -12 county saturation |
-| 9 | Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy | Fort Pierce police arrest 16-year-old suspect within 24 hours in armed robbery case | 53 | importance 35; freshness 56.13; urgency 4/10; -6 category saturation |
-| 10 | Man killed in Fort Pierce shooting as three masked suspects remain at large | Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach | 49 | importance 10; freshness 91.55; urgency 2/10; -6 category saturation |
-| 11 | Port St. Lucie police search for man missing since Monday morning | DeSantis pledges to campaign for Amendment 3 despite growing local opposition over service cuts | 43 | importance 10; freshness 56.12; urgency 2/10; validated material update |
-| 12 | 17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered | Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy | 47 | importance 10; freshness 83.12; urgency 2/10; -12 county saturation |
+| 1 | Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs | Man killed in Fort Pierce shooting as three masked suspects remain at large | 83 | importance 85; freshness 80.45; urgency 7/10 |
+| 2 | Man killed in Fort Pierce shooting as three masked suspects remain at large | Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs | 82 | importance 45; freshness 99.91; urgency 8/10; validated material update |
+| 3 | Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma | Body found in Martin County mangroves confirmed as missing visitor from Oklahoma | 75 | importance 100; freshness 45.82; urgency 2/10; validated material update |
+| 4 | Four Fort Pierce officers credited with pulling woman from South Causeway Bridge railing | Palm City woman charged in Border Collie hoarding case released from jail on $500 bond | 67 | importance 70; freshness 54.49; urgency 2/10; validated material update |
+| 5 | Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim | Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim | 59 | importance 35; freshness 51.88; urgency 4/10; validated material update; -4 county saturation |
+| 6 | Florida drivers face record-high Labor Day gas prices as Strait of Hormuz tensions drive fuel costs up | Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma | 58 | importance 10; freshness 57.49; urgency 7/10; validated material update; -4 county saturation |
+| 7 | Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach | Port St. Lucie police search for man missing since Monday morning | 54 | importance 45; freshness 45.82; urgency 4/10; -6 category saturation |
+| 8 | Fort Pierce opens public survey through Oct. 15 to help shape strategic plan through 2041 | Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach | 48 | importance 10; freshness 88.89; urgency 2/10 |
+| 9 | Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy | DeSantis pledges to campaign for Amendment 3 despite growing local opposition over service cuts | 42 | importance 10; freshness 53.45; urgency 2/10; validated material update |
+| 10 | Port St. Lucie police search for man missing since Monday morning | Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy | 46 | importance 10; freshness 80.45; urgency 2/10; -12 county saturation |
+| 11 | 17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered | Four Fort Pierce officers credited with pulling woman from South Causeway Bridge railing | 57 | importance 25; freshness 99.91; urgency 4/10; -12 category saturation; -12 county saturation |
+| 12 | Palm City woman charged in Border Collie hoarding case released from jail on $500 bond | Florida drivers face record-high Labor Day gas prices as Strait of Hormuz tensions drive fuel costs up | 45 | importance 0; freshness 88.87; urgency 2/10; -12 county saturation |
 
 ## Recommended moves
 
-- **Body found in Martin County mangroves confirmed as missing visitor from Oklahoma**: 51 → 1 — importance 100; freshness 48.49; urgency 2/10; validated material update
-- **DeSantis pledges to campaign for Amendment 3 despite growing local opposition over service cuts**: 45 → 11 — importance 10; freshness 56.12; urgency 2/10; validated material update
-- **Palm City woman charged in Border Collie hoarding case released from jail on $500 bond**: 27 → 3 — importance 70; freshness 57.16; urgency 2/10; validated material update
-- **Florida drivers face record-high Labor Day gas prices as Strait of Hormuz tensions drive fuel costs up**: 4 → 13 — importance 0; freshness 91.54; urgency 2/10
-- **Man killed in Fort Pierce shooting as three masked suspects remain at large**: 10 → 2 — importance 85; freshness 83.12; urgency 2/10
-- **Fort Pierce opens public survey through Oct. 15 to help shape strategic plan through 2041**: 7 → 14 — importance 0; freshness 91.54; urgency 2/10
-- **Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma**: 2 → 7 — importance 10; freshness 60.16; urgency 7/10; validated material update; -12 county saturation
-- **Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim**: 3 → 8 — importance 35; freshness 54.54; urgency 4/10; validated material update; -12 county saturation
-- **Port St. Lucie police search for man missing since Monday morning**: 11 → 6 — importance 45; freshness 48.49; urgency 4/10
-- **Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach**: 6 → 10 — importance 10; freshness 91.55; urgency 2/10; -6 category saturation
-- **Rollover crash on I-95 southbound in Palm City leaves driver with traumatic injuries, requiring airlift**: 1 → 4 — importance 25; freshness 99.91; urgency 7/10
-- **17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered**: 12 → 15 — importance 0; freshness 74.81; urgency 2/10; validated material update
+- **Body found in Martin County mangroves confirmed as missing visitor from Oklahoma**: 50 → 3 — importance 100; freshness 45.82; urgency 2/10; validated material update
+- **DeSantis pledges to campaign for Amendment 3 despite growing local opposition over service cuts**: 44 → 9 — importance 10; freshness 53.45; urgency 2/10; validated material update
+- **Palm City woman charged in Border Collie hoarding case released from jail on $500 bond**: 12 → 4 — importance 70; freshness 54.49; urgency 2/10; validated material update
+- **Four Fort Pierce officers credited with pulling woman from South Causeway Bridge railing**: 4 → 11 — importance 25; freshness 99.91; urgency 4/10; -12 category saturation; -12 county saturation
+- **Florida drivers face record-high Labor Day gas prices as Strait of Hormuz tensions drive fuel costs up**: 6 → 12 — importance 0; freshness 88.87; urgency 2/10; -12 county saturation
+- **Fort Pierce opens public survey through Oct. 15 to help shape strategic plan through 2041**: 8 → 13 — importance 0; freshness 88.87; urgency 2/10
+- **Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma**: 3 → 6 — importance 10; freshness 57.49; urgency 7/10; validated material update; -4 county saturation
+- **Port St. Lucie police search for man missing since Monday morning**: 10 → 7 — importance 45; freshness 45.82; urgency 4/10; -6 category saturation
+- **17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered**: 11 → 14 — importance 0; freshness 72.14; urgency 2/10; validated material update
+- **Man killed in Fort Pierce shooting as three masked suspects remain at large**: 2 → 1 — importance 85; freshness 80.45; urgency 7/10
+- **Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs**: 1 → 2 — importance 45; freshness 99.91; urgency 8/10; validated material update
+- **Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach**: 7 → 8 — importance 10; freshness 88.89; urgency 2/10
 
 ## Guardrails
 
