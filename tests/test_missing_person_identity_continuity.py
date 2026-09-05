@@ -8,6 +8,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from tct_engine import EditorialAction, EditorialEngine
+import tct_engine.story_registry as story_registry_module
+from tct_engine.story_lifecycle import classify_story_lifecycle
 from tct_engine.incident_identity import incident_anchor_key
 from tct_engine.unified_incident_identity import (
     build_unified_incident_evidence,
@@ -126,7 +128,22 @@ def test_different_ages_in_same_city_do_not_merge_without_shared_name():
     assert "Missing-person age conflict: True" in trace
 
 
-def test_editorial_engine_reuses_story_across_sparse_publisher_framings(tmp_path: Path):
+def test_editorial_engine_reuses_story_across_sparse_publisher_framings(
+    tmp_path: Path, monkeypatch
+):
+    # This is an Aug. 6 identity regression, not a lifecycle/retention test.
+    # Pin the registry lifecycle clock inside the incident's active window so the
+    # assertion cannot begin failing when wall-clock time crosses the 30-day
+    # archival threshold. Lifecycle aging is covered separately.
+    reference_time = datetime(2026, 8, 7, tzinfo=timezone.utc)
+    monkeypatch.setattr(
+        story_registry_module,
+        "classify_story_lifecycle",
+        lambda story: classify_story_lifecycle(
+            story, reference_time=reference_time
+        ),
+    )
+
     engine = EditorialEngine(
         default_published_at=datetime(2026, 8, 6, tzinfo=timezone.utc),
         registry_path=tmp_path / "registry.json",
