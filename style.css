@@ -5557,3 +5557,41 @@ header.site-masthead {
     min-height: 38px;
   }
 }
+
+
+/* ==========================================================
+   v1.13.7.5k - mobile More menu first-tap + scroll-position fix
+   ========================================================== */
+@media (max-width: 900px) {
+  /* Do not let touch Safari's synthetic hover/focus state reveal the menu
+     before the disclosure is actually opened. That behavior causes the
+     familiar first-tap-highlights / second-tap-opens problem on iOS. */
+  .nav-sections:not([open]):hover .nav-sections-menu,
+  .nav-sections:not([open]):focus-within .nav-sections-menu {
+    display: none !important;
+  }
+
+  /* Keep the category strip a real horizontal scroller while More is open.
+     Changing it to overflow:visible resets its apparent scroll position. */
+  .site-masthead .category-nav--primary:has(.nav-sections[open]) {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding-right: 50px !important;
+  }
+
+  /* The menu itself escapes the scroller as a viewport-fixed panel, so the
+     strip never has to change overflow modes. JS supplies the exact bottom
+     edge of the sticky nav row via --mobile-more-top. */
+  .nav-sections[open] .nav-sections-menu {
+    position: fixed;
+    top: var(--mobile-more-top, 103px);
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+    max-height: calc(100dvh - var(--mobile-more-top, 103px) - 12px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}

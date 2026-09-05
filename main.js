@@ -176,6 +176,72 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
+// -- MOBILE MORE MENU --
+// iOS Safari can require a second tap when :hover/:focus-within reveals a
+// submenu before the native <details> click completes. On mobile, toggle the
+// disclosure explicitly and preserve the horizontal category-strip position.
+(() => {
+  const mobileMoreQuery = window.matchMedia("(max-width: 900px)");
+  const menus = Array.from(document.querySelectorAll(".nav-sections"));
+  if (!menus.length) return;
+
+  function positionMobileMenu(details) {
+    const menu = details.querySelector(".nav-sections-menu");
+    const row = details.closest(".masthead-nav-row");
+    if (!menu) return;
+    if (!mobileMoreQuery.matches || !details.open || !row) {
+      menu.style.removeProperty("--mobile-more-top");
+      return;
+    }
+    const rowBottom = Math.ceil(row.getBoundingClientRect().bottom);
+    menu.style.setProperty("--mobile-more-top", `${rowBottom}px`);
+  }
+
+  menus.forEach(details => {
+    const summary = details.querySelector(":scope > summary");
+    if (!summary) return;
+
+    summary.addEventListener("click", event => {
+      if (!mobileMoreQuery.matches) return;
+
+      event.preventDefault();
+      const scroller = details.closest(".category-nav--primary");
+      const savedScrollLeft = scroller ? scroller.scrollLeft : 0;
+      const shouldOpen = !details.open;
+
+      menus.forEach(other => {
+        if (other !== details) other.removeAttribute("open");
+      });
+
+      details.open = shouldOpen;
+      if (shouldOpen) positionMobileMenu(details);
+
+      requestAnimationFrame(() => {
+        if (scroller) scroller.scrollLeft = savedScrollLeft;
+        if (details.open) positionMobileMenu(details);
+      });
+    });
+
+    details.addEventListener("toggle", () => {
+      if (details.open) positionMobileMenu(details);
+    });
+  });
+
+  const repositionOpenMenu = () => {
+    if (!mobileMoreQuery.matches) return;
+    menus.forEach(details => {
+      if (details.open) positionMobileMenu(details);
+    });
+  };
+
+  window.addEventListener("resize", repositionOpenMenu, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", repositionOpenMenu, { passive: true });
+    window.visualViewport.addEventListener("scroll", repositionOpenMenu, { passive: true });
+  }
+})();
+
 // Close the Sections menu when focus moves away by pointer or Escape. Native
 // <details>/<summary> retains keyboard and no-JS behavior; these are progressive
 // enhancements only.
