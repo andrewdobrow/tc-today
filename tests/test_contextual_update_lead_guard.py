@@ -260,7 +260,7 @@ def test_custom_article_is_never_suppressed_by_update_lead_guard():
 def test_category_cache_version_is_scoped_to_article_prompt_change():
     generate = _load_generate_module()
     assert generate.GENERATION_PROMPT_VERSION == "v1.9.4-incremental-generation-1"
-    assert generate.CATEGORY_GENERATION_PROMPT_VERSION == "v1.13.7.1y-live-assignment-editor"
+    assert generate.CATEGORY_GENERATION_PROMPT_VERSION == "v1.13.7.2-full-article-parity"
 
 
 def test_standard_archive_entry_does_not_read_article_body(monkeypatch):

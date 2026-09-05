@@ -952,7 +952,7 @@ ASSIGNMENT_EDITOR_TIMEOUT_SECONDS = 60.0
 ASSIGNMENT_WRITER_TIMEOUT_SECONDS = 90.0
 ASSIGNMENT_EDITOR_MAX_TOKENS = 1800
 ASSIGNMENT_WRITER_HERO_MAX_TOKENS = 2600
-ASSIGNMENT_WRITER_CARD_MAX_TOKENS = 1800
+ASSIGNMENT_WRITER_CARD_MAX_TOKENS = 2600
 ASSIGNMENT_EDITOR_REPORT_PATH = OUTPUT_DIR / "data" / "assignment-editor-shadow-report.json"
 ASSIGNMENT_EDITOR_REVIEW_PATH = OUTPUT_DIR / "data" / "assignment-editor-shadow-review.md"
 ASSIGNMENT_EDITOR_ANSWER_KEY_PATH = OUTPUT_DIR / "data" / "assignment-editor-shadow-answer-key.json"
@@ -964,7 +964,7 @@ ASSIGNMENT_EDITOR_PENDING = {}
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.1y-live-assignment-editor"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.2-full-article-parity"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
 # writer. Keeping one literal contract prevents the Sonnet 5 editor -> Sonnet 4.5
@@ -4823,12 +4823,31 @@ def validate_live_county_membership_authority(all_categories, top_cat=None, outp
     return {"assessed_placements": assessed, "violations": violations, "passed": True}
 
 
-# Publication quality gates. A category can fall back to older real reporting, but
-# a thin RSS blurb must never be expanded into a fake-looking article or promoted
-# merely to keep a section populated.
-MIN_HERO_BODY_WORDS = 120
-MIN_CARD_BODY_WORDS = 90
+# Publication quality gates. Homepage placement must never determine article depth:
+# every automated story that receives a permalink is a full article, whether it is
+# displayed as a hero or a card. The floor scales with available source depth so a
+# rich source cannot collapse into a thin article, while genuinely short sources are
+# not padded with invented or generic material merely to hit an arbitrary word count.
+MIN_ARTICLE_BODY_WORDS = 120
 MIN_SOURCE_WORDS = 80
+
+
+def _article_depth_requirements(item):
+    """Return one source-aware publication floor for every automated article.
+
+    These are rejection floors, not writing targets. Writers are instructed to aim
+    for roughly 350-430 words / four paragraphs whenever the reporting supports it.
+    """
+    source_words = _source_word_count(item)
+    if source_words >= 700:
+        return 300, 3
+    if source_words >= 450:
+        return 260, 3
+    if source_words >= 300:
+        return 220, 3
+    if source_words >= 200:
+        return 170, 3
+    return MIN_ARTICLE_BODY_WORDS, 2
 
 
 def _word_count(text):
@@ -5051,18 +5070,20 @@ def _publishable_article(item, hero=False):
     if quality in {"thin", "brief", "discovery_only"}:
         return False
 
-    body = (item.get("body", "") or "").strip()
-    min_words = MIN_HERO_BODY_WORDS if hero else MIN_CARD_BODY_WORDS
-    if _word_count(body) < min_words:
-        return False
-    # Prefer real paragraph structure, but allow a well-developed single paragraph
-    # with at least five factual sentences.
-    if _paragraph_count(body) < 2 and _sentence_count(body) < 5:
-        return False
-
     source_words = _source_word_count(item)
     if source_words < MIN_SOURCE_WORDS:
         return False
+
+    body = (item.get("body", "") or "").strip()
+    min_words, min_paragraphs = _article_depth_requirements(item)
+    if _word_count(body) < min_words:
+        return False
+    paragraphs = _paragraph_count(body)
+    if paragraphs < min_paragraphs:
+        # Only genuinely short-source articles may use the older sentence-structure
+        # escape hatch. Richer sources must produce a real multi-paragraph article.
+        if min_paragraphs > 2 or paragraphs < 1 or _sentence_count(body) < 5:
+            return False
     return True
 
 def _archive_article_metrics(entry):
@@ -5184,7 +5205,7 @@ def _archive_entry_publishable(entry):
     if entry.get("is_custom"):
         return True
     wc, pc = _archive_article_metrics(entry)
-    return wc >= MIN_HERO_BODY_WORDS and (pc >= 2 or wc >= 180)
+    return wc >= MIN_ARTICLE_BODY_WORDS and (pc >= 2 or wc >= 180)
 
 
 def _sports_relevance_evidence(item):
@@ -8056,8 +8077,8 @@ def generate_category_content(category_key, category_label, headlines, request_t
     if category_key in COUNTY_KEYS:
         source_rules = """SOURCE RULES:
 - Items marked [hero_eligible:no] must NOT be selected as the hero/section lead, even if they are full-source stories. They may only be used as lower cards if needed.
-- Stories marked [source_quality:full] contain full article body text and should be used for the hero and the main full cards.
-- Stories marked [source_quality:summary] may be used for normal cards only when the provided source contains enough concrete facts.
+- Stories marked [source_quality:full] contain full article body text and should be used for the hero and full articles.
+- Stories marked [source_quality:summary] may be used only when the provided source contains enough concrete facts for a standalone article.
 - Stories marked [source_quality:brief], [source_quality:thin], or [source_type:discovery_only] must NOT be used at all. Do not turn a blurb into an article.
 - The hero must come from [source_quality:full] or [source_quality:summary].
 - If there are not enough usable stories for six cards, return fewer cards. The site will backfill from its archive; never invent filler to populate the section.
@@ -8067,8 +8088,8 @@ def generate_category_content(category_key, category_label, headlines, request_t
     else:
         source_rules = """SOURCE RULES:
 - Items marked [hero_eligible:no] must NOT be selected as the hero/section lead, even if they are full-source stories. They may only be used as lower cards if needed.
-- Stories marked [source_quality:full] contain full article body text and may be used for the hero or full cards.
-- Stories marked [source_quality:summary] may be used for shorter full cards only if the provided text has enough concrete facts.
+- Stories marked [source_quality:full] contain full article body text and may be used for the hero or any full article.
+- Stories marked [source_quality:summary] may be used only if the provided text has enough concrete facts for a standalone article.
 - Stories marked [source_quality:brief], [source_quality:thin], or [source_type:discovery_only] must NOT be used for the hero and must not be padded into full articles.
 - If there are not enough usable stories for six cards, return fewer cards rather than writing filler.
 - Do not write generic context such as "this reflects growth," "officials continue to investigate," or "residents are encouraged" unless those facts are explicitly in the source.
@@ -8085,13 +8106,13 @@ def generate_category_content(category_key, category_label, headlines, request_t
 Tasks:
 1. Pick the single most important/urgent Florida statewide story. Prioritize broad impact — legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state.
 2. Write an accurate Florida-focused headline. Name the specific Florida city, region, or institution when relevant.
-3. Write a 380-430 word factual article in FOUR full paragraphs. Cover what happened, who is affected across Florida, and what happens next statewide.
-4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Ground all specific facts in the source. Always preserve proper nouns. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
+3. Write a complete standalone factual article with the same full treatment as every other story: aim for FOUR full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding or inventing material. Cover what happened, who is affected across Florida, and what happens next statewide.
+4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences) AND a complete standalone factual article, using the same full treatment as the hero: aim for four full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding or inventing material. Ground all specific facts in the source. Always preserve proper nouns. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 Return ONLY valid JSON:
 {{
   "hero": {{"headline": "...", "body": "full article", "urgency_score": <1-10>, "published": "copy [pub:...] exactly", "source_index": <number>}},
-  "cards": [{{"headline": "...", "teaser": "...", "body": "two to three paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
+  "cards": [{{"headline": "...", "teaser": "...", "body": "full standalone article", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
 }}
 """
     else:
@@ -8102,13 +8123,13 @@ Return ONLY valid JSON:
 Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories (county commission decisions, local crime, school district news, local business, road/infrastructure, local sports) rank ABOVE national or state stories unless the national story has very direct local impact.
 2. Write an accurate, locally-framed headline. Name the specific county, city, or town in the headline when relevant.
-3. Write a complete, readable factual article of four full paragraphs covering what happened, who is affected locally, the context, and what happens next. Never write absence language.
-4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Always preserve proper nouns — school names, road names, business names, people's names. If the source names specific schools, streets, or institutions, those names MUST appear in the card. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
+3. Write a complete standalone factual article with the same full treatment as every other story: aim for four full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding or inventing material. Cover what happened, who is affected locally, the context, and what happens next. Never write absence language.
+4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) AND a complete standalone factual article, using the same full treatment as the hero: aim for four full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding or inventing material. Always preserve proper nouns — school names, road names, business names, people's names. If the source names specific schools, streets, or institutions, those names MUST appear in the article. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 Return ONLY valid JSON:
 {{
   "hero": {{"headline": "...", "body": "full article", "urgency_score": <1-10>, "published": "copy [pub:...] exactly", "source_index": <number>}},
-  "cards": [{{"headline": "...", "teaser": "...", "body": "two to three paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
+  "cards": [{{"headline": "...", "teaser": "...", "body": "full standalone article", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
 }}
 """
 
@@ -9367,7 +9388,11 @@ def enhance_card(card, content_bank, headlines):
 
     try:
         body = card.get("body", "")
-        target = "two fully developed paragraphs, about 170-240 words total" if word_count >= 140 else "one concise paragraph"
+        target = (
+            "a complete standalone local-news article with four full paragraphs and roughly "
+            "350-430 words when the source supports that depth; if the source genuinely cannot "
+            "support that length, write shorter rather than padding, repeating, or inventing facts"
+        )
         update_lead_instruction = ""
         if _source_story_form(source) == "update":
             update_lead_instruction = (
@@ -9376,8 +9401,8 @@ def enhance_card(card, content_bank, headlines):
                 "who did not see earlier coverage."
             )
         prompt = (
-            f"Rewrite this local news card using the exact source material below.\n\n"
-            f"Card headline: {headline}\n\n"
+            f"Rewrite this local news article using the exact source material below.\n\n"
+            f"Article headline: {headline}\n\n"
             f"Current card body:\n{body}\n\n"
             f"Exact source material:\n{source_text[:6000]}\n\n"
             f"Write {target}. Use only confirmed facts from the source. "
@@ -9388,16 +9413,18 @@ def enhance_card(card, content_bank, headlines):
         )
         resp = client.messages.create(
             model=MODEL_ARTICLES,
-            max_tokens=800,
+            max_tokens=1600,
             messages=[{"role": "user", "content": prompt}]
         )
         enhanced = resp.content[0].text.strip()
         explanation_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
         if enhanced and not any(s in enhanced.lower()[:150] for s in explanation_signals):
-            # Only accept a short rewrite if the source itself was short. Full sources should
-            # produce at least two useful paragraphs.
-            if word_count < 140 or len(enhanced.split()) >= 90:
-                card["body"] = strip_absence_language(strip_markdown(enhanced, headline))
+            candidate_body = strip_absence_language(strip_markdown(enhanced, headline))
+            candidate = dict(card)
+            candidate["body"] = candidate_body
+            candidate["source_word_count"] = word_count
+            if _publishable_article(candidate, hero=False):
+                card["body"] = candidate_body
                 card["enriched"] = True
     except Exception:
         pass
@@ -9432,7 +9459,7 @@ def enhance_hero_article(hero, full_text):
         "Write in your own words — paraphrase everything except direct quotes from named individuals. "
         "Do not invent details not in the source. Do not comment on absent information. "
         "Do not copy newsletter openers like 'Good morning'. "
-        f"Keep it 380-480 words in four paragraphs. Include the concrete facts from the source.{update_lead_instruction} "
+        f"Aim for four full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding, repeating, or inventing material. Include the concrete facts from the source.{update_lead_instruction} "
         "Plain direct English. No em dashes."
     )
     try:
@@ -10891,23 +10918,29 @@ def _run_assignment_writer(packet, assignment, *, role, timeout_seconds=None):
             f"\nPRIOR CANONICAL CONTEXT: {source.get('canonical_context_body')}"
         )
 
+    full_article_rule = (
+        "Write a complete standalone local-news article with the same full treatment "
+        "regardless of homepage placement: aim for four full paragraphs and roughly "
+        "350-430 words when the source supports that depth. If the source genuinely "
+        "cannot support that length, write shorter rather than padding, repeating, or "
+        "inventing material."
+    )
     if role == "hero":
         output_contract = (
-            'Return ONLY one JSON object: {"headline":"...","body":"four full paragraphs",'
+            'Return ONLY one JSON object: {"headline":"...","body":"full standalone article",'
             f'"urgency_score":{json.dumps(urgency)},"published":{json.dumps(published)},'
             f'"source_index":{source_index}}}'
         )
-        length_rule = "Write a complete four-paragraph local-news article, roughly 350-430 words when the source supports that depth."
         max_tokens = ASSIGNMENT_WRITER_HERO_MAX_TOKENS
     else:
         output_contract = (
             'Return ONLY one JSON object: {"headline":"...","teaser":"one to two sentences",'
-            '"body":"two to three full paragraphs",'
+            '"body":"full standalone article",'
             f'"urgency_score":{json.dumps(urgency)},"published":{json.dumps(published)},'
             f'"source_index":{source_index}}}'
         )
-        length_rule = "Write a concise card with a one-to-two-sentence teaser and two-to-three factual paragraphs."
         max_tokens = ASSIGNMENT_WRITER_CARD_MAX_TOKENS
+    length_rule = full_article_rule
 
     prompt = f"""You are the writer for Treasure Coast Today. The assignment editor has already selected the story. You have NO story-selection authority in this task.
 

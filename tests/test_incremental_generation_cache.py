@@ -152,7 +152,7 @@ def test_publishable_second_passes_skip_claude(monkeypatch):
     }
     card = {
         "headline": "Local card headline",
-        "body": _publishable_body(100),
+        "body": _publishable_body(130),
         "source_index": 1,
         "source_quality": "full",
         "source_word_count": 160,
@@ -166,6 +166,26 @@ def test_publishable_second_passes_skip_claude(monkeypatch):
 
     assert generate.enhance_card(card, [], [source])["enriched"] is True
     assert generate.enhance_hero_article(hero, _article_text())["enriched"] is True
+
+
+def test_full_article_depth_contract_is_identical_for_hero_and_card():
+    generate = _load_generate_module()
+
+    thin_body = _publishable_body(175)
+    rich_body = "\n\n".join(
+        " ".join([word] * 70) + "."
+        for word in ("lead", "detail", "context", "followup")
+    )
+    base = {
+        "headline": "Fellsmere community profile",
+        "source_quality": "full",
+        "source_word_count": 507,
+    }
+
+    assert generate._article_depth_requirements(base) == (260, 3)
+    for hero in (False, True):
+        assert generate._publishable_article(dict(base, body=thin_body), hero=hero) is False
+        assert generate._publishable_article(dict(base, body=rich_body), hero=hero) is True
 
 
 def test_category_generation_key_changes_with_source_content():

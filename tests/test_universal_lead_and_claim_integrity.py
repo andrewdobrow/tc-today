@@ -571,7 +571,7 @@ def test_release_versions_and_reports_are_bumped():
     import tct_engine.observability as observability
 
     assert g.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.13.7.1y-live-assignment-editor"
+        "v1.13.7.2-full-article-parity"
     )
     assert g.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 7
     assert g.FORWARD_IDENTITY_VERSION == "1.7"
