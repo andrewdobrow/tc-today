@@ -8106,7 +8106,7 @@ def generate_category_content(category_key, category_label, headlines, request_t
 Tasks:
 1. Pick the single most important/urgent Florida statewide story. Prioritize broad impact — legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state.
 2. Write an accurate Florida-focused headline. Name the specific Florida city, region, or institution when relevant.
-3. Write a complete standalone factual article with the same full treatment as every other story: aim for FOUR full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding or inventing material. Cover what happened, who is affected across Florida, and what happens next statewide.
+3. Write a 380-430 word factual article in FOUR full paragraphs. Cover what happened, who is affected across Florida, and what happens next statewide.
 4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences) AND a complete standalone factual article, using the same full treatment as the hero: aim for four full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding or inventing material. Ground all specific facts in the source. Always preserve proper nouns. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 Return ONLY valid JSON:
@@ -8123,7 +8123,7 @@ Return ONLY valid JSON:
 Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories (county commission decisions, local crime, school district news, local business, road/infrastructure, local sports) rank ABOVE national or state stories unless the national story has very direct local impact.
 2. Write an accurate, locally-framed headline. Name the specific county, city, or town in the headline when relevant.
-3. Write a complete standalone factual article with the same full treatment as every other story: aim for four full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding or inventing material. Cover what happened, who is affected locally, the context, and what happens next. Never write absence language.
+3. Write a complete, readable factual article of four full paragraphs covering what happened, who is affected locally, the context, and what happens next. Never write absence language.
 4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) AND a complete standalone factual article, using the same full treatment as the hero: aim for four full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding or inventing material. Always preserve proper nouns — school names, road names, business names, people's names. If the source names specific schools, streets, or institutions, those names MUST appear in the article. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 Return ONLY valid JSON:
@@ -9401,8 +9401,8 @@ def enhance_card(card, content_bank, headlines):
                 "who did not see earlier coverage."
             )
         prompt = (
-            f"Rewrite this local news article using the exact source material below.\n\n"
-            f"Article headline: {headline}\n\n"
+            f"Rewrite this local news card using the exact source material below.\n\n"
+            f"Card headline: {headline}\n\n"
             f"Current card body:\n{body}\n\n"
             f"Exact source material:\n{source_text[:6000]}\n\n"
             f"Write {target}. Use only confirmed facts from the source. "
@@ -9459,7 +9459,7 @@ def enhance_hero_article(hero, full_text):
         "Write in your own words — paraphrase everything except direct quotes from named individuals. "
         "Do not invent details not in the source. Do not comment on absent information. "
         "Do not copy newsletter openers like 'Good morning'. "
-        f"Aim for four full paragraphs and roughly 350-430 words when the source supports that depth. If the source genuinely cannot support that length, write shorter rather than padding, repeating, or inventing material. Include the concrete facts from the source.{update_lead_instruction} "
+        f"Keep it 380-480 words in four paragraphs. Include the concrete facts from the source.{update_lead_instruction} "
         "Plain direct English. No em dashes."
     )
     try:
@@ -16536,7 +16536,16 @@ def load_custom_articles():
                 "Keep one authoritative queue entry per headline."
             )
         queued_headlines.add(headline)
+        if art.get("retired") is True or headline in retired:
+            retired_skips += 1
+            continue
         requested_slug = _validated_custom_requested_slug(art.get("slug"))
+        if requested_slug and requested_slug in _load_custom_retired_slugs(OUTPUT_DIR):
+            raise RuntimeError(
+                "Custom publication slug is retired/reserved: "
+                f"'{requested_slug}'. Choose a new unique slug; retired permalinks "
+                "cannot be reused by a new custom article."
+            )
         if requested_slug:
             prior_headline = queued_slugs.get(requested_slug)
             if prior_headline and prior_headline != headline:
@@ -16546,9 +16555,6 @@ def load_custom_articles():
                     "Each custom headline requires a unique requested slug."
                 )
             queued_slugs[requested_slug] = headline
-        if art.get("retired") is True or headline in retired:
-            retired_skips += 1
-            continue
         expires = str(art.get("expires") or "").strip()
         if expires:
             try:
@@ -18500,6 +18506,33 @@ def _validated_custom_requested_slug(value):
             "without removing its edition marker."
         )
     return slug
+
+
+def _allocate_new_publication_slug(base_slug, archive, output_root=None):
+    """Return a new permalink slug without ever reusing a retired custom URL.
+
+    Retired custom slugs are durable tombstones. They may have been removed from the
+    archive entirely, so checking only current archive rows can accidentally recreate
+    a URL that editorial policy explicitly retired. Auto-generated publications move
+    to the next numeric suffix; explicit custom slugs are rejected earlier instead of
+    being silently changed.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    reserved = {
+        _normalize_custom_slug(row.get("slug"))
+        for row in archive or []
+        if isinstance(row, dict) and _normalize_custom_slug(row.get("slug"))
+    }
+    reserved.update(_load_custom_retired_slugs(root))
+    slug = _normalize_custom_slug(base_slug)
+    if not slug:
+        return slug
+    counter = 1
+    candidate = slug
+    while candidate in reserved:
+        candidate = f"{slug}-{counter}"
+        counter += 1
+    return candidate
 
 
 def _parse_any_datetime(value):
@@ -32537,15 +32570,11 @@ def write_archives(all_categories, top_cat):
                     f"'{headline[:60]}' because NEW was not explicitly authorized"
                 )
                 continue
-            existing_slugs = {e["slug"] for e in archive}
             if _forced_slug:
                 base_slug = _forced_slug
             else:
                 base_slug = f"{today}-{slugify(headline)}"
-            slug = base_slug
-            counter = 1
-            while slug in existing_slugs:
-                slug = f"{base_slug}-{counter}"; counter += 1
+            slug = _allocate_new_publication_slug(base_slug, archive, OUTPUT_DIR)
             # Byline timestamp: brand-new article, first-published is now.
             hero["first_published"] = hero.get("first_published") or _now_eastern_rfc822()
             _related = [e for e in archive
