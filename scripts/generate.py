@@ -320,7 +320,7 @@ def _header_primary_cta_html():
         signin_href = f"{href}{joiner}signin=1"
         return (
             f'<a href="{href}" class="support-btn membership-subscribe-btn" '
-            'style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today — $1 first month">'
+            'style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today, $1 first month">'
             '<span class="membership-subscribe-label">Subscribe</span>'
             '<span class="membership-subscribe-price">Limited time &middot; $1 first month</span>'
             '</a>'
@@ -4632,7 +4632,7 @@ def _audit_geographic_navigation_coverage(archive, output_root=None, recent_days
 
     report = {
         "schema_version": 1,
-        "contract_version": "1.13.7.5g",
+        "contract_version": "1.13.7.5h",
         "generated_at": _utc_now_iso(),
         "policy": (
             "recent ordinary local news must project to a source-authorized county or Florida; "
@@ -15265,92 +15265,7 @@ def render_index(all_categories, top_cat):
     )
     _footer = _page_footer()
 
-    _live_masthead_script = r'''
-  <script>
-  (() => {
-    const timeEl = document.getElementById('tct-live-time');
-    const weatherEl = document.getElementById('tct-live-weather');
-    const iconEl = document.getElementById('tct-weather-icon');
-    const tempEl = document.getElementById('tct-weather-temp');
-    const conditionEl = document.getElementById('tct-weather-condition');
-
-    function updateTreasureCoastClock() {
-      if (!timeEl) return;
-      const now = new Date();
-      const datePart = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/New_York',
-        weekday: 'short', month: 'short', day: 'numeric'
-      }).format(now);
-      const timePart = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/New_York',
-        hour: 'numeric', minute: '2-digit', hour12: true,
-        timeZoneName: 'short'
-      }).format(now);
-      timeEl.textContent = `${datePart} · ${timePart}`;
-      timeEl.dateTime = now.toISOString();
-    }
-
-    const weatherCodes = {
-      0: ['☀', 'Clear'],
-      1: ['🌤', 'Mostly clear'],
-      2: ['⛅', 'Partly cloudy'],
-      3: ['☁', 'Cloudy'],
-      45: ['🌫', 'Fog'], 48: ['🌫', 'Fog'],
-      51: ['🌦', 'Light drizzle'], 53: ['🌦', 'Drizzle'], 55: ['🌧', 'Heavy drizzle'],
-      56: ['🌧', 'Freezing drizzle'], 57: ['🌧', 'Freezing drizzle'],
-      61: ['🌦', 'Light rain'], 63: ['🌧', 'Rain'], 65: ['🌧', 'Heavy rain'],
-      66: ['🌧', 'Freezing rain'], 67: ['🌧', 'Freezing rain'],
-      71: ['🌨', 'Light snow'], 73: ['🌨', 'Snow'], 75: ['❄', 'Heavy snow'], 77: ['🌨', 'Snow grains'],
-      80: ['🌦', 'Rain showers'], 81: ['🌧', 'Rain showers'], 82: ['⛈', 'Heavy showers'],
-      85: ['🌨', 'Snow showers'], 86: ['🌨', 'Snow showers'],
-      95: ['⛈', 'Thunderstorms'], 96: ['⛈', 'Storms with hail'], 99: ['⛈', 'Storms with hail']
-    };
-
-    function paintWeather(data) {
-      if (!data || typeof data.temperature !== 'number') return;
-      const [icon, label] = weatherCodes[data.code] || ['◌', 'Local weather'];
-      iconEl.textContent = icon;
-      tempEl.textContent = `${Math.round(data.temperature)}°`;
-      conditionEl.textContent = label;
-      weatherEl.title = `Treasure Coast: ${Math.round(data.temperature)}°F, ${label}`;
-    }
-
-    async function updateTreasureCoastWeather() {
-      if (!weatherEl) return;
-      const cacheKey = 'tct-weather-v1';
-      const maxAge = 20 * 60 * 1000;
-      try {
-        const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
-        if (cached && Date.now() - cached.savedAt < maxAge) {
-          paintWeather(cached);
-          return;
-        }
-      } catch (_) {}
-
-      try {
-        const url = 'https://api.open-meteo.com/v1/forecast?latitude=27.1975&longitude=-80.2528&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FNew_York';
-        const response = await fetch(url, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`Weather request failed: ${response.status}`);
-        const result = await response.json();
-        const data = {
-          temperature: result.current && result.current.temperature_2m,
-          code: result.current && result.current.weather_code,
-          savedAt: Date.now()
-        };
-        paintWeather(data);
-        try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch (_) {}
-      } catch (_) {
-        conditionEl.textContent = 'Local weather';
-      }
-    }
-
-    updateTreasureCoastClock();
-    window.setInterval(updateTreasureCoastClock, 30000);
-    updateTreasureCoastWeather();
-    window.setInterval(updateTreasureCoastWeather, 20 * 60 * 1000);
-  })();
-  </script>
-    '''
+    _live_masthead_script = ""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -15358,30 +15273,7 @@ def render_index(all_categories, top_cat):
 {_head}
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <div class="header-top">
-        <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
-      </div>
-      {_primary_navigation_html(active="news", homepage_filters=True)}
-      <div class="header-actions">
-        {_header_primary_cta_html()}
-      </div>
-    </div>
-  </header>
-  <div class="newsroom-strip">
-    <div class="newsroom-strip-inner">
-      <span class="newsroom-local-label">Local news for Martin, St. Lucie &amp; Indian River counties</span>
-      <div class="newsroom-live-tools" aria-label="Current Treasure Coast time and weather">
-        <time id="tct-live-time" class="newsroom-live-time" datetime=""></time>
-        <a id="tct-live-weather" class="newsroom-live-weather" href="/weather.html" aria-label="View local weather">
-          <span id="tct-weather-icon" class="newsroom-weather-icon" aria-hidden="true">◌</span>
-          <span id="tct-weather-temp">--°</span>
-          <span id="tct-weather-condition">Local weather</span>
-        </a>
-      </div>
-    </div>
-  </div>
+{_site_header_html(active="news", homepage_filters=True)}
   <main class="homepage-v2">
     <div class="lead-layout">
       <div class="lead-stack">
@@ -17205,19 +17097,6 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 <body>
   <div class="article-reading-progress" aria-hidden="true"></div>
 {header}
-  <div class="newsroom-strip">
-    <div class="newsroom-strip-inner">
-      <span class="newsroom-local-label">Local news for Martin, St. Lucie &amp; Indian River counties</span>
-      <div class="newsroom-live-tools" aria-label="Current Treasure Coast time and weather">
-        <time id="tct-live-time" class="newsroom-live-time" datetime=""></time>
-        <a id="tct-live-weather" class="newsroom-live-weather" href="/weather.html" aria-label="View local weather">
-          <span id="tct-weather-icon" class="newsroom-weather-icon" aria-hidden="true">◌</span>
-          <span id="tct-weather-temp">--°</span>
-          <span id="tct-weather-condition">Local weather</span>
-        </a>
-      </div>
-    </div>
-  </div>
   <main>
     <div class="article-wrap">
 {banner_slot}
@@ -21609,7 +21488,7 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css?v=1.13.7.5g">
+  <link rel="stylesheet" href="/style.css?v=1.13.7.5h">
   <style id="tct-mobile-overflow-fix">
     html, body {{ width: 100%; max-width: 100%; overflow-x: clip; }}
     *, *::before, *::after {{ box-sizing: border-box; }}
@@ -21741,19 +21620,104 @@ def _primary_navigation_html(active="", homepage_filters=False):
       </nav>"""
 
 
-def _page_header(active=""):
-    return f"""  <header>
+MORNING_BRIEF_LANDING_URL = "https://treasure-coast-today.kit.com/cb848255f8"
+
+
+def _masthead_newsletter_cta_html():
+    href = html_lib.escape(MORNING_BRIEF_LANDING_URL, quote=True)
+    return (
+        f'<a class="masthead-newsletter" href="{href}" '
+        'aria-label="Get the Treasure Coast Today Morning Brief">'
+        '<span class="masthead-newsletter-kicker">Morning Brief</span>'
+        '<span class="masthead-newsletter-copy">Start your day with local headlines</span>'
+        '</a>'
+    )
+
+
+def _live_masthead_script_html():
+    """Return the small shared clock/weather initializer used by every site header."""
+    return r"""<script data-tct-live-masthead>
+(function(){
+  if (window.__tctLiveMastheadInitialized) return;
+  window.__tctLiveMastheadInitialized = true;
+  const timeEl = document.getElementById('tct-live-time');
+  const weatherEl = document.getElementById('tct-live-weather');
+  const iconEl = document.getElementById('tct-weather-icon');
+  const tempEl = document.getElementById('tct-weather-temp');
+  const conditionEl = document.getElementById('tct-weather-condition');
+  function updateClock(){
+    if (!timeEl) return;
+    const now = new Date();
+    const datePart = new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric'}).format(now);
+    const timePart = new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true,timeZoneName:'short'}).format(now);
+    timeEl.textContent = datePart + ' · ' + timePart;
+    timeEl.dateTime = now.toISOString();
+  }
+  const codes={0:['☀','Clear'],1:['🌤','Mostly clear'],2:['⛅','Partly cloudy'],3:['☁','Cloudy'],45:['🌫','Fog'],48:['🌫','Fog'],51:['🌦','Light drizzle'],53:['🌦','Drizzle'],55:['🌧','Heavy drizzle'],61:['🌦','Light rain'],63:['🌧','Rain'],65:['🌧','Heavy rain'],80:['🌦','Rain showers'],81:['🌧','Rain showers'],82:['⛈','Heavy showers'],95:['⛈','Thunderstorms'],96:['⛈','Storms with hail'],99:['⛈','Storms with hail']};
+  function paint(d){
+    if (!d || typeof d.temperature !== 'number' || !weatherEl || !iconEl || !tempEl || !conditionEl) return;
+    const pair = codes[d.code] || ['◌','Local weather'];
+    iconEl.textContent = pair[0];
+    tempEl.textContent = Math.round(d.temperature) + '°';
+    conditionEl.textContent = pair[1];
+    weatherEl.title = 'Treasure Coast: ' + Math.round(d.temperature) + '°F, ' + pair[1];
+  }
+  async function updateWeather(){
+    if (!weatherEl) return;
+    const key='tct-weather-v1', age=20*60*1000;
+    try {
+      const cached=JSON.parse(localStorage.getItem(key)||'null');
+      if (cached && Date.now()-cached.savedAt<age) { paint(cached); return; }
+    } catch (_) {}
+    try {
+      const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=27.1975&longitude=-80.2528&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FNew_York',{cache:'no-store'});
+      if (!r.ok) throw new Error('weather');
+      const j=await r.json();
+      const d={temperature:j.current&&j.current.temperature_2m,code:j.current&&j.current.weather_code,savedAt:Date.now()};
+      paint(d);
+      try { localStorage.setItem(key,JSON.stringify(d)); } catch (_) {}
+    } catch (_) {
+      if (conditionEl) conditionEl.textContent='Local weather';
+    }
+  }
+  updateClock();
+  window.setInterval(updateClock,30000);
+  updateWeather();
+  window.setInterval(updateWeather,20*60*1000);
+})();
+</script>"""
+
+
+def _site_header_html(active="", homepage_filters=False):
+    return f'''<header class="site-masthead">
     <div class="header-inner">
-      <div class="header-top">
-        <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
+      <div class="masthead-top-row">
+        <div class="masthead-promo-slot">
+          {_masthead_newsletter_cta_html()}
+        </div>
+        <div class="header-top">
+          <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
+        </div>
+        <div class="header-actions">
+          {_header_primary_cta_html()}
+        </div>
       </div>
-      {_primary_navigation_html(active=active)}
-      <div class="header-actions">
-        {_header_primary_cta_html()}
+      <div class="masthead-nav-row">
+        <time id="tct-live-time" class="masthead-live-time" datetime="" aria-label="Current Treasure Coast date and time"></time>
+        {_primary_navigation_html(active=active, homepage_filters=homepage_filters)}
+        <a id="tct-live-weather" class="masthead-live-weather" href="/weather.html" aria-label="View local weather">
+          <span id="tct-weather-icon" class="masthead-weather-icon" aria-hidden="true">◌</span>
+          <span id="tct-weather-temp">--°</span>
+          <span id="tct-weather-condition">Local weather</span>
+        </a>
       </div>
     </div>
-  </header>"""
+    {_live_masthead_script_html()}
+  </header>'''
 
+
+def _page_header(active=""):
+    return _site_header_html(active=active)
 
 def _normalize_active_category_navigation_sitewide(output_root):
     """Keep active header category tabs navigable on retained pages.
@@ -21812,16 +21776,25 @@ def _normalize_active_category_navigation_sitewide(output_root):
 
 
 def _normalize_primary_navigation_sitewide(output_root):
-    """Converge every retained TCT header on the county-first nav contract.
+    """Converge retained pages on the canonical TCT masthead and primary nav.
 
-    Existing pages can carry several generations of header markup. Preserve the
-    page's active destination when it can be identified, then replace only the
-    ``category-nav`` element with the canonical navigation. The operation is
-    idempotent and leaves page content untouched.
+    The masthead is one shared brand contract: Morning Brief on the left, a
+    centered TCT wordmark, membership actions on the right, then one balanced
+    utility/navigation row with local date/time, primary destinations, and
+    weather. Older standalone newsroom strips are removed so time/weather never
+    appear twice and Events cannot drift into a separate header implementation.
     """
     root = Path(output_root)
     nav_re = re.compile(
         r'<nav\s+class=["\'][^"\']*\bcategory-nav\b[^"\']*["\'][^>]*>.*?</nav>',
+        re.I | re.S,
+    )
+    header_re = re.compile(r'<header\b[^>]*>.*?</header>', re.I | re.S)
+    newsroom_strip_re = re.compile(
+        r'\s*<div\s+class=["\']newsroom-strip["\']\s*>\s*'
+        r'<div\s+class=["\']newsroom-strip-inner["\']\s*>.*?'
+        r'<div\s+class=["\']newsroom-live-tools["\'][^>]*>.*?</div>\s*'
+        r'</div>\s*</div>',
         re.I | re.S,
     )
     active_label_to_key = {
@@ -21867,14 +21840,26 @@ def _normalize_primary_navigation_sitewide(output_root):
         if not nav_match:
             continue
         scanned += 1
-        old_nav = nav_match.group(0)
-        active = detect_active(old_nav, path)
+        active = detect_active(nav_match.group(0), path)
         homepage_filters = path.parent == root and path.name.lower() == "index.html"
-        new_nav = _primary_navigation_html(active=active, homepage_filters=homepage_filters)
-        normalized = original[:nav_match.start()] + new_nav + original[nav_match.end():]
+        canonical_header = _site_header_html(
+            active=active,
+            homepage_filters=homepage_filters,
+        )
+        header_match = header_re.search(original)
+        if header_match:
+            normalized = (
+                original[:header_match.start()]
+                + canonical_header
+                + original[header_match.end():]
+            )
+        else:
+            new_nav = _primary_navigation_html(active=active, homepage_filters=homepage_filters)
+            normalized = original[:nav_match.start()] + new_nav + original[nav_match.end():]
+        normalized = newsroom_strip_re.sub('', normalized, count=1)
         normalized = re.sub(
-            r'href=["\']/style\.css(?:\?v=[^"\']+)?["\']',
-            'href="/style.css?v=1.13.7.5g"',
+            r'href=["\']/?style\.css(?:\?v=[^"\']+)?["\']',
+            'href="/style.css?v=1.13.7.5h"',
             normalized,
             count=1,
             flags=re.I,
@@ -21883,7 +21868,8 @@ def _normalize_primary_navigation_sitewide(output_root):
             path.write_text(normalized, encoding="utf-8")
             updated += 1
 
-        final = new_nav
+        final_nav_match = nav_re.search(normalized)
+        final = final_nav_match.group(0) if final_nav_match else ""
         top_news_pos = final.find('href="/"')
         county_positions = [
             final.find('href="/?cat=martin"'),
@@ -21895,6 +21881,15 @@ def _normalize_primary_navigation_sitewide(output_root):
         florida_pos = final.find('href="/?cat=florida"')
         news_heading = final.find('class="nav-sections-heading">News</span>')
         more_heading = final.find('class="nav-sections-heading">More</span>')
+        masthead_ok = (
+            normalized.count('class="masthead-newsletter"') == 1
+            and normalized.count(MORNING_BRIEF_LANDING_URL) == 1
+            and normalized.count('id="tct-live-time"') == 1
+            and normalized.count('id="tct-live-weather"') == 1
+            and normalized.count('class="masthead-top-row"') == 1
+            and normalized.count('class="masthead-nav-row"') == 1
+            and 'class="newsroom-strip"' not in normalized
+        )
         if (
             min(top_news_pos, *county_positions, events_pos, sections_pos) < 0
             or not (top_news_pos < county_positions[0] < county_positions[1] < county_positions[2] < events_pos < sections_pos)
@@ -21902,15 +21897,16 @@ def _normalize_primary_navigation_sitewide(output_root):
             or not (news_heading < florida_pos < more_heading)
             or final.count('>Top News</a>') != 1
             or final.count('<details class="nav-sections">') != 1
+            or not masthead_ok
         ):
             failures.append(str(path.relative_to(root)))
 
     if failures:
         raise RuntimeError(
-            "Primary navigation contract FAILED: " + ", ".join(sorted(set(failures))[:10])
+            "Primary navigation/masthead contract FAILED: "
+            + ", ".join(sorted(set(failures))[:10])
         )
     return {"scanned": scanned, "updated": updated}
-
 
 def _normalize_events_navigation_sitewide(output_root):
     """Backward-compatible alias for the superseding primary-nav migration."""
@@ -37210,7 +37206,7 @@ def main():
     )
     _primary_nav = _normalize_primary_navigation_sitewide(OUTPUT_DIR)
     print(
-        "  Primary navigation contract PASSED: "
+        "  Primary navigation and masthead contract PASSED: "
         f"{_primary_nav['scanned']} HTML page(s) verified; "
         f"{_primary_nav['updated']} retained page(s) normalized"
     )

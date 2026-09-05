@@ -1392,6 +1392,7 @@ def _render_card(event: dict[str, Any]) -> str:
         secondary = f'<a class="event-ticket" href="{esc(ticket_url, quote=True)}" target="_blank" rel="noopener noreferrer external">Tickets</a>'
     description_html = f'<p class="event-desc">{esc(description)}</p>' if description else ""
     price_html = f'<span class="event-price">{esc(price)}</span>' if price else ""
+    source_name = _clean(event.get("source_name")).replace(" — ", " | ").replace("—", "-")
     return f'''<article class="event-card" data-event-id="{esc(event['id'])}" data-county="{esc(event['county'])}" data-category="{esc(event['category'])}" data-date="{esc(start.date().isoformat())}">
   <div class="event-datebox" aria-label="{esc(start.strftime('%A, %B %-d, %Y'))}"><span>{weekday}</span><strong>{month} {day}</strong></div>
   <div class="event-card-body">
@@ -1399,7 +1400,7 @@ def _render_card(event: dict[str, Any]) -> str:
     <h2 class="event-title"><a href="{esc(details_url, quote=True)}" target="_blank" rel="noopener noreferrer external">{esc(event['title'])}</a></h2>
     <p class="event-whenwhere"><strong>{esc(_format_time(event))}</strong>{' · ' if _format_time(event) and location else ''}{esc(location)}</p>
     {description_html}
-    <div class="event-card-footer"><span>Source: <a href="{esc(event['source_url'], quote=True)}" target="_blank" rel="noopener noreferrer external">{esc(event['source_name'])}</a></span><div class="event-actions"><a href="{esc(details_url, quote=True)}" target="_blank" rel="noopener noreferrer external">Event details →</a>{secondary}</div></div>
+    <div class="event-card-footer"><span>Source: <a href="{esc(event['source_url'], quote=True)}" target="_blank" rel="noopener noreferrer external">{esc(source_name)}</a></span><div class="event-actions"><a href="{esc(details_url, quote=True)}" target="_blank" rel="noopener noreferrer external">Event details →</a>{secondary}</div></div>
   </div>
 </article>'''
 
@@ -1537,6 +1538,22 @@ def validate_outputs() -> None:
         raise RuntimeError("events.html must not restore the retired pill-filter sections")
     if "gathered from official local calendars and venue schedules" in page:
         raise RuntimeError("events.html must not expose the retired source-method hero copy")
+    newsletter = page_soup.select_one('a.masthead-newsletter[href="https://treasure-coast-today.kit.com/cb848255f8"]')
+    if newsletter is None or "Start your day with local headlines" not in newsletter.get_text(" ", strip=True):
+        raise RuntimeError("events.html must use the shared Morning Brief masthead callout")
+    if page_soup.select_one(".masthead-top-row .wordmark") is None:
+        raise RuntimeError("events.html must use the shared centered TCT masthead")
+    if page_soup.select_one(".masthead-nav-row #tct-live-time") is None:
+        raise RuntimeError("events.html must expose date/time in the navigation utility row")
+    if page_soup.select_one('.masthead-nav-row #tct-live-weather[href="/weather.html"]') is None:
+        raise RuntimeError("events.html must expose weather in the navigation utility row")
+    if page_soup.select_one(".newsroom-strip") is not None:
+        raise RuntimeError("events.html must not restore the retired standalone newsroom strip")
+    hero = page_soup.select_one(".events-hero")
+    if hero is not None and " — " in hero.get_text(" ", strip=True):
+        raise RuntimeError("events.html must not render em-dash separators in TCT-owned hero copy")
+    if any(" — " in link.get_text(" ", strip=True) for link in page_soup.select(".event-card-footer span > a")):
+        raise RuntimeError("events.html must not render em-dash separators in TCT-owned source labels")
     footer = page_soup.find("footer")
     if footer is None or len(footer.select('a[href="/feed.xml"]')) != 1:
         raise RuntimeError("events.html must preserve exactly one sitewide RSS footer link")

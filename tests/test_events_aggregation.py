@@ -232,6 +232,31 @@ def test_events_page_hero_copy_is_short_and_does_not_explain_source_method():
     assert "gathered from official local calendars and venue schedules" not in page
     assert " — gathered from" not in page
     assert "Treasure Coast Events — Treasure Coast Today" not in page
+    assert " — " not in soup.select_one(".events-hero").get_text(" ", strip=True)
+    assert all(" — " not in link.get_text(" ", strip=True) for link in soup.select(".event-card-footer span > a"))
+
+
+def test_events_page_uses_shared_publication_masthead_with_live_utility_row():
+    page = (ROOT / "events.html").read_text(encoding="utf-8")
+    soup = BeautifulSoup(page, "html.parser")
+    top = soup.select_one(".masthead-top-row")
+    navrow = soup.select_one(".masthead-nav-row")
+    assert top is not None
+    assert navrow is not None
+    newsletter = top.select_one('a.masthead-newsletter[href="https://treasure-coast-today.kit.com/cb848255f8"]')
+    assert newsletter is not None
+    assert "Morning Brief" in newsletter.get_text(" ", strip=True)
+    assert "Start your day with local headlines" in newsletter.get_text(" ", strip=True)
+    assert "Free local news email" not in page
+    assert top.select_one(".header-top .wordmark") is not None
+    assert top.select_one(".header-actions .membership-subscribe-btn") is not None
+    assert navrow.select_one("#tct-live-time") is not None
+    assert navrow.select_one('#tct-live-weather[href="/weather.html"]') is not None
+    assert navrow.select_one("nav.category-nav--primary") is not None
+    assert soup.select_one(".newsroom-strip") is None
+    assert page.count('id="tct-live-time"') == 1
+    assert page.count('id="tct-live-weather"') == 1
+    assert "data-tct-live-masthead" in page
 
 
 def test_events_page_server_renders_only_ten_then_loads_more_in_ten_event_batches():
@@ -602,32 +627,52 @@ def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent
         if isinstance(item, ast.Assign)
         and any(isinstance(target, ast.Name) and target.id == "CATEGORIES" for target in item.targets)
     )
-    helper = next(
+    helper_names = {
+        "_header_primary_cta_html",
+        "_primary_navigation_html",
+        "_masthead_newsletter_cta_html",
+        "_live_masthead_script_html",
+        "_site_header_html",
+        "_normalize_primary_navigation_sitewide",
+    }
+    helpers = [
         item for item in tree.body
-        if isinstance(item, ast.FunctionDef) and item.name == "_primary_navigation_html"
-    )
-    normalizer = next(
+        if isinstance(item, ast.FunctionDef) and item.name in helper_names
+    ]
+    morning_brief_assign = next(
         item for item in tree.body
-        if isinstance(item, ast.FunctionDef) and item.name == "_normalize_primary_navigation_sitewide"
+        if isinstance(item, ast.Assign)
+        and any(
+            isinstance(target, ast.Name) and target.id == "MORNING_BRIEF_LANDING_URL"
+            for target in item.targets
+        )
     )
-    module = ast.Module(body=[helper, normalizer], type_ignores=[])
+    module = ast.Module(body=[morning_brief_assign, *helpers], type_ignores=[])
     namespace = {
         "Path": Path,
         "re": re,
         "html_lib": html_lib,
         "CATEGORIES": ast.literal_eval(categories_node.value),
+        "MEMBERSHIP_UI_ENABLED": True,
+        "MEMBERSHIP_SUBSCRIBE_URL": "/subscribe.html",
     }
     exec(compile(module, "generate.py", "exec"), namespace)
     normalize = namespace["_normalize_primary_navigation_sitewide"]
 
     sample = tmp_path / "article.html"
     sample.write_text(
-        '<link rel="stylesheet" href="/style.css?v=old">'
+        '<link rel="stylesheet" href="style.css">'
+        '<header><div class="header-inner">'
         '<nav class="category-nav">'
         '<a href="/?cat=crime" class="cat-btn active" aria-current="page">Crime &amp; Safety</a>'
         '<a href="/events.html" class="cat-btn">Events</a>'
         '<a href="/archive.html" class="cat-btn">Archive</a>'
-        '</nav>',
+        '</nav></div></header>'
+        '<div class="newsroom-strip"><div class="newsroom-strip-inner">'
+        '<span class="newsroom-local-label">Old utility</span>'
+        '<div class="newsroom-live-tools"><time id="tct-live-time"></time>'
+        '<a id="tct-live-weather" href="/weather.html">Weather</a></div>'
+        '</div></div>',
         encoding="utf-8",
     )
     result = normalize(tmp_path)
@@ -642,10 +687,40 @@ def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent
     assert 'href="/?cat=crime" class="nav-section-link active" aria-current="page"' in rendered
     assert rendered.index('class="nav-sections-heading">News</span>') < rendered.index('href="/?cat=florida"')
     assert rendered.index('href="/?cat=florida"') < rendered.index('class="nav-sections-heading">More</span>')
-    assert 'href="/style.css?v=1.13.7.5g"' in rendered
+    assert 'href="/style.css?v=1.13.7.5h"' in rendered
+    assert 'class="masthead-newsletter"' in rendered
+    assert 'https://treasure-coast-today.kit.com/cb848255f8' in rendered
+    assert 'Start your day with local headlines' in rendered
+    assert 'class="masthead-top-row"' in rendered
+    assert 'class="masthead-nav-row"' in rendered
+    assert rendered.count('id="tct-live-time"') == 1
+    assert rendered.count('id="tct-live-weather"') == 1
+    assert 'class="newsroom-strip"' not in rendered
 
     again = normalize(tmp_path)
     assert again == {"scanned": 1, "updated": 0}
+
+
+def test_homepage_uses_balanced_publication_masthead_without_legacy_strip():
+    page = (ROOT / "index.html").read_text(encoding="utf-8")
+    soup = BeautifulSoup(page, "html.parser")
+    top = soup.select_one(".masthead-top-row")
+    navrow = soup.select_one(".masthead-nav-row")
+    assert top is not None and navrow is not None
+    assert top.select_one('a.masthead-newsletter[href="https://treasure-coast-today.kit.com/cb848255f8"]') is not None
+    assert top.select_one(".header-top .wordmark") is not None
+    assert top.select_one(".header-actions .membership-subscribe-btn") is not None
+    assert navrow.select_one("#tct-live-time") is not None
+    assert navrow.select_one("nav.category-nav--primary") is not None
+    assert navrow.select_one('#tct-live-weather[href="/weather.html"]') is not None
+    children = [child for child in navrow.children if getattr(child, "name", None)]
+    assert children[0].get("id") == "tct-live-time"
+    assert "category-nav--primary" in (children[1].get("class") or [])
+    assert children[2].get("id") == "tct-live-weather"
+    assert soup.select_one(".newsroom-strip") is None
+    assert page.count('id="tct-live-time"') == 1
+    assert page.count('id="tct-live-weather"') == 1
+    assert page.count("data-tct-live-masthead") == 1
 
 
 def test_homepage_top_news_county_and_section_links_keep_client_side_filter_contract():
