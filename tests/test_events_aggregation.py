@@ -743,13 +743,26 @@ def test_homepage_top_news_county_and_section_links_keep_client_side_filter_cont
     assert 'document.querySelector(`.category-nav [data-cat="${catParam}"]`)' in main_js
 
 
-def test_primary_nav_css_supports_click_keyboard_hover_and_mobile_layout():
+def test_primary_nav_css_supports_click_keyboard_hover_and_single_row_mobile_layout():
     css = (ROOT / "style.css").read_text(encoding="utf-8")
     assert ".nav-sections[open] .nav-sections-menu" in css
     assert ".nav-sections:hover .nav-sections-menu" in css
     assert ".nav-sections:focus-within .nav-sections-menu" in css
     assert ".category-nav--primary" in css
-    assert "flex-wrap: wrap !important" in css
+    assert "grid-template-columns: auto minmax(0, 1fr) auto !important" in css
+    assert "flex-wrap: nowrap !important" in css
+    assert ".site-masthead .category-nav--primary:has(.nav-sections[open])" in css
+
+
+def test_publication_masthead_css_has_dark_nav_balanced_ctas_and_mobile_repair():
+    css = (ROOT / "style.css").read_text(encoding="utf-8")
+    assert "v1.13.7.5i - masthead contrast, CTA symmetry, mobile repair" in css
+    assert "background: var(--tct-green, #103f2b);" in css
+    assert "color: rgba(255,255,255,.92);" in css
+    assert "width: 180px;" in css
+    assert "grid-template-columns: none !important;" in css
+    assert "width: 92px;" in css
+    assert "max-width: none;" in css
 
 
 def test_cached_civicengage_rows_cannot_restore_relative_event_links():

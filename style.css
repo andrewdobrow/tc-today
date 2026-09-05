@@ -5012,3 +5012,370 @@ header.site-masthead {
   .masthead-nav-row { padding-top: 6px; }
   .site-masthead .category-nav--primary { margin-top: 4px; }
 }
+
+/* ==========================================================
+   v1.13.7.5i - masthead contrast, CTA symmetry, mobile repair
+   ========================================================== */
+
+/* Keep the masthead's two visual levels distinct: a quiet white brand row
+   above a full-width dark-green navigation/utility band. */
+.site-masthead .header-inner {
+  display: block !important;
+}
+
+.masthead-nav-row {
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  padding-inline: max(28px, calc((100vw - 1440px) / 2 + 28px));
+  background: var(--tct-green, #103f2b);
+  border-top: 0;
+}
+
+.masthead-live-time,
+.masthead-live-weather {
+  color: rgba(255,255,255,.92);
+}
+
+.masthead-live-weather:hover,
+.masthead-live-weather:focus-visible {
+  color: #fff;
+}
+
+.site-masthead .category-nav--primary > .cat-btn,
+.site-masthead .nav-sections-toggle {
+  color: rgba(255,255,255,.94);
+}
+
+.site-masthead .category-nav--primary > .cat-btn:hover,
+.site-masthead .category-nav--primary > .cat-btn:focus-visible,
+.site-masthead .category-nav--primary > .cat-btn.active,
+.site-masthead .nav-sections-toggle:hover,
+.site-masthead .nav-sections-toggle:focus-visible,
+.site-masthead .nav-sections-toggle.active {
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  box-shadow: inset 0 -2px #fff;
+  outline: none;
+}
+
+/* Match the Morning Brief treatment to the Subscribe control so the two
+   conversion actions visually balance the centered masthead. */
+.masthead-newsletter {
+  align-items: center;
+  max-width: none;
+  min-width: 166px;
+  min-height: 0;
+  padding: 9px 16px;
+  border: 1px solid var(--tct-green-2, #174f37);
+  border-radius: 8px;
+  background: var(--tct-green-2, #174f37);
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(23,79,55,.16);
+}
+
+.masthead-newsletter:hover,
+.masthead-newsletter:focus-visible {
+  background: var(--tct-green, #103f2b);
+  border-color: var(--tct-green, #103f2b);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.masthead-newsletter-kicker,
+.masthead-newsletter-copy {
+  color: #fff;
+}
+
+.masthead-newsletter-copy {
+  opacity: .94;
+}
+
+@media (max-width: 1120px) {
+  .masthead-newsletter {
+    min-width: 148px;
+  }
+}
+
+/* The old pre-masthead mobile rules used !important grid/flex placement on
+   .header-inner and .category-nav. Explicitly neutralize those rules here so
+   the publication masthead cannot be rearranged into the broken vertical
+   layout seen on narrow phones. */
+@media (max-width: 900px) {
+  .site-masthead .header-inner {
+    display: block !important;
+    grid-template-columns: none !important;
+    grid-template-areas: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 18px;
+  }
+
+  .site-masthead .header-top,
+  .site-masthead .header-actions {
+    grid-area: auto !important;
+    width: auto !important;
+    margin: 0;
+  }
+
+  .masthead-top-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+    grid-template-areas: none !important;
+    align-items: center;
+    gap: 12px;
+    min-height: 82px;
+    padding: 9px 0;
+  }
+
+  .masthead-promo-slot {
+    justify-self: start;
+  }
+
+  .site-masthead .header-top {
+    justify-self: center;
+  }
+
+  .site-masthead .header-actions {
+    justify-self: end;
+  }
+
+  .masthead-newsletter {
+    max-width: none;
+    min-width: 118px;
+    padding: 8px 11px;
+  }
+
+  .masthead-newsletter-copy,
+  .site-masthead .membership-subscribe-price {
+    display: none !important;
+  }
+
+  .masthead-nav-row {
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+  }
+
+  .masthead-live-time {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    justify-self: start;
+  }
+
+  .site-masthead .category-nav--primary {
+    grid-area: auto !important;
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    order: initial !important;
+    justify-self: stretch;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    flex: 0 1 auto !important;
+    flex-basis: auto !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 9px;
+    mask-image: linear-gradient(to right, #000 91%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 91%, transparent 100%);
+    scrollbar-width: none;
+  }
+
+  .site-masthead .category-nav--primary::-webkit-scrollbar {
+    display: none;
+  }
+
+  .masthead-live-weather {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    justify-self: end;
+  }
+
+  .site-masthead .category-nav--primary > .cat-btn,
+  .site-masthead .nav-sections-toggle {
+    flex: 0 0 auto;
+    padding: 10px 3px;
+    font-size: 11px;
+  }
+
+  .site-masthead .category-nav--primary:has(.nav-sections[open]) {
+    overflow: visible !important;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-masthead .header-inner {
+    padding: 0 12px;
+  }
+
+  .masthead-top-row {
+    gap: 7px;
+    min-height: 70px;
+    padding: 7px 0;
+  }
+
+  .masthead-newsletter,
+  .site-masthead .membership-subscribe-btn {
+    width: 92px;
+    min-width: 92px;
+    min-height: 36px;
+    padding: 7px 7px !important;
+    border-radius: 7px;
+  }
+
+  .masthead-newsletter-kicker,
+  .site-masthead .membership-subscribe-label {
+    font-size: 9.5px;
+    line-height: 1.05;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+
+  .site-masthead .wordmark {
+    gap: 6px;
+  }
+
+  .site-masthead .wordmark-tct {
+    font-size: 34px;
+  }
+
+  .site-masthead .wordmark-divider {
+    height: 27px;
+  }
+
+  .site-masthead .wordmark-full {
+    font-size: 5.9px;
+  }
+
+  .masthead-nav-row {
+    gap: 7px;
+    min-height: 42px;
+    padding: 0 12px;
+  }
+
+  .masthead-live-time,
+  .masthead-live-weather {
+    font-size: 9.5px;
+  }
+
+  .masthead-weather-icon {
+    width: 15px;
+    font-size: 12px;
+  }
+
+  .site-masthead .category-nav--primary {
+    gap: 8px;
+  }
+
+  .site-masthead .category-nav--primary > .cat-btn,
+  .site-masthead .nav-sections-toggle {
+    padding: 10px 2px;
+    font-size: 10.5px;
+  }
+}
+
+@media (max-width: 390px) {
+  .masthead-newsletter,
+  .site-masthead .membership-subscribe-btn {
+    width: 84px;
+    min-width: 84px;
+  }
+
+  .masthead-newsletter-kicker,
+  .site-masthead .membership-subscribe-label {
+    font-size: 8.8px;
+  }
+
+  .site-masthead .wordmark-tct {
+    font-size: 31px;
+  }
+
+  .site-masthead .wordmark-divider {
+    height: 25px;
+  }
+
+  .site-masthead .wordmark-full {
+    font-size: 5.4px;
+  }
+
+  .masthead-live-time {
+    max-width: 104px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* 5i refinement: keep the two masthead conversion buttons equal in width. */
+@media (min-width: 1121px) {
+  .masthead-newsletter,
+  .site-masthead .membership-subscribe-btn {
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+  }
+  .masthead-newsletter-copy {
+    font-size: 10px;
+    letter-spacing: -.005em;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 1120px) and (min-width: 901px) {
+  .masthead-newsletter,
+  .site-masthead .membership-subscribe-btn {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 390px) {
+  .masthead-live-time {
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    font-size: 8.6px;
+    letter-spacing: 0;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 561px) {
+  .masthead-newsletter,
+  .site-masthead .membership-subscribe-btn {
+    width: 122px;
+    min-width: 122px;
+    max-width: 122px;
+  }
+}
+
+@media (min-width: 1121px) {
+  .masthead-newsletter,
+  .site-masthead .membership-subscribe-btn { min-height: 50px; }
+}
+
+@media (max-width: 1120px) and (min-width: 901px) {
+  .masthead-newsletter,
+  .site-masthead .membership-subscribe-btn { min-height: 44px; }
+}
+
+@media (max-width: 900px) and (min-width: 561px) {
+  .masthead-newsletter,
+  .site-masthead .membership-subscribe-btn { min-height: 40px; }
+}
+
+.masthead-newsletter-kicker { white-space: nowrap; }
+
+@media (max-width: 1120px) and (min-width: 901px) {
+  .masthead-newsletter-copy,
+  .site-masthead .membership-subscribe-price { display: none !important; }
+}
