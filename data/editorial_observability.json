@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-05T05:43:04Z",
+  "generated_at": "2026-09-05T06:03:10Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 8,
-    "placements_after": 8,
+    "placements_before": 5,
+    "placements_after": 5,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,20 +49,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 179,
+    "candidates_processed": 174,
     "routes": {
-      "generate_new": 17,
-      "skip": 161,
+      "generate_new": 6,
+      "skip": 167,
       "update_existing": 1
     },
     "eligibility": {
-      "low_value": 119,
-      "publishable": 60
+      "low_value": 118,
+      "publishable": 56
     },
     "source_classes": {
-      "aggregator": 119,
+      "aggregator": 118,
       "local_news": 29,
-      "regional_news": 28,
+      "regional_news": 24,
       "unknown": 3
     },
     "rejected_count": 0,
@@ -70,20 +70,21 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 8,
-      "same_event": 171
+      "same_event": 174
     },
     "examples": [
       {
         "story_id": "story_008327",
         "title": "DOT targets 110 trucking schools following fatal St. Lucie County crash - Yahoo",
         "event_key": "traffic-crash-8f0b7bdb40-8f0b7bdb40",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -115,7 +116,7 @@
         ]
       },
       {
-        "story_id": "story_008324",
+        "story_id": "story_008361",
         "title": "Woman killed in Loxahatchee; SWAT responds in West Palm Beach",
         "event_key": "unknown-event-cdebb4dc0e",
         "relationship": "same_event",
@@ -213,7 +214,7 @@
         ]
       },
       {
-        "story_id": "story_008322",
+        "story_id": "story_008359",
         "title": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
         "event_key": "traffic-crash-fort-pierce-d109a66b8a",
         "relationship": "same_event",
@@ -227,7 +228,7 @@
         ]
       },
       {
-        "story_id": "story_008322",
+        "story_id": "story_008359",
         "title": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
         "event_key": "unknown-event-992a715ddd",
         "relationship": "same_event",
@@ -358,13 +359,15 @@
         "story_id": "story_008327",
         "title": "DOT targets 110 trucking schools following fatal St. Lucie County crash - Yahoo",
         "event_key": "traffic-crash-8f0b7bdb40-8f0b7bdb40",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -398,7 +401,7 @@
         ]
       },
       {
-        "story_id": "story_008324",
+        "story_id": "story_008361",
         "title": "Woman killed in Loxahatchee; SWAT responds in West Palm Beach",
         "event_key": "unknown-event-cdebb4dc0e",
         "relationship": "same_event",
@@ -503,7 +506,7 @@
         ]
       },
       {
-        "story_id": "story_008322",
+        "story_id": "story_008359",
         "title": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
         "event_key": "traffic-crash-fort-pierce-d109a66b8a",
         "relationship": "same_event",
@@ -518,7 +521,7 @@
         ]
       },
       {
-        "story_id": "story_008322",
+        "story_id": "story_008359",
         "title": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
         "event_key": "unknown-event-992a715ddd",
         "relationship": "same_event",
@@ -670,9 +673,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1251,
-      "timeline_entries_examined": 3491,
-      "transitions_examined": 2128,
+      "stories_with_timelines": 1254,
+      "timeline_entries_examined": 3500,
+      "transitions_examined": 2134,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 30,
       "high_confidence_candidate_count": 8,
@@ -2114,7 +2117,7 @@
           ]
         },
         {
-          "story_id": "story_008315",
+          "story_id": "story_008352",
           "story_title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
           "milestones": [
             "recovery"
@@ -2159,7 +2162,7 @@
           "prior_article": {
             "article_id": "rss-e7222eb1152f2bab97f2",
             "event_key": "missing-person-port-st-lucie-2eb6cf5485",
-            "published_at": "2026-09-05T05:32:40.743369+00:00",
+            "published_at": "2026-09-05T05:49:05.687652+00:00",
             "title": "Body found in Martin County mangroves confirmed as missing man - WPEC",
             "source": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
             "url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead"
@@ -2167,14 +2170,14 @@
           "newer_article": {
             "article_id": "rss-fedf37d2bc649307634c",
             "event_key": "missing-person-7693a0a37b-7693a0a37b",
-            "published_at": "2026-09-05T05:32:40.743369+00:00",
+            "published_at": "2026-09-05T05:49:05.687652+00:00",
             "title": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
             "source": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
             "url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_008315",
+            "Story: story_008352",
             "Novel milestones: recovery",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
@@ -3714,9 +3717,9 @@
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3513,
+      "active": 3510,
       "breaking": 1,
-      "developing": 211,
+      "developing": 214,
       "ongoing": 729,
       "resolved": 4
     }
@@ -3725,8 +3728,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 6529,
-    "active_stories_after": 6529,
+    "active_stories_before": 6537,
+    "active_stories_after": 6537,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3755,8 +3758,8 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-05T05:33:04Z",
-    "quarantined_story_records_retained": 982,
+    "generated_at": "2026-09-05T05:49:41Z",
+    "quarantined_story_records_retained": 993,
     "active_story_count": 6557
   },
   "stories": {
@@ -3768,7 +3771,7 @@
       "low": 3649,
       "archived": 0
     },
-    "average_importance": 9.48,
+    "average_importance": 9.49,
     "top": [
       {
         "story_id": "story_007001",
@@ -3783,7 +3786,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 13.88
+          "age_hours": 14.17
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3831,13 +3834,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-04T15:42:16.034092+00:00",
-          "hours_since_update": 13.88,
+          "hours_since_update": 14.17,
           "event_count": 12,
           "timeline_entries": 12
         }
       },
       {
-        "story_id": "story_008312",
+        "story_id": "story_008349",
         "title": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
         "score": 80,
         "editorial_priority": 90,
@@ -3849,7 +3852,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.02
+          "age_hours": 0.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3901,8 +3904,8 @@
         "lifecycle": {
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
-          "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 0.02,
+          "last_updated": "2026-09-05T05:49:05.687652+00:00",
+          "hours_since_update": 0.04,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -3920,7 +3923,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.06
+          "age_hours": 0.36
         },
         "level": "high",
         "importance_reasons": [
@@ -3963,7 +3966,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 0.06,
+          "hours_since_update": 0.36,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3981,7 +3984,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 2.24
+          "age_hours": 2.52
         },
         "level": "high",
         "importance_reasons": [
@@ -4024,13 +4027,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T03:19:39.455523+00:00",
-          "hours_since_update": 2.24,
+          "hours_since_update": 2.52,
           "event_count": 4,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_008303",
+        "story_id": "story_008340",
         "title": "Fatal I-95 crash jams traffic in St. Lucie County - cbs12.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4042,7 +4045,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.02
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4067,8 +4070,8 @@
           "score": 100,
           "counties": [
             "St. Lucie County",
-            "Martin County",
-            "Indian River County"
+            "Indian River County",
+            "Martin County"
           ],
           "places": [
             "Port St. Lucie",
@@ -4087,14 +4090,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 0.02,
+          "last_updated": "2026-09-05T05:49:05.687652+00:00",
+          "hours_since_update": 0.03,
           "event_count": 6,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_008304",
+        "story_id": "story_008341",
         "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4148,7 +4151,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T05:32:40.743369+00:00",
+          "last_updated": "2026-09-05T05:49:05.687652+00:00",
           "hours_since_update": 0.02,
           "event_count": 2,
           "timeline_entries": 2
@@ -4167,7 +4170,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 2.28
+          "age_hours": 2.58
         },
         "level": "high",
         "importance_reasons": [
@@ -4227,7 +4230,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T03:19:39.455523+00:00",
-          "hours_since_update": 2.28,
+          "hours_since_update": 2.58,
           "event_count": 93,
           "timeline_entries": 90
         }
@@ -4245,7 +4248,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 51.63
+          "age_hours": 51.91
         },
         "level": "high",
         "importance_reasons": [
@@ -4288,7 +4291,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-03T01:55:34.516844+00:00",
-          "hours_since_update": 51.63,
+          "hours_since_update": 51.91,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4306,7 +4309,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 30.13
+          "age_hours": 30.42
         },
         "level": "high",
         "importance_reasons": [
@@ -4349,7 +4352,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-03T23:27:52.005400+00:00",
-          "hours_since_update": 30.13,
+          "hours_since_update": 30.42,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4367,7 +4370,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 81.56
+          "age_hours": 81.84
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4415,7 +4418,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 81.56,
+          "hours_since_update": 81.84,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4433,7 +4436,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.04
+          "age_hours": 0.33
         },
         "level": "high",
         "importance_reasons": [
@@ -4469,7 +4472,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 0.04,
+          "hours_since_update": 0.33,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4487,7 +4490,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 54.98
+          "age_hours": 55.27
         },
         "level": "high",
         "importance_reasons": [
@@ -4530,7 +4533,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-02T22:35:25.973298+00:00",
-          "hours_since_update": 54.98,
+          "hours_since_update": 55.27,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4548,7 +4551,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 34.71
+          "age_hours": 35.0
         },
         "level": "high",
         "importance_reasons": [
@@ -4586,7 +4589,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-03T18:52:55.532200+00:00",
-          "hours_since_update": 34.71,
+          "hours_since_update": 35.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4604,7 +4607,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 51.64
+          "age_hours": 51.93
         },
         "level": "high",
         "importance_reasons": [
@@ -4642,13 +4645,13 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-03T01:55:34.516844+00:00",
-          "hours_since_update": 51.64,
+          "hours_since_update": 51.93,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_008299",
+        "story_id": "story_008336",
         "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4660,7 +4663,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.04
         },
         "level": "high",
         "importance_reasons": [
@@ -4710,14 +4713,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-05T05:49:05.687652+00:00",
+          "hours_since_update": 0.04,
           "event_count": 7,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_008308",
+        "story_id": "story_008345",
         "title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -4729,7 +4732,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.02
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4781,14 +4784,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 0.02,
+          "last_updated": "2026-09-05T05:49:05.687652+00:00",
+          "hours_since_update": 0.03,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_008309",
+        "story_id": "story_008346",
         "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -4800,7 +4803,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.02
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4851,14 +4854,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 0.02,
+          "last_updated": "2026-09-05T05:49:05.687652+00:00",
+          "hours_since_update": 0.03,
           "event_count": 4,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_008316",
+        "story_id": "story_008353",
         "title": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4870,7 +4873,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.04
         },
         "level": "high",
         "importance_reasons": [
@@ -4921,8 +4924,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-05T05:49:05.687652+00:00",
+          "hours_since_update": 0.04,
           "event_count": 7,
           "timeline_entries": 6
         }
@@ -4940,7 +4943,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 31.09
+          "age_hours": 31.38
         },
         "level": "high",
         "importance_reasons": [
@@ -4979,7 +4982,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-03T22:29:06.904955+00:00",
-          "hours_since_update": 31.09,
+          "hours_since_update": 31.38,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4997,7 +5000,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 181.1
+          "age_hours": 181.39
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5051,7 +5054,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 181.1,
+          "hours_since_update": 181.39,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -5061,7 +5064,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-05T05:37:38Z",
+    "generated_at": "2026-09-05T05:55:45Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5076,27 +5079,28 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 3,
         "category_eligibility_archive_recovery": 4,
-        "generated_live": 1,
+        "generated_live": 3,
+        "generation_failed_archive_recovery": 1,
         "no_publishable_sources": 1
       },
       "failures": {
+        "article_framing_integrity": 1,
         "no_category_eligible_sources": 4
       },
-      "model_attempt_count": 1,
-      "model_elapsed_seconds": 33.034,
-      "archive_recovery_requested_count": 5,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 59.118,
+      "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 9,
-      "published_story_duplicate_suppression_count": 44,
+      "article_framing_rejection_count": 2,
+      "category_eligibility_rejection_count": 8,
+      "published_story_duplicate_suppression_count": 49,
       "story_aware_update_context_count": 1,
       "material_update_promotion_evaluation_count": 5,
       "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 2
+      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_model_call_count": 1
     },
     "categories": [
       {
@@ -5104,8 +5108,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 26,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 11,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 10,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5122,8 +5126,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 4,
-        "category_eligibility_rejection_count": 4,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-local-government-central-action",
@@ -5138,20 +5142,6 @@
             "local_nexus_signals": [],
             "headline": "Florida attorney general settlement with egg producers results in 5.6 million free eggs for state food banks",
             "source_url": "https://www.wptv.com/money/consumer/florida-attorney-general-settlement-with-egg-producers-results-in-5-6-million-free-eggs-for-state-food-banks"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
-            "source_url": "https://cw34.com/news/local/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news"
           },
           {
             "contract_version": "1.0-local-government-central-action",
@@ -5182,16 +5172,26 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-sheriffs-office-responding-to-bomb-threat-at-fort-pierce-central-high-school"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
             "source_headline": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
             "source_url": "https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_008279",
+            "editorial_story_id": "story_008322",
             "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
             "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
+            "source_url": "https://cw34.com/news/local/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
+            "editorial_story_id": "story_008320",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5250,6 +5250,21 @@
             "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
             "canonical_is_custom": false,
             "identity_basis": "pre_generation_ledger:exact_source_url",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
+            "source_url": "https://cw34.com/news/local/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5353,21 +5368,28 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.603
+        "elapsed_seconds": 24.662
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "cache_hit",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 9,
-        "selected_source_count": 2,
-        "cache_hit": true,
+        "status": "generated_live",
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 8,
+        "selected_source_count": 1,
+        "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 9.059,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 9.059,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5378,7 +5400,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -5406,6 +5428,16 @@
             "canonical_slug": "2026-09-04-vero-beach-mother-michigan-boyfriend-arrested-after-icac-investigation-into-live",
             "canonical_headline": "Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case",
             "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Multi-vehicle crash blocks left lane on I-95 North in St. Lucie County - WPEC",
+            "source_url": "http://cbs12.com/news/florida/multi-vehicle-crash-blocks-left-lane-on-i-95-north-near-st-lucie-county-florida-news-florida-traffic-local-news-local-traffic",
+            "editorial_story_id": "story_008320",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5477,16 +5509,6 @@
             "canonical_headline": "Palm City woman charged in Border Collie hoarding case released from jail on $500 bond",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-            "editorial_story_id": "story_007607",
-            "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-            "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -5505,6 +5527,21 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Multi-vehicle crash blocks left lane on I-95 North in St. Lucie County - WPEC",
+            "source_url": "http://cbs12.com/news/florida/multi-vehicle-crash-blocks-left-lane-on-i-95-north-near-st-lucie-county-florida-news-florida-traffic-local-news-local-traffic",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -5631,26 +5668,14 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
-            "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
-            "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "live_hero_headline": "Fort Pierce Central High School cleared after bomb threat; Sheriff Del Toro vows charges",
-        "elapsed_seconds": 12.477
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Fort Pierce Central High School given all clear after bomb threat prompts evacuation",
+        "generated_card_count": 0,
+        "elapsed_seconds": 26.342
       },
       {
         "category_key": "business",
@@ -5862,7 +5887,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.767
+        "elapsed_seconds": 17.19
       },
       {
         "category_key": "sports",
@@ -5900,7 +5925,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.201
+        "elapsed_seconds": 12.264
       },
       {
         "category_key": "things_to_do",
@@ -5977,13 +6002,14 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Mango Music and Art Festival on Saturday in Lake Worth Beach",
-              "National Deaf Awareness Month event at Busch Wildlife Sanctuary in Jupiter on Saturday",
-              "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
+              "Labor Day weekend September 4, 2026",
+              "Mango Music and Art Festival in Lake Worth Beach on Saturday",
+              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
+              "Barrio Fiesta Labor Day Picnic in Port St. Lucie on Sunday",
               "SoFlo Market one-year anniversary in Boca Raton on Saturday",
-              "Northwest BBQ Brews Blues Festival on Saturday",
-              "Peachfest 5-Year Anniversary Art Walk on Saturday in West Palm Beach",
-              "Hurricane Alley Blowout Rodeo Friday and Saturday in Vero Beach"
+              "Northwest BBQ Brews Blues 11th annual festival on Saturday",
+              "Peachfest 5-Year Anniversary Art Walk on Saturday",
+              "Hurricane Alley Blowout Rodeo in Vero Beach Friday-Saturday"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6007,7 +6033,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.18
+        "elapsed_seconds": 21.497
       },
       {
         "category_key": "florida",
@@ -6072,23 +6098,40 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.831
+        "elapsed_seconds": 11.16
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "cache_hit",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 3,
-        "selected_source_count": 2,
-        "cache_hit": true,
-        "archive_recovery_requested": false,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "",
-        "failure_summary": "",
+        "status": "generation_failed_archive_recovery",
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
+        "cache_hit": false,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 9.286,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Humane Society begins adopting out 36 Border Collies rescued from Palm City hoarding case"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 13.81,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — First Border Collies adopted after Palm City hoarding rescue"
+          }
+        ],
+        "model_elapsed_seconds": 23.096,
+        "failure_code": "article_framing_integrity",
+        "failure_summary": "Article framing integrity failed for hero: surname_only_first_reference — First Border Collies adopted after Palm City hoarding rescue",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6097,19 +6140,29 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
             "source_headline": "Driver airlifted to trauma center after car crashes into tree on I-95 in Palm City - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-driver-airlifted-to-trauma-center-after-car-crashes-into-tree-on-i-95-in-palm-city/73620418",
-            "editorial_story_id": "story_008252",
+            "editorial_story_id": "story_008326",
             "canonical_slug": "2026-09-05-driver-airlifted-after-single-car-rollover-on-i-95-southbound-near-high-meadows",
             "canonical_headline": "Driver airlifted after single-car rollover on I-95 southbound near High Meadows in Palm City",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Solo crash on I-95 southbound in Palm City leaves driver with traumatic injuries - WPEC",
+            "source_url": "https://cbs12.com/news/florida/solo-crash-on-i-95-southbound-in-palm-city-leaves-driver-with-traumatic-injuries-florida-news-florida-traffic-local-traffic-crash-rollover-flip",
+            "editorial_story_id": "story_008320",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6126,7 +6179,7 @@
             "category_key": "martin",
             "source_headline": "3 masked suspects flee scene after man fatally shot in Fort Pierce - WPEC",
             "source_url": "https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news",
-            "editorial_story_id": "story_008279",
+            "editorial_story_id": "story_008322",
             "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
             "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
             "basis": "authorized_canonical_identity_skip",
@@ -6229,6 +6282,21 @@
             "canonical_headline": "Driver airlifted after single-car rollover on I-95 southbound near High Meadows in Palm City",
             "canonical_is_custom": false,
             "identity_basis": "pre_generation_ledger:exact_source_url",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Solo crash on I-95 southbound in Palm City leaves driver with traumatic injuries - WPEC",
+            "source_url": "https://cbs12.com/news/florida/solo-crash-on-i-95-southbound-in-palm-city-leaves-driver-with-traumatic-injuries-florida-news-florida-traffic-local-traffic-crash-rollover-flip",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6344,17 +6412,18 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "live_hero_headline": "Rollover crash on I-95 southbound in Palm City leaves driver with traumatic injuries, requiring airlift",
-        "elapsed_seconds": 11.042
+        "generation_status": "failed",
+        "budget_seconds": 180.0,
+        "elapsed_seconds": 36.718
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 16,
-        "publishable_source_count": 6,
-        "selected_source_count": 6,
+        "fresh_candidate_count": 14,
+        "publishable_source_count": 3,
+        "selected_source_count": 3,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -6362,11 +6431,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 33.034,
+            "elapsed_seconds": 20.073,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 33.034,
+        "model_elapsed_seconds": 20.073,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6377,10 +6446,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 6,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 12,
+        "published_story_duplicate_suppression_count": 14,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -6394,22 +6463,22 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man hit woman with car, drove with her on hood, deputies say - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-man-hit-woman-with-car-drove-with-her-on-hood-deputies-say-vero-beach-indian-river-county-sheriff-custody-dispute-kia-soul",
-            "editorial_story_id": "story_008153",
-            "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
-            "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - WPEC",
+            "source_url": "https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
+            "editorial_story_id": "story_008322",
+            "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
+            "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - WPEC",
-            "source_url": "https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_008279",
-            "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
-            "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
-            "basis": "exact_source_and_persistent_story_skip",
+            "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
+            "source_url": "https://cw34.com/news/local/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
+            "editorial_story_id": "story_008320",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6426,7 +6495,7 @@
             "category_key": "st_lucie",
             "source_headline": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
             "source_url": "https://cbs12.com/news/local/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_008279",
+            "editorial_story_id": "story_008322",
             "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
             "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
             "basis": "authorized_canonical_identity_skip",
@@ -6434,9 +6503,19 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie man hit woman with car, drove with her on hood, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-hit-woman-with-car-drove-with-her-on-hood-deputies-say-vero-beach-indian-river-county-sheriff-custody-dispute-kia-soul",
+            "editorial_story_id": "story_008153",
+            "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
+            "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "3 masked suspects flee scene after man fatally shot in Fort Pierce - WPEC",
             "source_url": "https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news",
-            "editorial_story_id": "story_008279",
+            "editorial_story_id": "story_008322",
             "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
             "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
             "basis": "authorized_canonical_identity_skip",
@@ -6449,6 +6528,16 @@
             "editorial_story_id": "story_007001",
             "canonical_slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
             "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - WPEC",
+            "source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
+            "editorial_story_id": "story_008320",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6527,12 +6616,12 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man hit woman with car, drove with her on hood, deputies say - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-man-hit-woman-with-car-drove-with-her-on-hood-deputies-say-vero-beach-indian-river-county-sheriff-custody-dispute-kia-soul",
-            "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
-            "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
+            "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - WPEC",
+            "source_url": "https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
+            "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6542,12 +6631,12 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - WPEC",
-            "source_url": "https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
-            "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
-            "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
+            "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
+            "source_url": "https://cw34.com/news/local/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6587,6 +6676,21 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie man hit woman with car, drove with her on hood, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-hit-woman-with-car-drove-with-her-on-hood-deputies-say-vero-beach-indian-river-county-sheriff-custody-dispute-kia-soul",
+            "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
+            "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "3 masked suspects flee scene after man fatally shot in Fort Pierce - WPEC",
             "source_url": "https://cbs12.com/news/local/fort-pierce-deadly-shooting-masked-suspects-flee-north-street-deadly-shooting-hca-florida-lawnwood-hospital-crime-florida-news",
             "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
@@ -6608,6 +6712,21 @@
             "canonical_headline": "Man killed in Fort Pierce shooting as three masked suspects remain at large",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - WPEC",
+            "source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:exact_source_url",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6694,23 +6813,30 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Sheriff's office gives all-clear after bomb threat forces evacuation at Fort Pierce Central High School",
-        "generated_card_count": 2,
-        "elapsed_seconds": 47.103
+        "live_hero_headline": "St. Lucie County Sheriff's Office gives all clear after bomb threat evacuates Fort Pierce Central High School",
+        "generated_card_count": 1,
+        "elapsed_seconds": 36.053
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "cache_hit",
+        "status": "generated_live",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 9,
-        "selected_source_count": 2,
-        "cache_hit": true,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 8,
+        "selected_source_count": 1,
+        "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 6.89,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 6.89,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6721,19 +6847,19 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 8,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
-            "source_headline": "Treasure Coast woman dedicates her life to helping stray animals and pets left behind - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-treasure-coast-community-champion-animals/73618989",
-            "editorial_story_id": "story_008232",
-            "canonical_slug": "2026-09-05-fellsmere-woman-75-wakes-at-230-am-daily-to-feed-stray-cats-volunteers-60-hours",
-            "canonical_headline": "Fellsmere woman, 75, wakes at 2:30 a.m. daily to feed stray cats, volunteers 60 hours a week at animal sanctuary",
-            "basis": "exact_source_and_persistent_story_skip",
+            "source_headline": "Vero Beach woman accused of livestreaming sex abuse of 2 children under 3, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
+            "editorial_story_id": "story_008149",
+            "canonical_slug": "2026-09-04-vero-beach-mother-michigan-boyfriend-arrested-after-icac-investigation-into-live",
+            "canonical_headline": "Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6765,24 +6891,34 @@
             "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+            "editorial_story_id": "story_007607",
+            "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+            "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
-            "source_headline": "Treasure Coast woman dedicates her life to helping stray animals and pets left behind - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-treasure-coast-community-champion-animals/73618989",
-            "canonical_slug": "2026-09-05-fellsmere-woman-75-wakes-at-230-am-daily-to-feed-stray-cats-volunteers-60-hours",
-            "canonical_headline": "Fellsmere woman, 75, wakes at 2:30 a.m. daily to feed stray cats, volunteers 60 hours a week at animal sanctuary",
+            "source_headline": "Vero Beach woman accused of livestreaming sex abuse of 2 children under 3, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
+            "canonical_slug": "2026-09-04-vero-beach-mother-michigan-boyfriend-arrested-after-icac-investigation-into-live",
+            "canonical_headline": "Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6830,8 +6966,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -6849,11 +6985,29 @@
             "novel_facts": [],
             "reason": "This is the exact same article from the same source URL covering the same shootout incident. The incoming article is dated 2026-09-04 but contains identical information to the canonical from 2026-09-03, including the same quotes, same details about the 17-year-old's Thursday morning arrest, and same weapon recovery. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match'. No material updates are present - no new arrests, charges, victim identification, or other developments that change what readers need to know. This appears to be a republication or recirculation of the same content.",
             "validation_errors": []
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
+            "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+            "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "live_hero_headline": "Vero Beach mother held without bond on child sexual battery charges after Michigan cybertip leads to Indian River County arrest",
-        "elapsed_seconds": 22.711
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Vero Beach man held on $1 million bond accused of using AI to create fake sexual images",
+        "generated_card_count": 0,
+        "elapsed_seconds": 23.399
       }
     ]
   }
