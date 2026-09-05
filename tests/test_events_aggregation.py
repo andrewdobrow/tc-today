@@ -215,6 +215,9 @@ def test_events_page_filters_are_compact_dropdowns_in_one_toolbar_row():
     assert not soup.select(".events-filter-section")
     assert not soup.select("button.event-filter")
     assert "grid-template-columns: minmax(250px, 1.55fr)" in page
+    assert "const rangeSelect = document.querySelector('[data-events-range]');" in page
+    assert "const countySelect = document.querySelector('[data-events-county]');" in page
+    assert "const categorySelect = document.querySelector('[data-events-category]');" in page
     assert "rangeSelect.addEventListener('change'" in page
     assert "countySelect.addEventListener('change'" in page
     assert "categorySelect.addEventListener('change'" in page
@@ -280,12 +283,29 @@ def test_events_page_server_renders_only_ten_then_loads_more_in_ten_event_batche
 
 def test_events_page_has_clear_reviewed_email_submission_path():
     page = (ROOT / "events.html").read_text(encoding="utf-8")
+    soup = BeautifulSoup(page, "html.parser")
+    note = soup.select_one("aside.events-note")
+    assert note is not None
+    assert note.select_one(".events-note-kicker").get_text(" ", strip=True) == "Community submissions"
     assert "Submit an event for review" in page
     assert "hello@treasurecoast.today" in page
     assert "submission does not guarantee inclusion" in page
     assert "Event%20name%3A" in page
     assert "Date%20and%20time%3A" in page
     assert "Public%20event%20or%20ticket%20link%3A" in page
+    assert "padding: 30px 32px 30px 36px" in page
+    assert "font-size: clamp(24px, 3vw, 30px)" in page
+    assert "background: var(--accent); color: #fff" in page
+
+
+def test_events_progressive_controls_initialize_and_hidden_states_are_reliable():
+    page = (ROOT / "events.html").read_text(encoding="utf-8")
+    assert "const rangeSelect = document.querySelector('[data-events-range]');" in page
+    assert "const countySelect = document.querySelector('[data-events-county]');" in page
+    assert "const categorySelect = document.querySelector('[data-events-category]');" in page
+    assert "if (moreButton) moreButton.addEventListener('click'" in page
+    # Safari can allow an author display rule to override the UA [hidden] rule.
+    assert ".events-empty[hidden], .events-more-wrap[hidden] { display: none !important; }" in page
 
 
 def test_launch_artifacts_validate_without_network():

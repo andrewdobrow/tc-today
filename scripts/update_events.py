@@ -1536,6 +1536,18 @@ def validate_outputs() -> None:
         raise RuntimeError("events.html must expose When, County and Type as three dropdown filters")
     if toolbar.select_one(".event-filter") is not None or page_soup.select_one(".events-filter-section") is not None:
         raise RuntimeError("events.html must not restore the retired pill-filter sections")
+    for js_contract in (
+        "const rangeSelect = document.querySelector('[data-events-range]');",
+        "const countySelect = document.querySelector('[data-events-county]');",
+        "const categorySelect = document.querySelector('[data-events-category]');",
+        "if (moreButton) moreButton.addEventListener('click'",
+    ):
+        if js_contract not in page:
+            raise RuntimeError(f"events.html progressive-loading JavaScript contract is incomplete: {js_contract}")
+    if ".events-empty[hidden], .events-more-wrap[hidden] { display: none !important; }" not in page:
+        raise RuntimeError("events.html must force hidden filter/load states to remain hidden across browsers")
+    if page_soup.select_one(".events-note .events-note-kicker") is None:
+        raise RuntimeError("events.html event-submission callout must remain visually prominent")
     if "gathered from official local calendars and venue schedules" in page:
         raise RuntimeError("events.html must not expose the retired source-method hero copy")
     newsletter = page_soup.select_one('a.masthead-newsletter[href="https://treasure-coast-today.kit.com/cb848255f8"]')
