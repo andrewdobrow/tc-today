@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Treasure Coast Events — Things to Do in Martin, St. Lucie &amp; Indian River</title>
+  <title>Treasure Coast Events | Things to Do in Martin, St. Lucie &amp; Indian River</title>
   <meta name="description" content="Find upcoming Treasure Coast events, live music, festivals, markets, family activities and arts in Martin, St. Lucie and Indian River counties.">
   <link rel="canonical" href="https://treasurecoast.today/events.html">
   <link rel="alternate" type="application/rss+xml" title="Treasure Coast Today RSS Feed" href="/feed.xml">
-  <meta property="og:title" content="Treasure Coast Events — Treasure Coast Today">
+  <meta property="og:title" content="Treasure Coast Events | Treasure Coast Today">
   <meta property="og:description" content="A local calendar of live music, festivals, markets, family activities, arts and community events across the Treasure Coast.">
   <meta property="og:url" content="https://treasurecoast.today/events.html">
   <meta property="og:type" content="website">
@@ -20,7 +20,7 @@
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/style.css?v=1.13.7.5g">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
@@ -39,18 +39,17 @@
     .events-hero h1 { max-width: 850px; margin: 0; color: var(--text); font-family: 'Fraunces', serif; font-size: clamp(38px, 6.5vw, 66px); font-weight: 600; line-height: .99; letter-spacing: -.035em; text-wrap: balance; }
     .events-deck { max-width: 760px; margin: 20px 0 0; color: var(--text-secondary); font-size: 17px; line-height: 1.65; }
 
-    .events-toolbar { position: relative; margin: 28px 0 22px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-secondary); }
+    .events-toolbar { position: relative; margin: 28px 0 22px; padding: 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-secondary); }
+    .events-toolbar-row { display: grid; grid-template-columns: minmax(250px, 1.55fr) minmax(140px, .7fr) minmax(150px, .78fr) minmax(190px, 1fr) auto; gap: 10px; align-items: end; }
+    .events-control { min-width: 0; }
+    .events-control-label { display: block; margin: 0 0 6px; color: var(--text-secondary); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
     .events-search-wrap { position: relative; }
-    .events-search { width: 100%; box-sizing: border-box; padding: 13px 15px 13px 42px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; }
-    .events-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
-    .events-search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 16px; pointer-events: none; }
-    .events-filter-section { margin-top: 15px; }
-    .events-filter-label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 10px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; }
-    .events-filter-row { display: flex; flex-wrap: wrap; gap: 7px; }
-    .event-filter { appearance: none; border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; background: var(--bg); color: var(--text-secondary); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: border-color .15s ease, background .15s ease, color .15s ease; }
-    .event-filter:hover { border-color: var(--accent); color: var(--text); }
-    .event-filter.is-active { border-color: var(--accent); background: var(--accent); color: #fff; }
-    .events-reset { margin-left: auto; border: 0; background: transparent; color: var(--accent); font: 600 12px 'DM Sans', sans-serif; cursor: pointer; padding: 8px 4px; }
+    .events-search { width: 100%; height: 42px; box-sizing: border-box; padding: 0 13px 0 39px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
+    .events-search:focus, .events-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
+    .events-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 15px; pointer-events: none; }
+    .events-select { width: 100%; height: 42px; box-sizing: border-box; border: 1px solid var(--border); border-radius: 9px; padding: 0 34px 0 11px; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 550; cursor: pointer; outline: none; }
+    .events-reset { height: 42px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg); color: var(--accent); font: 650 11px 'DM Sans', sans-serif; cursor: pointer; padding: 0 12px; white-space: nowrap; }
+    .events-reset:hover, .events-reset:focus-visible { border-color: var(--accent); outline: none; }
 
     .events-results { margin-top: 4px; }
     .events-results-head { display: flex; justify-content: space-between; gap: 18px; align-items: baseline; margin-bottom: 14px; color: var(--text-secondary); font-size: 12px; }
@@ -98,7 +97,10 @@
       .events-page { padding: 0 16px 54px; }
       .events-hero { padding-top: 38px; }
       .events-deck { font-size: 15px; }
-      .events-toolbar { margin-top: 22px; padding: 14px; }
+      .events-toolbar { margin-top: 22px; padding: 12px; }
+      .events-toolbar-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 9px; }
+      .events-control--search { grid-column: 1 / -1; }
+      .events-reset { align-self: end; }
       .events-results-head { display: block; }
       .events-updated { margin-top: 3px !important; text-align: left; }
       .event-card { grid-template-columns: 66px minmax(0, 1fr); border-radius: 12px; }
@@ -111,9 +113,14 @@
       .events-note { grid-template-columns: 1fr; }
       .events-submit { justify-self: start; }
     }
+    @media (max-width: 460px) {
+      .events-toolbar-row { grid-template-columns: 1fr; }
+      .events-control--search { grid-column: auto; }
+      .events-reset { width: 100%; }
+    }
   </style>
   <!-- TCT_EVENTS_JSONLD_START -->
-<script type="application/ld+json" data-tct-events-jsonld>{"@context":"https://schema.org","@type":"ItemList","name":"Treasure Coast Events","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Event","name":"MAG Fall Into Art Exhibition, Opening Reception, Meet the Artists and Chances for Art Events","startDate":"2026-09-04T12:00-04:00","url":"https://discovermartin.com/event/mag-fall-into-art-exhibition-opening-reception-meet-the-artists-and-chances-for-art-events/2026-09-04/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-11-02T17:00-05:00","description":"Come “Fall Into Art” with us, where you will “fall” in love with this new and eclectic exhibition featuring the latest work by our wonderful group of artists of the Martin Artisans Guild. The Opening Reception is slated for September 2nd, from 5:30 to 7:30…","location":{"@type":"Place","name":"Palm Room Art Gallery & Artisans Boutique","address":{"@type":"PostalAddress","streetAddress":"3746 SE Ocean Blvd, Sewall’s Point, FL","addressLocality":"Sewall’s Point","addressRegion":"FL"}}}},{"@type":"ListItem","position":2,"item":{"@type":"Event","name":"Pippin & Willin'","startDate":"2026-09-04T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar/2026/4/16/pippin-amp-willin-twgfp-blhjn","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T17:30-04:00","description":"Sep 4 5:30 PM 17:30 Friday, September 4, 2026 5:30 PM 8:30 PM 17:30 20:30 Riverside Theatre (map) Google Calendar ICS Acoustic Multigenre singer songwriter ADD TO MY CALENDAR View Event →","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":3,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-04T19:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","description":"Catherine, the daughter of a brilliant but troubled mathematician, struggles with grief, trust, and her own extraordinary gifts after her father’s death. This Pulitzer Prize-winning drama explores family, genius, and the fine line between brilliance and…","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":4,"item":{"@type":"Event","name":"RAELYN NELSON","startDate":"2026-09-04T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":5,"item":{"@type":"Event","name":"Hypersona Duo","startDate":"2026-09-04T19:30-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":6,"item":{"@type":"Event","name":"Neil Simon’s “Fools”","startDate":"2026-09-04T19:30-04:00","url":"https://discovermartin.com/event/neil-simons-fools/2026-09-04/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T22:00-04:00","description":"Neil Simon’s “Fools” is a boisterously lighthearted comic fable that has grown into a beloved staple of regional theater. Set in a fictional Ukrainian village cursed with chronic stupidity, this charming and whimsical family-friendly play provides a…","location":{"@type":"Place","name":"A.C.T. Studio Theatre","address":{"@type":"PostalAddress","streetAddress":"Cedar Pointe Plaza, 2399 SE Ocean Blvd., Stuart, FL, 34996","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":7,"item":{"@type":"Event","name":"The National Toby Keith Tribute: Beer For My Horses","startDate":"2026-09-05T00:00-04:00","url":"https://www.summercrushwine.com/our-concerts-events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","description":"The National Tribute to Toby Keith: Beer for My Horses Show brings Toby’s larger-than-life sound to the stage with crowd favorites like “Should’ve Been a Cowboy,” “How Do You Like Me Now?!,” “I Love This Bar,” and more. Raise a glass and sing along! Opening…","location":{"@type":"Place","name":"Summer Crush Vineyard & Winery","address":{"@type":"PostalAddress","streetAddress":"4200 Johnston Rd, Fort Pierce, FL 34951","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":8,"item":{"@type":"Event","name":"Zumba at Tradition Gazebo","startDate":"2026-09-05T00:00-04:00","url":"https://traditionfl.com/events/zumba-2/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T00:00-04:00","description":"<p>Join us every Saturday at 9:15 AM at the Gazebo for an exhilarating Zumba class! This high-energy dance workout combines infectious music and easy-to-follow moves to keep you moving and having fun. Whether you’re a beginner or a seasoned dancer, our…","location":{"@type":"Place","name":"Tradition Gazebo","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":9,"item":{"@type":"Event","name":"Downtown Fort Pierce Farmers Market","startDate":"2026-09-05T08:00-04:00","url":"https://visitstlucie.com/event/downtown-fort-pierce-farmers-market-2/2026-09-05/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T12:00-04:00","description":"The Downtown Fort Pierce Farmers Market is a vibrant weekly event that brings together over 70 friendly vendors offering a diverse selection of fresh produce, delicious foods, exotic plants, savory spices, and more. Held every Saturday from 8:00 AM to 12:00…","location":{"@type":"Place","name":"The Downtown Farmers’ Market of Fort Pierce","address":{"@type":"PostalAddress","streetAddress":"101 Melody Ln, Fort Pierce, FL, 34950","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":10,"item":{"@type":"Event","name":"A Life in the Wild Hike","startDate":"2026-09-05T09:00-04:00","url":"https://visitstlucie.com/event/a-life-in-the-wild-hike/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T11:00-04:00","description":"Join a fun hike centered around exploring the types of animals you may find in a place like Oxbow Preserve. Focused primarily on mammals, the hike will explore how animals use urban environments and continue to thrive in green spaces. Visit www.SLChikes.org…"}}]}</script>
+<script type="application/ld+json" data-tct-events-jsonld>{"@context":"https://schema.org","@type":"ItemList","name":"Treasure Coast Events","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Event","name":"MAG Fall Into Art Exhibition, Opening Reception, Meet the Artists and Chances for Art Events","startDate":"2026-09-04T12:00-04:00","url":"https://discovermartin.com/event/mag-fall-into-art-exhibition-opening-reception-meet-the-artists-and-chances-for-art-events/2026-09-04/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-11-02T17:00-05:00","description":"Come “Fall Into Art” with us, where you will “fall” in love with this new and eclectic exhibition featuring the latest work by our wonderful group of artists of the Martin Artisans Guild. The Opening Reception is slated for September 2nd, from 5:30 to 7:30…","location":{"@type":"Place","name":"Palm Room Art Gallery & Artisans Boutique","address":{"@type":"PostalAddress","streetAddress":"3746 SE Ocean Blvd, Sewall’s Point, FL","addressLocality":"Sewall’s Point","addressRegion":"FL"}}}},{"@type":"ListItem","position":2,"item":{"@type":"Event","name":"First Friday Art Walk","startDate":"2026-09-04T17:00-04:00","url":"https://www.stuartfl.gov/calendar.aspx?EID=6186","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T21:00-04:00","location":{"@type":"Place","name":"<p>The Creek District of Arts & Entertainment, Colorado Avenue</p> - Stuart FL 34994","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":3,"item":{"@type":"Event","name":"Food Trucks and Tributes – Johnny Cash Tribute","startDate":"2026-09-04T17:00-04:00","url":"https://visitstlucie.com/event/food-trucks-and-tributes-johnny-cash-tribute/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T21:00-04:00","description":"Food Trucks and Tributes – Johnny Cash Tribute Come down to Tradition Square this Friday for Food Trucks & Tributes, where concerts and food trucks come together in perfect harmony. With a tempting variety of dining choices and a heartfelt homage to one of…","location":{"@type":"Place","name":"Tradition Square","address":{"@type":"PostalAddress","streetAddress":"SW Tradition Square, Port St. Lucie, 34987","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":4,"item":{"@type":"Event","name":"Friday Fest - September 4, 2026","startDate":"2026-09-04T17:30-04:00","url":"https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T20:30-04:00","description":"Sep 4 Friday, September 4, 2026 5:30 PM 8:30 PM Marina Square (map) Google Calendar ICS The longest running street party on the Treasure Coast filled with food vendors, arts and crafts, and activities for all ages! View Event →"}},{"@type":"ListItem","position":5,"item":{"@type":"Event","name":"Pippin & Willin'","startDate":"2026-09-04T17:30-04:00","url":"https://www.riversidetheatre.com/loop-music-calendar/2026/4/16/pippin-amp-willin-twgfp-blhjn","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-05T17:30-04:00","description":"Sep 4 5:30 PM 17:30 Friday, September 4, 2026 5:30 PM 8:30 PM 17:30 20:30 Riverside Theatre (map) Google Calendar ICS Acoustic Multigenre singer songwriter ADD TO MY CALENDAR View Event →","location":{"@type":"Place","name":"Riverside Theatre","address":{"@type":"PostalAddress","streetAddress":"3250 Riverside Park Dr, Vero Beach, FL 32963","addressLocality":"Vero Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":6,"item":{"@type":"Event","name":"Upcoming events.","startDate":"2026-09-04T17:30-04:00","url":"https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T20:30-04:00","description":"Sep 4 Friday Fest - September 4, 2026 Friday, September 4, 2026 5:30 PM 8:30 PM Marina Square (map) Google Calendar ICS The longest running street party on the Treasure Coast filled with food vendors, arts and crafts, and activities for all ages! View Event…"}},{"@type":"ListItem","position":7,"item":{"@type":"Event","name":"⚾️ Jupiter Hammerheads @ St. Lucie Mets","startDate":"2026-09-04T18:10-04:00","url":"https://visitstlucie.com/event/%e2%9a%be%ef%b8%8f-jupiter-hammerheads-st-lucie-mets/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-04T21:10-04:00","description":"Florida State League | ▶️ Stream live on MiLB.TV or follow all the action on Gameday. Catch every swing, every pitch live! Step up to the plate and purchase your tickets now! Buy Tickets https://e.cal.mlb/f/25PYNV/3vXv4 Stream Live…"}},{"@type":"ListItem","position":8,"item":{"@type":"Event","name":"Proof","startDate":"2026-09-04T19:00-04:00","url":"https://www.pineappleplayhouse.com/seasonal-shows/proof","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","description":"Catherine, the daughter of a brilliant but troubled mathematician, struggles with grief, trust, and her own extraordinary gifts after her father’s death. This Pulitzer Prize-winning drama explores family, genius, and the fine line between brilliance and…","location":{"@type":"Place","name":"Pineapple Playhouse","address":{"@type":"PostalAddress","streetAddress":"700 W Weatherbee Rd, Fort Pierce, FL 34982","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":9,"item":{"@type":"Event","name":"RAELYN NELSON","startDate":"2026-09-04T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":10,"item":{"@type":"Event","name":"Hypersona Duo","startDate":"2026-09-04T19:30-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}}]}</script>
 <!-- TCT_EVENTS_JSONLD_END -->
   <script data-tct-member-prepaint>
 (function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1')document.documentElement.classList.add('tct-member-preverified')}catch(_e){}})();
@@ -125,23 +132,38 @@
   <header>
     <div class="header-inner">
       <div class="header-top">
-        <a href="/" class="wordmark">Treasure Coast Today</a>
+        <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
       </div>
-      <nav class="category-nav">
+      <nav class="category-nav category-nav--primary" aria-label="Primary navigation">
         <a href="/" class="cat-btn" style="text-decoration:none">Top News</a>
-        <a href="/?cat=local_gov" class="cat-btn" style="text-decoration:none">Local Government</a>
-        <a href="/?cat=crime" class="cat-btn" style="text-decoration:none">Crime &amp; Safety</a>
-        <a href="/?cat=business" class="cat-btn" style="text-decoration:none">Business &amp; Development</a>
-        <a href="/?cat=sports" class="cat-btn" style="text-decoration:none">Sports</a>
-        <a href="/?cat=things_to_do" class="cat-btn" style="text-decoration:none">Things To Do</a>
-        <a href="/?cat=florida" class="cat-btn" style="text-decoration:none">Florida</a>
         <a href="/?cat=martin" class="cat-btn" style="text-decoration:none">Martin County</a>
         <a href="/?cat=st_lucie" class="cat-btn" style="text-decoration:none">St. Lucie County</a>
         <a href="/?cat=indian_river" class="cat-btn" style="text-decoration:none">Indian River County</a>
-        <a href="/weather.html" class="cat-btn" style="text-decoration:none">Weather</a>
         <a href="/events.html" class="cat-btn active" aria-current="page" style="text-decoration:none">Events</a>
-        <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
-        </nav>
+        <details class="nav-sections">
+          <summary class="cat-btn nav-sections-toggle">Sections <span class="nav-sections-chevron" aria-hidden="true">▾</span></summary>
+          <div class="nav-sections-menu" role="group" aria-label="Sections">
+          <div class="nav-sections-group">
+            <span class="nav-sections-heading">News</span>
+            <div class="nav-sections-links">
+              <a href="/?cat=local_gov" class="nav-section-link">Local Government</a>
+              <a href="/?cat=crime" class="nav-section-link">Crime &amp; Safety</a>
+              <a href="/?cat=business" class="nav-section-link">Business &amp; Development</a>
+              <a href="/?cat=florida" class="nav-section-link">Florida</a>
+            </div>
+          </div>
+          <div class="nav-sections-group">
+            <span class="nav-sections-heading">More</span>
+            <div class="nav-sections-links">
+              <a href="/?cat=sports" class="nav-section-link">Sports</a>
+              <a href="/?cat=things_to_do" class="nav-section-link">Things To Do</a>
+              <a href="/weather.html" class="nav-section-link">Weather</a>
+              <a href="/archive.html" class="nav-section-link">Archive</a>
+            </div>
+          </div>
+          </div>
+        </details>
+      </nav>
       <div class="header-actions">
         <a href="/subscribe.html" class="support-btn membership-subscribe-btn" style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today — $1 first month"><span class="membership-subscribe-label">Subscribe</span><span class="membership-subscribe-price">Limited time &middot; $1 first month</span></a><a href="/subscribe.html?signin=1" class="membership-header-signin">Sign in</a><a href="/subscribe.html" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>
       </div>
@@ -152,55 +174,57 @@
     <section class="events-hero">
       <span class="events-eyebrow">Treasure Coast Events</span>
       <h1>What’s happening on the Treasure Coast.</h1>
-      <p class="events-deck">Live music, festivals, markets, family activities, arts, outdoor events and more across Martin, St. Lucie and Indian River counties — gathered from official local calendars and venue schedules.</p>
+      <p class="events-deck">Live music, festivals, markets, family activities, arts, outdoor events and more across Martin, St. Lucie and Indian River counties.</p>
     </section>
 
     <section class="events-toolbar" aria-label="Filter Treasure Coast events">
-      <div class="events-search-wrap">
-        <span class="events-search-icon" aria-hidden="true">⌕</span>
-        <label class="sr-only" for="eventsSearch">Search events</label>
-        <input class="events-search" id="eventsSearch" type="search" placeholder="Search events, venues or cities…" autocomplete="off" data-events-search>
-      </div>
-
-      <div class="events-filter-section">
-        <span class="events-filter-label">When</span>
-        <div class="events-filter-row" data-filter-group="range">
-          <button class="event-filter is-active" type="button" data-range="all" aria-pressed="true">All upcoming</button>
-          <button class="event-filter" type="button" data-range="today" aria-pressed="false">Today</button>
-          <button class="event-filter" type="button" data-range="weekend" aria-pressed="false">This weekend</button>
+      <div class="events-toolbar-row">
+        <div class="events-control events-control--search">
+          <span class="events-control-label">Search</span>
+          <div class="events-search-wrap">
+            <span class="events-search-icon" aria-hidden="true">⌕</span>
+            <label class="sr-only" for="eventsSearch">Search events</label>
+            <input class="events-search" id="eventsSearch" type="search" placeholder="Events, venues or cities" autocomplete="off" data-events-search>
+          </div>
         </div>
-      </div>
-
-      <div class="events-filter-section">
-        <span class="events-filter-label">County</span>
-        <div class="events-filter-row" data-filter-group="county">
-          <button class="event-filter is-active" type="button" data-county-filter="all" aria-pressed="true">All counties</button>
-          <button class="event-filter" type="button" data-county-filter="Martin" aria-pressed="false">Martin</button>
-          <button class="event-filter" type="button" data-county-filter="St. Lucie" aria-pressed="false">St. Lucie</button>
-          <button class="event-filter" type="button" data-county-filter="Indian River" aria-pressed="false">Indian River</button>
-        </div>
-      </div>
-
-      <div class="events-filter-section">
-        <span class="events-filter-label">Type</span>
-        <div class="events-filter-row" data-filter-group="category">
-          <button class="event-filter is-active" type="button" data-category-filter="all" aria-pressed="true">All types</button>
-          <button class="event-filter" type="button" data-category-filter="Live Music" aria-pressed="false">Live Music</button>
-          <button class="event-filter" type="button" data-category-filter="Arts &amp; Culture" aria-pressed="false">Arts &amp; Culture</button>
-          <button class="event-filter" type="button" data-category-filter="Family" aria-pressed="false">Family</button>
-          <button class="event-filter" type="button" data-category-filter="Food &amp; Markets" aria-pressed="false">Food &amp; Markets</button>
-          <button class="event-filter" type="button" data-category-filter="Sports &amp; Recreation" aria-pressed="false">Sports &amp; Recreation</button>
-          <button class="event-filter" type="button" data-category-filter="Outdoors &amp; Nature" aria-pressed="false">Outdoors &amp; Nature</button>
-          <button class="event-filter" type="button" data-category-filter="Community" aria-pressed="false">Community</button>
-          <button class="event-filter" type="button" data-category-filter="Classes &amp; Workshops" aria-pressed="false">Classes &amp; Workshops</button>
-          <button class="events-reset" type="button" data-events-reset>Reset filters</button>
-        </div>
+        <label class="events-control" for="eventsRange">
+          <span class="events-control-label">When</span>
+          <select class="events-select" id="eventsRange" data-events-range>
+            <option value="all">All upcoming</option>
+            <option value="today">Today</option>
+            <option value="weekend">This weekend</option>
+          </select>
+        </label>
+        <label class="events-control" for="eventsCounty">
+          <span class="events-control-label">County</span>
+          <select class="events-select" id="eventsCounty" data-events-county>
+            <option value="all">All counties</option>
+            <option value="Martin">Martin</option>
+            <option value="St. Lucie">St. Lucie</option>
+            <option value="Indian River">Indian River</option>
+          </select>
+        </label>
+        <label class="events-control" for="eventsCategory">
+          <span class="events-control-label">Type</span>
+          <select class="events-select" id="eventsCategory" data-events-category>
+            <option value="all">All types</option>
+            <option value="Live Music">Live Music</option>
+            <option value="Arts &amp; Culture">Arts &amp; Culture</option>
+            <option value="Family">Family</option>
+            <option value="Food &amp; Markets">Food &amp; Markets</option>
+            <option value="Sports &amp; Recreation">Sports &amp; Recreation</option>
+            <option value="Outdoors &amp; Nature">Outdoors &amp; Nature</option>
+            <option value="Community">Community</option>
+            <option value="Classes &amp; Workshops">Classes &amp; Workshops</option>
+          </select>
+        </label>
+        <button class="events-reset" type="button" data-events-reset>Reset</button>
       </div>
     </section>
 
     <!-- TCT_EVENTS_DYNAMIC_START -->
 <section class="events-results" aria-live="polite">
-  <div class="events-results-head"><p><strong data-events-count>534</strong> upcoming events</p><p class="events-updated">Updated Sep 4, 2026 at 9:58 PM ET</p></div>
+  <div class="events-results-head"><p><strong data-events-count>539</strong> upcoming events</p><p class="events-updated">Updated Sep 4, 2026 at 5:45 PM ET</p></div>
   <div class="events-list" data-events-list>
 <article class="event-card" data-event-id="407b1ca6040edc519c" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-04">
   <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
@@ -212,6 +236,36 @@
     <div class="event-card-footer"><span>Source: <a href="https://discovermartin.com/events/list/" target="_blank" rel="noopener noreferrer external">Discover Martin</a></span><div class="event-actions"><a href="https://discovermartin.com/event/mag-fall-into-art-exhibition-opening-reception-meet-the-artists-and-chances-for-art-events/2026-09-04/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
   </div>
 </article>
+<article class="event-card" data-event-id="275e1b19298bde287a" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span></div>
+    <h2 class="event-title"><a href="https://www.stuartfl.gov/calendar.aspx?EID=6186" target="_blank" rel="noopener noreferrer external">First Friday Art Walk</a></h2>
+    <p class="event-whenwhere"><strong>5 PM–9 PM</strong> · &lt;p&gt;The Creek District of Arts &amp; Entertainment, Colorado Avenue&lt;/p&gt; - Stuart FL 34994 · Stuart</p>
+    
+    <div class="event-card-footer"><span>Source: <a href="https://www.stuartfl.gov/calendar.aspx" target="_blank" rel="noopener noreferrer external">City of Stuart — City Events</a></span><div class="event-actions"><a href="https://www.stuartfl.gov/calendar.aspx?EID=6186" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="f8a4e2f319da5702a1" data-county="St. Lucie" data-category="Live Music" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Live Music</span></div>
+    <h2 class="event-title"><a href="https://visitstlucie.com/event/food-trucks-and-tributes-johnny-cash-tribute/" target="_blank" rel="noopener noreferrer external">Food Trucks and Tributes – Johnny Cash Tribute</a></h2>
+    <p class="event-whenwhere"><strong>5 PM–9 PM</strong> · Tradition Square · Port St. Lucie</p>
+    <p class="event-desc">Food Trucks and Tributes – Johnny Cash Tribute Come down to Tradition Square this Friday for Food Trucks &amp; Tributes, where concerts and food trucks come together in perfect harmony. With a tempting variety of dining choices and a heartfelt homage to one of…</p>
+    <div class="event-card-footer"><span>Source: <a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Visit St. Lucie</a></span><div class="event-actions"><a href="https://visitstlucie.com/event/food-trucks-and-tributes-johnny-cash-tribute/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="5a9d44c6b1bd5710d5" data-county="St. Lucie" data-category="Community" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Community</span></div>
+    <h2 class="event-title"><a href="https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026" target="_blank" rel="noopener noreferrer external">Friday Fest - September 4, 2026</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Fort Pierce</p>
+    <p class="event-desc">Sep 4 Friday, September 4, 2026 5:30 PM 8:30 PM Marina Square (map) Google Calendar ICS The longest running street party on the Treasure Coast filled with food vendors, arts and crafts, and activities for all ages! View Event →</p>
+    <div class="event-card-footer"><span>Source: <a href="https://mainstreetfortpierce.org/local-events-calendar" target="_blank" rel="noopener noreferrer external">Main Street Fort Pierce</a></span><div class="event-actions"><a href="https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
 <article class="event-card" data-event-id="10cbb19bbe627f28fc" data-county="Indian River" data-category="Live Music" data-date="2026-09-04">
   <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
   <div class="event-card-body">
@@ -220,6 +274,26 @@
     <p class="event-whenwhere"><strong>5:30 PM</strong> · Riverside Theatre · Vero Beach</p>
     <p class="event-desc">Sep 4 5:30 PM 17:30 Friday, September 4, 2026 5:30 PM 8:30 PM 17:30 20:30 Riverside Theatre (map) Google Calendar ICS Acoustic Multigenre singer songwriter ADD TO MY CALENDAR View Event →</p>
     <div class="event-card-footer"><span>Source: <a href="https://www.riversidetheatre.com/loop-music-calendar" target="_blank" rel="noopener noreferrer external">Riverside Theatre — Loop Music Calendar</a></span><div class="event-actions"><a href="https://www.riversidetheatre.com/loop-music-calendar/2026/4/16/pippin-amp-willin-twgfp-blhjn" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="3156b1ddd96b6547fa" data-county="St. Lucie" data-category="Community" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Community</span></div>
+    <h2 class="event-title"><a href="https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026" target="_blank" rel="noopener noreferrer external">Upcoming events.</a></h2>
+    <p class="event-whenwhere"><strong>5:30 PM–8:30 PM</strong> · Fort Pierce</p>
+    <p class="event-desc">Sep 4 Friday Fest - September 4, 2026 Friday, September 4, 2026 5:30 PM 8:30 PM Marina Square (map) Google Calendar ICS The longest running street party on the Treasure Coast filled with food vendors, arts and crafts, and activities for all ages! View Event…</p>
+    <div class="event-card-footer"><span>Source: <a href="https://mainstreetfortpierce.org/local-events-calendar" target="_blank" rel="noopener noreferrer external">Main Street Fort Pierce</a></span><div class="event-actions"><a href="https://mainstreetfortpierce.org/local-events-calendar/friday-fest-september-4-2026" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
+  </div>
+</article>
+<article class="event-card" data-event-id="3a91bbade69dd8dc90" data-county="St. Lucie" data-category="Sports &amp; Recreation" data-date="2026-09-04">
+  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
+  <div class="event-card-body">
+    <div class="event-card-meta"><span class="event-category">Sports &amp; Recreation</span></div>
+    <h2 class="event-title"><a href="https://visitstlucie.com/event/%e2%9a%be%ef%b8%8f-jupiter-hammerheads-st-lucie-mets/" target="_blank" rel="noopener noreferrer external">⚾️ Jupiter Hammerheads @ St. Lucie Mets</a></h2>
+    <p class="event-whenwhere"><strong>6:10 PM–9:10 PM</strong> · St. Lucie County</p>
+    <p class="event-desc">Florida State League | ▶️ Stream live on MiLB.TV or follow all the action on Gameday. Catch every swing, every pitch live! Step up to the plate and purchase your tickets now! Buy Tickets https://e.cal.mlb/f/25PYNV/3vXv4 Stream Live…</p>
+    <div class="event-card-footer"><span>Source: <a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Visit St. Lucie</a></span><div class="event-actions"><a href="https://visitstlucie.com/event/%e2%9a%be%ef%b8%8f-jupiter-hammerheads-st-lucie-mets/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
   </div>
 </article>
 <article class="event-card" data-event-id="cf0804e41c97205739" data-county="St. Lucie" data-category="Arts &amp; Culture" data-date="2026-09-04">
@@ -252,60 +326,10 @@
     <div class="event-card-footer"><span>Source: <a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Capt Hiram&#x27;s Resort</a></span><div class="event-actions"><a href="https://hirams.com/events/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
   </div>
 </article>
-<article class="event-card" data-event-id="cc3247c27b9b1ca6cb" data-county="Martin" data-category="Arts &amp; Culture" data-date="2026-09-04">
-  <div class="event-datebox" aria-label="Friday, September 4, 2026"><span>FRI</span><strong>SEP 4</strong></div>
-  <div class="event-card-body">
-    <div class="event-card-meta"><span class="event-category">Arts &amp; Culture</span><span class="event-price">$28</span></div>
-    <h2 class="event-title"><a href="https://discovermartin.com/event/neil-simons-fools/2026-09-04/" target="_blank" rel="noopener noreferrer external">Neil Simon’s “Fools”</a></h2>
-    <p class="event-whenwhere"><strong>7:30 PM–10 PM</strong> · A.C.T. Studio Theatre · Stuart</p>
-    <p class="event-desc">Neil Simon’s “Fools” is a boisterously lighthearted comic fable that has grown into a beloved staple of regional theater. Set in a fictional Ukrainian village cursed with chronic stupidity, this charming and whimsical family-friendly play provides a…</p>
-    <div class="event-card-footer"><span>Source: <a href="https://discovermartin.com/events/list/" target="_blank" rel="noopener noreferrer external">Discover Martin</a></span><div class="event-actions"><a href="https://discovermartin.com/event/neil-simons-fools/2026-09-04/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
-  </div>
-</article>
-<article class="event-card" data-event-id="f85aba49bd9fa7592b" data-county="St. Lucie" data-category="Live Music" data-date="2026-09-05">
-  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
-  <div class="event-card-body">
-    <div class="event-card-meta"><span class="event-category">Live Music</span><span class="event-price">The National Tribute to Toby Keith: Beer for My Horses Show brings Toby’s larger-than-life sound…</span></div>
-    <h2 class="event-title"><a href="https://www.summercrushwine.com/our-concerts-events" target="_blank" rel="noopener noreferrer external">The National Toby Keith Tribute: Beer For My Horses</a></h2>
-    <p class="event-whenwhere"><strong>12 AM</strong> · Summer Crush Vineyard &amp; Winery · Fort Pierce</p>
-    <p class="event-desc">The National Tribute to Toby Keith: Beer for My Horses Show brings Toby’s larger-than-life sound to the stage with crowd favorites like “Should’ve Been a Cowboy,” “How Do You Like Me Now?!,” “I Love This Bar,” and more. Raise a glass and sing along! Opening…</p>
-    <div class="event-card-footer"><span>Source: <a href="https://www.summercrushwine.com/our-concerts-events" target="_blank" rel="noopener noreferrer external">Summer Crush Vineyard &amp; Winery</a></span><div class="event-actions"><a href="https://www.summercrushwine.com/our-concerts-events" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
-  </div>
-</article>
-<article class="event-card" data-event-id="185c75a3ad72ef4f70" data-county="St. Lucie" data-category="Classes &amp; Workshops" data-date="2026-09-05">
-  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
-  <div class="event-card-body">
-    <div class="event-card-meta"><span class="event-category">Classes &amp; Workshops</span></div>
-    <h2 class="event-title"><a href="https://traditionfl.com/events/zumba-2/" target="_blank" rel="noopener noreferrer external">Zumba at Tradition Gazebo</a></h2>
-    <p class="event-whenwhere"><strong>12 AM–12 AM</strong> · Tradition Gazebo · Port St. Lucie</p>
-    <p class="event-desc">&lt;p&gt;Join us every Saturday at 9:15 AM at the Gazebo for an exhilarating Zumba class! This high-energy dance workout combines infectious music and easy-to-follow moves to keep you moving and having fun. Whether you’re a beginner or a seasoned dancer, our…</p>
-    <div class="event-card-footer"><span>Source: <a href="https://traditionfl.com/events-calendar/" target="_blank" rel="noopener noreferrer external">Tradition — Events Calendar</a></span><div class="event-actions"><a href="https://traditionfl.com/events/zumba-2/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
-  </div>
-</article>
-<article class="event-card" data-event-id="301c87d644d68c60b8" data-county="St. Lucie" data-category="Food &amp; Markets" data-date="2026-09-05">
-  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
-  <div class="event-card-body">
-    <div class="event-card-meta"><span class="event-category">Food &amp; Markets</span></div>
-    <h2 class="event-title"><a href="https://visitstlucie.com/event/downtown-fort-pierce-farmers-market-2/2026-09-05/" target="_blank" rel="noopener noreferrer external">Downtown Fort Pierce Farmers Market</a></h2>
-    <p class="event-whenwhere"><strong>8 AM–12 PM</strong> · The Downtown Farmers’ Market of Fort Pierce · Fort Pierce</p>
-    <p class="event-desc">The Downtown Fort Pierce Farmers Market is a vibrant weekly event that brings together over 70 friendly vendors offering a diverse selection of fresh produce, delicious foods, exotic plants, savory spices, and more. Held every Saturday from 8:00 AM to 12:00…</p>
-    <div class="event-card-footer"><span>Source: <a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Visit St. Lucie</a></span><div class="event-actions"><a href="https://visitstlucie.com/event/downtown-fort-pierce-farmers-market-2/2026-09-05/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
-  </div>
-</article>
-<article class="event-card" data-event-id="161bfd527b82e84380" data-county="St. Lucie" data-category="Outdoors &amp; Nature" data-date="2026-09-05">
-  <div class="event-datebox" aria-label="Saturday, September 5, 2026"><span>SAT</span><strong>SEP 5</strong></div>
-  <div class="event-card-body">
-    <div class="event-card-meta"><span class="event-category">Outdoors &amp; Nature</span><span class="event-price">Free</span></div>
-    <h2 class="event-title"><a href="https://visitstlucie.com/event/a-life-in-the-wild-hike/" target="_blank" rel="noopener noreferrer external">A Life in the Wild Hike</a></h2>
-    <p class="event-whenwhere"><strong>9 AM–11 AM</strong> · St. Lucie County</p>
-    <p class="event-desc">Join a fun hike centered around exploring the types of animals you may find in a place like Oxbow Preserve. Focused primarily on mammals, the hike will explore how animals use urban environments and continue to thrive in green spaces. Visit www.SLChikes.org…</p>
-    <div class="event-card-footer"><span>Source: <a href="https://visitstlucie.com/events/list/" target="_blank" rel="noopener noreferrer external">Visit St. Lucie</a></span><div class="event-actions"><a href="https://visitstlucie.com/event/a-life-in-the-wild-hike/" target="_blank" rel="noopener noreferrer external">Event details →</a></div></div>
-  </div>
-</article>
   </div>
   <div class="events-more-wrap" data-events-more-wrap>
     <button class="events-more" type="button" data-events-more>View 10 more</button>
-    <span class="events-showing" data-events-showing>Showing 10 of 534</span>
+    <span class="events-showing" data-events-showing>Showing 10 of 539</span>
   </div>
   <div class="events-empty" data-events-empty hidden><strong>No events match those filters.</strong><span>Try another county, category or date range.</span></div>
 </section>
@@ -424,13 +448,6 @@
   </div>
 </article>`;
     };
-    const setPressed = (button, groupSelector) => {
-      document.querySelectorAll(groupSelector).forEach(btn => {
-        const active = btn === button;
-        btn.classList.toggle('is-active', active);
-        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-      });
-    };
     const matches = (event, today, weekendStart, weekendEnd, needle) => {
       const eventDate = String(event.starts_at || '').slice(0, 10);
       const rangeOk = state.range === 'all' || (state.range === 'today' && eventDate === today) ||
@@ -479,24 +496,21 @@
     };
     const refreshFromInteraction = () => loadAllEvents().then(events => { if (events) apply(); });
 
-    document.querySelectorAll('[data-range]').forEach(button => button.addEventListener('click', () => {
-      state.range = button.dataset.range;
+    if (rangeSelect) rangeSelect.addEventListener('change', () => {
+      state.range = rangeSelect.value || 'all';
       state.limit = PAGE_SIZE;
-      setPressed(button, '[data-range]');
       refreshFromInteraction();
-    }));
-    document.querySelectorAll('[data-county-filter]').forEach(button => button.addEventListener('click', () => {
-      state.county = button.dataset.countyFilter;
+    });
+    if (countySelect) countySelect.addEventListener('change', () => {
+      state.county = countySelect.value || 'all';
       state.limit = PAGE_SIZE;
-      setPressed(button, '[data-county-filter]');
       refreshFromInteraction();
-    }));
-    document.querySelectorAll('[data-category-filter]').forEach(button => button.addEventListener('click', () => {
-      state.category = button.dataset.categoryFilter;
+    });
+    if (categorySelect) categorySelect.addEventListener('change', () => {
+      state.category = categorySelect.value || 'all';
       state.limit = PAGE_SIZE;
-      setPressed(button, '[data-category-filter]');
       refreshFromInteraction();
-    }));
+    });
     if (search) search.addEventListener('input', () => {
       state.query = search.value;
       state.limit = PAGE_SIZE;
@@ -514,10 +528,9 @@
       state.query = '';
       state.limit = PAGE_SIZE;
       if (search) search.value = '';
-      ['[data-range="all"]','[data-county-filter="all"]','[data-category-filter="all"]'].forEach(selector => {
-        const button = document.querySelector(selector);
-        if (button) setPressed(button, selector.includes('range') ? '[data-range]' : selector.includes('county') ? '[data-county-filter]' : '[data-category-filter]');
-      });
+      if (rangeSelect) rangeSelect.value = 'all';
+      if (countySelect) countySelect.value = 'all';
+      if (categorySelect) categorySelect.value = 'all';
       refreshFromInteraction();
     });
   })();

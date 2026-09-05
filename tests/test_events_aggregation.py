@@ -189,15 +189,49 @@ def test_existing_events_page_is_live_filterable_and_not_coming_soon():
     page = (ROOT / "events.html").read_text(encoding="utf-8")
     assert "Coming Soon" not in page
     assert "data-events-search" in page
-    assert 'data-range="today"' in page
-    assert 'data-range="weekend"' in page
-    assert 'data-county-filter="Martin"' in page
-    assert 'data-category-filter="Live Music"' in page
+    assert 'select class="events-select" id="eventsRange" data-events-range' in page
+    assert '<option value="today">Today</option>' in page
+    assert '<option value="weekend">This weekend</option>' in page
+    assert 'select class="events-select" id="eventsCounty" data-events-county' in page
+    assert '<option value="Martin">Martin</option>' in page
+    assert 'select class="events-select" id="eventsCategory" data-events-category' in page
+    assert '<option value="Live Music">Live Music</option>' in page
     assert page.count(events.DYNAMIC_START) == 1
     assert page.count(events.DYNAMIC_END) == 1
     assert page.count(events.JSONLD_START) == 1
     assert page.count(events.JSONLD_END) == 1
     assert '<a href="/feed.xml" type="application/rss+xml">RSS Feed</a>' in page
+
+
+def test_events_page_filters_are_compact_dropdowns_in_one_toolbar_row():
+    page = (ROOT / "events.html").read_text(encoding="utf-8")
+    soup = BeautifulSoup(page, "html.parser")
+    toolbar = soup.select_one(".events-toolbar-row")
+    assert toolbar is not None
+    assert len(toolbar.select("select.events-select")) == 3
+    assert toolbar.select_one("[data-events-range]") is not None
+    assert toolbar.select_one("[data-events-county]") is not None
+    assert toolbar.select_one("[data-events-category]") is not None
+    assert not soup.select(".events-filter-section")
+    assert not soup.select("button.event-filter")
+    assert "grid-template-columns: minmax(250px, 1.55fr)" in page
+    assert "rangeSelect.addEventListener('change'" in page
+    assert "countySelect.addEventListener('change'" in page
+    assert "categorySelect.addEventListener('change'" in page
+
+
+def test_events_page_hero_copy_is_short_and_does_not_explain_source_method():
+    page = (ROOT / "events.html").read_text(encoding="utf-8")
+    soup = BeautifulSoup(page, "html.parser")
+    deck = soup.select_one(".events-deck")
+    assert deck is not None
+    assert deck.get_text(" ", strip=True) == (
+        "Live music, festivals, markets, family activities, arts, outdoor events and more "
+        "across Martin, St. Lucie and Indian River counties."
+    )
+    assert "gathered from official local calendars and venue schedules" not in page
+    assert " — gathered from" not in page
+    assert "Treasure Coast Events — Treasure Coast Today" not in page
 
 
 def test_events_page_server_renders_only_ten_then_loads_more_in_ten_event_batches():
@@ -515,37 +549,83 @@ def test_relative_event_and_ticket_urls_resolve_against_source_not_tct():
     assert row["ticket_url"] == "https://venue.example/tickets/local-show"
 
 
-def test_events_page_omits_backend_process_copy_and_puts_events_before_archive():
+def test_events_page_header_uses_canonical_tct_wordmark_branding():
+    page = (ROOT / "events.html").read_text(encoding="utf-8")
+    expected_wordmark = (
+        '<a href="/" class="wordmark" aria-label="Treasure Coast Today">'
+        '<span class="wordmark-tct">TCT</span>'
+        '<span class="wordmark-divider"></span>'
+        '<span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>'
+    )
+    assert expected_wordmark in page
+    assert '<a href="/" class="wordmark">Treasure Coast Today</a>' not in page
+
+
+def test_events_page_uses_top_news_then_county_first_navigation_and_groups_florida_under_news():
     page = (ROOT / "events.html").read_text(encoding="utf-8")
     assert "Automatic updates" not in page
     assert "Duplicate listings combined" not in page
     assert "Sources refresh automatically" not in page
-    nav_start = page.index('<nav class="category-nav">')
+    nav_start = page.index('<nav class="category-nav category-nav--primary"')
     nav_end = page.index("</nav>", nav_start)
     nav = page[nav_start:nav_end]
+
+    top_news = nav.index('href="/"')
+    martin = nav.index('href="/?cat=martin"')
+    st_lucie = nav.index('href="/?cat=st_lucie"')
+    indian_river = nav.index('href="/?cat=indian_river"')
+    events = nav.index('href="/events.html"')
+    sections = nav.index('<details class="nav-sections">')
+    assert top_news < martin < st_lucie < indian_river < events < sections
+    assert nav.count('>Top News</a>') == 1
     assert nav.count('href="/events.html"') == 1
-    assert nav.index('href="/events.html"') < nav.index('href="/archive.html"')
+    assert 'href="/events.html" class="cat-btn active" aria-current="page"' in nav
+
+    news = nav.index('class="nav-sections-heading">News</span>')
+    florida = nav.index('href="/?cat=florida"')
+    more = nav.index('class="nav-sections-heading">More</span>')
+    assert top_news < news
+    assert news < florida < more
+    assert nav.index('href="/?cat=sports"') > more
+    assert nav.index('href="/archive.html"') > more
 
 
-def test_sitewide_events_nav_normalizer_inserts_events_before_archive(tmp_path):
+def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent(tmp_path):
     import ast
+    import html as html_lib
     import re
 
     source = (ROOT / "scripts" / "generate.py").read_text(encoding="utf-8")
     tree = ast.parse(source)
-    node = next(
+    categories_node = next(
         item for item in tree.body
-        if isinstance(item, ast.FunctionDef) and item.name == "_normalize_events_navigation_sitewide"
+        if isinstance(item, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "CATEGORIES" for target in item.targets)
     )
-    module = ast.Module(body=[node], type_ignores=[])
-    namespace = {"Path": Path, "re": re}
+    helper = next(
+        item for item in tree.body
+        if isinstance(item, ast.FunctionDef) and item.name == "_primary_navigation_html"
+    )
+    normalizer = next(
+        item for item in tree.body
+        if isinstance(item, ast.FunctionDef) and item.name == "_normalize_primary_navigation_sitewide"
+    )
+    module = ast.Module(body=[helper, normalizer], type_ignores=[])
+    namespace = {
+        "Path": Path,
+        "re": re,
+        "html_lib": html_lib,
+        "CATEGORIES": ast.literal_eval(categories_node.value),
+    }
     exec(compile(module, "generate.py", "exec"), namespace)
-    normalize = namespace["_normalize_events_navigation_sitewide"]
+    normalize = namespace["_normalize_primary_navigation_sitewide"]
 
-    sample = tmp_path / "index.html"
+    sample = tmp_path / "article.html"
     sample.write_text(
+        '<link rel="stylesheet" href="/style.css?v=old">'
         '<nav class="category-nav">'
-        '<a href="/weather.html" class="cat-btn">Weather</a>'
+        '<a href="/?cat=crime" class="cat-btn active" aria-current="page">Crime &amp; Safety</a>'
+        '<a href="/events.html" class="cat-btn">Events</a>'
         '<a href="/archive.html" class="cat-btn">Archive</a>'
         '</nav>',
         encoding="utf-8",
@@ -553,12 +633,48 @@ def test_sitewide_events_nav_normalizer_inserts_events_before_archive(tmp_path):
     result = normalize(tmp_path)
     rendered = sample.read_text(encoding="utf-8")
     assert result == {"scanned": 1, "updated": 1}
-    assert rendered.count('href="/events.html"') == 1
-    assert rendered.index('href="/events.html"') < rendered.index('href="/archive.html"')
+    assert rendered.index('href="/"') < rendered.index('href="/?cat=martin"')
+    assert 'href="/?cat=martin"' in rendered
+    assert 'href="/?cat=st_lucie"' in rendered
+    assert 'href="/?cat=indian_river"' in rendered
+    assert rendered.index('href="/events.html"') < rendered.index('<details class="nav-sections">')
+    assert 'class="cat-btn nav-sections-toggle active"' in rendered
+    assert 'href="/?cat=crime" class="nav-section-link active" aria-current="page"' in rendered
+    assert rendered.index('class="nav-sections-heading">News</span>') < rendered.index('href="/?cat=florida"')
+    assert rendered.index('href="/?cat=florida"') < rendered.index('class="nav-sections-heading">More</span>')
+    assert 'href="/style.css?v=1.13.7.5g"' in rendered
 
-    # A second pass is stable rather than appending another Events tab.
     again = normalize(tmp_path)
     assert again == {"scanned": 1, "updated": 0}
+
+
+def test_homepage_top_news_county_and_section_links_keep_client_side_filter_contract():
+    page = (ROOT / "index.html").read_text(encoding="utf-8")
+    nav_start = page.index('<nav class="category-nav category-nav--primary"')
+    nav_end = page.index("</nav>", nav_start)
+    nav = page[nav_start:nav_end]
+    assert 'href="/" class="cat-btn active" aria-current="page" data-cat="all"' in nav
+    assert nav.index('data-cat="all"') < nav.index('data-cat="martin"')
+    assert 'href="/?cat=martin" class="cat-btn" data-cat="martin"' in page
+    assert 'href="/?cat=st_lucie" class="cat-btn" data-cat="st_lucie"' in page
+    assert 'href="/?cat=indian_river" class="cat-btn" data-cat="indian_river"' in page
+    assert 'href="/?cat=local_gov" class="nav-section-link" data-cat="local_gov"' in page
+    assert 'href="/?cat=florida" class="nav-section-link" data-cat="florida"' in page
+
+    main_js = (ROOT / "main.js").read_text(encoding="utf-8")
+    assert 'document.querySelectorAll(".category-nav [data-cat]")' in main_js
+    assert 'const homepageGrid = document.getElementById("articlesGrid")' in main_js
+    assert 'event.preventDefault()' in main_js
+    assert 'document.querySelector(`.category-nav [data-cat="${catParam}"]`)' in main_js
+
+
+def test_primary_nav_css_supports_click_keyboard_hover_and_mobile_layout():
+    css = (ROOT / "style.css").read_text(encoding="utf-8")
+    assert ".nav-sections[open] .nav-sections-menu" in css
+    assert ".nav-sections:hover .nav-sections-menu" in css
+    assert ".nav-sections:focus-within .nav-sections-menu" in css
+    assert ".category-nav--primary" in css
+    assert "flex-wrap: wrap !important" in css
 
 
 def test_cached_civicengage_rows_cannot_restore_relative_event_links():

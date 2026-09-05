@@ -744,6 +744,7 @@ CATEGORY_ELIGIBILITY_REPORT_PATH = OUTPUT_DIR / "data" / "category-eligibility-r
 TRUSTED_SOURCE_RECOVERY_REPORT_PATH = OUTPUT_DIR / "data" / "trusted-source-recovery.json"
 CATEGORY_MEMBERSHIP_REPORT_PATH = OUTPUT_DIR / "data" / "category-membership-report.json"
 COUNTY_MEMBERSHIP_AUTHORITY_REPORT_PATH = OUTPUT_DIR / "data" / "county-membership-authority-report.json"
+GEOGRAPHIC_NAVIGATION_COVERAGE_REPORT_PATH = OUTPUT_DIR / "data" / "geographic-navigation-coverage-report.json"
 SOURCE_IMAGE_QUALITY_REPORT_PATH = OUTPUT_DIR / "data" / "source-image-quality-report.json"
 ARTICLE_IMAGE_OVERRIDES_PATH = OUTPUT_DIR / "data" / "article-image-overrides.json"
 ARTICLE_CONTENT_OVERRIDES_PATH = OUTPUT_DIR / "data" / "article-content-overrides.json"
@@ -4531,6 +4532,144 @@ def _backfill_archive_category_memberships(archive, output_root=None):
         f"({len(rows)} archive records; {len(repaired)} repaired)"
     )
     return rows, report
+
+
+def _audit_geographic_navigation_coverage(archive, output_root=None, recent_days=14):
+    """Prove county-first navigation does not silently strand ordinary local news.
+
+    County and Florida surfaces are the primary geography layer. Topic sections are
+    secondary discovery surfaces. Every recent ordinary local-news row must therefore
+    project to a source-authorized Treasure Coast county or to Florida. A genuinely
+    Treasure-Coast-wide story with no defensible county is retained as an explicit
+    regional exception rather than being guessed into all three counties. Sports and
+    Things To Do remain explicit topic exceptions when no county can be proved.
+
+    The audit window is anchored to the newest publication date in the archive instead
+    of the wall clock so regression fixtures cannot age into or out of the contract.
+    """
+    rows = [entry for entry in (archive or []) if isinstance(entry, dict)]
+    dated = []
+    for entry in rows:
+        raw = str(entry.get("date") or "").strip()
+        try:
+            dated.append((datetime.strptime(raw[:10], "%Y-%m-%d"), entry))
+        except Exception:
+            continue
+
+    latest_date = max((value for value, _entry in dated), default=None)
+    cutoff = latest_date - timedelta(days=max(0, int(recent_days))) if latest_date else None
+    ordinary_topics = {"local_gov", "crime", "business"}
+    topic_exception_keys = {"sports", "things_to_do"}
+    covered = []
+    regional_exceptions = []
+    topic_exceptions = []
+    violations = []
+    assessed = 0
+
+    for published_dt, entry in dated:
+        if cutoff is not None and published_dt < cutoff:
+            continue
+        if not _archive_entry_publishable(entry):
+            continue
+        memberships = set(_item_category_memberships(entry, entry.get("category_key", "")))
+        relevant_topics = sorted(memberships & (ordinary_topics | topic_exception_keys))
+        if not relevant_topics and "florida" not in memberships:
+            continue
+        assessed += 1
+        geography = [key for key in CATEGORIES if key in memberships and key in COUNTY_KEYS]
+        if geography or "florida" in memberships:
+            covered.append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "date": entry.get("date", ""),
+                "geography": geography or ["florida"],
+                "topics": relevant_topics,
+            })
+            continue
+
+        if memberships & topic_exception_keys and not memberships & ordinary_topics:
+            topic_exceptions.append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "date": entry.get("date", ""),
+                "topics": sorted(memberships & topic_exception_keys),
+                "reason": "topic_exception_without_provable_county",
+            })
+            continue
+
+        authority = _county_membership_authority_assessment(
+            entry, entry.get("category_key", "")
+        )
+        supported = list(authority.get("supported_counties") or [])
+        if supported:
+            violations.append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "date": entry.get("date", ""),
+                "topics": sorted(memberships & ordinary_topics),
+                "supported_counties": supported,
+                "reason": "source_supported_county_missing_from_navigation_memberships",
+            })
+            continue
+
+        if _has_treasure_coast_locality(entry):
+            regional_exceptions.append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "date": entry.get("date", ""),
+                "topics": sorted(memberships & ordinary_topics),
+                "reason": "treasure_coast_wide_without_defensible_single_county",
+            })
+            continue
+
+        violations.append({
+            "slug": entry.get("slug", ""),
+            "headline": entry.get("headline", ""),
+            "date": entry.get("date", ""),
+            "topics": sorted(memberships & ordinary_topics),
+            "reason": "ordinary_local_story_has_no_county_florida_or_regional_authority",
+        })
+
+    report = {
+        "schema_version": 1,
+        "contract_version": "1.13.7.5g",
+        "generated_at": _utc_now_iso(),
+        "policy": (
+            "recent ordinary local news must project to a source-authorized county or Florida; "
+            "true Treasure Coast-wide stories are explicit regional exceptions; sports and "
+            "Things To Do may remain topic-only when no county is provable"
+        ),
+        "latest_archive_date": latest_date.date().isoformat() if latest_date else "",
+        "window_days": max(0, int(recent_days)),
+        "window_start_date": cutoff.date().isoformat() if cutoff else "",
+        "records_assessed": assessed,
+        "geographically_covered": len(covered),
+        "regional_exceptions": len(regional_exceptions),
+        "topic_exceptions": len(topic_exceptions),
+        "violations": len(violations),
+        "covered": covered,
+        "regional_exception_rows": regional_exceptions,
+        "topic_exception_rows": topic_exceptions,
+        "violation_rows": violations,
+        "passed": not violations,
+    }
+    if output_root is not None:
+        path = Path(output_root) / "data" / "geographic-navigation-coverage-report.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if violations:
+        raise RuntimeError(
+            "Geographic navigation coverage contract FAILED: "
+            f"{len(violations)} recent ordinary local story/stories lack a valid county, "
+            "Florida, or explicit regional authority"
+        )
+    print(
+        "  Geographic navigation coverage PASSED "
+        f"({assessed} recent record(s); {len(covered)} county/Florida; "
+        f"{len(regional_exceptions)} regional exception(s); "
+        f"{len(topic_exceptions)} Sports/Things To Do exception(s))"
+    )
+    return report
 
 
 def _live_county_authority_items(all_categories, top_cat=None):
@@ -15055,15 +15194,8 @@ def render_index(all_categories, top_cat):
 
     older_section = older_sections_html
 
-    # Category navigation is permanent. A weak/failed live run is recovered from the
-    # archive before rendering, so there is never a reason to hide a category button.
-    nav_buttons = "\n        ".join(
-        ['<button class="cat-btn active" data-cat="all">Top News</button>'] +
-        [
-            f'<button class="cat-btn" data-cat="{cat_key}">{cat_config["label"]}</button>'
-            for cat_key, cat_config in CATEGORIES.items()
-        ]
-    )
+    # Primary navigation is county-first. Editorial topics live under Sections so
+    # the masthead remains easy to scan as TCT adds products such as Events.
 
     # Editorial redesign modules: Latest News is an independent chronological
     # publication stream. It must never inherit Top Stories importance ranking.
@@ -15231,12 +15363,7 @@ def render_index(all_categories, top_cat):
       <div class="header-top">
         <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
       </div>
-      <nav class="category-nav">
-        {nav_buttons}
-        <a href="/weather.html" class="cat-btn" style="text-decoration:none">Weather</a>
-        <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
-        <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
-      </nav>
+      {_primary_navigation_html(active="news", homepage_filters=True)}
       <div class="header-actions">
         {_header_primary_cta_html()}
       </div>
@@ -21482,7 +21609,7 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css?v=1.11.8.5">
+  <link rel="stylesheet" href="/style.css?v=1.13.7.5g">
   <style id="tct-mobile-overflow-fix">
     html, body {{ width: 100%; max-width: 100%; overflow-x: clip; }}
     *, *::before, *::after {{ box-sizing: border-box; }}
@@ -21531,35 +21658,96 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   </script>"""
 
 
-def _page_header(active=""):
-    def cat_link(label, href, key):
-        cls = "cat-btn active" if key == active else "cat-btn"
-        current = ' aria-current="page"' if key == active else ""
+def _primary_navigation_html(active="", homepage_filters=False):
+    """Return the canonical geography-first TCT primary navigation.
+
+    Top News is always the first direct destination, followed by the three county
+    products and Events. Editorial topics and utilities live beneath Sections.
+    Florida intentionally remains in the News group.
+
+    On the homepage, filterable destinations retain ``data-cat`` attributes so
+    the existing client-side view switcher works without a page reload.
+    """
+    active = str(active or "").strip()
+    top_item = ("news", "Top News", "/")
+    county_items = [
+        ("martin", "Martin County", "/?cat=martin"),
+        ("st_lucie", "St. Lucie County", "/?cat=st_lucie"),
+        ("indian_river", "Indian River County", "/?cat=indian_river"),
+    ]
+    news_items = [
+        ("local_gov", CATEGORIES["local_gov"]["label"], "/?cat=local_gov"),
+        ("crime", CATEGORIES["crime"]["label"], "/?cat=crime"),
+        ("business", CATEGORIES["business"]["label"], "/?cat=business"),
+        ("florida", CATEGORIES["florida"]["label"], "/?cat=florida"),
+    ]
+    more_items = [
+        ("sports", CATEGORIES["sports"]["label"], "/?cat=sports"),
+        ("things_to_do", CATEGORIES["things_to_do"]["label"], "/?cat=things_to_do"),
+        ("weather", "Weather", "/weather.html"),
+        ("archive", "Archive", "/archive.html"),
+    ]
+    section_keys = {key for key, _label, _href in news_items + more_items}
+
+    def attrs_for(key, *, section=False):
+        classes = ["nav-section-link" if section else "cat-btn"]
+        if key == active:
+            classes.append("active")
+        attrs = [f'class="{" ".join(classes)}"']
+        if key == active:
+            attrs.append('aria-current="page"')
+        if homepage_filters and key in {"news", *CATEGORIES.keys()}:
+            data_key = "all" if key == "news" else key
+            attrs.append(f'data-cat="{data_key}"')
+        return " ".join(attrs)
+
+    top_key, top_label, top_href = top_item
+    top_html = (
+        f'<a href="{top_href}" {attrs_for(top_key)} style="text-decoration:none">'
+        f'{html_lib.escape(top_label)}</a>'
+    )
+    county_html = "\n        ".join(
+        f'<a href="{href}" {attrs_for(key)} style="text-decoration:none">{html_lib.escape(label)}</a>'
+        for key, label, href in county_items
+    )
+    events_attrs = attrs_for("events")
+
+    def render_group(label, items):
+        links = "\n              ".join(
+            f'<a href="{href}" {attrs_for(key, section=True)}>{html_lib.escape(item_label)}</a>'
+            for key, item_label, href in items
+        )
         return (
-            f'<a href="{href}" class="{cls}" style="text-decoration:none"{current}>'
-            f'{label}</a>'
+            '<div class="nav-sections-group">\n'
+            f'            <span class="nav-sections-heading">{html_lib.escape(label)}</span>\n'
+            f'            <div class="nav-sections-links">\n              {links}\n            </div>\n'
+            '          </div>'
         )
 
-    # Build the category links from CATEGORIES so these labels always match the
-    # homepage nav. Previously they were hardcoded abbreviations ("Crime",
-    # "Martin Co.") which drifted from the real labels ("Crime & Safety",
-    # "Martin County") shown on the homepage.
-    cat_links = "\n        ".join(
-        cat_link(cfg["label"], f"/?cat={key}", key)
-        for key, cfg in CATEGORIES.items()
-    )
+    sections_active = active in section_keys
+    summary_classes = "cat-btn nav-sections-toggle" + (" active" if sections_active else "")
+    menu_html = render_group("News", news_items) + "\n          " + render_group("More", more_items)
+
+    return f"""<nav class="category-nav category-nav--primary" aria-label="Primary navigation">
+        {top_html}
+        {county_html}
+        <a href="/events.html" {events_attrs} style="text-decoration:none">Events</a>
+        <details class="nav-sections">
+          <summary class="{summary_classes}">Sections <span class="nav-sections-chevron" aria-hidden="true">▾</span></summary>
+          <div class="nav-sections-menu" role="group" aria-label="Sections">
+          {menu_html}
+          </div>
+        </details>
+      </nav>"""
+
+
+def _page_header(active=""):
     return f"""  <header>
     <div class="header-inner">
       <div class="header-top">
         <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
       </div>
-      <nav class="category-nav">
-        {cat_link("Top News", "/", "news")}
-        {cat_links}
-        {cat_link("Weather", "/weather.html", "weather")}
-        {cat_link("Events", "/events.html", "events")}
-        {cat_link("Archive", "/archive.html", "archive")}
-      </nav>
+      {_primary_navigation_html(active=active)}
       <div class="header-actions">
         {_header_primary_cta_html()}
       </div>
@@ -21623,23 +21811,53 @@ def _normalize_active_category_navigation_sitewide(output_root):
     return {"scanned": scanned, "updated": updated}
 
 
-def _normalize_events_navigation_sitewide(output_root):
-    """Expose Events immediately before Archive in every category navigation.
+def _normalize_primary_navigation_sitewide(output_root):
+    """Converge every retained TCT header on the county-first nav contract.
 
-    The Events launch page originally carried its own one-off tab after Archive,
-    while retained pages had no Events tab at all. Normalize the sitewide header
-    so Events is discoverable consistently and Archive remains the final nav item.
+    Existing pages can carry several generations of header markup. Preserve the
+    page's active destination when it can be identified, then replace only the
+    ``category-nav`` element with the canonical navigation. The operation is
+    idempotent and leaves page content untouched.
     """
     root = Path(output_root)
-    nav_re = re.compile(r'<nav\s+class=["\']category-nav["\'][^>]*>.*?</nav>', re.I | re.S)
-    events_re = re.compile(
-        r'<a\b[^>]*href=["\'](?:https://treasurecoast\.today)?/?events\.html["\'][^>]*>\s*Events\s*</a>',
+    nav_re = re.compile(
+        r'<nav\s+class=["\'][^"\']*\bcategory-nav\b[^"\']*["\'][^>]*>.*?</nav>',
         re.I | re.S,
     )
-    archive_re = re.compile(
-        r'<a\b[^>]*href=["\'](?:https://treasurecoast\.today)?/?archive\.html["\'][^>]*>\s*Archive\s*</a>',
-        re.I | re.S,
-    )
+    active_label_to_key = {
+        "Top News": "news",
+        **{cfg["label"]: key for key, cfg in CATEGORIES.items()},
+        "Weather": "weather",
+        "Events": "events",
+        "Archive": "archive",
+    }
+
+    def detect_active(nav, path):
+        if path.parent == root:
+            by_name = {
+                "index.html": "news",
+                "events.html": "events",
+                "weather.html": "weather",
+                "archive.html": "archive",
+            }
+            if path.name.lower() in by_name:
+                return by_name[path.name.lower()]
+        active_match = re.search(
+            r'<(?:a|span)\b[^>]*aria-current=["\']page["\'][^>]*>(.*?)</(?:a|span)>',
+            nav,
+            re.I | re.S,
+        )
+        if not active_match:
+            active_match = re.search(
+                r'<(?:a|span)\b[^>]*class=["\'][^"\']*\bactive\b[^"\']*["\'][^>]*>(.*?)</(?:a|span)>',
+                nav,
+                re.I | re.S,
+            )
+        if not active_match:
+            return ""
+        label = re.sub(r'<[^>]+>', '', active_match.group(1))
+        label = html_lib.unescape(re.sub(r'\s+', ' ', label)).strip()
+        return active_label_to_key.get(label, "")
 
     scanned = updated = 0
     failures = []
@@ -21649,56 +21867,54 @@ def _normalize_events_navigation_sitewide(output_root):
         if not nav_match:
             continue
         scanned += 1
-        nav = nav_match.group(0)
-        active = path.name.lower() == "events.html" and path.parent == root
-        existing_events = events_re.findall(nav)
-        existing_archive = archive_re.search(nav)
-        existing_is_active = bool(
-            existing_events and 'aria-current="page"' in existing_events[0]
+        old_nav = nav_match.group(0)
+        active = detect_active(old_nav, path)
+        homepage_filters = path.parent == root and path.name.lower() == "index.html"
+        new_nav = _primary_navigation_html(active=active, homepage_filters=homepage_filters)
+        normalized = original[:nav_match.start()] + new_nav + original[nav_match.end():]
+        normalized = re.sub(
+            r'href=["\']/style\.css(?:\?v=[^"\']+)?["\']',
+            'href="/style.css?v=1.13.7.5g"',
+            normalized,
+            count=1,
+            flags=re.I,
         )
-        already_correct = bool(
-            len(existing_events) == 1
-            and existing_archive is not None
-            and nav.find(existing_events[0]) < existing_archive.start()
-            and existing_is_active == active
-        )
-
-        if already_correct:
-            normalized = original
-        else:
-            nav = events_re.sub("", nav)
-            archive_match = archive_re.search(nav)
-            if not archive_match:
-                failures.append(str(path.relative_to(root)))
-                continue
-            current = ' aria-current="page"' if active else ""
-            cls = "cat-btn active" if active else "cat-btn"
-            events_link = (
-                f'<a href="/events.html" class="{cls}" style="text-decoration:none"{current}>Events</a>'
-            )
-            nav = nav[:archive_match.start()] + events_link + "\n        " + nav[archive_match.start():]
-            normalized = original[:nav_match.start()] + nav + original[nav_match.end():]
         if normalized != original:
             path.write_text(normalized, encoding="utf-8")
             updated += 1
 
-        final_nav_match = nav_re.search(normalized)
-        final_nav = final_nav_match.group(0) if final_nav_match else ""
-        final_events = events_re.findall(final_nav)
-        final_archive = archive_re.search(final_nav)
+        final = new_nav
+        top_news_pos = final.find('href="/"')
+        county_positions = [
+            final.find('href="/?cat=martin"'),
+            final.find('href="/?cat=st_lucie"'),
+            final.find('href="/?cat=indian_river"'),
+        ]
+        events_pos = final.find('href="/events.html"')
+        sections_pos = final.find('<details class="nav-sections">')
+        florida_pos = final.find('href="/?cat=florida"')
+        news_heading = final.find('class="nav-sections-heading">News</span>')
+        more_heading = final.find('class="nav-sections-heading">More</span>')
         if (
-            len(final_events) != 1
-            or final_archive is None
-            or final_nav.find(final_events[0]) > final_archive.start()
-            or (active and 'aria-current="page"' not in final_events[0])
+            min(top_news_pos, *county_positions, events_pos, sections_pos) < 0
+            or not (top_news_pos < county_positions[0] < county_positions[1] < county_positions[2] < events_pos < sections_pos)
+            or min(news_heading, florida_pos, more_heading) < 0
+            or not (news_heading < florida_pos < more_heading)
+            or final.count('>Top News</a>') != 1
+            or final.count('<details class="nav-sections">') != 1
         ):
             failures.append(str(path.relative_to(root)))
 
     if failures:
         raise RuntimeError(
-            "Events navigation contract FAILED: " + ", ".join(sorted(set(failures))[:10])
+            "Primary navigation contract FAILED: " + ", ".join(sorted(set(failures))[:10])
         )
     return {"scanned": scanned, "updated": updated}
+
+
+def _normalize_events_navigation_sitewide(output_root):
+    """Backward-compatible alias for the superseding primary-nav migration."""
+    return _normalize_primary_navigation_sitewide(output_root)
 
 
 KIT_INLINE_FORM_UID = "30e15672d3"
@@ -32513,6 +32729,9 @@ def write_archives(all_categories, top_cat):
     archive, _category_membership_report = _backfill_archive_category_memberships(
         archive, OUTPUT_DIR
     )
+    _geographic_navigation_report = _audit_geographic_navigation_coverage(
+        archive, OUTPUT_DIR
+    )
     validate_archive_incident_uniqueness(archive, OUTPUT_DIR)
 
     # Forward semantic decisions occur after the pre-publication consolidation pass.
@@ -36989,11 +37208,11 @@ def main():
         f"{_active_nav['scanned']} HTML page(s) verified; "
         f"{_active_nav['updated']} retained page(s) normalized"
     )
-    _events_nav = _normalize_events_navigation_sitewide(OUTPUT_DIR)
+    _primary_nav = _normalize_primary_navigation_sitewide(OUTPUT_DIR)
     print(
-        "  Events navigation contract PASSED: "
-        f"{_events_nav['scanned']} HTML page(s) verified; "
-        f"{_events_nav['updated']} retained page(s) normalized"
+        "  Primary navigation contract PASSED: "
+        f"{_primary_nav['scanned']} HTML page(s) verified; "
+        f"{_primary_nav['updated']} retained page(s) normalized"
     )
     _footer_rss = _normalize_footer_rss_link_sitewide(OUTPUT_DIR)
     print(

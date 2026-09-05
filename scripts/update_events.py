@@ -1528,6 +1528,15 @@ def validate_outputs() -> None:
     submit = page_soup.select_one('.events-note a[href^="mailto:hello@treasurecoast.today"]')
     if submit is None or "Submit an event for review" not in page:
         raise RuntimeError("events.html must expose the reviewed event-submission callout")
+    toolbar = page_soup.select_one(".events-toolbar-row")
+    if toolbar is None:
+        raise RuntimeError("events.html must expose the compact single-row filter toolbar")
+    if len(toolbar.select("select.events-select")) != 3:
+        raise RuntimeError("events.html must expose When, County and Type as three dropdown filters")
+    if toolbar.select_one(".event-filter") is not None or page_soup.select_one(".events-filter-section") is not None:
+        raise RuntimeError("events.html must not restore the retired pill-filter sections")
+    if "gathered from official local calendars and venue schedules" in page:
+        raise RuntimeError("events.html must not expose the retired source-method hero copy")
     footer = page_soup.find("footer")
     if footer is None or len(footer.select('a[href="/feed.xml"]')) != 1:
         raise RuntimeError("events.html must preserve exactly one sitewide RSS footer link")

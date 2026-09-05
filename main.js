@@ -74,14 +74,27 @@ async function shareArticle(btn) {
 }
 
 // -- CATEGORY FILTER --
-document.querySelectorAll(".cat-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+// County-first navigation uses ordinary links so it remains fully functional
+// without JavaScript. On the homepage only, links carrying data-cat switch the
+// existing client-side news view instead of navigating away.
+document.querySelectorAll(".category-nav [data-cat]").forEach(btn => {
+  btn.addEventListener("click", (event) => {
     try {
+      const homepageGrid = document.getElementById("articlesGrid");
+      if (!homepageGrid) return;
       const cat = btn.dataset.cat;
-      if (!cat) return; // Archive/Events are plain links
+      if (!cat) return;
+      event.preventDefault();
 
-      document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".category-nav [data-cat]").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".nav-sections-toggle").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
+      const sections = btn.closest(".nav-sections");
+      if (sections) {
+        const toggle = sections.querySelector(".nav-sections-toggle");
+        if (toggle) toggle.classList.add("active");
+        sections.removeAttribute("open");
+      }
 
       const titles = {
         "all":          "Treasure Coast Today | Local News",
@@ -158,9 +171,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const catParam = params.get("cat");
   if (catParam) {
-    const btn = document.querySelector(`.cat-btn[data-cat="${catParam}"]`);
+    const btn = document.querySelector(`.category-nav [data-cat="${catParam}"]`);
     if (btn) btn.click();
   }
+});
+
+// Close the Sections menu when focus moves away by pointer or Escape. Native
+// <details>/<summary> retains keyboard and no-JS behavior; these are progressive
+// enhancements only.
+document.addEventListener("click", (event) => {
+  document.querySelectorAll(".nav-sections[open]").forEach(menu => {
+    if (!menu.contains(event.target)) menu.removeAttribute("open");
+  });
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  document.querySelectorAll(".nav-sections[open]").forEach(menu => {
+    menu.removeAttribute("open");
+    const toggle = menu.querySelector("summary");
+    if (toggle) toggle.focus();
+  });
 });
 
 
