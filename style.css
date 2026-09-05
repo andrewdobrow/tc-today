@@ -5157,6 +5157,26 @@ header.site-masthead {
     display: block !important;
     min-height: 44px;
     padding: 0 18px;
+    overflow: visible;
+  }
+
+  /* A real edge overlay makes the horizontal-scroll affordance visible.
+     Text moves underneath the gradient instead of relying on a subtle mask. */
+  .masthead-nav-row::after {
+    content: "";
+    position: absolute;
+    z-index: 8;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 52px;
+    pointer-events: none;
+    background: linear-gradient(
+      to right,
+      rgba(16,63,43,0) 0%,
+      rgba(16,63,43,.76) 62%,
+      var(--tct-green, #103f2b) 100%
+    );
   }
 
   /* Mobile keeps the second masthead row focused on navigation. The live
@@ -5176,15 +5196,15 @@ header.site-masthead {
     max-width: 100% !important;
     min-width: 0 !important;
     margin: 0 !important;
-    padding: 0 2px !important;
+    padding: 0 50px 0 2px !important;
     flex: 0 1 auto !important;
     flex-basis: auto !important;
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
-    gap: 0;
-    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 34px), transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 34px), transparent 100%);
+    gap: 5px;
+    mask-image: none;
+    -webkit-mask-image: none;
     scrollbar-width: none;
   }
 
@@ -5195,20 +5215,27 @@ header.site-masthead {
   .site-masthead .category-nav--primary > .cat-btn,
   .site-masthead .nav-sections-toggle {
     flex: 0 0 auto;
-    padding: 10px 11px;
+    padding: 10px 8px;
     font-size: 11px;
+    letter-spacing: .005em;
+    white-space: nowrap;
   }
 
-  /* Quiet separators make each destination read as its own item without
-     turning the mobile nav into a row of boxed buttons. */
-  .site-masthead .category-nav--primary > .cat-btn {
-    border-right: 1px solid rgba(255,255,255,.18);
+  /* Keep the strip editorial and quiet: whitespace separates destinations,
+     while the current destination is indicated only by a restrained underline. */
+  .site-masthead .category-nav--primary > .cat-btn.active,
+  .site-masthead .nav-sections-toggle.active {
+    background: transparent;
+    box-shadow: inset 0 -2px rgba(255,255,255,.9);
+  }
+
+  .masthead-nav-row:has(.nav-sections[open])::after {
+    display: none;
   }
 
   .site-masthead .category-nav--primary:has(.nav-sections[open]) {
     overflow: visible !important;
-    mask-image: none;
-    -webkit-mask-image: none;
+    padding-right: 2px !important;
   }
 }
 
@@ -5273,12 +5300,12 @@ header.site-masthead {
   }
 
   .site-masthead .category-nav--primary {
-    gap: 0;
+    gap: 3px;
   }
 
   .site-masthead .category-nav--primary > .cat-btn,
   .site-masthead .nav-sections-toggle {
-    padding: 10px 10px;
+    padding: 10px 7px;
     font-size: 10.5px;
   }
 }
