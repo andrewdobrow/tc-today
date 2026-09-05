@@ -5154,22 +5154,21 @@ header.site-masthead {
   }
 
   .masthead-nav-row {
-    grid-template-columns: auto minmax(0, 1fr) auto !important;
-    gap: 8px;
+    display: block !important;
     min-height: 44px;
     padding: 0 18px;
   }
 
-  .masthead-live-time {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    justify-self: start;
+  /* Mobile keeps the second masthead row focused on navigation. The live
+     date/time and weather remain desktop utilities and do not compete with
+     the horizontally scrollable category list on narrow screens. */
+  .masthead-live-time,
+  .masthead-live-weather {
+    display: none !important;
   }
 
   .site-masthead .category-nav--primary {
     grid-area: auto !important;
-    grid-column: 2 !important;
-    grid-row: 1 !important;
     order: initial !important;
     justify-self: stretch;
     justify-content: flex-start !important;
@@ -5183,9 +5182,9 @@ header.site-masthead {
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
-    gap: 9px;
-    mask-image: linear-gradient(to right, #000 91%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, #000 91%, transparent 100%);
+    gap: 0;
+    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 34px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 34px), transparent 100%);
     scrollbar-width: none;
   }
 
@@ -5193,17 +5192,17 @@ header.site-masthead {
     display: none;
   }
 
-  .masthead-live-weather {
-    grid-column: 3 !important;
-    grid-row: 1 !important;
-    justify-self: end;
-  }
-
   .site-masthead .category-nav--primary > .cat-btn,
   .site-masthead .nav-sections-toggle {
     flex: 0 0 auto;
-    padding: 10px 3px;
+    padding: 10px 11px;
     font-size: 11px;
+  }
+
+  /* Quiet separators make each destination read as its own item without
+     turning the mobile nav into a row of boxed buttons. */
+  .site-masthead .category-nav--primary > .cat-btn {
+    border-right: 1px solid rgba(255,255,255,.18);
   }
 
   .site-masthead .category-nav--primary:has(.nav-sections[open]) {
@@ -5274,12 +5273,12 @@ header.site-masthead {
   }
 
   .site-masthead .category-nav--primary {
-    gap: 8px;
+    gap: 0;
   }
 
   .site-masthead .category-nav--primary > .cat-btn,
   .site-masthead .nav-sections-toggle {
-    padding: 10px 2px;
+    padding: 10px 10px;
     font-size: 10.5px;
   }
 }
