@@ -21612,8 +21612,8 @@ def _primary_navigation_html(active="", homepage_filters=False):
         {county_html}
         <a href="/events.html" {events_attrs} style="text-decoration:none">Events</a>
         <details class="nav-sections">
-          <summary class="{summary_classes}">Sections <span class="nav-sections-chevron" aria-hidden="true">▾</span></summary>
-          <div class="nav-sections-menu" role="group" aria-label="Sections">
+          <summary class="{summary_classes}">More <span class="nav-sections-chevron" aria-hidden="true">▾</span></summary>
+          <div class="nav-sections-menu" role="group" aria-label="More">
           {menu_html}
           </div>
         </details>
