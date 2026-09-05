@@ -35,6 +35,8 @@ TZ = ZoneInfo("America/New_York")
 USER_AGENT = "Treasure Coast Today Events/1.0 (+https://treasurecoast.today/events.html)"
 HTTP_TIMEOUT = 25
 SCHEMA_VERSION = 1
+INITIAL_EVENT_ROWS = 10
+EVENT_JSONLD_ROWS = 10
 DYNAMIC_START = "<!-- TCT_EVENTS_DYNAMIC_START -->"
 DYNAMIC_END = "<!-- TCT_EVENTS_DYNAMIC_END -->"
 JSONLD_START = "<!-- TCT_EVENTS_JSONLD_START -->"
@@ -1405,14 +1407,24 @@ def _render_card(event: dict[str, Any]) -> str:
 def _render_dynamic(events: list[dict[str, Any]], status: dict[str, Any]) -> str:
     generated = _parse_iso_datetime(status.get("generated_at"))
     updated = generated.strftime("%b %-d, %Y at %-I:%M %p") if generated else "not yet"
-    cards = "\n".join(_render_card(event) for event in events)
+    initial_events = events[:INITIAL_EVENT_ROWS]
+    cards = "\n".join(_render_card(event) for event in initial_events)
     if not cards:
         cards = '''<div class="events-empty events-empty--initial"><strong>The calendar is refreshing.</strong><span>We couldn't load a current event listing yet. Check back shortly.</span></div>'''
+    visible_count = min(len(events), INITIAL_EVENT_ROWS)
+    remaining = max(0, len(events) - visible_count)
+    next_count = min(INITIAL_EVENT_ROWS, remaining)
+    more_hidden = " hidden" if remaining == 0 else ""
+    more_label = f"View {next_count} more" if next_count else "View more"
     return f'''{DYNAMIC_START}
 <section class="events-results" aria-live="polite">
   <div class="events-results-head"><p><strong data-events-count>{len(events)}</strong> upcoming events</p><p class="events-updated">Updated {html_lib.escape(updated)} ET</p></div>
   <div class="events-list" data-events-list>
 {cards}
+  </div>
+  <div class="events-more-wrap" data-events-more-wrap{more_hidden}>
+    <button class="events-more" type="button" data-events-more>{html_lib.escape(more_label)}</button>
+    <span class="events-showing" data-events-showing>Showing {visible_count} of {len(events)}</span>
   </div>
   <div class="events-empty" data-events-empty hidden><strong>No events match those filters.</strong><span>Try another county, category or date range.</span></div>
 </section>
@@ -1421,7 +1433,7 @@ def _render_dynamic(events: list[dict[str, Any]], status: dict[str, Any]) -> str
 
 def _jsonld_payload(events: list[dict[str, Any]]) -> dict[str, Any]:
     items = []
-    for event in events[:100]:
+    for event in events[:EVENT_JSONLD_ROWS]:
         item: dict[str, Any] = {
             "@type": "Event",
             "name": event["title"],
@@ -1505,6 +1517,17 @@ def validate_outputs() -> None:
     if "Coming Soon" in page or "List your Treasure Coast event for free" in page:
         raise RuntimeError("events.html still contains the retired coming-soon experience")
     page_soup = BeautifulSoup(page, "html.parser")
+    rendered_cards = page_soup.select("article.event-card")
+    expected_initial = min(len(events), INITIAL_EVENT_ROWS)
+    if len(rendered_cards) != expected_initial:
+        raise RuntimeError(
+            f"events.html must server-render exactly {expected_initial} initial event cards, found {len(rendered_cards)}"
+        )
+    if len(events) > INITIAL_EVENT_ROWS and page_soup.select_one("[data-events-more]") is None:
+        raise RuntimeError("events.html must expose the incremental View more control")
+    submit = page_soup.select_one('.events-note a[href^="mailto:hello@treasurecoast.today"]')
+    if submit is None or "Submit an event for review" not in page:
+        raise RuntimeError("events.html must expose the reviewed event-submission callout")
     footer = page_soup.find("footer")
     if footer is None or len(footer.select('a[href="/feed.xml"]')) != 1:
         raise RuntimeError("events.html must preserve exactly one sitewide RSS footer link")

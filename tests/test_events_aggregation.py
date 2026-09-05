@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 
+from bs4 import BeautifulSoup
 
 from scripts import update_events as events
 
@@ -197,6 +198,35 @@ def test_existing_events_page_is_live_filterable_and_not_coming_soon():
     assert page.count(events.JSONLD_START) == 1
     assert page.count(events.JSONLD_END) == 1
     assert '<a href="/feed.xml" type="application/rss+xml">RSS Feed</a>' in page
+
+
+def test_events_page_server_renders_only_ten_then_loads_more_in_ten_event_batches():
+    page = (ROOT / "events.html").read_text(encoding="utf-8")
+    payload = json.loads((ROOT / "data" / "events.json").read_text(encoding="utf-8"))
+    expected = min(events.INITIAL_EVENT_ROWS, len(payload["events"]))
+    soup = BeautifulSoup(page, "html.parser")
+    assert len(soup.select("article.event-card")) == expected
+    assert events.INITIAL_EVENT_ROWS == 10
+    assert events.EVENT_JSONLD_ROWS == 10
+    assert 'const PAGE_SIZE = 10;' in page
+    assert 'data-events-more-wrap' in page
+    assert 'data-events-more' in page
+    assert 'View 10 more' in page
+    assert "state.limit += PAGE_SIZE" in page
+    assert "fetch('/data/events.json'" in page
+    # The full JSON is lazy-loaded only after a search/filter/View more interaction.
+    assert "refreshFromInteraction" in page
+    assert "loadAllEvents();" not in page
+
+
+def test_events_page_has_clear_reviewed_email_submission_path():
+    page = (ROOT / "events.html").read_text(encoding="utf-8")
+    assert "Submit an event for review" in page
+    assert "hello@treasurecoast.today" in page
+    assert "submission does not guarantee inclusion" in page
+    assert "Event%20name%3A" in page
+    assert "Date%20and%20time%3A" in page
+    assert "Public%20event%20or%20ticket%20link%3A" in page
 
 
 def test_launch_artifacts_validate_without_network():
