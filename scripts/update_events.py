@@ -686,18 +686,25 @@ def _squarespace_events(html_text: str, source: dict[str, Any], window: Window) 
         title = _clean(title_node.get_text(" ", strip=True))
         if not _plausible_heading(title):
             continue
-        times = list(TIME_RE.finditer(text_value))
-        if times:
-            clock = _parse_clock(times[0].group(0))
-            if clock:
-                start = start.replace(hour=clock[0], minute=clock[1])
+        # Squarespace event cards can repeat the start time in both a compact
+        # date label and expanded metadata before showing the actual end time
+        # (for example: "5:30 PM ... 5:30 PM 8:30 PM").  Treating the first
+        # two matches as start/end turns a normal three-hour event into a
+        # bogus 24-hour event that survives into the next day's calendar.
+        # Preserve clock order while ignoring duplicate values, then use the
+        # first distinct clock as the end time.
+        clocks: list[tuple[int, int]] = []
+        for time_match in TIME_RE.finditer(text_value):
+            clock = _parse_clock(time_match.group(0))
+            if clock and clock not in clocks:
+                clocks.append(clock)
+        if clocks:
+            start = start.replace(hour=clocks[0][0], minute=clocks[0][1])
         end = None
-        if len(times) >= 2:
-            clock = _parse_clock(times[1].group(0))
-            if clock:
-                end = start.replace(hour=clock[0], minute=clock[1])
-                if end <= start:
-                    end += timedelta(days=1)
+        if len(clocks) >= 2:
+            end = start.replace(hour=clocks[1][0], minute=clocks[1][1])
+            if end <= start:
+                end += timedelta(days=1)
         link = title_node.find("a", href=True) or block.find("a", href=True)
         event_url = urljoin(source["url"], link["href"]) if link else _source_url(source)
         raw = {
@@ -1318,6 +1325,25 @@ def _cached_source_events(cache: dict[str, Any], source_id: str, source: dict[st
         # locality, and URL authority. Older CivicEngage cache rows may contain the
         # same relative feed links that caused the live TCT-link regression.
         cached_raw = dict(raw)
+        # Repair legacy Squarespace cache rows created before duplicate clock
+        # values were ignored.  Those rows can encode a normal evening event
+        # as exactly 24 hours long (for example 5:30 PM one day through 5:30 PM
+        # the next), which keeps yesterday's event visible after midnight.
+        if source.get("adapter") == "squarespace_events":
+            cached_start = _parse_iso_datetime(cached_raw.get("starts_at") or cached_raw.get("start"))
+            cached_end = _parse_iso_datetime(cached_raw.get("ends_at") or cached_raw.get("end"))
+            if cached_start and cached_end and timedelta(hours=23) <= (cached_end - cached_start) <= timedelta(hours=25):
+                cached_clocks: list[tuple[int, int]] = []
+                for time_match in TIME_RE.finditer(_clean(cached_raw.get("description"))):
+                    clock = _parse_clock(time_match.group(0))
+                    if clock and clock not in cached_clocks:
+                        cached_clocks.append(clock)
+                if len(cached_clocks) >= 2:
+                    repaired_end = cached_start.replace(hour=cached_clocks[1][0], minute=cached_clocks[1][1])
+                    if repaired_end <= cached_start:
+                        repaired_end += timedelta(days=1)
+                    if repaired_end - cached_start < timedelta(hours=12):
+                        cached_raw["ends_at"] = _iso_local(repaired_end)
         description_url = _standalone_http_url(cached_raw.get("description"))
         if source.get("adapter") == "ical" and description_url:
             cached_raw["event_url"] = description_url

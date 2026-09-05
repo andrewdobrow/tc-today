@@ -115,6 +115,24 @@ def test_terra_fermata_adapter_captures_show_and_not_duplicate_card_copy():
     assert parsed[0]["starts_at"].startswith("2026-09-04T19:00")
 
 
+def test_squarespace_adapter_ignores_repeated_start_time_before_actual_end_time():
+    source = _source(
+        id="riverside-loop-music", name="Riverside Theatre — Loop Music Calendar",
+        adapter="squarespace_events", county="Indian River", city="Vero Beach",
+        venue="Riverside Theatre", category="Live Music", priority=5,
+    )
+    html = """
+    <article>
+      <h2><a href="/loop-music-calendar/pippin-willin">Pippin &amp; Willin'</a></h2>
+      <div>Sep 4 5:30 PM 17:30 Friday, September 4, 2026 5:30 PM 8:30 PM 17:30 20:30 Riverside Theatre</div>
+    </article>
+    """
+    parsed = events._squarespace_events(html, source, _window())
+    assert len(parsed) == 1
+    assert parsed[0]["starts_at"].startswith("2026-09-04T17:30")
+    assert parsed[0]["ends_at"].startswith("2026-09-04T20:30")
+
+
 def test_martinarts_adapter_uses_explicit_day_heading_for_each_performance():
     source = _source(id="martinarts", name="MartinArts", adapter="martinarts_calendar", category="Arts & Culture")
     html = """
@@ -172,6 +190,37 @@ def test_cross_source_dedupe_prefers_official_venue_and_fills_missing_details():
     assert merged[0]["event_url"] == "https://venue.example/show"
     assert merged[0]["description"] == "Tourism description"
     assert merged[0]["also_listed_by"] == ["Tourism Calendar"]
+
+
+def test_cached_squarespace_24_hour_parse_artifact_is_repaired_and_expires_after_midnight():
+    source = _source(
+        id="riverside-loop-music", name="Riverside Theatre — Loop Music Calendar",
+        adapter="squarespace_events", county="Indian River", city="Vero Beach",
+        venue="Riverside Theatre", category="Live Music", priority=5,
+    )
+    os.environ["TCT_EVENTS_NOW"] = "2026-09-05T01:43:00-04:00"
+    window = events._window(120)
+    cache = {
+        "schema_version": 1,
+        "sources": {
+            source["id"]: {
+                "events": [{
+                    "title": "Pippin & Willin'",
+                    "starts_at": "2026-09-04T17:30-04:00",
+                    "ends_at": "2026-09-05T17:30-04:00",
+                    "description": "Sep 4 5:30 PM 17:30 Friday, September 4, 2026 5:30 PM 8:30 PM 17:30 20:30 Riverside Theatre",
+                    "county": "Indian River",
+                    "category": "Live Music",
+                    "source_name": source["name"],
+                    "source_url": source["url"],
+                    "source_id": source["id"],
+                    "source_priority": 5,
+                    "source_kind": "venue",
+                }]
+            }
+        },
+    }
+    assert events._cached_source_events(cache, source["id"], source, window) == []
 
 
 def test_cache_write_is_content_stable_when_source_events_do_not_change():
