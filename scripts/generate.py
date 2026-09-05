@@ -17541,7 +17541,15 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
         headline = str(row.get("headline") or "").strip()
         if not slug or not headline or slug in seen_slugs:
             continue
-        if row.get("retired_custom") or row.get("exclude_from_live_recovery"):
+        is_current_custom_publication = slug in current_custom_slugs
+        # A current-run custom publication receipt is authoritative evidence that the
+        # article was actually published this run. ``exclude_from_live_recovery`` is a
+        # placement/archive-recovery control; it must not silently suppress a newly
+        # published editor-authored article from RSS. Explicit retirement remains a
+        # hard syndication block.
+        if row.get("retired_custom"):
+            continue
+        if row.get("exclude_from_live_recovery") and not is_current_custom_publication:
             continue
         if _is_nonstory_placeholder(row):
             continue
@@ -17553,7 +17561,7 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
                 if live.get(key) not in (None, ""):
                     enriched[key] = live.get(key)
         published_dt = _rss_publication_datetime(enriched)
-        candidates.append((slug in current_custom_slugs, published_dt, slug, enriched))
+        candidates.append((is_current_custom_publication, published_dt, slug, enriched))
 
     candidates.sort(key=lambda row: (row[0], row[1], row[2]), reverse=True)
     candidates = candidates[: max(1, int(max_items or 100))]
@@ -17701,7 +17709,19 @@ def validate_custom_rss_publication_contract(output_root=None):
             "action": str(receipt.get("action") or ""),
             "url": f"{SITE_URL}/articles/{slug}.html",
         })
+    archive = load_archive(root / "archive.json")
+    archive_by_slug = {
+        str(row.get("slug") or "").strip(): row
+        for row in archive
+        if isinstance(row, dict) and str(row.get("slug") or "").strip()
+    }
     missing = [row for row in expected if row["url"] not in rss_guids]
+    for row in missing:
+        state = archive_by_slug.get(row["slug"]) or {}
+        row["archive_present"] = bool(state)
+        row["retired_custom"] = bool(state.get("retired_custom"))
+        row["exclude_from_live_recovery"] = bool(state.get("exclude_from_live_recovery"))
+        row["identity_quarantine_reason"] = str(state.get("identity_quarantine_reason") or "")
     report = {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -17715,9 +17735,21 @@ def validate_custom_rss_publication_contract(output_root=None):
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     if missing:
+        details = []
+        for row in missing[:5]:
+            state_bits = []
+            if not row.get("archive_present"):
+                state_bits.append("archive_missing")
+            if row.get("retired_custom"):
+                state_bits.append("retired_custom")
+            if row.get("exclude_from_live_recovery"):
+                state_bits.append("exclude_from_live_recovery")
+            if row.get("identity_quarantine_reason"):
+                state_bits.append("reason=" + row["identity_quarantine_reason"])
+            suffix = ", ".join(state_bits) if state_bits else "archive_active_but_feed_missing"
+            details.append(f"{row['headline'][:55]} ({row['slug']}; {suffix})")
         raise RuntimeError(
-            "Custom RSS publication contract FAILED: "
-            + "; ".join(f"{row['headline'][:55]} ({row['slug']})" for row in missing[:5])
+            "Custom RSS publication contract FAILED: " + "; ".join(details)
         )
     print(
         "  Custom RSS publication contract PASSED "

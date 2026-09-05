@@ -145,3 +145,68 @@ def test_custom_rss_publication_contract_fails_closed_when_receipt_is_missing(tm
     report = json.loads((tmp_path / "data" / "rss-publication-contract.json").read_text())
     assert report["passed"] is False
     assert report["missing"][0]["slug"] == "2026-07-25-missing-custom-story"
+
+
+def test_new_publication_slug_never_reuses_retired_custom_permalink(tmp_path: Path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    retired_slug = "2026-09-05-treasure-coast-weekly-traffic-report-i-95-ramp-closures"
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "custom-retirements.json").write_text(
+        json.dumps({"slugs": [{"slug": retired_slug, "action": "purge"}]}),
+        encoding="utf-8",
+    )
+
+    allocated = g._allocate_new_publication_slug(retired_slug, [], tmp_path)
+
+    assert allocated == retired_slug + "-1"
+
+
+def test_current_custom_publication_is_in_rss_even_if_live_recovery_excluded(tmp_path: Path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    custom = _archive_row(
+        "Treasure Coast Weekly Traffic Report",
+        "2026-09-05-treasure-coast-weekly-traffic-report",
+        "Sat, 05 Sep 2026 03:00:00 -0400",
+        is_custom=True,
+        authoritative_custom=True,
+        exclude_from_live_recovery=True,
+        identity_quarantine_reason="recurring_custom_edition_superseded",
+    )
+    (tmp_path / "archive.json").write_text(json.dumps([custom]), encoding="utf-8")
+    monkeypatch.setattr(g, "CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS", [{
+        "headline": custom["headline"],
+        "slug": custom["slug"],
+        "action": "created",
+    }])
+
+    rss = g.render_rss_feed([], None)
+
+    assert custom["headline"] in rss
+    assert f"/articles/{custom['slug']}.html" in rss
+
+
+def test_explicitly_retired_current_custom_publication_stays_out_of_rss(tmp_path: Path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    custom = _archive_row(
+        "Retired custom story",
+        "2026-09-05-retired-custom-story",
+        "Sat, 05 Sep 2026 03:00:00 -0400",
+        is_custom=True,
+        authoritative_custom=True,
+        retired_custom=True,
+        exclude_from_live_recovery=True,
+        identity_quarantine_reason="editor_retired_custom_article",
+    )
+    (tmp_path / "archive.json").write_text(json.dumps([custom]), encoding="utf-8")
+    monkeypatch.setattr(g, "CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS", [{
+        "headline": custom["headline"],
+        "slug": custom["slug"],
+        "action": "created",
+    }])
+
+    rss = g.render_rss_feed([], None)
+
+    assert custom["headline"] not in rss
