@@ -493,8 +493,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.9"' in page
-    assert 'src="/membership.js?v=1.13.7.9"' in page
+    assert 'href="/membership.css?v=1.13.7.11"' in page
+    assert 'src="/membership.js?v=1.13.7.11"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -530,8 +530,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.9') == 1
-    assert first.count('/membership.js?v=1.13.7.9') == 1
+    assert first.count('/membership.css?v=1.13.7.11') == 1
+    assert first.count('/membership.js?v=1.13.7.11') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -610,7 +610,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.9"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.11"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
@@ -805,9 +805,11 @@ def test_monthly_free_article_uses_branded_dismissible_bottom_banner_only_after_
     assert "You're reading your free article for this month." in browser
     assert "Subscribe for unlimited access" in browser
     assert "$1 first month" in browser
-    assert 'class="tct-free-article-banner-cta" type="button" data-plan="monthly"' in browser
-    assert 'href="/subscribe.html"' not in browser[browser.index('function armFreeArticleBanner'):browser.index('const armedScrollY')]
-    assert "cta?.addEventListener('click', () => startCheckout(cta))" in browser
+    banner_section = browser[browser.index('function armFreeArticleBanner'):browser.index('const armedScrollY')]
+    assert 'const subscribeHref = `/subscribe.html?next=${encodeURIComponent(window.location.pathname)}`' in banner_section
+    assert 'class="tct-free-article-banner-cta" href="${subscribeHref}"' in banner_section
+    assert 'data-plan="monthly"' not in banner_section
+    assert "startCheckout(cta)" not in banner_section
     assert "armFreeArticleBanner(slug, meterPeriod, paywall)" in browser
     assert browser.index("data?.access === 'monthly_free'") < browser.index("armFreeArticleBanner(slug, meterPeriod, paywall)")
     assert "const FREE_ARTICLE_BANNER_DELAY_MS = 1750" in browser

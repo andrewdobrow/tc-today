@@ -996,4 +996,58 @@ html.tct-meter-precheck .tct-preview-copy {
 @media (prefers-reduced-motion: reduce) {
   .tct-free-article-banner { transition: none; }
 }
+
+/* ================================================================
+   TCT v1.13.7.11 - mobile membership landing hierarchy
+   Keep the existing plan-card design intact. On phones, remove the
+   redundant sales copy above the cards so the plan choices appear
+   immediately, while the deeper value explanation remains below.
+   ================================================================ */
+@media (max-width: 620px) {
+  .membership-landing-page .membership-landing {
+    padding-top: 10px;
+  }
+  .membership-landing-page .membership-landing-hero {
+    gap: 14px;
+    padding-top: 8px;
+  }
+  .membership-landing-page .membership-landing-hero-copy {
+    max-width: none;
+  }
+  .membership-landing-page .membership-landing-hero-copy .membership-landing-kicker {
+    margin-bottom: 5px;
+    font-size: .68rem;
+  }
+  .membership-landing-page .membership-landing-hero h1 {
+    margin: 0;
+    font-size: clamp(2rem, 9.5vw, 2.4rem);
+    line-height: 1.01;
+  }
+  .membership-landing-page .membership-landing-deck,
+  .membership-landing-page .membership-landing-offer-line,
+  .membership-landing-page .membership-landing-hero-actions {
+    display: none;
+  }
+  .membership-landing-page .membership-hero-plans {
+    gap: 14px;
+  }
+  .membership-landing-page .membership-landing-signin-mobile {
+    display: inline-flex !important;
+    justify-self: center;
+    margin: 0 auto;
+    padding: 4px 2px;
+    border: 0;
+    background: transparent;
+    color: #174f3d;
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 621px) {
+  .membership-landing-page .membership-landing-signin-mobile { display: none !important; }
 }

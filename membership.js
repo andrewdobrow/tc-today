@@ -343,6 +343,7 @@ function armFreeArticleBanner(slug, period, paywall){
   const dismissKey = freeArticleBannerDismissKey(slug, period)
   try { if (sessionStorage.getItem(dismissKey) === '1') return false } catch {}
 
+  const subscribeHref = `/subscribe.html?next=${encodeURIComponent(window.location.pathname)}`
   const banner = document.createElement('aside')
   banner.className = 'tct-free-article-banner'
   banner.setAttribute('data-tct-free-article-banner', 'true')
@@ -354,16 +355,13 @@ function armFreeArticleBanner(slug, period, paywall){
       <div class="tct-free-article-banner-copy">
         <strong>You're reading your free article for this month.</strong>
       </div>
-      <button class="tct-free-article-banner-cta" type="button" data-plan="monthly">
+      <a class="tct-free-article-banner-cta" href="${subscribeHref}">
         <span>Subscribe for unlimited access</span>
         <small>$1 first month</small>
-      </button>
+      </a>
       <button class="tct-free-article-banner-dismiss" type="button" aria-label="Dismiss free article notice">&times;</button>
     </div>`
   document.body.appendChild(banner)
-
-  const cta = qs('.tct-free-article-banner-cta', banner)
-  cta?.addEventListener('click', () => startCheckout(cta))
 
   const dismiss = qs('.tct-free-article-banner-dismiss', banner)
   dismiss?.addEventListener('click', () => {
