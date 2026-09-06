@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,7 +14,7 @@ def _read(relative: str) -> str:
 
 def test_shared_footer_delegates_kit_loading_to_main_javascript():
     source = _read("scripts/generate.py")
-    assert '<script src="/main.js"></script>' in source
+    assert re.search(r'<script\s+src=["\']/main\.js(?:\?v=[^"\']+)?["\']\s*></script>', source)
     assert f'data-uid="{LEGACY_STICKY_UID}"' not in source
     assert f'data-uid="{MODAL_UID}"' not in source
 
