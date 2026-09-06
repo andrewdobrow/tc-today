@@ -17396,7 +17396,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         <div class="article-main-column">
           {img_html}
           <div class="article-body">{body}</div>
-          {_paywall_newsletter_slot()}
+          {_newsletter_inline_embed("article")}
           {event_link_html}
           <div class="article-share">
             <span class="article-share-label">Share this story</span>
@@ -22305,13 +22305,13 @@ _ARTICLE_POST_NEWSLETTER_SLOT_RE = re.compile(
 
 
 def _normalize_article_newsletter_delivery_sitewide(root):
-    """Enforce one newsletter surface per article access state.
+    """Enforce one Kit signup immediately after the story body on every article.
 
-    Retained article HTML keeps only a dormant post-article slot on protected
-    membership pages. membership.js reveals that slot with the current Kit form
-    only when the reader remains fully paywalled; successful full access removes
-    it and inserts the same form after paragraph two. Unprotected articles have no
-    post-article newsletter slot at all.
+    The form is deliberately post-article rather than mid-article so readers never
+    mistake the newsletter module for the end of a story while paragraphs remain
+    below it. Membership/paywall state does not change the newsletter placement;
+    the same Kit form remains after the visible/full story and before ancillary
+    event-link/share treatment.
     """
     root = Path(root)
     articles_dir = root / "articles"
@@ -22320,44 +22320,44 @@ def _normalize_article_newsletter_delivery_sitewide(root):
     if not articles_dir.exists():
         return {"scanned": 0, "updated": 0}
 
-    desired_slot = _paywall_newsletter_slot()
+    desired_slot = _newsletter_inline_embed("article").strip()
     for path in sorted(articles_dir.glob("*.html")):
         scanned += 1
         original = path.read_text(encoding="utf-8", errors="ignore")
         normalized = _ARTICLE_POST_NEWSLETTER_SLOT_RE.sub("", original)
-        has_full_paywall = bool(re.search(r"\bdata-tct-paywall\b", normalized, re.I))
-        if has_full_paywall:
-            boundary = None
-            for pattern in (
-                r'<div class="article-share">',
-                r'<hr class="article-divider"',
-                r'<p class="article-more"',
-            ):
-                boundary = re.search(pattern, normalized, re.I)
-                if boundary:
-                    break
-            if not boundary:
-                failures.append(str(path.relative_to(root)))
-                continue
-            normalized = (
-                normalized[:boundary.start()]
-                + desired_slot
-                + "\n          "
-                + normalized[boundary.start():]
-            )
+
+        # Insert directly after article-body, before an optional event-link box
+        # and always before Share. This works for normal, short-public, retained,
+        # and subsequently paywalled article shells.
+        boundary = None
+        for pattern in (
+            r'<aside class="event-link-box"',
+            r'<div class="article-share">',
+            r'<hr class="article-divider"',
+            r'<p class="article-more"',
+        ):
+            boundary = re.search(pattern, normalized, re.I)
+            if boundary:
+                break
+        if not boundary or '<div class="article-body' not in normalized:
+            failures.append(str(path.relative_to(root)))
+            continue
+
+        normalized = (
+            normalized[:boundary.start()]
+            + desired_slot
+            + "\n          "
+            + normalized[boundary.start():]
+        )
         if normalized != original:
             path.write_text(normalized, encoding="utf-8")
             updated += 1
 
         final = normalized
-        old_article_slot = re.search(r"newsletter-inline-slot--article", final, re.I)
-        old_article_uid = re.search(
-            r'<aside\b[^>]*newsletter-inline-slot--(?:article|paywall)[^>]*>.*?30e15672d3.*?</aside>',
-            final,
-            re.I | re.S,
-        )
-        paywall_slots = len(re.findall(r"data-tct-paywall-newsletter", final, re.I))
-        if old_article_slot or old_article_uid or (has_full_paywall and paywall_slots != 1) or (not has_full_paywall and paywall_slots):
+        article_slots = len(re.findall(r"newsletter-inline-slot--article", final, re.I))
+        kit_uids = len(re.findall(r'data-uid=["\']30e15672d3["\']', final, re.I))
+        obsolete_paywall_slots = len(re.findall(r"data-tct-paywall-newsletter", final, re.I))
+        if article_slots != 1 or kit_uids != 1 or obsolete_paywall_slots:
             failures.append(str(path.relative_to(root)))
 
     if failures:

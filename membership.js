@@ -8,8 +8,8 @@ let membershipStatusPromise = null
 const MEMBER_HINT_KEY = 'tct_member_entitled_hint'
 const METER_STATE_KEY = 'tct_monthly_free_article_v1'
 const METER_PENDING_TTL_MS = 120000
-const FULL_ARTICLE_NEWSLETTER_UID = '2865b8d821'
-const FULL_ARTICLE_NEWSLETTER_SRC = 'https://treasure-coast-today.kit.com/2865b8d821/index.js'
+const FULL_ARTICLE_NEWSLETTER_UID = '30e15672d3'
+const FULL_ARTICLE_NEWSLETTER_SRC = 'https://treasure-coast-today.kit.com/30e15672d3/index.js'
 
 function setMemberHint(entitled){
   try {
@@ -248,11 +248,14 @@ async function openPortal(button){
 
 function removePostArticleNewsletter(){
   const articleRoot = qs('.article-main-column') || qs('.article-wrap') || document
-  qsa('[data-tct-paywall-newsletter], .newsletter-inline-slot--article', articleRoot).forEach(node => node.remove())
+  // Retain the real post-article Kit form. Only remove the obsolete dormant
+  // paywall-only placeholder used by older generated pages.
+  qsa('[data-tct-paywall-newsletter]', articleRoot).forEach(node => node.remove())
 }
 
 function showPaywallNewsletter(){
   const articleRoot = qs('.article-main-column') || qs('.article-wrap') || document
+  if (qs('.newsletter-inline-slot--article', articleRoot)) return true
   const slot = qs('[data-tct-paywall-newsletter]', articleRoot)
   if (!slot) return false
   slot.hidden = false
@@ -267,38 +270,30 @@ function showPaywallNewsletter(){
 
 function placeFullArticleNewsletter(){
   const articleRoot = qs('.article-main-column') || qs('.article-wrap') || document
+  const existing = qs('.newsletter-inline-slot--article', articleRoot)
+  if (existing) return true
   if (qs('[data-tct-full-article-newsletter]', articleRoot)) return false
 
-  // Full-access readers get the Morning Brief immediately after paragraph two,
-  // regardless of total story length. Keep the Kit form outside .article-body so
-  // article typography cannot bleed into the form. Legacy unlocked pages may use
-  // more than one article-body block, so locate paragraph two across the complete
-  // visible story rather than assuming the first block contains five paragraphs.
-  const articleBodies = qsa('.article-body', articleRoot).filter(node =>
-    !node.closest('.tct-member-only') &&
-    (!node.classList.contains('tct-protected-content') || node.classList.contains('is-unlocked'))
-  )
-  const paragraphs = articleBodies.flatMap(node =>
-    Array.from(node.children).filter(child => child.tagName === 'P')
-  )
-  const secondParagraph = paragraphs[1]
-  if (!secondParagraph) return false
-
-  const articleBody = secondParagraph.parentElement
-  if (!articleBody) return false
-  const continuation = document.createElement('div')
-  continuation.className = articleBody.className
-  continuation.classList.add('tct-full-article-continuation')
-  continuation.setAttribute('data-tct-full-article-continuation', 'true')
-  while (secondParagraph.nextSibling) continuation.appendChild(secondParagraph.nextSibling)
-
+  // Fallback for a retained/legacy page that somehow missed the static article
+  // newsletter normalization. Keep the signup after all story paragraphs and
+  // before any ancillary event-link/share treatment.
+  const boundary = qs('.event-link-box', articleRoot) || qs('.article-share', articleRoot)
   const slot = document.createElement('aside')
-  slot.className = 'newsletter-inline-slot newsletter-inline-slot--full-article'
+  slot.className = 'newsletter-inline-slot newsletter-inline-slot--article newsletter-inline-slot--full-article'
   slot.setAttribute('aria-label', 'Subscribe to the Treasure Coast Morning Brief')
   slot.setAttribute('data-tct-full-article-newsletter', 'true')
 
-  if (continuation.childNodes.length) articleBody.insertAdjacentElement('afterend', continuation)
-  articleBody.insertAdjacentElement('afterend', slot)
+  if (boundary?.parentElement) {
+    boundary.parentElement.insertBefore(slot, boundary)
+  } else {
+    const articleBodies = qsa('.article-body', articleRoot).filter(node =>
+      !node.closest('.tct-member-only') &&
+      (!node.classList.contains('tct-protected-content') || node.classList.contains('is-unlocked'))
+    )
+    const lastBody = articleBodies[articleBodies.length - 1]
+    if (!lastBody) return false
+    lastBody.insertAdjacentElement('afterend', slot)
+  }
 
   const script = document.createElement('script')
   script.async = true
