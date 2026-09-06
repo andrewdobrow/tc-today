@@ -123,6 +123,147 @@
       .events-control--search { grid-column: auto; }
       .events-reset { width: 100%; }
     }
+
+
+    /* TCT Events subscriber conversion banner */
+    .events-subscribe-banner {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 140;
+      background: #174f3d;
+      color: #fff;
+      border-top: 4px solid #f26445;
+      box-shadow: 0 -12px 34px rgba(0,0,0,.20);
+      transform: translateY(calc(100% + 12px));
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .2s ease, opacity .2s ease;
+    }
+    .events-subscribe-banner.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .events-subscribe-banner-inner {
+      width: min(1160px, 100%);
+      min-height: 84px;
+      margin: 0 auto;
+      padding: 12px 22px calc(12px + env(safe-area-inset-bottom));
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: auto minmax(0,1fr) auto 40px;
+      align-items: center;
+      gap: 22px;
+    }
+    .events-subscribe-banner-monogram {
+      padding-right: 20px;
+      border-right: 1px solid rgba(255,255,255,.38);
+      font-family: "Fraunces", Georgia, "Times New Roman", serif;
+      font-size: 36px;
+      line-height: .9;
+      font-weight: 650;
+      letter-spacing: -.07em;
+      white-space: nowrap;
+    }
+    .events-subscribe-banner-copy { min-width: 0; }
+    .events-subscribe-banner-copy strong {
+      display: block;
+      font-family: Georgia, serif;
+      font-size: clamp(1.12rem,1.8vw,1.42rem);
+      line-height: 1.14;
+      letter-spacing: -.012em;
+    }
+    .events-subscribe-banner-copy span {
+      display: block;
+      margin-top: 4px;
+      color: rgba(255,255,255,.88);
+      font-size: .88rem;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+    .events-subscribe-banner-cta {
+      display: inline-flex;
+      min-width: 224px;
+      min-height: 55px;
+      padding: 8px 18px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background: #f26445;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 900;
+      line-height: 1.08;
+    }
+    .events-subscribe-banner-cta:hover { filter: brightness(.96); }
+    .events-subscribe-banner-cta:focus-visible,
+    .events-subscribe-banner-dismiss:focus-visible {
+      outline: 3px solid #ffe08a;
+      outline-offset: 2px;
+    }
+    .events-subscribe-banner-cta small {
+      margin-top: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .035em;
+      text-transform: uppercase;
+    }
+    .events-subscribe-banner-dismiss {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.10);
+      color: #fff;
+      cursor: pointer;
+      font: 400 29px/38px Arial, sans-serif;
+    }
+    .events-subscribe-banner-dismiss:hover { background: rgba(255,255,255,.18); }
+    body.tct-member-entitled .events-subscribe-banner { display: none !important; }
+    @media (max-width: 680px) {
+      .events-subscribe-banner-inner {
+        min-height: 0;
+        padding: 11px 13px calc(11px + env(safe-area-inset-bottom));
+        grid-template-columns: auto minmax(0,1fr) 34px;
+        grid-template-areas: 'brand copy dismiss' 'cta cta cta';
+        gap: 10px 12px;
+      }
+      .events-subscribe-banner-monogram {
+        grid-area: brand;
+        padding-right: 0;
+        border-right: 0;
+        font-size: 30px;
+        line-height: .9;
+      }
+      .events-subscribe-banner-copy { grid-area: copy; }
+      .events-subscribe-banner-copy strong { font-size: 1.05rem; line-height: 1.16; }
+      .events-subscribe-banner-copy span { margin-top: 3px; font-size: .78rem; line-height: 1.25; }
+      .events-subscribe-banner-dismiss {
+        grid-area: dismiss;
+        width: 34px;
+        height: 34px;
+        font-size: 25px;
+        line-height: 32px;
+      }
+      .events-subscribe-banner-cta {
+        grid-area: cta;
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        padding: 8px 14px;
+        font-size: 1rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .events-subscribe-banner { transition: none; }
+    }
   </style>
   <!-- TCT_EVENTS_JSONLD_START -->
 <script type="application/ld+json" data-tct-events-jsonld>{"@context":"https://schema.org","@type":"ItemList","name":"Treasure Coast Events","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Event","name":"MAG Fall Into Art Exhibition, Opening Reception, Meet the Artists and Chances for Art Events","startDate":"2026-09-05T12:00-04:00","url":"https://discovermartin.com/event/mag-fall-into-art-exhibition-opening-reception-meet-the-artists-and-chances-for-art-events/2026-09-05/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-11-03T17:00-05:00","description":"Come “Fall Into Art” with us, where you will “fall” in love with this new and eclectic exhibition featuring the latest work by our wonderful group of artists of the Martin Artisans Guild. The Opening Reception is slated for September 2nd, from 5:30 to 7:30…","location":{"@type":"Place","name":"Palm Room Art Gallery & Artisans Boutique","address":{"@type":"PostalAddress","streetAddress":"3746 SE Ocean Blvd, Sewall’s Point, FL","addressLocality":"Sewall’s Point","addressRegion":"FL"}}}},{"@type":"ListItem","position":2,"item":{"@type":"Event","name":"FREEBIRD ATL - The Ultimate Lynyrd Skynyrd Experience","startDate":"2026-09-05T19:00-04:00","url":"https://www.terrafermata.com/_events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Terra Fermata","address":{"@type":"PostalAddress","streetAddress":"26 SE 6th St, Stuart, FL 34994","addressLocality":"Stuart","addressRegion":"FL"}}}},{"@type":"ListItem","position":3,"item":{"@type":"Event","name":"Hypersona Duo","startDate":"2026-09-05T19:30-04:00","url":"https://hirams.com/events/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","location":{"@type":"Place","name":"Capt Hiram's Resort","address":{"@type":"PostalAddress","streetAddress":"1580 US Highway 1, Sebastian, FL 32958","addressLocality":"Sebastian","addressRegion":"FL"}}}},{"@type":"ListItem","position":4,"item":{"@type":"Event","name":"Neighborhood Farmer’s Market at Tradition Square","startDate":"2026-09-06T00:00-04:00","url":"https://traditionfl.com/events/neighborhood-farmers-market-at-tradition-square/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T00:00-04:00","description":"<p>There can’t be a better way to spend your Sunday than strolling the square and supporting local businesses. Grab a coffee or a bite to eat and shop around this Sunday from 9:00 AM to 2:00 PM at the Tradition Square. </p> <p>Interested in becoming a vendor…","location":{"@type":"Place","name":"Tradition Square","address":{"@type":"PostalAddress","streetAddress":"","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":5,"item":{"@type":"Event","name":"The ULTIMATE Tribute to Journey, Styx, and REO Speedwagon!!","startDate":"2026-09-06T00:00-04:00","url":"https://www.summercrushwine.com/our-concerts-events","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","description":"Get ready for an afternoon of arena-rock favorites as Majesty of Rock brings the legendary music of Journey, Styx, and REO Speedwagon to the Summer Crush stage! Featuring powerhouse vocals, incredible musicianship, and the unmistakable sound of classic rock…","location":{"@type":"Place","name":"Summer Crush Vineyard & Winery","address":{"@type":"PostalAddress","streetAddress":"4200 Johnston Rd, Fort Pierce, FL 34951","addressLocality":"Fort Pierce","addressRegion":"FL"}}}},{"@type":"ListItem","position":6,"item":{"@type":"Event","name":"Hobe Sound Farmers Market","startDate":"2026-09-06T09:00-04:00","url":"https://hobesoundfarms.com/plan-your-visit/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T14:00-04:00","location":{"@type":"Place","name":"Hobe Sound Farms","address":{"@type":"PostalAddress","streetAddress":"1425 SE Bridge Rd, Hobe Sound, FL 33455","addressLocality":"Hobe Sound","addressRegion":"FL"}}}},{"@type":"ListItem","position":7,"item":{"@type":"Event","name":"Neighborhood Farmer’s Market at Tradition Square","startDate":"2026-09-06T09:00-04:00","url":"https://visitstlucie.com/event/neighborhood-farmers-market-at-tradition-square/2026-09-06/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T14:00-04:00","description":"There can’t be a better way to spend your Sunday than strolling the square and supporting local businesses. Grab a coffee or a bite to eat and shop around this Sunday from 9:00 AM to 2:00 PM at the Tradition Square. Interested in becoming a vendor for our…","location":{"@type":"Place","name":"Neighborhood Farmers Market at Tradition Square","address":{"@type":"PostalAddress","streetAddress":"SW Meeting St, Port St. Lucie, FL, 34987","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":8,"item":{"@type":"Event","name":"Port St. Lucie Green Market","startDate":"2026-09-06T09:00-04:00","url":"https://visitstlucie.com/event/port-st-lucie-green-market/2026-09-06/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T14:00-04:00","description":"Come and enjoy Port Saint Lucie’s newest open air shop local green market attraction. It’s a Free Family friendly & pet friendly weekly event to bring your friends to fellowship & bring the kids to play. Enjoy the many treasures you will find here with lots…","location":{"@type":"Place","name":"MIDFLORIDA Event Center","address":{"@type":"PostalAddress","streetAddress":"9249 Civic Center Pl, Port St. Lucie, 34952","addressLocality":"Port St. Lucie","addressRegion":"FL"}}}},{"@type":"ListItem","position":9,"item":{"@type":"Event","name":"Bank of America Museums on Us","startDate":"2026-09-06T12:00-04:00","url":"https://www.childrensmuseumtc.org/events-calendar-1/2024/12/7/bank-of-america-museums-on-us-4m8lb-m93yb-e8wnn-kbbrj-skwbf-x9apz-yf9yz-2dgre-fx8gw-67fnt-9ngaj-5ekgn-hmdnk-lmddb-y8d7n","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-09-06T16:00-04:00","description":", 12:00 PM – 4:00 PM","location":{"@type":"Place","name":"Children's Museum of the Treasure Coast","address":{"@type":"PostalAddress","streetAddress":"1707 NE Indian River Dr, Jensen Beach, FL 34957","addressLocality":"Jensen Beach","addressRegion":"FL"}}}},{"@type":"ListItem","position":10,"item":{"@type":"Event","name":"MAG Fall Into Art Exhibition, Opening Reception, Meet the Artists and Chances for Art Events","startDate":"2026-09-06T12:00-04:00","url":"https://discovermartin.com/event/mag-fall-into-art-exhibition-opening-reception-meet-the-artists-and-chances-for-art-events/2026-09-06/","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","endDate":"2026-11-04T17:00-05:00","description":"Come “Fall Into Art” with us, where you will “fall” in love with this new and eclectic exhibition featuring the latest work by our wonderful group of artists of the Martin Artisans Guild. The Opening Reception is slated for September 2nd, from 5:30 to 7:30…","location":{"@type":"Place","name":"Palm Room Art Gallery & Artisans Boutique","address":{"@type":"PostalAddress","streetAddress":"3746 SE Ocean Blvd, Sewall’s Point, FL","addressLocality":"Sewall’s Point","addressRegion":"FL"}}}}]}</script>
@@ -693,6 +834,96 @@
       if (categorySelect) categorySelect.value = 'all';
       refreshFromInteraction();
     });
+  })();
+  </script>
+
+  <script>
+  (() => {
+    const DISMISS_KEY = 'tct_events_subscribe_banner_dismissed_v1';
+    const MEMBER_HINT_KEY = 'tct_member_entitled_hint';
+    const SHOW_DELAY_MS = 1750;
+    const SHOW_SCROLL_PX = 120;
+
+    const isSubscriber = () => {
+      if (document.body.classList.contains('tct-member-entitled')) return true;
+      try { return localStorage.getItem(MEMBER_HINT_KEY) === '1'; } catch (_) { return false; }
+    };
+    try { if (sessionStorage.getItem(DISMISS_KEY) === '1') return; } catch (_) {}
+    if (isSubscriber()) return;
+
+    const banner = document.createElement('aside');
+    banner.className = 'events-subscribe-banner';
+    banner.setAttribute('data-events-subscribe-banner', 'true');
+    banner.setAttribute('aria-label', 'Treasure Coast Today subscription offer');
+    banner.setAttribute('aria-hidden', 'true');
+    banner.innerHTML = `
+      <div class="events-subscribe-banner-inner">
+        <div class="events-subscribe-banner-monogram" aria-hidden="true">TCT</div>
+        <div class="events-subscribe-banner-copy">
+          <strong>Never miss what’s happening on the Treasure Coast.</strong>
+          <span>Unlock full access to local news starting at just $1.</span>
+        </div>
+        <a class="events-subscribe-banner-cta" href="/subscribe.html?next=%2Fevents.html">
+          <span>Try 1 Month for $1</span>
+          <small>Then $4.99/month</small>
+        </a>
+        <button class="events-subscribe-banner-dismiss" type="button" aria-label="Dismiss subscription offer">&times;</button>
+      </div>`;
+    document.body.appendChild(banner);
+
+    const armedScrollY = window.scrollY;
+    let delayElapsed = false;
+    let ticking = false;
+    let removed = false;
+    let delayTimer = null;
+
+    const observer = new MutationObserver(() => {
+      if (isSubscriber()) removeBanner(false);
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    const cleanup = () => {
+      if (delayTimer !== null) window.clearTimeout(delayTimer);
+      delayTimer = null;
+      window.removeEventListener('scroll', requestUpdate);
+      observer.disconnect();
+    };
+    const removeBanner = (remember) => {
+      if (removed) return;
+      removed = true;
+      if (remember) {
+        try { sessionStorage.setItem(DISMISS_KEY, '1'); } catch (_) {}
+      }
+      cleanup();
+      banner.classList.remove('is-visible');
+      banner.setAttribute('aria-hidden', 'true');
+      window.setTimeout(() => banner.remove(), 220);
+    };
+    const update = () => {
+      ticking = false;
+      if (removed || !banner.isConnected) return;
+      if (isSubscriber()) {
+        removeBanner(false);
+        return;
+      }
+      const scrolledEnough = Math.abs(window.scrollY - armedScrollY) >= SHOW_SCROLL_PX;
+      const show = delayElapsed || scrolledEnough;
+      banner.classList.toggle('is-visible', show);
+      banner.setAttribute('aria-hidden', show ? 'false' : 'true');
+    };
+    const requestUpdate = () => {
+      if (ticking || removed) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    banner.querySelector('.events-subscribe-banner-dismiss')?.addEventListener('click', () => removeBanner(true));
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    delayTimer = window.setTimeout(() => {
+      delayElapsed = true;
+      requestUpdate();
+    }, SHOW_DELAY_MS);
+    requestUpdate();
   })();
   </script>
   <script src="/membership-config.js"></script>

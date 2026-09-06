@@ -1621,6 +1621,16 @@ def validate_outputs() -> None:
     footer = page_soup.find("footer")
     if footer is None or len(footer.select('a[href="/feed.xml"]')) != 1:
         raise RuntimeError("events.html must preserve exactly one sitewide RSS footer link")
+    for banner_contract in (
+        "Never miss what’s happening on the Treasure Coast.",
+        "Unlock full access to local news starting at just $1.",
+        "Try 1 Month for $1",
+        'href="/subscribe.html?next=%2Fevents.html"',
+        "tct_events_subscribe_banner_dismissed_v1",
+        "tct_member_entitled_hint",
+    ):
+        if banner_contract not in page:
+            raise RuntimeError(f"events.html subscription banner contract is incomplete: {banner_contract}")
 
 
 def refresh(*, offline: bool = False) -> dict[str, Any]:
