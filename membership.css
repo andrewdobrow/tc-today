@@ -859,9 +859,9 @@ html.tct-meter-precheck .tct-preview-copy {
 
 
 /* ================================================================
-   TCT v1.13.7.7 - branded monthly free-article reminder
-   A compact, dismissible bottom banner appears only after a reader
-   begins using the one-free-article monthly allowance.
+   TCT v1.13.7.8 - branded monthly free-article reminder
+   A more prominent, dismissible bottom banner appears only after a
+   reader begins using the one-free-article monthly allowance.
    ================================================================ */
 .tct-free-article-banner {
   position: fixed;
@@ -871,9 +871,9 @@ html.tct-meter-precheck .tct-preview-copy {
   z-index: 140;
   background: #174f3d;
   color: #fff;
-  border-top: 3px solid #f26445;
-  box-shadow: 0 -10px 30px rgba(0,0,0,.18);
-  transform: translateY(calc(100% + 10px));
+  border-top: 4px solid #f26445;
+  box-shadow: 0 -12px 34px rgba(0,0,0,.20);
+  transform: translateY(calc(100% + 12px));
   opacity: 0;
   pointer-events: none;
   transition: transform .2s ease, opacity .2s ease;
@@ -885,40 +885,40 @@ html.tct-meter-precheck .tct-preview-copy {
 }
 .tct-free-article-banner-inner {
   width: min(1160px, 100%);
-  min-height: 70px;
+  min-height: 84px;
   margin: 0 auto;
-  padding: 10px 18px calc(10px + env(safe-area-inset-bottom));
+  padding: 12px 22px calc(12px + env(safe-area-inset-bottom));
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: minmax(0,1fr) auto 34px;
+  grid-template-columns: auto minmax(0,1fr) auto 40px;
   align-items: center;
-  gap: 18px;
+  gap: 22px;
+}
+.tct-free-article-banner-monogram {
+  padding-right: 20px;
+  border-right: 1px solid rgba(255,255,255,.38);
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-size: 36px;
+  line-height: .9;
+  font-weight: 650;
+  letter-spacing: -.07em;
+  white-space: nowrap;
 }
 .tct-free-article-banner-copy { min-width: 0; }
-.tct-free-article-banner-kicker {
-  display: block;
-  margin: 0 0 2px;
-  color: #ffe08a;
-  font-size: 10px;
-  line-height: 1.1;
-  font-weight: 900;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-}
 .tct-free-article-banner-copy strong {
   display: block;
   font-family: Georgia, serif;
-  font-size: clamp(1.03rem,1.7vw,1.3rem);
-  line-height: 1.16;
+  font-size: clamp(1.16rem,1.9vw,1.48rem);
+  line-height: 1.14;
   letter-spacing: -.012em;
 }
 .tct-free-article-banner-cta {
   display: inline-flex;
-  min-width: 220px;
-  min-height: 46px;
-  padding: 7px 16px;
+  min-width: 264px;
+  min-height: 55px;
+  padding: 8px 19px;
   box-sizing: border-box;
-  border-radius: 7px;
+  border-radius: 8px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -926,6 +926,7 @@ html.tct-meter-precheck .tct-preview-copy {
   color: #fff;
   text-decoration: none;
   text-align: center;
+  font-size: 1rem;
   font-weight: 900;
   line-height: 1.08;
 }
@@ -936,39 +937,59 @@ html.tct-meter-precheck .tct-preview-copy {
   outline-offset: 2px;
 }
 .tct-free-article-banner-cta small {
-  margin-top: 3px;
-  font-size: 10px;
+  margin-top: 4px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
 }
 .tct-free-article-banner-dismiss {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   border: 0;
   border-radius: 50%;
   background: rgba(255,255,255,.10);
   color: #fff;
   cursor: pointer;
-  font: 400 26px/32px Arial, sans-serif;
+  font: 400 29px/38px Arial, sans-serif;
 }
 .tct-free-article-banner-dismiss:hover { background: rgba(255,255,255,.18); }
 @media (max-width: 680px) {
   .tct-free-article-banner-inner {
     min-height: 0;
-    padding: 9px 11px calc(9px + env(safe-area-inset-bottom));
-    grid-template-columns: minmax(0,1fr) 30px;
-    grid-template-areas: 'copy dismiss' 'cta cta';
-    gap: 8px 10px;
+    padding: 11px 13px calc(11px + env(safe-area-inset-bottom));
+    grid-template-columns: auto minmax(0,1fr) 34px;
+    grid-template-areas: 'brand copy dismiss' 'cta cta cta';
+    gap: 10px 12px;
+  }
+  .tct-free-article-banner-monogram {
+    grid-area: brand;
+    padding-right: 0;
+    border-right: 0;
+    font-size: 30px;
+    line-height: .9;
   }
   .tct-free-article-banner-copy { grid-area: copy; }
-  .tct-free-article-banner-dismiss { grid-area: dismiss; width:30px;height:30px;font-size:23px;line-height:28px; }
-  .tct-free-article-banner-cta { grid-area: cta; width:100%;min-width:0;min-height:40px;padding:6px 12px; }
-  .tct-free-article-banner-kicker { display:none; }
-  .tct-free-article-banner-copy strong { font-size: .98rem; line-height: 1.18; }
-  .tct-free-article-banner-cta small { font-size: 9px; }
+  .tct-free-article-banner-dismiss {
+    grid-area: dismiss;
+    width:34px;
+    height:34px;
+    font-size:25px;
+    line-height:32px;
+  }
+  .tct-free-article-banner-cta {
+    grid-area: cta;
+    width:100%;
+    min-width:0;
+    min-height:48px;
+    padding:8px 14px;
+    font-size:1rem;
+  }
+  .tct-free-article-banner-copy strong { font-size: 1.08rem; line-height: 1.16; }
+  .tct-free-article-banner-cta small { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .tct-free-article-banner { transition: none; }
+}
 }

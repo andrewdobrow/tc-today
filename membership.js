@@ -350,8 +350,8 @@ function armFreeArticleBanner(slug, period, paywall){
   banner.setAttribute('aria-hidden', 'true')
   banner.innerHTML = `
     <div class="tct-free-article-banner-inner">
+      <div class="tct-free-article-banner-monogram" aria-hidden="true">TCT</div>
       <div class="tct-free-article-banner-copy">
-        <span class="tct-free-article-banner-kicker">Treasure Coast Today</span>
         <strong>You're reading your free article for this month.</strong>
       </div>
       <a class="tct-free-article-banner-cta" href="/subscribe.html">
