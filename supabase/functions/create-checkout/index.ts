@@ -16,59 +16,149 @@ function priceForPlan(plan: string) {
 }
 
 export default {
-  // Checkout-first by design: Stripe collects the email and payment method. No TCT account is required
-  // before Checkout. The signed Stripe webhook establishes/links the identity and paid entitlement.
+  // Checkout-first by design: Stripe collects the email and payment method.
+  // The caller may request either hosted Checkout or Embedded Checkout.
   fetch: withSupabase({ auth: 'none' }, async (req) => {
     if (!stripeSecret || !monthlyPrice || !annualPrice) {
-      return Response.json({ error: 'Stripe membership secrets are not configured.' }, { status: 503 })
-    }
-    if (!stripeSecretMatchesMode(stripeSecret)) {
-      console.error(`create-checkout Stripe mode mismatch: expected ${STRIPE_MODE}`)
-      return Response.json({ error: 'Stripe payment mode is not configured safely.' }, { status: 503 })
+      return Response.json(
+        { error: 'Stripe membership secrets are not configured.' },
+        { status: 503 },
+      )
     }
 
-    let body: { plan?: string; return_path?: string }
+    if (!stripeSecretMatchesMode(stripeSecret)) {
+      console.error(`create-checkout Stripe mode mismatch: expected ${STRIPE_MODE}`)
+      return Response.json(
+        { error: 'Stripe payment mode is not configured safely.' },
+        { status: 503 },
+      )
+    }
+
+    let body: {
+      plan?: string
+      return_path?: string
+      presentation?: string
+    }
+
     try {
       body = await req.json()
     } catch {
-      return Response.json({ error: 'Invalid request body.' }, { status: 400 })
+      return Response.json(
+        { error: 'Invalid request body.' },
+        { status: 400 },
+      )
     }
 
     const plan = String(body.plan ?? '').toLowerCase()
     const priceId = priceForPlan(plan)
-    if (!priceId) return Response.json({ error: 'Plan must be monthly or annual.' }, { status: 400 })
+
+    if (!priceId) {
+      return Response.json(
+        { error: 'Plan must be monthly or annual.' },
+        { status: 400 },
+      )
+    }
+
+    const presentation = String(body.presentation ?? 'hosted').toLowerCase()
+
+    if (presentation !== 'hosted' && presentation !== 'embedded') {
+      return Response.json(
+        { error: 'Checkout presentation must be hosted or embedded.' },
+        { status: 400 },
+      )
+    }
 
     const returnPath = safeReturnPath(body.return_path)
     const next = encodeURIComponent(returnPath)
 
-    try {
-      const session = await stripe.checkout.sessions.create({
-        mode: 'subscription',
-        payment_method_collection: 'always',
-        name_collection: { individual: { enabled: true, optional: false } },
-        line_items: [{ price: priceId, quantity: 1 }],
-        success_url: `${siteUrl}/subscribe.html?checkout=success&session_id={CHECKOUT_SESSION_ID}&next=${next}`,
-        cancel_url: `${siteUrl}/subscribe.html?checkout=cancelled&next=${next}`,
-        discounts: plan === 'monthly' ? [{ coupon: MONTHLY_INTRO_COUPON }] : undefined,
+    const commonParams: Stripe.Checkout.SessionCreateParams = {
+      mode: 'subscription',
+      payment_method_collection: 'always',
+      name_collection: {
+        individual: {
+          enabled: true,
+          optional: false,
+        },
+      },
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      discounts:
+        plan === 'monthly'
+          ? [{ coupon: MONTHLY_INTRO_COUPON }]
+          : undefined,
+      metadata: {
+        plan,
+        return_path: returnPath,
+        tct_stripe_mode: STRIPE_MODE,
+        introductory_offer:
+          plan === 'monthly'
+            ? 'first_month_1_usd'
+            : 'none',
+      },
+      subscription_data: {
         metadata: {
           plan,
-          return_path: returnPath,
           tct_stripe_mode: STRIPE_MODE,
-          introductory_offer: plan === 'monthly' ? 'first_month_1_usd' : 'none',
+          introductory_offer:
+            plan === 'monthly'
+              ? 'first_month_1_usd'
+              : 'none',
         },
-        subscription_data: {
-          metadata: {
-            plan,
-            tct_stripe_mode: STRIPE_MODE,
-            introductory_offer: plan === 'monthly' ? 'first_month_1_usd' : 'none',
-          },
-        },
+      },
+    }
+
+    try {
+      // New Embedded Checkout path.
+      if (presentation === 'embedded') {
+        const session = await stripe.checkout.sessions.create({
+          ...commonParams,
+          ui_mode: 'embedded',
+          redirect_on_completion: 'if_required',
+          return_url:
+            `${siteUrl}/subscribe.html?checkout=success&session_id={CHECKOUT_SESSION_ID}&next=${next}`,
+        })
+
+        if (!session.client_secret) {
+          throw new Error(
+            'Stripe did not return an Embedded Checkout client secret.',
+          )
+        }
+
+        return Response.json({
+          clientSecret: session.client_secret,
+          session_id: session.id,
+          presentation: 'embedded',
+        })
+      }
+
+      // Existing hosted Checkout path remains unchanged.
+      const session = await stripe.checkout.sessions.create({
+        ...commonParams,
+        success_url:
+          `${siteUrl}/subscribe.html?checkout=success&session_id={CHECKOUT_SESSION_ID}&next=${next}`,
+        cancel_url:
+          `${siteUrl}/subscribe.html?checkout=cancelled&next=${next}`,
       })
-      if (!session.url) throw new Error('Stripe did not return a Checkout URL.')
-      return Response.json({ url: session.url })
+
+      if (!session.url) {
+        throw new Error('Stripe did not return a Checkout URL.')
+      }
+
+      return Response.json({
+        url: session.url,
+        session_id: session.id,
+        presentation: 'hosted',
+      })
     } catch (error) {
       console.error('create-checkout Stripe error', error)
-      return Response.json({ error: 'Unable to start Stripe Checkout.' }, { status: 502 })
+      return Response.json(
+        { error: 'Unable to start Stripe Checkout.' },
+        { status: 502 },
+      )
     }
   }),
 }
