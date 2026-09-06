@@ -64,8 +64,16 @@ def test_sitewide_chrome_normalizer_preserves_dark_mode_and_launches_retained_pa
 
 def test_subscribe_page_is_real_landing_page_not_account_gate():
     page = (ROOT / "subscribe.html").read_text()
-    assert "Know what’s happening across the Treasure Coast." in page
+    assert "Choose your plan" in page
+    assert "Full access starts at $1." in page
     assert 'id="membership-plans"' in page
+    assert page.index('id="membership-plans"') < page.index("membership-landing-value")
+    assert page.count('id="membership-plans"') == 1
+    assert page.count('data-plan="annual"') == 1
+    assert page.count('data-plan="monthly"') == 1
+    assert "Get your first month for $1" in page
+    assert "Subscribe annually" in page
+    assert "Already a subscriber? Sign in" in page
     assert "Don’t miss stories like these." in page
     assert "data-membership-top-stories" in page
     assert "archive.json" in page
@@ -74,34 +82,25 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
     assert "membership-story-card" in page
     assert "membership-landing-value-grid" in page
     assert "membership-faq-grid" in page
-    assert "membership-hero-plans" in page
-    assert "membership-hero-plan-monthly" in page
-    assert "membership-hero-plan-annual" in page
-    assert page.index("membership-hero-plans") < page.index("membership-landing-value")
-    assert page.count('data-plan="annual"') >= 2
-    assert page.count('data-plan="monthly"') >= 2
-    assert 'membership-landing-signin-mobile' in page
-    assert '/membership.css?v=1.13.7.11' in page
-    assert '/membership.js?v=1.13.7.11' in page
+    assert '/membership.css?v=1.13.7.12' in page
+    assert '/membership.js?v=1.13.7.12' in page
     assert "Create account" not in page
     assert 'type="password"' not in page
     assert "Limited time &middot; $1 first month" in page
     assert "Monthly: $1 today, then $4.99/month starting one month later. Annual: $49/year. Subscriptions renew automatically until canceled." in page
 
 
-def test_mobile_subscribe_page_prioritizes_existing_plan_cards_without_squeezing_them():
+def test_subscription_landing_promotes_existing_full_plan_cards_without_squeezing_them():
     css = (ROOT / "membership.css").read_text()
-    mobile = css.split("TCT v1.13.7.11 - mobile membership landing hierarchy", 1)[1]
-    assert ".membership-landing-page .membership-landing-deck" in mobile
-    assert ".membership-landing-page .membership-landing-offer-line" in mobile
-    assert ".membership-landing-page .membership-landing-hero-actions" in mobile
-    assert "display: none;" in mobile
-    assert "font-size: clamp(2rem, 9.5vw, 2.4rem);" in mobile
-    assert ".membership-landing-page .membership-hero-plans" in mobile
-    # Preserve the existing card dimensions and CTA sizing rather than compacting them.
-    assert ".membership-hero-plan { padding: 17px 16px 15px; }" in css
-    assert ".membership-hero-plan-button" in css
-    assert "min-height: 48px;" in css
+    plan_first = css.split("TCT v1.13.7.12 - plan-first subscription landing page", 1)[1]
+    assert ".membership-landing-page .membership-landing-plans-section--top" in plan_first
+    assert ".membership-landing-page .membership-landing-plans-heading--top h1" in plan_first
+    assert "font-size: clamp(2.25rem, 11vw, 2.8rem);" in plan_first
+    assert ".membership-landing-page .membership-landing-plans" in plan_first
+    # Preserve the existing lower-section card construction and CTA dimensions.
+    assert ".membership-landing-page .membership-landing-plan {" in css
+    assert "padding: 30px;" in css
+    assert ".membership-landing-page .membership-btn { border-radius: 4px; min-height: 50px; }" in css
 
 
 def test_browser_config_requires_explicit_live_payment_mode_before_public_launch(monkeypatch, tmp_path):
@@ -240,8 +239,8 @@ def test_sitewide_subscriber_chrome_loads_membership_state_and_prepaints(tmp_pat
     assert "data-tct-member-prepaint" in rendered
     assert "tct_member_entitled_hint" in rendered
     assert 'src="/membership-config.js"' in rendered
-    assert 'src="/membership.js?v=1.13.7.11"' in rendered
-    assert rendered.count('/membership.js?v=1.13.7.11') == 1
+    assert 'src="/membership.js?v=1.13.7.12"' in rendered
+    assert rendered.count('/membership.js?v=1.13.7.12') == 1
 
 
 def test_entitled_subscriber_chrome_replaces_sales_header_and_hides_membership_card():

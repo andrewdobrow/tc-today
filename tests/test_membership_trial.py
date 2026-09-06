@@ -51,7 +51,9 @@ def test_subscribe_page_and_checkout_copy_match_intro_offer():
     browser = (ROOT / "membership.js").read_text()
     css = (ROOT / "membership.css").read_text()
     assert "Limited time &middot; $1 first month" in page
-    assert "membership-landing-offer-line" in page
+    assert "Choose your plan" in page
+    assert "Full access starts at $1." in page
+    assert page.index('id="membership-plans"') < page.index("membership-landing-value")
     assert "Get your first month for $1" in page
     assert "Then $4.99/month" in page
     assert "Subscribe annually" in page

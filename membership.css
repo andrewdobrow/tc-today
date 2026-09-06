@@ -998,56 +998,63 @@ html.tct-meter-precheck .tct-preview-copy {
 }
 
 /* ================================================================
-   TCT v1.13.7.11 - mobile membership landing hierarchy
-   Keep the existing plan-card design intact. On phones, remove the
-   redundant sales copy above the cards so the plan choices appear
-   immediately, while the deeper value explanation remains below.
+   TCT v1.13.7.12 - plan-first subscription landing page
+   Promote the existing "Choose your plan" presentation to the top of
+   the page. Preserve the full-size plan cards; remove the redundant
+   hero sales block rather than shrinking the choices on mobile.
    ================================================================ */
+.membership-landing-page .membership-landing-plans-section--top {
+  padding-top: clamp(38px, 5vw, 58px);
+  padding-bottom: clamp(44px, 6vw, 68px);
+}
+.membership-landing-page .membership-landing-plans-heading--top {
+  margin-bottom: 28px;
+}
+.membership-landing-page .membership-landing-plans-heading--top h1 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #151515;
+  font-size: clamp(2.8rem, 5.4vw, 4.9rem);
+  line-height: 1.01;
+  letter-spacing: -.034em;
+  text-wrap: balance;
+}
+.membership-landing-page .membership-landing-plan-signin-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
 @media (max-width: 620px) {
   .membership-landing-page .membership-landing {
-    padding-top: 10px;
+    padding-top: 0;
   }
-  .membership-landing-page .membership-landing-hero {
-    gap: 14px;
-    padding-top: 8px;
+  .membership-landing-page .membership-landing-plans-section--top {
+    padding-top: 20px;
+    padding-bottom: 42px;
   }
-  .membership-landing-page .membership-landing-hero-copy {
-    max-width: none;
+  .membership-landing-page .membership-landing-plans-heading--top {
+    margin-bottom: 18px;
   }
-  .membership-landing-page .membership-landing-hero-copy .membership-landing-kicker {
-    margin-bottom: 5px;
-    font-size: .68rem;
+  .membership-landing-page .membership-landing-plans-heading--top .membership-landing-kicker {
+    margin-bottom: 7px;
+    font-size: .7rem;
   }
-  .membership-landing-page .membership-landing-hero h1 {
-    margin: 0;
-    font-size: clamp(2rem, 9.5vw, 2.4rem);
-    line-height: 1.01;
+  .membership-landing-page .membership-landing-plans-heading--top h1 {
+    font-size: clamp(2.25rem, 11vw, 2.8rem);
+    line-height: 1;
   }
-  .membership-landing-page .membership-landing-deck,
-  .membership-landing-page .membership-landing-offer-line,
-  .membership-landing-page .membership-landing-hero-actions {
-    display: none;
+  .membership-landing-page .membership-landing-plans-heading--top p {
+    margin-top: 10px;
+    font-size: .96rem;
+    line-height: 1.45;
   }
-  .membership-landing-page .membership-hero-plans {
-    gap: 14px;
+  .membership-landing-page .membership-landing-plans {
+    gap: 16px;
+    margin-top: 0;
   }
-  .membership-landing-page .membership-landing-signin-mobile {
-    display: inline-flex !important;
-    justify-self: center;
-    margin: 0 auto;
-    padding: 4px 2px;
-    border: 0;
-    background: transparent;
-    color: #174f3d;
-    font: inherit;
-    font-size: .9rem;
-    font-weight: 800;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
+  .membership-landing-page .membership-landing-plan-signin-row {
+    margin-top: 16px;
   }
 }
 
-@media (min-width: 621px) {
-  .membership-landing-page .membership-landing-signin-mobile { display: none !important; }
-}
