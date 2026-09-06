@@ -21831,7 +21831,7 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css?v=1.13.7.5s">
+  <link rel="stylesheet" href="/style.css?v=1.13.7.5t">
   <style id="tct-mobile-overflow-fix">
     html, body {{ width: 100%; max-width: 100%; overflow-x: clip; }}
     *, *::before, *::after {{ box-sizing: border-box; }}
@@ -21963,6 +21963,65 @@ def _primary_navigation_html(active="", homepage_filters=False):
       </nav>"""
 
 
+def _mobile_navigation_html(active="", homepage_filters=False):
+    """Return the mobile-only hamburger drawer navigation."""
+    active = str(active or "").strip()
+    county_items = [
+        ("martin", "Martin County", "/?cat=martin"),
+        ("st_lucie", "St. Lucie County", "/?cat=st_lucie"),
+        ("indian_river", "Indian River County", "/?cat=indian_river"),
+    ]
+    category_items = [
+        ("news", "Top News", "/"),
+        ("local_gov", CATEGORIES["local_gov"]["label"], "/?cat=local_gov"),
+        ("crime", CATEGORIES["crime"]["label"], "/?cat=crime"),
+        ("business", CATEGORIES["business"]["label"], "/?cat=business"),
+        ("sports", CATEGORIES["sports"]["label"], "/?cat=sports"),
+        ("things_to_do", CATEGORIES["things_to_do"]["label"], "/?cat=things_to_do"),
+        ("florida", CATEGORIES["florida"]["label"], "/?cat=florida"),
+    ]
+    more_items = [
+        ("events", "Events", "/events.html"),
+        ("weather", "Weather", "/weather.html"),
+        ("archive", "Archive", "/archive.html"),
+        ("about", "About", "/about.html"),
+        ("advertise", "Advertise", "/advertise.html"),
+        ("contact", "Contact", "/contact.html"),
+    ]
+
+    def link_html(key, label, href):
+        classes = ["mobile-nav-link"]
+        if key == active:
+            classes.append("active")
+        attrs = [f'class="{" ".join(classes)}"']
+        if key == active:
+            attrs.append('aria-current="page"')
+        if homepage_filters and key in {"news", *CATEGORIES.keys()}:
+            attrs.append(f'data-cat="{"all" if key == "news" else key}"')
+        return f'<a href="{href}" {" ".join(attrs)}>{html_lib.escape(label)}</a>'
+
+    def group_html(label, items):
+        links = "\n          ".join(link_html(*item) for item in items)
+        slug = re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
+        return f'''<section class="mobile-nav-group mobile-nav-group--{slug}" aria-labelledby="mobile-nav-{slug}">
+        <h2 id="mobile-nav-{slug}" class="mobile-nav-heading">{html_lib.escape(label)}</h2>
+        <div class="mobile-nav-links">
+          {links}
+        </div>
+      </section>'''
+
+    groups = "\n      ".join([
+        group_html("Counties", county_items),
+        group_html("Categories", category_items),
+        group_html("More", more_items),
+    ])
+    return f'''<nav id="tct-mobile-nav" class="mobile-nav-panel" aria-label="Mobile navigation" hidden>
+      <div class="mobile-nav-panel-inner">
+      {groups}
+      </div>
+    </nav>'''
+
+
 MORNING_BRIEF_LANDING_URL = "https://treasure-coast-today.kit.com/cb848255f8"
 
 
@@ -22036,6 +22095,9 @@ def _site_header_html(active="", homepage_filters=False):
     <div class="header-inner">
       <div class="masthead-top-row">
         <div class="masthead-promo-slot">
+          <button type="button" class="mobile-nav-toggle-button" aria-label="Open navigation menu" aria-controls="tct-mobile-nav" aria-expanded="false">
+            <span class="mobile-nav-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
           {_masthead_newsletter_cta_html()}
         </div>
         <div class="header-top">
@@ -22045,6 +22107,7 @@ def _site_header_html(active="", homepage_filters=False):
           {_header_primary_cta_html()}
         </div>
       </div>
+      {_mobile_navigation_html(active=active, homepage_filters=homepage_filters)}
       <div class="masthead-nav-row">
         <time id="tct-live-time" class="masthead-live-time" datetime="" aria-label="Current Treasure Coast date and time"></time>
         {_primary_navigation_html(active=active, homepage_filters=homepage_filters)}
@@ -22202,7 +22265,14 @@ def _normalize_primary_navigation_sitewide(output_root):
         normalized = newsroom_strip_re.sub('', normalized, count=1)
         normalized = re.sub(
             r'href=["\']/?style\.css(?:\?v=[^"\']+)?["\']',
-            'href="/style.css?v=1.13.7.5s"',
+            'href="/style.css?v=1.13.7.5t"',
+            normalized,
+            count=1,
+            flags=re.I,
+        )
+        normalized = re.sub(
+            r'src=["\']/?main\.js(?:\?v=[^"\']+)?["\']',
+            'src="/main.js?v=1.13.7.5t"',
             normalized,
             count=1,
             flags=re.I,
@@ -22231,6 +22301,11 @@ def _normalize_primary_navigation_sitewide(output_root):
             and normalized.count('id="tct-live-weather"') == 1
             and normalized.count('class="masthead-top-row"') == 1
             and normalized.count('class="masthead-nav-row"') == 1
+            and normalized.count('class="mobile-nav-toggle-button"') == 1
+            and normalized.count('id="tct-mobile-nav"') == 1
+            and normalized.count('class="mobile-nav-heading">Counties</h2>') == 1
+            and normalized.count('class="mobile-nav-heading">Categories</h2>') == 1
+            and normalized.count('class="mobile-nav-heading">More</h2>') == 1
             and 'class="newsroom-strip"' not in normalized
         )
         if (
@@ -22505,7 +22580,7 @@ def _page_footer():
     </div>
     <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
   </footer>
-  <script src="/main.js"></script>"""
+  <script src="/main.js?v=1.13.7.5t"></script>"""
 
 
 def render_author_page():

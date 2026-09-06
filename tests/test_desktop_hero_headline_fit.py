@@ -58,7 +58,7 @@ def test_desktop_copy_panel_can_expand_without_overlapping_media():
 
 def test_stylesheet_url_is_cache_busted_for_release():
     source = GENERATOR_PATH.read_text(encoding="utf-8")
-    assert '<link rel="stylesheet" href="/style.css?v=1.13.7.5s">' in source
+    assert '<link rel="stylesheet" href="/style.css?v=1.13.7.5t">' in source
 
 
 def test_desktop_masthead_uses_125_percent_visual_target():
@@ -68,3 +68,14 @@ def test_desktop_masthead_uses_125_percent_visual_target():
     assert "height: 24px !important;" in css
     assert "font-weight: 800 !important;" in css
     assert "font-size: clamp(43px, 3.45vw, 48px);" in css
+
+
+def test_mobile_masthead_uses_hamburger_drawer_and_larger_logo():
+    css = (ROOT / "style.css").read_text(encoding="utf-8")
+    assert "v1.13.7.5t - mobile hamburger masthead redesign" in css
+    assert ".site-masthead .masthead-newsletter" in css
+    assert "display: none !important;" in css
+    assert "header.site-masthead .masthead-nav-row" in css
+    assert ".mobile-nav-toggle-button" in css
+    assert ".mobile-nav-panel" in css
+    assert "font-size: 35px !important;" in css

@@ -5901,3 +5901,283 @@ header.site-masthead {
     font-size: 7.5px;
   }
 }
+
+/* ==========================================================
+   v1.13.7.5t - mobile hamburger masthead redesign
+   ========================================================== */
+/* Desktop keeps the existing compact two-row masthead. Mobile replaces the
+   category strip with one clean brand row and an accessible hamburger drawer. */
+.mobile-nav-toggle-button,
+.mobile-nav-panel {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  /* The Morning Brief CTA leaves the mobile masthead entirely. Its desktop
+     placement is unchanged. The left slot becomes the hamburger anchor. */
+  .site-masthead .masthead-newsletter {
+    display: none !important;
+  }
+
+  .site-masthead .masthead-promo-slot {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
+  .mobile-nav-toggle-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--tct-green, #103f2b) 18%, transparent);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--tct-green, #103f2b);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-nav-toggle-button:hover,
+  .mobile-nav-toggle-button:focus-visible {
+    background: color-mix(in srgb, var(--tct-green, #103f2b) 6%, var(--bg));
+    outline: none;
+  }
+
+  .mobile-nav-toggle-icon {
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 16px;
+  }
+
+  .mobile-nav-toggle-icon > span {
+    position: absolute;
+    left: 0;
+    width: 20px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    transform-origin: center;
+    transition: transform .18s ease, opacity .15s ease, top .18s ease;
+  }
+
+  .mobile-nav-toggle-icon > span:nth-child(1) { top: 0; }
+  .mobile-nav-toggle-icon > span:nth-child(2) { top: 7px; }
+  .mobile-nav-toggle-icon > span:nth-child(3) { top: 14px; }
+
+  .mobile-nav-toggle-button[aria-expanded="true"] .mobile-nav-toggle-icon > span:nth-child(1) {
+    top: 7px;
+    transform: rotate(45deg);
+  }
+  .mobile-nav-toggle-button[aria-expanded="true"] .mobile-nav-toggle-icon > span:nth-child(2) {
+    opacity: 0;
+  }
+  .mobile-nav-toggle-button[aria-expanded="true"] .mobile-nav-toggle-icon > span:nth-child(3) {
+    top: 7px;
+    transform: rotate(-45deg);
+  }
+
+  /* With no second row, give the logo and controls enough white space to feel
+     intentional rather than squeezed. The wordmark is ~15% larger than the
+     previous final mobile lockup. */
+  header.site-masthead .masthead-top-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+    align-items: center !important;
+    min-height: 78px !important;
+    height: auto !important;
+    max-height: none !important;
+    gap: 12px !important;
+    padding: 9px 0 !important;
+  }
+
+  .site-masthead .header-top {
+    justify-self: center !important;
+  }
+
+  .site-masthead .header-actions {
+    justify-self: end !important;
+  }
+
+  .site-masthead .wordmark {
+    gap: 8px !important;
+  }
+
+  .site-masthead .wordmark-tct {
+    font-size: 51px !important;
+  }
+
+  .site-masthead .wordmark-divider {
+    height: 40px !important;
+  }
+
+  .site-masthead .wordmark-full {
+    font-size: 8.5px !important;
+  }
+
+  /* The old mobile category/More row is removed from layout completely. */
+  header.site-masthead .masthead-nav-row {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+  }
+
+  header.site-masthead .masthead-nav-row::after {
+    display: none !important;
+  }
+
+  /* Drawer sits directly beneath the sticky white masthead and does not
+     increase the header's resting height. */
+  .mobile-nav-panel {
+    position: absolute;
+    z-index: 130;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: block;
+    max-height: calc(100dvh - 78px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 18px 34px rgba(12, 31, 22, .16);
+  }
+
+  .mobile-nav-panel[hidden] {
+    display: none !important;
+  }
+
+  .mobile-nav-panel-inner {
+    width: min(100%, 620px);
+    margin: 0 auto;
+    padding: 10px 18px max(22px, env(safe-area-inset-bottom));
+  }
+
+  .mobile-nav-group {
+    padding: 14px 0 16px;
+  }
+
+  .mobile-nav-group + .mobile-nav-group {
+    border-top: 1px solid var(--border);
+  }
+
+  .mobile-nav-heading {
+    margin: 0 0 8px;
+    color: var(--tct-green, #103f2b);
+    font-family: "DM Sans", sans-serif;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .09em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .mobile-nav-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px 18px;
+  }
+
+  .mobile-nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 8px 2px;
+    color: var(--text);
+    font-family: "DM Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link:focus-visible {
+    color: var(--tct-green, #103f2b);
+    outline: none;
+  }
+
+  .mobile-nav-link.active {
+    color: var(--tct-green, #103f2b);
+    font-weight: 850;
+  }
+
+  .mobile-nav-link.active::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    margin-right: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--tct-green, #103f2b);
+  }
+}
+
+@media (max-width: 560px) {
+  header.site-masthead .masthead-top-row {
+    min-height: 72px !important;
+    gap: 8px !important;
+    padding: 8px 0 !important;
+  }
+
+  .mobile-nav-toggle-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+  }
+
+  /* 30px -> 34.5px is the requested 15% mobile logo increase. */
+  .site-masthead .wordmark-tct {
+    font-size: 35px !important;
+  }
+
+  .site-masthead .wordmark-divider {
+    height: 27px !important;
+  }
+
+  .site-masthead .wordmark-full {
+    font-size: 5.9px !important;
+  }
+
+  .site-masthead .wordmark {
+    gap: 7px !important;
+  }
+
+  .site-masthead .membership-subscribe-btn {
+    min-height: 38px !important;
+  }
+
+  .mobile-nav-panel {
+    max-height: calc(100dvh - 72px);
+  }
+
+  .mobile-nav-panel-inner {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .mobile-nav-links {
+    gap-column: 14px;
+  }
+
+  .mobile-nav-link {
+    font-size: 13.5px;
+  }
+}
+
+@media (max-width: 350px) {
+  .mobile-nav-links {
+    grid-template-columns: 1fr;
+  }
+}

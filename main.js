@@ -77,7 +77,7 @@ async function shareArticle(btn) {
 // County-first navigation uses ordinary links so it remains fully functional
 // without JavaScript. On the homepage only, links carrying data-cat switch the
 // existing client-side news view instead of navigating away.
-document.querySelectorAll(".category-nav [data-cat]").forEach(btn => {
+document.querySelectorAll(".category-nav [data-cat], .mobile-nav-panel [data-cat]").forEach(btn => {
   btn.addEventListener("click", (event) => {
     try {
       const homepageGrid = document.getElementById("articlesGrid");
@@ -86,7 +86,7 @@ document.querySelectorAll(".category-nav [data-cat]").forEach(btn => {
       if (!cat) return;
       event.preventDefault();
 
-      document.querySelectorAll(".category-nav [data-cat]").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".category-nav [data-cat], .mobile-nav-panel [data-cat]").forEach(b => b.classList.remove("active"));
       document.querySelectorAll(".nav-sections-toggle").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       const sections = btn.closest(".nav-sections");
@@ -171,10 +171,55 @@ document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const catParam = params.get("cat");
   if (catParam) {
-    const btn = document.querySelector(`.category-nav [data-cat="${catParam}"]`);
+    const btn = document.querySelector(`.category-nav [data-cat="${catParam}"], .mobile-nav-panel [data-cat="${catParam}"]`);
     if (btn) btn.click();
   }
 });
+
+
+// -- MOBILE HAMBURGER NAVIGATION --
+// Mobile uses a dedicated drawer instead of the horizontal category row.
+// The desktop nav remains in the DOM and functional above 900px.
+(() => {
+  const mobileQuery = window.matchMedia("(max-width: 900px)");
+  const toggle = document.querySelector(".mobile-nav-toggle-button");
+  const panel = document.getElementById("tct-mobile-nav");
+  if (!toggle || !panel) return;
+
+  function setOpen(open, { restoreFocus = false } = {}) {
+    const shouldOpen = Boolean(open && mobileQuery.matches);
+    panel.hidden = !shouldOpen;
+    toggle.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+    toggle.setAttribute("aria-label", shouldOpen ? "Close navigation menu" : "Open navigation menu");
+    document.documentElement.classList.toggle("mobile-nav-open", shouldOpen);
+    if (!shouldOpen && restoreFocus) toggle.focus();
+  }
+
+  toggle.addEventListener("click", event => {
+    event.preventDefault();
+    setOpen(panel.hidden);
+  });
+
+  panel.addEventListener("click", event => {
+    if (event.target.closest("a")) setOpen(false);
+  });
+
+  document.addEventListener("click", event => {
+    if (panel.hidden || !mobileQuery.matches) return;
+    if (panel.contains(event.target) || toggle.contains(event.target)) return;
+    setOpen(false);
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !panel.hidden) setOpen(false, { restoreFocus: true });
+  });
+
+  const syncViewport = () => {
+    if (!mobileQuery.matches) setOpen(false);
+  };
+  if (mobileQuery.addEventListener) mobileQuery.addEventListener("change", syncViewport);
+  else mobileQuery.addListener(syncViewport);
+})();
 
 
 // -- MOBILE MORE MENU --

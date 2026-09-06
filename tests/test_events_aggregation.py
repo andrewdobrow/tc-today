@@ -699,6 +699,7 @@ def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent
     helper_names = {
         "_header_primary_cta_html",
         "_primary_navigation_html",
+        "_mobile_navigation_html",
         "_masthead_newsletter_cta_html",
         "_live_masthead_script_html",
         "_site_header_html",
@@ -754,14 +755,22 @@ def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent
     assert rendered.index('href="/events.html"') < rendered.index('<details class="nav-sections">')
     assert 'class="cat-btn nav-sections-toggle active"' in rendered
     assert 'href="/?cat=crime" class="nav-section-link active" aria-current="page"' in rendered
-    assert rendered.index('class="nav-sections-heading">News</span>') < rendered.index('href="/?cat=florida"')
-    assert rendered.index('href="/?cat=florida"') < rendered.index('class="nav-sections-heading">More</span>')
-    assert 'href="/style.css?v=1.13.7.5s"' in rendered
+    desktop_nav_start = rendered.index('<nav class="category-nav category-nav--primary"')
+    desktop_nav_end = rendered.index('</nav>', desktop_nav_start)
+    desktop_nav = rendered[desktop_nav_start:desktop_nav_end]
+    assert desktop_nav.index('class="nav-sections-heading">News</span>') < desktop_nav.index('href="/?cat=florida"')
+    assert desktop_nav.index('href="/?cat=florida"') < desktop_nav.index('class="nav-sections-heading">More</span>')
+    assert 'href="/style.css?v=1.13.7.5t"' in rendered
     assert 'class="masthead-newsletter"' in rendered
     assert 'https://treasure-coast-today.kit.com/cb848255f8' in rendered
     assert 'Start your day with local headlines' in rendered
     assert 'class="masthead-top-row"' in rendered
     assert 'class="masthead-nav-row"' in rendered
+    assert 'class="mobile-nav-toggle-button"' in rendered
+    assert 'id="tct-mobile-nav"' in rendered
+    assert 'class="mobile-nav-heading">Counties</h2>' in rendered
+    assert 'class="mobile-nav-heading">Categories</h2>' in rendered
+    assert 'class="mobile-nav-heading">More</h2>' in rendered
     assert rendered.count('id="tct-live-time"') == 1
     assert rendered.count('id="tct-live-weather"') == 1
     assert 'class="newsroom-strip"' not in rendered
@@ -806,22 +815,24 @@ def test_homepage_top_news_county_and_section_links_keep_client_side_filter_cont
     assert 'href="/?cat=florida" class="nav-section-link" data-cat="florida"' in page
 
     main_js = (ROOT / "main.js").read_text(encoding="utf-8")
-    assert 'document.querySelectorAll(".category-nav [data-cat]")' in main_js
+    assert 'document.querySelectorAll(".category-nav [data-cat], .mobile-nav-panel [data-cat]")' in main_js
     assert 'const homepageGrid = document.getElementById("articlesGrid")' in main_js
     assert 'event.preventDefault()' in main_js
-    assert 'document.querySelector(`.category-nav [data-cat="${catParam}"]`)' in main_js
+    assert 'document.querySelector(`.category-nav [data-cat="${catParam}"], .mobile-nav-panel [data-cat="${catParam}"]`)' in main_js
 
 
-def test_primary_nav_css_supports_click_keyboard_hover_and_single_row_mobile_layout():
+def test_mobile_navigation_replaces_category_row_with_hamburger_drawer():
     css = (ROOT / "style.css").read_text(encoding="utf-8")
-    assert ".nav-sections[open] .nav-sections-menu" in css
-    assert ".nav-sections:hover .nav-sections-menu" in css
-    assert ".nav-sections:focus-within .nav-sections-menu" in css
-    assert ".category-nav--primary" in css
-    assert "grid-template-columns: auto minmax(0, 1fr) auto !important" in css
-    assert "flex-wrap: nowrap !important" in css
-    assert ".site-masthead .category-nav--primary:has(.nav-sections[open])" in css
-
+    main_js = (ROOT / "main.js").read_text(encoding="utf-8")
+    assert "v1.13.7.5t - mobile hamburger masthead redesign" in css
+    assert "header.site-masthead .masthead-nav-row" in css
+    assert ".mobile-nav-toggle-button" in css
+    assert ".mobile-nav-panel[hidden]" in css
+    assert ".mobile-nav-group + .mobile-nav-group" in css
+    assert 'document.querySelector(".mobile-nav-toggle-button")' in main_js
+    assert 'document.getElementById("tct-mobile-nav")' in main_js
+    assert 'toggle.setAttribute("aria-expanded"' in main_js
+    assert 'if (event.key === "Escape"' in main_js
 
 def test_publication_masthead_css_has_dark_nav_balanced_ctas_and_mobile_repair():
     css = (ROOT / "style.css").read_text(encoding="utf-8")
