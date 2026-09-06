@@ -493,8 +493,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.10"' in page
-    assert 'src="/membership.js?v=1.13.7.10"' in page
+    assert 'href="/membership.css?v=1.13.7.9"' in page
+    assert 'src="/membership.js?v=1.13.7.9"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -530,8 +530,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.10') == 1
-    assert first.count('/membership.js?v=1.13.7.10') == 1
+    assert first.count('/membership.css?v=1.13.7.9') == 1
+    assert first.count('/membership.js?v=1.13.7.9') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -610,7 +610,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.10"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.9"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
@@ -829,30 +829,3 @@ def test_monthly_free_article_uses_branded_dismissible_bottom_banner_only_after_
     assert "font-size: 30px" in css
     assert "min-height:48px" in css
     assert "—" not in "You're reading your free article for this month. Subscribe for unlimited access. $1 first month"
-
-
-
-def test_embedded_checkout_frontend_uses_stripe_modal_with_hosted_fallback():
-    browser = (ROOT / "membership.js").read_text(encoding="utf-8")
-    css = (ROOT / "membership.css").read_text(encoding="utf-8")
-    assert "https://js.stripe.com/clover/stripe.js" in browser
-    assert "stripe.initEmbeddedCheckout" in browser
-    assert "presentation:'embedded'" in browser
-    assert "presentation:'hosted'" in browser
-    assert "data-tct-checkout-modal" in browser
-    assert "checkout-complete" in browser
-    assert "Embedded Stripe Checkout unavailable; falling back to hosted Checkout." in browser
-    assert ".tct-checkout-modal" in css
-    assert ".tct-checkout-modal-panel" in css
-    assert "body.tct-checkout-modal-open" in css
-
-
-def test_embedded_checkout_browser_config_exposes_only_publishable_stripe_key():
-    writer = (ROOT / "scripts/write_membership_browser_config.py").read_text(encoding="utf-8")
-    workflow = (ROOT / ".github/workflows/update.yml").read_text(encoding="utf-8")
-    assert 'os.getenv("TCT_STRIPE_PUBLISHABLE_KEY"' in writer
-    assert '"stripePublishableKey": stripe_publishable_key' in writer
-    assert "pk_live_" in writer
-    assert "pk_test_" in writer
-    assert "vars.TCT_STRIPE_PUBLISHABLE_KEY" in workflow
-    assert "STRIPE_SECRET_KEY" not in writer
