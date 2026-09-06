@@ -756,7 +756,7 @@ def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent
     assert 'href="/?cat=crime" class="nav-section-link active" aria-current="page"' in rendered
     assert rendered.index('class="nav-sections-heading">News</span>') < rendered.index('href="/?cat=florida"')
     assert rendered.index('href="/?cat=florida"') < rendered.index('class="nav-sections-heading">More</span>')
-    assert 'href="/style.css?v=1.13.7.5h"' in rendered
+    assert 'href="/style.css?v=1.13.7.5q"' in rendered
     assert 'class="masthead-newsletter"' in rendered
     assert 'https://treasure-coast-today.kit.com/cb848255f8' in rendered
     assert 'Start your day with local headlines' in rendered

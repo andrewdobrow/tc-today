@@ -21831,7 +21831,7 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css?v=1.13.7.5h">
+  <link rel="stylesheet" href="/style.css?v=1.13.7.5q">
   <style id="tct-mobile-overflow-fix">
     html, body {{ width: 100%; max-width: 100%; overflow-x: clip; }}
     *, *::before, *::after {{ box-sizing: border-box; }}
@@ -22202,7 +22202,7 @@ def _normalize_primary_navigation_sitewide(output_root):
         normalized = newsroom_strip_re.sub('', normalized, count=1)
         normalized = re.sub(
             r'href=["\']/?style\.css(?:\?v=[^"\']+)?["\']',
-            'href="/style.css?v=1.13.7.5h"',
+            'href="/style.css?v=1.13.7.5q"',
             normalized,
             count=1,
             flags=re.I,
