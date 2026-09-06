@@ -32,30 +32,22 @@ def _load_generate():
     return module
 
 
-def test_article_template_uses_dormant_paywall_newsletter_slot_not_old_article_embed():
+def test_article_template_restores_requested_kit_form_immediately_after_article_body():
     source = (ROOT / "scripts" / "generate.py").read_text(encoding="utf-8")
     render_source = source[source.index("def render_article_page("):source.index("\ndef ", source.index("def render_article_page(") + 20)]
-    assert '{_paywall_newsletter_slot()}' in render_source
-    assert '{_newsletter_inline_embed("article")}' not in render_source
-
-    g = _load_generate()
-    slot = g._paywall_newsletter_slot()
-    assert 'data-tct-paywall-newsletter="true"' in slot
-    assert 'newsletter-inline-slot--paywall' in slot
-    assert ' hidden' in slot
-    assert "30e15672d3" not in slot
-    assert "2865b8d821" not in slot  # membership.js hydrates only after full-paywall state is known
+    assert '{_newsletter_inline_embed("article")}' in render_source
+    assert '{_paywall_newsletter_slot()}' not in render_source
+    assert render_source.index('<div class="article-body">{body}</div>') < render_source.index('{_newsletter_inline_embed("article")}')
 
 
-def test_sitewide_article_newsletter_contract_replaces_old_bottom_form_only_on_paywalled_pages(tmp_path):
+def test_sitewide_article_newsletter_contract_puts_same_requested_form_on_all_articles(tmp_path):
     g = _load_generate()
     articles = tmp_path / "articles"
     articles.mkdir()
 
     old_slot = (
-        '<aside class="newsletter-inline-slot newsletter-inline-slot--article" '
-        'aria-label="Subscribe"><script async data-uid="30e15672d3" '
-        'src="https://treasure-coast-today.kit.com/30e15672d3/index.js"></script></aside>'
+        '<aside class="newsletter-inline-slot newsletter-inline-slot--paywall" '
+        'data-tct-paywall-newsletter="true" hidden></aside>'
     )
     paywalled = articles / "paywalled.html"
     paywalled.write_text(
@@ -68,33 +60,27 @@ def test_sitewide_article_newsletter_contract_replaces_old_bottom_form_only_on_p
     public = articles / "public.html"
     public.write_text(
         '<html><body><div class="article-body"><p>One.</p><p>Two.</p></div>'
-        + old_slot
-        + '<div class="article-share">share</div></body></html>',
+        '<div class="article-share">share</div></body></html>',
         encoding="utf-8",
     )
 
     result = g._normalize_article_newsletter_delivery_sitewide(tmp_path)
     assert result == {"scanned": 2, "updated": 2}
 
-    paywalled_html = paywalled.read_text(encoding="utf-8")
-    assert "newsletter-inline-slot--article" not in paywalled_html
-    assert "30e15672d3" not in paywalled_html
-    assert paywalled_html.count("data-tct-paywall-newsletter") == 1
-    assert "newsletter-inline-slot--paywall" in paywalled_html
-    assert "hidden" in paywalled_html
-
-    public_html = public.read_text(encoding="utf-8")
-    assert "newsletter-inline-slot--article" not in public_html
-    assert "newsletter-inline-slot--paywall" not in public_html
-    assert "data-tct-paywall-newsletter" not in public_html
-    assert "30e15672d3" not in public_html
+    for path in (paywalled, public):
+        rendered = path.read_text(encoding="utf-8")
+        assert rendered.count("newsletter-inline-slot--article") == 1
+        assert rendered.count('data-uid="30e15672d3"') == 1
+        assert rendered.count("https://treasure-coast-today.kit.com/30e15672d3/index.js") == 1
+        assert "data-tct-paywall-newsletter" not in rendered
+        assert rendered.index('newsletter-inline-slot--article') < rendered.index('<div class="article-share">')
 
 
-def test_full_paywall_hydrates_same_current_kit_form_used_midarticle():
+def test_membership_runtime_preserves_or_falls_back_to_same_requested_article_end_form():
     browser = (ROOT / "membership.js").read_text(encoding="utf-8")
-    assert "const FULL_ARTICLE_NEWSLETTER_UID = '2865b8d821'" in browser
+    assert "const FULL_ARTICLE_NEWSLETTER_UID = '30e15672d3'" in browser
     assert "function showPaywallNewsletter()" in browser
-    assert "slot.hidden = false" in browser
+    assert "if (qs('.newsletter-inline-slot--article', articleRoot)) return true" in browser
     assert "script.setAttribute('data-uid', FULL_ARTICLE_NEWSLETTER_UID)" in browser
     assert "script.src = FULL_ARTICLE_NEWSLETTER_SRC" in browser
     assert "function removePostArticleNewsletter()" in browser
