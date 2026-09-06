@@ -241,6 +241,12 @@ def test_existing_events_page_is_live_filterable_and_not_coming_soon():
     assert 'select class="events-select" id="eventsRange" data-events-range' in page
     assert '<option value="today">Today</option>' in page
     assert '<option value="weekend">This weekend</option>' in page
+    assert '<option value="next_weekend">Next weekend</option>' in page
+    assert "state.range === 'next_weekend'" in page
+    assert "if (day === 0)" in page
+    assert "nextStart = isoAddDays(today.iso, 6);" in page
+    assert "const plainText = value =>" in page
+    assert "const descriptionText = plainText(event.description);" in page
     assert 'select class="events-select" id="eventsCounty" data-events-county' in page
     assert '<option value="Martin">Martin</option>' in page
     assert 'select class="events-select" id="eventsCategory" data-events-category' in page
@@ -516,6 +522,24 @@ def test_tribe_adapter_normalizes_manatee_center_event_with_official_venue_detai
     assert parsed[0]["starts_at"].startswith("2026-09-30T10:00")
     assert parsed[0]["venue"] == "Manatee Center"
     assert parsed[0]["county"] == "St. Lucie"
+    assert parsed[0]["description"] == "Admission is waived for the community."
+    assert "<p>" not in parsed[0]["description"]
+
+
+def test_event_description_normalization_strips_literal_and_entity_escaped_html():
+    source = _source()
+    literal = events._normalize_event({
+        "title": "Community Art Day",
+        "starts_at": "2026-09-12T10:00:00-04:00",
+        "description": "<p>Free <strong>family</strong> activities.</p><p>Bring water.</p>",
+    }, source, _window(30))
+    escaped = events._normalize_event({
+        "title": "Community Music Day",
+        "starts_at": "2026-09-13T10:00:00-04:00",
+        "description": "&lt;p&gt;Live music &amp;amp; food.&lt;/p&gt;",
+    }, source, _window(30))
+    assert literal is not None and literal["description"] == "Free family activities. Bring water."
+    assert escaped is not None and escaped["description"] == "Live music & food."
 
 
 def test_elliott_calendar_generic_parser_keeps_special_event_but_drops_configured_daily_exhibit():
@@ -774,6 +798,7 @@ def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent
     assert rendered.count('id="tct-live-time"') == 1
     assert rendered.count('id="tct-live-weather"') == 1
     assert 'class="newsroom-strip"' not in rendered
+    assert rendered.count('src="/main.js?v=1.13.7.5t"') == 1
 
     again = normalize(tmp_path)
     assert again == {"scanned": 1, "updated": 0}
@@ -819,6 +844,17 @@ def test_homepage_top_news_county_and_section_links_keep_client_side_filter_cont
     assert 'const homepageGrid = document.getElementById("articlesGrid")' in main_js
     assert 'event.preventDefault()' in main_js
     assert 'document.querySelector(`.category-nav [data-cat="${catParam}"], .mobile-nav-panel [data-cat="${catParam}"]`)' in main_js
+
+
+def test_weather_page_loads_the_shared_mobile_hamburger_runtime():
+    page = (ROOT / "weather.html").read_text(encoding="utf-8")
+    soup = BeautifulSoup(page, "html.parser")
+    toggle = soup.select_one('.mobile-nav-toggle-button[aria-controls="tct-mobile-nav"]')
+    panel = soup.select_one('#tct-mobile-nav.mobile-nav-panel')
+    assert toggle is not None
+    assert panel is not None
+    scripts = [tag.get("src", "") for tag in soup.find_all("script") if tag.get("src")]
+    assert "/main.js?v=1.13.7.5t" in scripts
 
 
 def test_mobile_navigation_replaces_category_row_with_hamburger_drawer():

@@ -151,8 +151,28 @@ def _clean(value: Any) -> str:
     return re.sub(r"\s+", " ", html_lib.unescape(str(value or ""))).strip()
 
 
-def _clip(value: Any, limit: int = 260) -> str:
-    text = _clean(value)
+def _clean_description(value: Any) -> str:
+    """Return plain-text event copy even when a source sends HTML markup.
+
+    Some calendars expose descriptions as HTML (and some caches preserve the
+    entity-escaped form).  Strip markup at normalization time so neither the
+    rendered cards nor the JSON/JSON-LD payload can surface literal tags.
+    """
+    text = str(value or "")
+    # A source may entity-escape an already-HTML description. Two passes cover
+    # the common ``&amp;lt;p&amp;gt;`` case without changing ordinary text.
+    for _ in range(2):
+        decoded = html_lib.unescape(text)
+        if decoded == text:
+            break
+        text = decoded
+    if "<" in text and ">" in text:
+        text = BeautifulSoup(text, "html.parser").get_text(" ", strip=True)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _clip(value: Any, limit: int = 260, *, plain_html: bool = False) -> str:
+    text = _clean_description(value) if plain_html else _clean(value)
     if len(text) <= limit:
         return text
     cut = text[: limit - 1].rsplit(" ", 1)[0].rstrip(" ,.;:-")
@@ -367,7 +387,7 @@ def _normalize_event(raw: dict[str, Any], source: dict[str, Any], window: Window
         "county": county,
         "category": _clean(raw.get("category")),
         "price": _clip(raw.get("price"), 100),
-        "description": _clip(raw.get("description"), 260),
+        "description": _clip(raw.get("description"), 260, plain_html=True),
         "event_url": _absolute_event_url(
             raw.get("event_url") or raw.get("url") or _source_url(source), source
         ),
@@ -1352,9 +1372,11 @@ def _cached_source_events(cache: dict[str, Any], source_id: str, source: dict[st
         if event:
             # Preserve authoritative descriptive fields from cache, but never restore
             # raw URL strings after _normalize_event has made them absolute.
-            for field in ("description", "price", "venue", "address", "city", "category"):
+            for field in ("price", "venue", "address", "city", "category"):
                 if cached_raw.get(field):
                     event[field] = cached_raw[field]
+            if cached_raw.get("description"):
+                event["description"] = _clip(cached_raw["description"], 260, plain_html=True)
             events.append(event)
     return events
 
@@ -1560,12 +1582,16 @@ def validate_outputs() -> None:
         raise RuntimeError("events.html must expose the compact single-row filter toolbar")
     if len(toolbar.select("select.events-select")) != 3:
         raise RuntimeError("events.html must expose When, County and Type as three dropdown filters")
+    range_values = {option.get("value") for option in toolbar.select("[data-events-range] option")}
+    if not {"today", "weekend", "next_weekend"}.issubset(range_values):
+        raise RuntimeError("events.html must expose Today, This weekend and Next weekend ranges")
     if toolbar.select_one(".event-filter") is not None or page_soup.select_one(".events-filter-section") is not None:
         raise RuntimeError("events.html must not restore the retired pill-filter sections")
     for js_contract in (
         "const rangeSelect = document.querySelector('[data-events-range]');",
         "const countySelect = document.querySelector('[data-events-county]');",
         "const categorySelect = document.querySelector('[data-events-category]');",
+        "state.range === 'next_weekend'",
         "if (moreButton) moreButton.addEventListener('click'",
     ):
         if js_contract not in page:

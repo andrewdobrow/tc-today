@@ -22277,6 +22277,16 @@ def _normalize_primary_navigation_sitewide(output_root):
             count=1,
             flags=re.I,
         )
+        # A few retained standalone pages (notably Weather) historically never
+        # loaded main.js. Once their header is normalized to the mobile hamburger
+        # masthead, the button exists but has no click handler. Inject the shared
+        # script when it is absent so every normalized masthead is functional.
+        if not re.search(r'<script\b[^>]*\bsrc=["\']/?main\.js(?:\?v=[^"\']+)?["\'][^>]*>', normalized, re.I):
+            main_script = '  <script src="/main.js?v=1.13.7.5t"></script>\n'
+            if re.search(r'</body>', normalized, re.I):
+                normalized = re.sub(r'</body>', main_script + '</body>', normalized, count=1, flags=re.I)
+            else:
+                normalized = normalized.rstrip() + '\n' + main_script
         if normalized != original:
             path.write_text(normalized, encoding="utf-8")
             updated += 1
