@@ -2503,6 +2503,72 @@ def restore_live_source_images_from_archive(categories, archive):
     return restored
 
 
+def recover_recent_archive_source_images(archive, articles_dir, *, max_age_days=3):
+    """Upgrade recent fallback article pages when the publisher has a real image.
+
+    A story may first create its canonical permalink from a card that lacked RSS image
+    metadata, then appear in another category whose hero lookup finds the publisher's
+    og:image. Canonical duplicate protection correctly preserves the first URL, but it
+    must not freeze an inferior fallback image onto that permanent page. Only recent,
+    non-custom rows with a real publisher URL and no authoritative source image are
+    considered, keeping the repair bounded and avoiding routine refetches of old work.
+    """
+    try:
+        from datetime import timedelta as _timedelta
+        cutoff = datetime.now(ZoneInfo("America/New_York")).date() - _timedelta(days=max_age_days)
+    except Exception:
+        cutoff = None
+
+    repaired = 0
+    for row in archive or []:
+        if not isinstance(row, dict) or row.get("is_custom") or row.get("authoritative_custom"):
+            continue
+        if _is_real_source_image_url(row.get("source_image_url") or row.get("image_url")):
+            continue
+        source_url = str(row.get("latest_source_url") or row.get("source_url") or "").strip()
+        slug = str(row.get("slug") or "").strip()
+        if not source_url.startswith(("https://", "http://")) or not slug:
+            continue
+        if cutoff is not None:
+            raw_day = str(row.get("lastmod") or row.get("date") or "")[:10]
+            try:
+                if datetime.fromisoformat(raw_day).date() < cutoff:
+                    continue
+            except Exception:
+                continue
+
+        source_img = fetch_og_image(source_url, str(row.get("headline") or ""))
+        if not _is_real_source_image_url(source_img):
+            continue
+
+        old_candidates = [
+            str(row.get("image_url") or "").strip(),
+            _category_social_og_image_url(str(row.get("category_key") or "top_news")),
+            f"{SITE_URL}/og-image.png",
+        ]
+        for fallback_key in (str(row.get("category_key") or "top_news"), "top_news"):
+            fallback, _ = get_fallback_image(
+                fallback_key, str(row.get("headline") or ""), item=row
+            )
+            if fallback:
+                old_candidates.append(fallback)
+
+        row["image_url"] = source_img
+        row["source_image_url"] = source_img
+        row["image_credit"] = get_image_credit(source_url)
+        row["image_source"] = "recent_archive_og_image_recovery"
+        row["is_fallback_image"] = False
+        row["social_image_source"] = "recent_archive_og_image_recovery"
+        row["social_image_is_source"] = True
+        article_path = Path(articles_dir) / f"{slug}.html"
+        _replace_article_fallback_references(article_path, old_candidates, source_img)
+        repaired += 1
+
+    if repaired:
+        print(f"  Recent source-image recovery upgraded {repaired} canonical article image(s)")
+    return repaired
+
+
 def _replace_article_fallback_references(article_path, old_urls, new_url):
     """Replace only known fallback image references in one existing article page."""
     if not article_path.is_file() or not new_url:
@@ -9451,17 +9517,15 @@ def fetch_article_text(url, max_words=2500, content_hint=""):
 
 
 def enhance_card(card, content_bank, headlines):
-    """Rewrite a card from its exact source article, not fuzzy content-bank matches."""
+    """Rewrite a card from its exact source article, not fuzzy content-bank matches.
+
+    Image authority is hydrated here too. Cards can become the first placement that
+    creates a permanent article page, so waiting for hero-only image enrichment can
+    leave an otherwise image-rich publisher story permanently stuck on a local
+    fallback even when another category later finds the real source image.
+    """
     headline = card.get("headline", "")
     if not headline:
-        return card
-
-    # The category-generation call already receives the exact source body. Do not
-    # spend a second Claude request rewriting a card that already passes the final
-    # publication gate. This is the primary cold-cache runtime reduction.
-    if _publishable_article(card, hero=False):
-        card["enriched"] = True
-        GENERATION_CACHE.stats["card_second_pass_skipped"] += 1
         return card
 
     source = None
@@ -9471,6 +9535,28 @@ def enhance_card(card, content_bank, headlines):
             source = headlines[int(idx) - 1]
         except Exception:
             source = None
+
+    # Hydrate a missing card image from the exact publisher page before the fast-path
+    # return. This mirrors the hero og:image fallback and runs inside the existing
+    # card thread pool, so several image lookups remain bounded in parallel.
+    if source and not _is_real_source_image_url(card.get("image_url")):
+        image_link = str(source.get("link") or card.get("link") or "").strip()
+        if image_link and source.get("source_type") != "discovery_only":
+            og_img = fetch_og_image(image_link, headline)
+            if og_img:
+                card["image_url"] = og_img
+                card["source_image_url"] = og_img
+                card["image_credit"] = get_image_credit(image_link)
+                card["image_source"] = "og_image_fetch"
+                card["is_fallback_image"] = False
+
+    # The category-generation call already receives the exact source body. Do not
+    # spend a second Claude request rewriting a card that already passes the final
+    # publication gate. This is the primary cold-cache runtime reduction.
+    if _publishable_article(card, hero=False):
+        card["enriched"] = True
+        GENERATION_CACHE.stats["card_second_pass_skipped"] += 1
+        return card
 
     if not source:
         return card
@@ -32700,7 +32786,14 @@ def write_archives(all_categories, top_cat):
                 _forward_identity_report["custom_payloads_verified"] += 1
             existing["headline"]  = headline
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
-            existing["image_url"] = hero.get("image_url","")
+            incoming_image = str(hero.get("source_image_url") or hero.get("image_url") or "").strip()
+            if _is_real_source_image_url(incoming_image) or not _is_real_source_image_url(existing.get("image_url")):
+                existing["image_url"] = incoming_image or hero.get("image_url","")
+            if _is_real_source_image_url(incoming_image):
+                existing["source_image_url"] = incoming_image
+                existing["image_credit"] = hero.get("image_credit", "")
+                existing["image_source"] = hero.get("image_source", "source_image")
+                existing["is_fallback_image"] = False
             _merge_category_memberships(existing, hero, existing.get("category_key") or cat_key)
             existing["article_word_count"] = _word_count(hero.get("body", ""))
             existing["article_paragraph_count"] = _paragraph_count(hero.get("body", ""))
@@ -32799,6 +32892,11 @@ def write_archives(all_categories, top_cat):
                 "canonical_first_published_at": hero.get("first_published", ""),
                 "canonical_last_material_update_at": "",
                 "image_url": hero.get("image_url",""),
+                "source_image_url": (hero.get("source_image_url") or hero.get("image_url", ""))
+                    if _is_real_source_image_url(hero.get("source_image_url") or hero.get("image_url", "")) else "",
+                "image_credit": hero.get("image_credit", ""),
+                "image_source": hero.get("image_source", ""),
+                "is_fallback_image": bool(hero.get("is_fallback_image")),
                 "feed_url": hero.get("feed_url",""),
                 "source_url": normalized_source_url,
                 "source_headline": hero.get("source_headline", ""),
@@ -33014,6 +33112,7 @@ def write_archives(all_categories, top_cat):
         _semantic_registry_consolidation.get("aliases_written", 0) or 0
     )
 
+    recover_recent_archive_source_images(archive, articles_dir, max_age_days=3)
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     _save_semantic_publication_gate_cache(_semantic_gate_cache)
     _write_semantic_publication_gate_report(_semantic_gate_report, OUTPUT_DIR)
