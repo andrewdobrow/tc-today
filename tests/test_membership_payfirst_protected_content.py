@@ -493,8 +493,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.4"' in page
-    assert 'src="/membership.js?v=1.13.7.4"' in page
+    assert 'href="/membership.css?v=1.13.7.7"' in page
+    assert 'src="/membership.js?v=1.13.7.7"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -503,15 +503,21 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
     assert 'html.tct-member-preverified .tct-preview-copy' in css
     assert 'mask-image: none !important' in css
 
-    # The hint is written only from a successful server membership decision and
-    # cannot substitute for the entitlement check that gates protected content.
+    # The visual hint is still written only from a successful membership-status
+    # decision; it never grants protected content. Article delivery now starts in
+    # parallel and protected-article remains the server-side content authority.
     entitled_at = js.index('const entitled = Boolean(data?.entitled)')
     hint_at = js.index('setMemberHint(entitled)', entitled_at)
+    initial_status_at = js.index('const initialStatusPromise = membershipStatus()')
+    initial_article_at = js.index('const initialArticlePromise = unlockArticle(initialStatusPromise)')
+    await_both_at = js.index('await Promise.all([initialStatusPromise, initialArticlePromise])')
     protected_fetch_at = js.index("supabase.functions.invoke('protected-article'")
-    meter_reservation_at = js.index('const reservation = reserveMeterArticle(slug)')
     assert entitled_at < hint_at
+    assert initial_status_at < initial_article_at < await_both_at
     assert protected_fetch_at > 0
-    assert meter_reservation_at > protected_fetch_at
+    unlock_section = js.split("async function unlockArticle(statusPromise=null){", 1)[1].split("function revealSignIn(button){", 1)[0]
+    assert "const status = statusOverride || await membershipStatus()" not in unlock_section
+    assert "data?.access === 'member'" in js
     assert "localStorage.getItem(MEMBER_HINT_KEY)" not in js
     assert "localStorage.setItem(MEMBER_HINT_KEY, '1')" in js
     assert "localStorage.removeItem(MEMBER_HINT_KEY)" in js
@@ -524,8 +530,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.4') == 1
-    assert first.count('/membership.js?v=1.13.7.4') == 1
+    assert first.count('/membership.css?v=1.13.7.7') == 1
+    assert first.count('/membership.js?v=1.13.7.7') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -573,7 +579,7 @@ def test_one_free_article_monthly_meter_contract_is_server_signed_and_repeat_saf
 
     assert "const METER_STATE_KEY = 'tct_monthly_free_article_v1'" in browser
     assert "reserveMeterArticle(slug)" in browser
-    assert "meter_token: reservation.meterToken || ''" in browser
+    assert "meter_token: existingMeterToken" in browser
     assert "data?.access === 'monthly_free'" in browser
     assert "You've read your free article this month." in browser
     assert "Continue reading Treasure Coast Today for just $1." in browser
@@ -604,7 +610,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.4"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.7"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
@@ -620,9 +626,9 @@ def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
     assert "newsletter-inline-slot newsletter-inline-slot--article newsletter-inline-slot--full-article" in browser
     assert "script.setAttribute('data-uid', FULL_ARTICLE_NEWSLETTER_UID)" in browser
     assert "script.src = FULL_ARTICLE_NEWSLETTER_SRC" in browser
-    # One definition plus three successful full-access invocations: direct paid
-    # member unlock, server-authoritative member unlock, and monthly-free unlock.
-    assert browser.count("placeFullArticleNewsletter()") == 4
+    # One definition plus two successful full-access invocations: the
+    # server-authoritative member path and the monthly-free path.
+    assert browser.count("placeFullArticleNewsletter()") == 3
 
 
 def test_post_article_newsletter_is_preserved_for_full_access_and_legacy_paywall_slot_is_removable():
@@ -639,14 +645,43 @@ def test_post_article_newsletter_is_preserved_for_full_access_and_legacy_paywall
 def test_paid_members_and_monthly_free_readers_both_preserve_end_of_article_newsletter():
     browser = (ROOT / "membership.js").read_text()
 
-    direct_member = browser.index("if (status?.authenticated && status?.entitled)")
-    direct_member_call = browser.index("removePostArticleNewsletter(); placeFullArticleNewsletter()", direct_member)
-    server_member = browser.index("data?.access === 'member'", direct_member_call)
+    server_member = browser.index("data?.access === 'member'")
     server_member_call = browser.index("removePostArticleNewsletter(); placeFullArticleNewsletter()", server_member)
     monthly_free = browser.index("data?.access === 'monthly_free'", server_member_call)
     monthly_free_call = browser.index("placeFullArticleNewsletter()", monthly_free)
 
-    assert direct_member < direct_member_call < server_member < server_member_call < monthly_free < monthly_free_call
+    assert server_member < server_member_call < monthly_free < monthly_free_call
+    assert "if (status?.authenticated && status?.entitled)" not in browser
+
+
+def test_article_unlock_starts_in_parallel_with_membership_status_without_weakening_server_gate():
+    browser = (ROOT / "membership.js").read_text()
+    protected = (ROOT / "supabase/functions/protected-article/index.ts").read_text()
+
+    status_start = browser.index("const initialStatusPromise = membershipStatus()")
+    article_start = browser.index("const initialArticlePromise = unlockArticle(initialStatusPromise)")
+    parallel_wait = browser.index("await Promise.all([initialStatusPromise, initialArticlePromise])")
+    assert status_start < article_start < parallel_wait
+    assert "const session = await authSession()" in browser
+    assert "const reservation = reserveMeterArticle(slug)" in browser
+    assert "if (!reservation.allowed && !session)" in browser
+    assert "if (!reservation.allowed && session && !existingMeterToken)" in browser
+    assert "const status = statusPromise ? await statusPromise : await membershipStatus()" in browser
+    assert "body: { slug, meter_token: existingMeterToken }" in browser
+    assert "data?.access === 'member'" in browser
+    assert "data?.access === 'monthly_free'" in browser
+    assert "function statusWithArticleAuthority(status, articleResult)" in browser
+    assert "articleResult?.access === 'member'" in browser
+    assert "authenticated:true, entitled:true" in browser
+
+    # The backend still checks membership before it considers the monthly meter,
+    # so moving the request earlier cannot expose content to an unauthorized user.
+    membership_check = protected.index("if (await hasMembership(ctx, userId))")
+    meter_check = protected.index("const period = currentMeterPeriod()")
+    assert membership_check < meter_check
+    assert "protected_body: article.protected_body" in protected
+    assert "access: 'member'" in protected
+    assert "access: 'monthly_free'" in protected
 
 
 def test_update_workflow_auto_repairs_legacy_protected_article_endpoint_for_meter_launch():
@@ -760,3 +795,27 @@ def test_prepare_protects_event_link_article_and_short_public_article_drops_dorm
     assert "event-link-box" in event_public
     assert any(row["slug"] == event_slug for row in payload["articles"])
     assert "data-tct-paywall-newsletter" not in short_public
+
+
+def test_monthly_free_article_uses_branded_dismissible_bottom_banner_only_after_unlock():
+    browser = (ROOT / "membership.js").read_text()
+    css = (ROOT / "membership.css").read_text()
+
+    assert "function armFreeArticleBanner(slug, period, paywall)" in browser
+    assert "You're reading your free article for this month." in browser
+    assert "Subscribe for unlimited access" in browser
+    assert "$1 first month" in browser
+    assert "armFreeArticleBanner(slug, meterPeriod, paywall)" in browser
+    assert browser.index("data?.access === 'monthly_free'") < browser.index("armFreeArticleBanner(slug, meterPeriod, paywall)")
+    assert "const FREE_ARTICLE_BANNER_DELAY_MS = 1750" in browser
+    assert "const FREE_ARTICLE_BANNER_SCROLL_PX = 120" in browser
+    assert "delayElapsed || scrolledEnough" in browser
+    assert "window.setTimeout(() =>" in browser
+    assert "FREE_ARTICLE_BANNER_DELAY_MS" in browser
+    assert "sessionStorage.setItem(dismissKey, '1')" in browser
+    assert "removeFreeArticleBanner()" in browser
+    assert ".tct-free-article-banner" in css
+    assert "position: fixed" in css
+    assert "background: #174f3d" in css
+    assert "border-top: 3px solid #f26445" in css
+    assert "—" not in "You're reading your free article for this month. Subscribe for unlimited access. $1 first month"
