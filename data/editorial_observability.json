@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-05T23:39:42Z",
+  "generated_at": "2026-09-06T01:33:05Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 7,
-    "placements_after": 7,
+    "placements_before": 4,
+    "placements_after": 4,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,22 +49,22 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 185,
+    "candidates_processed": 190,
     "routes": {
-      "generate_new": 27,
-      "skip": 156,
+      "generate_new": 15,
+      "skip": 173,
       "update_existing": 2
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 126,
-      "publishable": 57
+      "low_value": 129,
+      "publishable": 59
     },
     "source_classes": {
-      "aggregator": 128,
+      "aggregator": 131,
       "local_news": 26,
       "regional_news": 27,
-      "unknown": 4
+      "unknown": 6
     },
     "rejected_count": 2,
     "rejected_examples": [
@@ -90,10 +90,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 18,
-      "same_event": 167
+      "new_story": 13,
+      "same_event": 177
     },
     "examples": [
+      {
+        "story_id": "story_008714",
+        "title": "Florida Atlantic Owls open season in electric atmosphere at sold-out Swamp - WPEC",
+        "event_key": "unknown-event-0a77cee4de",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_008556",
         "title": "Vote Now: CBS12 News Game of the Week - cw34.com",
@@ -106,6 +118,18 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_008715",
+        "title": "It began as an Irish joke. Now the 'Cat in the Hat' hoax has U.S. teens in handcuffs. - Latin Times",
+        "event_key": "unknown-event-7285a03575",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -142,15 +166,16 @@
         "event_key": "unknown-event-3e97a69cd8",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_008642",
+        "story_id": "story_008687",
         "title": "Motorcyclist ejected, killed in crash on State Road 7",
         "event_key": "named-person-death:state-road",
         "relationship": "same_event",
@@ -164,8 +189,8 @@
       },
       {
         "story_id": "story_006291",
-        "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - WPTV",
-        "event_key": "unknown-event-bbc86c744b",
+        "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - wptv.com",
+        "event_key": "unknown-event-fdd09bb378",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -303,6 +328,15 @@
         ]
       },
       {
+        "story_id": "",
+        "title": "17001 SW Sapri Way, Port Saint Lucie, FL 34986 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
+      },
+      {
         "story_id": "story_008208",
         "title": "West Palm Beach firefighters' union says staffing isn't keeping pace with city growth",
         "event_key": "fire-b26b20b3a4-b26b20b3a4",
@@ -318,49 +352,8 @@
       },
       {
         "story_id": "story_008208",
-        "title": "West Palm Beach firefighters' union says staffing isn't keeping pace with city growth - wflx.com",
-        "event_key": "unknown-event-d7773a5d58",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_008140",
-        "title": "Fatal pedestrian crash involving train under investigation in Stuart",
-        "event_key": "traffic-crash-stuart-794260e6ac",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_008664",
-        "title": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
-        "event_key": "traffic-crash-fort-pierce-d109a66b8a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_008664",
-        "title": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
-        "event_key": "unknown-event-992a715ddd",
+        "title": "West Palm Beach firefighters' union says staffing isn't keeping pace with city growth - WFLX",
+        "event_key": "unknown-event-c67c5ba122",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -374,6 +367,19 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_008714",
+        "title": "Florida Atlantic Owls open season in electric atmosphere at sold-out Swamp - WPEC",
+        "event_key": "unknown-event-0a77cee4de",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_008556",
         "title": "Vote Now: CBS12 News Game of the Week - cw34.com",
         "event_key": "unknown-event-18ddec5afa",
@@ -386,6 +392,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_008715",
+        "title": "It began as an Irish joke. Now the 'Cat in the Hat' hoax has U.S. teens in handcuffs. - Latin Times",
+        "event_key": "unknown-event-7285a03575",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -425,15 +444,16 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_008642",
+        "story_id": "story_008687",
         "title": "Motorcyclist ejected, killed in crash on State Road 7",
         "event_key": "named-person-death:state-road",
         "relationship": "same_event",
@@ -448,8 +468,8 @@
       },
       {
         "story_id": "story_006291",
-        "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - WPTV",
-        "event_key": "unknown-event-bbc86c744b",
+        "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - wptv.com",
+        "event_key": "unknown-event-fdd09bb378",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -613,15 +633,16 @@
       },
       {
         "story_id": "story_008208",
-        "title": "West Palm Beach firefighters' union says staffing isn't keeping pace with city growth - wflx.com",
-        "event_key": "unknown-event-d7773a5d58",
+        "title": "West Palm Beach firefighters' union says staffing isn't keeping pace with city growth - WFLX",
+        "event_key": "unknown-event-c67c5ba122",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -629,36 +650,6 @@
         "story_id": "story_008140",
         "title": "Fatal pedestrian crash involving train under investigation in Stuart",
         "event_key": "traffic-crash-stuart-794260e6ac",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_008664",
-        "title": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
-        "event_key": "traffic-crash-fort-pierce-d109a66b8a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_008664",
-        "title": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
-        "event_key": "unknown-event-992a715ddd",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -692,12 +683,12 @@
     },
     "examples": [
       {
-        "headline": "Sebastian man arrested after weapon attack leaves victim seriously injured - WPEC",
-        "event_key": "unknown-event-0573a2e57d",
-        "current_story_id": "story_008683",
+        "headline": "Man charged with attempted murder after late Friday attack in Sebastian - Vero News",
+        "event_key": "unknown-event-88731938d9",
+        "current_story_id": "story_008716",
         "current_relationship": "new_story",
-        "candidate_story_id": "story_006171",
-        "candidate_confidence": 0.62,
+        "candidate_story_id": "story_003680",
+        "candidate_confidence": 0.622222,
         "candidate_milestones": [
           "arrest"
         ],
@@ -709,11 +700,11 @@
         ],
         "candidate_trace": [
           "Follow-up candidate mode: observe_only",
-          "Candidate story: story_006171",
+          "Candidate story: story_003680",
           "Novel milestones: arrest",
           "Exact event-key anchor: False",
           "Facts overlap: 0.00",
-          "Title overlap: 0.20",
+          "Title overlap: 0.22",
           "Location match: True",
           "Agency match: False",
           "Event type match: False",
@@ -730,9 +721,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1284,
-      "timeline_entries_examined": 3581,
-      "transitions_examined": 2176,
+      "stories_with_timelines": 1285,
+      "timeline_entries_examined": 3585,
+      "transitions_examined": 2180,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 30,
       "high_confidence_candidate_count": 8,
@@ -1658,11 +1649,11 @@
         "timeline_identity_unanchored": 19,
         "weak_title_continuity": 4
       },
-      "excluded_entry_count": 131,
+      "excluded_entry_count": 130,
       "exclusion_reasons": {
         "insufficient_title_detail": 36,
         "low_value_title": 14,
-        "social_source": 82
+        "social_source": 81
       },
       "examples": [
         {
@@ -2174,7 +2165,7 @@
           ]
         },
         {
-          "story_id": "story_008657",
+          "story_id": "story_008702",
           "story_title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
           "milestones": [
             "recovery"
@@ -2219,7 +2210,7 @@
           "prior_article": {
             "article_id": "rss-e7222eb1152f2bab97f2",
             "event_key": "missing-person-port-st-lucie-2eb6cf5485",
-            "published_at": "2026-09-05T23:24:03.902202+00:00",
+            "published_at": "2026-09-06T01:18:16.787695+00:00",
             "title": "Body found in Martin County mangroves confirmed as missing man - WPEC",
             "source": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
             "url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead"
@@ -2227,14 +2218,14 @@
           "newer_article": {
             "article_id": "rss-fedf37d2bc649307634c",
             "event_key": "missing-person-7693a0a37b-7693a0a37b",
-            "published_at": "2026-09-05T23:24:03.902202+00:00",
+            "published_at": "2026-09-06T01:18:16.787695+00:00",
             "title": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
             "source": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
             "url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_008657",
+            "Story: story_008702",
             "Novel milestones: recovery",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
@@ -3756,28 +3747,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1073,
-      "treasure_coast_local": 886,
+      "florida": 1076,
+      "treasure_coast_local": 890,
       "treasure_coast_region": 414,
-      "unknown": 2043
+      "unknown": 2046
     },
-    "average_score": 60.96
+    "average_score": 60.98
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1073,
-      "treasure_coast_local": 886,
+      "florida": 1076,
+      "treasure_coast_local": 890,
       "treasure_coast_region": 414,
-      "unknown": 2043
+      "unknown": 2046
     },
-    "average_priority": 4.09
+    "average_priority": 4.08
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3359,
+      "active": 3360,
       "breaking": 1,
-      "developing": 261,
-      "ongoing": 791,
+      "developing": 262,
+      "ongoing": 799,
       "resolved": 4
     }
   },
@@ -3785,8 +3776,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 6606,
-    "active_stories_after": 6606,
+    "active_stories_before": 6621,
+    "active_stories_after": 6621,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3815,23 +3806,23 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-05T23:24:41Z",
-    "quarantined_story_records_retained": 1081,
-    "active_story_count": 6642
+    "generated_at": "2026-09-06T01:18:54Z",
+    "quarantined_story_records_retained": 1092,
+    "active_story_count": 6652
   },
   "stories": {
-    "total": 4416,
+    "total": 4426,
     "importance_levels": {
       "breaking": 6,
       "high": 92,
       "normal": 708,
-      "low": 3610,
+      "low": 3620,
       "archived": 0
     },
-    "average_importance": 9.61,
+    "average_importance": 9.59,
     "top": [
       {
-        "story_id": "story_008654",
+        "story_id": "story_008699",
         "title": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
         "score": 80,
         "editorial_priority": 90,
@@ -3895,14 +3886,14 @@
         "lifecycle": {
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
-          "last_updated": "2026-09-05T23:24:03.902202+00:00",
+          "last_updated": "2026-09-06T01:18:16.787695+00:00",
           "hours_since_update": 0.04,
           "event_count": 5,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_008645",
+        "story_id": "story_008690",
         "title": "Fatal I-95 crash jams traffic in St. Lucie County - cbs12.com",
         "score": 75,
         "editorial_priority": 84,
@@ -3959,14 +3950,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T23:24:03.902202+00:00",
+          "last_updated": "2026-09-06T01:18:16.787695+00:00",
           "hours_since_update": 0.03,
           "event_count": 6,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_008646",
+        "story_id": "story_008691",
         "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4020,7 +4011,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T23:24:03.902202+00:00",
+          "last_updated": "2026-09-06T01:18:16.787695+00:00",
           "hours_since_update": 0.03,
           "event_count": 2,
           "timeline_entries": 2
@@ -4039,7 +4030,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 31.77
+          "age_hours": 33.68
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4087,7 +4078,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-04T15:42:16.034092+00:00",
-          "hours_since_update": 31.77,
+          "hours_since_update": 33.68,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -4105,7 +4096,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 17.91
+          "age_hours": 19.82
         },
         "level": "high",
         "importance_reasons": [
@@ -4148,7 +4139,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 17.91,
+          "hours_since_update": 19.82,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4166,7 +4157,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 20.11
+          "age_hours": 22.01
         },
         "level": "high",
         "importance_reasons": [
@@ -4209,7 +4200,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T03:19:39.455523+00:00",
-          "hours_since_update": 20.11,
+          "hours_since_update": 22.01,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4218,16 +4209,16 @@
         "story_id": "story_003665",
         "title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
         "score": 70,
-        "editorial_priority": 75,
-        "editorial_score": 75,
+        "editorial_priority": 79,
+        "editorial_score": 79,
         "score_breakdown": {
-          "score": 75,
+          "score": 79,
           "importance": 70,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 12.79
+          "age_hours": 0.09
         },
         "level": "high",
         "importance_reasons": [
@@ -4279,17 +4270,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 94,
-        "timeline_entries": 91,
+        "event_count": 95,
+        "timeline_entries": 92,
         "relationship_decisions": 10,
-        "canonical_source_candidates": 143,
+        "canonical_source_candidates": 144,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T10:42:52.010333+00:00",
-          "hours_since_update": 12.79,
-          "event_count": 94,
-          "timeline_entries": 91
+          "last_updated": "2026-09-06T01:18:16.787695+00:00",
+          "hours_since_update": 0.09,
+          "event_count": 95,
+          "timeline_entries": 92
         }
       },
       {
@@ -4305,7 +4296,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 69.49
+          "age_hours": 71.4
         },
         "level": "high",
         "importance_reasons": [
@@ -4348,7 +4339,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-03T01:55:34.516844+00:00",
-          "hours_since_update": 69.49,
+          "hours_since_update": 71.4,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4366,7 +4357,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 48.0
+          "age_hours": 49.9
         },
         "level": "high",
         "importance_reasons": [
@@ -4406,10 +4397,10 @@
         "relationship_decisions": 1,
         "canonical_source_candidates": 5,
         "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
+          "state": "ongoing",
+          "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-03T23:27:52.005400+00:00",
-          "hours_since_update": 48.0,
+          "hours_since_update": 49.9,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4427,7 +4418,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 15.13
+          "age_hours": 17.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4468,7 +4459,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T08:22:44.187567+00:00",
-          "hours_since_update": 15.13,
+          "hours_since_update": 17.03,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4486,7 +4477,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 99.43
+          "age_hours": 101.33
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4534,7 +4525,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 99.43,
+          "hours_since_update": 101.33,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4552,7 +4543,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 52.57
+          "age_hours": 54.47
         },
         "level": "high",
         "importance_reasons": [
@@ -4590,7 +4581,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-03T18:52:55.532200+00:00",
-          "hours_since_update": 52.57,
+          "hours_since_update": 54.47,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4608,7 +4599,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 69.51
+          "age_hours": 71.41
         },
         "level": "high",
         "importance_reasons": [
@@ -4646,13 +4637,13 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-03T01:55:34.516844+00:00",
-          "hours_since_update": 69.51,
+          "hours_since_update": 71.41,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_008641",
+        "story_id": "story_008686",
         "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4714,14 +4705,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T23:24:03.902202+00:00",
+          "last_updated": "2026-09-06T01:18:16.787695+00:00",
           "hours_since_update": 0.04,
           "event_count": 7,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_008650",
+        "story_id": "story_008695",
         "title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -4785,14 +4776,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T23:24:03.902202+00:00",
+          "last_updated": "2026-09-06T01:18:16.787695+00:00",
           "hours_since_update": 0.03,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_008651",
+        "story_id": "story_008696",
         "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -4855,14 +4846,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T23:24:03.902202+00:00",
+          "last_updated": "2026-09-06T01:18:16.787695+00:00",
           "hours_since_update": 0.03,
           "event_count": 4,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_008658",
+        "story_id": "story_008703",
         "title": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4925,7 +4916,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-05T23:24:03.902202+00:00",
+          "last_updated": "2026-09-06T01:18:16.787695+00:00",
           "hours_since_update": 0.04,
           "event_count": 7,
           "timeline_entries": 6
@@ -4944,7 +4935,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 48.96
+          "age_hours": 50.87
         },
         "level": "high",
         "importance_reasons": [
@@ -4983,7 +4974,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-03T22:29:06.904955+00:00",
-          "hours_since_update": 48.96,
+          "hours_since_update": 50.87,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -5001,7 +4992,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 198.97
+          "age_hours": 200.88
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5055,7 +5046,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 198.97,
+          "hours_since_update": 200.88,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -5073,7 +5064,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 99.42
+          "age_hours": 101.32
         },
         "level": "high",
         "importance_reasons": [
@@ -5116,7 +5107,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 99.42,
+          "hours_since_update": 101.32,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -5126,7 +5117,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-05T23:32:16Z",
+    "generated_at": "2026-09-06T01:25:54Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5141,21 +5132,24 @@
     "summary": {
       "category_count": 9,
       "statuses": {
+        "cache_hit": 1,
         "category_eligibility_archive_recovery": 4,
-        "generated_live": 4,
-        "no_publishable_sources": 1
+        "generated_live": 1,
+        "no_publishable_sources": 1,
+        "quality_gate_archive_recovery": 2
       },
       "failures": {
-        "no_category_eligible_sources": 4
+        "no_category_eligible_sources": 4,
+        "publication_quality_rejected": 2
       },
-      "model_attempt_count": 4,
-      "model_elapsed_seconds": 73.576,
-      "archive_recovery_requested_count": 5,
+      "model_attempt_count": 3,
+      "model_elapsed_seconds": 59.322,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 1,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 8,
-      "published_story_duplicate_suppression_count": 31,
+      "category_eligibility_rejection_count": 5,
+      "published_story_duplicate_suppression_count": 42,
       "story_aware_update_context_count": 5,
       "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
@@ -5169,7 +5163,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 9,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5186,23 +5180,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 1,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community"
-          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -5216,29 +5196,25 @@
             "local_nexus_signals": [],
             "headline": "Florida attorney general settlement with egg producers results in 5.6 million free eggs for state food banks",
             "source_url": "https://www.wptv.com/money/consumer/florida-attorney-general-settlement-with-egg-producers-results-in-5-6-million-free-eggs-for-state-food-banks"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "St. Lucie County Sheriff's Office gives all clear after bomb threat at Fort Pierce Central High School",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-sheriffs-office-responding-to-bomb-threat-at-fort-pierce-central-high-school"
           }
         ],
         "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
             "source_url": "https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_008628",
+            "editorial_story_id": "story_008664",
             "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
             "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
             "basis": "exact_source_and_persistent_story_skip",
@@ -5248,7 +5224,7 @@
             "category_key": "local_gov",
             "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
             "source_url": "https://cw34.com/news/local/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_008626",
+            "editorial_story_id": "story_008662",
             "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
             "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
             "basis": "authorized_canonical_identity_skip",
@@ -5262,16 +5238,6 @@
             "canonical_slug": "2026-09-04-fort-pierce-opens-public-survey-through-oct-15-to-help-shape-strategic-plan-thro",
             "canonical_headline": "Fort Pierce opens public survey through Oct. 15 to help shape strategic plan through 2041",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/humane-society-of-the-treasure-coast-begins-placing-rescued-border-collies-in-new-homes",
-            "editorial_story_id": "story_003665",
-            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-            "canonical_headline": "First Border Collies adopted after Palm City hoarding rescue, Humane Society says",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5315,6 +5281,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
@@ -5362,21 +5343,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/humane-society-of-the-treasure-coast-begins-placing-rescued-border-collies-in-new-homes",
-            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-            "canonical_headline": "First Border Collies adopted after Palm City hoarding rescue, Humane Society says",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
             "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
@@ -5392,30 +5358,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 23.771
+        "elapsed_seconds": 27.51
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 9,
-        "selected_source_count": 2,
+        "publishable_source_count": 7,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": false,
+        "archive_recovery_requested": true,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 15.568,
+            "elapsed_seconds": 7.471,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 15.568,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 7.471,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5424,7 +5390,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
@@ -5438,8 +5404,8 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wflx.com",
-            "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community/?outputType=amp"
+            "headline": "Vero Beach man jailed on $1 million bond accused of AI fake sexual images scheme - WPBF",
+            "source_url": "https://www.wpbf.com/article/vero-beach-ai-fake-sexual-images-case/73606237"
           },
           {
             "contract_version": "1.0-primary-crime-safety-focus",
@@ -5452,26 +5418,36 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "Florida attorney general settlement with egg producers results in 5.6 million free eggs for state food banks",
-            "source_url": "https://www.wptv.com/money/consumer/florida-attorney-general-settlement-with-egg-producers-results-in-5-6-million-free-eggs-for-state-food-banks"
+            "headline": "Palm City Border Collie hoarding suspect posts bond, released from jail - cw34.com",
+            "source_url": "https://cw34.com/news/local/palm-city-border-collie-hoarding-suspect-posts-bond-released-from-jail-florida-news-border-collies-72-charges-36-dogs-hoarding-case-local-news-florida-crime-local-crime-martin-county?teaserSource=trending"
           }
         ],
         "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
-            "source_headline": "Multi-vehicle crash blocks left lane on I-95 North in St. Lucie County - WPEC",
-            "source_url": "http://cbs12.com/news/florida/multi-vehicle-crash-blocks-left-lane-on-i-95-north-near-st-lucie-county-florida-news-florida-traffic-local-news-local-traffic",
-            "editorial_story_id": "story_008626",
-            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
-            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
-            "basis": "authorized_canonical_identity_skip",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "crime",
             "source_headline": "Vero Beach woman accused of livestreaming sex abuse of 2 children under 3, deputies say - WPEC",
-            "source_url": "https://cbs12.com/news/crime/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
+            "source_url": "https://cbs12.com/news/local/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
             "editorial_story_id": "story_008149",
             "canonical_slug": "2026-09-04-vero-beach-mother-michigan-boyfriend-arrested-after-icac-investigation-into-live",
             "canonical_headline": "Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case",
@@ -5480,7 +5456,17 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes - wflx.com",
+            "source_headline": "Multi-vehicle crash blocks left lane on I-95 North in St. Lucie County - WPEC",
+            "source_url": "http://cbs12.com/news/florida/multi-vehicle-crash-blocks-left-lane-on-i-95-north-near-st-lucie-county-florida-news-florida-traffic-local-news-local-traffic",
+            "editorial_story_id": "story_008662",
+            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes - WFLX",
             "source_url": "https://www.wflx.com/2026/09/04/humane-society-treasure-coast-begins-placing-rescued-border-collies-new-homes?outputType=amp",
             "editorial_story_id": "story_003665",
             "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
@@ -5496,26 +5482,6 @@
             "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
             "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - cw34.com",
-            "source_url": "https://cw34.com/news/local/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested?teaserSource=trending",
-            "editorial_story_id": "story_008626",
-            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
-            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
-            "basis": "authorized_canonical_identity_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman - wflx.com",
-            "source_url": "https://www.wflx.com/2026/09/03/man-found-incompetent-stand-trial-random-stabbing-death-martin-county-woman",
-            "editorial_story_id": "story_007979",
-            "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-            "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -5544,11 +5510,56 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Vero Beach woman accused of livestreaming sex abuse of 2 children under 3, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
+            "canonical_slug": "2026-09-04-vero-beach-mother-michigan-boyfriend-arrested-after-icac-investigation-into-live",
+            "canonical_headline": "Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "crime",
             "source_headline": "Multi-vehicle crash blocks left lane on I-95 North in St. Lucie County - WPEC",
@@ -5566,22 +5577,7 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Vero Beach woman accused of livestreaming sex abuse of 2 children under 3, deputies say - WPEC",
-            "source_url": "https://cbs12.com/news/crime/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
-            "canonical_slug": "2026-09-04-vero-beach-mother-michigan-boyfriend-arrested-after-icac-investigation-into-live",
-            "canonical_headline": "Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes - wflx.com",
+            "source_headline": "Humane Society of the Treasure Coast begins placing rescued Border Collies in new homes - WFLX",
             "source_url": "https://www.wflx.com/2026/09/04/humane-society-treasure-coast-begins-placing-rescued-border-collies-new-homes?outputType=amp",
             "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
             "canonical_headline": "First Border Collies adopted after Palm City hoarding rescue, Humane Society says",
@@ -5608,73 +5604,20 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - cw34.com",
-            "source_url": "https://cw34.com/news/local/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested?teaserSource=trending",
-            "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
-            "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man found incompetent to stand trial in random stabbing death of Martin County woman - wflx.com",
-            "source_url": "https://www.wflx.com/2026/09/03/man-found-incompetent-stand-trial-random-stabbing-death-martin-county-woman",
-            "canonical_slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-            "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
-            "shared_anchors": [
-              "Kersten Francilus, 25, charged in stabbing death",
-              "Joyce Ellen Thompson Adams, 73-year-old victim",
-              "Martin County judge ruled incompetent to stand trial",
-              "Two doctors examined during hearing in Aug",
-              "April 2025 stabbing in Southwood community near Stuart",
-              "Southeast Black Oak Lane and Woods Edge Trail location",
-              "Remanded to state mental hospital for competency restoration"
-            ],
-            "novel_facts": [
-              "Additional background details about the attack being worse than initially reported (50+ stabs vs 16-17)",
-              "More witness/neighbor quotes and color",
-              "Extended background about prior law enforcement encounters",
-              "Mother's interview details about knives and medication",
-              "Francilus's comments about victim being Jewish (which was incorrect)"
-            ],
-            "reason": "Both articles report the identical court ruling: a Martin County judge finding Kersten Francilus incompetent to stand trial in the fatal stabbing of Joyce Ellen Thompson Adams. The core legal development (incompetency ruling, two-doctor examination, remand to state hospital) is the same. The incoming article contains substantially more background detail about the underlying April 2025 stabbing incident, but no new material update to the competency ruling itself. The additional details are explanatory background and color, not a development that changes what readers need to know about the competency determination.",
-            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-        "generated_card_count": 0,
-        "elapsed_seconds": 47.849
+        "elapsed_seconds": 35.187
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 10,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5691,26 +5634,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [
-              "source_locality:treasure coast",
-              "source_locality:martin county"
-            ],
-            "headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community"
-          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -5749,8 +5675,18 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-sheriffs-office-responding-to-bomb-threat-at-fort-pierce-central-high-school"
           }
         ],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "Fort Pierce seeks community input to help shape new strategic plan for the city's future",
@@ -5814,6 +5750,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
             "source_headline": "Fort Pierce seeks community input to help shape new strategic plan for the city's future",
             "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-seeks-community-input-to-help-shape-new-strategic-plan-for-the-citys-future",
             "canonical_slug": "2026-09-04-fort-pierce-opens-public-survey-through-oct-15-to-help-shape-strategic-plan-thro",
@@ -5859,7 +5810,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.15
+        "elapsed_seconds": 15.284
       },
       {
         "category_key": "sports",
@@ -5897,7 +5848,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 5,
-        "elapsed_seconds": 11.817
+        "elapsed_seconds": 11.76
       },
       {
         "category_key": "things_to_do",
@@ -5984,13 +5935,13 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Mango Music and Art Festival on Saturday in Lake Worth Beach",
-              "National Deaf Awareness Month event at Busch Wildlife Sanctuary in Jupiter on Saturday",
-              "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
-              "SoFlo Market one-year anniversary celebration in Boca Raton on Saturday",
-              "Northwest BBQ Brews Blues 11th annual festival at Heart Soul Park on Saturday",
-              "Peachfest 5-year anniversary art walk on Saturday in West Palm Beach",
-              "Hurricane Alley Blowout Rodeo two-night event in Vero Beach on Friday and Saturday"
+              "Mango Music and Art Festival on September 4, 2026 in Lake Worth Beach",
+              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on September 4",
+              "Barrio Fiesta Labor Day Picnic on September 5 in Port St. Lucie",
+              "SoFlo Market 1-year anniversary celebration in Boca Raton",
+              "Northwest BBQ Brews Blues 11th annual festival",
+              "Peachfest 5-Year Anniversary Art Walk in West Palm Beach",
+              "Hurricane Alley Blowout Rodeo two-night event in Vero Beach"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6029,7 +5980,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 22.602
+        "elapsed_seconds": 23.646
       },
       {
         "category_key": "florida",
@@ -6094,30 +6045,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.439
+        "elapsed_seconds": 10.259
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 27,
-        "publishable_source_count": 8,
-        "selected_source_count": 7,
+        "status": "quality_gate_archive_recovery",
+        "fetched_candidate_count": 30,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 4,
+        "selected_source_count": 3,
         "cache_hit": false,
-        "archive_recovery_requested": false,
+        "archive_recovery_requested": true,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 22.408,
+            "elapsed_seconds": 18.448,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 22.408,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 18.448,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 1,
@@ -6127,7 +6078,7 @@
             "required": true,
             "passed": false,
             "story_form": "update",
-            "lead_word_count": 61,
+            "lead_word_count": 53,
             "baseline_anchor": "abuse_or_neglect",
             "baseline_present": true,
             "baseline_anchor_present": true,
@@ -6161,16 +6112,66 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Golf cart rider injured in crash with tractor in Martin County - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-golf-cart-rider-injured-in-crash-with-tractor-in-martin-county/73623106",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wptv.com",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - WPEC",
+            "source_url": "https://cbs12.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Driver airlifted to trauma center after car crashes into tree on I-95 in Palm City - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-driver-airlifted-to-trauma-center-after-car-crashes-into-tree-on-i-95-in-palm-city/73620418",
-            "editorial_story_id": "story_008632",
+            "editorial_story_id": "story_008668",
             "canonical_slug": "2026-09-05-driver-airlifted-after-single-car-rollover-on-i-95-southbound-near-high-meadows",
             "canonical_headline": "Driver airlifted after single-car rollover on I-95 southbound near High Meadows in Palm City",
             "basis": "exact_source_and_persistent_story_skip",
@@ -6218,6 +6219,81 @@
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Golf cart rider injured in crash with tractor in Martin County - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-golf-cart-rider-injured-in-crash-with-tractor-in-martin-county/73623106",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wptv.com",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - WPEC",
+            "source_url": "https://cbs12.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "martin",
             "source_headline": "Driver airlifted to trauma center after car crashes into tree on I-95 in Palm City - WPBF",
@@ -6277,18 +6353,16 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "76-year-old ejected from golf cart after collision with tractor in Tropical Farms",
-        "generated_card_count": 0,
-        "elapsed_seconds": 54.113
+        "elapsed_seconds": 41.479
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 9,
-        "selected_source_count": 9,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 8,
+        "selected_source_count": 8,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -6296,11 +6370,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 30.091,
+            "elapsed_seconds": 33.403,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 30.091,
+        "model_elapsed_seconds": 33.403,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6311,16 +6385,26 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 8,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Four Fort Pierce officers credited with saving woman in crisis on South Causeway Bridge - WPEC",
+            "source_url": "https://cbs12.com/news/florida/four-fort-pierce-officers-credited-with-saving-woman-in-crisis-on-south-causeway-bridge-florida-news-local-news-fort-pierce-police-department",
+            "editorial_story_id": "story_008228",
+            "canonical_slug": "2026-09-04-four-fort-pierce-officers-credited-with-pulling-woman-from-south-causeway-bridge",
+            "canonical_headline": "Four Fort Pierce officers credited with pulling woman from South Causeway Bridge railing",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
             "source_url": "https://cw34.com/news/local/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_008626",
+            "editorial_story_id": "story_008662",
             "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
             "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
             "basis": "authorized_canonical_identity_skip",
@@ -6358,19 +6442,9 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "'Breathe, baby. Breathe': 911 calls capture panic after deadly Port St. Lucie shooting - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMivgJBVV95cUxQV0ItUWFuSk1ncm5CeC1jRHQzQzRTOG9jYklLWUVtcHdlSHJ2TUZNaUcxRlBZLVpXZkpSRzJMZW8xcWFYVlR6UWxQMlAycWI3LS1lQl9UMGU2dFNQZmx2VTdERmhMcFpYQW1SM2tXVEx3b254OTFCWXdpSnBnZkdNUG9VYkZBZlJWbGVMOHh3aGlkUXZvcFRUTWN3MmJ4Z19pR01RaFdNODBEWHdNWUdCTGd6aUE3OGlWV2diMnNiMU54QjNjM1Q2ekRGMjN2WFJ3eGJQMERfOHdka3ZpTHJka3VBdVcwaGt5bHY5ZnpQTTJDdXdfTGgxLUdaM2wwaFVjV0FuWE1oQ1RPcEFLbExWQUtpZ2tRQmgwN1lCbVBNVWVsQ2dpbk1wOUs1Wm05THFiNVcxVnZUZXBIWjFTbVE",
-            "editorial_story_id": "story_001431",
-            "canonical_slug": "2026-07-20-port-st-lucie-police-to-hold-news-conference-on-double-fatal-shooting-that-kille",
-            "canonical_headline": "Jealousy over woman sparked double fatal shooting in Port St. Lucie, police say",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Teen suspect arrested within 24 hours in Fort Pierce armed robbery probe, FPPD says - cw34.com",
             "source_url": "https://cw34.com/news/local/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested?teaserSource=trending",
-            "editorial_story_id": "story_008626",
+            "editorial_story_id": "story_008662",
             "canonical_slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
             "canonical_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
             "basis": "authorized_canonical_identity_skip",
@@ -6388,16 +6462,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "VIDEO: Driver crashes into parked trucks in Port St. Lucie after medical episode - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-crash-speeding-problems/73574622",
-            "editorial_story_id": "story_007298",
-            "canonical_slug": "2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc",
-            "canonical_headline": "Port St. Lucie police confirm medical episode caused SW Lucero Drive crash; driver's family says he had seizure",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - WPEC",
             "source_url": "https://cbs12.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
             "editorial_story_id": "story_007751",
@@ -6405,15 +6469,50 @@
             "canonical_headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County votes to remove license plate readers over privacy concerns - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-license-plate-readers-privacy-flock-cameras/73598008",
+            "editorial_story_id": "story_007901",
+            "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
+            "canonical_headline": "St. Lucie County votes to remove license plate readers from county roads over privacy concerns",
+            "basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+            "editorial_story_id": "story_007629",
+            "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+            "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Four Fort Pierce officers credited with saving woman in crisis on South Causeway Bridge - WPEC",
+            "source_url": "https://cbs12.com/news/florida/four-fort-pierce-officers-credited-with-saving-woman-in-crisis-on-south-causeway-bridge-florida-news-local-news-fort-pierce-police-department",
+            "canonical_slug": "2026-09-04-four-fort-pierce-officers-credited-with-pulling-woman-from-south-causeway-bridge",
+            "canonical_headline": "Four Fort Pierce officers credited with pulling woman from South Causeway Bridge railing",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Bomb threat reported at Fort Pierce Central High School, deputies investigate - cw34.com",
@@ -6478,33 +6577,18 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Mango Music and Art Festival on Saturday September 4, 2026 in Lake Worth Beach",
-              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
-              "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
+              "Mango Music and Art Festival on September 4, 2026 in Lake Worth Beach",
+              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on September 4",
+              "Barrio Fiesta Labor Day Picnic on September 5 in Port St. Lucie",
               "SoFlo Market 1-year anniversary celebration in Boca Raton",
-              "Northwest BBQ Brews Blues Festival at Heart Soul Park",
+              "Northwest BBQ Brews Blues 11th annual festival",
               "Peachfest 5-Year Anniversary Art Walk in West Palm Beach",
-              "Hurricane Alley Blowout Rodeo Friday-Saturday in Vero Beach"
+              "Hurricane Alley Blowout Rodeo two-night event in Vero Beach"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
               "known_canonical_identity_conflict"
             ]
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "'Breathe, baby. Breathe': 911 calls capture panic after deadly Port St. Lucie shooting - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMivgJBVV95cUxQV0ItUWFuSk1ncm5CeC1jRHQzQzRTOG9jYklLWUVtcHdlSHJ2TUZNaUcxRlBZLVpXZkpSRzJMZW8xcWFYVlR6UWxQMlAycWI3LS1lQl9UMGU2dFNQZmx2VTdERmhMcFpYQW1SM2tXVEx3b254OTFCWXdpSnBnZkdNUG9VYkZBZlJWbGVMOHh3aGlkUXZvcFRUTWN3MmJ4Z19pR01RaFdNODBEWHdNWUdCTGd6aUE3OGlWV2diMnNiMU54QjNjM1Q2ekRGMjN2WFJ3eGJQMERfOHdka3ZpTHJka3VBdVcwaGt5bHY5ZnpQTTJDdXdfTGgxLUdaM2wwaFVjV0FuWE1oQ1RPcEFLbExWQUtpZ2tRQmgwN1lCbVBNVWVsQ2dpbk1wOUs1Wm05THFiNVcxVnZUZXBIWjFTbVE",
-            "canonical_slug": "2026-07-20-port-st-lucie-police-to-hold-news-conference-on-double-fatal-shooting-that-kille",
-            "canonical_headline": "Jealousy over woman sparked double fatal shooting in Port St. Lucie, police say",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "st_lucie",
@@ -6532,8 +6616,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -6555,21 +6639,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "VIDEO: Driver crashes into parked trucks in Port St. Lucie after medical episode - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-crash-speeding-problems/73574622",
-            "canonical_slug": "2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc",
-            "canonical_headline": "Port St. Lucie police confirm medical episode caused SW Lucero Drive crash; driver's family says he had seizure",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - WPEC",
             "source_url": "https://cbs12.com/news/local/33-pounds-of-marijuana-150k-cash-and-guns-seized-in-fort-pierce-drug-bust-st-lucie-county-sheriffs-office-narcotics-investigation-drug-bust-marijuana-marijuana-trafficking-33-pounds-marijuana-150000-cash-cash-seizure-firearms-guns-seized-co",
             "canonical_slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
@@ -6582,35 +6651,58 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County votes to remove license plate readers over privacy concerns - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-license-plate-readers-privacy-flock-cameras/73598008",
+            "canonical_slug": "2026-09-01-st-lucie-county-sheriff-restricts-license-plate-reader-use-to-forcible-felonies",
+            "canonical_headline": "St. Lucie County votes to remove license plate readers from county roads over privacy concerns",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:local-alpr-policy|st-lucie|2026-09-01",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-crime-news-former-st-lucie-county-gop-chairman-kenneth-nail-kenny-nail-arrested-in-martin-county-saw-palmetto-berry-case-harvesting-public-parks-without-permit-authorized-locations",
+            "canonical_slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
+            "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Fort Pierce Central High evacuated after bomb threat; Sheriff Del Toro gives all-clear following search",
-        "generated_card_count": 2,
-        "elapsed_seconds": 65.929
+        "live_hero_headline": "Fort Pierce police search for three masked suspects after fatal shooting following verbal altercation",
+        "generated_card_count": 1,
+        "elapsed_seconds": 62.682
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generated_live",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 26,
-        "publishable_source_count": 4,
+        "status": "cache_hit",
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 2,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.509,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 5.509,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6621,19 +6713,59 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - WPEC",
+            "source_url": "https://cbs12.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Port St. Lucie man hit woman with car, drove with her on hood, deputies say - cw34.com",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-man-hit-woman-with-car-drove-with-her-on-hood-deputies-say-vero-beach-indian-river-county-sheriff-custody-dispute-kia-soul",
+            "editorial_story_id": "story_008153",
+            "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
+            "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
             "source_headline": "Vero Beach woman accused of livestreaming sex abuse of 2 children under 3, deputies say - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
+            "source_url": "https://cbs12.com/newsletter-daily/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
             "editorial_story_id": "story_008149",
             "canonical_slug": "2026-09-04-vero-beach-mother-michigan-boyfriend-arrested-after-icac-investigation-into-live",
             "canonical_headline": "Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case",
             "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Port St. Lucie man hit woman with car, drove with her on hood, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-hit-woman-with-car-drove-with-her-on-hood-deputies-say-vero-beach-indian-river-county-sheriff-custody-dispute-kia-soul",
+            "editorial_story_id": "story_008153",
+            "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
+            "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6672,20 +6804,104 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - WPEC",
+            "source_url": "https://cbs12.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Port St. Lucie man hit woman with car, drove with her on hood, deputies say - cw34.com",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-man-hit-woman-with-car-drove-with-her-on-hood-deputies-say-vero-beach-indian-river-county-sheriff-custody-dispute-kia-soul",
+            "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
+            "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Brandon Isaiah Martin, 24, of Port St. Lucie",
+              "Arrested Sept. 2 on outstanding warrant",
+              "Aggravated battery with a deadly weapon charge",
+              "April 28, 2025 incident on 26th Court Southwest in Vero Beach",
+              "Silver Kia Soul vehicle",
+              "Struck mother of his children with car during custody dispute",
+              "Woman driven on hood for four or five houses",
+              "Indian River County Sheriff's Office",
+              "Warrant approved May 5, 2025",
+              "$50,000 bond"
+            ],
+            "novel_facts": [
+              "Martin posted bond (jail records show)",
+              "Warrant served at a Vero Beach address",
+              "Additional detail: Mother put car in neutral to stop vehicle",
+              "Additional detail: Abrasions documented on woman's knees",
+              "Additional detail: Woman heard Martin threaten to kill her"
+            ],
+            "reason": "Both articles report the identical event: Brandon Isaiah Martin's Sept. 2 arrest on an outstanding warrant for an April 28, 2025 incident where he allegedly struck the mother of his children with a Kia Soul during a custody dispute in Vero Beach. The incoming article adds only routine scene details (abrasions, threat statement, how the car was stopped) and confirms he posted bond afterward. These are not material updates that change what readers need to know - the arrest already occurred and was reported. The bond posting is a routine procedural step, not a significant development like a court ruling or new charge.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "indian_river",
             "source_headline": "Vero Beach woman accused of livestreaming sex abuse of 2 children under 3, deputies say - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
+            "source_url": "https://cbs12.com/newsletter-daily/florida-crime-news-vero-beach-woman-accused-of-livestreaming-child-sexual-abuse-material-boy-girl-younger-than-3-kik-biological-father-michigan-deputies-say",
             "canonical_slug": "2026-09-04-vero-beach-mother-michigan-boyfriend-arrested-after-icac-investigation-into-live",
             "canonical_headline": "Vero Beach woman Lisette Zamarripa charged with capital sexual battery of two toddlers in ICAC livestream case",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Port St. Lucie man hit woman with car, drove with her on hood, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-hit-woman-with-car-drove-with-her-on-hood-deputies-say-vero-beach-indian-river-county-sheriff-custody-dispute-kia-soul",
+            "canonical_slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
+            "canonical_headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6725,11 +6941,8 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Vero Beach man jailed on $1 million bond accused of using AI to create fake sexual images",
-        "generated_card_count": 0,
-        "elapsed_seconds": 32.444
+        "elapsed_seconds": 23.4
       }
     ]
   }
