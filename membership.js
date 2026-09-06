@@ -354,13 +354,16 @@ function armFreeArticleBanner(slug, period, paywall){
       <div class="tct-free-article-banner-copy">
         <strong>You're reading your free article for this month.</strong>
       </div>
-      <a class="tct-free-article-banner-cta" href="/subscribe.html">
+      <button class="tct-free-article-banner-cta" type="button" data-plan="monthly">
         <span>Subscribe for unlimited access</span>
         <small>$1 first month</small>
-      </a>
+      </button>
       <button class="tct-free-article-banner-dismiss" type="button" aria-label="Dismiss free article notice">&times;</button>
     </div>`
   document.body.appendChild(banner)
+
+  const cta = qs('.tct-free-article-banner-cta', banner)
+  cta?.addEventListener('click', () => startCheckout(cta))
 
   const dismiss = qs('.tct-free-article-banner-dismiss', banner)
   dismiss?.addEventListener('click', () => {
