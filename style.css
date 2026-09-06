@@ -5801,58 +5801,103 @@ header.site-masthead {
 
 
 /* ==========================================================
-   v1.13.7.5p - exact rendered masthead dimensions
+   v1.13.7.5s - 125%-scale visual target: 90px / 30px
    ========================================================== */
-/* Previous 90px rules could still inherit/cascade vertical spacing in some
-   layouts. These are total rendered dimensions, not minimum content heights. */
+/* On a 125% Windows display scale, 72 CSS px renders at about 90 device
+   pixels and 24 CSS px at about 30 device pixels. Keep mobile's existing
+   responsive geometry unchanged; this adjustment is for desktop/tablet. */
 @media (min-width: 901px) {
   header.site-masthead .masthead-top-row {
     box-sizing: border-box !important;
-    height: 90px !important;
-    min-height: 90px !important;
-    max-height: 90px !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     align-items: center !important;
   }
+
+  header.site-masthead .masthead-nav-row {
+    box-sizing: border-box !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    align-items: center !important;
+  }
+
+  header.site-masthead .category-nav--primary {
+    box-sizing: border-box !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    align-items: center !important;
+  }
+
+  header.site-masthead .category-nav--primary > .cat-btn,
+  header.site-masthead .nav-sections-toggle {
+    box-sizing: border-box !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+  }
+
+  header.site-masthead .masthead-live-time,
+  header.site-masthead .masthead-live-weather {
+    line-height: 24px !important;
+  }
 }
 
-header.site-masthead .masthead-nav-row {
-  box-sizing: border-box !important;
-  height: 30px !important;
-  min-height: 30px !important;
-  max-height: 30px !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  align-items: center !important;
+/* Preserve bold category labels on mobile without changing the existing
+   mobile 30px scroller geometry. */
+@media (max-width: 900px) {
+  header.site-masthead .category-nav--primary > .cat-btn,
+  header.site-masthead .nav-sections-toggle {
+    font-weight: 800 !important;
+  }
 }
 
-header.site-masthead .category-nav--primary {
-  box-sizing: border-box !important;
-  height: 30px !important;
-  min-height: 30px !important;
-  max-height: 30px !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  align-items: center !important;
+/* Scale the brand lockup with the 72px desktop row so it retains breathing
+   room instead of feeling vertically packed. */
+@media (min-width: 1121px) {
+  .site-masthead .wordmark-tct {
+    font-size: clamp(43px, 3.45vw, 48px);
+  }
+
+  .site-masthead .wordmark-divider {
+    height: 35px;
+  }
+
+  .site-masthead .wordmark-full {
+    font-size: 7.7px;
+  }
 }
 
-header.site-masthead .category-nav--primary > .cat-btn,
-header.site-masthead .nav-sections-toggle {
-  box-sizing: border-box !important;
-  height: 30px !important;
-  min-height: 30px !important;
-  max-height: 30px !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  font-weight: 800 !important;
-  line-height: 1 !important;
+@media (max-width: 1120px) and (min-width: 901px) {
+  .site-masthead .wordmark-tct {
+    font-size: 44px;
+  }
+
+  .site-masthead .wordmark-divider {
+    height: 34px;
+  }
+
+  .site-masthead .wordmark-full {
+    font-size: 7.5px;
+  }
 }
