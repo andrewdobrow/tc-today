@@ -25,6 +25,7 @@ def main() -> None:
     key = os.getenv("TCT_SUPABASE_PUBLISHABLE_KEY", "").strip()
     ui_enabled = _enabled()
     payment_mode = os.getenv("TCT_STRIPE_MODE", "test").strip().lower() or "test"
+    stripe_publishable_key = os.getenv("TCT_STRIPE_PUBLISHABLE_KEY", "").strip()
     if payment_mode not in {"test", "live"}:
         raise RuntimeError("TCT_STRIPE_MODE must be either test or live")
 
@@ -37,12 +38,17 @@ def main() -> None:
         raise RuntimeError("Membership UI cannot be enabled without browser-safe Supabase configuration")
     if ui_enabled and payment_mode != "live":
         raise RuntimeError("Membership UI cannot be enabled until TCT_STRIPE_MODE=live")
+    if stripe_publishable_key:
+        expected_prefix = "pk_live_" if payment_mode == "live" else "pk_test_"
+        if not stripe_publishable_key.startswith(expected_prefix):
+            raise RuntimeError(f"TCT_STRIPE_PUBLISHABLE_KEY must start with {expected_prefix} in {payment_mode} mode")
 
     payload = {
         "supabaseUrl": url,
         "supabasePublishableKey": key,
         "uiEnabled": ui_enabled,
         "paymentMode": payment_mode,
+        "stripePublishableKey": stripe_publishable_key,
         "sandbox": payment_mode == "test",
     }
     OUT.write_text(
@@ -65,7 +71,7 @@ def main() -> None:
     print(
         f"Membership browser config written: url={'set' if url else 'missing'}, "
         f"key={'set' if key else 'missing'}, ui={'enabled' if ui_enabled else 'dark'}, "
-        f"stripe={payment_mode}"
+        f"stripe={payment_mode}, stripe_publishable={'set' if stripe_publishable_key else 'missing'}"
     )
 
 

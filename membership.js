@@ -14,6 +14,10 @@ const FULL_ARTICLE_NEWSLETTER_SRC = 'https://treasure-coast-today.kit.com/30e156
 const FREE_ARTICLE_BANNER_DISMISS_PREFIX = 'tct_free_article_banner_dismissed_v1:'
 const FREE_ARTICLE_BANNER_DELAY_MS = 1750
 const FREE_ARTICLE_BANNER_SCROLL_PX = 120
+const STRIPE_JS_SRC = 'https://js.stripe.com/clover/stripe.js'
+let stripeJsPromise = null
+let activeEmbeddedCheckout = null
+let activeCheckoutModal = null
 
 function setMemberHint(entitled){
   try {
@@ -118,21 +122,218 @@ function returnPathFor(button){
   return '/'
 }
 
-async function startCheckout(button){
-  if (!supabase) return
-  const plan = button.dataset.plan
-  const message = qs('[data-membership-message]') || qs('.membership-message', button.closest('.tct-paywall') || document)
-  button.disabled = true
-  setMessage(message, 'Opening secure Stripe checkout…')
-  const { data, error } = await supabase.functions.invoke('create-checkout', {
-    body: { plan, return_path: returnPathFor(button) },
+function stripePublishableKey(){
+  const key = String(config.stripePublishableKey || '').trim()
+  return /^pk_(?:live|test)_/.test(key) ? key : ''
+}
+
+function loadStripeJs(){
+  if (window.Stripe) return Promise.resolve(window.Stripe)
+  if (stripeJsPromise) return stripeJsPromise
+  stripeJsPromise = new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-tct-stripe-js]')
+    if (existing) {
+      existing.addEventListener('load', () => window.Stripe ? resolve(window.Stripe) : reject(new Error('Stripe.js did not initialize.')), { once:true })
+      existing.addEventListener('error', () => reject(new Error('Stripe.js failed to load.')), { once:true })
+      return
+    }
+    const script = document.createElement('script')
+    script.src = STRIPE_JS_SRC
+    script.async = true
+    script.setAttribute('data-tct-stripe-js', 'true')
+    script.addEventListener('load', () => window.Stripe ? resolve(window.Stripe) : reject(new Error('Stripe.js did not initialize.')), { once:true })
+    script.addEventListener('error', () => reject(new Error('Stripe.js failed to load.')), { once:true })
+    document.head.appendChild(script)
+  }).catch(error => {
+    stripeJsPromise = null
+    throw error
   })
-  button.disabled = false
-  if (error || !data?.url) {
-    setMessage(message, `Checkout failed: ${data?.error || error?.message || 'Please try again.'}`, true)
+  return stripeJsPromise
+}
+
+function checkoutPlanCopy(plan){
+  return plan === 'annual'
+    ? { title:'Annual membership', detail:'Unlimited access • $49/year' }
+    : { title:'Treasure Coast Today membership', detail:'Unlimited access • $1 first month, then $4.99/month' }
+}
+
+function closeCheckoutModal(){
+  const modal = activeCheckoutModal
+  if (!modal) return
+  try { activeEmbeddedCheckout?.destroy?.() } catch {}
+  activeEmbeddedCheckout = null
+  activeCheckoutModal = null
+  document.body.classList.remove('tct-checkout-modal-open')
+  modal.classList.remove('is-open')
+  window.setTimeout(() => modal.remove(), 180)
+}
+
+function createCheckoutModal(plan){
+  closeCheckoutModal()
+  const copy = checkoutPlanCopy(plan)
+  const modal = document.createElement('div')
+  modal.className = 'tct-checkout-modal'
+  modal.setAttribute('data-tct-checkout-modal', 'true')
+  modal.innerHTML = `
+    <div class="tct-checkout-modal-backdrop" data-tct-checkout-close></div>
+    <section class="tct-checkout-modal-panel" role="dialog" aria-modal="true" aria-labelledby="tct-checkout-title">
+      <header class="tct-checkout-modal-header">
+        <div class="tct-checkout-modal-brand" aria-hidden="true">TCT</div>
+        <div class="tct-checkout-modal-heading">
+          <strong id="tct-checkout-title">${copy.title}</strong>
+          <span>${copy.detail}</span>
+        </div>
+        <button class="tct-checkout-modal-close" type="button" data-tct-checkout-close aria-label="Close checkout">&times;</button>
+      </header>
+      <div class="tct-checkout-modal-status" data-tct-checkout-status role="status">Preparing secure checkout…</div>
+      <div class="tct-checkout-modal-mount" data-tct-checkout-mount></div>
+    </section>`
+  document.body.appendChild(modal)
+  document.body.classList.add('tct-checkout-modal-open')
+  activeCheckoutModal = modal
+
+  const close = () => closeCheckoutModal()
+  qsa('[data-tct-checkout-close]', modal).forEach(el => el.addEventListener('click', close))
+  modal._tctEscapeHandler = event => {
+    if (event.key === 'Escape' && activeCheckoutModal === modal) close()
+  }
+  document.addEventListener('keydown', modal._tctEscapeHandler)
+  const originalRemove = modal.remove.bind(modal)
+  modal.remove = () => {
+    document.removeEventListener('keydown', modal._tctEscapeHandler)
+    originalRemove()
+  }
+  window.requestAnimationFrame(() => modal.classList.add('is-open'))
+  qs('.tct-checkout-modal-close', modal)?.focus({ preventScroll:true })
+  return modal
+}
+
+function setCheckoutModalStatus(modal, text, state='loading'){
+  const status = qs('[data-tct-checkout-status]', modal)
+  if (!status) return
+  status.textContent = text || ''
+  status.dataset.state = state
+  status.classList.toggle('hidden', !text)
+}
+
+async function finishEmbeddedCheckout(sessionId, plan, modal){
+  if (!modal?.isConnected || !sessionId) return
+  try { activeEmbeddedCheckout?.destroy?.() } catch {}
+  activeEmbeddedCheckout = null
+  qs('[data-tct-checkout-mount]', modal)?.replaceChildren()
+  setCheckoutModalStatus(modal, 'Payment successful. Activating your membership…', 'loading')
+
+  const { data, error } = await supabase.functions.invoke('checkout-complete', {
+    body: { session_id: sessionId },
+  })
+  if (error || !data?.complete) {
+    setCheckoutModalStatus(
+      modal,
+      `Your payment succeeded, but membership setup needs another try. ${data?.error || error?.message || 'Please contact us if this continues.'}`.trim(),
+      'error',
+    )
     return
   }
+
+  const session = await authSession()
+  if (session) {
+    invalidateMembershipStatus()
+    const statusPromise = membershipStatus()
+    const articlePromise = unlockArticle(statusPromise)
+    const [status, articleResult] = await Promise.all([statusPromise, articlePromise])
+    const effectiveStatus = statusWithArticleAuthority(status, articleResult)
+    applySubscriberChrome(effectiveStatus)
+    await refreshSubscribeAccount(effectiveStatus)
+    if (effectiveStatus?.authenticated && effectiveStatus?.entitled) {
+      setCheckoutModalStatus(modal, 'You’re subscribed. Unlimited access is active on this device.', 'success')
+      return
+    }
+  }
+
+  const planMessage = plan === 'annual' ? 'Your annual membership is active.' : 'Your $1 first month is active.'
+  setCheckoutModalStatus(
+    modal,
+    `${planMessage} We sent a secure sign-in link to ${data.email}. Open it to activate unlimited access on this device.`,
+    'success',
+  )
+}
+
+async function startHostedCheckout(plan, returnPath, message){
+  setMessage(message, 'Opening secure Stripe checkout…')
+  const { data, error } = await supabase.functions.invoke('create-checkout', {
+    body: { plan, return_path: returnPath, presentation:'hosted' },
+  })
+  if (error || !data?.url) {
+    throw new Error(data?.error || error?.message || 'Please try again.')
+  }
   window.location.assign(data.url)
+}
+
+async function startEmbeddedCheckout(plan, returnPath){
+  const modal = createCheckoutModal(plan)
+  const key = stripePublishableKey()
+  if (!key) throw new Error('Stripe publishable key is unavailable.')
+
+  const stripeGlobal = await loadStripeJs()
+  if (!modal.isConnected) return
+  const { data, error } = await supabase.functions.invoke('create-checkout', {
+    body: { plan, return_path: returnPath, presentation:'embedded' },
+  })
+  if (!modal.isConnected) return
+  if (error) throw new Error(data?.error || error?.message || 'Unable to create embedded checkout.')
+
+  // A pre-embedded backend may ignore `presentation` and return its normal hosted
+  // URL. Honor that response rather than leaving the reader at a broken modal.
+  if (data?.url && !data?.clientSecret) {
+    window.location.assign(data.url)
+    return
+  }
+  if (!data?.clientSecret || !data?.session_id) throw new Error(data?.error || 'Embedded checkout did not return a client secret.')
+
+  const stripe = stripeGlobal(key)
+  let checkout = null
+  checkout = await stripe.initEmbeddedCheckout({
+    fetchClientSecret: async () => data.clientSecret,
+    onComplete: async () => {
+      try { checkout?.destroy?.() } catch {}
+      if (activeEmbeddedCheckout === checkout) activeEmbeddedCheckout = null
+      await finishEmbeddedCheckout(String(data.session_id), plan, modal)
+    },
+  })
+  if (!modal.isConnected) {
+    try { checkout.destroy() } catch {}
+    return
+  }
+  activeEmbeddedCheckout = checkout
+  checkout.mount(qs('[data-tct-checkout-mount]', modal))
+  setCheckoutModalStatus(modal, '', 'ready')
+}
+
+async function startCheckout(button){
+  if (!supabase || button?.disabled) return
+  const plan = button.dataset.plan
+  const returnPath = returnPathFor(button)
+  const message = qs('[data-membership-message]') || qs('.membership-message', button.closest('.tct-paywall') || document)
+  button.disabled = true
+
+  if (stripePublishableKey()) {
+    try {
+      setMessage(message, '')
+      await startEmbeddedCheckout(plan, returnPath)
+      button.disabled = false
+      return
+    } catch (error) {
+      closeCheckoutModal()
+      console.warn('Embedded Stripe Checkout unavailable; falling back to hosted Checkout.', error)
+    }
+  }
+
+  try {
+    await startHostedCheckout(plan, returnPath, message)
+  } catch (error) {
+    setMessage(message, `Checkout failed: ${error?.message || 'Please try again.'}`, true)
+    button.disabled = false
+  }
 }
 
 async function sendMagicLink(form){

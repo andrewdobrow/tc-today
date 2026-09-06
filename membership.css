@@ -859,7 +859,7 @@ html.tct-meter-precheck .tct-preview-copy {
 
 
 /* ================================================================
-   TCT v1.13.7.9 - branded monthly free-article reminder
+   TCT v1.13.7.10 - branded monthly free-article reminder
    A more prominent, dismissible bottom banner appears only after a
    reader begins using the one-free-article monthly allowance.
    ================================================================ */
@@ -996,4 +996,161 @@ html.tct-meter-precheck .tct-preview-copy {
 @media (prefers-reduced-motion: reduce) {
   .tct-free-article-banner { transition: none; }
 }
+
+
+/* ================================================================
+   TCT v1.13.7.10 - on-site Stripe Embedded Checkout modal
+   Stripe owns the secure payment iframe; TCT owns only the surrounding shell.
+   ================================================================ */
+body.tct-checkout-modal-open { overflow: hidden; }
+.tct-checkout-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+}
+.tct-checkout-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.tct-checkout-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10,18,14,.72);
+  backdrop-filter: blur(2px);
+}
+.tct-checkout-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(620px, 100%);
+  max-height: min(92vh, 880px);
+  overflow: auto;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(0,0,0,.34);
+  overscroll-behavior: contain;
+}
+.tct-checkout-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  min-height: 76px;
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr) 42px;
+  align-items: center;
+  gap: 15px;
+  padding: 13px 15px 13px 18px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #dfe7e2;
+  background: #174f3d;
+  color: #fff;
+}
+.tct-checkout-modal-brand {
+  padding-right: 15px;
+  border-right: 1px solid rgba(255,255,255,.36);
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-size: 32px;
+  line-height: .9;
+  font-weight: 650;
+  letter-spacing: -.07em;
+  white-space: nowrap;
+}
+.tct-checkout-modal-heading { min-width: 0; }
+.tct-checkout-modal-heading strong,
+.tct-checkout-modal-heading span { display: block; }
+.tct-checkout-modal-heading strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.12rem;
+  line-height: 1.15;
+}
+.tct-checkout-modal-heading span {
+  margin-top: 4px;
+  color: rgba(255,255,255,.84);
+  font-size: .78rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+.tct-checkout-modal-close {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  cursor: pointer;
+  font: 400 28px/36px Arial, sans-serif;
+}
+.tct-checkout-modal-close:hover { background: rgba(255,255,255,.2); }
+.tct-checkout-modal-close:focus-visible {
+  outline: 3px solid #ffe08a;
+  outline-offset: 2px;
+}
+.tct-checkout-modal-status {
+  margin: 18px 20px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #f4f8f6;
+  color: #174f3d;
+  font-size: .9rem;
+  line-height: 1.45;
+  font-weight: 800;
+}
+.tct-checkout-modal-status[data-state="success"] {
+  margin-bottom: 22px;
+  border: 1px solid #b8d5c6;
+  background: #eff8f2;
+}
+.tct-checkout-modal-status[data-state="error"] {
+  margin-bottom: 22px;
+  border: 1px solid #e8b8ad;
+  background: #fff3f0;
+  color: #8a2f20;
+}
+.tct-checkout-modal-mount {
+  min-height: 310px;
+  padding: 8px 14px 20px;
+  box-sizing: border-box;
+}
+.tct-checkout-modal-status.hidden + .tct-checkout-modal-mount { padding-top: 14px; }
+@media (max-width: 680px) {
+  .tct-checkout-modal {
+    padding: 0;
+    place-items: stretch;
+  }
+  .tct-checkout-modal-panel {
+    width: 100%;
+    max-height: 100dvh;
+    height: 100dvh;
+    border-radius: 0;
+  }
+  .tct-checkout-modal-header {
+    min-height: 72px;
+    padding: calc(11px + env(safe-area-inset-top)) 12px 11px 14px;
+    grid-template-columns: auto minmax(0,1fr) 38px;
+    gap: 11px;
+  }
+  .tct-checkout-modal-brand {
+    padding-right: 11px;
+    font-size: 28px;
+  }
+  .tct-checkout-modal-heading strong { font-size: 1rem; }
+  .tct-checkout-modal-heading span { font-size: .72rem; }
+  .tct-checkout-modal-close {
+    width: 36px;
+    height: 36px;
+    font-size: 26px;
+    line-height: 34px;
+  }
+  .tct-checkout-modal-status { margin: 14px 13px 0; }
+  .tct-checkout-modal-mount { padding: 8px 4px calc(18px + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tct-checkout-modal { transition: none; }
 }
