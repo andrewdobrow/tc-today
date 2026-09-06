@@ -22304,6 +22304,40 @@ _ARTICLE_POST_NEWSLETTER_SLOT_RE = re.compile(
 )
 
 
+def _is_article_redirect_stub(page_html):
+    """Return True for canonical redirect tombstones stored under /articles/.
+
+    The canonical story manager intentionally leaves lightweight noindex redirect
+    files behind when duplicate article URLs are consolidated. Those files are not
+    readable article pages and must not be forced through article-body contracts
+    such as newsletter placement.
+    """
+    source = str(page_html or "")
+    if re.search(
+        r'<div\b[^>]*class=["\'][^"\']*\barticle-body\b',
+        source,
+        re.I,
+    ):
+        return False
+
+    has_noindex = bool(
+        re.search(
+            r'<meta\b[^>]*name=["\']robots["\'][^>]*content=["\'][^"\']*noindex',
+            source,
+            re.I,
+        )
+    )
+    has_canonical = bool(
+        re.search(r'<link\b[^>]*rel=["\']canonical["\']', source, re.I)
+    )
+    has_redirect = bool(
+        re.search(r'<meta\b[^>]*http-equiv=["\']refresh["\']', source, re.I)
+        or re.search(r'\b(?:window\.)?location\.replace\s*\(', source, re.I)
+        or re.search(r'\bthis article has moved to\b', source, re.I)
+    )
+    return has_noindex and has_canonical and has_redirect
+
+
 def _normalize_article_newsletter_delivery_sitewide(root):
     """Enforce one Kit signup immediately after the story body on every article.
 
@@ -22312,6 +22346,9 @@ def _normalize_article_newsletter_delivery_sitewide(root):
     below it. Membership/paywall state does not change the newsletter placement;
     the same Kit form remains after the visible/full story and before ancillary
     event-link/share treatment.
+
+    Canonical redirect tombstones under ``articles/`` are deliberately skipped:
+    they are navigation artifacts, not readable article pages.
     """
     root = Path(root)
     articles_dir = root / "articles"
@@ -22324,6 +22361,8 @@ def _normalize_article_newsletter_delivery_sitewide(root):
     for path in sorted(articles_dir.glob("*.html")):
         scanned += 1
         original = path.read_text(encoding="utf-8", errors="ignore")
+        if _is_article_redirect_stub(original):
+            continue
         normalized = _ARTICLE_POST_NEWSLETTER_SLOT_RE.sub("", original)
 
         # Insert directly after article-body, before an optional event-link box

@@ -84,3 +84,40 @@ def test_membership_runtime_preserves_or_falls_back_to_same_requested_article_en
     assert "script.setAttribute('data-uid', FULL_ARTICLE_NEWSLETTER_UID)" in browser
     assert "script.src = FULL_ARTICLE_NEWSLETTER_SRC" in browser
     assert "function removePostArticleNewsletter()" in browser
+
+
+def test_sitewide_article_newsletter_contract_skips_canonical_redirect_tombstones(tmp_path):
+    g = _load_generate()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+
+    redirect = articles / "moved.html"
+    redirect_html = (
+        '<!doctype html><html><head>'
+        '<link rel="canonical" href="https://treasurecoast.today/articles/canonical.html">'
+        '<meta name="robots" content="noindex,follow">'
+        '<meta http-equiv="refresh" content="0; url=https://treasurecoast.today/articles/canonical.html">'
+        '<script>window.location.replace("https://treasurecoast.today/articles/canonical.html");</script>'
+        '</head><body><p>This article has moved to '
+        '<a href="https://treasurecoast.today/articles/canonical.html">Canonical story</a>.</p>'
+        '</body></html>'
+    )
+    redirect.write_text(redirect_html, encoding="utf-8")
+
+    article = articles / "real.html"
+    article.write_text(
+        '<html><body><div class="article-body"><p>One.</p><p>Two.</p></div>'
+        '<div class="article-share">share</div></body></html>',
+        encoding="utf-8",
+    )
+
+    result = g._normalize_article_newsletter_delivery_sitewide(tmp_path)
+    assert result == {"scanned": 2, "updated": 1}
+
+    assert redirect.read_text(encoding="utf-8") == redirect_html
+    assert 'newsletter-inline-slot--article' not in redirect_html
+
+    rendered = article.read_text(encoding="utf-8")
+    assert rendered.count('newsletter-inline-slot--article') == 1
+    assert rendered.count('data-uid="30e15672d3"') == 1
+    assert rendered.index('newsletter-inline-slot--article') < rendered.index('<div class="article-share">')
