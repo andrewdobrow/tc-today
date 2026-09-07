@@ -25,9 +25,10 @@ jobs:
       committed: ${{ steps.push.outputs.committed }}
 
     steps:
-      - name: Checkout repo
+      - name: Checkout latest main
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Set up Python
@@ -56,16 +57,36 @@ jobs:
         run: |
           git config user.name "TCT Events Bot"
           git config user.email "bot@treasurecoast.today"
-          git add events.html data/events.json data/events-source-cache.json data/events-source-status.json
-          if git diff --staged --quiet; then
-            echo "No event changes to publish."
-            echo "committed=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          git commit -m "Events: refresh $(date -u '+%b %d %Y %H:%M UTC')"
-          git pull --rebase
-          git push
-          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+          # Generated event caches should never be manually merged/rebased. A queued
+          # workflow can start from an older trigger SHA, and main can also advance
+          # while this job is fetching calendars. If push loses that race, rebuild
+          # the event artifacts on the new main tip and try again.
+          for attempt in 1 2 3; do
+            git add events.html data/events.json data/events-source-cache.json data/events-source-status.json
+            if git diff --staged --quiet; then
+              echo "No event changes to publish."
+              echo "committed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            git commit -m "Events: refresh $(date -u '+%b %d %Y %H:%M UTC')"
+            if git push origin HEAD:main; then
+              echo "committed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Event publish could not catch up with main after 3 attempts." >&2
+              exit 1
+            fi
+
+            echo "main advanced during event refresh; rebuilding on latest main (attempt $((attempt + 1))/3)."
+            git fetch origin main
+            git reset --hard origin/main
+            python -u scripts/update_events.py
+            python scripts/update_events.py --validate-only
+          done
 
   deploy:
     needs: update
