@@ -13428,10 +13428,16 @@ def _final_canonical_surface_identity(item, permalink, context):
     raw_entry = archive_by_slug.get(raw_slug)
 
     event_key = str(
-        (canonical_entry or {}).get("durable_custom_identity_key")
+        (canonical_entry or {}).get("custom_publication_key")
+        or _custom_publication_key(canonical_entry or {})
+        or (canonical_entry or {}).get("durable_custom_identity_key")
         or (canonical_entry or {}).get("custom_event_key")
+        or (raw_entry or {}).get("custom_publication_key")
+        or _custom_publication_key(raw_entry or {})
         or (raw_entry or {}).get("durable_custom_identity_key")
         or (raw_entry or {}).get("custom_event_key")
+        or item.get("custom_publication_key")
+        or _custom_publication_key(item)
         or item.get("durable_custom_identity_key")
         or item.get("custom_event_key")
         or ""
@@ -16810,12 +16816,14 @@ def validate_custom_category_placement(all_categories, output_root=None):
 
 
 def load_custom_articles():
-    """Load manual publications using an exact-headline-only update contract.
+    """Load manual publications using durable custom-publication identity.
 
-    The same headline updates the existing custom permalink and may replace the
-    complete body, image, category or product data. Any headline difference creates a
-    new article. No fuzzy, body-hash, recurring-series, source or story-ID matching is
-    allowed to authorize a custom overwrite.
+    A custom article is an editorial object, not a headline string. Headline, body,
+    image and category edits must stay on the article's original permalink whenever a
+    durable identity proves they are the same submission. Identity is resolved in this
+    order: explicit ``custom_id``/``custom_publication_key``; recurring series+edition;
+    exact unchanged body payload; then exact headline as the legacy fallback. Different
+    recurring editions and unrelated custom stories still receive new URLs.
     """
     path = OUTPUT_DIR / "custom_articles.json"
     if not path.exists():
@@ -16840,25 +16848,19 @@ def load_custom_articles():
     now = datetime.now(_tz.utc)
     retired = _load_custom_retirements(OUTPUT_DIR)
     archive = load_archive(OUTPUT_DIR / "archive.json")
-    archived_by_exact_headline = {}
-    for existing in archive:
-        if not isinstance(existing, dict) or not (existing.get("is_custom") or existing.get("authoritative_custom")):
-            continue
-        headline = _exact_custom_headline(existing.get("headline"))
-        if not headline or headline in retired or existing.get("retired_custom"):
-            continue
-        archived_by_exact_headline.setdefault(headline, []).append(existing)
-    for rows in archived_by_exact_headline.values():
-        rows.sort(key=lambda row: (
-            str(row.get("first_published") or row.get("date") or ""),
-            str(row.get("slug") or ""),
-        ))
+    archived_customs = [
+        existing for existing in archive
+        if isinstance(existing, dict)
+        and (existing.get("is_custom") or existing.get("authoritative_custom"))
+        and not existing.get("retired_custom")
+    ]
 
     live = []
     skipped_published = 0
     retired_skips = 0
     queued_headlines = set()
     queued_slugs = {}
+    queued_publication_keys = {}
     for index, raw in enumerate(data, start=1):
         if not isinstance(raw, dict):
             raise RuntimeError(
@@ -16878,6 +16880,7 @@ def load_custom_articles():
         if art.get("retired") is True or headline in retired:
             retired_skips += 1
             continue
+
         requested_slug = _validated_custom_requested_slug(art.get("slug"))
         if requested_slug and requested_slug in _load_custom_retired_slugs(OUTPUT_DIR):
             raise RuntimeError(
@@ -16891,9 +16894,10 @@ def load_custom_articles():
                 raise RuntimeError(
                     "custom_articles.json reuses slug "
                     f"'{requested_slug}' for both '{prior_headline}' and '{headline}'. "
-                    "Each custom headline requires a unique requested slug."
+                    "Each custom publication may declare a slug only once per queue."
                 )
             queued_slugs[requested_slug] = headline
+
         expires = str(art.get("expires") or "").strip()
         if expires:
             try:
@@ -16918,26 +16922,62 @@ def load_custom_articles():
         art["headline"] = headline
         art["_custom_requested_slug"] = str(art.get("slug") or "").strip()
         art["_custom_requested_replace_slug"] = ""
-        exact_matches = archived_by_exact_headline.get(headline, [])
-        exact_existing = exact_matches[0] if exact_matches else None
         payload_hash = _custom_body_hash(art.get("body", ""))
-        if exact_existing:
-            saved_hash = str(exact_existing.get("custom_body_hash") or "")
-            product_signature = str(exact_existing.get("product_guide_hash") or "")
-            current_product_signature = _product_guide_hash(art) if str(art.get("article_type") or "") == "product_guide" else ""
-            if not art.get("republish") and saved_hash and saved_hash == payload_hash and product_signature == current_product_signature:
+        art["custom_body_hash"] = payload_hash
+        publication_key = _custom_publication_key(art)
+        if publication_key:
+            prior = queued_publication_keys.get(publication_key)
+            if prior and prior != headline:
+                raise RuntimeError(
+                    "custom_articles.json contains the same durable custom publication "
+                    f"more than once ({publication_key}): '{prior}' and '{headline}'."
+                )
+            queued_publication_keys[publication_key] = headline
+            art["custom_publication_key"] = publication_key
+
+        matches = [
+            existing for existing in archived_customs
+            if _custom_publication_identity_match(art, existing)
+        ]
+        matches.sort(key=_custom_canonical_sort_key)
+        identity_existing = matches[0] if matches else None
+
+        if identity_existing:
+            saved_hash = str(identity_existing.get("custom_body_hash") or "")
+            product_signature = str(identity_existing.get("product_guide_hash") or "")
+            current_product_signature = (
+                _product_guide_hash(art)
+                if str(art.get("article_type") or "") == "product_guide"
+                else ""
+            )
+            exact_headline_unchanged = (
+                _archive_custom_headline_key(identity_existing) == headline
+                or _exact_custom_headline(identity_existing.get("headline")) == headline
+            )
+            payload_unchanged = bool(
+                not art.get("republish")
+                and exact_headline_unchanged
+                and saved_hash
+                and saved_hash == payload_hash
+                and product_signature == current_product_signature
+            )
+            slug = str(identity_existing.get("slug") or "")
+            art["replace_slug"] = slug
+            art["_custom_requested_replace_slug"] = slug
+            art["_custom_identity_update"] = True
+            art["_custom_active_queue"] = True
+            if publication_key:
+                art["custom_publication_key"] = publication_key
+            elif identity_existing.get("custom_publication_key"):
+                art["custom_publication_key"] = identity_existing.get("custom_publication_key")
+            if identity_existing.get("custom_id") and not art.get("custom_id"):
+                art["custom_id"] = identity_existing.get("custom_id")
+
+            if payload_unchanged:
                 # An unchanged queue entry is still an ACTIVE editorial placement.
-                # Removing it from this run forces archive recovery to reintroduce the
-                # story as ``_archive_only``, which in turn makes a freshly published
-                # original TCT article ineligible for front-page selection. Preserve
-                # the established permalink and first-publication time, but mark the
-                # payload as a no-op so write_archives does not rewrite it.
-                slug = str(exact_existing.get("slug") or "")
-                art["replace_slug"] = slug
-                art["_custom_requested_replace_slug"] = slug
-                art["_custom_exact_headline_update"] = True
+                # Preserve the established permalink and publication time but avoid
+                # rewriting the body/page when nothing editorial changed.
                 art["_custom_payload_unchanged"] = True
-                art["_custom_active_queue"] = True
                 art["_archived_slug"] = slug
                 art["slug"] = slug or art.get("slug", "")
                 if slug:
@@ -16946,16 +16986,15 @@ def load_custom_articles():
                     "first_published", "date", "lastmod", "published_raw",
                     "editorial_story_id", "ranking_eligible", "legacy_identity_status",
                 ):
-                    if exact_existing.get(key) not in (None, ""):
-                        art[key] = exact_existing.get(key)
+                    if identity_existing.get(key) not in (None, ""):
+                        art[key] = identity_existing.get(key)
                 skipped_published += 1
                 print(f"  Custom active queue retained (payload unchanged): '{headline[:60]}'")
             else:
-                art["replace_slug"] = exact_existing.get("slug", "")
-                art["_custom_requested_replace_slug"] = exact_existing.get("slug", "")
-                art["_custom_exact_headline_update"] = True
-                art["_custom_active_queue"] = True
-                print(f"  Custom exact-headline update queued: '{headline[:60]}'")
+                print(
+                    "  Custom durable-identity update queued: "
+                    f"'{headline[:60]}' -> {slug or '[existing canonical]'}"
+                )
         else:
             art.pop("replace_slug", None)
             art.pop("update_existing", None)
@@ -16963,8 +17002,13 @@ def load_custom_articles():
         art["is_custom"] = True
         art["authoritative_custom"] = True
         art["_custom_active_queue"] = True
-        art["custom_body_hash"] = payload_hash
         art["custom_headline_key"] = headline
+        art["custom_series_key"] = _custom_series_key(art)
+        art["custom_edition_key"] = _custom_edition_marker(art)
+        if not art.get("custom_publication_key"):
+            stable_key = _custom_publication_key(art)
+            if stable_key:
+                art["custom_publication_key"] = stable_key
         art["enriched"] = True
         art["link"] = art.get("link", f"{SITE_URL}/")
         art["source_quality"] = "full"
@@ -17125,6 +17169,8 @@ _V1_12_0_6_FALSE_UPDATE_REPAIR_SNAPSHOTS = {
         "custom_event_key": "",
         "custom_series_key": "",
         "custom_edition_key": "",
+        "custom_id": "",
+        "custom_publication_key": "",
         "article_word_count": 211,
         "article_paragraph_count": 4,
         "event_url": "",
@@ -18854,13 +18900,7 @@ def _archive_custom_headline_key(entry):
 
 
 def _backfill_active_custom_archive_authority(archive, current_customs):
-    """Backfill legacy custom metadata without fuzzy cross-article matching.
-
-    Exact custom headlines are authoritative. A narrow known-event key is also safe
-    for the explicitly supported continuing incidents. Generic token overlap is not
-    safe for recurring beats such as St. Lucie Mets game recaps, where team names and
-    comeback language repeat across distinct games.
-    """
+    """Backfill durable custom metadata without fuzzy cross-article matching."""
     archive = list(archive or [])
     stamped = 0
     for current in current_customs or []:
@@ -18869,11 +18909,10 @@ def _backfill_active_custom_archive_authority(archive, current_customs):
         headline = _exact_custom_headline(current.get("headline"))
         if not headline:
             continue
-        exact_matches = [
+        matches = [
             entry for entry in archive
-            if _archive_custom_headline_key(entry) == headline
+            if _custom_publication_identity_match(current, entry)
         ]
-        matches = exact_matches
         if not matches:
             current_text = " ".join([
                 current.get("headline", ""), current.get("teaser", ""),
@@ -18894,13 +18933,7 @@ def _backfill_active_custom_archive_authority(archive, current_customs):
         if not matches:
             continue
 
-        def rank(entry):
-            exact = 1 if _archive_custom_headline_key(entry) == headline else 0
-            words = int(entry.get("article_word_count", 0) or 0)
-            first = str(entry.get("first_published") or entry.get("date") or "")
-            return (exact, words, first)
-
-        entry = max(matches, key=rank)
+        entry = min(matches, key=_custom_canonical_sort_key)
         entry["is_custom"] = True
         entry["authoritative_custom"] = True
         entry["custom_headline_key"] = headline
@@ -18908,6 +18941,17 @@ def _backfill_active_custom_archive_authority(archive, current_customs):
             current.get("headline", ""),
             current.get("teaser", "") or current.get("body", "")[:180],
         )
+        entry["custom_body_hash"] = current.get("custom_body_hash") or _custom_body_hash(
+            current.get("body", "")
+        )
+        entry["custom_series_key"] = _custom_series_key(current)
+        entry["custom_edition_key"] = _custom_edition_marker(current)
+        publication_key = _custom_publication_key(current)
+        if publication_key:
+            entry["custom_publication_key"] = publication_key
+        explicit_id = slugify(str(current.get("custom_id") or current.get("article_id") or ""))
+        if explicit_id:
+            entry["custom_id"] = explicit_id
         event_key = _custom_event_identity_key(current) or _known_event_key(" ".join([
             current.get("headline", ""), current.get("teaser", ""),
             current.get("body", "")[:500],
@@ -18916,7 +18960,6 @@ def _backfill_active_custom_archive_authority(archive, current_customs):
             entry["custom_event_key"] = event_key
         stamped += 1
     return stamped
-
 
 def _iter_live_custom_placements(all_categories, top_cat=None):
     """Yield each distinct live custom placement once with its surface label."""
@@ -18937,9 +18980,11 @@ def _iter_live_custom_placements(all_categories, top_cat=None):
 
 
 def _same_custom_publication_payload(a, b):
-    """Live clones coalesce only when their custom headlines are exactly equal."""
+    """Live clones coalesce by durable custom identity, not display headline."""
     if not isinstance(a, dict) or not isinstance(b, dict):
         return False
+    if _custom_publication_identity_match(a, b) or _custom_publication_identity_match(b, a):
+        return True
     headline_a = _exact_custom_headline(a.get("headline"))
     headline_b = _exact_custom_headline(b.get("headline"))
     return bool(headline_a and headline_a == headline_b)
@@ -19014,6 +19059,8 @@ def _record_current_custom_publication(item, slug, story_id, category_key, actio
         "custom_body_hash": body_hash,
         "custom_series_key": series_key,
         "custom_edition_key": edition_key,
+        "custom_id": slugify(str(item.get("custom_id") or item.get("article_id") or "")),
+        "custom_publication_key": _custom_publication_key(item),
         "slug": slug,
         "editorial_story_id": str(story_id or "").strip(),
         "category_key": str(category_key or item.get("category_key") or item.get("category") or "").strip(),
@@ -19148,6 +19195,31 @@ def _parse_any_datetime(value):
         return None
 
 
+def _normalize_custom_edition_key(value):
+    """Normalize human month variants so Sep/Sept/September identify one edition."""
+    raw = slugify(str(value or ""))
+    if not raw:
+        return ""
+    parts = raw.split("-")
+    month_aliases = {
+        "jan": "jan", "january": "jan",
+        "feb": "feb", "february": "feb",
+        "mar": "mar", "march": "mar",
+        "apr": "apr", "april": "apr",
+        "may": "may",
+        "jun": "jun", "june": "jun",
+        "jul": "jul", "july": "jul",
+        "aug": "aug", "august": "aug",
+        "sep": "sep", "sept": "sep", "september": "sep",
+        "oct": "oct", "october": "oct",
+        "nov": "nov", "november": "nov",
+        "dec": "dec", "december": "dec",
+    }
+    if parts and parts[0] in month_aliases:
+        parts[0] = month_aliases[parts[0]]
+    return "-".join(parts)
+
+
 def _custom_series_key(item):
     """Return an explicit or narrowly inferred recurring custom-series key."""
     if not isinstance(item, dict):
@@ -19155,22 +19227,42 @@ def _custom_series_key(item):
     explicit = slugify(str(item.get("series_key") or item.get("custom_series_key") or ""))
     if explicit:
         return explicit
+    category = str(item.get("category") or item.get("category_key") or "").strip()
     text = " ".join([
         str(item.get("headline") or ""),
-        str(item.get("category") or item.get("category_key") or ""),
+        str(item.get("teaser") or ""),
+        str(item.get("body") or "")[:600],
+        category,
     ]).lower()
     if "traffic report" in text and ("treasure coast" in text or "i-95" in text or "road" in text):
         return "treasure-coast-traffic-report"
+    # Weekly/dated Things To Do roundups are one recurring series, but each date
+    # range is a separate edition. Headline wording can change without creating a
+    # new publication; the edition marker below keeps next weekend distinct.
+    if (
+        category == "things_to_do"
+        and "treasure coast" in text
+        and re.search(r"\bevents?\b", text)
+        and (
+            "weekend" in text
+            or re.search(
+                rf"\b({_CUSTOM_MONTH_PATTERN})\.?\s+\d{{1,2}}\s*(?:-|–|—|to|through)\s*\d{{1,2}}\b",
+                text,
+                re.I,
+            )
+        )
+    ):
+        return "treasure-coast-weekend-events"
     return ""
 
 
 def _custom_edition_marker(item):
-    """Extract a human-visible edition marker such as ``july-26-31``."""
+    """Extract a normalized human-visible edition marker such as ``jul-26-31``."""
     if not isinstance(item, dict):
         return ""
-    explicit = slugify(str(item.get("edition_key") or item.get("custom_edition_key") or ""))
+    explicit = str(item.get("edition_key") or item.get("custom_edition_key") or "").strip()
     if explicit:
-        return explicit
+        return _normalize_custom_edition_key(explicit)
     headline = str(item.get("headline") or "").lower()
     match = re.search(
         rf"\b({_CUSTOM_MONTH_PATTERN})\.?\s+(\d{{1,2}})(?:\s*(?:-|–|—|to|through)\s*(\d{{1,2}}))?\b",
@@ -19181,11 +19273,100 @@ def _custom_edition_marker(item):
         pieces = [match.group(1).lower(), str(int(match.group(2)))]
         if match.group(3):
             pieces.append(str(int(match.group(3))))
-        return "-".join(pieces)
+        return _normalize_custom_edition_key("-".join(pieces))
     published = str(item.get("published_raw") or item.get("published") or "")
     parsed = _parse_any_datetime(published)
     return parsed.date().isoformat() if parsed else ""
 
+
+def _custom_publication_key(item):
+    """Return a durable editor identity that is independent of display headline."""
+    if not isinstance(item, dict):
+        return ""
+    explicit_id = slugify(str(item.get("custom_id") or item.get("article_id") or ""))
+    if explicit_id:
+        return f"id:{explicit_id}"
+    stored = str(item.get("custom_publication_key") or "").strip()
+    if stored.startswith("id:"):
+        return stored
+    series = _custom_series_key(item)
+    edition = _normalize_custom_edition_key(
+        item.get("custom_edition_key") or item.get("edition_key") or _custom_edition_marker(item)
+    )
+    if series and edition:
+        return f"series:{series}|edition:{edition}"
+    if stored:
+        # Normalize old stored series keys if a prior build persisted Sept vs Sep.
+        match = re.fullmatch(r"series:([^|]+)\|edition:(.+)", stored)
+        if match:
+            return f"series:{slugify(match.group(1))}|edition:{_normalize_custom_edition_key(match.group(2))}"
+        return stored
+    return ""
+
+
+def _custom_canonical_sort_key(entry):
+    """Oldest established permalink wins when several custom copies share identity."""
+    if not isinstance(entry, dict):
+        return (float("inf"), "")
+    parsed = _parse_any_datetime(
+        entry.get("first_published") or entry.get("date") or entry.get("lastmod")
+    )
+    return (
+        parsed.timestamp() if parsed is not None else float("inf"),
+        str(entry.get("slug") or ""),
+    )
+
+
+def _custom_publication_ledger_key(entry):
+    """Return the one deterministic ledger key allowed for an unsafe custom row.
+
+    Headline edits can make an otherwise valid custom archive row fail the generic
+    headline/slug alignment check.  A durable custom ID or recurring series+edition
+    key is still safe publication identity, but it must not open that row to source,
+    story-ID, incident, or cross-source fuzzy reconciliation.
+    """
+    if not isinstance(entry, dict):
+        return ""
+    if not (entry.get("is_custom") or entry.get("authoritative_custom")):
+        return ""
+    key = str(_custom_publication_key(entry) or "").strip()
+    return f"custom-event:{key}" if key else ""
+
+
+def _custom_publication_identity_match(current, archived):
+    """Return True only for deterministic same-custom-publication evidence.
+
+    This intentionally avoids fuzzy headline similarity. A stable custom ID or
+    series+edition key is authoritative. Exact unchanged body payload is a safe legacy
+    bridge for headline-only corrections made before custom IDs existed. Exact headline
+    remains the final backward-compatible fallback.
+    """
+    if not isinstance(current, dict) or not isinstance(archived, dict):
+        return False
+    if not (archived.get("is_custom") or archived.get("authoritative_custom")):
+        return False
+    current_key = _custom_publication_key(current)
+    archived_key = _custom_publication_key(archived)
+    if current_key and archived_key:
+        return current_key == archived_key
+
+    current_headline = _exact_custom_headline(current.get("headline"))
+    archived_headline = _archive_custom_headline_key(archived)
+    if current_headline and archived_headline and current_headline == archived_headline:
+        return True
+
+    current_hash = str(current.get("custom_body_hash") or _custom_body_hash(current.get("body", ""))).strip()
+    archived_hash = str(archived.get("custom_body_hash") or "").strip()
+    if current_hash and archived_hash and current_hash == archived_hash:
+        current_category = str(current.get("category") or current.get("category_key") or "").strip()
+        archived_category = str(archived.get("category") or archived.get("category_key") or "").strip()
+        current_type = str(current.get("article_type") or "custom_article")
+        archived_type = str(archived.get("article_type") or "custom_article")
+        return bool(
+            current_type == archived_type
+            and (not current_category or not archived_category or current_category == archived_category)
+        )
+    return False
 
 def _custom_series_slug_mismatch(item, slug):
     """Detect a recurring edition published under another edition's permalink."""
@@ -19201,7 +19382,19 @@ def _custom_series_slug_mismatch(item, slug):
     # corrections remain explicit payload repairs of the existing custom page.
     if not marker:
         return False
-    if marker not in slug:
+    slug_marker_match = re.search(
+        rf"(?:^|-)((?:{_CUSTOM_MONTH_PATTERN}))-(\d{{1,2}})(?:-(\d{{1,2}}))?(?:-|$)",
+        slug,
+        re.I,
+    )
+    if slug_marker_match:
+        slug_marker_parts = [slug_marker_match.group(1), slug_marker_match.group(2)]
+        if slug_marker_match.group(3):
+            slug_marker_parts.append(slug_marker_match.group(3))
+        slug_marker = _normalize_custom_edition_key("-".join(slug_marker_parts))
+        if slug_marker != _normalize_custom_edition_key(marker):
+            return True
+    elif marker not in slug:
         return True
     # When an edition is explicit, the series name must also remain recognizable.
     return not all(part in slug for part in series_key.split("-") if len(part) > 2)
@@ -19501,19 +19694,15 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
     current_custom_payload = None
     if replace_with_custom and (entry.get("is_custom") or entry.get("authoritative_custom")):
         # Current custom copy may refresh an archived custom placement only through
-        # the exact-headline authority contract. Broad event similarity, fingerprints,
-        # or inherited slugs must never swap a different manual article into this
-        # archive placement. That previously allowed an archived Sports custom story
-        # to absorb a new Florida product guide while retaining ``_archive_only``.
-        entry_headline = _exact_custom_headline(entry.get("headline"))
-        if entry_headline:
-            current_custom_payload = next(
-                (
-                    custom for custom in current_customs
-                    if _exact_custom_headline(custom.get("headline")) == entry_headline
-                ),
-                None,
-            )
+        # deterministic durable custom identity. This permits headline/body corrections
+        # to stay on the original permalink without reviving fuzzy sports/topic merges.
+        current_custom_payload = next(
+            (
+                custom for custom in current_customs
+                if _custom_publication_identity_match(custom, entry)
+            ),
+            None,
+        )
         if current_custom_payload is not None:
             canonical = current_custom_payload
 
@@ -19525,7 +19714,8 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
             "image_credit", "published", "published_raw", "feed_url", "event_url",
             "event_link_text", "category", "category_key", "category_label",
             "article_type", "products", "product_count", "has_affiliate_links",
-            "custom_body_hash", "custom_headline_key",
+            "custom_body_hash", "custom_headline_key", "custom_id",
+            "custom_publication_key", "custom_series_key", "custom_edition_key",
         ):
             value = canonical.get(key)
             if value not in (None, ""):
@@ -24214,16 +24404,22 @@ def _refresh_current_manual_custom_metadata(existing, hero, headline):
     )
     existing["custom_series_key"] = _custom_series_key(hero)
     existing["custom_edition_key"] = _custom_edition_marker(hero)
+    publication_key = _custom_publication_key(hero)
+    if publication_key:
+        existing["custom_publication_key"] = publication_key
+    explicit_id = slugify(str(hero.get("custom_id") or hero.get("article_id") or ""))
+    if explicit_id:
+        existing["custom_id"] = explicit_id
     return True
 
 
 def _resolve_custom_publication_target(hero, archive, existing, headline):
-    """Resolve a custom-origin placement without confusing provenance and submission.
+    """Resolve custom publication identity without tying permalink ownership to title.
 
-    Active manual queue payloads retain the immutable exact-headline contract: a
-    changed headline is a new article. Published custom canonicals that merely carry
-    durable custom provenance must instead stay on their already-established permalink
-    when a validated update advances the display headline.
+    Current manual submissions update an established custom permalink when deterministic
+    durable identity matches: explicit custom ID, recurring series+edition, exact legacy
+    body payload, or exact headline. Unrelated custom stories and new recurring editions
+    remain isolated and receive new URLs.
     """
     if not (hero.get("is_custom") or hero.get("authoritative_custom")):
         return existing, None, None
@@ -24244,24 +24440,22 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
         if isinstance(entry, dict)
         and (entry.get("is_custom") or entry.get("authoritative_custom"))
         and not entry.get("retired_custom")
-        and _archive_custom_headline_key(entry) == headline_key
+        and _custom_publication_identity_match(hero, entry)
     ]
-    matches.sort(key=lambda row: (
-        str(row.get("first_published") or row.get("date") or ""),
-        str(row.get("slug") or ""),
-    ))
+    matches.sort(key=_custom_canonical_sort_key)
     target = matches[0] if matches else None
     if target is not None:
         story_id = str(target.get("editorial_story_id") or "").strip()
         if not story_id:
-            story_id = "custom:" + hashlib.sha256(
-                ("headline|" + headline_key).encode("utf-8")
-            ).hexdigest()[:32]
+            seed = _custom_publication_key(hero) or _custom_publication_key(target)
+            if not seed:
+                seed = "headline|" + (_archive_custom_headline_key(target) or headline_key)
+            story_id = "custom:" + hashlib.sha256(seed.encode("utf-8")).hexdigest()[:32]
         return target, None, story_id
 
-    # Preserve a diagnostic marker when a live/archive clone brought an older
-    # custom permalink into a differently titled submission. The stale slug is
-    # quarantined, not reused; the different headline receives a new identity.
+    # Preserve the prior recurring-edition diagnostic when a stale live/archive
+    # placement carries the previous edition's slug. It must be quarantined rather
+    # than reused; this does not apply when durable identity already found a target.
     if "_custom_requested_slug" not in hero and isinstance(existing, dict):
         inherited_slug = _normalize_custom_slug(hero.get("slug"))
         existing_slug = _normalize_custom_slug(existing.get("slug"))
@@ -24269,10 +24463,9 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
             hero["_superseded_custom_slug"] = existing_slug
             hero["_custom_series_permalink_repair"] = True
 
-    # Only a slug explicitly captured from custom_articles.json may choose a
-    # new custom permalink. ``hero["slug"]`` can be inherited from a stale
-    # archive/live placement and must never authorize reuse when the exact
-    # headline does not match.
+    # Only a slug explicitly captured from custom_articles.json may choose a new
+    # custom permalink. Inherited live/archive slugs never authorize an unrelated
+    # custom overwrite.
     requested_slug = hero.get("_custom_requested_slug", "")
     forced_slug = _validated_custom_requested_slug(requested_slug) or None
     if forced_slug:
@@ -24280,7 +24473,7 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
             (
                 entry for entry in archive or []
                 if _normalize_custom_slug(entry.get("slug")) == forced_slug
-                and _archive_custom_headline_key(entry) != headline_key
+                and not _custom_publication_identity_match(hero, entry)
             ),
             None,
         )
@@ -24289,13 +24482,14 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
                 "Custom publication slug collision: "
                 f"'{headline_key}' requested '{forced_slug}', but that permalink "
                 f"already belongs to '{collision.get('headline', '')}'. "
-                "Use a new unique slug; generation stopped before any article page "
-                "could be overwritten."
+                "Use the existing custom_id for an edit, or choose a new unique slug; "
+                "generation stopped before any article page could be overwritten."
             )
 
-    story_id = "custom:" + hashlib.sha256(
-        ("headline|" + headline_key).encode("utf-8")
-    ).hexdigest()[:32]
+    identity_seed = _custom_publication_key(hero)
+    if not identity_seed:
+        identity_seed = "headline|" + headline_key
+    story_id = "custom:" + hashlib.sha256(identity_seed.encode("utf-8")).hexdigest()[:32]
     return None, forced_slug, story_id
 
 def _incident_anchor_can_own_canonical(anchor):
@@ -24355,10 +24549,13 @@ def _publication_copy_rank(entry):
 
 
 def _publication_coalesce_key(item, identity_index=None):
-    """Use exact custom headlines and persistent generated-story IDs."""
+    """Use durable custom publication identity and persistent generated-story IDs."""
     if not isinstance(item, dict):
         return ""
     if item.get("is_custom") or item.get("authoritative_custom"):
+        publication_key = _custom_publication_key(item)
+        if publication_key:
+            return "custom-publication:" + publication_key
         headline = _exact_custom_headline(item.get("headline"))
         return (
             "custom-headline:" + hashlib.sha256(headline.encode("utf-8")).hexdigest()
@@ -24480,7 +24677,9 @@ def _publication_ledger_identity_keys(item, identity_index=None, *, include_arch
             keys.append(f"source:{source_url}")
 
     custom_event = str(
-        item.get("custom_event_key")
+        item.get("custom_publication_key")
+        or _custom_publication_key(item)
+        or item.get("custom_event_key")
         or item.get("durable_custom_identity_key")
         or ""
     ).strip()
@@ -29024,18 +29223,27 @@ def _build_canonical_publication_ledger(archive, identity_index=None):
     cross_source_features = {}
     cross_source_candidate_index = defaultdict(set)
     for entry in archive:
-        if not _publication_ledger_candidate_safe(entry):
+        generic_safe = _publication_ledger_candidate_safe(entry)
+        custom_only_key = _custom_publication_ledger_key(entry)
+        if not generic_safe and not custom_only_key:
             continue
         _ensure_publication_identity_fields(entry)
         slug = str(entry.get("slug") or "").strip()
-        features = _cross_source_feature_bundle(entry)
-        if slug:
-            cross_source_features[slug] = features
-            for candidate_key in _cross_source_candidate_keys(features):
-                cross_source_candidate_index[candidate_key].add(slug)
-        for key in _publication_ledger_identity_keys(
-            entry, identity_index, include_archive_body=True
-        ):
+        if generic_safe:
+            features = _cross_source_feature_bundle(entry)
+            if slug:
+                cross_source_features[slug] = features
+                for candidate_key in _cross_source_candidate_keys(features):
+                    cross_source_candidate_index[candidate_key].add(slug)
+            keys = _publication_ledger_identity_keys(
+                entry, identity_index, include_archive_body=True
+            )
+        else:
+            # Edited custom headlines may no longer align with their original slug.
+            # Admit only the deterministic custom publication key; never expose this
+            # bypass to source/story/incident or cross-source similarity identities.
+            keys = (custom_only_key,)
+        for key in keys:
             key_members[key].append(entry)
 
     key_to_slug = {}
@@ -29363,13 +29571,25 @@ def _reconcile_canonical_publication_ledger(archive, identity_index, output_root
 
     key_owner = {}
     identity_keys_by_index = {}
+    custom_identity_only_indexes = set()
     for index, entry in enumerate(archive):
-        if not _publication_ledger_candidate_safe(entry):
+        generic_safe = _publication_ledger_candidate_safe(entry)
+        custom_only_key = _custom_publication_ledger_key(entry)
+        if not generic_safe and not custom_only_key:
             continue
+        if generic_safe:
+            candidate_keys = _publication_ledger_identity_keys(
+                entry, identity_index, include_archive_body=True
+            )
+        else:
+            # This narrow lane exists only for custom headline edits whose original
+            # permalink no longer lexically resembles the edited title.  The row is
+            # allowed to connect only through its deterministic custom publication
+            # identity and is excluded from generic cross-source candidate matching.
+            candidate_keys = (custom_only_key,)
+            custom_identity_only_indexes.add(index)
         keys = []
-        for key in _publication_ledger_identity_keys(
-            entry, identity_index, include_archive_body=True
-        ):
+        for key in candidate_keys:
             if key.startswith("story:") and key.split(":", 1)[1] not in safe_story_ids:
                 continue
             keys.append(key)
@@ -29383,11 +29603,17 @@ def _reconcile_canonical_publication_ledger(archive, identity_index, output_root
 
     # Historical reconciliation is blocked by stable cross-source features before
     # pair evaluation.  v1.12.0.6 compared every archive row with every other row,
-    # which made the production path quadratic as the archive grew.
+    # which made the production path quadratic as the archive grew. Custom rows that
+    # entered via the durable-key-only bypass are deliberately excluded from this
+    # generic evidence graph.
     candidate_indexes = sorted(identity_keys_by_index)
+    generic_candidate_indexes = [
+        index for index in candidate_indexes
+        if index not in custom_identity_only_indexes
+    ]
     feature_by_index = {
         index: _cross_source_feature_bundle(archive[index])
-        for index in candidate_indexes
+        for index in generic_candidate_indexes
     }
     cross_source_buckets = defaultdict(list)
     for index, features in feature_by_index.items():
@@ -31357,6 +31583,8 @@ def _stable_authoritative_custom_story_id(entry):
     if existing:
         return existing
     seed_parts = [
+        str(entry.get("custom_publication_key") or _custom_publication_key(entry) or "").strip(),
+        str(entry.get("custom_id") or "").strip(),
         str(entry.get("custom_event_key") or "").strip(),
         str(entry.get("custom_fingerprint") or "").strip(),
         str(entry.get("custom_headline_key") or "").strip(),
@@ -33384,6 +33612,8 @@ def write_archives(all_categories, top_cat):
                 ) if hero.get("is_custom") else "",
                 "custom_series_key": _custom_series_key(hero) if hero.get("is_custom") else "",
                 "custom_edition_key": _custom_edition_marker(hero) if hero.get("is_custom") else "",
+                "custom_id": slugify(str(hero.get("custom_id") or hero.get("article_id") or "")) if hero.get("is_custom") else "",
+                "custom_publication_key": _custom_publication_key(hero) if hero.get("is_custom") else "",
                 "article_word_count": _word_count(hero.get("body", "")),
                 "article_paragraph_count": _paragraph_count(hero.get("body", "")),
                 "event_url": hero.get("event_url", ""),
@@ -37659,6 +37889,8 @@ def main():
                 def _same_as_custom(item):
                     if not item:
                         return False
+                    if item.get("is_custom") or item.get("authoritative_custom"):
+                        return _same_custom_publication_payload(item, art)
                     return _exact_custom_headline(item.get("headline")) == _exact_custom_headline(art.get("headline"))
 
                 # Sweep EVERY category: drop feed cards that are this story, and if a

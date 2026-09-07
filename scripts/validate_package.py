@@ -31,6 +31,7 @@ def validate_custom_queue(path: Path) -> list[str]:
     errors: list[str] = []
     headlines: set[str] = set()
     slugs: dict[str, str] = {}
+    custom_ids: dict[str, str] = {}
     for index, item in enumerate(data, start=1):
         label = f"custom_articles.json item {index}"
         if not isinstance(item, dict):
@@ -43,6 +44,17 @@ def validate_custom_queue(path: Path) -> list[str]:
         if headline in headlines:
             errors.append(f"{label} duplicates exact headline: {headline}")
         headlines.add(headline)
+        custom_id = re.sub(
+            r"[^a-z0-9]+", "-", str(item.get("custom_id") or item.get("article_id") or "").strip().lower()
+        ).strip("-")
+        if custom_id:
+            prior_headline = custom_ids.get(custom_id)
+            if prior_headline and prior_headline != headline:
+                errors.append(
+                    f"{label} ('{headline}') reuses custom_id '{custom_id}' "
+                    f"already assigned to '{prior_headline}'"
+                )
+            custom_ids[custom_id] = headline
         requested_slug = re.sub(
             r"[^a-z0-9]+", "-", str(item.get("slug") or "").strip().lower()
         ).strip("-")
