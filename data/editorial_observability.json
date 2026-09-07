@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-07T02:23:42Z",
+  "generated_at": "2026-09-07T10:58:46Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 7,
-    "placements_after": 7,
+    "placements_before": 3,
+    "placements_after": 3,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,24 +49,24 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 189,
+    "candidates_processed": 190,
     "routes": {
-      "generate_new": 44,
-      "skip": 143,
-      "update_existing": 2
+      "generate_new": 48,
+      "skip": 141,
+      "update_existing": 1
     },
     "eligibility": {
-      "listing": 6,
-      "low_value": 126,
-      "publishable": 57
+      "listing": 8,
+      "low_value": 130,
+      "publishable": 52
     },
     "source_classes": {
-      "aggregator": 132,
-      "local_news": 36,
-      "regional_news": 15,
-      "unknown": 6
+      "aggregator": 138,
+      "local_news": 37,
+      "regional_news": 13,
+      "unknown": 2
     },
-    "rejected_count": 6,
+    "rejected_count": 8,
     "rejected_examples": [
       {
         "headline": "8916 Orchid Reserve Cir, Sebastian, FL 32958 - Realtor.com",
@@ -105,6 +105,24 @@
         "source_class": "aggregator"
       },
       {
+        "headline": "657 SW Cleveland Ave Unit B, Stuart, FL 34994 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQQ1FpX1hpNlZSanF0SmRETG51RVVKZjNZRzFJbWFDMllsLTl3MGZ5T21wdTRoakswQ2lmOERMN2VWTmU5a1NFcWM5TnBrZGJVOWUtUzhOektlZ0pYSFdjNk9CbTdsRzVxTEJZOTBmT1g0WkVKZk43NDdMUUthaDlBV1g3ZmZ5cXB1bWNJU0JpNElkSVpuX0E?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
+        "headline": "5605 Winter Garden Pkwy, Fort Pierce, FL 34951 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOUVRoU201Qm9IN0N4UGRyUk5NRlM4YnNsR2hIMzJDR2dfQlcybmVvS2VyblFxYkN4VDNBMzcwdUU0NFNXaHlPVGZBWHJJV3k5bzhBUFdSVlZWVnE1Z1VISWNSYXVvOGdjQUVpczlLSjZhSGhQdUNobDBBT2F4ejB4N3IwMlJHeXBCaGhkRFBMaWptb3ZaYUVtaHNwWGx0QQ?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
         "headline": "5424 Fantasy Dr, Fort Pierce, FL 34947 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOaDI3aUNYU01WWnVEYnI0b2JJUDJMSzhNUlpTRTd4S3hvcTFGRGdMWWoyWmpLTGxqZmxBRWRIX3hwekl4bDgwNTd2TkxsdUpxN2kxczlXS21fMUs0bk1SUjVPbXNIWHVTVnUwYldzdzhFLWVETmNWUlZqOVREN21fTDZPS0lfR3hPNk52eUtqTVduOUU?oc=5",
         "status": "listing",
@@ -126,11 +144,22 @@
   },
   "relationships": {
     "counts": {
-      "follow_up": 1,
-      "new_story": 36,
-      "same_event": 152
+      "new_story": 44,
+      "same_event": 146
     },
     "examples": [
+      {
+        "story_id": "story_009179",
+        "title": "Florida short film 'Goodbye Stuart' filmed in Martin County - Treasure Coast News",
+        "event_key": "unknown-event-3a0d6d0b13",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_008939",
         "title": "Florida teachers were targeted over Charlie Kirk posts. What happened next? - Tampa Bay Times",
@@ -146,21 +175,9 @@
         ]
       },
       {
-        "story_id": "story_009121",
-        "title": "12-year-old arrested after ‘Death Note’ found at Florida elementary school - WPEC",
-        "event_key": "unknown-event-85176a8476",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
         "story_id": "story_007557",
-        "title": "Indiantown's new interim village manager vows transparency after surprise appointment - WPTV",
-        "event_key": "unknown-event-b2bf629f54",
+        "title": "Indiantown's new interim village manager vows transparency after surprise appointment",
+        "event_key": "unknown-event-7799fe82fd",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -302,7 +319,7 @@
         ]
       },
       {
-        "story_id": "story_009092",
+        "story_id": "story_009153",
         "title": "Motorcyclist ejected, killed in crash on State Road 7",
         "event_key": "named-person-death:state-road",
         "relationship": "same_event",
@@ -315,23 +332,9 @@
         ]
       },
       {
-        "story_id": "story_008224",
-        "title": "No undocumented kids at Florida state universities, Board of Governors decides - cw34.com",
-        "event_key": "unknown-event-c23363d447",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_006291",
-        "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - WPTV",
-        "event_key": "unknown-event-bbc86c744b",
+        "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - wptv.com",
+        "event_key": "unknown-event-fdd09bb378",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -392,9 +395,36 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "story_008204",
+        "title": "Connections Education Center's annual Fire Truck Pull raises money for students with autism",
+        "event_key": "fire-f121841323-f121841323",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
       }
     ],
     "decision_trace_examples": [
+      {
+        "story_id": "story_009179",
+        "title": "Florida short film 'Goodbye Stuart' filmed in Martin County - Treasure Coast News",
+        "event_key": "unknown-event-3a0d6d0b13",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_008939",
         "title": "Florida teachers were targeted over Charlie Kirk posts. What happened next? - Tampa Bay Times",
@@ -411,22 +441,9 @@
         ]
       },
       {
-        "story_id": "story_009121",
-        "title": "12-year-old arrested after ‘Death Note’ found at Florida elementary school - WPEC",
-        "event_key": "unknown-event-85176a8476",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
         "story_id": "story_007557",
-        "title": "Indiantown's new interim village manager vows transparency after surprise appointment - WPTV",
-        "event_key": "unknown-event-b2bf629f54",
+        "title": "Indiantown's new interim village manager vows transparency after surprise appointment",
+        "event_key": "unknown-event-7799fe82fd",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -559,7 +576,7 @@
         ]
       },
       {
-        "story_id": "story_009092",
+        "story_id": "story_009153",
         "title": "Motorcyclist ejected, killed in crash on State Road 7",
         "event_key": "named-person-death:state-road",
         "relationship": "same_event",
@@ -573,24 +590,9 @@
         ]
       },
       {
-        "story_id": "story_008224",
-        "title": "No undocumented kids at Florida state universities, Board of Governors decides - cw34.com",
-        "event_key": "unknown-event-c23363d447",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_006291",
-        "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - WPTV",
-        "event_key": "unknown-event-bbc86c744b",
+        "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - wptv.com",
+        "event_key": "unknown-event-fdd09bb378",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -691,110 +693,43 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "story_008207",
+        "title": "Florida attorney general settlement with egg producers results in 5.6 million free eggs for state food banks",
+        "event_key": "unknown-event-bbcbf0e278",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
       }
     ]
   },
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 2,
-    "high_confidence_candidate_count": 1,
+    "candidate_count": 0,
+    "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "follow_up": 1,
-      "new_story": 1
-    },
-    "milestones": {
-      "arrest": 1,
-      "death": 1
-    },
-    "reason_codes": {
-      "enforced_follow_up": 1,
-      "entity_match": 2,
-      "event_type_match": 1,
-      "fact_continuity": 1,
-      "identity_anchor_qualified": 2,
-      "location_match": 1,
-      "novel_milestone": 1,
-      "title_continuity": 2
-    },
-    "examples": [
-      {
-        "headline": "5 dead after Amazon cargo aircraft overruns runway in Miami, striking multiple vehicles",
-        "event_key": "traffic-crash-d1c2a87cbe-d1c2a87cbe",
-        "current_story_id": "story_009082",
-        "current_relationship": "follow_up",
-        "candidate_story_id": "story_009082",
-        "candidate_confidence": 0.953333,
-        "candidate_milestones": [
-          "death"
-        ],
-        "candidate_reason_codes": [
-          "enforced_follow_up",
-          "event_type_match",
-          "entity_match",
-          "title_continuity",
-          "fact_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Relationship: follow_up",
-          "Distinctive facts overlap: 1.00",
-          "Identity anchor qualified: True",
-          "Location match: False",
-          "Agency match: False",
-          "Event type match: True",
-          "Entity match: True",
-          "Lifecycle signal: True",
-          "Novel milestones: death",
-          "Novel fact ratio: 0.00",
-          "Confidence: 0.95",
-          "Threshold: 0.68"
-        ]
-      },
-      {
-        "headline": "Shooting of dog that allegedly charged at couple in Fort Pierce investigated - WPBF",
-        "event_key": "unknown-event-f23bf9e2a6",
-        "current_story_id": "story_009142",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_003760",
-        "candidate_confidence": 0.64,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_003760",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.40",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.64"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 30,
     "retrospective_high_confidence_candidate_count": 8,
     "retrospective_activation_eligible_candidate_count": 5,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1308,
-      "timeline_entries_examined": 3659,
-      "transitions_examined": 2229,
+      "stories_with_timelines": 1307,
+      "timeline_entries_examined": 3660,
+      "transitions_examined": 2232,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 30,
       "high_confidence_candidate_count": 8,
@@ -1757,11 +1692,11 @@
         "timeline_identity_unanchored": 19,
         "weak_title_continuity": 4
       },
-      "excluded_entry_count": 132,
+      "excluded_entry_count": 131,
       "exclusion_reasons": {
         "insufficient_title_detail": 37,
         "low_value_title": 14,
-        "social_source": 82
+        "social_source": 81
       },
       "examples": [
         {
@@ -2273,7 +2208,7 @@
           ]
         },
         {
-          "story_id": "story_009107",
+          "story_id": "story_009168",
           "story_title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
           "milestones": [
             "recovery"
@@ -2318,7 +2253,7 @@
           "prior_article": {
             "article_id": "rss-e7222eb1152f2bab97f2",
             "event_key": "missing-person-port-st-lucie-2eb6cf5485",
-            "published_at": "2026-09-07T02:08:53.631330+00:00",
+            "published_at": "2026-09-07T10:43:03.494424+00:00",
             "title": "Body found in Martin County mangroves confirmed as missing man - WPEC",
             "source": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
             "url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead"
@@ -2326,14 +2261,14 @@
           "newer_article": {
             "article_id": "rss-fedf37d2bc649307634c",
             "event_key": "missing-person-7693a0a37b-7693a0a37b",
-            "published_at": "2026-09-07T02:08:53.631330+00:00",
+            "published_at": "2026-09-07T10:43:03.494424+00:00",
             "title": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
             "source": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
             "url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_009107",
+            "Story: story_009168",
             "Novel milestones: recovery",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
@@ -3855,28 +3790,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1083,
-      "treasure_coast_local": 893,
+      "florida": 1084,
+      "treasure_coast_local": 895,
       "treasure_coast_region": 407,
-      "unknown": 2038
+      "unknown": 2047
     },
-    "average_score": 61.0
+    "average_score": 60.97
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1083,
-      "treasure_coast_local": 893,
+      "florida": 1084,
+      "treasure_coast_local": 895,
       "treasure_coast_region": 407,
-      "unknown": 2038
+      "unknown": 2047
     },
-    "average_priority": 4.04
+    "average_priority": 4.02
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3326,
+      "active": 3321,
       "breaking": 1,
-      "developing": 212,
-      "ongoing": 878,
+      "developing": 213,
+      "ongoing": 894,
       "resolved": 4
     }
   },
@@ -3884,8 +3819,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 6701,
-    "active_stories_after": 6701,
+    "active_stories_before": 6732,
+    "active_stories_after": 6732,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3910,27 +3845,27 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 111,
+    "incident_anchor_to_story_count": 112,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-07T02:09:28Z",
-    "quarantined_story_records_retained": 1213,
-    "active_story_count": 6753
+    "generated_at": "2026-09-07T10:43:42Z",
+    "quarantined_story_records_retained": 1224,
+    "active_story_count": 6787
   },
   "stories": {
-    "total": 4421,
+    "total": 4433,
     "importance_levels": {
       "breaking": 6,
-      "high": 91,
+      "high": 92,
       "normal": 720,
-      "low": 3604,
+      "low": 3615,
       "archived": 0
     },
-    "average_importance": 9.7,
+    "average_importance": 9.68,
     "top": [
       {
-        "story_id": "story_009104",
+        "story_id": "story_009165",
         "title": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
         "score": 80,
         "editorial_priority": 90,
@@ -3942,7 +3877,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3994,14 +3929,14 @@
         "lifecycle": {
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
-          "last_updated": "2026-09-07T02:08:53.631330+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-07T10:43:03.494424+00:00",
+          "hours_since_update": 0.04,
           "event_count": 5,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_009095",
+        "story_id": "story_009156",
         "title": "Fatal I-95 crash jams traffic in St. Lucie County - cbs12.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4038,8 +3973,8 @@
           "score": 100,
           "counties": [
             "St. Lucie County",
-            "Martin County",
-            "Indian River County"
+            "Indian River County",
+            "Martin County"
           ],
           "places": [
             "Port St. Lucie",
@@ -4058,14 +3993,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T02:08:53.631330+00:00",
+          "last_updated": "2026-09-07T10:43:03.494424+00:00",
           "hours_since_update": 0.03,
           "event_count": 6,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_009096",
+        "story_id": "story_009157",
         "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4077,7 +4012,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.02
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4119,8 +4054,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T02:08:53.631330+00:00",
-          "hours_since_update": 0.02,
+          "last_updated": "2026-09-07T10:43:03.494424+00:00",
+          "hours_since_update": 0.03,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4138,7 +4073,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 58.52
+          "age_hours": 67.09
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4186,7 +4121,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-04T15:42:16.034092+00:00",
-          "hours_since_update": 58.52,
+          "hours_since_update": 67.09,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -4204,7 +4139,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 44.68
+          "age_hours": 53.25
         },
         "level": "high",
         "importance_reasons": [
@@ -4247,7 +4182,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 44.68,
+          "hours_since_update": 53.25,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4265,7 +4200,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 46.85
+          "age_hours": 55.42
         },
         "level": "high",
         "importance_reasons": [
@@ -4308,7 +4243,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T03:19:39.455523+00:00",
-          "hours_since_update": 46.85,
+          "hours_since_update": 55.42,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4326,7 +4261,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 126.17
+          "age_hours": 134.74
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4374,7 +4309,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 126.17,
+          "hours_since_update": 134.74,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4392,7 +4327,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 24.93
+          "age_hours": 33.5
         },
         "level": "high",
         "importance_reasons": [
@@ -4452,7 +4387,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-06T01:18:16.787695+00:00",
-          "hours_since_update": 24.93,
+          "hours_since_update": 33.5,
           "event_count": 95,
           "timeline_entries": 92
         }
@@ -4470,7 +4405,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 41.82
+          "age_hours": 50.39
         },
         "level": "high",
         "importance_reasons": [
@@ -4511,13 +4446,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T08:22:44.187567+00:00",
-          "hours_since_update": 41.82,
+          "hours_since_update": 50.39,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_009091",
+        "story_id": "story_009152",
         "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4579,14 +4514,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T02:08:53.631330+00:00",
+          "last_updated": "2026-09-07T10:43:03.494424+00:00",
           "hours_since_update": 0.04,
           "event_count": 7,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_009100",
+        "story_id": "story_009161",
         "title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -4650,14 +4585,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T02:08:53.631330+00:00",
+          "last_updated": "2026-09-07T10:43:03.494424+00:00",
           "hours_since_update": 0.03,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_009101",
+        "story_id": "story_009162",
         "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -4720,14 +4655,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T02:08:53.631330+00:00",
+          "last_updated": "2026-09-07T10:43:03.494424+00:00",
           "hours_since_update": 0.03,
           "event_count": 4,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_009108",
+        "story_id": "story_009169",
         "title": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4739,7 +4674,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 0.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4790,8 +4725,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T02:08:53.631330+00:00",
-          "hours_since_update": 0.04,
+          "last_updated": "2026-09-07T10:43:03.494424+00:00",
+          "hours_since_update": 0.05,
           "event_count": 7,
           "timeline_entries": 6
         }
@@ -4809,7 +4744,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 74.76
+          "age_hours": 83.33
         },
         "level": "high",
         "importance_reasons": [
@@ -4852,7 +4787,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-03T23:27:52.005400+00:00",
-          "hours_since_update": 74.76,
+          "hours_since_update": 83.33,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4870,7 +4805,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 225.71
+          "age_hours": 234.29
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4924,7 +4859,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 225.71,
+          "hours_since_update": 234.29,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -4942,7 +4877,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 126.16
+          "age_hours": 134.73
         },
         "level": "high",
         "importance_reasons": [
@@ -4985,7 +4920,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 126.16,
+          "hours_since_update": 134.73,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -5003,7 +4938,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 126.16
+          "age_hours": 134.73
         },
         "level": "high",
         "importance_reasons": [
@@ -5046,7 +4981,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 126.16,
+          "hours_since_update": 134.73,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -5064,7 +4999,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 126.17
+          "age_hours": 134.74
         },
         "level": "high",
         "importance_reasons": [
@@ -5108,7 +5043,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 126.17,
+          "hours_since_update": 134.74,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -5126,7 +5061,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 96.24
+          "age_hours": 104.81
         },
         "level": "high",
         "importance_reasons": [
@@ -5169,7 +5104,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-03T01:55:34.516844+00:00",
-          "hours_since_update": 96.24,
+          "hours_since_update": 104.81,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -5187,7 +5122,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 576.48
+          "age_hours": 585.06
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5235,7 +5170,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 576.48,
+          "hours_since_update": 585.06,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -5245,7 +5180,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-07T02:16:46Z",
+    "generated_at": "2026-09-07T10:51:02Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5260,49 +5195,43 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 5,
-        "generated_live": 4
+        "category_eligibility_archive_recovery": 6,
+        "generated_live": 2,
+        "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 6
       },
-      "model_attempt_count": 4,
-      "model_elapsed_seconds": 55.811,
-      "archive_recovery_requested_count": 5,
+      "model_attempt_count": 2,
+      "model_elapsed_seconds": 18.342,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 1,
-      "article_framing_rejection_count": 1,
-      "category_eligibility_rejection_count": 2,
-      "published_story_duplicate_suppression_count": 21,
+      "contextual_update_lead_rejection_count": 0,
+      "article_framing_rejection_count": 0,
+      "category_eligibility_rejection_count": 0,
+      "published_story_duplicate_suppression_count": 32,
       "story_aware_update_context_count": 3,
-      "material_update_promotion_evaluation_count": 4,
-      "material_update_promotion_count": 2,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 3
+      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 1
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "generated_live",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 5,
-        "selected_source_count": 2,
+        "status": "category_eligibility_archive_recovery",
+        "fetched_candidate_count": 25,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 3,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 10.578,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 10.578,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Local Government category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5311,11 +5240,31 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "editorial_story_id": "story_007557",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment - wptv.com",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "editorial_story_id": "story_007557",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
@@ -5327,7 +5276,7 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
+        "story_aware_update_context_count": 2,
         "story_aware_update_context_bindings": [
           {
             "source_headline": "Motorcyclist ejected, killed in crash on State Road 7",
@@ -5350,83 +5299,65 @@
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
+          },
+          {
+            "source_headline": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - WPEC",
+            "source_url": "https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
+            "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "story:story_009115",
+              "source:https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=story:story_009115,source:https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 2,
-        "material_update_promotion_count": 2,
+        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "local_gov",
-            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment - WPTV",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
-            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
-            "canonical_headline": "Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": true,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "update_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "update_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Indiantown Village Council voted to terminate Village Manager Taryn Kryzda",
-              "Michael Giardino appointed as interim village manager",
-              "Tuesday meeting with residents demanding transparency about data centers",
-              "Giardino previously lost job as Stuart city manager",
-              "Three new council members recently elected"
-            ],
-            "novel_facts": [
-              "First public statement from Giardino about his approach: 'Transparency is the Hallmark of governance'",
-              "Giardino's explanation that council members reached out to him after his Stuart departure",
-              "Resident reactions from Kimberly Jackson Brown and Eric Miller supporting the change",
-              "Giardino's self-description as Navy veteran with commercial airport management experience",
-              "Giardino's quote about doing things 'ethically, morally, and in accordance with the law'",
-              "Resident warning that Giardino must 'take instruction from the council'"
-            ],
-            "reason": "Same event: both articles cover the Tuesday Indiantown council meeting where Kryzda was fired and Giardino appointed interim manager. Material update: the incoming article provides Giardino's first on-record comments about his appointment and governance philosophy, plus substantive resident reactions to the leadership change. This is a material development (new manager's first public statement of approach) that belongs in the existing canonical rather than a separate story, as it doesn't raise an independently newsworthy accountability or policy question beyond the original personnel action.",
-            "validation_errors": []
-          },
           {
             "category_key": "local_gov",
             "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
             "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
             "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
-            "canonical_headline": "Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": true,
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
             "cache_hit": false,
-            "model_call": true,
-            "action": "update_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "update_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Indiantown Village Council termination of Village Manager Taryn Kryzda",
-              "Michael Giardino appointed as interim village manager",
-              "Tuesday council meeting",
-              "Giardino recently lost job as Stuart city manager",
-              "Residents packed meeting demanding transparency about data centers"
-            ],
-            "novel_facts": [
-              "First on-the-record comments from Michael Giardino about his appointment and plans",
-              "Giardino's statement: 'Transparency is the Hallmark of governance'",
-              "Details about how Giardino was recruited: 'I was invited to come by a few of the council members'",
-              "Giardino's background running commercial airports",
-              "Resident reactions: Kimberly Jackson Brown and Eric Miller comments",
-              "Three new council members were elected after ousting incumbents in last election",
-              "Giardino describes appointment as 'could have been destiny all along'"
-            ],
-            "reason": "Same event: Both articles cover the Tuesday council meeting where Taryn Kryzda was fired and Michael Giardino was appointed interim village manager. The candidate covered the meeting itself; the incoming article is a follow-up interview with Giardino published 4 days later (Sept 6 vs Sept 2). This contains material new updates: Giardino's first public comments about his plans, his governance philosophy, how he was recruited, and substantive resident reaction. However, this is not independently newsworthy as a separate story—it's a natural follow-up adding depth and reaction to the original appointment story. This should update the existing canonical rather than create a new URL.",
-            "validation_errors": []
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment - wptv.com",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "local_gov",
@@ -5444,35 +5375,24 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 4,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
-        "generated_card_count": 0,
-        "elapsed_seconds": 54.528
+        "new_publication_stale_rejected_count": 10,
+        "elapsed_seconds": 26.583
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 26,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 4,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 1,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 10.193,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 10.193,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Crime & Safety category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5481,29 +5401,34 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 1,
-        "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-primary-crime-safety-focus",
-            "category_key": "crime",
-            "mode": "enforce",
-            "policy": "primary_crime_safety_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_crime_safety_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment"
-          }
-        ],
-        "published_story_duplicate_suppression_count": 1,
+        "category_eligibility_assessed_count": 0,
+        "category_eligibility_rejection_count": 0,
+        "category_eligibility_rejections": [],
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
-            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wflx.com",
+            "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/crime/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
+            "editorial_story_id": "story_009122",
+            "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+            "canonical_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "editorial_story_id": "story_007557",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
             "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
             "editorial_story_id": "story_008555",
             "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
@@ -5521,7 +5446,37 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
-            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wflx.com",
+            "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/crime/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
+            "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+            "canonical_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
             "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
             "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
             "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
@@ -5536,19 +5491,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
-        "generated_card_count": 0,
-        "elapsed_seconds": 35.879
+        "elapsed_seconds": 32.983
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 3,
+        "fresh_candidate_count": 16,
+        "publishable_source_count": 2,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5565,30 +5516,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 1,
-        "category_eligibility_rejection_count": 1,
-        "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [
-              "source_locality:martin county",
-              "source_locality:stuart",
-              "source_locality:indiantown"
-            ],
-            "headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment"
-          }
-        ],
-        "published_story_duplicate_suppression_count": 6,
+        "category_eligibility_assessed_count": 0,
+        "category_eligibility_rejection_count": 0,
+        "category_eligibility_rejections": [],
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "editorial_story_id": "story_007557",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
@@ -5648,6 +5590,16 @@
             "canonical_headline": "First Border Collies adopted after Palm City hoarding rescue, Humane Society says",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/tiger-woods-license-is-suspended-can-he-drive-a-golf-cart",
+            "editorial_story_id": "story_007379",
+            "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+            "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 1,
@@ -5680,6 +5632,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "business",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "business",
             "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community",
@@ -5769,10 +5736,25 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Tiger Woods' license is suspended — can he drive a golf cart?",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/tiger-woods-license-is-suspended-can-he-drive-a-golf-cart",
+            "canonical_slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
+            "canonical_headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 11,
-        "elapsed_seconds": 19.301
+        "elapsed_seconds": 21.901
       },
       {
         "category_key": "sports",
@@ -5809,8 +5791,8 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 6,
-        "elapsed_seconds": 16.328
+        "new_publication_stale_rejected_count": 15,
+        "elapsed_seconds": 18.334
       },
       {
         "category_key": "things_to_do",
@@ -5904,16 +5886,16 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.95,
+            "confidence": 1.0,
             "shared_anchors": [],
             "novel_facts": [
-              "Mango Music and Art Festival on September 4, 2026 in Lake Worth Beach",
-              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on September 4",
-              "Barrio Fiesta Labor Day Picnic on September 5 in Port St. Lucie",
-              "SoFlo Market one-year anniversary celebration in Boca Raton",
-              "Northwest BBQ Brews Blues Festival at Heart Soul Park",
-              "Peachfest 5-Year Anniversary Art Walk in West Palm Beach",
-              "Hurricane Alley Blowout Rodeo in Vero Beach"
+              "Mango Music and Art Festival on Saturday September 6, 2026 in Lake Worth Beach",
+              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
+              "Barrio Fiesta Labor Day Picnic on Sunday at Sandhill Crane Park in Port St. Lucie",
+              "SoFlo Market 1-year anniversary celebration in Boca Raton on Saturday",
+              "Northwest BBQ Brews Blues 11th annual festival at Heart Soul Park on Saturday",
+              "Peachfest 5-Year Anniversary Art Walk on Saturday in West Palm Beach",
+              "Hurricane Alley Blowout Rodeo Friday-Saturday in Vero Beach"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -5967,7 +5949,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 22.136
+        "elapsed_seconds": 23.771
       },
       {
         "category_key": "florida",
@@ -5975,7 +5957,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 1,
+        "publishable_source_count": 2,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5992,7 +5974,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -6005,214 +5987,46 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 22.942
+        "elapsed_seconds": 36.496
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "status": "no_publishable_sources",
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 0,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.856,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 11.856,
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "hero",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 66,
-            "baseline_anchor": "fire",
-            "baseline_present": false,
-            "baseline_anchor_present": false,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "city",
-              "council",
-              "former",
-              "indiantown",
-              "interim",
-              "kryzda",
-              "manager",
-              "stuart",
-              "taryn",
-              "village"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim",
-            "novelty_anchor": "semantic_gate_novel_fact",
-            "novelty_present": true,
-            "novelty_token_hits": [
-              "transparency"
-            ],
-            "semantic_novel_fact_hits": [
-              "comments",
-              "first",
-              "members",
-              "plans",
-              "transparency"
-            ],
-            "semantic_novel_fact_token_count": 36,
-            "missing": [
-              "original_event_context_missing"
-            ],
-            "source_title": "Indiantown's new interim village manager vows transparency after surprise appointment",
-            "headline": "Indiantown interim village manager Michael Giardino vows transparency in first public comments since appointment"
-          }
-        ],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "hero",
-            "required": true,
-            "passed": false,
-            "headline": "Indiantown interim village manager Michael Giardino vows transparency in first public comments since appointment",
-            "missing": [
-              "original_event_context_missing"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": false,
-              "headline": "Indiantown interim village manager Michael Giardino vows transparency in first public comments since appointment",
-              "lead": "Indiantown interim village manager Michael Giardino outlined his transparency-focused management approach in his first public comments since the Village Council appointed him Tuesday, one week after he was fired as Stuart city manager. Giardino replaced former Village Manager Taryn Kryzda, whom the council voted to terminate with some members citing no confidence during a meeting packed with residents urging more transparency about data center plans.",
-              "lead_word_count": 66,
-              "headline_overlap_ratio": 0.846,
-              "new_context_token_count": 38,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "update",
-              "surname_first_reference": {
-                "required": false,
-                "passed": true,
-                "missing": [],
-                "candidates": []
-              },
-              "update_diagnostics": {
-                "required": true,
-                "passed": false,
-                "story_form": "update",
-                "lead_word_count": 66,
-                "baseline_anchor": "fire",
-                "baseline_present": false,
-                "baseline_anchor_present": false,
-                "baseline_details_present": true,
-                "baseline_context_hits": [
-                  "city",
-                  "council",
-                  "former",
-                  "indiantown",
-                  "interim",
-                  "kryzda",
-                  "manager",
-                  "stuart",
-                  "taryn",
-                  "village"
-                ],
-                "baseline_context_required": 2,
-                "canonical_context_available": true,
-                "canonical_context_headline": "Indiantown council fires village manager Taryn Kryzda, names former Stuart city manager as interim",
-                "novelty_anchor": "semantic_gate_novel_fact",
-                "novelty_present": true,
-                "novelty_token_hits": [
-                  "transparency"
-                ],
-                "semantic_novel_fact_hits": [
-                  "comments",
-                  "first",
-                  "members",
-                  "plans",
-                  "transparency"
-                ],
-                "semantic_novel_fact_token_count": 36,
-                "missing": [
-                  "original_event_context_missing"
-                ],
-                "source_title": "Indiantown's new interim village manager vows transparency after surprise appointment",
-                "headline": "Indiantown interim village manager Michael Giardino vows transparency in first public comments since appointment"
-              },
-              "missing": [
-                "original_event_context_missing"
-              ]
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": true,
-              "headline": "Indiantown interim village manager Michael Giardino vows transparency in first public comments since appointment",
-              "lead": "Indiantown interim village manager Michael Giardino outlined his transparency-focused management approach in his first public comments since the Village Council appointed him Tuesday, one week after he was fired as Stuart city manager. Giardino replaced former Village Manager Taryn Kryzda, whom the council voted to terminate with some members citing no confidence during a meeting packed with residents urging more transparency about data center plans.",
-              "headline_money_claims": [],
-              "lead_money_claims": [],
-              "missing_money_claims": [],
-              "headline_jurisdictions": [
-                "indian_town"
-              ],
-              "lead_jurisdictions": [
-                "indian_town",
-                "stuart"
-              ],
-              "missing_jurisdictions": [],
-              "headline_judge_claims": [],
-              "lead_judge_claims": [],
-              "missing_judge_claims": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": []
-            },
-            "source_focus": {
-              "required": true,
-              "passed": true,
-              "generated_headline": "Indiantown interim village manager Michael Giardino vows transparency in first public comments since appointment",
-              "generated_lead": "Indiantown interim village manager Michael Giardino outlined his transparency-focused management approach in his first public comments since the Village Council appointed him Tuesday, one week after he was fired as Stuart city manager. Giardino replaced former Village Manager Taryn Kryzda, whom the council voted to terminate with some members citing no confidence during a meeting packed with residents urging more transparency about data center plans.",
-              "source_title": "Indiantown's new interim village manager vows transparency after surprise appointment",
-              "source_lead": "Indiantown's new interim village manager is speaking out for the first time about how he plans to lead the village following a surprise appointment that came just one week after he lost his job as Stuart city manager.Michael Giardino was named interim village manager Tuesday after the Indiantown Village Council voted to terminate former Village Manager Taryn Kryzda, with some council members citing no confidence. The move came as residents packed the council meeting, urging more transparency about plans for",
-              "title_similarity": {
-                "score": 0.6794,
-                "overlap": 0.7778,
-                "jaccard": 0.4667,
-                "sorted_sequence": 0.7527,
-                "ordered_sequence": 0.7312,
-                "shared_token_count": 7.0
-              },
-              "lead_token_overlap": 0.694,
-              "missing": []
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "official_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "editorial_story_id": "story_007557",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Golf cart rider injured in crash with tractor in Martin County - WPBF",
@@ -6225,7 +6039,17 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wflx.com",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wptv.com",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "editorial_story_id": "story_008555",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
             "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
             "editorial_story_id": "story_008555",
             "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
@@ -6242,50 +6066,30 @@
             "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
             "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Driver airlifted to trauma center after car crashes into tree on I-95 in Palm City - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-driver-airlifted-to-trauma-center-after-car-crashes-into-tree-on-i-95-in-palm-city/73620418",
-            "editorial_story_id": "story_009073",
-            "canonical_slug": "2026-09-05-driver-airlifted-after-single-car-rollover-on-i-95-southbound-near-high-meadows",
-            "canonical_headline": "Driver airlifted after single-car rollover on I-95 southbound near High Meadows in Palm City",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Dolly Parton films return to Florida theaters in Royal Palm Beach, Jensen Beach - cw34.com",
-            "source_url": "https://cw34.com/entertainment/dolly-parton-films-regal-cinemas-jensen-beach-royal-palm-beach-jolene-imagination-library-hannah-montana-miley-cyrus-florida-news",
-            "publisher": "cw34.com",
-            "canonical_slug": "2026-09-04-jensen-beach-theater-screens-dolly-parton-films-this-weekend-to-benefit-children",
-            "canonical_headline": "Jensen Beach theater screens Dolly Parton films this weekend to benefit children's literacy",
-            "basis": "exact_structured_incident_key",
-            "identity_keys": [
-              "incident:named-person-death:regal-broward",
-              "story:story_008115",
-              "source:https://cw34.com/entertainment/dolly-parton-films-regal-cinemas-jensen-beach-royal-palm-beach-jolene-imagination-library-hannah-montana-miley-cyrus-florida-news"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "incident",
-              "story"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=incident:named-person-death:regal-broward,story:story_008115",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 1,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "martin",
             "source_headline": "Golf cart rider injured in crash with tractor in Martin County - WPBF",
@@ -6303,7 +6107,22 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wflx.com",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - wptv.com",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
+            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
             "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
             "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
             "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
@@ -6330,63 +6149,19 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Driver airlifted to trauma center after car crashes into tree on I-95 in Palm City - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-driver-airlifted-to-trauma-center-after-car-crashes-into-tree-on-i-95-in-palm-city/73620418",
-            "canonical_slug": "2026-09-05-driver-airlifted-after-single-car-rollover-on-i-95-southbound-near-high-meadows",
-            "canonical_headline": "Driver airlifted after single-car rollover on I-95 southbound near High Meadows in Palm City",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:exact_source_url",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 1.0,
-            "shared_anchors": [
-              "Friday night September 5, 2026",
-              "Single-car rollover crash",
-              "I-95 southbound near High Meadows exit, Mile Marker 102, Palm City",
-              "Driver airlifted by LifeStar with traumatic injuries",
-              "Car crashed into palm tree and rolled onto its side",
-              "Occurred just after 6:15 p.m.",
-              "Martin County Fire Rescue responded",
-              "Identical source URL: wpbf.com/article/florida-driver-airlifted-to-trauma-center-after-car-crashes-into-tree-on-i-95-in-palm-city/73620418"
-            ],
-            "novel_facts": [
-              "MCFR special operations team extrication detail",
-              "Confirmation no other vehicles involved",
-              "Names of specific trauma centers (HCA Florida Lawnwood Hospital, St. Mary's Medical Center)",
-              "Distance details to trauma centers",
-              "Florida Highway Patrol also responded",
-              "All lanes reopened",
-              "Specific crew list (Heavy Rescue 23, etc.)",
-              "Facebook post quote from MCFR"
-            ],
-            "reason": "This is the exact same crash event with identical source URL, date, time, location, and core facts. The incoming article adds routine scene details (crew names, hospital distances, lane reopening confirmation) and background information, but contains no material update such as victim identification, driver condition update, charges, or cause determination. These are cleanup and procedural details that do not change what readers need to know about the underlying incident.",
-            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Indiantown interim village manager Michael Giardino vows transparency in first public comments since appointment",
-        "generated_card_count": 0,
-        "elapsed_seconds": 38.139
+        "elapsed_seconds": 43.474
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 26,
-        "publishable_source_count": 7,
-        "selected_source_count": 7,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -6394,11 +6169,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 23.184,
+            "elapsed_seconds": 8.479,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 23.184,
+        "model_elapsed_seconds": 8.479,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6409,11 +6184,31 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - cw34.com",
+            "source_url": "https://cw34.com/news/local/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
+            "editorial_story_id": "story_009122",
+            "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+            "canonical_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/crime/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
+            "editorial_story_id": "story_009122",
+            "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+            "canonical_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - WPEC",
@@ -6453,6 +6248,16 @@
             "canonical_headline": "Body found in Martin County mangroves confirmed as missing visitor from Oklahoma",
             "basis": "durable_custom_incident_identity:missing-person|michael-debevec",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "New data center proposed for western St. Lucie County near Interstate 95 - wptv.com",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
+            "editorial_story_id": "story_007205",
+            "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+            "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -6462,6 +6267,36 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - cw34.com",
+            "source_url": "https://cw34.com/news/local/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
+            "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+            "canonical_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/crime/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
+            "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+            "canonical_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "33 pounds of marijuana, $150K cash and guns seized in Fort Pierce drug bust - WPEC",
@@ -6521,30 +6356,52 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "New data center proposed for western St. Lucie County near Interstate 95 - wptv.com",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
+            "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+            "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 1,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "St. Lucie deputies investigate homeowner's shooting of neighbor's dog in Indian River Estates",
-        "generated_card_count": 2,
-        "elapsed_seconds": 46.548
+        "live_hero_headline": "Fort Pierce man shoots dog during confrontation in Indian River Estates, sheriff's office investigating",
+        "generated_card_count": 0,
+        "elapsed_seconds": 33.408
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 3,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Indian River County category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 9.863,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 9.863,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6553,19 +6410,29 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
-            "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - cw34.com",
-            "source_url": "https://cw34.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
-            "editorial_story_id": "story_008555",
-            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-            "basis": "authorized_canonical_identity_skip",
+            "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/local/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
+            "editorial_story_id": "story_009122",
+            "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+            "canonical_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "editorial_story_id": "story_007557",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6578,13 +6445,28 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
-            "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - cw34.com",
-            "source_url": "https://cw34.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
-            "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-            "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+            "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
+            "source_url": "https://cbs12.com/news/local/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
+            "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+            "canonical_headline": "St. Lucie County deputies investigate man who shot dog during driveway confrontation in Indian River Estates",
             "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
+            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
+            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
+            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6593,7 +6475,11 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 22.786
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Vero Beach quarterback Champ Monds done for season after medical procedure",
+        "generated_card_count": 0,
+        "elapsed_seconds": 28.961
       }
     ]
   }
