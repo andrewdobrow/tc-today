@@ -489,6 +489,11 @@ function renderProtectedBody(protectedBody, paywall, access){
   if (protectedBody.startsWith(fullBodyMarker) && preview) {
     preview.innerHTML = protectedBody.slice(fullBodyMarker.length).trim()
     preview.classList.remove('tct-member-preview')
+    // The JSON-LD paywall schema points to .tct-paywalled-content. Once the
+    // secure full body replaces the public teaser, keep that semantic class on
+    // the rendered article so Google's cssSelector resolves to the content it
+    // was granted permission to crawl instead of an empty/removed placeholder.
+    preview.classList.add('tct-paywalled-content')
     qs('.tct-preview-copy', preview)?.classList.remove('tct-preview-copy')
     if (access === 'member') memberOnly?.remove()
     return true
