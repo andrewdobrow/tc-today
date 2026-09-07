@@ -17191,6 +17191,123 @@ def _repair_v1_12_0_6_false_cross_source_overwrites(output_root):
     return report
 
 
+_PREBALANCED_OVERLONG_HEADLINE_REPAIRS = {
+    "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp": {
+        "old": "Driver killed, passenger hospitalized after box truck overturns on Florida's Turnpike near mile marker 166 in St. Lucie County",
+        "new": "Driver killed, passenger hospitalized in box truck crash on Florida's Turnpike in St. Lucie County",
+    },
+    "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat": {
+        "old": "Man shot dog that charged him after two dogs trapped wife in vehicle in Fort Pierce driveway, St. Lucie County deputies say",
+        "new": "Man shoots dog after two dogs trap wife in vehicle in Fort Pierce, St. Lucie County",
+    },
+}
+
+
+def _repair_prebalanced_overlong_headlines(output_root):
+    """Repair only known canonicals published before the balanced headline rule.
+
+    These articles were already canonicalized before v1.13.7.7, so later runs
+    correctly suppress their sources as already published and never re-enter the
+    writer path where the >110-character headline guard lives.  This migration is
+    intentionally exact-slug + exact-old-headline guarded.  It changes display
+    headlines only: the permalink, permalink-origin metadata, article body, source
+    attribution, and publication timestamps remain untouched.
+    """
+    root = Path(output_root)
+    archive_path = root / "archive.json"
+    archive = load_archive(archive_path)
+    if not isinstance(archive, list):
+        return {"repaired_count": 0, "repairs": []}
+
+    repairs = []
+    for row in archive:
+        if not isinstance(row, dict):
+            continue
+        slug = str(row.get("slug") or "")
+        rule = _PREBALANCED_OVERLONG_HEADLINE_REPAIRS.get(slug)
+        if not rule:
+            continue
+        observed = str(row.get("headline") or "")
+        if observed != rule["old"]:
+            continue
+
+        row["headline"] = rule["new"]
+        repairs.append({
+            "slug": slug,
+            "old_headline": rule["old"],
+            "new_headline": rule["new"],
+        })
+
+        # Existing canonical pages are not necessarily re-rendered when their
+        # source is suppressed as already published. Patch only this exact known
+        # headline in the already-rendered page so the correction is visible on
+        # the very next run without touching body copy or the permalink.
+        article_path = root / "articles" / f"{slug}.html"
+        try:
+            page = article_path.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            page = ""
+        except Exception:
+            page = ""
+        if page:
+            repaired_page = page.replace(rule["old"], rule["new"])
+
+            # NewsArticle structured data intentionally truncates headlines to
+            # 110 characters, so the old JSON-LD value may not contain the full
+            # old display headline. Update only the NewsArticle JSON-LD block.
+            script_match = re.search(
+                r'(<script type="application/ld\+json">)(.*?)(</script>)',
+                repaired_page,
+                flags=re.IGNORECASE | re.DOTALL,
+            )
+            if script_match:
+                try:
+                    payload = json.loads(script_match.group(2))
+                except Exception:
+                    payload = None
+                if isinstance(payload, dict) and payload.get("@type") == "NewsArticle":
+                    jsonld_headline = str(payload.get("headline") or "")
+                    if (
+                        jsonld_headline == rule["old"][:110]
+                        or rule["old"].startswith(jsonld_headline)
+                    ):
+                        payload["headline"] = rule["new"][:110]
+                        replacement = (
+                            script_match.group(1)
+                            + json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
+                            + script_match.group(3)
+                        )
+                        repaired_page = (
+                            repaired_page[: script_match.start()]
+                            + replacement
+                            + repaired_page[script_match.end() :]
+                        )
+
+            if repaired_page != page:
+                article_path.write_text(repaired_page, encoding="utf-8")
+
+    if not repairs:
+        return {"repaired_count": 0, "repairs": []}
+
+    archive_path.write_text(
+        json.dumps(archive, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    report = {
+        "schema_version": 1,
+        "release": "v1.13.7.8-prebalanced-headline-migration",
+        "repaired_count": len(repairs),
+        "repairs": repairs,
+    }
+    report_path = root / "data" / "headline-concision-repair.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    return report
+
+
 def _custom_body_tokens(value):
     text = str(value or "")
     # Rendered Markdown links retain their label but not the destination in visible
@@ -36422,6 +36539,12 @@ def main():
         print(
             "  Cross-source overwrite repair restored "
             f"{_repair_report['repaired_count']} canonical article(s)"
+        )
+    _headline_migration = _repair_prebalanced_overlong_headlines(OUTPUT_DIR)
+    if _headline_migration.get("repaired_count"):
+        print(
+            "  Pre-balanced headline migration shortened "
+            f"{_headline_migration['repaired_count']} existing canonical headline(s)"
         )
     # Current published identities are needed before model generation so a registry
     # ``skip`` decision can suppress an already-published story at the source boundary.
