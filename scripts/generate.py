@@ -964,12 +964,14 @@ ASSIGNMENT_EDITOR_PENDING = {}
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.3-breaking-brief-continuity"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.4-headline-concision"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
 # writer. Keeping one literal contract prevents the Sonnet 5 editor -> Sonnet 4.5
 # writer experiment from drifting behind the deterministic publication guards.
 LEAD_AND_HEADLINE_INTEGRITY_STANDARD = """LEAD AND HEADLINE INTEGRITY STANDARD:
+- Write concise, newspaper-style headlines focused on the core new development. Prefer about 55-80 characters when the story supports it; shorter is fine, and headlines should generally stay under 90 characters. Move secondary details, background, and nonessential attribution into the teaser or article body instead of cramming them into the headline.
+- Do not add formulaic attribution labels such as "Deputies:" or "Police:" just to shorten a headline. Keep routine source attribution in the teaser/body. If attribution is genuinely necessary to keep a headline accurate or avoid presenting an allegation as established fact, phrase that distinction naturally and sparingly. Never mechanically truncate a headline or sacrifice accuracy or clarity just to hit the character target.
 - Every article and card body must begin with a self-contained news lead that tells a reader with no prior knowledge what happened and what is new now.
 - The lead must make sense without the headline. It must still make sense if the headline is completely removed. Do not use the headline as a substitute for context, and do not merely paraphrase it.
 - If the headline or lead names an amendment, bill, ordinance, referendum, resolution, program, proposal, measure, or numbered initiative, define what it would do in the FIRST paragraph. A phrase such as 'if Amendment 3 passes' is not a definition.

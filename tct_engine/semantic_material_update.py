@@ -17,7 +17,7 @@ import math
 import re
 from typing import Any, Mapping
 
-SEMANTIC_MATERIAL_UPDATE_VERSION = "1.1"
+SEMANTIC_MATERIAL_UPDATE_VERSION = "1.2"
 
 _STOP_WORDS = {
     "a", "an", "and", "are", "as", "at", "be", "been", "being", "by",
@@ -271,6 +271,7 @@ Editorial requirements:
 - Use direct, neutral local-news language. No markdown, section headings, datelines, bullet lists, or commentary.
 - Do not use direct quotes unless the exact quote appears in the supplied text.
 - The headline MUST be refreshed to foreground the material development. Do not reuse or lightly paraphrase the old canonical headline when the story state has changed. It must remain accurate and locally specific.
+- Keep the refreshed headline concise and newspaper-style. Prefer about 55-80 characters when the story supports it; shorter is fine, and generally stay under 90 characters. Put secondary details, background, and routine source attribution in the teaser/body instead of cramming them into the headline. Do not add formulaic labels such as "Deputies:" or "Police:" just to shorten it. If attribution is genuinely necessary to keep the headline accurate or avoid presenting an allegation as established fact, phrase that distinction naturally and sparingly. Never mechanically truncate or sacrifice accuracy to meet the target.
 - Every specific city, county, or monetary claim stated in the headline must also be explicitly stated in the FIRST paragraph.
 - The teaser must be one or two complete sentences and explain the new development in context.
 

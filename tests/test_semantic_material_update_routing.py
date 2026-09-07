@@ -782,3 +782,18 @@ def test_committed_material_update_headline_repair_is_noop_when_headline_already
     assert report["repaired_count"] == 0
     assert entry["headline"] == current_headline
     assert page.read_text(encoding="utf-8") == original_html
+
+def test_material_update_prompt_keeps_headlines_concise_without_hard_truncation():
+    import tct_engine.semantic_material_update as material_update
+
+    prompt = material_update._prompt(
+        {"headline": "Old headline", "body": "Original event context."},
+        {"headline": "New source headline", "body": "A material new development happened."},
+        {"novel_facts": ["material new development"], "shared_anchors": ["same event"]},
+    )
+
+    assert "55-80 characters" in prompt
+    assert "under 90 characters" in prompt
+    assert "Never mechanically truncate" in prompt
+    assert material_update.SEMANTIC_MATERIAL_UPDATE_VERSION == "1.2"
+

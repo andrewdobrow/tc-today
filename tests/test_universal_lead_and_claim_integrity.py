@@ -571,8 +571,11 @@ def test_release_versions_and_reports_are_bumped():
     import tct_engine.observability as observability
 
     assert g.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.13.7.3-breaking-brief-continuity"
+        "v1.13.7.4-headline-concision"
     )
+    assert "55-80 characters" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert "under 90 characters" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert "Never mechanically truncate" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
     assert g.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 7
     assert g.FORWARD_IDENTITY_VERSION == "1.7"
     version = tuple(int(part) for part in observability.ENGINE_VERSION.split("."))
