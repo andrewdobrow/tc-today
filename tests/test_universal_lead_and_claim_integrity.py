@@ -571,10 +571,11 @@ def test_release_versions_and_reports_are_bumped():
     import tct_engine.observability as observability
 
     assert g.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.13.7.6-official-name-preservation"
+        "v1.13.7.7-balanced-headline-concision"
     )
-    assert "NO hard character target or ceiling" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
-    assert "Geographic specificity outranks headline brevity" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert "Aim roughly for 65-95 characters" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert "above about 110 characters should normally be rewritten" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert "Mile markers, exit numbers, block numbers, street addresses" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
     assert '"Florida\'s Turnpike", "I-95", "Fort Pierce", or "Martin County"' in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
     assert 'do not normalize "Florida\'s Turnpike" to "Florida Turnpike"' in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
     assert "Never mechanically truncate" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
@@ -649,3 +650,82 @@ def test_archive_article_body_reads_membership_preview_for_final_framing(tmp_pat
 
     assert kept == [item]
     assert rejected == []
+
+
+def test_assignment_writer_repairs_sentence_length_headline_without_dropping_named_geography(monkeypatch):
+    g = _load_generate()
+    overlong = (
+        "Driver killed, passenger hospitalized after box truck overturns on "
+        "Florida's Turnpike near mile marker 166 in St. Lucie County"
+    )
+    repaired = (
+        "Driver killed, passenger hospitalized in box truck crash on "
+        "Florida's Turnpike in St. Lucie County"
+    )
+
+    class _Response:
+        def __init__(self, payload):
+            self.content = [types.SimpleNamespace(text=json.dumps(payload))]
+            self.model = g.MODEL_ARTICLES
+
+    class _Messages:
+        def __init__(self):
+            self.calls = []
+
+        def create(self, **kwargs):
+            self.calls.append(kwargs)
+            if len(self.calls) == 1:
+                return _Response({
+                    "headline": overlong,
+                    "body": (
+                        "A box truck overturned on Florida's Turnpike in St. Lucie County, "
+                        "killing the driver and sending a passenger to a hospital.\n\n"
+                        "The crash occurred near mile marker 166, according to the supplied report."
+                    ),
+                    "urgency_score": 8,
+                    "published": "2026-09-07T15:00:00Z",
+                    "source_index": 1,
+                })
+            return _Response({"headline": repaired})
+
+    class _Client:
+        def __init__(self):
+            self.messages = _Messages()
+
+        def with_options(self, **kwargs):
+            return self
+
+    fake_client = _Client()
+    monkeypatch.setattr(g, "client", fake_client)
+    packet = {
+        "category_key": "st_lucie",
+        "category_label": "St. Lucie County",
+        "source_inputs": [{
+            "title": (
+                "Driver killed, passenger hospitalized after box truck overturns on "
+                "Florida's Turnpike near mile marker 166 in St. Lucie County"
+            ),
+            "published": "2026-09-07T15:00:00Z",
+            "story_form": "new",
+            "article_text": (
+                "A box truck overturned on Florida's Turnpike in St. Lucie County, "
+                "killing the driver and sending a passenger to a hospital near mile marker 166."
+            ),
+        }],
+    }
+    assignment = {"source_index": 1, "angle": "fatal Turnpike crash", "urgency_score": 8}
+
+    item, _model, _duration = g._run_assignment_writer(
+        packet, assignment, role="hero", timeout_seconds=30
+    )
+
+    assert len(overlong) == 126
+    assert item["headline"] == repaired
+    assert len(item["headline"]) == 98
+    assert "Florida's Turnpike" in item["headline"]
+    assert "St. Lucie County" in item["headline"]
+    assert "mile marker 166" not in item["headline"]
+    assert len(fake_client.messages.calls) == 2
+    repair_prompt = fake_client.messages.calls[1]["messages"][0]["content"]
+    assert "Preserve every meaningful named geographic proper noun" in repair_prompt
+    assert 'Do NOT change "Florida\'s Turnpike" to "Florida Turnpike"' in repair_prompt

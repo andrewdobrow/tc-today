@@ -17,7 +17,7 @@ import math
 import re
 from typing import Any, Mapping
 
-SEMANTIC_MATERIAL_UPDATE_VERSION = "1.2"
+SEMANTIC_MATERIAL_UPDATE_VERSION = "1.3"
 
 _STOP_WORDS = {
     "a", "an", "and", "are", "as", "at", "be", "been", "being", "by",
@@ -154,7 +154,7 @@ def validate_material_update(
     words = re.findall(r"\b\w+\b", _plain(body))
     if not headline or len(headline.split()) < 5:
         errors.append("headline_missing_or_too_short")
-    if len(headline) > 180:
+    if len(headline) > 110:
         errors.append("headline_too_long")
     if not teaser or len(teaser.split()) < 12:
         errors.append("teaser_missing_or_too_short")
@@ -271,7 +271,7 @@ Editorial requirements:
 - Use direct, neutral local-news language. No markdown, section headings, datelines, bullet lists, or commentary.
 - Do not use direct quotes unless the exact quote appears in the supplied text.
 - The headline MUST be refreshed to foreground the material development. Do not reuse or lightly paraphrase the old canonical headline when the story state has changed. It must remain accurate and locally specific.
-- Keep the refreshed headline concise and newspaper-style, but use length only as a soft preference; there is no hard character target or ceiling. Trim secondary details and background first. NEVER remove, abbreviate into ambiguity, or generalize a meaningful source-supported geographic identifier solely for brevity; preserve specific roadway/corridor, city, county, neighborhood, facility, or landmark names such as "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County" when they materially identify the event. Geographic specificity outranks headline brevity. Preserve source-supported official proper names exactly enough to retain their identity, including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike". Do not add formulaic labels such as "Deputies:" or "Police:" just to shorten it. If attribution is genuinely necessary to keep the headline accurate or avoid presenting an allegation as established fact, phrase that distinction naturally and sparingly. Never mechanically truncate or sacrifice accuracy, clarity, or geographic specificity for length.
+- Keep the refreshed headline concise and newspaper-style. Aim roughly for 65-95 characters when natural; a headline above about 110 characters should normally be rewritten more tightly instead of becoming a sentence-length summary. Preserve meaningful source-supported geographic proper names such as "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County", including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike". Keep the core development and meaningful named geography, then cut or compress secondary chronology, causal clauses, routine attribution, and granular locator details such as mile markers, exit numbers, block numbers, or street addresses unless those coordinates are themselves central to the news. Do not add formulaic labels such as "Deputies:" or "Police:" just to shorten it. Never mechanically truncate or sacrifice accuracy, clarity, or meaningful geographic specificity for length.
 - Every specific city, county, or monetary claim stated in the headline must also be explicitly stated in the FIRST paragraph.
 - The teaser must be one or two complete sentences and explain the new development in context.
 
@@ -342,6 +342,7 @@ def compose_material_update(
         headline_errors = {
             "headline_not_refreshed_for_material_update",
             "headline_missing_material_development",
+            "headline_too_long",
         }
         errors = set(result.get("validation_errors") or [])
         # A headline-only miss is repairable without weakening any content or
@@ -353,8 +354,11 @@ def compose_material_update(
                 "the headline did not visibly advance the material development. "
                 f"Rejected headline: {result.get('headline','')!r}. "
                 "Return the complete JSON object again with a NEW headline that "
-                "foregrounds at least one of the semantic gate's novel facts. "
-                "Do not reuse the existing canonical headline."
+                "foregrounds at least one of the semantic gate's novel facts, reads "
+                "like a concise newspaper headline, and is at or below 110 characters "
+                "without removing meaningful named geography. Preserve official proper "
+                "names such as Florida's Turnpike exactly. Do not reuse the existing "
+                "canonical headline."
             )
             retry = _request(retry_prompt)
             retry["headline_retry"] = True

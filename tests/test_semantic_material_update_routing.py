@@ -792,10 +792,36 @@ def test_material_update_prompt_keeps_headlines_concise_without_hard_truncation(
         {"novel_facts": ["material new development"], "shared_anchors": ["same event"]},
     )
 
-    assert "no hard character target or ceiling" in prompt
-    assert "Geographic specificity outranks headline brevity" in prompt
+    assert "Aim roughly for 65-95 characters" in prompt
+    assert "above about 110 characters should normally be rewritten" in prompt
     assert '"Florida\'s Turnpike", "I-95", "Fort Pierce", or "Martin County"' in prompt
     assert 'do not normalize "Florida\'s Turnpike" to "Florida Turnpike"' in prompt
+    assert "mile markers, exit numbers, block numbers" in prompt
     assert "Never mechanically truncate" in prompt
-    assert material_update.SEMANTIC_MATERIAL_UPDATE_VERSION == "1.2"
+    assert material_update.SEMANTIC_MATERIAL_UPDATE_VERSION == "1.3"
 
+
+
+def test_material_update_retries_sentence_length_headline_for_concision():
+    overlong = _composition_payload()
+    overlong["headline"] = (
+        "Martin County shark fishing rewrite advances after state directive as commissioners "
+        "continue ordinance review and prepare revised local beach rules"
+    )
+    refreshed = _composition_payload()
+    client = _SequenceClient([overlong, refreshed])
+    result = compose_material_update(
+        client,
+        model="claude-sonnet-4-5",
+        canonical={"headline": CANONICAL_HEADLINE, "body": CANONICAL_BODY},
+        incoming={"headline": UPDATE_HEADLINE, "body": UPDATE_BODY},
+        decision=_decision(),
+    )
+    assert len(overlong["headline"]) > 110
+    assert result["status"] == "validated"
+    assert result["headline"] == refreshed["headline"]
+    assert result["headline_retry"] is True
+    assert len(client.messages.calls) == 2
+    retry_prompt = client.messages.calls[1]["messages"][0]["content"]
+    assert "at or below 110 characters" in retry_prompt
+    assert "without removing meaningful named geography" in retry_prompt

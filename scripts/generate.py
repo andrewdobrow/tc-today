@@ -964,15 +964,16 @@ ASSIGNMENT_EDITOR_PENDING = {}
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.6-official-name-preservation"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.7-balanced-headline-concision"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
 # writer. Keeping one literal contract prevents the Sonnet 5 editor -> Sonnet 4.5
 # writer experiment from drifting behind the deterministic publication guards.
 LEAD_AND_HEADLINE_INTEGRITY_STANDARD = """LEAD AND HEADLINE INTEGRITY STANDARD:
-- Write concise, newspaper-style headlines focused on the core new development, but treat length only as a soft editorial preference. A compact headline is usually best, often around 60-100 characters when natural, but there is NO hard character target or ceiling. Trim secondary clauses and background before trimming information that identifies what or where the story is about.
-- NEVER remove, abbreviate into ambiguity, or generalize a meaningful source-supported geographic identifier solely to make a headline shorter. Preserve specific place, roadway/corridor, city, county, neighborhood, facility, or landmark names when they materially identify the event — for example "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County". Geographic specificity outranks headline brevity. Preserve source-supported official proper names exactly enough to retain their identity, including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike".
-- Do not add formulaic attribution labels such as "Deputies:" or "Police:" just to shorten a headline. Keep routine source attribution in the teaser/body. If attribution is genuinely necessary to keep a headline accurate or avoid presenting an allegation as established fact, phrase that distinction naturally and sparingly. Never mechanically truncate a headline or sacrifice accuracy, clarity, or geographic specificity for length.
+- Write concise, newspaper-style headlines focused on the core new development. Aim roughly for 65-95 characters when natural. A headline above about 110 characters should normally be rewritten more tightly rather than allowed to become a sentence-length summary. This is an editorial rewrite trigger, NOT permission to mechanically truncate text or drop essential facts.
+- Preserve meaningful source-supported geographic proper names. NEVER shorten a headline by deleting or mangling the named place, roadway/corridor, city, county, neighborhood, facility, or landmark that materially tells readers where the story happened — for example "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County". Preserve source-supported official proper names exactly enough to retain their identity, including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike".
+- Concision hierarchy: keep the core event, the key outcome/development, and meaningful named geography; then cut or compress secondary chronology, causal clauses, routine attribution, and granular locator details. Mile markers, exit numbers, block numbers, street addresses, and similar coordinates normally belong in the teaser/body unless they are themselves central to the news. When several meaningful geographic names are useful and can fit cleanly (for example a named roadway plus the county), keep them rather than sacrificing location for an arbitrary number.
+- Do not add formulaic attribution labels such as "Deputies:" or "Police:" just to shorten a headline. Keep routine source attribution in the teaser/body. If attribution is genuinely necessary to keep a headline accurate or avoid presenting an allegation as established fact, phrase that distinction naturally and sparingly. Never mechanically truncate a headline or sacrifice accuracy, clarity, or meaningful geographic specificity for length.
 - Every article and card body must begin with a self-contained news lead that tells a reader with no prior knowledge what happened and what is new now.
 - The lead must make sense without the headline. It must still make sense if the headline is completely removed. Do not use the headline as a substitute for context, and do not merely paraphrase it.
 - If the headline or lead names an amendment, bill, ordinance, referendum, resolution, program, proposal, measure, or numbered initiative, define what it would do in the FIRST paragraph. A phrase such as 'if Amendment 3 passes' is not a definition.
@@ -11245,6 +11246,64 @@ Writing rules:
         raise ValueError("Assignment writer returned no headline")
     if not str(item.get("body") or "").strip():
         raise ValueError("Assignment writer returned no body")
+
+    # Headline concision is editorial, not truncation. The main prompt asks for a
+    # compact headline, but models can still return sentence-length summaries when
+    # several true details compete for space. Give only genuinely overlong headlines
+    # one small headline-only rewrite pass. Named geography/proper names are protected;
+    # granular coordinates such as mile markers are not.
+    _headline = re.sub(r"\s+", " ", str(item.get("headline") or "")).strip()
+    if len(_headline) > 110:
+        _body = str(item.get("body") or "").strip()
+        _lead = re.split(r"\n\s*\n+", _body, maxsplit=1)[0].strip()
+        _repair_prompt = f"""Rewrite ONLY this Treasure Coast Today headline so it reads like a concise newspaper headline rather than a sentence-length summary.
+
+CURRENT HEADLINE: {_headline}
+SOURCE TITLE: {title}
+ARTICLE LEAD: {_lead}
+
+Rules:
+- Aim for roughly 65-95 characters and keep it at or below 110 characters when this can be done without losing accuracy.
+- Preserve every meaningful named geographic proper noun already present in the current headline, including official roadway names, cities, and counties. Do NOT change "Florida's Turnpike" to "Florida Turnpike".
+- Preserve other essential proper names and the core news development.
+- Cut or compress nonessential wording first: secondary chronology, causal clauses, routine attribution, and granular locators such as mile markers, exit numbers, block numbers, and street addresses unless the locator itself is central to the news.
+- Do not add any fact that is absent from the current headline or article lead.
+- Do not use formulaic labels such as "Deputies:" or "Police:".
+- Never mechanically truncate words.
+
+Return ONLY JSON: {{"headline":"..."}}
+"""
+        _repair_kwargs = {
+            "model": MODEL_ARTICLES,
+            "max_tokens": 300,
+            "system": [{"type": "text", "text": system_prompt}],
+            "messages": [{"role": "user", "content": _repair_prompt}],
+        }
+        if not hasattr(client, "with_options"):
+            _repair_kwargs["timeout"] = writer_timeout
+        try:
+            _repair_started = time.perf_counter()
+            _repair_response = request_client.messages.create(**_repair_kwargs)
+            duration += time.perf_counter() - _repair_started
+            _repair_item = _parse_assignment_shadow_json(
+                _extract_model_text(_repair_response)
+            )
+            _candidate = re.sub(
+                r"\s+", " ", str((_repair_item or {}).get("headline") or "")
+            ).strip()
+            if (
+                _candidate
+                and len(_candidate.split()) >= 5
+                and len(_candidate) <= 110
+                and len(_candidate) < len(_headline)
+            ):
+                item["headline"] = _candidate
+        except Exception as exc:
+            print(
+                "  Headline concision repair skipped after model error: "
+                f"{type(exc).__name__}: {exc}"
+            )
+
     # Editorial metadata comes from the validated assignment/source, never from the writer.
     item["source_index"] = source_index
     item["urgency_score"] = urgency
