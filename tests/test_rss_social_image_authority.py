@@ -405,3 +405,30 @@ def test_social_meta_sync_handles_content_before_marker_attribute(tmp_path):
     assert generate._meta_tag_content(page, "property", "og:image") == source
     assert generate._meta_tag_content(page, "name", "twitter:image") == source
     assert source.replace("&", "&amp;") in page
+
+
+def test_article_visible_hero_prefers_durable_source_image_over_editorial_fallback():
+    source_url = "https://cbs12.com/resources/media2/16x9/1200/source-crash.jpg"
+    fallback_url = (
+        "https://treasurecoast.today/images/editorial/topics/"
+        "roads-transportation/traffic.webp"
+    )
+    page = generate.render_article_page(
+        {
+            "headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+            "teaser": "One northbound lane reopened after a fatal box truck crash.",
+            "body": "The crash happened on Florida's Turnpike in St. Lucie County.",
+            "image_url": fallback_url,
+            "source_image_url": source_url,
+            "image_credit": "CBS12",
+            "first_published": "Mon, 07 Sep 2026 14:51:06 -0400",
+        },
+        "Crime & Safety",
+        "crime",
+        "2026-09-07",
+        "turnpike-source-image-authority",
+    )
+
+    assert f'<figure class="article-hero-image"><img src="{source_url}"' in page
+    assert f'<meta property="og:image" content="{source_url}">' in page
+    assert fallback_url not in page

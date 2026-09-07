@@ -2508,14 +2508,13 @@ def restore_live_source_images_from_archive(categories, archive):
 
 
 def recover_recent_archive_source_images(archive, articles_dir, *, max_age_days=3):
-    """Upgrade recent fallback article pages when the publisher has a real image.
+    """Recover or reconcile recent source images on permanent article pages.
 
-    A story may first create its canonical permalink from a card that lacked RSS image
-    metadata, then appear in another category whose hero lookup finds the publisher's
-    og:image. Canonical duplicate protection correctly preserves the first URL, but it
-    must not freeze an inferior fallback image onto that permanent page. Only recent,
-    non-custom rows with a real publisher URL and no authoritative source image are
-    considered, keeping the repair bounded and avoiding routine refetches of old work.
+    A canonical row can already retain a real publisher image while a later material
+    update re-renders its visible hero from an incoming editorial fallback.  Treat the
+    archive's real ``source_image_url`` as durable authority and reconcile the page as
+    well as the row.  Only recent, non-custom stories are inspected so this remains a
+    bounded repair rather than a sitewide historical rewrite.
     """
     try:
         from datetime import timedelta as _timedelta
@@ -2527,11 +2526,9 @@ def recover_recent_archive_source_images(archive, articles_dir, *, max_age_days=
     for row in archive or []:
         if not isinstance(row, dict) or row.get("is_custom") or row.get("authoritative_custom"):
             continue
-        if _is_real_source_image_url(row.get("source_image_url") or row.get("image_url")):
-            continue
         source_url = str(row.get("latest_source_url") or row.get("source_url") or "").strip()
         slug = str(row.get("slug") or "").strip()
-        if not source_url.startswith(("https://", "http://")) or not slug:
+        if not slug:
             continue
         if cutoff is not None:
             raw_day = str(row.get("lastmod") or row.get("date") or "")[:10]
@@ -2541,9 +2538,19 @@ def recover_recent_archive_source_images(archive, articles_dir, *, max_age_days=
             except Exception:
                 continue
 
-        source_img = fetch_og_image(source_url, str(row.get("headline") or ""))
-        if not _is_real_source_image_url(source_img):
-            continue
+        existing_source_img = _absolute_image_url(
+            row.get("source_image_url") or row.get("image_url")
+        )
+        if _is_real_source_image_url(existing_source_img):
+            source_img = existing_source_img
+            recovered_metadata = False
+        else:
+            if not source_url.startswith(("https://", "http://")):
+                continue
+            source_img = fetch_og_image(source_url, str(row.get("headline") or ""))
+            if not _is_real_source_image_url(source_img):
+                continue
+            recovered_metadata = True
 
         old_candidates = [
             str(row.get("image_url") or "").strip(),
@@ -2557,24 +2564,35 @@ def recover_recent_archive_source_images(archive, articles_dir, *, max_age_days=
             if fallback:
                 old_candidates.append(fallback)
 
-        row["image_url"] = source_img
-        row["source_image_url"] = source_img
-        row["image_credit"] = get_image_credit(source_url)
-        row["image_source"] = "recent_archive_og_image_recovery"
-        row["is_fallback_image"] = False
-        row["social_image_source"] = "recent_archive_og_image_recovery"
-        row["social_image_is_source"] = True
+        if recovered_metadata:
+            row["image_url"] = source_img
+            row["source_image_url"] = source_img
+            row["image_credit"] = get_image_credit(source_url)
+            row["image_source"] = "recent_archive_og_image_recovery"
+            row["is_fallback_image"] = False
+            row["social_image_source"] = "recent_archive_og_image_recovery"
+            row["social_image_is_source"] = True
+        else:
+            # Keep image_url aligned with the already-authoritative source image too;
+            # this prevents later update/render paths from seeing a stale fallback.
+            row["image_url"] = source_img
+            row["source_image_url"] = source_img
+            row["is_fallback_image"] = False
+
         article_path = Path(articles_dir) / f"{slug}.html"
-        _replace_article_fallback_references(article_path, old_candidates, source_img)
-        repaired += 1
+        page_repaired = _replace_article_fallback_references(
+            article_path, old_candidates, source_img, image_credit=str(row.get("image_credit") or "")
+        )
+        if recovered_metadata or page_repaired:
+            repaired += 1
 
     if repaired:
-        print(f"  Recent source-image recovery upgraded {repaired} canonical article image(s)")
+        print(f"  Recent source-image recovery/reconciliation upgraded {repaired} canonical article image(s)")
     return repaired
 
 
-def _replace_article_fallback_references(article_path, old_urls, new_url):
-    """Replace only known fallback image references in one existing article page."""
+def _replace_article_fallback_references(article_path, old_urls, new_url, image_credit=""):
+    """Replace known fallback references and restore source-photo credit on the hero."""
     if not article_path.is_file() or not new_url:
         return False
     try:
@@ -2590,6 +2608,20 @@ def _replace_article_fallback_references(article_path, old_urls, new_url):
         old_path = urlsplit(old).path if "://" in old else old
         if old_path:
             updated = updated.replace(old_path, urlsplit(new_url).path)
+
+    credit = str(image_credit or "").strip()
+    if credit:
+        # Material-update fallbacks are commonly rendered without a figcaption. When
+        # this repair restores the publisher image, restore the publisher credit too.
+        hero_pattern = re.compile(
+            r'(<figure class="article-hero-image"><img\b[^>]*\bsrc="'
+            + re.escape(new_url)
+            + r'"[^>]*>)(?:<figcaption class="img-credit">.*?</figcaption>)?(</figure>)',
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        caption = f'<figcaption class="img-credit">Photo: {html_lib.escape(credit)}</figcaption>'
+        updated = hero_pattern.sub(r'\1' + caption + r'\2', updated, count=1)
+
     if updated == html:
         return False
     article_path.write_text(updated, encoding="utf-8")
@@ -17476,8 +17508,19 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
       </aside>'''
 
     img_html   = ""
-    _art_img   = hero.get("image_url", "")
-    if not _art_img or (_is_legacy_or_branded_fallback_image(_art_img) and not (hero.get("is_custom") or hero.get("authoritative_custom"))):
+    _is_custom_article = bool(hero.get("is_custom") or hero.get("authoritative_custom"))
+    # A durable, publisher-sourced image is the visible article authority too.
+    # Material updates are often sourced from a later article that has no usable
+    # photo; in that case ``image_url`` may carry an editorial fallback even while
+    # ``source_image_url`` correctly preserves the canonical source photo.  Never
+    # let that fallback silently downgrade the visible hero. Custom articles retain
+    # their explicitly supplied display-image authority.
+    _source_art_img = _absolute_image_url(hero.get("source_image_url"))
+    if not _is_custom_article and _is_real_source_image_url(_source_art_img):
+        _art_img = _source_art_img
+    else:
+        _art_img = hero.get("image_url", "")
+    if not _art_img or (_is_legacy_or_branded_fallback_image(_art_img) and not _is_custom_article):
         # No real source image — use the most specific reusable editorial photo,
         # then fall back to the branded category graphic.
         _fb, _ = get_fallback_image(category_key, hero.get("headline", ""), item=hero)
@@ -27493,6 +27536,27 @@ def _apply_semantic_material_update_metadata(
         canonical["social_image_is_source"] = True
         merged["source_image_url"] = incoming_source_image
         merged["image_url"] = incoming_source_image
+        merged["image_credit"] = str((incoming or {}).get("image_credit") or "")
+        merged["image_source"] = str((incoming or {}).get("image_source") or "semantic_material_update_source")
+        merged["is_fallback_image"] = False
+    else:
+        # A material update may have stronger facts but a weaker/no photo. Preserve
+        # the canonical publisher image in that case instead of inheriting the
+        # update source's editorial fallback into the permanent article page.
+        canonical_source_image = _absolute_image_url(
+            (canonical or {}).get("source_image_url") or (canonical or {}).get("image_url")
+        )
+        if _is_real_source_image_url(canonical_source_image):
+            canonical["source_image_url"] = canonical_source_image
+            canonical["image_url"] = canonical_source_image
+            canonical["is_fallback_image"] = False
+            merged["source_image_url"] = canonical_source_image
+            merged["image_url"] = canonical_source_image
+            merged["image_credit"] = str((canonical or {}).get("image_credit") or "")
+            merged["image_source"] = str(
+                (canonical or {}).get("image_source") or "canonical_source_image_inherited"
+            )
+            merged["is_fallback_image"] = False
 
     stamp = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     canonical["last_meaningful_update_at"] = stamp

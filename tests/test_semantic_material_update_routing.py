@@ -825,3 +825,120 @@ def test_material_update_retries_sentence_length_headline_for_concision():
     retry_prompt = client.messages.calls[1]["messages"][0]["content"]
     assert "at or below 110 characters" in retry_prompt
     assert "without removing meaningful named geography" in retry_prompt
+
+
+def test_material_update_without_new_source_photo_inherits_canonical_source_image(tmp_path):
+    generate = _load_generate(tmp_path)
+    source_image = "https://cbs12.com/resources/media2/16x9/1200/source-crash.jpg"
+    fallback_image = (
+        "https://treasurecoast.today/images/editorial/topics/"
+        "roads-transportation/traffic.webp"
+    )
+    canonical = _archive_row(
+        "2026-09-07-turnpike-crash",
+        "Driver killed in crash on Florida's Turnpike in St. Lucie County",
+        "2026-09-07",
+        "story_turnpike",
+        "A driver was killed in a box truck crash on Florida's Turnpike.",
+        "https://cbs12.com/news/local/original-turnpike-crash",
+    )
+    canonical.update({
+        "image_url": source_image,
+        "source_image_url": source_image,
+        "image_credit": "CBS12",
+        "image_source": "og_image_fetch",
+        "is_fallback_image": False,
+    })
+    incoming = _archive_row(
+        "2026-09-07-turnpike-crash-update",
+        "One northbound lane reopens after fatal Turnpike crash",
+        "2026-09-07",
+        "story_turnpike_update",
+        "One northbound lane reopened after the fatal crash.",
+        "https://www.wflx.com/2026/09/07/turnpike-crash-update",
+    )
+    incoming.update({
+        "image_url": fallback_image,
+        "source_image_url": "",
+        "image_credit": "",
+        "image_source": "editorial_fallback",
+        "is_fallback_image": True,
+    })
+    merged = dict(incoming)
+    merged.update({
+        "headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+        "teaser": "One northbound lane reopened after the fatal crash.",
+        "body": "One northbound lane reopened after the fatal crash on Florida's Turnpike.",
+    })
+    decision = {
+        "confidence": 0.98,
+        "novel_facts": ["One northbound lane reopened"],
+        "shared_anchors": ["Florida's Turnpike", "St. Lucie County"],
+    }
+
+    generate._apply_semantic_material_update_metadata(
+        canonical, incoming, merged, decision, {}, today="2026-09-07"
+    )
+
+    assert canonical["image_url"] == source_image
+    assert canonical["source_image_url"] == source_image
+    assert merged["image_url"] == source_image
+    assert merged["source_image_url"] == source_image
+    assert merged["image_credit"] == "CBS12"
+    assert merged["is_fallback_image"] is False
+
+
+def test_recent_source_image_reconciliation_repairs_visible_fallback_without_refetch(
+    tmp_path, monkeypatch
+):
+    generate = _load_generate(tmp_path)
+    source_image = "https://cbs12.com/resources/media2/16x9/1200/source-crash.jpg"
+    fallback_image = (
+        "https://treasurecoast.today/images/editorial/topics/"
+        "roads-transportation/traffic.webp"
+    )
+    slug = "2026-09-07-turnpike-crash"
+    articles = tmp_path / "articles"
+    articles.mkdir(parents=True)
+    article_path = articles / f"{slug}.html"
+    article_path.write_text(
+        f'<meta property="og:image" content="{source_image}">'
+        f'<figure class="article-hero-image"><img src="{fallback_image}" alt="Turnpike crash"></figure>',
+        encoding="utf-8",
+    )
+    archive = [{
+        "slug": slug,
+        "headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+        "category_key": "crime",
+        "date": "2026-09-07",
+        "lastmod": "2026-09-07",
+        "image_url": source_image,
+        "source_image_url": source_image,
+        "image_credit": "CBS12",
+        "image_source": "og_image_fetch",
+        "is_fallback_image": False,
+        "source_url": "https://cbs12.com/news/local/original-turnpike-crash",
+    }]
+
+    monkeypatch.setattr(
+        generate,
+        "fetch_og_image",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("must not refetch when source authority already exists")),
+    )
+    monkeypatch.setattr(
+        generate,
+        "get_fallback_image",
+        lambda *args, **kwargs: (fallback_image, ""),
+    )
+
+    repaired = generate.recover_recent_archive_source_images(
+        archive, articles, max_age_days=3650
+    )
+
+    assert repaired == 1
+    html = article_path.read_text(encoding="utf-8")
+    assert f'<figure class="article-hero-image"><img src="{source_image}"' in html
+    assert fallback_image not in html
+    assert '<figcaption class="img-credit">Photo: CBS12</figcaption>' in html
+    assert archive[0]["image_url"] == source_image
+    assert archive[0]["source_image_url"] == source_image
