@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-07T15:48:50Z",
+  "generated_at": "2026-09-07T17:24:44Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -17,19 +17,20 @@
     "statuses": {
       "category_eligibility_archive_recovery": 6,
       "generated_live": 2,
-      "no_publishable_sources": 1
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 6
+      "no_category_eligible_sources": 6,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 2,
-    "model_elapsed_seconds": 33.635,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 32.505,
     "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 1,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 2,
-    "published_story_duplicate_suppression_count": 33,
+    "published_story_duplicate_suppression_count": 32,
     "story_aware_update_context_count": 9,
     "material_update_promotion_evaluation_count": 1,
     "material_update_promotion_count": 0,
@@ -43,7 +44,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 3,
+      "publishable_source_count": 4,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -130,7 +131,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
-          "canonical_headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:florida-s-turnpike",
@@ -139,10 +140,11 @@
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "incident"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike",
+            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike,story:story_009244",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -228,7 +230,7 @@
           "canonical_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
           "canonical_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:exact_source_url",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -237,29 +239,37 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 8,
-      "elapsed_seconds": 24.158
+      "new_publication_stale_rejected_count": 11,
+      "elapsed_seconds": 28.031
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
-      "selected_source_count": 2,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 2,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.4,
+          "elapsed_seconds": 7.89,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 10.957,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 24.4,
+      "model_elapsed_seconds": 18.847,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -270,11 +280,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Deadly Labor Day crash closes Florida’s Turnpike near Okeechobee Road in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+          "editorial_story_id": "story_009244",
+          "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
@@ -294,26 +314,16 @@
           "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
-          "editorial_story_id": "story_008555",
-          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
           "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
-          "canonical_headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:florida-s-turnpike",
@@ -322,32 +332,11 @@
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "incident"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Deadly Labor Day crash closes Florida’s Turnpike near Okeechobee Road in Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
-          "canonical_headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:named-person-death:florida-s-turnpike",
-            "story:story_009246"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike",
+            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike,story:story_009244",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -359,6 +348,21 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Deadly Labor Day crash closes Florida’s Turnpike near Okeechobee Road in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+          "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "crime",
           "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
@@ -388,29 +392,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
-          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "All northbound Turnpike lanes remain closed near Fort Pierce for fatal box truck crash investigation",
-      "generated_card_count": 1,
-      "elapsed_seconds": 46.073
+      "live_hero_headline": "All northbound Turnpike lanes closed after fatal box truck crash",
+      "generated_card_count": 0,
+      "elapsed_seconds": 49.273
     },
     {
       "category_key": "business",
@@ -418,7 +407,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 16,
-      "publishable_source_count": 2,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -549,7 +538,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
-          "canonical_headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:florida-s-turnpike",
@@ -558,10 +547,11 @@
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "incident"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike",
+            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike,story:story_009244",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -717,7 +707,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 11,
-      "elapsed_seconds": 15.562
+      "elapsed_seconds": 18.759
     },
     {
       "category_key": "sports",
@@ -754,15 +744,15 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 13,
-      "elapsed_seconds": 17.043
+      "new_publication_stale_rejected_count": 15,
+      "elapsed_seconds": 17.42
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
+      "fresh_candidate_count": 16,
       "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -852,13 +842,13 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Mango Music and Art Festival on Saturday in Lake Worth Beach",
-            "National Deaf Awareness Month event at Busch Wildlife Sanctuary in Jupiter on Saturday",
-            "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
-            "SoFlo Market 1-year anniversary celebration in Boca Raton on Saturday",
-            "Northwest BBQ Brews Blues Festival at Heart Soul Park",
-            "Peachfest 5-Year Anniversary Art Walk in West Palm Beach on Saturday",
-            "Hurricane Alley Blowout Rodeo in Vero Beach Friday-Saturday"
+            "Mango Music and Art Festival on Saturday September 6, 2026 in Lake Worth Beach",
+            "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
+            "Barrio Fiesta Labor Day Picnic on Sunday at Sandhill Crane Park",
+            "SoFlo Market 1-year anniversary celebration in Boca Raton",
+            "Northwest BBQ Brews Blues 11th annual festival",
+            "Peachfest 5-year anniversary at The Peach Art Collective",
+            "Hurricane Alley Blowout Rodeo Friday-Saturday at The Overpass Arena"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -912,7 +902,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 22.672
+      "elapsed_seconds": 27.353
     },
     {
       "category_key": "florida",
@@ -950,23 +940,30 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.643
+      "elapsed_seconds": 16.586
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "no_publishable_sources",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 6.316,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 6.316,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -975,55 +972,15 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
-          "editorial_story_id": "story_007557",
-          "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
-          "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "Golf cart rider injured in crash with tractor in Martin County - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-golf-cart-rider-injured-in-crash-with-tractor-in-martin-county/73623106",
-          "editorial_story_id": "story_008555",
-          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
-          "editorial_story_id": "story_008555",
-          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
-          "editorial_story_id": "story_008555",
-          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
           "editorial_story_id": "story_008555",
           "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
           "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
@@ -1031,8 +988,48 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - cw34.com",
+          "source_url": "https://cw34.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
+          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_009293"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['martin-county']",
+            "shared_event_families=['crash']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['tropical-way']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['cart', 'golf', 'old', 'tractor']",
+            "shared_distinctive_token_count=28",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -1040,68 +1037,8 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
-          "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
-          "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
-          "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Golf cart rider injured in crash with tractor in Martin County - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-golf-cart-rider-injured-in-crash-with-tractor-in-martin-county/73623106",
-          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-in-martin-countys-tropical-farms-community",
-          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "76-year-old man ejected after golf cart crashes into tractor in Martin County's Tropical Farms community - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/05/76-year-old-man-ejected-after-golf-cart-crashes-into-tractor-martin-countys-tropical-farms-community?outputType=amp",
-          "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "76-year-old hospitalized after Golf Cart Hits Tractor in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/76-year-old-hospitalized-after-golf-cart-hits-tractor-in-martin-county-tropical-way-golf-cart-crash-tractor-accident-golf-cart-vs-tractor-76-year-old-driver-driver-ejected-florida-traffic-accident-senior-driver-crash-hospitalized",
           "canonical_slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
           "canonical_headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
           "canonical_is_custom": false,
@@ -1115,14 +1052,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.564
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 39.311
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 2,
       "selected_source_count": 2,
       "cache_hit": false,
@@ -1132,11 +1071,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.235,
+          "elapsed_seconds": 7.342,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 9.235,
+      "model_elapsed_seconds": 7.342,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1150,8 +1089,38 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fatal crash on Florida's Turnpike closes north and southbound lanes - Treasure Coast News",
+          "source_url": "https://news.google.com/rss/articles/CBMijAJBVV95cUxQTHhnTXlab2o2UmxON1JOYmM2MUw2emtZRnZKZ0VYVTdiZnpEUzB4R0VieExHOUlac2QxN2VuV0hfVHpHVUMyQUpYMkx4TnZnbXhrSmRNSDRpSS0zSUVGUlUtTGExcFNhT3Bza202bVNUbU9hUDlkU1phdjdIdGZRR0NtNXpETHRndzkzN3hNY2hTWjR3ZHhsUWFUbkVXQUY4OTlGYmlvX1pSdU90TnRmYTdhR2dDNEVvSlZxT2cxUHR1MjFwQjFrdGJOVGxSTHdWRlA5R2dxVlZRTjV5UGtxdUxsT0lsdlV1ZEtqMXJLeDhRS1N2R1lmU3JUSVZYTWdrSllpTXNQRUFYSjFf",
+          "editorial_story_id": "story_009244",
+          "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fatal crash on Florida's Turnpike closes north and southbound lanes - Yahoo",
+          "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQbmVUTmd0S25rUVBYcXBiMGFUZi1QdWZLbm1tb2FfbldYSXBWTDFXenpIdU5wMHVHT3J6WGtSdEU4Y25oLUpSMjFpdzVXcTNvYzdleV9CQnFPa0o5RzZWNnlUTVI4VktsY0FRTW95d0pvaWgzVzRPRjZUMlg2VDBIc09sTV9aLV92X2phMzVTeHE",
+          "editorial_story_id": "story_009244",
+          "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Deadly Labor Day crash closes Florida’s Turnpike near Okeechobee Road in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+          "editorial_story_id": "story_009244",
+          "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Shooting of dog that allegedly charged at couple in Fort Pierce investigated - WPBF",
@@ -1160,6 +1129,16 @@
           "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
           "canonical_headline": "Man shot dog that charged him after two dogs trapped wife in vehicle in Fort Pierce driveway, St. Lucie County deputies say",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - cw34.com",
+          "source_url": "https://cw34.com/news/local/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack?teaserSource=trending",
+          "editorial_story_id": "story_009122",
+          "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+          "canonical_headline": "Man shot dog that charged him after two dogs trapped wife in vehicle in Fort Pierce driveway, St. Lucie County deputies say",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1201,26 +1180,16 @@
           "canonical_headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "New data center proposed for western St. Lucie County near Interstate 95 - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
-          "editorial_story_id": "story_007205",
-          "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
-          "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash",
+          "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
-          "canonical_headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:florida-s-turnpike",
@@ -1229,32 +1198,35 @@
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "incident"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike",
+            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike,story:story_009244",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "Deadly Labor Day crash closes Florida’s Turnpike near Okeechobee Road in Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
-          "publisher": "cbs12.com",
+          "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash",
+          "publisher": "www.wptv.com",
           "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
-          "canonical_headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:florida-s-turnpike",
-            "story:story_009246"
+            "story:story_009244",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "incident"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike",
+            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike,story:story_009244",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1271,10 +1243,40 @@
           "source_headline": "Fatal crash on Florida's Turnpike closes north and southbound lanes - Treasure Coast News",
           "source_url": "https://news.google.com/rss/articles/CBMijAJBVV95cUxQTHhnTXlab2o2UmxON1JOYmM2MUw2emtZRnZKZ0VYVTdiZnpEUzB4R0VieExHOUlac2QxN2VuV0hfVHpHVUMyQUpYMkx4TnZnbXhrSmRNSDRpSS0zSUVGUlUtTGExcFNhT3Bza202bVNUbU9hUDlkU1phdjdIdGZRR0NtNXpETHRndzkzN3hNY2hTWjR3ZHhsUWFUbkVXQUY4OTlGYmlvX1pSdU90TnRmYTdhR2dDNEVvSlZxT2cxUHR1MjFwQjFrdGJOVGxSTHdWRlA5R2dxVlZRTjV5UGtxdUxsT0lsdlV1ZEtqMXJLeDhRS1N2R1lmU3JUSVZYTWdrSllpTXNQRUFYSjFf",
           "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
-          "canonical_headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
           "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fatal crash on Florida's Turnpike closes north and southbound lanes - Yahoo",
+          "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQbmVUTmd0S25rUVBYcXBiMGFUZi1QdWZLbm1tb2FfbldYSXBWTDFXenpIdU5wMHVHT3J6WGtSdEU4Y25oLUpSMjFpdzVXcTNvYzdleV9CQnFPa0o5RzZWNnlUTVI4VktsY0FRTW95d0pvaWgzVzRPRjZUMlg2VDBIc09sTV9aLV92X2phMzVTeHE",
+          "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Deadly Labor Day crash closes Florida’s Turnpike near Okeechobee Road in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+          "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1290,6 +1292,21 @@
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - cw34.com",
+          "source_url": "https://cw34.com/news/local/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack?teaserSource=trending",
+          "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+          "canonical_headline": "Man shot dog that charged him after two dogs trapped wife in vehicle in Fort Pierce driveway, St. Lucie County deputies say",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1355,37 +1372,22 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "New data center proposed for western St. Lucie County near Interstate 95 - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95",
-          "canonical_slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
-          "canonical_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 2,
+      "new_publication_stale_rejected_count": 3,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal Fort Pierce-area box truck crash",
+      "live_hero_headline": "All northbound Turnpike lanes closed in St. Lucie County after fatal crash",
       "generated_card_count": 0,
-      "elapsed_seconds": 24.9
+      "elapsed_seconds": 21.376
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 2,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1402,7 +1404,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
@@ -1445,7 +1447,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
-          "canonical_headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+          "canonical_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:florida-s-turnpike",
@@ -1454,10 +1456,11 @@
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "incident"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike",
+            "deterministic_identity_keys=incident:named-person-death:florida-s-turnpike,story:story_009244",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1516,7 +1519,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.544
+      "elapsed_seconds": 17.585
     }
   ]
 }

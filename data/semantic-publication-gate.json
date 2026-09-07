@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-07T15:53:59.331451+00:00",
+  "generated_at": "2026-09-07T17:30:59.619744+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -36,7 +36,7 @@
     "angle_shifted_event_recall": "dense shared article facts may nominate a recent candidate even when headlines diverge; nomination never merges without model adjudication",
     "independent_followup_policy": "same-event angle changes default to canonical update; a second permalink requires model-confirmed independent public-interest value plus a distinct persistent story identity",
     "material_update_composer": {
-      "version": "1.1",
+      "version": "1.2",
       "model": "claude-sonnet-4-5",
       "timeout_seconds": 60.0,
       "failure_behavior": "preserve_both_pages_and_retry",
@@ -62,16 +62,16 @@
     }
   },
   "summary": {
-    "evaluations": 45,
+    "evaluations": 46,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 45,
+    "no_candidate_passes": 46,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
     "new_stories_allowed": 0,
-    "retroactive_rows_retained": 45,
+    "retroactive_rows_retained": 46,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -122,13 +122,13 @@
       "confidence": 0.95,
       "shared_anchors": [],
       "novel_facts": [
-        "Mango Music and Art Festival on Saturday in Lake Worth Beach",
-        "National Deaf Awareness Month event at Busch Wildlife Sanctuary in Jupiter on Saturday",
-        "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
-        "SoFlo Market 1-year anniversary celebration in Boca Raton on Saturday",
-        "Northwest BBQ Brews Blues Festival at Heart Soul Park",
-        "Peachfest 5-Year Anniversary Art Walk in West Palm Beach on Saturday",
-        "Hurricane Alley Blowout Rodeo in Vero Beach Friday-Saturday"
+        "Mango Music and Art Festival on Saturday September 6, 2026 in Lake Worth Beach",
+        "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
+        "Barrio Fiesta Labor Day Picnic on Sunday at Sandhill Crane Park",
+        "SoFlo Market 1-year anniversary celebration in Boca Raton",
+        "Northwest BBQ Brews Blues 11th annual festival",
+        "Peachfest 5-year anniversary at The Peach Art Collective",
+        "Hurricane Alley Blowout Rodeo Friday-Saturday at The Overpass Arena"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -137,6 +137,26 @@
     }
   ],
   "decisions": [
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Motorist describes moments before deadly box truck crash on Turnpike near Fort Pierce",
+      "incoming_source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+      "incoming_story_id": "story_009244",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
     {
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "First Border Collies adopted after Palm City hoarding rescue, Humane Society says",
@@ -461,7 +481,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Multi-vehicle crash blocks I-95 southbound near Kanner Highway in Martin County",
       "incoming_source_url": "http://cbs12.com/news/florida/i-95-south-blocked-near-martin-county-delays-expected-after-multi-vehicle-crash-florida-news-local-news-local-traffic-crash",
-      "incoming_story_id": "story_009170",
+      "incoming_story_id": "story_009234",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -481,7 +501,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect",
       "incoming_source_url": "https://cw34.com/news/local/ircso-assists-fellsmere-pd-in-search-for-machete-stabbing-suspect-florida-news-florida-crime-local-news-local-crime-stabbing-knife-machete",
-      "incoming_story_id": "story_009169",
+      "incoming_story_id": "story_009233",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -921,7 +941,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Driver airlifted after single-car rollover on I-95 southbound near High Meadows in Palm City",
       "incoming_source_url": "https://www.wpbf.com/article/florida-driver-airlifted-to-trauma-center-after-car-crashes-into-tree-on-i-95-in-palm-city/73620418",
-      "incoming_story_id": "story_009177",
+      "incoming_story_id": "story_009242",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -961,7 +981,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
       "incoming_source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
-      "incoming_story_id": "story_009173",
+      "incoming_story_id": "story_009237",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1043,10 +1063,10 @@
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 9,
+    "directives_considered": 8,
     "story_records_merged": 0,
     "aliases_written": 0,
-    "already_consolidated": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_008278",
@@ -1162,7 +1182,7 @@
       },
       {
         "source_story_id": "story_008325",
-        "target_story_id": "story_009177",
+        "target_story_id": "story_009242",
         "target_slug": "2026-09-05-driver-airlifted-after-single-car-rollover-on-i-95-southbound-near-high-meadows",
         "incoming_headline": "Rollover crash on I-95 southbound in Palm City leaves driver with traumatic injuries, requiring airlift",
         "confidence": 0.97,
@@ -1342,7 +1362,7 @@
       },
       {
         "source_story_id": "story_008325",
-        "target_story_id": "story_009177",
+        "target_story_id": "story_009242",
         "target_slug": "2026-09-05-driver-airlifted-after-single-car-rollover-on-i-95-southbound-near-high-meadows",
         "incoming_headline": "Rollover crash on I-95 southbound in Palm City leaves driver with traumatic injuries, requiring airlift",
         "confidence": 0.97,
