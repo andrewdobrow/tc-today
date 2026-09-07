@@ -346,8 +346,13 @@ def test_psl_animal_cruelty_contract_does_not_merge_unrelated_same_city_case():
 
 
 def test_editorial_engine_uses_enriched_source_text_to_join_psl_animal_cruelty_sources(tmp_path: Path):
+    # Keep this identity test independent of the production 30-day lifecycle clock.
+    # A fixed August 2026 timestamp began making the first synthetic story archived
+    # once the real calendar reached September 7, preventing archived-story matching
+    # before the second same-incident source was processed.
+    incident_time = datetime.now(timezone.utc)
     engine = EditorialEngine(
-        default_published_at=datetime(2026, 8, 8, 1, tzinfo=timezone.utc),
+        default_published_at=incident_time,
         registry_path=tmp_path / "registry.json",
     )
     first = engine.process(
