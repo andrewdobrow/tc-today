@@ -728,3 +728,68 @@ def test_v1_12_0_6_false_update_repair_restores_exact_canonical_rows(tmp_path):
         (tmp_path / "data" / "cross-source-identity-repair.json").read_text(encoding="utf-8")
     )
     assert saved_report["repaired_count"] == 2
+
+
+def test_turnpike_false_identity_repair_restores_june_lawsuit_and_removes_bad_anchor(tmp_path):
+    import json
+
+    g = _load_generate()
+    slug = "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille"
+    corrupted = [
+        {
+            "slug": slug,
+            "headline": "All northbound Turnpike lanes closed after fatal box truck crash",
+            "source_headline": (
+                "All northbound lanes of Florida's Turnpike closed in St. Lucie County "
+                "after fatal box truck crash"
+            ),
+            "source_url": (
+                "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/"
+                "all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash"
+            ),
+            "incident_anchor_key": "named-person-death:florida-s-turnpike",
+            "editorial_route": "update_existing",
+        }
+    ]
+    (tmp_path / "archive.json").write_text(json.dumps(corrupted), encoding="utf-8")
+
+    report = g._repair_v1_12_0_6_false_cross_source_overwrites(tmp_path)
+    repaired = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))[0]
+
+    assert report["repaired_count"] == 1
+    assert report["repairs"][0]["repair_type"] == "false_cross_source_overwrite_restored"
+    assert repaired["headline"] == (
+        "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit"
+    )
+    assert repaired["source_url"].endswith(
+        "/wrongful-death-lawsuit-filed-in-fatal-turnpike-crash-involving-semi-truck-driver"
+    )
+    assert "incident_anchor_key" not in repaired
+    assert repaired["_event_identity_snapshot"]["incident_anchor"] == ""
+
+
+def test_turnpike_repair_sanitizes_bad_anchor_without_rewriting_clean_june_story(tmp_path):
+    import json
+
+    g = _load_generate()
+    slug = "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille"
+    clean_but_stale = {
+        "slug": slug,
+        "headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+        "teaser": "Original lawsuit teaser remains untouched.",
+        "source_url": (
+            "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/"
+            "wrongful-death-lawsuit-filed-in-fatal-turnpike-crash-involving-semi-truck-driver"
+        ),
+        "incident_anchor_key": "named-person-death:florida-s-turnpike",
+    }
+    (tmp_path / "archive.json").write_text(json.dumps([clean_but_stale]), encoding="utf-8")
+
+    report = g._repair_v1_12_0_6_false_cross_source_overwrites(tmp_path)
+    repaired = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))[0]
+
+    assert report["repaired_count"] == 1
+    assert report["repairs"][0]["repair_type"] == "invalid_identity_anchor_removed"
+    assert repaired["headline"] == clean_but_stale["headline"]
+    assert repaired["teaser"] == clean_but_stale["teaser"]
+    assert "incident_anchor_key" not in repaired

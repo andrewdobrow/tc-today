@@ -152,3 +152,42 @@ def test_broad_incident_anchor_cannot_own_publication_ledger_or_final_surface(tm
     )
     assert custom_identity["canonical_slug"] == custom["slug"]
     assert collies_identity["canonical_slug"] == collies["slug"]
+
+
+def test_historical_florida_turnpike_false_person_anchor_is_candidate_only_everywhere():
+    anchor = "named-person-death:florida-s-turnpike"
+    assert incident_anchor_write_authoritative(anchor) is False
+    assert is_broad_event_class_key(anchor) is True
+
+    decision = authorize_exact_identity_keys([f"incident:{anchor}"])
+    assert decision.outcome == "possible_relationship"
+    assert decision.write_authorized is False
+    assert decision.proof_type == "broad_structured_incident_key"
+
+
+def test_historical_turnpike_false_person_anchor_cannot_rebind_publication_ledger():
+    g = _load_generate()
+    anchor = "named-person-death:florida-s-turnpike"
+    canonical = {
+        "slug": "2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille",
+        "headline": "C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit",
+        "source_url": "https://www.wptv.com/old-turnpike-lawsuit",
+        "incident_anchor_key": anchor,
+        "publication_id": "publication:old-turnpike-lawsuit",
+        "canonical_publication_id": "publication:old-turnpike-lawsuit",
+        "ranking_eligible": True,
+        "legacy_identity_status": "identified",
+    }
+    incoming = {
+        "headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash",
+        "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash",
+        "source_url": "https://www.wptv.com/new-fatal-box-truck-crash",
+        "incident_anchor_key": anchor,
+    }
+
+    ledger = g._build_canonical_publication_ledger([canonical])
+    target, basis, keys = g._canonical_publication_ledger_target(incoming, ledger)
+
+    assert f"incident:{anchor}" in keys
+    assert target is None
+    assert basis != "exact_structured_incident_key"

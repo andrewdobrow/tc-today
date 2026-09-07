@@ -15,6 +15,7 @@ from typing import Any, Iterable, Mapping, MutableMapping
 from .incident_identity import (
     build_story_incident_signature,
     compare_incident_signatures,
+    incident_anchor_write_authoritative,
     named_person_death_subjects,
     title_supports_named_person_death,
     timeline_incident_anchor,
@@ -83,7 +84,13 @@ def is_broad_event_class_key(event_key: object) -> bool:
         return True
     if value.startswith("named-person-death:"):
         subject = value.split(":", 1)[1]
-        ordered_tokens = tuple(token for token in subject.split("-") if token)
+        # Reuse the canonical write-authority boundary first. This catches stale
+        # malformed keys such as ``named-person-death:florida-s-turnpike`` even
+        # though the possessive artifact contributes an otherwise unknown ``s``
+        # token to the older location-only heuristic below.
+        if not incident_anchor_write_authoritative(value):
+            return True
+        ordered_tokens = tuple(token for token in subject.split("-") if token and token != "s")
         tokens = set(ordered_tokens)
         # A location-only subject (or a truncated street beginning with a
         # direction) is not a named person. Do not reject a real surname merely

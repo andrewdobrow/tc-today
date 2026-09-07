@@ -792,8 +792,10 @@ def test_material_update_prompt_keeps_headlines_concise_without_hard_truncation(
         {"novel_facts": ["material new development"], "shared_anchors": ["same event"]},
     )
 
-    assert "55-80 characters" in prompt
-    assert "under 90 characters" in prompt
+    assert "no hard character target or ceiling" in prompt
+    assert "Geographic specificity outranks headline brevity" in prompt
+    assert '"Florida\'s Turnpike", "I-95", "Fort Pierce", or "Martin County"' in prompt
+    assert 'do not normalize "Florida\'s Turnpike" to "Florida Turnpike"' in prompt
     assert "Never mechanically truncate" in prompt
     assert material_update.SEMANTIC_MATERIAL_UPDATE_VERSION == "1.2"
 

@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-INCIDENT_IDENTITY_VERSION = "3.4"
+INCIDENT_IDENTITY_VERSION = "3.5"
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _ANIMAL_QUANTITY_RE = re.compile(r"\b(\d{1,3})\s+(?:cats?|dogs?|animals?|pets?)\b", re.IGNORECASE)
@@ -384,7 +384,13 @@ def _valid_person_name(value: object) -> str:
         return ""
     if not 2 <= len(words) <= 3:
         return ""
-    folded_words = [re.sub(r"[^a-z]", "", word.casefold()) for word in words]
+    # Normalize possessives *before* stripping punctuation. Otherwise a place such
+    # as ``Florida's Turnpike`` becomes ``floridas turnpike`` and can slip past
+    # the explicit ``florida`` location guard as a false two-word person name.
+    folded_words = [
+        re.sub(r"[^a-z]", "", re.sub(r"(?:'s|’s)$", "", word.casefold()))
+        for word in words
+    ]
     if any(not word for word in folded_words):
         return ""
     rejected = {
@@ -398,6 +404,10 @@ def _valid_person_name(value: object) -> str:
         "service", "resident", "who", "began", "his", "her", "career",
         "here", "after", "orchard", "grove", "wptv", "wflx", "wpbf",
         "wpec", "cw34", "tapinto", "yahoo", "canada",
+        # Road/infrastructure nouns are especially dangerous in crash headlines:
+        # title-case road names can otherwise resemble conventional first/last names.
+        "turnpike", "highway", "interstate", "road", "street", "avenue",
+        "boulevard", "parkway", "causeway", "bridge", "drive", "lane", "trail",
     }
     if set(folded_words) & rejected:
         return ""
@@ -542,10 +552,25 @@ def incident_anchor_write_authoritative(anchor_key: object) -> bool:
         return False
 
     # Named subjects identify one continuing real-world incident rather than a
-    # jurisdiction-wide class of incidents.
+    # jurisdiction-wide class of incidents. Named-death anchors receive an extra
+    # plausibility check because historical parsing could mistake title-cased road
+    # names such as ``Florida's Turnpike`` for a person's first/last name. Persisted
+    # bad keys must fail closed even after the extractor itself is fixed.
+    if value.startswith("named-person-death:"):
+        subject = value[len("named-person-death:"):].strip(" :-")
+        tokens = [token for token in subject.split("-") if token and token != "s"]
+        if len(tokens) < 2:
+            return False
+        infrastructure_tokens = {
+            "turnpike", "highway", "interstate", "road", "street", "avenue",
+            "boulevard", "parkway", "causeway", "bridge", "drive", "lane", "trail",
+        }
+        if any(token in infrastructure_tokens for token in tokens):
+            return False
+        return bool(subject)
+
     for prefix in (
         "missing-person:",
-        "named-person-death:",
         "law-enforcement-operation:",
     ):
         if value.startswith(prefix):

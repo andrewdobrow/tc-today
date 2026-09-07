@@ -571,10 +571,12 @@ def test_release_versions_and_reports_are_bumped():
     import tct_engine.observability as observability
 
     assert g.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.13.7.4-headline-concision"
+        "v1.13.7.6-official-name-preservation"
     )
-    assert "55-80 characters" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
-    assert "under 90 characters" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert "NO hard character target or ceiling" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert "Geographic specificity outranks headline brevity" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert '"Florida\'s Turnpike", "I-95", "Fort Pierce", or "Martin County"' in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
+    assert 'do not normalize "Florida\'s Turnpike" to "Florida Turnpike"' in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
     assert "Never mechanically truncate" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
     assert g.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 7
     assert g.FORWARD_IDENTITY_VERSION == "1.7"

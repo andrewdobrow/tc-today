@@ -964,14 +964,15 @@ ASSIGNMENT_EDITOR_PENDING = {}
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.4-headline-concision"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.6-official-name-preservation"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
 # writer. Keeping one literal contract prevents the Sonnet 5 editor -> Sonnet 4.5
 # writer experiment from drifting behind the deterministic publication guards.
 LEAD_AND_HEADLINE_INTEGRITY_STANDARD = """LEAD AND HEADLINE INTEGRITY STANDARD:
-- Write concise, newspaper-style headlines focused on the core new development. Prefer about 55-80 characters when the story supports it; shorter is fine, and headlines should generally stay under 90 characters. Move secondary details, background, and nonessential attribution into the teaser or article body instead of cramming them into the headline.
-- Do not add formulaic attribution labels such as "Deputies:" or "Police:" just to shorten a headline. Keep routine source attribution in the teaser/body. If attribution is genuinely necessary to keep a headline accurate or avoid presenting an allegation as established fact, phrase that distinction naturally and sparingly. Never mechanically truncate a headline or sacrifice accuracy or clarity just to hit the character target.
+- Write concise, newspaper-style headlines focused on the core new development, but treat length only as a soft editorial preference. A compact headline is usually best, often around 60-100 characters when natural, but there is NO hard character target or ceiling. Trim secondary clauses and background before trimming information that identifies what or where the story is about.
+- NEVER remove, abbreviate into ambiguity, or generalize a meaningful source-supported geographic identifier solely to make a headline shorter. Preserve specific place, roadway/corridor, city, county, neighborhood, facility, or landmark names when they materially identify the event — for example "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County". Geographic specificity outranks headline brevity. Preserve source-supported official proper names exactly enough to retain their identity, including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike".
+- Do not add formulaic attribution labels such as "Deputies:" or "Police:" just to shorten a headline. Keep routine source attribution in the teaser/body. If attribution is genuinely necessary to keep a headline accurate or avoid presenting an allegation as established fact, phrase that distinction naturally and sparingly. Never mechanically truncate a headline or sacrifice accuracy, clarity, or geographic specificity for length.
 - Every article and card body must begin with a self-contained news lead that tells a reader with no prior knowledge what happened and what is new now.
 - The lead must make sense without the headline. It must still make sense if the headline is completely removed. Do not use the headline as a substitute for context, and do not merely paraphrase it.
 - If the headline or lead names an amendment, bill, ordinance, referendum, resolution, program, proposal, measure, or numbered initiative, define what it would do in the FIRST paragraph. A phrase such as 'if Amendment 3 passes' is not a definition.
@@ -16911,6 +16912,74 @@ def load_archive(archive_path):
 
 
 _V1_12_0_6_FALSE_UPDATE_REPAIR_SNAPSHOTS = {
+    '2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille': {'slug': '2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille',
+ 'headline': 'C.H. Robinson and White Hawk Carriers named in St. Lucie County Turnpike crash lawsuit',
+ 'teaser': 'C.H. Robinson Company Inc., described as one of the largest transportation brokers in the United '
+           'States, is named as a defendant in a wrongful death lawsuit stemming from a fatal Turnpike crash '
+           'in St. Lucie County.',
+ 'category_key': 'crime',
+ 'category_label': 'Crime & Safety',
+ 'date': '2026-06-11',
+ 'lastmod': '2026-06-12',
+ 'image_url': 'https://ewscripps.brightspotcdn.com/dims4/default/0b24bab/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F31%2F2b%2F67c7c2e04a6c89b01c3a08973105%2Funtitled-1-recovered.jpg',
+ 'source_url': 'https://www.wptv.com/news/treasure-coast/region-st-lucie-county/wrongful-death-lawsuit-filed-in-fatal-turnpike-crash-involving-semi-truck-driver',
+ 'ranking_eligible': False,
+ 'legacy_identity_status': 'legacy_unresolved',
+ 'category_keys': ['crime', 'st_lucie'],
+ 'county_keys': ['st_lucie'],
+ 'publication_id': 'publication:f431d9c6eb9445beeb986bd4',
+ 'canonical_slug': '2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille',
+ 'canonical_publication_id': 'publication:f431d9c6eb9445beeb986bd4',
+ '_event_identity_snapshot': {'schema_version': '1.0',
+                              'origin': 'legacy_archive_derived',
+                              'source_url': 'https://www.wptv.com/news/treasure-coast/region-st-lucie-county/wrongful-death-lawsuit-filed-in-fatal-turnpike-crash-involving-semi-truck-driver',
+                              'source_headline': 'C.H. Robinson and White Hawk Carriers named in St. Lucie '
+                                                 'County Turnpike crash lawsuit',
+                              'source_published': '2026-06-11',
+                              'incident_anchor': '',
+                              'known_event_key': '',
+                              'locality': ['st-lucie', 'st-lucie-county'],
+                              'event_families': ['crash'],
+                              'people': [],
+                              'precise_locations': [],
+                              'agencies': [],
+                              'subject_phrases': ['carri-turnpike-crash',
+                                                  'carri-turnpike-crash-lawsuit',
+                                                  'hawk-carri-turnpike',
+                                                  'hawk-carri-turnpike-crash',
+                                                  'robinson-white-hawk',
+                                                  'robinson-white-hawk-carri',
+                                                  'turnpike-crash-lawsuit',
+                                                  'white-hawk-carri',
+                                                  'white-hawk-carri-turnpike'],
+                              'headline_topic_tokens': ['carri',
+                                                        'crash',
+                                                        'hawk',
+                                                        'lawsuit',
+                                                        'robinson',
+                                                        'turnpike',
+                                                        'white'],
+                              'distinctive_tokens': ['brok',
+                                                     'carri',
+                                                     'company',
+                                                     'crash',
+                                                     'death',
+                                                     'defendant',
+                                                     'describ',
+                                                     'fatal',
+                                                     'hawk',
+                                                     'inc',
+                                                     'largest',
+                                                     'lawsuit',
+                                                     'one',
+                                                     'robinson',
+                                                     'stat',
+                                                     'stemm',
+                                                     'transportation',
+                                                     'turnpike',
+                                                     'unit',
+                                                     'white',
+                                                     'wrongful']}},
     "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery": {
         "slug": "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery",
         "headline": "Indian River County Sheriff warns of possible bad drugs on streets after two deaths near Sebastian",
@@ -16981,10 +17050,11 @@ _V1_12_0_6_FALSE_UPDATE_REPAIR_SNAPSHOTS = {
 
 
 def _repair_v1_12_0_6_false_cross_source_overwrites(output_root):
-    """Restore the two canonical rows overwritten by the 2026-07-31 matcher bug.
+    """Restore exact canonical rows overwritten by known identity bugs.
 
-    The repair is exact-slug and exact-drift guarded, so clean repositories and any
-    future legitimate update to these stories remain untouched.
+    The repair is exact-slug and exact-drift guarded. It also removes one known
+    malformed Turnpike death anchor from the original June canonical row so that a
+    clean-but-stale repository cannot reuse that bad identity later.
     """
     root = Path(output_root)
     archive_path = root / "archive.json"
@@ -16993,6 +17063,11 @@ def _repair_v1_12_0_6_false_cross_source_overwrites(output_root):
         return {"repaired_count": 0, "repairs": []}
 
     drift_markers = {
+        '2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille': (
+            "all northbound turnpike lanes closed",
+            "fatal box truck crash",
+            "all-northbound-lanes-of-floridas-turnpike-closed",
+        ),
         "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery": (
             "sentenced to life", "selling fentanyl", "vero beach man",
         ),
@@ -17013,10 +17088,28 @@ def _repair_v1_12_0_6_false_cross_source_overwrites(output_root):
             str(row.get("source_headline") or ""),
             str(row.get("source_url") or ""),
         )).lower()
-        if not any(marker in observed for marker in drift_markers[slug]):
+        has_known_drift = any(marker in observed for marker in drift_markers[slug])
+        if not has_known_drift:
+            if (
+                slug == '2026-06-11-wrongful-death-lawsuit-filed-in-st-lucie-county-after-fatal-turnpike-crash-kille'
+                and str(row.get("incident_anchor_key") or "").casefold()
+                == "named-person-death:florida-s-turnpike"
+            ):
+                cleaned = dict(row)
+                cleaned.pop("incident_anchor_key", None)
+                archive[index] = cleaned
+                repairs.append({
+                    "slug": slug,
+                    "repair_type": "invalid_identity_anchor_removed",
+                    "incorrect_headline": str(row.get("headline") or ""),
+                    "restored_headline": str(row.get("headline") or ""),
+                    "incorrect_source_url": str(row.get("source_url") or ""),
+                    "restored_source_url": str(row.get("source_url") or ""),
+                })
             continue
         repairs.append({
             "slug": slug,
+            "repair_type": "false_cross_source_overwrite_restored",
             "incorrect_headline": str(row.get("headline") or ""),
             "restored_headline": snapshot["headline"],
             "incorrect_source_url": str(row.get("source_url") or ""),
@@ -17027,7 +17120,7 @@ def _repair_v1_12_0_6_false_cross_source_overwrites(output_root):
     report = {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "release": "v1.12.0.6.2",
+        "release": "v1.13.7.5-turnpike-identity-repair",
         "repaired_count": len(repairs),
         "repairs": repairs,
     }

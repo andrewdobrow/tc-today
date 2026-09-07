@@ -176,3 +176,32 @@ def test_sparse_live_article_matches_existing_incident_before_sparse_guard(tmp_p
     assert registry.last_decision["relationship"] == "same_event"
     assert "Deterministic incident identity: true" in registry.last_decision["decision_trace"]
     assert registry.get_story(first)["canonical_title"].startswith("More than 70 animals")
+
+
+def test_floridas_turnpike_is_not_parsed_as_named_death_subject() -> None:
+    from tct_engine.incident_identity import incident_anchor_key
+
+    title = (
+        "Palm City man dies after SUV collides with semi-truck on Florida's "
+        "Turnpike in Martin County"
+    )
+    body = (
+        "A Palm City man died after an SUV collided with a semi-truck on "
+        "Florida's Turnpike in Martin County."
+    )
+
+    assert incident_anchor_key(titles=(title,), body=body) == ""
+
+
+def test_real_named_death_subject_survives_turnpike_location_guard() -> None:
+    from tct_engine.incident_identity import (
+        incident_anchor_key,
+        incident_anchor_write_authoritative,
+    )
+
+    title = "John Smith dies after crash on Florida's Turnpike"
+    body = "John Smith died after a crash on Florida's Turnpike in St. Lucie County."
+    anchor = incident_anchor_key(titles=(title,), body=body)
+
+    assert anchor == "named-person-death:john-smith"
+    assert incident_anchor_write_authoritative(anchor) is True
