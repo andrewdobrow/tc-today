@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-07T23:04:53Z",
+  "generated_at": "2026-09-07T23:26:35Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 1,
-    "placements_after": 1,
+    "placements_before": 2,
+    "placements_after": 2,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,21 +49,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 186,
+    "candidates_processed": 188,
     "routes": {
-      "generate_new": 18,
-      "skip": 167,
-      "update_existing": 1
+      "generate_new": 7,
+      "skip": 181
     },
     "eligibility": {
       "listing": 6,
-      "low_value": 126,
-      "publishable": 54
+      "low_value": 125,
+      "publishable": 57
     },
     "source_classes": {
-      "aggregator": 132,
-      "local_news": 37,
-      "regional_news": 14,
+      "aggregator": 131,
+      "local_news": 38,
+      "regional_news": 16,
       "unknown": 3
     },
     "rejected_count": 6,
@@ -87,8 +86,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "767 SE Chaloupe Ave, Port Saint Lucie, FL 34983 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNQ2lMdjRiT2Flc054ZGFJVUhVNWxWeDNwbU1LZW5Jc3dPd291ZU9nUnhla0pMbWJtSVctOTNBWUkzbHdjSDhVQ2RwU1hSYXVWb1hteEdBUmRkMmZHZVdhbjFKN25QZ2xVT1ZjbDBReXNSbFJnMGFEUUpyQlZaWHRRU3dwdzN6VGxRc0dONlByY1RkRkFncW4wVEhTbw?oc=5",
+        "headline": "7962 NW Greenbank Cir, Port Saint Lucie, FL 34987 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQTEFYMDBYNW80NFAtUGVIS0hBZFNWc1lwWFFFUjJxU1BCd2k3TlJoNXNuT2JlVmVNZklmTTU4UEF0eXQ2NzlpVjZBYWJ3VTFsQWRESkNjblhaZ0s3X1V1ZXE3NTdzTmpKeXY4UGRyN3paZkpCdHlvUXRwTXhCMDlvTTdzd0VsdVJmTUU2bVZYWmJEeVRkLXpnVmFJMnc2dw?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -126,32 +125,21 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 15,
-      "same_event": 171
+      "new_story": 12,
+      "same_event": 176
     },
     "examples": [
       {
         "story_id": "story_009508",
         "title": "Another major insurer will cover surgical mesh after our investigation into breast cancer insurance denials",
         "event_key": "unknown-event-9b77b573d1",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_008122",
-        "title": "Deadly Florida Shooting Under Police Investigation - The Boca Raton Tribune",
-        "event_key": "unknown-event-502ee8ed41",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -375,15 +363,25 @@
         "event_key": "unknown-event-5a288d5b38",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMicEFVX3lxTE16VTY2M0x3NFBYZHJZSk1zWDRuVkU2M2lGS0VOY0VSVExHRWpLQTR5NDZyUHZoQXYzZ2JJVlVCTzB4QXV3VTFoSG9JWmFSVW9WLW51VUExdXNSVkRpVUxXQXU5X2dwaE03R2ZoTVUwMi0",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_009505",
+        "story_id": "",
+        "title": "7962 NW Greenbank Cir, Port Saint Lucie, FL 34987 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
+      },
+      {
+        "story_id": "story_009545",
         "title": "Motorcyclist ejected, killed in crash on State Road 7",
         "event_key": "traffic-crash-6a65af0eed-6a65af0eed",
         "relationship": "same_event",
@@ -402,26 +400,14 @@
         "story_id": "story_009508",
         "title": "Another major insurer will cover surgical mesh after our investigation into breast cancer insurance denials",
         "event_key": "unknown-event-9b77b573d1",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_008122",
-        "title": "Deadly Florida Shooting Under Police Investigation - The Boca Raton Tribune",
-        "event_key": "unknown-event-502ee8ed41",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -642,15 +628,16 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMicEFVX3lxTE16VTY2M0x3NFBYZHJZSk1zWDRuVkU2M2lGS0VOY0VSVExHRWpLQTR5NDZyUHZoQXYzZ2JJVlVCTzB4QXV3VTFoSG9JWmFSVW9WLW51VUExdXNSVkRpVUxXQXU5X2dwaE03R2ZoTVUwMi0",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_009505",
+        "story_id": "story_009545",
         "title": "Motorcyclist ejected, killed in crash on State Road 7",
         "event_key": "traffic-crash-6a65af0eed-6a65af0eed",
         "relationship": "same_event",
@@ -665,7 +652,7 @@
         ]
       },
       {
-        "story_id": "story_009501",
+        "story_id": "story_009541",
         "title": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - cw34.com",
         "event_key": "fire-fort-pierce-fdaa49a7a7",
         "relationship": "same_event",
@@ -693,72 +680,43 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "story_008294",
+        "title": "Week 3 Roundup: Jensen Beach tops South Fork, extends rivalry streak to 9 - Treasure Coast News",
+        "event_key": "unknown-event-d9bfecef8b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
       }
     ]
   },
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
+    "candidate_count": 0,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 1
-    },
-    "milestones": {
-      "arrest": 1
-    },
-    "reason_codes": {
-      "agency_match": 1,
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1
-    },
-    "examples": [
-      {
-        "headline": "Indian River County traffic stop over dark tint turns into drug arrest, deputies say - WPEC",
-        "event_key": "traffic-crash-fort-pierce-bbaeb3c41e",
-        "current_story_id": "story_009510",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_002738",
-        "candidate_confidence": 0.7,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "agency_match",
-          "entity_match",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_002738",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.00",
-          "Location match: True",
-          "Agency match: True",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.70"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 32,
     "retrospective_high_confidence_candidate_count": 9,
     "retrospective_activation_eligible_candidate_count": 5,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1356,
-      "timeline_entries_examined": 3792,
-      "transitions_examined": 2311,
+      "stories_with_timelines": 1358,
+      "timeline_entries_examined": 3796,
+      "transitions_examined": 2313,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 32,
       "high_confidence_candidate_count": 9,
@@ -1703,7 +1661,7 @@
           ]
         },
         {
-          "story_id": "story_009479",
+          "story_id": "story_009519",
           "story_title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1714,7 +1672,7 @@
               "prior_article": {
                 "article_id": "rss-0b4baf979b4e35fba284",
                 "event_key": "traffic-crash-vero-beach-9c1a5710d7",
-                "published_at": "2026-09-07T22:50:43.789845+00:00",
+                "published_at": "2026-09-07T23:14:57.194174+00:00",
                 "title": "A multi million dollar crane crashes in Vero Beach as residents raise concern - WPEC",
                 "source": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news",
                 "url": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news"
@@ -1722,7 +1680,7 @@
               "newer_article": {
                 "article_id": "rss-2e44c0e5b35c2393f944",
                 "event_key": "traffic-crash-b209f4dc72-b209f4dc72",
-                "published_at": "2026-09-07T22:50:43.789845+00:00",
+                "published_at": "2026-09-07T23:14:57.194174+00:00",
                 "title": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cw34.com",
                 "source": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5"
@@ -2346,7 +2304,7 @@
           ]
         },
         {
-          "story_id": "story_009494",
+          "story_id": "story_009534",
           "story_title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
           "milestones": [
             "recovery"
@@ -2391,7 +2349,7 @@
           "prior_article": {
             "article_id": "rss-e7222eb1152f2bab97f2",
             "event_key": "missing-person-port-st-lucie-2eb6cf5485",
-            "published_at": "2026-09-07T22:50:43.789845+00:00",
+            "published_at": "2026-09-07T23:14:57.194174+00:00",
             "title": "Body found in Martin County mangroves confirmed as missing man - WPEC",
             "source": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
             "url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead"
@@ -2399,14 +2357,14 @@
           "newer_article": {
             "article_id": "rss-fedf37d2bc649307634c",
             "event_key": "missing-person-7693a0a37b-7693a0a37b",
-            "published_at": "2026-09-07T22:50:43.789845+00:00",
+            "published_at": "2026-09-07T23:14:57.194174+00:00",
             "title": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
             "source": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
             "url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_009494",
+            "Story: story_009534",
             "Novel milestones: recovery",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
@@ -3920,7 +3878,7 @@
           ]
         },
         {
-          "story_id": "story_009479",
+          "story_id": "story_009519",
           "story_title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
           "milestones": [
             "death"
@@ -3957,7 +3915,7 @@
           "prior_article": {
             "article_id": "rss-0b4baf979b4e35fba284",
             "event_key": "traffic-crash-vero-beach-9c1a5710d7",
-            "published_at": "2026-09-07T22:50:43.789845+00:00",
+            "published_at": "2026-09-07T23:14:57.194174+00:00",
             "title": "A multi million dollar crane crashes in Vero Beach as residents raise concern - WPEC",
             "source": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news",
             "url": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news"
@@ -3965,14 +3923,14 @@
           "newer_article": {
             "article_id": "rss-2e44c0e5b35c2393f944",
             "event_key": "traffic-crash-b209f4dc72-b209f4dc72",
-            "published_at": "2026-09-07T22:50:43.789845+00:00",
+            "published_at": "2026-09-07T23:14:57.194174+00:00",
             "title": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cw34.com",
             "source": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_009479",
+            "Story: story_009519",
             "Novel milestones: death",
             "Identity anchor qualified: False",
             "Identity anchor codes: event_family_match, identity_anchor_missing",
@@ -3995,27 +3953,27 @@
   "local_relevance": {
     "scopes": {
       "florida": 1094,
-      "treasure_coast_local": 901,
+      "treasure_coast_local": 902,
       "treasure_coast_region": 409,
-      "unknown": 2089
+      "unknown": 2093
     },
-    "average_score": 60.8
+    "average_score": 60.79
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 1094,
-      "treasure_coast_local": 901,
+      "treasure_coast_local": 902,
       "treasure_coast_region": 409,
-      "unknown": 2089
+      "unknown": 2093
     },
     "average_priority": 4.15
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3452,
+      "active": 3469,
       "breaking": 2,
-      "developing": 246,
-      "ongoing": 789,
+      "developing": 248,
+      "ongoing": 775,
       "resolved": 4
     }
   },
@@ -4023,8 +3981,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 6836,
-    "active_stories_after": 6836,
+    "active_stories_before": 6843,
+    "active_stories_after": 6843,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -4053,20 +4011,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-07T22:51:22Z",
-    "quarantined_story_records_retained": 1297,
-    "active_story_count": 6868
+    "generated_at": "2026-09-07T23:15:27Z",
+    "quarantined_story_records_retained": 1307,
+    "active_story_count": 6873
   },
   "stories": {
-    "total": 4493,
+    "total": 4498,
     "importance_levels": {
       "breaking": 6,
       "high": 101,
-      "normal": 729,
-      "low": 3657,
+      "normal": 731,
+      "low": 3660,
       "archived": 0
     },
-    "average_importance": 9.85,
+    "average_importance": 9.86,
     "top": [
       {
         "story_id": "story_009318",
@@ -4081,7 +4039,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.2
+          "age_hours": 4.6
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4127,13 +4085,13 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 4.2,
+          "hours_since_update": 4.6,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_009491",
+        "story_id": "story_009531",
         "title": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
         "score": 80,
         "editorial_priority": 90,
@@ -4145,7 +4103,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 0.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4197,8 +4155,8 @@
         "lifecycle": {
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
-          "last_updated": "2026-09-07T22:50:43.789845+00:00",
-          "hours_since_update": 0.04,
+          "last_updated": "2026-09-07T23:14:57.194174+00:00",
+          "hours_since_update": 0.03,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -4216,7 +4174,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.21
+          "age_hours": 4.61
         },
         "level": "high",
         "importance_reasons": [
@@ -4260,7 +4218,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 4.21,
+          "hours_since_update": 4.61,
           "event_count": 42,
           "timeline_entries": 38
         }
@@ -4278,7 +4236,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 2.23
+          "age_hours": 2.61
         },
         "level": "high",
         "importance_reasons": [
@@ -4321,13 +4279,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T20:42:55.067221+00:00",
-          "hours_since_update": 2.23,
+          "hours_since_update": 2.61,
           "event_count": 9,
           "timeline_entries": 9
         }
       },
       {
-        "story_id": "story_009479",
+        "story_id": "story_009519",
         "title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
         "score": 75,
         "editorial_priority": 85,
@@ -4339,7 +4297,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.04
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4382,8 +4340,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T22:50:43.789845+00:00",
-          "hours_since_update": 0.04,
+          "last_updated": "2026-09-07T23:14:57.194174+00:00",
+          "hours_since_update": 0.03,
           "event_count": 9,
           "timeline_entries": 9
         }
@@ -4401,7 +4359,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 4.2
+          "age_hours": 4.6
         },
         "level": "high",
         "importance_reasons": [
@@ -4445,7 +4403,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 4.2,
+          "hours_since_update": 4.6,
           "event_count": 4,
           "timeline_entries": 3
         }
@@ -4463,7 +4421,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 4.2
+          "age_hours": 4.6
         },
         "level": "high",
         "importance_reasons": [
@@ -4506,13 +4464,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 4.2,
+          "hours_since_update": 4.6,
           "event_count": 4,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_009482",
+        "story_id": "story_009522",
         "title": "Fatal I-95 crash jams traffic in St. Lucie County - cbs12.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4524,7 +4482,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.02
         },
         "level": "high",
         "importance_reasons": [
@@ -4549,8 +4507,8 @@
           "score": 100,
           "counties": [
             "St. Lucie County",
-            "Indian River County",
-            "Martin County"
+            "Martin County",
+            "Indian River County"
           ],
           "places": [
             "Port St. Lucie",
@@ -4569,14 +4527,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T22:50:43.789845+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-07T23:14:57.194174+00:00",
+          "hours_since_update": 0.02,
           "event_count": 6,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_009483",
+        "story_id": "story_009523",
         "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4588,7 +4546,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.03
+          "age_hours": 0.02
         },
         "level": "high",
         "importance_reasons": [
@@ -4630,8 +4588,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T22:50:43.789845+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-07T23:14:57.194174+00:00",
+          "hours_since_update": 0.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4649,7 +4607,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 1.26
+          "age_hours": 1.65
         },
         "level": "high",
         "importance_reasons": [
@@ -4690,7 +4648,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T21:38:34.170415+00:00",
-          "hours_since_update": 1.26,
+          "hours_since_update": 1.65,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4708,7 +4666,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 3.06
+          "age_hours": 3.44
         },
         "level": "high",
         "importance_reasons": [
@@ -4749,7 +4707,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T19:53:07.094197+00:00",
-          "hours_since_update": 3.06,
+          "hours_since_update": 3.44,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4767,7 +4725,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 65.37
+          "age_hours": 65.76
         },
         "level": "high",
         "importance_reasons": [
@@ -4810,7 +4768,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 65.37,
+          "hours_since_update": 65.76,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4828,7 +4786,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 67.55
+          "age_hours": 67.95
         },
         "level": "high",
         "importance_reasons": [
@@ -4871,7 +4829,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T03:19:39.455523+00:00",
-          "hours_since_update": 67.55,
+          "hours_since_update": 67.95,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4889,7 +4847,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 79.21
+          "age_hours": 79.6
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4937,7 +4895,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-04T15:42:16.034092+00:00",
-          "hours_since_update": 79.21,
+          "hours_since_update": 79.6,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -4955,7 +4913,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 146.87
+          "age_hours": 147.27
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5003,7 +4961,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 146.87,
+          "hours_since_update": 147.27,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -5021,7 +4979,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 45.62
+          "age_hours": 46.01
         },
         "level": "high",
         "importance_reasons": [
@@ -5081,7 +5039,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-06T01:18:16.787695+00:00",
-          "hours_since_update": 45.62,
+          "hours_since_update": 46.01,
           "event_count": 95,
           "timeline_entries": 92
         }
@@ -5099,7 +5057,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 62.52
+          "age_hours": 62.91
         },
         "level": "high",
         "importance_reasons": [
@@ -5140,13 +5098,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T08:22:44.187567+00:00",
-          "hours_since_update": 62.52,
+          "hours_since_update": 62.91,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_009478",
+        "story_id": "story_009518",
         "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -5158,7 +5116,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -5208,14 +5166,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T22:50:43.789845+00:00",
-          "hours_since_update": 0.04,
+          "last_updated": "2026-09-07T23:14:57.194174+00:00",
+          "hours_since_update": 0.03,
           "event_count": 7,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_009487",
+        "story_id": "story_009527",
         "title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -5279,14 +5237,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T22:50:43.789845+00:00",
+          "last_updated": "2026-09-07T23:14:57.194174+00:00",
           "hours_since_update": 0.03,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_009488",
+        "story_id": "story_009528",
         "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -5349,7 +5307,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T22:50:43.789845+00:00",
+          "last_updated": "2026-09-07T23:14:57.194174+00:00",
           "hours_since_update": 0.03,
           "event_count": 4,
           "timeline_entries": 2
@@ -5360,7 +5318,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-07T22:57:21Z",
+    "generated_at": "2026-09-07T23:20:25Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5376,21 +5334,22 @@
       "category_count": 9,
       "statuses": {
         "category_eligibility_archive_recovery": 5,
-        "no_publishable_sources": 2,
+        "generated_live": 1,
+        "no_publishable_sources": 1,
         "quality_gate_archive_recovery": 2
       },
       "failures": {
         "no_category_eligible_sources": 5,
         "publication_quality_rejected": 2
       },
-      "model_attempt_count": 2,
-      "model_elapsed_seconds": 15.111,
-      "archive_recovery_requested_count": 9,
+      "model_attempt_count": 3,
+      "model_elapsed_seconds": 21.72,
+      "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 0,
-      "published_story_duplicate_suppression_count": 36,
+      "published_story_duplicate_suppression_count": 37,
       "story_aware_update_context_count": 0,
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
@@ -5535,15 +5494,15 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 7,
-        "elapsed_seconds": 25.977
+        "new_publication_stale_rejected_count": 8,
+        "elapsed_seconds": 18.867
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 21,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 4,
         "selected_source_count": 1,
         "cache_hit": false,
@@ -5553,11 +5512,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 9.055,
+            "elapsed_seconds": 7.655,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 9.055,
+        "model_elapsed_seconds": 7.655,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -5571,18 +5530,8 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "crime",
-            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/07/1-northbound-lane-reopens-floridas-turnpike-after-fatal-st-lucie-county-crash?outputType=amp",
-            "editorial_story_id": "story_009348",
-            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "crime",
             "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
@@ -5621,21 +5570,6 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "crime",
-            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/07/1-northbound-lane-reopens-floridas-turnpike-after-fatal-st-lucie-county-crash?outputType=amp",
-            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "crime",
             "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
@@ -5685,7 +5619,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 33.386
+        "elapsed_seconds": 28.14
       },
       {
         "category_key": "business",
@@ -5925,13 +5859,13 @@
           }
         ],
         "new_publication_stale_rejected_count": 9,
-        "elapsed_seconds": 21.593
+        "elapsed_seconds": 17.454
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 24,
+        "fetched_candidate_count": 25,
         "fresh_candidate_count": 24,
         "publishable_source_count": 4,
         "selected_source_count": 0,
@@ -5953,24 +5887,51 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
+        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppressions": [
+          {
+            "category_key": "sports",
+            "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
+            "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
+            "editorial_story_id": "story_007607",
+            "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+            "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          }
+        ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 14,
-        "elapsed_seconds": 13.199
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "sports",
+            "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
+            "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
+            "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
+            "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
+        "new_publication_stale_rejected_count": 13,
+        "elapsed_seconds": 10.969
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
+        "fresh_candidate_count": 17,
         "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -6061,12 +6022,13 @@
             "shared_anchors": [],
             "novel_facts": [
               "Mango Music and Art Festival on Saturday in Lake Worth Beach",
-              "National Deaf Awareness Month event at Busch Wildlife Sanctuary in Jupiter on Saturday",
+              "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
               "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
-              "SoFlo Market 1-year anniversary celebration in Boca Raton on Saturday",
-              "Northwest BBQ Brews Blues (11th annual) on Saturday",
-              "Peachfest 5-Year Anniversary Art Walk in West Palm Beach on Saturday",
-              "Hurricane Alley Blowout Rodeo Friday-Saturday in Vero Beach"
+              "SoFlo Market one-year anniversary celebration on Saturday in Boca Raton",
+              "Northwest BBQ Brews Blues Festival on Saturday",
+              "Peachfest 5-Year Anniversary Art Walk on Saturday in West Palm Beach",
+              "Hurricane Alley Blowout Rodeo Friday-Saturday in Vero Beach",
+              "Labor Day weekend timeframe (September 4, 2026)"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6120,7 +6082,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 26.56
+        "elapsed_seconds": 24.317
       },
       {
         "category_key": "florida",
@@ -6158,14 +6120,14 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.081
+        "elapsed_seconds": 11.774
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "no_publishable_sources",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 0,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -6186,31 +6148,65 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
+        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash?outputType=amp",
+            "editorial_story_id": "story_009348",
+            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          }
+        ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash?outputType=amp",
+            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.677
+        "elapsed_seconds": 8.75
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 29,
         "fresh_candidate_count": 16,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 7.645,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 7.645,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6221,7 +6217,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 13,
@@ -6561,7 +6557,11 @@
           }
         ],
         "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 16.683
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Man shoots dog in Fort Pierce's Indian River Estates after aggressive attack",
+        "generated_card_count": 0,
+        "elapsed_seconds": 22.235
       },
       {
         "category_key": "indian_river",
@@ -6569,7 +6569,7 @@
         "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 22,
-        "publishable_source_count": 5,
+        "publishable_source_count": 4,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6578,11 +6578,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.056,
+            "elapsed_seconds": 6.42,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 6.056,
+        "model_elapsed_seconds": 6.42,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -6593,7 +6593,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 3,
@@ -6685,7 +6685,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 28.084
+        "elapsed_seconds": 23.288
       }
     ]
   }
