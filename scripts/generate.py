@@ -18607,6 +18607,10 @@ def update_sitemap(archive_entries):
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>{SITE_URL}/newsroom.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>{SITE_URL}/author/andrew-dobrow.html</loc>
     <priority>0.6</priority>
   </url>
@@ -22430,6 +22434,7 @@ def _primary_navigation_html(active="", homepage_filters=False):
         ("things_to_do", CATEGORIES["things_to_do"]["label"], "/?cat=things_to_do"),
         ("weather", "Weather", "/weather.html"),
         ("archive", "Archive", "/archive.html"),
+        ("newsroom", "Newsroom", "/newsroom.html"),
     ]
     section_keys = {key for key, _label, _href in news_items + more_items}
 
@@ -22506,6 +22511,7 @@ def _mobile_navigation_html(active="", homepage_filters=False):
         ("events", "Events", "/events.html"),
         ("weather", "Weather", "/weather.html"),
         ("archive", "Archive", "/archive.html"),
+        ("newsroom", "Newsroom", "/newsroom.html"),
         ("about", "About", "/about.html"),
         ("advertise", "Advertise", "/advertise.html"),
         ("contact", "Contact", "/contact.html"),
@@ -22731,6 +22737,7 @@ def _normalize_primary_navigation_sitewide(output_root):
         "Weather": "weather",
         "Events": "events",
         "Archive": "archive",
+        "Newsroom": "newsroom",
     }
 
     def detect_active(nav, path):
@@ -22740,6 +22747,7 @@ def _normalize_primary_navigation_sitewide(output_root):
                 "events.html": "events",
                 "weather.html": "weather",
                 "archive.html": "archive",
+                "newsroom.html": "newsroom",
             }
             if path.name.lower() in by_name:
                 return by_name[path.name.lower()]
@@ -23080,6 +23088,55 @@ def _normalize_footer_rss_link_sitewide(output_root):
     return {"scanned": scanned, "updated": updated}
 
 
+def _normalize_footer_newsroom_link_sitewide(output_root):
+    """Replace the old reader-facing Author footer destination with Newsroom.
+
+    Article bylines and schema.org ``author`` metadata intentionally remain
+    person-specific; this migration only changes the site-navigation label and
+    destination inside rendered footers.
+    """
+    root = Path(output_root)
+    footer_re = re.compile(r"<footer\b.*?</footer>", re.I | re.S)
+    author_link_re = re.compile(
+        r'<a\b[^>]*href=["\'](?:https://treasurecoast\.today)?/?author/andrew-dobrow\.html["\'][^>]*>\s*Author\s*</a>',
+        re.I | re.S,
+    )
+    newsroom_link_re = re.compile(
+        r'<a\b[^>]*href=["\'](?:https://treasurecoast\.today)?/?newsroom\.html["\'][^>]*>\s*Newsroom\s*</a>',
+        re.I | re.S,
+    )
+
+    scanned = updated = 0
+    failures = []
+    for path in root.rglob("*.html"):
+        original = path.read_text(encoding="utf-8", errors="ignore")
+        match = footer_re.search(original)
+        if not match:
+            continue
+        scanned += 1
+        footer = match.group(0)
+        normalized_footer, replacements = author_link_re.subn(
+            '<a href="/newsroom.html">Newsroom</a>', footer
+        )
+        if replacements:
+            normalized = original[:match.start()] + normalized_footer + original[match.end():]
+            path.write_text(normalized, encoding="utf-8")
+            updated += 1
+        else:
+            normalized = original
+
+        final_match = footer_re.search(normalized)
+        final_footer = final_match.group(0) if final_match else ""
+        if author_link_re.search(final_footer) or len(newsroom_link_re.findall(final_footer)) != 1:
+            failures.append(str(path.relative_to(root)))
+
+    if failures:
+        raise RuntimeError(
+            "Footer Newsroom link contract FAILED: " + ", ".join(sorted(set(failures))[:10])
+        )
+    return {"scanned": scanned, "updated": updated}
+
+
 def _page_footer():
     membership_link = '<a href="/subscribe.html">Membership</a>' if MEMBERSHIP_UI_ENABLED else ''
     if MEMBERSHIP_UI_ENABLED:
@@ -23095,7 +23152,7 @@ def _page_footer():
       <div class="footer-brand"><span class="footer-wordmark">TCT</span><p>Independent, hyperlocal journalism for the Treasure Coast.</p></div>
       <div class="footer-column"><strong>Quick Links</strong><div class="footer-links">
         <a href="/about.html">About</a>
-        <a href="/author/andrew-dobrow.html">Author</a>
+        <a href="/newsroom.html">Newsroom</a>
         <a href="/editorial-standards.html">Editorial Standards</a>
         <a href="/corrections-policy.html">Corrections</a>
         <a href="/ownership.html">Ownership</a>
@@ -23113,6 +23170,96 @@ def _page_footer():
     <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
   </footer>
   <script src="/main.js?v=1.13.7.5t"></script>"""
+
+
+def render_newsroom_page():
+    newsroom_schema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Newsroom | Treasure Coast Today",
+        "url": f"{SITE_URL}/newsroom.html",
+        "description": "Meet the people behind Treasure Coast Today and learn about the newsroom serving Martin, St. Lucie and Indian River counties.",
+        "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "item": {
+                        "@type": "Person",
+                        "name": "Andrew Dobrow",
+                        "jobTitle": "Founder and Publisher",
+                        "url": f"{SITE_URL}/author/andrew-dobrow.html",
+                        "worksFor": {
+                            "@type": "Organization",
+                            "name": SITE_NAME,
+                            "url": SITE_URL,
+                        },
+                    },
+                }
+            ],
+        },
+    }
+    head = _page_head(
+        "Newsroom | Treasure Coast Today",
+        "Meet the Treasure Coast Today newsroom serving Martin, St. Lucie and Indian River counties, Florida.",
+        "/newsroom.html",
+        structured_data=newsroom_schema,
+    )
+    header = _page_header(active="newsroom")
+    footer = _page_footer()
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>
+    .newsroom-wrap {{ max-width: 820px; margin: 56px auto 80px; padding: 0 24px; }}
+    .newsroom-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }}
+    .newsroom-headline {{ font-family: 'Fraunces', serif; font-size: clamp(32px, 5vw, 48px); font-weight: 600; line-height: 1.1; color: var(--text); margin: 0 0 18px; letter-spacing: -.02em; }}
+    .newsroom-deck {{ max-width: 680px; margin: 0 0 38px; font-size: 17px; line-height: 1.7; color: var(--text-secondary); }}
+    .newsroom-section-title {{ font-family: 'Fraunces', serif; font-size: 24px; font-weight: 550; color: var(--text); margin: 0 0 16px; }}
+    .newsroom-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }}
+    .newsroom-card {{ border: 1px solid var(--border); border-radius: 14px; padding: 24px; background: var(--bg); }}
+    .newsroom-card-kicker {{ display: block; margin-bottom: 6px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
+    .newsroom-card h2 {{ margin: 0 0 4px; font-family: 'Fraunces', serif; font-size: 25px; font-weight: 600; color: var(--text); }}
+    .newsroom-role {{ margin: 0 0 14px; font-size: 14px; color: var(--text-muted); }}
+    .newsroom-card p {{ margin: 0 0 18px; font-size: 15px; line-height: 1.65; color: var(--text-secondary); }}
+    .newsroom-profile-link {{ color: var(--accent); font-size: 14px; font-weight: 650; text-decoration: none; }}
+    .newsroom-profile-link:hover {{ text-decoration: underline; }}
+    .newsroom-divider {{ border: 0; border-top: 1px solid var(--border); margin: 42px 0 30px; }}
+    .newsroom-standards {{ font-size: 15px; line-height: 1.7; color: var(--text-secondary); }}
+    .newsroom-standards a {{ color: var(--accent); font-weight: 600; text-decoration: none; }}
+    .newsroom-standards a:hover {{ text-decoration: underline; }}
+  </style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="newsroom-wrap">
+      <span class="newsroom-eyebrow">Newsroom</span>
+      <h1 class="newsroom-headline">Meet the Treasure Coast Today newsroom.</h1>
+      <p class="newsroom-deck">Treasure Coast Today is an independent local newsroom covering Martin, St. Lucie and Indian River counties. Meet the people responsible for the reporting, editing and publishing behind TCT.</p>
+
+      <h2 class="newsroom-section-title">Our team</h2>
+      <div class="newsroom-grid">
+        <article class="newsroom-card">
+          <span class="newsroom-card-kicker">Publisher</span>
+          <h2>Andrew Dobrow</h2>
+          <p class="newsroom-role">Founder and Publisher</p>
+          <p>Andrew founded Treasure Coast Today and oversees its editorial standards, accuracy and independent local coverage across the Treasure Coast.</p>
+          <a class="newsroom-profile-link" href="/author/andrew-dobrow.html">View Andrew Dobrow's profile &rarr;</a>
+        </article>
+      </div>
+
+      <hr class="newsroom-divider">
+      <div class="newsroom-standards">
+        <p>Learn more about <a href="/editorial-standards.html">our editorial standards</a>, <a href="/corrections-policy.html">our corrections policy</a>, and <a href="/ownership.html">our ownership and funding</a>.</p>
+      </div>
+    </div>
+  </main>
+{footer}
+</body>
+</html>"""
 
 
 def render_author_page():
@@ -23146,7 +23293,7 @@ def render_author_page():
         "/author/andrew-dobrow.html",
         structured_data=author_schema,
     )
-    header = _page_header()
+    header = _page_header(active="newsroom")
     footer = _page_footer()
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -23164,13 +23311,16 @@ def render_author_page():
     .author-divider {{ border: none; border-top: 1px solid var(--border); margin: 36px 0; }}
     .author-contact-card {{ background: var(--bg-secondary); border-radius: 12px; padding: 22px 24px; font-size: 15px; color: var(--text-secondary); }}
     .author-contact-card strong {{ color: var(--text); }}
+    .author-back {{ display: inline-block; margin-bottom: 20px; color: var(--accent); font-size: 13px; font-weight: 600; text-decoration: none; }}
+    .author-back:hover {{ text-decoration: underline; }}
   </style>
 </head>
 <body>
 {header}
   <main>
     <div class="author-wrap">
-      <span class="author-eyebrow">Author</span>
+      <a class="author-back" href="/newsroom.html">&larr; Back to Newsroom</a>
+      <span class="author-eyebrow">Newsroom</span>
       <h1 class="author-name">Andrew Dobrow</h1>
       <p class="author-role">Founder and Publisher, Treasure Coast Today</p>
       <div class="author-body">
@@ -23218,7 +23368,7 @@ def _policy_footer_nav(current=""):
         ("/editorial-standards.html", "Editorial Standards"),
         ("/corrections-policy.html", "Corrections Policy"),
         ("/ownership.html", "Ownership &amp; Funding"),
-        ("/author/andrew-dobrow.html", "Author"),
+        ("/newsroom.html", "Newsroom"),
         ("/contact.html", "Contact"),
     ]
     items = "".join(
@@ -23440,7 +23590,7 @@ def render_about_page():
           <a href="/editorial-standards.html">Editorial Standards</a>
           <a href="/corrections-policy.html">Corrections Policy</a>
           <a href="/ownership.html">Ownership &amp; Funding</a>
-          <a href="/author/andrew-dobrow.html">Author</a>
+          <a href="/newsroom.html">Newsroom</a>
           <a href="/contact.html">Contact</a>
         </div>
       </div>
@@ -38319,6 +38469,7 @@ def main():
 
     # Static pages
     (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
+    (OUTPUT_DIR / "newsroom.html").write_text(render_newsroom_page(), encoding="utf-8")
     _author_dir = OUTPUT_DIR / "author"
     _author_dir.mkdir(exist_ok=True)
     (_author_dir / "andrew-dobrow.html").write_text(render_author_page(), encoding="utf-8")
@@ -38346,6 +38497,12 @@ def main():
         "  Primary navigation and masthead contract PASSED: "
         f"{_primary_nav['scanned']} HTML page(s) verified; "
         f"{_primary_nav['updated']} retained page(s) normalized"
+    )
+    _footer_newsroom = _normalize_footer_newsroom_link_sitewide(OUTPUT_DIR)
+    print(
+        "  Footer Newsroom link contract PASSED: "
+        f"{_footer_newsroom['scanned']} HTML footer(s) verified; "
+        f"{_footer_newsroom['updated']} retained page(s) normalized"
     )
     _footer_rss = _normalize_footer_rss_link_sitewide(OUTPUT_DIR)
     print(
