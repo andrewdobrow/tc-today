@@ -164,6 +164,10 @@ def paywall_section_html(slug: str) -> str:
     <span>Support independent journalism</span>
   </div>
   <p class="tct-paywall-secure">Secure checkout powered by Stripe. Subscriptions renew automatically until canceled.</p>
+  <div class="tct-paywall-newsletter-fallback">
+    <span>Not ready to subscribe?</span>
+    <a href="https://treasure-coast-today.kit.com/cb848255f8">Start your morning with the free TCT Morning Brief →</a>
+  </div>
 </section>'''
 
 

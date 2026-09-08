@@ -332,3 +332,287 @@ document.addEventListener("keydown", (event) => {
   // detected rather than initialized a second time.
   window.setTimeout(loadSitewideKitModal, 0);
 })();
+
+// -- FIRST-PARTY MOST READ (privacy-preserving aggregate counts) --
+(() => {
+  const endpointMeta = document.querySelector('meta[name="tct-story-analytics-endpoint"]');
+  const endpoint = endpointMeta ? String(endpointMeta.content || '').trim() : '';
+  const modules = Array.from(document.querySelectorAll('[data-tct-most-read]'));
+  if (!endpoint) return;
+
+  const post = (payload, options = {}) => fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    cache: 'no-store',
+    credentials: 'omit',
+    ...options
+  });
+
+  async function renderMostRead() {
+    if (!modules.length) return;
+    try {
+      const [topResponse, indexResponse] = await Promise.all([
+        post({ action: 'top', hours: 24, limit: 5 }),
+        fetch('/data/story-index.json', { cache: 'no-store', credentials: 'same-origin' })
+      ]);
+      if (!topResponse.ok || !indexResponse.ok) return;
+      const topPayload = await topResponse.json();
+      const indexPayload = await indexResponse.json();
+      if (!topPayload || topPayload.schema_ready !== true || !Array.isArray(topPayload.stories)) return;
+      const index = indexPayload && indexPayload.stories ? indexPayload.stories : {};
+      const rows = topPayload.stories.map(item => ({ ...item, meta: index[item.slug] })).filter(item => item.meta && item.meta.headline && item.meta.url);
+      if (!rows.length) return;
+      modules.forEach(module => {
+        const list = module.querySelector('[data-tct-most-read-list]');
+        if (!list) return;
+        list.innerHTML = rows.map(item => `<li><a href="${String(item.meta.url).replace(/"/g, '&quot;')}"><span><span class="most-read-title">${String(item.meta.headline).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</span><span class="most-read-meta">${String(item.meta.category || 'Local News').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</span></span></a></li>`).join('');
+        module.hidden = false;
+      });
+    } catch (_) {}
+  }
+
+  function recordArticleView() {
+    const body = document.body;
+    const slug = body && body.dataset ? String(body.dataset.articleSlug || '').trim() : '';
+    if (!slug || !/^[a-z0-9][a-z0-9-]{5,180}$/.test(slug)) return;
+    const key = `tct-story-viewed:${slug}`;
+    try { if (sessionStorage.getItem(key) === '1') return; sessionStorage.setItem(key, '1'); } catch (_) {}
+    window.setTimeout(() => {
+      post({ action: 'record', slug }, { keepalive: true }).catch(() => {});
+    }, 2500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { renderMostRead(); recordArticleView(); }, { once: true });
+  } else {
+    renderMostRead(); recordArticleView();
+  }
+})();
+
+// -- SITEWIDE ARTICLE SEARCH --
+// Lazy-load the compact story index only after the reader opens/searches. The
+// same index powers the masthead overlay and the dedicated /search.html page.
+(() => {
+  const INDEX_URL = '/data/story-index.json';
+  let indexPromise = null;
+
+  const escapeHtml = value => String(value == null ? '' : value).replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[char]));
+
+  const normalize = value => String(value == null ? '' : value)
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+
+  function expandCommonTerms(query) {
+    const raw = normalize(query);
+    const aliases = {
+      'psl': 'port st lucie',
+      'irc': 'indian river county'
+    };
+    return aliases[raw] || raw;
+  }
+
+  async function loadIndex() {
+    if (!indexPromise) {
+      indexPromise = fetch(INDEX_URL, { cache: 'no-store', credentials: 'same-origin' })
+        .then(response => {
+          if (!response.ok) throw new Error('search index unavailable');
+          return response.json();
+        })
+        .then(payload => payload && payload.stories ? Object.values(payload.stories) : [])
+        .catch(error => {
+          indexPromise = null;
+          throw error;
+        });
+    }
+    return indexPromise;
+  }
+
+  function scoreStories(stories, rawQuery) {
+    const phrase = expandCommonTerms(rawQuery);
+    if (phrase.length < 2) return [];
+    const terms = phrase.split(/\s+/).filter(Boolean);
+
+    return stories.map(meta => {
+      const headline = normalize(meta.headline);
+      const teaser = normalize(meta.teaser);
+      const category = normalize(meta.category);
+      const places = normalize([...(meta.cities || []), ...(meta.counties || [])].join(' '));
+      const haystack = [headline, teaser, category, places].join(' ');
+      if (!terms.every(term => haystack.includes(term))) return null;
+
+      let score = 0;
+      if (headline === phrase) score += 160;
+      else if (headline.includes(phrase)) score += 90;
+      else if (haystack.includes(phrase)) score += 30;
+      terms.forEach(term => {
+        if (headline.startsWith(term)) score += 18;
+        else if (headline.includes(term)) score += 12;
+        if (places.includes(term)) score += 6;
+        if (category.includes(term)) score += 4;
+        if (teaser.includes(term)) score += 2;
+      });
+      return { meta, score };
+    }).filter(Boolean).sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return String(b.meta.date || '').localeCompare(String(a.meta.date || ''));
+    });
+  }
+
+  function formatDate(raw) {
+    if (!raw) return '';
+    const match = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!match) return String(raw);
+    const date = new Date(`${match[1]}-${match[2]}-${match[3]}T12:00:00`);
+    try {
+      return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
+    } catch (_) {
+      return String(raw);
+    }
+  }
+
+  function resultHtml(item, compact = false) {
+    const meta = item.meta;
+    const places = [...(meta.cities || []), ...(meta.counties || [])].filter(Boolean);
+    const metaLine = [meta.category || 'Local News', places[0] || '', formatDate(meta.date)].filter(Boolean).join(' · ');
+    const teaser = String(meta.teaser || '').trim();
+    return `<a class="tct-search-result${compact ? ' tct-search-result--compact' : ''}" href="${escapeHtml(meta.url || '#')}">
+      <span class="tct-search-result-meta">${escapeHtml(metaLine)}</span>
+      <strong class="tct-search-result-title">${escapeHtml(meta.headline || 'Untitled story')}</strong>
+      ${!compact && teaser ? `<span class="tct-search-result-teaser">${escapeHtml(teaser)}</span>` : ''}
+    </a>`;
+  }
+
+  async function renderInto({ query, resultsEl, statusEl, limit, compact = false, fullResultsLink = false }) {
+    const clean = String(query || '').trim();
+    if (clean.length < 2) {
+      if (resultsEl) resultsEl.innerHTML = '';
+      if (statusEl) statusEl.textContent = clean ? 'Type at least two characters to search.' : 'Start typing to search TCT articles.';
+      return;
+    }
+    if (statusEl) statusEl.textContent = 'Searching…';
+    try {
+      const stories = await loadIndex();
+      const matches = scoreStories(stories, clean);
+      const visible = matches.slice(0, limit);
+      if (resultsEl) {
+        let html = visible.map(item => resultHtml(item, compact)).join('');
+        if (fullResultsLink && matches.length > visible.length) {
+          html += `<a class="tct-search-view-all" href="/search.html?q=${encodeURIComponent(clean)}">View all ${matches.length} results →</a>`;
+        }
+        resultsEl.innerHTML = html;
+      }
+      if (statusEl) {
+        if (!matches.length) statusEl.textContent = `No TCT articles found for “${clean}.”`;
+        else if (matches.length === 1) statusEl.textContent = '1 article found';
+        else statusEl.textContent = `${matches.length} articles found`;
+      }
+    } catch (_) {
+      if (resultsEl) resultsEl.innerHTML = '';
+      if (statusEl) statusEl.textContent = 'Search is temporarily unavailable. You can still browse the archive.';
+    }
+  }
+
+  // Masthead search overlay.
+  const overlay = document.querySelector('[data-tct-search-overlay]');
+  const toggles = Array.from(document.querySelectorAll('[data-tct-search-toggle]'));
+  if (overlay && toggles.length) {
+    const input = overlay.querySelector('[data-tct-search-input]');
+    const results = overlay.querySelector('[data-tct-search-results]');
+    const status = overlay.querySelector('[data-tct-search-status]');
+    const form = overlay.querySelector('[data-tct-search-form]');
+    const closers = Array.from(overlay.querySelectorAll('[data-tct-search-close]'));
+    let previousFocus = null;
+    let timer = null;
+
+    function openSearch() {
+      previousFocus = document.activeElement;
+      overlay.hidden = false;
+      document.documentElement.classList.add('tct-search-open');
+      toggles.forEach(button => button.setAttribute('aria-expanded', 'true'));
+      window.setTimeout(() => {
+        if (input) input.focus();
+        loadIndex().catch(() => {});
+      }, 0);
+    }
+
+    function closeSearch() {
+      overlay.hidden = true;
+      document.documentElement.classList.remove('tct-search-open');
+      toggles.forEach(button => button.setAttribute('aria-expanded', 'false'));
+      if (previousFocus && typeof previousFocus.focus === 'function') previousFocus.focus();
+    }
+
+    toggles.forEach(button => button.addEventListener('click', event => {
+      event.preventDefault();
+      openSearch();
+    }));
+    closers.forEach(button => button.addEventListener('click', closeSearch));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !overlay.hidden) closeSearch();
+    });
+
+    if (input) input.addEventListener('input', () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => renderInto({
+        query: input.value,
+        resultsEl: results,
+        statusEl: status,
+        limit: 7,
+        compact: true,
+        fullResultsLink: true
+      }), 110);
+    });
+
+    if (form) form.addEventListener('submit', event => {
+      const query = input ? input.value.trim() : '';
+      if (!query) {
+        event.preventDefault();
+        if (input) input.focus();
+      }
+    });
+  }
+
+  // Dedicated full search results page.
+  const pageForm = document.querySelector('[data-tct-search-page-form]');
+  if (pageForm) {
+    const pageInput = pageForm.querySelector('[data-tct-search-page-input]');
+    const pageResults = document.querySelector('[data-tct-search-page-results]');
+    const pageStatus = document.querySelector('[data-tct-search-page-status]');
+    let pageTimer = null;
+
+    const runPageSearch = query => renderInto({
+      query,
+      resultsEl: pageResults,
+      statusEl: pageStatus,
+      limit: 100,
+      compact: false,
+      fullResultsLink: false
+    });
+
+    const initial = new URLSearchParams(window.location.search).get('q') || '';
+    if (pageInput) pageInput.value = initial;
+    if (initial) runPageSearch(initial);
+
+    if (pageInput) pageInput.addEventListener('input', () => {
+      window.clearTimeout(pageTimer);
+      pageTimer = window.setTimeout(() => runPageSearch(pageInput.value), 130);
+    });
+
+    pageForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const query = pageInput ? pageInput.value.trim() : '';
+      const url = query ? `/search.html?q=${encodeURIComponent(query)}` : '/search.html';
+      try { history.replaceState(null, '', url); } catch (_) {}
+      if (query && typeof window.gtag === 'function') {
+        try { window.gtag('event', 'search', { search_term: query }); } catch (_) {}
+      }
+      runPageSearch(query);
+    });
+  }
+})();

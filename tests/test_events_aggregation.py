@@ -869,7 +869,7 @@ def test_weather_page_loads_the_shared_mobile_hamburger_runtime():
     assert toggle is not None
     assert panel is not None
     scripts = [tag.get("src", "") for tag in soup.find_all("script") if tag.get("src")]
-    assert "/main.js?v=1.13.7.5t" in scripts
+    assert any(src.startswith("/main.js?v=") for src in scripts)
 
 
 def test_mobile_navigation_replaces_category_row_with_hamburger_drawer():

@@ -1,0 +1,172 @@
+import json
+from pathlib import Path
+
+from scripts import build_audience_features as features
+from tct_engine.membership_paywall import paywall_section_html
+
+
+def _chrome():
+    return '''<!doctype html><html><head><title>Chrome</title></head><body>
+<header class="site-masthead"><nav><a href="/?cat=martin" class="cat-btn">Martin County</a><a href="/?cat=st_lucie" class="cat-btn">St. Lucie County</a><a href="/?cat=indian_river" class="cat-btn">Indian River County</a><div class="nav-sections-links"><a href="/archive.html" class="nav-section-link">Archive</a><a href="/contact.html" class="nav-section-link">Contact</a></div><div class="mobile-nav-links"><a href="/contact.html" class="mobile-nav-link">Contact</a></div></nav></header>
+<main></main><footer><div class="footer-links"><a href="/about.html">About</a><a href="/archive.html">Archive</a><a href="/contact.html">Contact</a></div></footer><script src="/main.js?v=old"></script></body></html>'''
+
+
+def _archive_rows():
+    base = [
+        ("stuart-one", "Stuart approves waterfront plan", "martin", "Martin County", "2026-09-08"),
+        ("stuart-two", "New restaurant opens in Stuart", "business", "Business & Development", "2026-09-07"),
+        ("stuart-three", "Stuart police announce road closure", "crime", "Crime & Safety", "2026-09-06"),
+        ("psl-one", "Port St. Lucie council approves project", "st_lucie", "St. Lucie County", "2026-09-08"),
+        ("psl-two", "Port St. Lucie police investigate crash", "crime", "Crime & Safety", "2026-09-07"),
+        ("psl-three", "Business opens in Port St. Lucie", "business", "Business & Development", "2026-09-06"),
+    ]
+    rows=[]
+    for slug,headline,key,label,date in base:
+        county_keys=["martin"] if "stuart" in slug else ["st_lucie"]
+        rows.append({"slug":slug,"headline":headline,"teaser":headline+" details.","category_key":key,"category_label":label,"county_keys":county_keys,"date":date,"lastmod":date,"first_published":date,"image_url":"https://example.com/image.jpg"})
+    return rows
+
+
+def _setup_root(tmp_path, monkeypatch):
+    (tmp_path / "about.html").write_text(_chrome(), encoding="utf-8")
+    (tmp_path / "articles").mkdir(exist_ok=True)
+    (tmp_path / "data").mkdir(exist_ok=True)
+    monkeypatch.setattr(features, "ROOT", tmp_path)
+
+
+def test_city_matching_respects_county_metadata():
+    row={"headline":"Stuart officials act", "teaser":"", "county_keys":["martin"]}
+    assert [c["slug"] for c in features._entry_cities(row)] == ["stuart"]
+    wrong={"headline":"Stuart officials act", "teaser":"", "county_keys":["st_lucie"]}
+    assert features._entry_cities(wrong) == []
+
+
+def test_city_pages_are_real_story_hubs(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    rows=_archive_rows()
+    report=features.render_city_pages(rows)
+    assert report["counts"]["stuart"] == 3
+    page=(tmp_path/"stuart"/"index.html").read_text(encoding="utf-8")
+    assert '<link rel="canonical" href="https://treasurecoast.today/stuart/">' in page
+    assert page.count('class="city-story-card') == 3
+    assert "CollectionPage" in page
+
+
+def test_searchable_archive_keeps_crawlable_article_links(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    rows=_archive_rows()
+    features.render_searchable_archive(rows)
+    page=(tmp_path/"archive.html").read_text(encoding="utf-8")
+    assert 'data-archive-query' in page and 'data-archive-city' in page
+    assert 'href="/articles/stuart-one.html"' in page
+    assert page.count('data-archive-item') >= len(rows)
+
+
+def test_news_tip_form_supports_files_and_email_fallback(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    features.render_news_tip_page()
+    page=(tmp_path/"news-tip.html").read_text(encoding="utf-8")
+    assert 'enctype="multipart/form-data"' in page
+    assert 'name="attachment"' in page
+    assert 'tips@treasurecoast.today' in page
+    assert 'name="form_type" value="Treasure Coast Today News Tip"' in page
+
+
+def test_event_detail_pages_use_internal_canonical_and_event_schema(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    (tmp_path/"events.html").write_text(_chrome(), encoding="utf-8")
+    payload={"schema_version":1,"events":[{"id":"0123456789abcdef12","title":"Stuart Art Walk","starts_at":"2026-09-12T18:00:00-04:00","ends_at":"2026-09-12T20:00:00-04:00","venue":"Downtown Stuart","address":"1 Main St","city":"Stuart","county":"Martin","category":"Arts & Culture","price":"Free","description":"A downtown art walk.","event_url":"https://example.com/event","ticket_url":"","source_name":"Example Calendar","source_url":"https://example.com/calendar"}]}
+    (tmp_path/"data"/"events.json").write_text(json.dumps(payload), encoding="utf-8")
+    report=features.render_event_detail_pages()
+    assert report["rendered"] == 1
+    enriched=json.loads((tmp_path/"data"/"events.json").read_text())
+    detail=enriched["events"][0]["detail_url"]
+    page=(tmp_path/detail.lstrip('/')).read_text(encoding="utf-8")
+    assert f'<link rel="canonical" href="https://treasurecoast.today{detail}">' in page
+    assert '"@type":"Event"' in page
+    assert 'Official event page' in page
+
+
+def test_article_enhancement_handles_legacy_shell_and_adds_schema(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    rows=_archive_rows()
+    article=tmp_path/"articles"/"stuart-one.html"
+    article.write_text('''<!doctype html><html><head><link rel="canonical" href="https://treasurecoast.today/articles/stuart-one.html"></head><body data-article-slug="stuart-one"><main><div class="article-wrap"><div class="article-meta">Meta</div><h1 class="article-headline">Stuart approves waterfront plan</h1><div class="article-body">Body copy</div><a class="article-more-link" href="/?cat=martin">More</a></div></main></body></html>''', encoding="utf-8")
+    report=features.enhance_articles(rows)
+    assert report["scanned"] == 1
+    page=article.read_text(encoding="utf-8")
+    assert 'TCT_BREADCRUMB_START' in page
+    assert 'data-tct-most-read' in page
+    assert 'google-add-preferred-source-btn' in page
+    assert 'https://news.google.com/swg/js/v1/publisher.js' in page
+    assert '"@type":"NewsArticle"' in page
+    assert '"@type":"Person","name":"Andrew Dobrow"' in page
+
+
+
+def test_sitewide_article_search_builds_index_page_and_masthead_control(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    rows=_archive_rows()
+    count=features.write_story_index(rows)
+    assert count == len(rows)
+    payload=json.loads((tmp_path/"data"/"story-index.json").read_text(encoding="utf-8"))
+    assert payload["schema_version"] == 2
+    sample=payload["stories"]["stuart-one"]
+    assert sample["teaser"]
+    assert "Stuart" in sample["cities"]
+    assert "Martin County" in sample["counties"]
+
+    features.render_article_search_page()
+    features.inject_site_navigation()
+    search=(tmp_path/"search.html").read_text(encoding="utf-8")
+    chrome=(tmp_path/"about.html").read_text(encoding="utf-8")
+    assert 'name="robots" content="noindex,follow"' in search
+    assert 'data-tct-search-page-input' in search
+    assert 'data-tct-search-page-results' in search
+    assert 'data-tct-search-toggle' in chrome
+    assert 'data-tct-search-overlay' in chrome
+    assert 'aria-label="Search Treasure Coast Today"' in chrome
+
+
+def test_search_chrome_injection_is_idempotent(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    features.inject_site_navigation()
+    first=(tmp_path/"about.html").read_text(encoding="utf-8")
+    features.inject_site_navigation()
+    second=(tmp_path/"about.html").read_text(encoding="utf-8")
+    assert first == second
+    assert second.count('data-tct-search-toggle') == 1
+    assert second.count('data-tct-search-overlay') == 1
+
+def test_paywall_has_free_morning_brief_fallback_and_value_copy():
+    html=paywall_section_html("sample-story")
+    assert "Not ready to subscribe?" in html
+    assert "free TCT Morning Brief" in html
+    assert "Get unlimited, ad-free access to independent local reporting" in html
+    assert "Ad-free reading" in html
+
+
+def test_most_read_implementation_is_aggregate_and_privacy_preserving():
+    root=Path(__file__).resolve().parents[1]
+    migration=(root/"supabase/migrations/202609080001_story_analytics.sql").read_text(encoding="utf-8")
+    function=(root/"supabase/functions/story-analytics/index.ts").read_text(encoding="utf-8")
+    main=(root/"main.js").read_text(encoding="utf-8")
+    assert "story_pageviews_hourly" in migration
+    assert "ip_address" not in migration.lower()
+    assert "user_id" not in migration.lower()
+    assert "device_id" not in migration.lower()
+    assert "increment_story_pageview" in function
+    assert "sessionStorage" in main
+    assert "data-tct-most-read" in main
+    assert "data-tct-search-overlay" in main
+    assert "story-index.json" in main
+
+
+def test_workflow_runs_features_before_paywall_and_validates_after_paywall():
+    root=Path(__file__).resolve().parents[1]
+    workflow=(root/".github/workflows/update.yml").read_text(encoding="utf-8")
+    build=workflow.index("python -u scripts/build_audience_features.py")
+    paywall=workflow.index("python scripts/prepare_membership_paywall.py")
+    validate=workflow.index("python scripts/validate_seo_contracts.py")
+    assert build < paywall < validate
+    assert "supabase functions deploy story-analytics" in workflow
