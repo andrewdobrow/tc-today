@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-07T23:26:35Z",
+  "generated_at": "2026-09-08T02:55:07Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -49,23 +49,23 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 188,
+    "candidates_processed": 185,
     "routes": {
-      "generate_new": 7,
-      "skip": 181
+      "generate_new": 21,
+      "skip": 164
     },
     "eligibility": {
-      "listing": 6,
+      "listing": 5,
       "low_value": 125,
-      "publishable": 57
+      "publishable": 55
     },
     "source_classes": {
-      "aggregator": 131,
+      "aggregator": 130,
       "local_news": 38,
-      "regional_news": 16,
-      "unknown": 3
+      "regional_news": 15,
+      "unknown": 2
     },
-    "rejected_count": 6,
+    "rejected_count": 5,
     "rejected_examples": [
       {
         "headline": "8916 Orchid Reserve Cir, Sebastian, FL 32958 - Realtor.com",
@@ -111,28 +111,56 @@
           "Headline matches listing pattern 'realtor.com'"
         ],
         "source_class": "aggregator"
-      },
-      {
-        "headline": "675 W Lake Jasmine Cir Apt 104, Vero Beach, FL 32962 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNMndqck1qdXFudkt6UnNqUkw0YktGdWVsS2JqUF9FaVZJTHdDLTdyV3JMVFFhc3pKVTR2cjg4alBOTVBwR0thQXhlVmF0OEVzYWxBdmxVOGZQSVZleklab1RiWUU3c1Zjdmg2ODhPb0QwLUNmeE1sNWdQMmpvaFpWZmJ5OFZHTDI5Ty1BRTdLLWw5X0doZVEwMGotRGpZSzFVSFlSMTBB?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 12,
-      "same_event": 176
+      "new_story": 19,
+      "same_event": 166
     },
     "examples": [
+      {
+        "story_id": "story_007434",
+        "title": "Jupiter planning future investments in town projects including park fields, fire station",
+        "event_key": "fire-648e4ddbb0-648e4ddbb0",
+        "relationship": "same_event",
+        "confidence": 0.94,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: fire",
+          "Shared people: fire station",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: none",
+          "Shared distinctive tokens: 1",
+          "Distinctive-token overlap: 0.07",
+          "Title overlap: 0.30",
+          "Identity anchors qualified: True",
+          "Confidence: 0.94"
+        ]
+      },
       {
         "story_id": "story_009508",
         "title": "Another major insurer will cover surgical mesh after our investigation into breast cancer insurance denials",
         "event_key": "unknown-event-9b77b573d1",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_008122",
+        "title": "Deadly Florida Shooting Under Police Investigation - The Boca Raton Tribune",
+        "event_key": "unknown-event-502ee8ed41",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -370,22 +398,40 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      }
+    ],
+    "decision_trace_examples": [
+      {
+        "story_id": "story_007434",
+        "title": "Jupiter planning future investments in town projects including park fields, fire station",
+        "event_key": "fire-648e4ddbb0-648e4ddbb0",
+        "relationship": "same_event",
+        "confidence": 0.94,
+        "matched_existing": true,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: fire",
+          "Shared people: fire station",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: none",
+          "Shared distinctive tokens: 1",
+          "Distinctive-token overlap: 0.07",
+          "Title overlap: 0.30",
+          "Identity anchors qualified: True",
+          "Confidence: 0.94"
+        ]
       },
       {
-        "story_id": "",
-        "title": "7962 NW Greenbank Cir, Port Saint Lucie, FL 34987 - Realtor.com",
-        "event_key": "",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
-      },
-      {
-        "story_id": "story_009545",
-        "title": "Motorcyclist ejected, killed in crash on State Road 7",
-        "event_key": "traffic-crash-6a65af0eed-6a65af0eed",
+        "story_id": "story_009508",
+        "title": "Another major insurer will cover surgical mesh after our investigation into breast cancer insurance denials",
+        "event_key": "unknown-event-9b77b573d1",
         "relationship": "same_event",
         "confidence": 1.0,
+        "matched_existing": true,
         "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
@@ -393,13 +439,11 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      }
-    ],
-    "decision_trace_examples": [
+      },
       {
-        "story_id": "story_009508",
-        "title": "Another major insurer will cover surgical mesh after our investigation into breast cancer insurance denials",
-        "event_key": "unknown-event-9b77b573d1",
+        "story_id": "story_008122",
+        "title": "Deadly Florida Shooting Under Police Investigation - The Boca Raton Tribune",
+        "event_key": "unknown-event-502ee8ed41",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -637,24 +681,9 @@
         ]
       },
       {
-        "story_id": "story_009545",
+        "story_id": "story_009583",
         "title": "Motorcyclist ejected, killed in crash on State Road 7",
         "event_key": "traffic-crash-6a65af0eed-6a65af0eed",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_009541",
-        "title": "Fort Pierce Central High evacuated after bomb threat; deputies give all-clear - cw34.com",
-        "event_key": "fire-fort-pierce-fdaa49a7a7",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -670,21 +699,6 @@
         "story_id": "story_006291",
         "title": "Presidential fitness test returns to some schools after President Donald Trump signs executive order - WPTV",
         "event_key": "unknown-event-bbc86c744b",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_008294",
-        "title": "Week 3 Roundup: Jensen Beach tops South Fork, extends rivalry streak to 9 - Treasure Coast News",
-        "event_key": "unknown-event-d9bfecef8b",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -714,9 +728,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1358,
-      "timeline_entries_examined": 3796,
-      "transitions_examined": 2313,
+      "stories_with_timelines": 1355,
+      "timeline_entries_examined": 3791,
+      "transitions_examined": 2311,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 32,
       "high_confidence_candidate_count": 9,
@@ -1661,7 +1675,7 @@
           ]
         },
         {
-          "story_id": "story_009519",
+          "story_id": "story_009557",
           "story_title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1672,7 +1686,7 @@
               "prior_article": {
                 "article_id": "rss-0b4baf979b4e35fba284",
                 "event_key": "traffic-crash-vero-beach-9c1a5710d7",
-                "published_at": "2026-09-07T23:14:57.194174+00:00",
+                "published_at": "2026-09-08T02:40:27.108602+00:00",
                 "title": "A multi million dollar crane crashes in Vero Beach as residents raise concern - WPEC",
                 "source": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news",
                 "url": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news"
@@ -1680,7 +1694,7 @@
               "newer_article": {
                 "article_id": "rss-2e44c0e5b35c2393f944",
                 "event_key": "traffic-crash-b209f4dc72-b209f4dc72",
-                "published_at": "2026-09-07T23:14:57.194174+00:00",
+                "published_at": "2026-09-08T02:40:27.108602+00:00",
                 "title": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cw34.com",
                 "source": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5"
@@ -2304,7 +2318,7 @@
           ]
         },
         {
-          "story_id": "story_009534",
+          "story_id": "story_009572",
           "story_title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
           "milestones": [
             "recovery"
@@ -2349,7 +2363,7 @@
           "prior_article": {
             "article_id": "rss-e7222eb1152f2bab97f2",
             "event_key": "missing-person-port-st-lucie-2eb6cf5485",
-            "published_at": "2026-09-07T23:14:57.194174+00:00",
+            "published_at": "2026-09-08T02:40:27.108602+00:00",
             "title": "Body found in Martin County mangroves confirmed as missing man - WPEC",
             "source": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
             "url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead"
@@ -2357,14 +2371,14 @@
           "newer_article": {
             "article_id": "rss-fedf37d2bc649307634c",
             "event_key": "missing-person-7693a0a37b-7693a0a37b",
-            "published_at": "2026-09-07T23:14:57.194174+00:00",
+            "published_at": "2026-09-08T02:40:27.108602+00:00",
             "title": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
             "source": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
             "url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_009534",
+            "Story: story_009572",
             "Novel milestones: recovery",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
@@ -3878,7 +3892,7 @@
           ]
         },
         {
-          "story_id": "story_009519",
+          "story_id": "story_009557",
           "story_title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
           "milestones": [
             "death"
@@ -3915,7 +3929,7 @@
           "prior_article": {
             "article_id": "rss-0b4baf979b4e35fba284",
             "event_key": "traffic-crash-vero-beach-9c1a5710d7",
-            "published_at": "2026-09-07T23:14:57.194174+00:00",
+            "published_at": "2026-09-08T02:40:27.108602+00:00",
             "title": "A multi million dollar crane crashes in Vero Beach as residents raise concern - WPEC",
             "source": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news",
             "url": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news"
@@ -3923,14 +3937,14 @@
           "newer_article": {
             "article_id": "rss-2e44c0e5b35c2393f944",
             "event_key": "traffic-crash-b209f4dc72-b209f4dc72",
-            "published_at": "2026-09-07T23:14:57.194174+00:00",
+            "published_at": "2026-09-08T02:40:27.108602+00:00",
             "title": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cw34.com",
             "source": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_009519",
+            "Story: story_009557",
             "Novel milestones: death",
             "Identity anchor qualified: False",
             "Identity anchor codes: event_family_match, identity_anchor_missing",
@@ -3952,28 +3966,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1094,
-      "treasure_coast_local": 902,
+      "florida": 1092,
+      "treasure_coast_local": 900,
       "treasure_coast_region": 409,
-      "unknown": 2093
+      "unknown": 2080
     },
-    "average_score": 60.79
+    "average_score": 60.84
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1094,
-      "treasure_coast_local": 902,
+      "florida": 1092,
+      "treasure_coast_local": 900,
       "treasure_coast_region": 409,
-      "unknown": 2093
+      "unknown": 2080
     },
-    "average_priority": 4.15
+    "average_priority": 4.13
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3469,
+      "active": 3480,
       "breaking": 2,
-      "developing": 248,
-      "ongoing": 775,
+      "developing": 242,
+      "ongoing": 753,
       "resolved": 4
     }
   },
@@ -3981,8 +3995,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 6843,
-    "active_stories_after": 6843,
+    "active_stories_before": 6848,
+    "active_stories_after": 6848,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -4011,35 +4025,35 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-07T23:15:27Z",
-    "quarantined_story_records_retained": 1307,
-    "active_story_count": 6873
+    "generated_at": "2026-09-08T02:41:06Z",
+    "quarantined_story_records_retained": 1317,
+    "active_story_count": 6886
   },
   "stories": {
-    "total": 4498,
+    "total": 4481,
     "importance_levels": {
       "breaking": 6,
       "high": 101,
-      "normal": 731,
-      "low": 3660,
+      "normal": 727,
+      "low": 3647,
       "archived": 0
     },
-    "average_importance": 9.86,
+    "average_importance": 9.87,
     "top": [
       {
         "story_id": "story_009318",
         "title": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
         "score": 85,
-        "editorial_priority": 96,
-        "editorial_score": 96,
+        "editorial_priority": 92,
+        "editorial_score": 92,
         "score_breakdown": {
-          "score": 96,
+          "score": 92,
           "importance": 85,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.6
+          "age_hours": 8.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4085,13 +4099,13 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 4.6,
+          "hours_since_update": 8.03,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_009531",
+        "story_id": "story_009569",
         "title": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
         "score": 80,
         "editorial_priority": 90,
@@ -4103,7 +4117,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4155,72 +4169,10 @@
         "lifecycle": {
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
-          "last_updated": "2026-09-07T23:14:57.194174+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
+          "hours_since_update": 0.04,
           "event_count": 5,
           "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_002912",
-        "title": "Woman found shot in Vero Beach roadway dies; IRCSO investigating as homicide, searching for person of interest",
-        "score": 75,
-        "editorial_priority": 85,
-        "editorial_score": 85,
-        "score_breakdown": {
-          "score": 85,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 4.61
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach",
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 42,
-        "timeline_entries": 38,
-        "relationship_decisions": 10,
-        "canonical_source_candidates": 40,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 4.61,
-          "event_count": 42,
-          "timeline_entries": 38
         }
       },
       {
@@ -4236,7 +4188,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 2.61
+          "age_hours": 0.1
         },
         "level": "high",
         "importance_reasons": [
@@ -4271,21 +4223,21 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 9,
-        "timeline_entries": 9,
+        "event_count": 10,
+        "timeline_entries": 10,
         "relationship_decisions": 4,
-        "canonical_source_candidates": 12,
+        "canonical_source_candidates": 16,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T20:42:55.067221+00:00",
-          "hours_since_update": 2.61,
-          "event_count": 9,
-          "timeline_entries": 9
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
+          "hours_since_update": 0.1,
+          "event_count": 10,
+          "timeline_entries": 10
         }
       },
       {
-        "story_id": "story_009519",
+        "story_id": "story_009557",
         "title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
         "score": 75,
         "editorial_priority": 85,
@@ -4297,7 +4249,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.03
+          "age_hours": 0.04
         },
         "level": "high",
         "importance_reasons": [
@@ -4340,137 +4292,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T23:14:57.194174+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
+          "hours_since_update": 0.04,
           "event_count": 9,
           "timeline_entries": 9
         }
       },
       {
-        "story_id": "story_004042",
-        "title": "Male pedestrian, 65, struck, killed by vehicle on U.S. 1 in St. Lucie County - wpbf.com",
-        "score": 75,
-        "editorial_priority": 84,
-        "editorial_score": 84,
-        "score_breakdown": {
-          "score": 84,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 4.6
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County"
-          ],
-          "places": [
-            "Stuart"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 4,
-        "timeline_entries": 3,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 4.6,
-          "event_count": 4,
-          "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_009319",
-        "title": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - cbs12.com",
-        "score": 75,
-        "editorial_priority": 84,
-        "editorial_score": 84,
-        "score_breakdown": {
-          "score": 84,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 4.6
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 4,
-        "timeline_entries": 4,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 6,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 4.6,
-          "event_count": 4,
-          "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_009522",
+        "story_id": "story_009560",
         "title": "Fatal I-95 crash jams traffic in St. Lucie County - cbs12.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4482,7 +4311,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.02
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4527,14 +4356,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T23:14:57.194174+00:00",
-          "hours_since_update": 0.02,
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
+          "hours_since_update": 0.03,
           "event_count": 6,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_009523",
+        "story_id": "story_009561",
         "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4546,7 +4375,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.02
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4588,10 +4417,195 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T23:14:57.194174+00:00",
-          "hours_since_update": 0.02,
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
+          "hours_since_update": 0.03,
           "event_count": 2,
           "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_002912",
+        "title": "Woman found shot in Vero Beach roadway dies; IRCSO investigating as homicide, searching for person of interest",
+        "score": 75,
+        "editorial_priority": 81,
+        "editorial_score": 81,
+        "score_breakdown": {
+          "score": 81,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 8.04
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach",
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 42,
+        "timeline_entries": 38,
+        "relationship_decisions": 10,
+        "canonical_source_candidates": 40,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-07T18:40:23.494881+00:00",
+          "hours_since_update": 8.04,
+          "event_count": 42,
+          "timeline_entries": 38
+        }
+      },
+      {
+        "story_id": "story_004042",
+        "title": "Male pedestrian, 65, struck, killed by vehicle on U.S. 1 in St. Lucie County - wpbf.com",
+        "score": 75,
+        "editorial_priority": 80,
+        "editorial_score": 80,
+        "score_breakdown": {
+          "score": 80,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 8.03
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County"
+          ],
+          "places": [
+            "Stuart"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 4,
+        "timeline_entries": 3,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-07T18:40:23.494881+00:00",
+          "hours_since_update": 8.03,
+          "event_count": 4,
+          "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_009319",
+        "title": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - cbs12.com",
+        "score": 75,
+        "editorial_priority": 80,
+        "editorial_score": 80,
+        "score_breakdown": {
+          "score": 80,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 8.03
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 4,
+        "timeline_entries": 4,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 6,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-07T18:40:23.494881+00:00",
+          "hours_since_update": 8.03,
+          "event_count": 4,
+          "timeline_entries": 4
         }
       },
       {
@@ -4607,7 +4621,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 1.65
+          "age_hours": 5.09
         },
         "level": "high",
         "importance_reasons": [
@@ -4648,68 +4662,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T21:38:34.170415+00:00",
-          "hours_since_update": 1.65,
+          "hours_since_update": 5.09,
           "event_count": 3,
           "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_009355",
-        "title": "Patient killed in Martin County ambulance crash, driver charged - wcti12.com",
-        "score": 75,
-        "editorial_priority": 74,
-        "editorial_score": 74,
-        "score_breakdown": {
-          "score": 74,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 3.44
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T19:53:07.094197+00:00",
-          "hours_since_update": 3.44,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -4725,7 +4680,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 65.76
+          "age_hours": 69.21
         },
         "level": "high",
         "importance_reasons": [
@@ -4768,7 +4723,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 65.76,
+          "hours_since_update": 69.21,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4786,7 +4741,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 67.95
+          "age_hours": 71.38
         },
         "level": "high",
         "importance_reasons": [
@@ -4829,9 +4784,68 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T03:19:39.455523+00:00",
-          "hours_since_update": 67.95,
+          "hours_since_update": 71.38,
           "event_count": 4,
           "timeline_entries": 4
+        }
+      },
+      {
+        "story_id": "story_009355",
+        "title": "Patient killed in Martin County ambulance crash, driver charged - wcti12.com",
+        "score": 75,
+        "editorial_priority": 70,
+        "editorial_score": 70,
+        "score_breakdown": {
+          "score": 70,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.89
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-07T19:53:07.094197+00:00",
+          "hours_since_update": 6.89,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -4847,7 +4861,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 79.6
+          "age_hours": 83.05
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4895,7 +4909,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-04T15:42:16.034092+00:00",
-          "hours_since_update": 79.6,
+          "hours_since_update": 83.05,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -4913,7 +4927,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 147.27
+          "age_hours": 150.7
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4961,7 +4975,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 147.27,
+          "hours_since_update": 150.7,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4979,7 +4993,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 46.01
+          "age_hours": 49.46
         },
         "level": "high",
         "importance_reasons": [
@@ -5039,7 +5053,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-06T01:18:16.787695+00:00",
-          "hours_since_update": 46.01,
+          "hours_since_update": 49.46,
           "event_count": 95,
           "timeline_entries": 92
         }
@@ -5057,7 +5071,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 62.91
+          "age_hours": 66.35
         },
         "level": "high",
         "importance_reasons": [
@@ -5098,13 +5112,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-05T08:22:44.187567+00:00",
-          "hours_since_update": 62.91,
+          "hours_since_update": 66.35,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_009518",
+        "story_id": "story_009556",
         "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -5116,7 +5130,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.04
         },
         "level": "high",
         "importance_reasons": [
@@ -5166,14 +5180,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T23:14:57.194174+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
+          "hours_since_update": 0.04,
           "event_count": 7,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_009527",
+        "story_id": "story_009565",
         "title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -5237,14 +5251,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T23:14:57.194174+00:00",
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
           "hours_since_update": 0.03,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_009528",
+        "story_id": "story_009566",
         "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -5307,7 +5321,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-07T23:14:57.194174+00:00",
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
           "hours_since_update": 0.03,
           "event_count": 4,
           "timeline_entries": 2
@@ -5318,7 +5332,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-07T23:20:25Z",
+    "generated_at": "2026-09-08T02:47:26Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5333,8 +5347,8 @@
     "summary": {
       "category_count": 9,
       "statuses": {
+        "cache_hit": 1,
         "category_eligibility_archive_recovery": 5,
-        "generated_live": 1,
         "no_publishable_sources": 1,
         "quality_gate_archive_recovery": 2
       },
@@ -5342,14 +5356,14 @@
         "no_category_eligible_sources": 5,
         "publication_quality_rejected": 2
       },
-      "model_attempt_count": 3,
-      "model_elapsed_seconds": 21.72,
+      "model_attempt_count": 2,
+      "model_elapsed_seconds": 19.625,
       "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 0,
-      "published_story_duplicate_suppression_count": 37,
+      "published_story_duplicate_suppression_count": 34,
       "story_aware_update_context_count": 0,
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
@@ -5363,7 +5377,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 5,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5494,16 +5508,16 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 8,
-        "elapsed_seconds": 18.867
+        "new_publication_stale_rejected_count": 6,
+        "elapsed_seconds": 22.87
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "quality_gate_archive_recovery",
-        "fetched_candidate_count": 25,
+        "fetched_candidate_count": 26,
         "fresh_candidate_count": 22,
-        "publishable_source_count": 4,
+        "publishable_source_count": 5,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5512,11 +5526,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 7.655,
+            "elapsed_seconds": 11.063,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 7.655,
+        "model_elapsed_seconds": 11.063,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -5530,12 +5544,12 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
-            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash?outputType=amp",
+            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash - wflx.com",
+            "source_url": "https://www.wflx.com/2026/09/07/1-northbound-lane-reopens-floridas-turnpike-after-fatal-st-lucie-county-crash?outputType=amp",
             "editorial_story_id": "story_009348",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
             "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
@@ -5544,8 +5558,18 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash",
+            "source_headline": "Truck driver killed, passenger hospitalized after Turnpike crash in St. Lucie County - WPEC",
+            "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+            "editorial_story_id": "story_009348",
+            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - wflx.com",
+            "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash?outputType=amp",
             "editorial_story_id": "story_009348",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
             "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
@@ -5558,7 +5582,7 @@
             "source_url": "https://cbs12.com/news/local/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
             "editorial_story_id": "story_009122",
             "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
-            "canonical_headline": "Man shoots dog after two dogs trap wife in vehicle in Fort Pierce, St. Lucie County",
+            "canonical_headline": "Fort Pierce man's shooting of charging dog confirmed justified after investigation",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -5572,12 +5596,27 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
-            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash?outputType=amp",
+            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash - wflx.com",
+            "source_url": "https://www.wflx.com/2026/09/07/1-northbound-lane-reopens-floridas-turnpike-after-fatal-st-lucie-county-crash?outputType=amp",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
             "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Truck driver killed, passenger hospitalized after Turnpike crash in St. Lucie County - WPEC",
+            "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5587,8 +5626,8 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/all-northbound-lanes-of-floridas-turnpike-closed-in-st-lucie-county-after-fatal-box-truck-crash",
+            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - wflx.com",
+            "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash?outputType=amp",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
             "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
             "canonical_is_custom": false,
@@ -5605,7 +5644,7 @@
             "source_headline": "Dog shot after charging at man in St. Lucie County, deputies say - WPEC",
             "source_url": "https://cbs12.com/news/local/dog-shot-injured-after-allegedly-charging-at-fort-pierce-couple-in-driveway-indian-river-estates-st-lucie-county-dog-shooting-dog-shot-dog-injured-palm-drive-st-lucie-county-sheriffs-office-st-lucie-county-sheriff-animal-shooting-dog-attack",
             "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
-            "canonical_headline": "Man shoots dog after two dogs trap wife in vehicle in Fort Pierce, St. Lucie County",
+            "canonical_headline": "Fort Pierce man's shooting of charging dog confirmed justified after investigation",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -5619,15 +5658,15 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 28.14
+        "elapsed_seconds": 35.043
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 16,
-        "publishable_source_count": 4,
+        "fresh_candidate_count": 17,
+        "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5647,7 +5686,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -5718,16 +5757,6 @@
             "canonical_headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-            "editorial_story_id": "story_003665",
-            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-            "canonical_headline": "First Border Collies adopted after Palm City hoarding rescue, Humane Society says",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -5841,25 +5870,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Woman facing 72 charges in Palm City hoarding case pleads not guilty after surrendering dogs",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/woman-facing-72-charges-in-palm-city-hoarding-case-pleads-not-guilty-after-surrendering-dogs",
-            "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-            "canonical_headline": "First Border Collies adopted after Palm City hoarding rescue, Humane Society says",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 9,
-        "elapsed_seconds": 17.454
+        "elapsed_seconds": 21.245
       },
       {
         "category_key": "sports",
@@ -5923,8 +5937,8 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 13,
-        "elapsed_seconds": 10.969
+        "new_publication_stale_rejected_count": 12,
+        "elapsed_seconds": 17.845
       },
       {
         "category_key": "things_to_do",
@@ -6021,14 +6035,14 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Mango Music and Art Festival on Saturday in Lake Worth Beach",
+              "Labor Day weekend (September 4, 2026)",
+              "Mango Music and Art Festival in Lake Worth Beach on Saturday",
               "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
-              "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
-              "SoFlo Market one-year anniversary celebration on Saturday in Boca Raton",
-              "Northwest BBQ Brews Blues Festival on Saturday",
-              "Peachfest 5-Year Anniversary Art Walk on Saturday in West Palm Beach",
-              "Hurricane Alley Blowout Rodeo Friday-Saturday in Vero Beach",
-              "Labor Day weekend timeframe (September 4, 2026)"
+              "Barrio Fiesta Labor Day Picnic on Sunday at Sandhill Crane Park",
+              "SoFlo Market 1-year anniversary in Boca Raton on Saturday",
+              "Northwest BBQ Brews Blues Festival at Heart Soul Park on Saturday",
+              "Peachfest 5-Year Anniversary Art Walk on Saturday",
+              "Hurricane Alley Blowout Rodeo Friday-Saturday at The Overpass Arena in Vero Beach"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6082,7 +6096,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 24.317
+        "elapsed_seconds": 27.553
       },
       {
         "category_key": "florida",
@@ -6120,7 +6134,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.774
+        "elapsed_seconds": 12.133
       },
       {
         "category_key": "martin",
@@ -6152,7 +6166,7 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
-            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
+            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - wflx.com",
             "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash?outputType=amp",
             "editorial_story_id": "story_009348",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
@@ -6170,7 +6184,7 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
-            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
+            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - wflx.com",
             "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash?outputType=amp",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
             "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
@@ -6185,28 +6199,21 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 8.75
+        "elapsed_seconds": 19.517
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 16,
+        "status": "cache_hit",
+        "fetched_candidate_count": 30,
+        "fresh_candidate_count": 18,
         "publishable_source_count": 1,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 7.645,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 7.645,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6220,11 +6227,11 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 13,
+        "published_story_duplicate_suppression_count": 12,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash - WFLX",
+            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash - wflx.com",
             "source_url": "https://www.wflx.com/2026/09/07/1-northbound-lane-reopens-floridas-turnpike-after-fatal-st-lucie-county-crash?outputType=amp",
             "editorial_story_id": "story_009348",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
@@ -6294,27 +6301,17 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Fatal crash on Florida's Turnpike closes north and southbound lanes - Yahoo",
-            "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQbmVUTmd0S25rUVBYcXBiMGFUZi1QdWZLbm1tb2FfbldYSXBWTDFXenpIdU5wMHVHT3J6WGtSdEU4Y25oLUpSMjFpdzVXcTNvYzdleV9CQnFPa0o5RzZWNnlUTVI4VktsY0FRTW95d0pvaWgzVzRPRjZUMlg2VDBIc09sTV9aLV92X2phMzVTeHE",
-            "editorial_story_id": "story_009348",
-            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Shooting of dog that allegedly charged at couple in Fort Pierce investigated - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-dog-shot-allegedly-charging-at-fort-pierce-couple-outside-home-in-st-lucie-county/73626712",
             "editorial_story_id": "story_009122",
             "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
-            "canonical_headline": "Man shoots dog after two dogs trap wife in vehicle in Fort Pierce, St. Lucie County",
+            "canonical_headline": "Fort Pierce man's shooting of charging dog confirmed justified after investigation",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
+            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - wflx.com",
             "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash",
             "editorial_story_id": "story_009348",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
@@ -6362,7 +6359,7 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash - WFLX",
+            "source_headline": "1 northbound lane reopens on Florida's Turnpike after fatal St. Lucie County crash - wflx.com",
             "source_url": "https://www.wflx.com/2026/09/07/1-northbound-lane-reopens-floridas-turnpike-after-fatal-st-lucie-county-crash?outputType=amp",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
             "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
@@ -6467,25 +6464,10 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Fatal crash on Florida's Turnpike closes north and southbound lanes - Yahoo",
-            "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQbmVUTmd0S25rUVBYcXBiMGFUZi1QdWZLbm1tb2FfbldYSXBWTDFXenpIdU5wMHVHT3J6WGtSdEU4Y25oLUpSMjFpdzVXcTNvYzdleV9CQnFPa0o5RzZWNnlUTVI4VktsY0FRTW95d0pvaWgzVzRPRjZUMlg2VDBIc09sTV9aLV92X2phMzVTeHE",
-            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Shooting of dog that allegedly charged at couple in Fort Pierce investigated - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-dog-shot-allegedly-charging-at-fort-pierce-couple-outside-home-in-st-lucie-county/73626712",
             "canonical_slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
-            "canonical_headline": "Man shoots dog after two dogs trap wife in vehicle in Fort Pierce, St. Lucie County",
+            "canonical_headline": "Fort Pierce man's shooting of charging dog confirmed justified after investigation",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "material_update_source_already_absorbed",
@@ -6497,7 +6479,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - WFLX",
+            "source_headline": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash - wflx.com",
             "source_url": "https://www.wflx.com/2026/09/07/all-northbound-lanes-floridas-turnpike-closed-st-lucie-county-after-fatal-box-truck-crash",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
             "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
@@ -6556,20 +6538,17 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 2,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
+        "new_publication_stale_rejected_count": 3,
         "live_hero_headline": "Man shoots dog in Fort Pierce's Indian River Estates after aggressive attack",
-        "generated_card_count": 0,
-        "elapsed_seconds": 22.235
+        "elapsed_seconds": 15.712
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "quality_gate_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 4,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 5,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6578,11 +6557,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.42,
+            "elapsed_seconds": 8.562,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 6.42,
+        "model_elapsed_seconds": 8.562,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -6593,10 +6572,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -6606,26 +6585,6 @@
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
             "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
-            "editorial_story_id": "story_007557",
-            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
-            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach star QB Champ Monds out for rest of season - WPBF",
-            "source_url": "https://www.wpbf.com/article/vero-beach-star-qb-champ-monds-out-for-rest-of-season/73622837",
-            "editorial_story_id": "story_009214",
-            "canonical_slug": "2026-09-07-vero-beach-quarterback-champ-monds-done-for-season-after-medical-procedure",
-            "canonical_headline": "Vero Beach quarterback Champ Monds done for season after medical procedure",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6650,42 +6609,12 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Indiantown's new interim village manager vows transparency after surprise appointment",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/indiantowns-new-interim-village-manager-vows-transparency-after-surprise-appointment",
-            "canonical_slug": "2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen",
-            "canonical_headline": "Indiantown interim village manager Michael Giardino vows transparency after appointment",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach star QB Champ Monds out for rest of season - WPBF",
-            "source_url": "https://www.wpbf.com/article/vero-beach-star-qb-champ-monds-out-for-rest-of-season/73622837",
-            "canonical_slug": "2026-09-07-vero-beach-quarterback-champ-monds-done-for-season-after-medical-procedure",
-            "canonical_headline": "Vero Beach quarterback Champ Monds done for season after medical procedure",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 23.288
+        "elapsed_seconds": 36.268
       }
     ]
   }
