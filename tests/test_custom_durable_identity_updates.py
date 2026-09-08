@@ -277,3 +277,120 @@ def test_live_third_headline_wording_still_binds_to_original_first_permalink():
     assert target["slug"] == OLD_SLUG
     assert forced is None
     assert story_id == "custom:first"
+
+
+def test_stable_weekend_publication_allows_headline_to_add_weekend_without_changing_slug():
+    g = _load_generate()
+    entry = {
+        "slug": OLD_SLUG,
+        "headline": "Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sep. 11-13",
+        "permalink_origin_headline": "Looking for something to do? 5 Treasure Coast events for Sept. 11-13",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_publication_key": "series:treasure-coast-weekend-events|edition:sep-11-13",
+        "custom_series_key": "treasure-coast-weekend-events",
+        "custom_edition_key": "sep-11-13",
+        "lastmod": "2026-09-07",
+    }
+
+    # The original permalink predates the word "weekend" in the edited headline.
+    # Stable custom identity must preserve that URL as long as the edition still matches.
+    assert "weekend" not in OLD_SLUG
+    assert g._custom_series_slug_mismatch(entry, OLD_SLUG) is False
+    assert g._archive_headline_slug_alignment(entry)["aligned"] is True
+
+
+def test_stable_custom_identity_still_rejects_wrong_recurring_edition_slug():
+    g = _load_generate()
+    entry = {
+        "slug": "2026-07-10-treasure-coast-traffic-report-july-12-17",
+        "headline": "Treasure Coast Traffic Report: I-95 Work Planned July 26-31",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_publication_key": "series:treasure-coast-traffic-report|edition:jul-26-31",
+        "custom_series_key": "treasure-coast-traffic-report",
+        "custom_edition_key": "jul-26-31",
+        "lastmod": "2026-07-25",
+    }
+
+    result = g._archive_headline_slug_alignment(entry)
+    assert result["aligned"] is False
+    assert result["reason"] == "recurring_custom_edition_slug_mismatch"
+
+
+def test_post_publication_rebind_uses_durable_custom_key_not_current_headline(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS", [])
+    publication_key = "series:treasure-coast-weekend-events|edition:sep-11-13"
+    archive_entry = {
+        "slug": OLD_SLUG,
+        "headline": "Looking for something to do? 5 Treasure Coast events for Sept. 11-13",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_publication_key": publication_key,
+        "custom_series_key": "treasure-coast-weekend-events",
+        "custom_edition_key": "sep-11-13",
+        "editorial_story_id": "custom:first",
+        "category_key": "things_to_do",
+        "ranking_eligible": True,
+    }
+    (tmp_path / "archive.json").write_text(json.dumps([archive_entry]), encoding="utf-8")
+    live = {
+        "headline": "Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sep. 11-13",
+        "body": BODY,
+        "category": "things_to_do",
+        "category_key": "things_to_do",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_publication_key": publication_key,
+        "_current_custom_publication_slug": OLD_SLUG,
+        "_archived_slug": OLD_SLUG,
+    }
+    categories = [{"category_key": "things_to_do", "hero": live, "cards": []}]
+
+    rebound = g._rebind_current_custom_editions_to_archive(categories, categories[0], tmp_path)
+
+    assert rebound
+    assert live["_archived_slug"] == OLD_SLUG
+    assert live["headline"].startswith("Looking for something to do this weekend?")
+    report = json.loads((tmp_path / "data" / "custom-post-publication-rebind.json").read_text())
+    assert report["unresolved_count"] == 0
+    assert report["identity_contract"].startswith("durable_custom_publication")
+
+
+def test_forward_live_identity_accepts_edited_weekend_headline_on_original_permalink(tmp_path):
+    g = _load_generate()
+    (tmp_path / "data").mkdir()
+    publication_key = "series:treasure-coast-weekend-events|edition:sep-11-13"
+    headline = "Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sep. 11-13"
+    story_id = "custom:first"
+    (tmp_path / "archive.json").write_text(json.dumps([{
+        "slug": OLD_SLUG,
+        "headline": headline,
+        "permalink_origin_headline": "Looking for something to do? 5 Treasure Coast events for Sept. 11-13",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_publication_key": publication_key,
+        "custom_series_key": "treasure-coast-weekend-events",
+        "custom_edition_key": "sep-11-13",
+        "editorial_story_id": story_id,
+        "category_key": "things_to_do",
+        "ranking_eligible": True,
+        "lastmod": "2026-09-07",
+    }]), encoding="utf-8")
+    placement = {
+        "headline": headline,
+        "slug": OLD_SLUG,
+        "_archived_slug": OLD_SLUG,
+        "link": f"https://treasurecoast.today/articles/{OLD_SLUG}.html",
+        "editorial_story_id": story_id,
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_publication_key": publication_key,
+    }
+    categories = [{"category_key": "things_to_do", "hero": placement, "cards": []}]
+
+    report = g.validate_forward_live_identity(categories, categories[0], tmp_path)
+
+    assert report["passed"] is True
+    assert report["violation_count"] == 0

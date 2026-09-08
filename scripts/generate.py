@@ -19369,7 +19369,15 @@ def _custom_publication_identity_match(current, archived):
     return False
 
 def _custom_series_slug_mismatch(item, slug):
-    """Detect a recurring edition published under another edition's permalink."""
+    """Detect a recurring edition published under another edition's permalink.
+
+    Stable custom publication identity deliberately allows the display headline (and
+    therefore the inferred series wording) to evolve while the original permalink is
+    preserved.  Once a custom row carries a durable ``series+edition`` key, the slug
+    contract is about the *edition marker*, not whether every word in today's inferred
+    series label appears in the historical slug.  Legacy recurring rows without a
+    durable key retain the older series-token safety check.
+    """
     series_key = _custom_series_key(item)
     if not series_key:
         return False
@@ -19394,9 +19402,19 @@ def _custom_series_slug_mismatch(item, slug):
         slug_marker = _normalize_custom_edition_key("-".join(slug_marker_parts))
         if slug_marker != _normalize_custom_edition_key(marker):
             return True
-    elif marker not in slug:
+    elif _normalize_custom_edition_key(marker) not in slug:
         return True
-    # When an edition is explicit, the series name must also remain recognizable.
+
+    stored_publication_key = str(item.get("custom_publication_key") or "").strip()
+    explicit_custom_id = slugify(str(item.get("custom_id") or item.get("article_id") or ""))
+    if explicit_custom_id or stored_publication_key.startswith(f"series:{series_key}|edition:"):
+        # This is an established custom edition. A headline edit may add/remove words
+        # such as "weekend" without minting a new URL; the immutable permalink origin
+        # and durable publication key remain the safety boundary.
+        return False
+
+    # Legacy recurring rows that predate durable custom identity still require the
+    # series name to be recognizable in the slug.
     return not all(part in slug for part in series_key.split("-") if len(part) > 2)
 
 
@@ -33876,58 +33894,122 @@ def write_archives(all_categories, top_cat):
 
 
 def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, output_dir=None):
-    """Verify current custom permalinks using exact headline publication receipts."""
+    """Verify current custom permalinks using durable publication identity first.
+
+    Headline equality is only a legacy fallback.  A custom article whose headline was
+    edited must stay bound to the permalink established for its ``custom_id`` or
+    recurring ``series+edition`` key.
+    """
     root = Path(output_dir or OUTPUT_DIR)
     archive = load_archive(root / "archive.json")
     retired = _load_custom_retirements(root)
-    by_slug = {str(row.get("slug") or "").strip(): row for row in archive if isinstance(row, dict) and row.get("slug")}
+    by_slug = {
+        str(row.get("slug") or "").strip(): row
+        for row in archive
+        if isinstance(row, dict) and row.get("slug")
+    }
     by_headline = {}
+    by_publication_key = {}
     for row in archive:
         if not isinstance(row, dict) or not (row.get("is_custom") or row.get("authoritative_custom")):
             continue
         headline = _exact_custom_headline(row.get("headline"))
-        if not headline or headline in retired or row.get("exclude_from_live_recovery"):
+        if row.get("exclude_from_live_recovery"):
             continue
-        by_headline.setdefault(headline, []).append(row)
-    receipts = [row for row in CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS if isinstance(row, dict) and row.get("slug")]
+        if headline and headline not in retired:
+            by_headline.setdefault(headline, []).append(row)
+        publication_key = str(_custom_publication_key(row) or "").strip()
+        if publication_key:
+            by_publication_key.setdefault(publication_key, []).append(row)
+
+    receipts = [
+        row for row in CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
+        if isinstance(row, dict) and row.get("slug")
+    ]
     receipts_by_headline = {}
+    receipts_by_publication_key = {}
     for receipt in receipts:
         headline = _exact_custom_headline(receipt.get("headline"))
         if headline:
             receipts_by_headline.setdefault(headline, []).append(receipt)
+        publication_key = str(
+            receipt.get("custom_publication_key") or _custom_publication_key(receipt) or ""
+        ).strip()
+        if publication_key:
+            receipts_by_publication_key.setdefault(publication_key, []).append(receipt)
 
     rebound, unresolved = [], []
     for surface, item in _iter_live_custom_placements(all_categories, top_cat):
         headline = _exact_custom_headline(item.get("headline"))
         if not headline or headline in retired or item.get("retired"):
             continue
+        publication_key = str(_custom_publication_key(item) or "").strip()
         entry = None
         basis = None
+
         direct_slug = str(item.get("_current_custom_publication_slug") or "").strip()
         if direct_slug:
             candidate = by_slug.get(direct_slug)
-            if candidate and _exact_custom_headline(candidate.get("headline")) == headline and not candidate.get("exclude_from_live_recovery"):
-                entry, basis = candidate, "direct_publication_binding"
+            if (
+                candidate
+                and not candidate.get("exclude_from_live_recovery")
+                and (
+                    (publication_key and _custom_publication_identity_match(item, candidate))
+                    or _exact_custom_headline(candidate.get("headline")) == headline
+                )
+            ):
+                entry, basis = candidate, "direct_durable_publication_binding"
+
+        if entry is None and publication_key:
+            receipt_rows = receipts_by_publication_key.get(publication_key, [])
+            created = [row for row in receipt_rows if row.get("action") == "created"]
+            selected = created[-1] if created else (receipt_rows[-1] if receipt_rows else None)
+            if selected:
+                candidate = by_slug.get(str(selected.get("slug") or ""))
+                if (
+                    candidate
+                    and not candidate.get("exclude_from_live_recovery")
+                    and _custom_publication_identity_match(item, candidate)
+                ):
+                    entry, basis = candidate, "durable_publication_receipt"
+
+        if entry is None and publication_key:
+            candidates = [
+                row for row in by_publication_key.get(publication_key, [])
+                if not row.get("exclude_from_live_recovery")
+            ]
+            if candidates:
+                entry = min(candidates, key=_custom_canonical_sort_key)
+                basis = "durable_publication_archive"
+
+        # Backward compatibility for custom rows created before durable identity.
         if entry is None:
             receipt_rows = receipts_by_headline.get(headline, [])
             created = [row for row in receipt_rows if row.get("action") == "created"]
             selected = created[-1] if created else (receipt_rows[-1] if receipt_rows else None)
             if selected:
                 candidate = by_slug.get(str(selected.get("slug") or ""))
-                if candidate and _exact_custom_headline(candidate.get("headline")) == headline and not candidate.get("exclude_from_live_recovery"):
+                if (
+                    candidate
+                    and _exact_custom_headline(candidate.get("headline")) == headline
+                    and not candidate.get("exclude_from_live_recovery")
+                ):
                     entry, basis = candidate, "exact_headline_publication_receipt"
         if entry is None:
             candidates = by_headline.get(headline, [])
             if len(candidates) == 1:
                 entry, basis = candidates[0], "exact_headline_archive"
+
         if entry is None:
             unresolved.append({
                 "surface": surface,
                 "headline": headline,
+                "custom_publication_key": publication_key,
                 "current_slug": str(item.get("_archived_slug") or item.get("slug") or ""),
-                "reason": "exact_headline_target_missing_or_ambiguous",
+                "reason": "durable_custom_target_missing_or_ambiguous",
             })
             continue
+
         slug = str(entry.get("slug") or "").strip()
         previous_slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
         item["_archived_slug"] = slug
@@ -33935,6 +34017,11 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
         item["link"] = f"{SITE_URL}/articles/{slug}.html"
         item["_current_custom_publication_slug"] = slug
         item["_current_custom_publication_bound"] = True
+        stable_key = str(_custom_publication_key(entry) or publication_key or "").strip()
+        if stable_key:
+            item["custom_publication_key"] = stable_key
+        if entry.get("custom_id") and not item.get("custom_id"):
+            item["custom_id"] = entry.get("custom_id")
         if entry.get("editorial_story_id"):
             item["editorial_story_id"] = entry.get("editorial_story_id")
             item["_editorial_story_id"] = entry.get("editorial_story_id")
@@ -33942,6 +34029,7 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
         rebound.append({
             "surface": surface,
             "headline": headline,
+            "custom_publication_key": stable_key,
             "previous_slug": previous_slug,
             "slug": slug,
             "match_basis": basis,
@@ -33951,9 +34039,9 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
     data_dir = root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "custom-post-publication-rebind.json").write_text(json.dumps({
-        "version": "1.11.0",
+        "version": "1.12.0",
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "identity_contract": "exact_headline_only",
+        "identity_contract": "durable_custom_publication_then_legacy_exact_headline",
         "publication_receipts": len(receipts),
         "rebound_count": len(rebound),
         "changed_count": sum(1 for row in rebound if row.get("changed")),
@@ -33962,9 +34050,9 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
         "unresolved": unresolved,
     }, indent=2, ensure_ascii=False), encoding="utf-8")
     if rebound:
-        print(f"  Custom exact-headline permalink verified for {len(rebound)} placement(s)")
+        print(f"  Custom durable permalink verified for {len(rebound)} placement(s)")
     if unresolved:
-        print(f"  Custom exact-headline permalink unresolved for {len(unresolved)} placement(s); final gate will block")
+        print(f"  Custom durable permalink unresolved for {len(unresolved)} placement(s); final gate will block")
     return rebound
 
 def validate_forward_live_identity(all_categories, top_cat=None, output_dir=None):
