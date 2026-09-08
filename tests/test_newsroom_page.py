@@ -94,3 +94,42 @@ def test_newsroom_is_in_desktop_mobile_navigation_and_sitemap():
     assert 'https://treasurecoast.today/newsroom.html' in sitemap
     assert 'aria-current="page"' in desktop
     assert 'aria-current="page"' in mobile
+
+
+def test_old_footer_without_author_gets_newsroom_inserted_after_about(tmp_path):
+    g = _load_generate()
+    page = tmp_path / "legacy-no-author.html"
+    page.write_text(
+        '<html><body><footer><div class="footer-links">'
+        '<a href="about.html">About</a>'
+        '<a href="archive.html">Archive</a>'
+        '<a href="/feed.xml">RSS Feed</a>'
+        '<a href="privacy.html">Privacy</a>'
+        '</div></footer></body></html>',
+        encoding="utf-8",
+    )
+    result = g._normalize_footer_newsroom_link_sitewide(tmp_path)
+    assert result == {"scanned": 1, "updated": 1}
+    text = page.read_text(encoding="utf-8")
+    assert text.count('<a href="/newsroom.html">Newsroom</a>') == 1
+    assert text.index('>About</a>') < text.index('>Newsroom</a>') < text.index('>Archive</a>')
+    second = g._normalize_footer_newsroom_link_sitewide(tmp_path)
+    assert second == {"scanned": 1, "updated": 0}
+
+
+def test_very_old_footer_without_about_gets_newsroom_before_archive(tmp_path):
+    g = _load_generate()
+    page = tmp_path / "legacy-no-about.html"
+    page.write_text(
+        '<html><body><footer><div class="footer-links">'
+        '<a href="https://treasurecoast.today/archive.html">Archive</a>'
+        '<a href="/feed.xml">RSS Feed</a>'
+        '<a href="https://treasurecoast.today/privacy.html">Privacy</a>'
+        '</div></footer></body></html>',
+        encoding="utf-8",
+    )
+    result = g._normalize_footer_newsroom_link_sitewide(tmp_path)
+    assert result == {"scanned": 1, "updated": 1}
+    text = page.read_text(encoding="utf-8")
+    assert text.count('<a href="/newsroom.html">Newsroom</a>') == 1
+    assert text.index('>Newsroom</a>') < text.index('>Archive</a>')

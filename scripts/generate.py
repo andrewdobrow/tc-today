@@ -23105,6 +23105,19 @@ def _normalize_footer_newsroom_link_sitewide(output_root):
         r'<a\b[^>]*href=["\'](?:https://treasurecoast\.today)?/?newsroom\.html["\'][^>]*>\s*Newsroom\s*</a>',
         re.I | re.S,
     )
+    about_link_re = re.compile(
+        r'<a\b[^>]*href=["\'][^"\']*about\.html["\'][^>]*>\s*About\s*</a>',
+        re.I | re.S,
+    )
+    archive_link_re = re.compile(
+        r'<a\b[^>]*href=["\'][^"\']*archive\.html["\'][^>]*>\s*Archive\s*</a>',
+        re.I | re.S,
+    )
+    footer_links_open_re = re.compile(
+        r'<div\b[^>]*class=["\'][^"\']*\bfooter-links\b[^"\']*["\'][^>]*>',
+        re.I | re.S,
+    )
+    newsroom_link = '<a href="/newsroom.html">Newsroom</a>'
 
     scanned = updated = 0
     failures = []
@@ -23115,9 +23128,46 @@ def _normalize_footer_newsroom_link_sitewide(output_root):
             continue
         scanned += 1
         footer = match.group(0)
-        normalized_footer, replacements = author_link_re.subn(
-            '<a href="/newsroom.html">Newsroom</a>', footer
-        )
+        normalized_footer, replacements = author_link_re.subn(newsroom_link, footer)
+
+        # Some of the oldest retained article shells predate the Author link
+        # entirely.  They are valid TCT pages, so migrate them by inserting
+        # Newsroom into the existing footer instead of treating the absence of
+        # Author as a contract failure.  Prefer a stable semantic position
+        # immediately after About, then before Archive, then at the start of the
+        # footer-links group for unusual legacy shells.
+        if not newsroom_link_re.search(normalized_footer):
+            about_match = about_link_re.search(normalized_footer)
+            archive_match = archive_link_re.search(normalized_footer)
+            links_open_match = footer_links_open_re.search(normalized_footer)
+            if about_match:
+                insert_at = about_match.end()
+                normalized_footer = (
+                    normalized_footer[:insert_at]
+                    + "\n        "
+                    + newsroom_link
+                    + normalized_footer[insert_at:]
+                )
+                replacements += 1
+            elif archive_match:
+                insert_at = archive_match.start()
+                normalized_footer = (
+                    normalized_footer[:insert_at]
+                    + newsroom_link
+                    + "\n        "
+                    + normalized_footer[insert_at:]
+                )
+                replacements += 1
+            elif links_open_match:
+                insert_at = links_open_match.end()
+                normalized_footer = (
+                    normalized_footer[:insert_at]
+                    + "\n        "
+                    + newsroom_link
+                    + normalized_footer[insert_at:]
+                )
+                replacements += 1
+
         if replacements:
             normalized = original[:match.start()] + normalized_footer + original[match.end():]
             path.write_text(normalized, encoding="utf-8")
