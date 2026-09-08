@@ -144,6 +144,11 @@ jobs:
         continue-on-error: true
         run: python -u scripts/update_events.py
 
+      - name: Build audience growth and local discovery features
+        env:
+          TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
+        run: python -u scripts/build_audience_features.py
+
       - name: Upload model bake-off review
         if: ${{ inputs.model_bakeoff == true }}
         uses: actions/upload-artifact@v4
@@ -164,6 +169,49 @@ jobs:
           TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
           TCT_STRIPE_MODE: ${{ vars.TCT_STRIPE_MODE || 'test' }}
         run: python scripts/write_membership_browser_config.py
+
+      - name: Probe Most Read analytics capability
+        id: story_analytics_probe
+        env:
+          TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
+        run: |
+          python - <<'PY'
+          import os
+          import requests
+
+          base = os.environ.get("TCT_SUPABASE_URL", "").strip().rstrip("/")
+          output = os.environ["GITHUB_OUTPUT"]
+          if not base:
+              print("TCT_SUPABASE_URL is not configured; Most Read remains hidden.")
+              with open(output, "a", encoding="utf-8") as handle:
+                  handle.write("needs_deploy=false\n")
+              raise SystemExit(0)
+          try:
+              response = requests.post(
+                  f"{base}/functions/v1/story-analytics",
+                  json={"action": "capability"},
+                  timeout=20,
+              )
+          except requests.RequestException as exc:
+              print(f"Most Read capability probe unavailable ({exc}); requesting function deploy.")
+              with open(output, "a", encoding="utf-8") as handle:
+                  handle.write("needs_deploy=true\n")
+              raise SystemExit(0)
+          if response.status_code == 200:
+              payload = response.json()
+              print(f"Most Read endpoint is deployed; schema_ready={payload.get('schema_ready')!r}.")
+              with open(output, "a", encoding="utf-8") as handle:
+                  handle.write("needs_deploy=false\n")
+              raise SystemExit(0)
+          if response.status_code in {401, 404, 405}:
+              print("Most Read Edge Function is missing or stale; it will be deployed automatically.")
+              with open(output, "a", encoding="utf-8") as handle:
+                  handle.write("needs_deploy=true\n")
+              raise SystemExit(0)
+          print(f"Most Read capability probe returned HTTP {response.status_code}; leaving the optional module hidden for this run.")
+          with open(output, "a", encoding="utf-8") as handle:
+              handle.write("needs_deploy=false\n")
+          PY
 
       - name: Probe protected-content snapshot capability
         id: protected_sync_probe
@@ -247,11 +295,21 @@ jobs:
           raise SystemExit(f"Monthly meter capability probe failed with HTTP {response.status_code}.")
           PY
 
-      - name: Set up Supabase CLI for protected-content repair
-        if: ${{ steps.protected_sync_probe.outputs.needs_deploy == 'true' || steps.protected_article_meter_probe.outputs.needs_deploy == 'true' }}
+      - name: Set up Supabase CLI for runtime endpoint repair
+        if: ${{ steps.protected_sync_probe.outputs.needs_deploy == 'true' || steps.protected_article_meter_probe.outputs.needs_deploy == 'true' || steps.story_analytics_probe.outputs.needs_deploy == 'true' }}
         uses: supabase/setup-cli@v1
         with:
           version: latest
+
+      - name: Deploy Most Read analytics endpoint
+        if: steps.story_analytics_probe.outputs.needs_deploy == 'true'
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PROJECT_ID: ${{ vars.SUPABASE_PROJECT_REF }}
+        run: |
+          test -n "$SUPABASE_ACCESS_TOKEN" || { echo "Missing GitHub secret SUPABASE_ACCESS_TOKEN; Most Read will remain hidden."; exit 0; }
+          test -n "$PROJECT_ID" || { echo "Missing GitHub repository variable SUPABASE_PROJECT_REF; Most Read will remain hidden."; exit 0; }
+          supabase functions deploy story-analytics --use-api --project-ref "$PROJECT_ID"
 
       - name: Repair stale protected-content sync function
         if: steps.protected_sync_probe.outputs.needs_deploy == 'true'
@@ -290,6 +348,11 @@ jobs:
           TCT_PROTECTED_SNAPSHOT_PATH: /tmp/tct-protected-current.json
         run: python scripts/prepare_membership_paywall.py
 
+      - name: Validate final SEO and audience contracts
+        run: |
+          python scripts/validate_seo_contracts.py
+          python scripts/build_audience_features.py --validate-only
+
       - name: Sync protected article store
         env:
           TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
@@ -316,6 +379,8 @@ jobs:
             data/editorial_story_registry.json
             data/forward-publication-identity.json
             data/story-regression-report.json
+            data/audience-features-report.json
+            data/story-index.json
             archive.json
 
       - name: Remove transient Python artifacts
