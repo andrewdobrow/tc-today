@@ -12,27 +12,27 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sept. 11-13 | One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County | 67 | importance 75; freshness 49.25; urgency 2/10; validated material update |
-| 2 | Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety | Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards | 57 | importance 35; freshness 87.79; urgency 2/10 |
-| 3 | Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations | Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety | 56 | importance 10; freshness 93.24; urgency 2/10; validated material update |
-| 4 | Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards | Fort Pierce man's shooting of charging dog confirmed justified after investigation | 54 | importance 35; freshness 51.89; urgency 2/10; validated material update; -6 category saturation |
-| 5 | 800 gallons of sewage spill at Port St. Lucie lift station after power failure | JetBlue ends Vero Beach to JFK route permanently after demand falls short | 48 | importance 10; freshness 85.53; urgency 2/10 |
-| 6 | Tradition Entertainment District in Port St. Lucie to break ground within six months | Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations | 46 | importance 0; freshness 93.24; urgency 2/10 |
-| 7 | JetBlue ends Vero Beach to JFK route permanently after demand falls short | Tradition Entertainment District in Port St. Lucie to break ground within six months | 48 | importance 10; freshness 85.52; urgency 2/10; -8 county saturation |
-| 8 | Fort Pierce man's shooting of charging dog confirmed justified after investigation | Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sept. 11-13 | 39 | importance 0; freshness 51.26; urgency 5/10 |
-| 9 | One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County | 800 gallons of sewage spill at Port St. Lucie lift station after power failure | 45 | importance 0; freshness 87.79; urgency 2/10; -12 county saturation |
+| 1 | Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sept. 11-13 | One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County | 67 | importance 75; freshness 47.59; urgency 2/10; validated material update |
+| 2 | Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety | Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards | 56 | importance 35; freshness 86.12; urgency 2/10 |
+| 3 | Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations | Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety | 55 | importance 10; freshness 91.57; urgency 2/10; validated material update |
+| 4 | Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards | Fort Pierce man's shooting of charging dog confirmed justified after investigation | 54 | importance 35; freshness 50.22; urgency 2/10; validated material update; -6 category saturation |
+| 5 | 800 gallons of sewage spill at Port St. Lucie lift station after power failure | JetBlue ends Vero Beach to JFK route permanently after demand falls short | 47 | importance 10; freshness 83.87; urgency 2/10 |
+| 6 | Tradition Entertainment District in Port St. Lucie to break ground within six months | Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations | 46 | importance 0; freshness 91.57; urgency 2/10 |
+| 7 | JetBlue ends Vero Beach to JFK route permanently after demand falls short | Tradition Entertainment District in Port St. Lucie to break ground within six months | 48 | importance 10; freshness 83.86; urgency 2/10; -8 county saturation |
+| 8 | Fort Pierce man's shooting of charging dog confirmed justified after investigation | Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sept. 11-13 | 39 | importance 0; freshness 49.59; urgency 5/10 |
+| 9 | One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County | 800 gallons of sewage spill at Port St. Lucie lift station after power failure | 44 | importance 0; freshness 86.12; urgency 2/10; -12 county saturation |
 
 ## Recommended moves
 
-- **One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County**: 9 → 1 — importance 75; freshness 49.25; urgency 2/10; validated material update
-- **Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sept. 11-13**: 1 → 8 — importance 0; freshness 51.26; urgency 5/10
-- **Fort Pierce man's shooting of charging dog confirmed justified after investigation**: 8 → 4 — importance 35; freshness 51.89; urgency 2/10; validated material update; -6 category saturation
-- **800 gallons of sewage spill at Port St. Lucie lift station after power failure**: 5 → 9 — importance 0; freshness 87.79; urgency 2/10; -12 county saturation
-- **Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations**: 3 → 6 — importance 0; freshness 93.24; urgency 2/10
-- **Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards**: 4 → 2 — importance 35; freshness 87.79; urgency 2/10
-- **JetBlue ends Vero Beach to JFK route permanently after demand falls short**: 7 → 5 — importance 10; freshness 85.53; urgency 2/10
-- **Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety**: 2 → 3 — importance 10; freshness 93.24; urgency 2/10; validated material update
-- **Tradition Entertainment District in Port St. Lucie to break ground within six months**: 6 → 7 — importance 10; freshness 85.52; urgency 2/10; -8 county saturation
+- **One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County**: 9 → 1 — importance 75; freshness 47.59; urgency 2/10; validated material update
+- **Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sept. 11-13**: 1 → 8 — importance 0; freshness 49.59; urgency 5/10
+- **Fort Pierce man's shooting of charging dog confirmed justified after investigation**: 8 → 4 — importance 35; freshness 50.22; urgency 2/10; validated material update; -6 category saturation
+- **800 gallons of sewage spill at Port St. Lucie lift station after power failure**: 5 → 9 — importance 0; freshness 86.12; urgency 2/10; -12 county saturation
+- **Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations**: 3 → 6 — importance 0; freshness 91.57; urgency 2/10
+- **Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards**: 4 → 2 — importance 35; freshness 86.12; urgency 2/10
+- **JetBlue ends Vero Beach to JFK route permanently after demand falls short**: 7 → 5 — importance 10; freshness 83.87; urgency 2/10
+- **Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety**: 2 → 3 — importance 10; freshness 91.57; urgency 2/10; validated material update
+- **Tradition Entertainment District in Port St. Lucie to break ground within six months**: 6 → 7 — importance 10; freshness 83.86; urgency 2/10; -8 county saturation
 
 ## Guardrails
 
