@@ -109,6 +109,9 @@ class EditorialEngine:
         # same unchanged feed record on a later workflow run must not make this
         # journal grow forever or replay the same evidence repeatedly.
         self._history: list[dict[str, Any]] = []
+        # Diagnostic only: tells production whether startup restored the exact
+        # derived pipeline snapshot or had to use the compatibility replay path.
+        self._state_restore_mode = "empty"
 
     def process(
         self,
@@ -344,6 +347,58 @@ class EditorialEngine:
 
         return compacted, len(records) - len(compacted)
 
+    @staticmethod
+    def _registry_fingerprint(path: str | Path) -> dict[str, object] | None:
+        """Return a content fingerprint for the persistent identity registry.
+
+        A snapshot is safe to restore only when it was derived from the exact same
+        registry bytes.  Content hashing is intentionally stronger than mtime/size so
+        Git checkouts, artifact restores and failed-run recovery cannot accidentally
+        pair stale derived event state with a different authoritative registry.
+        """
+        target = Path(path)
+        if not target.exists() or not target.is_file():
+            return None
+        digest = hashlib.sha256()
+        try:
+            with target.open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+            size = target.stat().st_size
+        except OSError:
+            return None
+        return {
+            "algorithm": "sha256",
+            "sha256": digest.hexdigest(),
+            "size": size,
+        }
+
+    @property
+    def state_restore_mode(self) -> str:
+        """How saved state was restored: snapshot, replay, or empty."""
+        return self._state_restore_mode
+
+    @classmethod
+    def _validate_history_records(
+        cls, records: list[dict[str, Any]]
+    ) -> None:
+        """Validate the replay journal without executing editorial decisions."""
+        for index, item in enumerate(records):
+            if not isinstance(item, dict):
+                raise EditorialStateError(
+                    "Invalid article record at index " f"{index}."
+                )
+            entry = item.get("entry")
+            source = item.get("source")
+            if not isinstance(entry, dict):
+                raise EditorialStateError(
+                    "Invalid article entry at index " f"{index}."
+                )
+            if not isinstance(source, str) or not source.strip():
+                raise EditorialStateError(
+                    "Invalid article source at index " f"{index}."
+                )
+
     def save(self, path: str | Path) -> None:
         """Save replayable editorial state to a JSON file."""
 
@@ -362,6 +417,11 @@ class EditorialEngine:
         payload = {
             "version": _STATE_VERSION,
             "articles": compacted_history,
+            # Exact derived event state eliminates the expensive historical replay on
+            # the next run.  It is accepted only when the authoritative registry's
+            # SHA-256 fingerprint still matches; otherwise load() replays normally.
+            "pipeline_state": self._pipeline.export_replay_state(),
+            "registry_fingerprint": self._registry_fingerprint(self.registry_path),
         }
 
         temporary_path = state_path.with_suffix(
@@ -436,33 +496,40 @@ class EditorialEngine:
             )
 
         articles, _ = cls._compact_history_records(articles)
+        cls._validate_history_records(articles)
 
         registry_already_exists = Path(registry_path).exists()
+        saved_fingerprint = payload.get("registry_fingerprint")
+        current_fingerprint = cls._registry_fingerprint(registry_path)
+        pipeline_state = payload.get("pipeline_state")
+        snapshot_matches_registry = bool(
+            registry_already_exists
+            and isinstance(saved_fingerprint, dict)
+            and saved_fingerprint == current_fingerprint
+            and isinstance(pipeline_state, dict)
+        )
+
+        if snapshot_matches_registry:
+            try:
+                engine._pipeline.restore_replay_state(pipeline_state)
+            except (TypeError, ValueError):
+                # Derived state is a performance cache only. Any corruption or schema
+                # mismatch falls back to the exact historical replay path below.
+                snapshot_matches_registry = False
+            else:
+                engine._history = articles
+                engine._state_restore_mode = "snapshot"
+                return engine
+
+        # Compatibility/fail-safe path: preserve the exact pre-optimization behavior
+        # whenever the snapshot is absent, malformed, or paired with different
+        # authoritative registry bytes. This makes the optimization quality-neutral.
         with engine._pipeline.defer_registry_saves(
             commit=not registry_already_exists
         ):
-            for index, item in enumerate(articles):
-                if not isinstance(item, dict):
-                    raise EditorialStateError(
-                        "Invalid article record at index "
-                        f"{index}."
-                    )
-
-                entry = item.get("entry")
-                source = item.get("source")
-
-                if not isinstance(entry, dict):
-                    raise EditorialStateError(
-                        "Invalid article entry at index "
-                        f"{index}."
-                    )
-
-                if not isinstance(source, str) or not source.strip():
-                    raise EditorialStateError(
-                        "Invalid article source at index "
-                        f"{index}."
-                    )
-
+            for item in articles:
+                entry = item["entry"]
+                source = item["source"]
                 county = item.get("county")
                 is_custom = item.get("is_custom")
 
@@ -477,6 +544,7 @@ class EditorialEngine:
         # Preserve the original records exactly once. Replaying them above
         # rebuilds pipeline state but does not append them to history.
         engine._history = articles
+        engine._state_restore_mode = "replay"
 
         return engine
 

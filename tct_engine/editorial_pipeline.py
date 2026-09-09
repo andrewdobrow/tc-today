@@ -83,6 +83,119 @@ class EditorialPipeline:
         """Revoke active authority for stories contaminated during this batch."""
         return self._registry.quarantine_active_contamination()
 
+    def export_replay_state(self) -> dict[str, object]:
+        """Serialize only the derived event state needed to resume exactly.
+
+        The persistent ``StoryRegistry`` remains the authority for cross-event story
+        identity.  This snapshot covers the two in-memory structures that historically
+        required replaying the entire editorial journal on every process start:
+        canonical candidates per event and the latest event snapshot used by update
+        classification.  It is a cache of derived state, never an authority boundary.
+        """
+        candidates: list[dict[str, object]] = []
+        for event_key in sorted(self._stories._candidates):
+            event_candidates = self._stories._candidates[event_key]
+            for article_id in sorted(event_candidates):
+                candidate = event_candidates[article_id]
+                candidates.append({
+                    "article_id": candidate.article_id,
+                    "event_key": candidate.event_key,
+                    "title": candidate.title,
+                    "source": candidate.source,
+                    "url": candidate.url,
+                    "is_custom": candidate.is_custom,
+                    "published_at": candidate.published_at.isoformat(),
+                })
+
+        snapshots = [
+            {
+                "event_key": snapshot.event_key,
+                "facts": list(snapshot.facts),
+                "status": snapshot.status,
+            }
+            for _, snapshot in sorted(self._snapshots.items())
+        ]
+        return {
+            "version": 1,
+            "candidates": candidates,
+            "snapshots": snapshots,
+        }
+
+    def restore_replay_state(self, payload: object) -> dict[str, int]:
+        """Restore a validated derived-state snapshot atomically.
+
+        Any malformed snapshot raises ``ValueError`` before mutating the live pipeline.
+        The caller can then fall back to the historical replay path, preserving the
+        exact pre-optimization behavior rather than accepting partial state.
+        """
+        if not isinstance(payload, dict) or payload.get("version") != 1:
+            raise ValueError("unsupported editorial pipeline replay-state version")
+        candidate_rows = payload.get("candidates")
+        snapshot_rows = payload.get("snapshots")
+        if not isinstance(candidate_rows, list) or not isinstance(snapshot_rows, list):
+            raise ValueError("invalid editorial pipeline replay-state shape")
+
+        restored_stories = CanonicalStoryManager()
+        restored_snapshots: dict[str, StorySnapshot] = {}
+
+        for index, row in enumerate(candidate_rows):
+            if not isinstance(row, dict):
+                raise ValueError(f"invalid replay candidate at index {index}")
+            try:
+                article_id = str(row["article_id"]).strip()
+                event_key = str(row["event_key"]).strip()
+                title = str(row["title"]).strip()
+                source = str(row["source"]).strip()
+                url = str(row.get("url") or "")
+                is_custom = bool(row.get("is_custom", False))
+                published_raw = str(row["published_at"]).strip()
+                published_at = datetime.fromisoformat(published_raw)
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError(f"invalid replay candidate at index {index}") from exc
+            if published_at.tzinfo is None:
+                published_at = published_at.replace(tzinfo=timezone.utc)
+            restored_stories.add(
+                StoryCandidate(
+                    article_id=article_id,
+                    event_key=event_key,
+                    title=title,
+                    source=source,
+                    url=url,
+                    is_custom=is_custom,
+                    published_at=published_at,
+                )
+            )
+
+        for index, row in enumerate(snapshot_rows):
+            if not isinstance(row, dict):
+                raise ValueError(f"invalid replay snapshot at index {index}")
+            event_key = str(row.get("event_key") or "").strip()
+            facts = row.get("facts")
+            status = str(row.get("status") or "developing")
+            if not event_key or not isinstance(facts, list) or not all(
+                isinstance(fact, str) for fact in facts
+            ):
+                raise ValueError(f"invalid replay snapshot at index {index}")
+            if event_key in restored_snapshots:
+                raise ValueError(f"duplicate replay snapshot for {event_key}")
+            restored_snapshots[event_key] = StorySnapshot(
+                event_key=event_key,
+                facts=tuple(facts),
+                status=status,
+            )
+
+        candidate_event_keys = set(restored_stories._candidates)
+        snapshot_event_keys = set(restored_snapshots)
+        if candidate_event_keys != snapshot_event_keys:
+            raise ValueError("replay candidates and snapshots cover different events")
+
+        self._stories = restored_stories
+        self._snapshots = restored_snapshots
+        return {
+            "candidate_count": len(candidate_rows),
+            "event_count": len(snapshot_rows),
+        }
+
     def _record_timeline_entry(
         self,
         *,

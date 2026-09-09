@@ -101,3 +101,74 @@ def test_deferred_registry_save_does_not_commit_after_exception(tmp_path, monkey
 
     assert writes == []
     assert not registry_path.exists()
+
+
+def test_matching_registry_snapshot_skips_historical_process_replay(tmp_path, monkeypatch):
+    state_path, registry_path = _saved_state(tmp_path, count=12)
+
+    def fail_if_replayed(*args, **kwargs):
+        raise AssertionError("historical journal replay should not run")
+
+    monkeypatch.setattr(EditorialEngine, "_process", fail_if_replayed)
+
+    restored = EditorialEngine.load(
+        state_path,
+        default_published_at=DEFAULT_TIME,
+        registry_path=registry_path,
+    )
+
+    assert restored.state_restore_mode == "snapshot"
+    assert len(restored._history) == 12
+
+
+def test_registry_fingerprint_mismatch_falls_back_to_full_replay(tmp_path, monkeypatch):
+    state_path, registry_path = _saved_state(tmp_path, count=5)
+    payload = registry_path.read_text(encoding="utf-8")
+    # A byte-level mismatch must disable the derived-state fast path even when the
+    # JSON is still valid.  This is the safety boundary that keeps quality/identity
+    # behavior identical after artifact restores or partial failed runs.
+    registry_path.write_text(payload + "\n", encoding="utf-8")
+
+    calls = []
+    original_process = EditorialEngine._process
+
+    def counted_process(self, *args, **kwargs):
+        calls.append(1)
+        return original_process(self, *args, **kwargs)
+
+    monkeypatch.setattr(EditorialEngine, "_process", counted_process)
+
+    restored = EditorialEngine.load(
+        state_path,
+        default_published_at=DEFAULT_TIME,
+        registry_path=registry_path,
+    )
+
+    assert restored.state_restore_mode == "replay"
+    assert len(calls) == 5
+
+
+def test_corrupt_pipeline_snapshot_falls_back_to_replay(tmp_path, monkeypatch):
+    state_path, registry_path = _saved_state(tmp_path, count=4)
+    import json
+
+    state = json.loads(state_path.read_text(encoding="utf-8"))
+    state["pipeline_state"]["snapshots"] = "not-a-list"
+    state_path.write_text(json.dumps(state), encoding="utf-8")
+
+    calls = []
+    original_process = EditorialEngine._process
+
+    def counted_process(self, *args, **kwargs):
+        calls.append(1)
+        return original_process(self, *args, **kwargs)
+
+    monkeypatch.setattr(EditorialEngine, "_process", counted_process)
+    restored = EditorialEngine.load(
+        state_path,
+        default_published_at=DEFAULT_TIME,
+        registry_path=registry_path,
+    )
+
+    assert restored.state_restore_mode == "replay"
+    assert len(calls) == 4

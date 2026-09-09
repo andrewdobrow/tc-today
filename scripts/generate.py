@@ -36416,7 +36416,11 @@ def _load_editorial_engine_audit():
             EDITORIAL_STATE_PATH,
             registry_path=EDITORIAL_REGISTRY_PATH,
         )
-        print(f"  Editorial audit state loaded: {EDITORIAL_STATE_PATH}")
+        _restore_mode = getattr(engine, "state_restore_mode", "replay")
+        print(
+            f"  Editorial audit state loaded: {EDITORIAL_STATE_PATH} "
+            f"(restore={_restore_mode})"
+        )
         return engine
     except Exception as exc:
         print(f"  Editorial audit load failed; continuing unchanged: {exc}")
