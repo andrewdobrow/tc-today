@@ -926,3 +926,56 @@ def test_cached_civicengage_rows_cannot_restore_relative_event_links():
     assert len(parsed) == 1
     assert parsed[0]["event_url"] == "https://www.stuartfl.gov/calendar.aspx?EID=6186"
     assert parsed[0]["description"] == ""
+
+
+def test_primary_nav_normalizer_targets_header_that_owns_nav_not_unrelated_page_header(tmp_path):
+    """Legacy pages may contain other <header> elements before the old site nav."""
+    import ast
+    import html as html_lib
+    import re
+
+    source = (ROOT / "scripts" / "generate.py").read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    categories_node = next(
+        item for item in tree.body
+        if isinstance(item, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "CATEGORIES" for target in item.targets)
+    )
+    helper_names = {
+        "_header_primary_cta_html", "_primary_navigation_html", "_mobile_navigation_html",
+        "_masthead_newsletter_cta_html", "_live_masthead_script_html", "_site_header_html",
+        "_normalize_primary_navigation_sitewide",
+    }
+    helpers = [item for item in tree.body if isinstance(item, ast.FunctionDef) and item.name in helper_names]
+    morning_brief_assign = next(
+        item for item in tree.body
+        if isinstance(item, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "MORNING_BRIEF_LANDING_URL" for target in item.targets)
+    )
+    namespace = {
+        "Path": Path, "re": re, "html_lib": html_lib,
+        "CATEGORIES": ast.literal_eval(categories_node.value),
+        "MEMBERSHIP_UI_ENABLED": True, "MEMBERSHIP_SUBSCRIBE_URL": "/subscribe.html",
+    }
+    exec(compile(ast.Module(body=[morning_brief_assign, *helpers], type_ignores=[]), "generate.py", "exec"), namespace)
+    normalize = namespace["_normalize_primary_navigation_sitewide"]
+
+    sample = tmp_path / "legacy.html"
+    sample.write_text(
+        '<header class="article-kicker-header"><h2>Local explainer</h2></header>'
+        '<header class="legacy-site-header"><nav class="category-nav">'
+        '<a href="/?cat=martin" class="cat-btn active" aria-current="page">Martin County</a>'
+        '<a href="/events.html" class="cat-btn">Events</a>'
+        '</nav></header>'
+        '<main><header class="article-story-header"><h1>Story</h1></header></main>',
+        encoding="utf-8",
+    )
+
+    result = normalize(tmp_path)
+    rendered = sample.read_text(encoding="utf-8")
+    assert result == {"scanned": 1, "updated": 1}
+    assert '<header class="article-kicker-header"><h2>Local explainer</h2></header>' in rendered
+    assert '<header class="article-story-header"><h1>Story</h1></header>' in rendered
+    assert rendered.count('class="site-masthead"') == 1
+    assert 'href="/?cat=martin" class="cat-btn active" aria-current="page"' in rendered
+    assert normalize(tmp_path) == {"scanned": 1, "updated": 0}

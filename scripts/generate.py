@@ -22723,7 +22723,13 @@ def _normalize_primary_navigation_sitewide(output_root):
         r'<nav\s+class=["\'][^"\']*\bcategory-nav\b[^"\']*["\'][^>]*>.*?</nav>',
         re.I | re.S,
     )
-    header_re = re.compile(r'<header\b[^>]*>.*?</header>', re.I | re.S)
+    # Scope masthead replacement/validation to the actual site masthead.  Retained
+    # article and feature pages may legitimately contain additional <header> elements
+    # inside the page body, so a generic first-header regex can target the wrong block.
+    site_header_re = re.compile(
+        r'<header\b(?=[^>]*class=["\'][^"\']*\bsite-masthead\b[^"\']*["\'])[^>]*>.*?</header>',
+        re.I | re.S,
+    )
     newsroom_strip_re = re.compile(
         r'\s*<div\s+class=["\']newsroom-strip["\']\s*>\s*'
         r'<div\s+class=["\']newsroom-strip-inner["\']\s*>.*?'
@@ -22782,7 +22788,17 @@ def _normalize_primary_navigation_sitewide(output_root):
             active=active,
             homepage_filters=homepage_filters,
         )
-        header_match = header_re.search(original)
+        header_match = site_header_re.search(original)
+        if not header_match:
+            # Some very old pages used a plain <header> wrapper without the
+            # site-masthead class. Replace that wrapper only when it actually
+            # contains the primary navigation we matched above; never grab an
+            # unrelated article/page hero header.
+            generic_header_re = re.compile(r'<header\b[^>]*>.*?</header>', re.I | re.S)
+            header_match = next((
+                match for match in generic_header_re.finditer(original)
+                if match.start() <= nav_match.start() < match.end()
+            ), None)
         if header_match:
             normalized = (
                 original[:header_match.start()]
@@ -22790,9 +22806,17 @@ def _normalize_primary_navigation_sitewide(output_root):
                 + original[header_match.end():]
             )
         else:
-            new_nav = _primary_navigation_html(active=active, homepage_filters=homepage_filters)
-            normalized = original[:nav_match.start()] + new_nav + original[nav_match.end():]
-        normalized = newsroom_strip_re.sub('', normalized, count=1)
+            # If a legacy primary nav lived outside any header, replace that nav
+            # with the full canonical masthead so the page converges in one pass.
+            normalized = (
+                original[:nav_match.start()]
+                + canonical_header
+                + original[nav_match.end():]
+            )
+        # The old standalone newsroom utility strip is superseded by the masthead
+        # time/weather row. Remove every retained copy; some legacy pages accumulated
+        # more than one during earlier shell migrations.
+        normalized = newsroom_strip_re.sub('', normalized)
         normalized = re.sub(
             r'href=["\']/?style\.css(?:\?v=[^"\']+)?["\']',
             'href="/style.css?v=1.13.7.5t"',
@@ -22821,7 +22845,12 @@ def _normalize_primary_navigation_sitewide(output_root):
             path.write_text(normalized, encoding="utf-8")
             updated += 1
 
-        final_nav_match = nav_re.search(normalized)
+        # Validate the canonical masthead in isolation.  Article bodies and feature
+        # modules can contain their own headers/navs and must not create false masthead
+        # failures simply because they reuse a generic token elsewhere on the page.
+        final_headers = list(site_header_re.finditer(normalized))
+        final_header = final_headers[0].group(0) if len(final_headers) == 1 else ""
+        final_nav_match = nav_re.search(final_header) if final_header else None
         final = final_nav_match.group(0) if final_nav_match else ""
         top_news_pos = final.find('href="/"')
         county_positions = [
@@ -22835,17 +22864,18 @@ def _normalize_primary_navigation_sitewide(output_root):
         news_heading = final.find('class="nav-sections-heading">News</span>')
         more_heading = final.find('class="nav-sections-heading">More</span>')
         masthead_ok = (
-            normalized.count('class="masthead-newsletter"') == 1
-            and normalized.count(MORNING_BRIEF_LANDING_URL) == 1
-            and normalized.count('id="tct-live-time"') == 1
-            and normalized.count('id="tct-live-weather"') == 1
-            and normalized.count('class="masthead-top-row"') == 1
-            and normalized.count('class="masthead-nav-row"') == 1
-            and normalized.count('class="mobile-nav-toggle-button"') == 1
-            and normalized.count('id="tct-mobile-nav"') == 1
-            and normalized.count('class="mobile-nav-heading">Counties</h2>') == 1
-            and normalized.count('class="mobile-nav-heading">Categories</h2>') == 1
-            and normalized.count('class="mobile-nav-heading">More</h2>') == 1
+            len(final_headers) == 1
+            and final_header.count('class="masthead-newsletter"') == 1
+            and final_header.count(MORNING_BRIEF_LANDING_URL) == 1
+            and final_header.count('id="tct-live-time"') == 1
+            and final_header.count('id="tct-live-weather"') == 1
+            and final_header.count('class="masthead-top-row"') == 1
+            and final_header.count('class="masthead-nav-row"') == 1
+            and final_header.count('class="mobile-nav-toggle-button"') == 1
+            and final_header.count('id="tct-mobile-nav"') == 1
+            and final_header.count('class="mobile-nav-heading">Counties</h2>') == 1
+            and final_header.count('class="mobile-nav-heading">Categories</h2>') == 1
+            and final_header.count('class="mobile-nav-heading">More</h2>') == 1
             and 'class="newsroom-strip"' not in normalized
         )
         if (
@@ -31422,22 +31452,13 @@ def _repair_article_shells(output_root):
         return aliases.get(normalized, "")
 
     def _canonical_article_prefix(active_key):
-        newsroom = """<div class="newsroom-strip">
-    <div class="newsroom-strip-inner">
-      <span class="newsroom-local-label">Local news for Martin, St. Lucie &amp; Indian River counties</span>
-      <div class="newsroom-live-tools" aria-label="Current Treasure Coast time and weather">
-        <time id="tct-live-time" class="newsroom-live-time" datetime=""></time>
-        <a id="tct-live-weather" class="newsroom-live-weather" href="/weather.html" aria-label="View local weather">
-          <span id="tct-weather-icon" class="newsroom-weather-icon" aria-hidden="true">◌</span>
-          <span id="tct-weather-temp">--°</span>
-          <span id="tct-weather-condition">Local weather</span>
-        </a>
-      </div>
-    </div>
-  </div>"""
+        # Time/weather now live in the canonical masthead itself.  Older repair
+        # passes also injected a standalone newsroom-strip here, only for the later
+        # primary-navigation migration to remove it again.  Keeping one authority
+        # avoids rewriting every retained article on every generation.
         return (
             '<div class="article-reading-progress" aria-hidden="true"></div>\n'
-            + _page_header(active=active_key) + '\n  ' + newsroom + '\n  '
+            + _page_header(active=active_key) + '\n  '
         )
 
     def _normalize_article_header(raw, category_label):
@@ -31473,7 +31494,7 @@ def _repair_article_shells(output_root):
             'class="article-meta"',
             'class="article-editorial-grid"',
             'class="article-side-rail"',
-            'class="newsroom-strip"',
+            'class="site-masthead"',
         ]
         if not MEMBERSHIP_UI_ENABLED:
             modern_shell_tokens.insert(2, 'class="article-banner-slot')
