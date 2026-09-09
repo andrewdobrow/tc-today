@@ -19,7 +19,7 @@
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css?v=1.13.7.5t">
+  <link rel="stylesheet" href="/style.css?v=1.13.8.1">
   <style id="tct-mobile-overflow-fix">
     html, body { width: 100%; max-width: 100%; overflow-x: clip; }
     *, *::before, *::after { box-sizing: border-box; }
@@ -70,6 +70,7 @@
 (function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1'){document.documentElement.classList.add('tct-member-preverified');return;}var z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit'}).formatToParts(new Date());var y=(z.find(function(p){return p.type==='year'})||{}).value||'';var m=(z.find(function(p){return p.type==='month'})||{}).value||'';var period=y+'-'+m;var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');var raw=localStorage.getItem('tct_monthly_free_article_v1');var state=raw?JSON.parse(raw):null;var stalePending=state&&state.pending&&!state.meter_token&&(Date.now()-Number(state.started_at||0)>120000);if(stalePending){localStorage.removeItem('tct_monthly_free_article_v1');state=null;}if(slug&&(!state||state.period!==period||state.slug===slug)){document.documentElement.classList.add('tct-meter-precheck');setTimeout(function(){document.documentElement.classList.remove('tct-meter-precheck')},5000);}}catch(_e){}})();
 </script>
   <link rel="stylesheet" href="/membership.css?v=1.13.7.13">
+<meta name="tct-story-analytics-endpoint" content="https://pbvhdbmgqvoumcytvwyq.supabase.co/functions/v1/story-analytics">
 <script type="text/javascript" async="async" data-noptimize="1" data-cfasync="false" src="//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"></script>
 </head>
 <body data-article-slug="">
@@ -86,6 +87,9 @@
           <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
         </div>
         <div class="header-actions">
+          <button type="button" class="tct-search-toggle" data-tct-search-toggle aria-label="Search Treasure Coast Today" aria-controls="tct-site-search" aria-expanded="false">
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+</button>
           <a href="/subscribe.html" class="support-btn membership-subscribe-btn" style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today, $1 first month"><span class="membership-subscribe-label">Subscribe</span><span class="membership-subscribe-price">Limited time &middot; $1 first month</span></a><a href="/subscribe.html?signin=1" class="membership-header-signin">Sign in</a><a href="/subscribe.html" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>
         </div>
       </div>
@@ -120,6 +124,7 @@
           <a href="/newsroom.html" class="mobile-nav-link">Newsroom</a>
           <a href="/about.html" class="mobile-nav-link">About</a>
           <a href="/advertise.html" class="mobile-nav-link">Advertise</a>
+          <a href="/news-tip.html" class="mobile-nav-link">News Tip</a>
           <a href="/contact.html" class="mobile-nav-link">Contact</a>
         </div>
       </section>
@@ -152,6 +157,7 @@
               <a href="/?cat=things_to_do" class="nav-section-link" data-cat="things_to_do">Things To Do</a>
               <a href="/weather.html" class="nav-section-link">Weather</a>
               <a href="/archive.html" class="nav-section-link">Archive</a>
+              <a href="/news-tip.html" class="nav-section-link">News Tip</a>
               <a href="/newsroom.html" class="nav-section-link">Newsroom</a>
             </div>
           </div>
@@ -216,20 +222,37 @@
 })();
 </script>
   </header>
+  <div id="tct-site-search" class="tct-search-overlay" data-tct-search-overlay hidden>
+  <button type="button" class="tct-search-backdrop" data-tct-search-close aria-label="Close search"></button>
+  <section class="tct-search-dialog" role="dialog" aria-modal="true" aria-labelledby="tct-search-title">
+    <div class="tct-search-dialog-head">
+      <div><span class="tct-search-kicker">Treasure Coast Today</span><h2 id="tct-search-title">Search TCT News</h2></div>
+      <button type="button" class="tct-search-close" data-tct-search-close aria-label="Close search">&times;</button>
+    </div>
+    <form class="tct-search-form" data-tct-search-form action="/search.html" method="get" role="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+      <input type="search" name="q" data-tct-search-input placeholder="Search local news, cities, people and topics" autocomplete="off" spellcheck="false" aria-label="Search Treasure Coast Today articles">
+      <button type="submit">Search</button>
+    </form>
+    <div class="tct-search-status" data-tct-search-status>Start typing to search TCT articles.</div>
+    <div class="tct-search-results" data-tct-search-results></div>
+    <div class="tct-search-dialog-foot"><a href="/archive.html">Browse the full archive</a></div>
+  </section>
+</div>
   <main class="homepage-v2">
     <div class="lead-layout">
       <div class="lead-stack">
         <div class="lead-primary">
     <section class="hero hero-v3 fade-in" data-cat-hero="all">
       
-      <a class="hero-v3-link" href="https://treasurecoast.today/articles/2026-09-08-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-failure.html" aria-label="Read: 800 gallons of sewage spill at Port St. Lucie lift station after power failure">
-        <div class="hero-v3-media"><figure class="hero-image-wrap"><img class="hero-image" src="https://cbs12.com/resources/media2/16x9/1920/1320/center/90/ae268f52-a3c1-4977-b1c0-4df2e3f10b92-PSLsewagespill.png" alt="" loading="lazy"><figcaption class="img-credit">Photo: CBS12</figcaption></figure></div>
+      <a class="hero-v3-link" href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac.html" aria-label="Read: Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations">
+        <div class="hero-v3-media"><figure class="hero-image-wrap"><img class="hero-image" src="https://ewscripps.brightspotcdn.com/dims4/default/12bb823/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F6f%2F39%2Fe3be613a4eba9896bf90a9602ba2%2Fboater.jpg" alt="" loading="lazy"><figcaption class="img-credit">Photo: WPTV</figcaption></figure></div>
         <div class="hero-v3-content">
-          <span class="tag hero-v3-tag">St. Lucie County</span>
-          <h1 class="hero-v3-headline">800 gallons of sewage spill at Port St. Lucie lift station after power failure</h1>
-          <p class="hero-summary hero-v3-summary">About 800 gallons of untreated wastewater spilled from a Port St. Lucie lift station Tuesday after the station lost full electrical power, according to a pollution notice filed with the Florida Department of Environmental Protection. The city's SCADA monitoring system did not detect the issue.
+          <span class="tag hero-v3-tag">Business & Development</span>
+          <h1 class="hero-v3-headline">Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations</h1>
+          <p class="hero-summary hero-v3-summary">The Fort Pierce location of Carefree Boat Club of Treasure Coast has gone dark, with an empty office, no staff available, and no way for members to make reservations, leaving paying members with limited options and unanswered questions.
 
- Utility staff discovered sewage escaping from the wet well lid at the WP-22 lift st...</p>
+ Peter Terry, who moved to Fort Pierce from Maryland, paid a $3,000 initiation fee plus monthly membership and reservation fees to access rent...</p>
           <div class="hero-foot hero-v3-foot">
             <span class="meta">A few minutes ago</span>
             <span class="hero-readmore">Read full story &rarr;</span>
@@ -261,9 +284,9 @@
           <h1 class="hero-v3-headline">Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards</h1>
           <p class="hero-summary hero-v3-summary">Martin County deputies arrested 18-year-old Cedric Lenard Culver of Fort Pierce after finding him asleep in a stolen car at Treasure Coast Square mall with stolen credit cards and documents inside.
 
- A search of the vehicle uncovered multiple stolen credit and bank cards along with personal information documents belonging to other people. Deputies are working with the Port St....</p>
+ A search of the vehicle uncovered multiple stolen credit and bank cards along with personal information documents belonging to other people....</p>
           <div class="hero-foot hero-v3-foot">
-            <span class="meta">A few minutes ago</span>
+            <span class="meta">4:55 PM ET</span>
             <span class="hero-readmore">Read full story &rarr;</span>
           </div>
         </div>
@@ -271,14 +294,16 @@
     </section>
     <section class="hero hero-v3" data-cat-hero="business" style="display:none">
       <div class="topic-section-label"><h2 class="county-label-text">Treasure Coast Business News</h2></div>
-      <a class="hero-v3-link" href="https://treasurecoast.today/articles/2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon.html" aria-label="Read: Tradition Entertainment District in Port St. Lucie to break ground within six months">
-        <div class="hero-v3-media"><figure class="hero-image-wrap"><img class="hero-image" src="https://ewscripps.brightspotcdn.com/dims4/default/f0265a2/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F49%2F40%2F76b8c2414562939611adcfd7d502%2Ftradition.jpg" alt="" loading="lazy"><figcaption class="img-credit">Photo: WPTV</figcaption></figure></div>
+      <a class="hero-v3-link" href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac.html" aria-label="Read: Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations">
+        <div class="hero-v3-media"><figure class="hero-image-wrap"><img class="hero-image" src="https://ewscripps.brightspotcdn.com/dims4/default/12bb823/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F6f%2F39%2Fe3be613a4eba9896bf90a9602ba2%2Fboater.jpg" alt="" loading="lazy"><figcaption class="img-credit">Photo: WPTV</figcaption></figure></div>
         <div class="hero-v3-content">
           <span class="tag hero-v3-tag">Business & Development</span>
-          <h1 class="hero-v3-headline">Tradition Entertainment District in Port St. Lucie to break ground within six months</h1>
-          <p class="hero-summary hero-v3-summary">A nearly 85-acre entertainment district is planned along Village Parkway in the Tradition community of Port St. Lucie, with construction set to begin within six months on the first phase. The development will span four parcels between Innovation Way and Hegener Drive and bring approximately 25 new restaurants plus retail stores to the...</p>
+          <h1 class="hero-v3-headline">Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations</h1>
+          <p class="hero-summary hero-v3-summary">The Fort Pierce location of Carefree Boat Club of Treasure Coast has gone dark, with an empty office, no staff available, and no way for members to make reservations, leaving paying members with limited options and unanswered questions.
+
+ Peter Terry, who moved to Fort Pierce from Maryland, paid a $3,000 initiation fee plus monthly membership and reservation fees to access rent...</p>
           <div class="hero-foot hero-v3-foot">
-            <span class="meta">3:34 PM ET</span>
+            <span class="meta">A few minutes ago</span>
             <span class="hero-readmore">Read full story &rarr;</span>
           </div>
         </div>
@@ -335,16 +360,16 @@
     </section>
     <section class="hero hero-v3" data-cat-hero="martin" style="display:none">
       <div class="county-section-label"><h2 class="county-label-text">Martin County News</h2></div>
-      <a class="hero-v3-link" href="https://treasurecoast.today/articles/2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security.html" aria-label="Read: Former NYPD officer who worked Ground Zero leads Martin County school security">
+      <a class="hero-v3-link" href="https://treasurecoast.today/articles/2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security.html" aria-label="Read: Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety">
         <div class="hero-v3-media"><figure class="hero-image-wrap"><img class="hero-image" src="https://treasurecoast.today/images/editorial/topics/schools/treasure-coast-sign.webp" alt="" loading="lazy"></figure></div>
         <div class="hero-v3-content">
           <span class="tag hero-v3-tag">Martin County</span>
-          <h1 class="hero-v3-headline">Former NYPD officer who worked Ground Zero leads Martin County school security</h1>
-          <p class="hero-summary hero-v3-summary">Frank Frangella spent weeks digging through rubble at Ground Zero after the September 11 attacks. Now he leads safety and security for all Martin County schools and says he has not forgotten a single moment from that day.
+          <h1 class="hero-v3-headline">Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety</h1>
+          <p class="hero-summary hero-v3-summary">Frank Frangella spent weeks digging through rubble at Ground Zero after the September 11 attacks. Now he leads safety and security for all Martin County schools and says he has not forgotten a single moment.
 
- Frangella's office serves as a quiet tribute to September 11. Photos, statues, and mementos fill the space, each one...</p>
+ Frangella's office serves as a quiet tribute to that day. Photos, statues, and mementos fill the space, each one tied to his time working at Ground Zero in the weeks and...</p>
           <div class="hero-foot hero-v3-foot">
-            <span class="meta">3:34 PM ET</span>
+            <span class="meta">A few minutes ago</span>
             <span class="hero-readmore">Read full story &rarr;</span>
           </div>
         </div>
@@ -352,16 +377,14 @@
     </section>
     <section class="hero hero-v3" data-cat-hero="st_lucie" style="display:none">
       <div class="county-section-label"><h2 class="county-label-text">St. Lucie County News</h2></div>
-      <a class="hero-v3-link" href="https://treasurecoast.today/articles/2026-09-08-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-failure.html" aria-label="Read: 800 gallons of sewage spill at Port St. Lucie lift station after power failure">
-        <div class="hero-v3-media"><figure class="hero-image-wrap"><img class="hero-image" src="https://cbs12.com/resources/media2/16x9/1920/1320/center/90/ae268f52-a3c1-4977-b1c0-4df2e3f10b92-PSLsewagespill.png" alt="" loading="lazy"><figcaption class="img-credit">Photo: CBS12</figcaption></figure></div>
+      <a class="hero-v3-link" href="https://treasurecoast.today/articles/2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon.html" aria-label="Read: Tradition Entertainment District in Port St. Lucie to break ground within six months">
+        <div class="hero-v3-media"><figure class="hero-image-wrap"><img class="hero-image" src="https://ewscripps.brightspotcdn.com/dims4/default/f0265a2/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F49%2F40%2F76b8c2414562939611adcfd7d502%2Ftradition.jpg" alt="" loading="lazy"><figcaption class="img-credit">Photo: WPTV</figcaption></figure></div>
         <div class="hero-v3-content">
           <span class="tag hero-v3-tag">St. Lucie County</span>
-          <h1 class="hero-v3-headline">800 gallons of sewage spill at Port St. Lucie lift station after power failure</h1>
-          <p class="hero-summary hero-v3-summary">About 800 gallons of untreated wastewater spilled from a Port St. Lucie lift station Tuesday after the station lost full electrical power, according to a pollution notice filed with the Florida Department of Environmental Protection. The city's SCADA monitoring system did not detect the issue.
-
- Utility staff discovered sewage escaping from the wet well lid at the WP-22 lift st...</p>
+          <h1 class="hero-v3-headline">Tradition Entertainment District in Port St. Lucie to break ground within six months</h1>
+          <p class="hero-summary hero-v3-summary">A nearly 85-acre entertainment district is planned along Village Parkway in the Tradition community of Port St. Lucie, with construction set to begin within six months on the first phase. The development will span four parcels between Innovation Way and Hegener Drive and bring approximately 25 new restaurants plus retail stores to the...</p>
           <div class="hero-foot hero-v3-foot">
-            <span class="meta">A few minutes ago</span>
+            <span class="meta">3:34 PM ET</span>
             <span class="hero-readmore">Read full story &rarr;</span>
           </div>
         </div>
@@ -390,13 +413,18 @@
       <aside class="latest-rail">
         <div class="latest-rail-title"><span>◷</span><h2>Latest News</h2></div>
         <div class="latest-list">
-          <a class="latest-item" href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st.html">
+          <a class="latest-item" href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac.html">
             <div class="latest-item-top"><span class="latest-time">A few minutes ago</span></div>
+            <h3>Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations</h3>
+            <span class="latest-county">Business & Development</span>
+          </a>
+          <a class="latest-item" href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st.html">
+            <div class="latest-item-top"><span class="latest-time">4:55 PM ET</span></div>
             <h3>Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards</h3>
             <span class="latest-county">Crime & Safety</span>
           </a>
           <a class="latest-item" href="https://treasurecoast.today/articles/2026-09-08-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-failure.html">
-            <div class="latest-item-top"><span class="latest-time">A few minutes ago</span></div>
+            <div class="latest-item-top"><span class="latest-time">4:55 PM ET</span></div>
             <h3>800 gallons of sewage spill at Port St. Lucie lift station after power failure</h3>
             <span class="latest-county">St. Lucie County</span>
           </a>
@@ -406,14 +434,9 @@
             <span class="latest-county">Indian River County</span>
           </a>
           <a class="latest-item" href="https://treasurecoast.today/articles/2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security.html">
-            <div class="latest-item-top"><span class="latest-time">3:34 PM ET</span></div>
-            <h3>Former NYPD officer who worked Ground Zero leads Martin County school security</h3>
+            <div class="latest-item-top"><span class="latest-time">A few minutes ago</span></div>
+            <h3>Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety</h3>
             <span class="latest-county">Martin County</span>
-          </a>
-          <a class="latest-item" href="https://treasurecoast.today/articles/2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon.html">
-            <div class="latest-item-top"><span class="latest-time">3:34 PM ET</span></div>
-            <h3>Tradition Entertainment District in Port St. Lucie to break ground within six months</h3>
-            <span class="latest-county">Business & Development</span>
           </a></div>
         <a class="latest-more" href="/archive.html">View all latest news →</a>
       </aside>
@@ -421,16 +444,6 @@
     <section class="top-stories-v2">
       <div class="section-kicker"><span>☆</span><h2>Top Stories</h2></div>
       <div class="articles-grid" id="articlesGrid">
-      <a href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st.html" class="grid-card fade-in" data-cat="all" data-cats="all" data-topnews="true">
-        <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://cbs12.com/resources/media2/16x9/1920/1320/center/90/ce3df14d-eeb6-49fa-8d70-6d6c289f594a-TheWestPalmBeachPoliceDepartmentismarchingitsrecruitmenteffortsnorthtradingorangesfortheBigApple.15.jpg" alt="" loading="lazy">
-        </div>
-        <div class="grid-card-body">
-          <span class="grid-card-tag">Crime & Safety</span>
-          <h2 class="grid-card-headline">Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards</h2>
-          <span class="grid-card-time">Sep 8, 2026</span>
-        </div>
-      </a>
       <a href="https://treasurecoast.today/articles/2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database.html" class="grid-card fade-in" data-cat="crime" data-cats="crime st_lucie" data-topnews="true">
         <div class="grid-card-image-wrap">
           <img class="grid-card-image" src="https://ewscripps.brightspotcdn.com/dims4/default/e09fe50/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F15%2F67%2F2deacc7f4d2081b93cfc0f57c21a%2Ffort-pierce-police.jpg" alt="" loading="lazy">
@@ -438,6 +451,16 @@
         <div class="grid-card-body">
           <span class="grid-card-tag">Crime & Safety</span>
           <h2 class="grid-card-headline">Former Fort Pierce police officer arrested for alleged misuse of police databases</h2>
+          <span class="grid-card-time">Sep 8, 2026</span>
+        </div>
+      </a>
+      <a href="https://treasurecoast.today/articles/2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security.html" class="grid-card fade-in" data-cat="all" data-cats="all" data-topnews="true">
+        <div class="grid-card-image-wrap">
+          <img class="grid-card-image" src="https://treasurecoast.today/images/editorial/topics/schools/treasure-coast-sign.webp" alt="" loading="lazy">
+        </div>
+        <div class="grid-card-body">
+          <span class="grid-card-tag">Martin County</span>
+          <h2 class="grid-card-headline">Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety</h2>
           <span class="grid-card-time">Sep 8, 2026</span>
         </div>
       </a>
@@ -451,13 +474,13 @@
           <span class="grid-card-time">Sep 7, 2026</span>
         </div>
       </a>
-      <a href="https://treasurecoast.today/articles/2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon.html" class="grid-card fade-in" data-cat="all" data-cats="all" data-topnews="true">
+      <a href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st.html" class="grid-card fade-in" data-cat="all" data-cats="all" data-topnews="true">
         <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://ewscripps.brightspotcdn.com/dims4/default/f0265a2/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F49%2F40%2F76b8c2414562939611adcfd7d502%2Ftradition.jpg" alt="" loading="lazy">
+          <img class="grid-card-image" src="https://cbs12.com/resources/media2/16x9/1920/1320/center/90/ce3df14d-eeb6-49fa-8d70-6d6c289f594a-TheWestPalmBeachPoliceDepartmentismarchingitsrecruitmenteffortsnorthtradingorangesfortheBigApple.15.jpg" alt="" loading="lazy">
         </div>
         <div class="grid-card-body">
-          <span class="grid-card-tag">Business & Development</span>
-          <h2 class="grid-card-headline">Tradition Entertainment District in Port St. Lucie to break ground within six months</h2>
+          <span class="grid-card-tag">Crime & Safety</span>
+          <h2 class="grid-card-headline">Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards</h2>
           <span class="grid-card-time">Sep 8, 2026</span>
         </div>
       </a>
@@ -472,13 +495,13 @@
           <span class="tct-membership-cta">Get your first month for $1 <b>&rarr;</b></span>
         </div>
       </a>
-      <a href="https://treasurecoast.today/articles/2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security.html" class="grid-card fade-in" data-cat="all" data-cats="all" data-topnews="true">
+      <a href="https://treasurecoast.today/articles/2026-09-08-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-failure.html" class="grid-card fade-in" data-cat="st_lucie" data-cats="local_gov st_lucie" data-topnews="true">
         <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://treasurecoast.today/images/editorial/topics/schools/treasure-coast-sign.webp" alt="" loading="lazy">
+          <img class="grid-card-image" src="https://cbs12.com/resources/media2/16x9/1920/1320/center/90/ae268f52-a3c1-4977-b1c0-4df2e3f10b92-PSLsewagespill.png" alt="" loading="lazy">
         </div>
         <div class="grid-card-body">
-          <span class="grid-card-tag">Martin County</span>
-          <h2 class="grid-card-headline">Former NYPD officer who worked Ground Zero leads Martin County school security</h2>
+          <span class="grid-card-tag">St. Lucie County</span>
+          <h2 class="grid-card-headline">800 gallons of sewage spill at Port St. Lucie lift station after power failure</h2>
           <span class="grid-card-time">Sep 8, 2026</span>
         </div>
       </a>
@@ -489,6 +512,16 @@
         <div class="grid-card-body">
           <span class="grid-card-tag">Indian River County</span>
           <h2 class="grid-card-headline">JetBlue ends Vero Beach to JFK route permanently after demand falls short</h2>
+          <span class="grid-card-time">Sep 8, 2026</span>
+        </div>
+      </a>
+      <a href="https://treasurecoast.today/articles/2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon.html" class="grid-card fade-in" data-cat="all" data-cats="all" data-topnews="true">
+        <div class="grid-card-image-wrap">
+          <img class="grid-card-image" src="https://ewscripps.brightspotcdn.com/dims4/default/f0265a2/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F49%2F40%2F76b8c2414562939611adcfd7d502%2Ftradition.jpg" alt="" loading="lazy">
+        </div>
+        <div class="grid-card-body">
+          <span class="grid-card-tag">St. Lucie County</span>
+          <h2 class="grid-card-headline">Tradition Entertainment District in Port St. Lucie to break ground within six months</h2>
           <span class="grid-card-time">Sep 8, 2026</span>
         </div>
       </a>
@@ -530,56 +563,6 @@
           <span class="grid-card-tag">Crime & Safety</span>
           <h2 class="grid-card-headline">Vero Beach mother Lisette Zamarripa held without bond as prosecutors seek capital sexual battery indictment in toddler abuse case</h2>
           <span class="grid-card-time">Sep 6, 2026</span>
-        </div>
-      </a>
-      <a href="https://treasurecoast.today/articles/2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc.html" class="grid-card fade-in" data-cat="st_lucie" data-cats="crime st_lucie">
-        <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://kubrick.htvapps.com/htv-prod/images/8edceae1-1058-499c-9151-1161279f582c.jpg?crop=1.00xw%3A0.685xh%3B0%2C0.137xh&resize=1200%3A*" alt="" loading="lazy">
-        </div>
-        <div class="grid-card-body">
-          <span class="grid-card-tag">St. Lucie County</span>
-          <h2 class="grid-card-headline">Port St. Lucie police confirm medical episode caused SW Lucero Drive crash; driver's family says he had seizure</h2>
-          <span class="grid-card-time">Sep 5, 2026</span>
-        </div>
-      </a>
-      <a href="https://treasurecoast.today/articles/2026-09-05-looking-for-something-to-do-this-week-on-the-treasure-coast-here-are-10-events-f.html" class="grid-card fade-in" data-cat="things_to_do" data-cats="things_to_do martin">
-        <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://treasurecoast.today/images/bestevents1.jpg" alt="" loading="lazy">
-        </div>
-        <div class="grid-card-body">
-          <span class="grid-card-tag">Things To Do</span>
-          <h2 class="grid-card-headline">Looking for something to do this week on the Treasure Coast? Here are 10 events for Sept. 5-12</h2>
-          <span class="grid-card-time">Sep 5, 2026</span>
-        </div>
-      </a>
-      <a href="https://treasurecoast.today/articles/2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving.html" class="grid-card fade-in" data-cat="st_lucie" data-cats="crime st_lucie">
-        <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://cbs12.com/resources/media2/16x9/711/1320/0x1/90/29b8280b-cb70-4582-9560-246dc84ee33f-PBSOsirens.jpg" alt="" loading="lazy">
-        </div>
-        <div class="grid-card-body">
-          <span class="grid-card-tag">St. Lucie County</span>
-          <h2 class="grid-card-headline">Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle</h2>
-          <span class="grid-card-time">Sep 5, 2026</span>
-        </div>
-      </a>
-      <a href="https://treasurecoast.today/articles/2026-09-05-treasure-coast-weekly-traffic-report-i-95-ramp-closures-overnight-lane-closures.html" class="grid-card fade-in" data-cat="local_government" data-cats="">
-        <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://treasurecoast.today/images/fdot.png" alt="" loading="lazy">
-        </div>
-        <div class="grid-card-body">
-          <span class="grid-card-tag">Local Government</span>
-          <h2 class="grid-card-headline">Treasure Coast Weekly Traffic Report: I-95 ramp closures, overnight lane closures planned Sept. 5-11</h2>
-          <span class="grid-card-time">Sep 5, 2026</span>
-        </div>
-      </a>
-      <a href="https://treasurecoast.today/articles/2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu.html" class="grid-card fade-in" data-cat="martin" data-cats="crime martin">
-        <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://ewscripps.brightspotcdn.com/dims4/default/85709bc/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2Faa%2F32%2Ffadfa2da47088b701b209591263a%2Fmcso.jpg" alt="" loading="lazy">
-        </div>
-        <div class="grid-card-body">
-          <span class="grid-card-tag">Martin County</span>
-          <h2 class="grid-card-headline">76-year-old ejected after golf cart crashes into tractor in Tropical Farms community</h2>
-          <span class="grid-card-time">Sep 5, 2026</span>
         </div>
       </a>
       <a href="https://treasurecoast.today/articles/2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million.html" class="grid-card fade-in" data-cat="local_gov" data-cats="local_gov st_lucie">
@@ -720,16 +703,6 @@
           <span class="grid-card-tag">Business & Development</span>
           <h2 class="grid-card-headline">Fort Pierce has no legal options to block Causeway Cove development on South Hutchinson Island</h2>
           <span class="grid-card-time">Aug 11, 2026</span>
-        </div>
-      </a>
-      <a href="https://treasurecoast.today/articles/2026-08-10-fort-pierce-approves-36-unit-temporary-family-housing-at-graceway-village-on-har.html" class="grid-card fade-in" data-cat="business" data-cats="local_gov business st_lucie">
-        <div class="grid-card-image-wrap">
-          <img class="grid-card-image" src="https://bloximages.newyork1.vip.townnews.com/hometownnewstc.com/content/tncms/assets/v3/editorial/e/0f/e0fe50b0-7ec0-5ebc-971a-1207f04689fa/6a79f88e72c34.image.jpg?crop=582%2C306%2C0%2C33&resize=438%2C230&order=crop%2Cresize" alt="" loading="lazy">
-        </div>
-        <div class="grid-card-body">
-          <span class="grid-card-tag">Business & Development</span>
-          <h2 class="grid-card-headline">Fort Pierce approves 36-unit temporary family housing at GraceWay Village on Hartman Road</h2>
-          <span class="grid-card-time">Aug 10, 2026</span>
         </div>
       </a>
       <a href="https://treasurecoast.today/articles/2026-09-06-careys-walk-off-3-run-homer-lifts-st-lucie-mets-past-jupiter-11-10-in-12-inning.html" class="grid-card fade-in" data-cat="sports" data-cats="sports">
@@ -933,20 +906,21 @@
         </div>
       </a></div>
     </section>
+    <!-- TCT_MOST_READ_HOME_START --><section class="most-read-module" data-tct-most-read hidden><div class="most-read-head"><span>Trending</span><h2>Most Read</h2></div><ol data-tct-most-read-list></ol><p class="most-read-window">Most-read TCT stories over the past 24 hours.</p></section><!-- TCT_MOST_READ_HOME_END -->
     <div class="county-panels-grid">
           <section class="county-panel county-martin">
             <div class="county-panel-head">
-              <div><h2>Martin County</h2><p>Stuart · Jensen Beach · Palm City · Hobe Sound</p></div>
+              <div><h2>Martin County</h2><p><a href="/stuart/">Stuart</a> · <a href="/jensen-beach/">Jensen Beach</a> · <a href="/palm-city/">Palm City</a> · <a href="/hobe-sound/">Hobe Sound</a></p></div>
               <a href="/?cat=martin">View all →</a>
             </div>
             <div class="county-panel-list">
+              <a class="county-panel-story" href="https://treasurecoast.today/articles/2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security.html">
+                <img src="https://treasurecoast.today/images/editorial/topics/schools/treasure-coast-sign.webp" alt="" loading="lazy">
+                <span>Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety</span>
+              </a>
               <a class="county-panel-story" href="https://treasurecoast.today/articles/2026-09-07-looking-for-something-to-do-5-treasure-coast-events-for-sept-11-13.html">
                 <img src="https://treasurecoast.today/images/911-palm-city.png" alt="" loading="lazy">
                 <span>Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sept. 11-13</span>
-              </a>
-              <a class="county-panel-story" href="https://treasurecoast.today/articles/2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security.html">
-                <img src="https://treasurecoast.today/images/editorial/topics/schools/treasure-coast-sign.webp" alt="" loading="lazy">
-                <span>Former NYPD officer who worked Ground Zero leads Martin County school security</span>
               </a>
               <a class="county-panel-story" href="https://treasurecoast.today/articles/2026-09-02-indiantown-village-council-fires-manager-rejects-data-center-pause-after-residen.html">
                 <img src="https://ewscripps.brightspotcdn.com/dims4/default/ebc25b3/2147483647/strip/true/crop/1535x806+0+23/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2Fd3%2F25%2F1cfbcead43638db44a0f7f011c25%2Fscreenshot-2026-09-06-122647.png" alt="" loading="lazy">
@@ -955,14 +929,10 @@
           </section>
           <section class="county-panel county-st_lucie">
             <div class="county-panel-head">
-              <div><h2>St. Lucie County</h2><p>Port St. Lucie · Fort Pierce</p></div>
+              <div><h2>St. Lucie County</h2><p><a href="/port-st-lucie/">Port St. Lucie</a> · <a href="/fort-pierce/">Fort Pierce</a></p></div>
               <a href="/?cat=st_lucie">View all →</a>
             </div>
             <div class="county-panel-list">
-              <a class="county-panel-story" href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st.html">
-                <img src="https://cbs12.com/resources/media2/16x9/1920/1320/center/90/ce3df14d-eeb6-49fa-8d70-6d6c289f594a-TheWestPalmBeachPoliceDepartmentismarchingitsrecruitmenteffortsnorthtradingorangesfortheBigApple.15.jpg" alt="" loading="lazy">
-                <span>Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards</span>
-              </a>
               <a class="county-panel-story" href="https://treasurecoast.today/articles/2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database.html">
                 <img src="https://ewscripps.brightspotcdn.com/dims4/default/e09fe50/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F15%2F67%2F2deacc7f4d2081b93cfc0f57c21a%2Ffort-pierce-police.jpg" alt="" loading="lazy">
                 <span>Former Fort Pierce police officer arrested for alleged misuse of police databases</span>
@@ -970,11 +940,15 @@
               <a class="county-panel-story" href="https://treasurecoast.today/articles/2026-09-07-looking-for-something-to-do-5-treasure-coast-events-for-sept-11-13.html">
                 <img src="https://treasurecoast.today/images/911-palm-city.png" alt="" loading="lazy">
                 <span>Looking for something to do this weekend? Here are the Top 5 Treasure Coast events for Sept. 11-13</span>
+              </a>
+              <a class="county-panel-story" href="https://treasurecoast.today/articles/2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st.html">
+                <img src="https://cbs12.com/resources/media2/16x9/1920/1320/center/90/ce3df14d-eeb6-49fa-8d70-6d6c289f594a-TheWestPalmBeachPoliceDepartmentismarchingitsrecruitmenteffortsnorthtradingorangesfortheBigApple.15.jpg" alt="" loading="lazy">
+                <span>Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards</span>
               </a></div>
           </section>
           <section class="county-panel county-indian_river">
             <div class="county-panel-head">
-              <div><h2>Indian River County</h2><p>Vero Beach · Sebastian · Fellsmere</p></div>
+              <div><h2>Indian River County</h2><p><a href="/vero-beach/">Vero Beach</a> · <a href="/sebastian/">Sebastian</a> · <a href="/fellsmere/">Fellsmere</a></p></div>
               <a href="/?cat=indian_river">View all →</a>
             </div>
             <div class="county-panel-list">
@@ -1062,6 +1036,12 @@
       <h2 class="older-title">More Crime & Safety Stories</h2>
       <ul class="older-list">
         <li class="older-item">
+          <a href="/articles/2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc.html" class="older-link">
+            <span class="older-headline">Port St. Lucie police confirm medical episode caused SW Lucero Drive crash; driver's family says he had seizure</span>
+            <span class="older-date">2026-09-01</span>
+          </a>
+        </li>
+        <li class="older-item">
           <a href="/articles/2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear.html" class="older-link">
             <span class="older-headline">Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs</span>
             <span class="older-date">2026-09-04</span>
@@ -1112,12 +1092,6 @@
         <li class="older-item">
           <a href="/articles/2026-09-02-indian-river-county-sheriffs-office-assists-fellsmere-police-in-search-for-mache.html" class="older-link">
             <span class="older-headline">Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect</span>
-            <span class="older-date">2026-09-02</span>
-          </a>
-        </li>
-        <li class="older-item">
-          <a href="/articles/2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru.html" class="older-link">
-            <span class="older-headline">Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust</span>
             <span class="older-date">2026-09-02</span>
           </a>
         </li>
@@ -1260,6 +1234,12 @@
       <h2 class="older-title">More Things To Do Stories</h2>
       <ul class="older-list">
         <li class="older-item">
+          <a href="/articles/2026-09-05-looking-for-something-to-do-this-week-on-the-treasure-coast-here-are-10-events-f.html" class="older-link">
+            <span class="older-headline">Looking for something to do this week on the Treasure Coast? Here are 10 events for Sept. 5-12</span>
+            <span class="older-date">2026-09-05</span>
+          </a>
+        </li>
+        <li class="older-item">
           <a href="/articles/2026-09-01-flavor-south-florida-brings-dining-deals-to-port-st-lucie-and-treasure-coast-res.html" class="older-link">
             <span class="older-headline">Flavor South Florida brings dining deals to Port St. Lucie and Treasure Coast restaurants through September</span>
             <span class="older-date">2026-09-01</span>
@@ -1311,12 +1291,6 @@
           <a href="/articles/2026-08-10-sunshine-state-of-mind-boutique-opens-in-downtown-fort-pierce.html" class="older-link">
             <span class="older-headline">Sunshine State of Mind Boutique opens in downtown Fort Pierce</span>
             <span class="older-date">2026-08-10</span>
-          </a>
-        </li>
-        <li class="older-item">
-          <a href="/articles/2026-08-06-vero-beach-high-school-marching-band-prepares-for-school-year-with-nearly-90-yea.html" class="older-link">
-            <span class="older-headline">Vero Beach High School marching band prepares for school year with nearly 90 years of tradition</span>
-            <span class="older-date">2026-08-06</span>
           </a>
         </li>
       </ul>
@@ -1392,6 +1366,18 @@
       <h2 class="older-title">More Martin County Stories</h2>
       <ul class="older-list">
         <li class="older-item">
+          <a href="/articles/2026-09-05-looking-for-something-to-do-this-week-on-the-treasure-coast-here-are-10-events-f.html" class="older-link">
+            <span class="older-headline">Looking for something to do this week on the Treasure Coast? Here are 10 events for Sept. 5-12</span>
+            <span class="older-date">2026-09-05</span>
+          </a>
+        </li>
+        <li class="older-item">
+          <a href="/articles/2026-09-05-treasure-coast-weekly-traffic-report-i-95-ramp-closures-overnight-lane-closures.html" class="older-link">
+            <span class="older-headline">Treasure Coast Weekly Traffic Report: I-95 ramp closures, overnight lane closures planned Sept. 5-11</span>
+            <span class="older-date">2026-09-05</span>
+          </a>
+        </li>
+        <li class="older-item">
           <a href="/articles/2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-visitor-last-seen-at-chastain-beach.html" class="older-link">
             <span class="older-headline">Body found in Martin County mangroves confirmed as missing visitor from Oklahoma</span>
             <span class="older-date">2026-08-29</span>
@@ -1439,24 +1425,30 @@
             <span class="older-date">2026-08-31</span>
           </a>
         </li>
-        <li class="older-item">
-          <a href="/articles/2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart.html" class="older-link">
-            <span class="older-headline">Lightning strike injures man on boat near Sandsprit Park in Stuart</span>
-            <span class="older-date">2026-08-30</span>
-          </a>
-        </li>
-        <li class="older-item">
-          <a href="/articles/2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city.html" class="older-link">
-            <span class="older-headline">Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp</span>
-            <span class="older-date">2026-08-26</span>
-          </a>
-        </li>
       </ul>
       <a href="/archive.html" class="older-more">View full archive &rarr;</a>
     </section>
     <section class="older-section" data-older-cat="st_lucie" style="display:none">
       <h2 class="older-title">More St. Lucie County Stories</h2>
       <ul class="older-list">
+        <li class="older-item">
+          <a href="/articles/2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc.html" class="older-link">
+            <span class="older-headline">Port St. Lucie police confirm medical episode caused SW Lucero Drive crash; driver's family says he had seizure</span>
+            <span class="older-date">2026-09-01</span>
+          </a>
+        </li>
+        <li class="older-item">
+          <a href="/articles/2026-09-05-looking-for-something-to-do-this-week-on-the-treasure-coast-here-are-10-events-f.html" class="older-link">
+            <span class="older-headline">Looking for something to do this week on the Treasure Coast? Here are 10 events for Sept. 5-12</span>
+            <span class="older-date">2026-09-05</span>
+          </a>
+        </li>
+        <li class="older-item">
+          <a href="/articles/2026-09-05-treasure-coast-weekly-traffic-report-i-95-ramp-closures-overnight-lane-closures.html" class="older-link">
+            <span class="older-headline">Treasure Coast Weekly Traffic Report: I-95 ramp closures, overnight lane closures planned Sept. 5-11</span>
+            <span class="older-date">2026-09-05</span>
+          </a>
+        </li>
         <li class="older-item">
           <a href="/articles/2026-09-04-fort-pierce-opens-public-survey-through-oct-15-to-help-shape-strategic-plan-thro.html" class="older-link">
             <span class="older-headline">Fort Pierce opens public survey through Oct. 15 to help shape strategic plan through 2041</span>
@@ -1499,30 +1491,24 @@
             <span class="older-date">2026-08-31</span>
           </a>
         </li>
-        <li class="older-item">
-          <a href="/articles/2026-08-29-st-lucie-county-school-bus-driver-faces-discipline-for-illegal-u-turn-on-i-95-in.html" class="older-link">
-            <span class="older-headline">St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce</span>
-            <span class="older-date">2026-08-29</span>
-          </a>
-        </li>
-        <li class="older-item">
-          <a href="/articles/2026-08-29-one-hospitalized-after-apartment-fire-at-peacock-run-complex-in-port-st-lucie.html" class="older-link">
-            <span class="older-headline">One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie</span>
-            <span class="older-date">2026-08-29</span>
-          </a>
-        </li>
-        <li class="older-item">
-          <a href="/articles/2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch.html" class="older-link">
-            <span class="older-headline">Port St. Lucie High School football player held in ICE custody after school zone speeding violation</span>
-            <span class="older-date">2026-08-26</span>
-          </a>
-        </li>
       </ul>
       <a href="/archive.html" class="older-more">View full archive &rarr;</a>
     </section>
     <section class="older-section" data-older-cat="indian_river" style="display:none">
       <h2 class="older-title">More Indian River County Stories</h2>
       <ul class="older-list">
+        <li class="older-item">
+          <a href="/articles/2026-09-05-looking-for-something-to-do-this-week-on-the-treasure-coast-here-are-10-events-f.html" class="older-link">
+            <span class="older-headline">Looking for something to do this week on the Treasure Coast? Here are 10 events for Sept. 5-12</span>
+            <span class="older-date">2026-09-05</span>
+          </a>
+        </li>
+        <li class="older-item">
+          <a href="/articles/2026-09-05-treasure-coast-weekly-traffic-report-i-95-ramp-closures-overnight-lane-closures.html" class="older-link">
+            <span class="older-headline">Treasure Coast Weekly Traffic Report: I-95 ramp closures, overnight lane closures planned Sept. 5-11</span>
+            <span class="older-date">2026-09-05</span>
+          </a>
+        </li>
         <li class="older-item">
           <a href="/articles/2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit.html" class="older-link">
             <span class="older-headline">Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma</span>
@@ -1571,18 +1557,6 @@
             <span class="older-date">2026-08-27</span>
           </a>
         </li>
-        <li class="older-item">
-          <a href="/articles/2026-08-25-vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush.html" class="older-link">
-            <span class="older-headline">Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush</span>
-            <span class="older-date">2026-08-25</span>
-          </a>
-        </li>
-        <li class="older-item">
-          <a href="/articles/2026-08-24-port-st-lucie-botanical-gardens-sculptures-utility-box-wraps-call-for-artists.html" class="older-link">
-            <span class="older-headline">Port St. Lucie seeks artists for Botanical Gardens sculptures, photographers for utility box wraps</span>
-            <span class="older-date">2026-08-24</span>
-          </a>
-        </li>
       </ul>
       <a href="/archive.html" class="older-more">View full archive &rarr;</a>
     </section>
@@ -1602,6 +1576,7 @@
         <a href="/subscribe.html">Membership</a>
         <a href="/advertise.html">Advertise</a>
         <a href="/privacy.html">Privacy</a>
+        <a href="/news-tip.html">News Tip</a>
         <a href="/contact.html">Contact</a>
       </div></div>
       <div class="footer-column"><strong>Counties</strong><a href="/?cat=martin">Martin County</a><a href="/?cat=st_lucie">St. Lucie County</a><a href="/?cat=indian_river">Indian River County</a></div>
@@ -1613,7 +1588,7 @@
     </div>
     <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
   </footer>
-  <script src="/main.js?v=1.13.7.5t"></script>
+  <script src="/main.js?v=1.13.8.1"></script>
 
   <script src="/membership-config.js"></script>
   <script type="module" src="/membership.js?v=1.13.7.13"></script>
