@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-09T05:15:44Z",
+  "generated_at": "2026-09-09T10:59:21Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 1,
-    "placements_after": 1,
+    "placements_before": 5,
+    "placements_after": 5,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -51,17 +51,17 @@
   "audit": {
     "candidates_processed": 176,
     "routes": {
-      "generate_new": 10,
-      "skip": 166
+      "generate_new": 35,
+      "skip": 141
     },
     "eligibility": {
-      "low_value": 119,
-      "publishable": 57
+      "low_value": 118,
+      "publishable": 58
     },
     "source_classes": {
-      "aggregator": 119,
-      "local_news": 36,
-      "regional_news": 18,
+      "aggregator": 118,
+      "local_news": 38,
+      "regional_news": 17,
       "unknown": 3
     },
     "rejected_count": 0,
@@ -69,10 +69,34 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 8,
-      "same_event": 168
+      "new_story": 24,
+      "same_event": 152
     },
     "examples": [
+      {
+        "story_id": "story_009993",
+        "title": "Florida beach city airport, waterfront have similar issue | Opinion - Treasure Coast News",
+        "event_key": "unknown-event-a06950bf02",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_009994",
+        "title": "Trump gave $45,000 holiday gifts to Natalie Harp and two other White House aides - WKMG",
+        "event_key": "unknown-event-e5089b8441",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_009897",
         "title": "Palm Springs planning board recommends denial of 48-townhome plan on church property",
@@ -93,10 +117,11 @@
         "event_key": "unknown-event-059204d0fb",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -118,6 +143,20 @@
         "story_id": "story_009898",
         "title": "Former US Sen. Sununu to face US Rep. Chris Pappas in New Hampshire Senate race",
         "event_key": "unknown-event-8c49d837a2",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_009912",
+        "title": "SPACE & TREASURE COAST POWER 10: Vero Beach Holds No. 1 as Merritt Island Rises and Cocoa Tumbles - FloridaHSFootball.com",
+        "event_key": "unknown-event-5c43329368",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -255,35 +294,20 @@
         ]
       },
       {
-        "story_id": "story_009637",
-        "title": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WFLX",
-        "event_key": "unknown-event-37772ebe22",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_009634",
-        "title": "New grand jury subpoenas being sent in investigation targeting Trump-Russia probe, AP sources say - Greeley Tribune",
-        "event_key": "unknown-event-c553397299",
+        "title": "New grand jury subpoenas being sent in investigation targeting Trump-Russia probe, AP sources say - greeleytribune.com",
+        "event_key": "unknown-event-47414d1bf2",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_009635",
+        "story_id": "story_009990",
         "title": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
         "event_key": "unknown-event-fa1360f25e",
         "relationship": "same_event",
@@ -314,34 +338,6 @@
         "story_id": "story_009636",
         "title": "Exiting school superintendent David Moore has a few more tricks up his sleeve before stepping down - Vero News",
         "event_key": "unknown-event-a95d2b1f68",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_009637",
-        "title": "Former NYPD officer who worked Ground Zero now leads Martin County school safety",
-        "event_key": "unknown-event-456a32b073",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_009638",
-        "title": "Vero city council OK’s steep hike in utility rates - Vero News",
-        "event_key": "unknown-event-135af19fdf",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -355,6 +351,32 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_009993",
+        "title": "Florida beach city airport, waterfront have similar issue | Opinion - Treasure Coast News",
+        "event_key": "unknown-event-a06950bf02",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_009994",
+        "title": "Trump gave $45,000 holiday gifts to Natalie Harp and two other White House aides - WKMG",
+        "event_key": "unknown-event-e5089b8441",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_009897",
         "title": "Palm Springs planning board recommends denial of 48-townhome plan on church property",
         "event_key": "unknown-event-db6d5f518e",
@@ -376,10 +398,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -402,6 +425,21 @@
         "story_id": "story_009898",
         "title": "Former US Sen. Sununu to face US Rep. Chris Pappas in New Hampshire Senate race",
         "event_key": "unknown-event-8c49d837a2",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_009912",
+        "title": "SPACE & TREASURE COAST POWER 10: Vero Beach Holds No. 1 as Merritt Island Rises and Cocoa Tumbles - FloridaHSFootball.com",
+        "event_key": "unknown-event-5c43329368",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -549,37 +587,21 @@
         ]
       },
       {
-        "story_id": "story_009637",
-        "title": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WFLX",
-        "event_key": "unknown-event-37772ebe22",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_009634",
-        "title": "New grand jury subpoenas being sent in investigation targeting Trump-Russia probe, AP sources say - Greeley Tribune",
-        "event_key": "unknown-event-c553397299",
+        "title": "New grand jury subpoenas being sent in investigation targeting Trump-Russia probe, AP sources say - greeleytribune.com",
+        "event_key": "unknown-event-47414d1bf2",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_009635",
+        "story_id": "story_009990",
         "title": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
         "event_key": "unknown-event-fa1360f25e",
         "relationship": "same_event",
@@ -612,36 +634,6 @@
         "story_id": "story_009636",
         "title": "Exiting school superintendent David Moore has a few more tricks up his sleeve before stepping down - Vero News",
         "event_key": "unknown-event-a95d2b1f68",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_009637",
-        "title": "Former NYPD officer who worked Ground Zero now leads Martin County school safety",
-        "event_key": "unknown-event-456a32b073",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_009638",
-        "title": "Vero city council OK’s steep hike in utility rates - Vero News",
-        "event_key": "unknown-event-135af19fdf",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -658,29 +650,71 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 1,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
-    "retrospective_candidate_count": 32,
+    "current_relationships": {
+      "new_story": 1
+    },
+    "milestones": {
+      "arrest": 1
+    },
+    "reason_codes": {
+      "agency_match": 1,
+      "identity_anchor_qualified": 1,
+      "location_match": 1,
+      "novel_milestone": 1
+    },
+    "examples": [
+      {
+        "headline": "Ex-Fort Pierce police officer accused of illegally accessing four police database to track ex-girlfriend - WPBF",
+        "event_key": "unknown-event-ac9ab9c846",
+        "current_story_id": "story_009998",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_005719",
+        "candidate_confidence": 0.613333,
+        "candidate_milestones": [
+          "arrest"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_005719",
+          "Novel milestones: arrest",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.33",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: False",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.61"
+        ]
+      }
+    ],
+    "retrospective_candidate_count": 31,
     "retrospective_high_confidence_candidate_count": 9,
     "retrospective_activation_eligible_candidate_count": 5,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1305,
-      "timeline_entries_examined": 3660,
-      "transitions_examined": 2219,
+      "stories_with_timelines": 1299,
+      "timeline_entries_examined": 3637,
+      "transitions_examined": 2202,
       "candidate_scope": "distinct_article_transitions",
-      "candidate_count": 32,
+      "candidate_count": 31,
       "high_confidence_candidate_count": 9,
       "activation_eligible_candidate_count": 5,
-      "same_source_evolution_count": 11,
+      "same_source_evolution_count": 12,
       "same_source_evolution_milestones": {
-        "arrest": 2,
+        "arrest": 3,
         "court_action": 2,
         "death": 2,
         "identified": 1,
@@ -893,6 +927,41 @@
           }
         },
         {
+          "story_id": "story_009990",
+          "story_title": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
+          "milestones": [
+            "arrest"
+          ],
+          "matched_phrases": {
+            "arrest": [
+              "arrested"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-2f37b93a6449bd61d11e",
+            "event_key": "unknown-event-fa1360f25e",
+            "published_at": "2026-09-09T10:43:00.727445+00:00",
+            "title": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
+            "source": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+            "url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems"
+          },
+          "newer_article": {
+            "article_id": "rss-778bbcc8a45313e749e6",
+            "event_key": "unknown-event-a95606fe37",
+            "published_at": "2026-09-09T10:43:00.727445+00:00",
+            "title": "Former Fort Pierce police officer arrested for alleged misuse of police database systems",
+            "source": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+            "url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems"
+          }
+        },
+        {
           "story_id": "story_006049",
           "story_title": "Criminal case continues against pro golfer Tiger Woods in Florida - Treasure Coast News",
           "milestones": [
@@ -1067,9 +1136,9 @@
           }
         }
       ],
-      "identity_anchor_rejected_count": 20,
-      "incoherent_transition_count": 20,
-      "incoherent_story_count": 13,
+      "identity_anchor_rejected_count": 19,
+      "incoherent_transition_count": 19,
+      "incoherent_story_count": 12,
       "incoherent_stories": [
         {
           "story_id": "story_003665",
@@ -1649,43 +1718,7 @@
           ]
         },
         {
-          "story_id": "story_009827",
-          "story_title": "Indian River County traffic stop over dark tint turns into drug arrest, deputies say - WPEC",
-          "transition_count": 1,
-          "blocking_reasons": {
-            "timeline_identity_unanchored": 1
-          },
-          "examples": [
-            {
-              "prior_article": {
-                "article_id": "rss-a5d9f487a639decda0d1",
-                "event_key": "traffic-crash-fort-pierce-7b201e9e91",
-                "published_at": "2026-09-08T23:58:04.937653+00:00",
-                "title": "Indian River County traffic stop over dark tint turns into drug arrest, deputies say - WPEC",
-                "source": "https://cbs12.com/news/florida/indian-river-county-traffic-stop-over-dark-tint-turns-into-drug-arrest-deputies-say-florida-news-florida-crime-local-news-local-crime-heroin-weed-marijuana",
-                "url": "https://cbs12.com/news/florida/indian-river-county-traffic-stop-over-dark-tint-turns-into-drug-arrest-deputies-say-florida-news-florida-crime-local-news-local-crime-heroin-weed-marijuana"
-              },
-              "newer_article": {
-                "article_id": "rss-b82f90188403f819e7bd",
-                "event_key": "traffic-crash-port-st-lucie-c5696c110e",
-                "published_at": "2026-09-08T23:58:04.937653+00:00",
-                "title": "Vehicle fire shuts down Florida Turnpike south near Port St. Lucie Blvd. Exit - WPEC",
-                "source": "https://cbs12.com/news/local/vehicle-fire-shuts-down-florida-turnpike-south-near-port-st-lucie-blvd-exit",
-                "url": "https://cbs12.com/news/local/vehicle-fire-shuts-down-florida-turnpike-south-near-port-st-lucie-blvd-exit"
-              },
-              "milestones": [
-                "closure"
-              ],
-              "identity_anchor_codes": [
-                "event_family_match",
-                "identity_anchor_missing"
-              ],
-              "prior_title_overlap": 0.083333
-            }
-          ]
-        },
-        {
-          "story_id": "story_009922",
+          "story_id": "story_009961",
           "story_title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1696,7 +1729,7 @@
               "prior_article": {
                 "article_id": "rss-0b4baf979b4e35fba284",
                 "event_key": "traffic-crash-vero-beach-9c1a5710d7",
-                "published_at": "2026-09-09T05:03:22.397772+00:00",
+                "published_at": "2026-09-09T10:43:00.727445+00:00",
                 "title": "A multi million dollar crane crashes in Vero Beach as residents raise concern - WPEC",
                 "source": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news",
                 "url": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news"
@@ -1704,7 +1737,7 @@
               "newer_article": {
                 "article_id": "rss-2e44c0e5b35c2393f944",
                 "event_key": "traffic-crash-b209f4dc72-b209f4dc72",
-                "published_at": "2026-09-09T05:03:22.397772+00:00",
+                "published_at": "2026-09-09T10:43:00.727445+00:00",
                 "title": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cw34.com",
                 "source": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5"
@@ -1724,7 +1757,6 @@
       "milestones": {
         "approval": 1,
         "arrest": 11,
-        "closure": 1,
         "court_action": 2,
         "death": 6,
         "identified": 3,
@@ -1736,9 +1768,9 @@
       },
       "blocking_conflicts": {
         "event_family_conflict": 2,
-        "same_timestamp_order_uncertain": 16,
-        "timeline_identity_unanchored": 20,
-        "weak_title_continuity": 5
+        "same_timestamp_order_uncertain": 15,
+        "timeline_identity_unanchored": 19,
+        "weak_title_continuity": 4
       },
       "excluded_entry_count": 149,
       "exclusion_reasons": {
@@ -2329,7 +2361,7 @@
           ]
         },
         {
-          "story_id": "story_009937",
+          "story_id": "story_009976",
           "story_title": "Martin County Sheriff's Office investigates body found in Hutchinson Island mangroves",
           "milestones": [
             "recovery"
@@ -2374,7 +2406,7 @@
           "prior_article": {
             "article_id": "rss-e7222eb1152f2bab97f2",
             "event_key": "missing-person-port-st-lucie-2eb6cf5485",
-            "published_at": "2026-09-09T05:03:22.397772+00:00",
+            "published_at": "2026-09-09T10:43:00.727445+00:00",
             "title": "Body found in Martin County mangroves confirmed as missing man - WPEC",
             "source": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead",
             "url": "https://cbs12.com/news/local/body-found-michael-anthony-debevec-martin-county-mangroves-confirmed-as-missing-man-mangroves-house-of-refuge-hutchinson-island-chastain-beach-stuart-stuart-florida-news-florida-news-south-florida-news-missing-man-found-man-found-dead"
@@ -2382,14 +2414,14 @@
           "newer_article": {
             "article_id": "rss-fedf37d2bc649307634c",
             "event_key": "missing-person-7693a0a37b-7693a0a37b",
-            "published_at": "2026-09-09T05:03:22.397772+00:00",
+            "published_at": "2026-09-09T10:43:00.727445+00:00",
             "title": "Missing Oklahoma man’s body found near beach in Martin County - WPBF",
             "source": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161",
             "url": "https://www.wpbf.com/article/florida-martin-county-missing-oklahoma-man-body-found-debevec/73597161"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_009937",
+            "Story: story_009976",
             "Novel milestones: recovery",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
@@ -3839,74 +3871,7 @@
           ]
         },
         {
-          "story_id": "story_009827",
-          "story_title": "Indian River County traffic stop over dark tint turns into drug arrest, deputies say - WPEC",
-          "milestones": [
-            "closure"
-          ],
-          "matched_phrases": {
-            "closure": [
-              "shuts down"
-            ]
-          },
-          "confidence": 0.525,
-          "activation_eligible": false,
-          "timeline_incoherent": true,
-          "identity_anchor_qualified": false,
-          "identity_anchor_codes": [
-            "event_family_match",
-            "identity_anchor_missing"
-          ],
-          "shared_title_tokens": [
-            "wpec"
-          ],
-          "blocking_conflicts": [
-            "same_timestamp_order_uncertain",
-            "weak_title_continuity",
-            "timeline_identity_unanchored"
-          ],
-          "reason_codes": [
-            "retrospective_timeline_transition",
-            "novel_milestone",
-            "persistent_story_identity_untrusted",
-            "event_family_match",
-            "identity_anchor_missing",
-            "timeline_incoherent"
-          ],
-          "prior_title_overlap": 0.083333,
-          "canonical_title_overlap": 0.083333,
-          "prior_article": {
-            "article_id": "rss-a5d9f487a639decda0d1",
-            "event_key": "traffic-crash-fort-pierce-7b201e9e91",
-            "published_at": "2026-09-08T23:58:04.937653+00:00",
-            "title": "Indian River County traffic stop over dark tint turns into drug arrest, deputies say - WPEC",
-            "source": "https://cbs12.com/news/florida/indian-river-county-traffic-stop-over-dark-tint-turns-into-drug-arrest-deputies-say-florida-news-florida-crime-local-news-local-crime-heroin-weed-marijuana",
-            "url": "https://cbs12.com/news/florida/indian-river-county-traffic-stop-over-dark-tint-turns-into-drug-arrest-deputies-say-florida-news-florida-crime-local-news-local-crime-heroin-weed-marijuana"
-          },
-          "newer_article": {
-            "article_id": "rss-b82f90188403f819e7bd",
-            "event_key": "traffic-crash-port-st-lucie-c5696c110e",
-            "published_at": "2026-09-08T23:58:04.937653+00:00",
-            "title": "Vehicle fire shuts down Florida Turnpike south near Port St. Lucie Blvd. Exit - WPEC",
-            "source": "https://cbs12.com/news/local/vehicle-fire-shuts-down-florida-turnpike-south-near-port-st-lucie-blvd-exit",
-            "url": "https://cbs12.com/news/local/vehicle-fire-shuts-down-florida-turnpike-south-near-port-st-lucie-blvd-exit"
-          },
-          "candidate_trace": [
-            "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_009827",
-            "Novel milestones: closure",
-            "Identity anchor qualified: False",
-            "Identity anchor codes: event_family_match, identity_anchor_missing",
-            "Prior title overlap: 0.08",
-            "Canonical title overlap (context only): 0.08",
-            "Same timestamp: True",
-            "Blocking conflicts: same_timestamp_order_uncertain, weak_title_continuity, timeline_identity_unanchored",
-            "Candidate confidence: 0.52",
-            "Activation eligible: False"
-          ]
-        },
-        {
-          "story_id": "story_009922",
+          "story_id": "story_009961",
           "story_title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
           "milestones": [
             "death"
@@ -3943,7 +3908,7 @@
           "prior_article": {
             "article_id": "rss-0b4baf979b4e35fba284",
             "event_key": "traffic-crash-vero-beach-9c1a5710d7",
-            "published_at": "2026-09-09T05:03:22.397772+00:00",
+            "published_at": "2026-09-09T10:43:00.727445+00:00",
             "title": "A multi million dollar crane crashes in Vero Beach as residents raise concern - WPEC",
             "source": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news",
             "url": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news"
@@ -3951,14 +3916,14 @@
           "newer_article": {
             "article_id": "rss-2e44c0e5b35c2393f944",
             "event_key": "traffic-crash-b209f4dc72-b209f4dc72",
-            "published_at": "2026-09-09T05:03:22.397772+00:00",
+            "published_at": "2026-09-09T10:43:00.727445+00:00",
             "title": "Bicyclist killed in crash that closed intersection on State Road 70 in Okeechobee - cw34.com",
             "source": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTlh3SEYtcGZYcFBWZjBOekQyblRwRmZXSWh0YldOdWpkeFB2VndnVUM0WE5qOG5OVXppdnRRQ0dhLVlkUGFTZU4tYlV4VFhfVFBLQ0JpdTZGb1dCNTZFWDJRaWsxXzF5VTRlcnN4dXVaYkw4Z3RMdFlIcW5Ec2tQTktWREJQbkVOdFJXS0xxbUxaVHUxWUhETVgzaDhNRmUxVWdac3lpZXdMS2tMV3NpcG5lSG1NWG1BNVpLT3U4RGdyRUp4QXBqWUZn?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_009922",
+            "Story: story_009961",
             "Novel milestones: death",
             "Identity anchor qualified: False",
             "Identity anchor codes: event_family_match, identity_anchor_missing",
@@ -3980,28 +3945,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1081,
-      "treasure_coast_local": 900,
-      "treasure_coast_region": 395,
-      "unknown": 2102
+      "florida": 1072,
+      "treasure_coast_local": 902,
+      "treasure_coast_region": 394,
+      "unknown": 2099
     },
-    "average_score": 60.6
+    "average_score": 60.62
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1081,
-      "treasure_coast_local": 900,
-      "treasure_coast_region": 395,
-      "unknown": 2102
+      "florida": 1072,
+      "treasure_coast_local": 902,
+      "treasure_coast_region": 394,
+      "unknown": 2099
     },
     "average_priority": 4.05
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3584,
+      "active": 3598,
       "breaking": 1,
-      "developing": 186,
-      "ongoing": 703,
+      "developing": 187,
+      "ongoing": 677,
       "resolved": 4
     }
   },
@@ -4009,8 +3974,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 7042,
-    "active_stories_after": 7042,
+    "active_stories_before": 7048,
+    "active_stories_after": 7048,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -4039,23 +4004,23 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-09T05:03:53Z",
-    "quarantined_story_records_retained": 1366,
-    "active_story_count": 7074
+    "generated_at": "2026-09-09T10:43:38Z",
+    "quarantined_story_records_retained": 1377,
+    "active_story_count": 7097
   },
   "stories": {
-    "total": 4478,
+    "total": 4467,
     "importance_levels": {
       "breaking": 6,
-      "high": 107,
-      "normal": 719,
-      "low": 3646,
+      "high": 106,
+      "normal": 722,
+      "low": 3633,
       "archived": 0
     },
-    "average_importance": 9.8,
+    "average_importance": 9.82,
     "top": [
       {
-        "story_id": "story_009934",
+        "story_id": "story_009973",
         "title": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
         "score": 80,
         "editorial_priority": 90,
@@ -4067,7 +4032,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4119,14 +4084,14 @@
         "lifecycle": {
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
+          "hours_since_update": 0.04,
           "event_count": 5,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_009922",
+        "story_id": "story_009961",
         "title": "SR 710 crash survivor reunites with Martin County Fire Rescue crew who saved his life",
         "score": 75,
         "editorial_priority": 85,
@@ -4181,14 +4146,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
           "hours_since_update": 0.04,
           "event_count": 9,
           "timeline_entries": 9
         }
       },
       {
-        "story_id": "story_009925",
+        "story_id": "story_009964",
         "title": "Fatal I-95 crash jams traffic in St. Lucie County - cbs12.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4200,7 +4165,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.02
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4245,14 +4210,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
-          "hours_since_update": 0.02,
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
+          "hours_since_update": 0.03,
           "event_count": 6,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_009926",
+        "story_id": "story_009965",
         "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
         "score": 75,
         "editorial_priority": 84,
@@ -4306,7 +4271,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
           "hours_since_update": 0.02,
           "event_count": 2,
           "timeline_entries": 2
@@ -4325,7 +4290,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 34.41
+          "age_hours": 40.07
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4371,7 +4336,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 34.41,
+          "hours_since_update": 40.07,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4389,7 +4354,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 34.41
+          "age_hours": 40.08
         },
         "level": "high",
         "importance_reasons": [
@@ -4433,7 +4398,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 34.41,
+          "hours_since_update": 40.08,
           "event_count": 42,
           "timeline_entries": 38
         }
@@ -4451,7 +4416,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 34.4
+          "age_hours": 40.07
         },
         "level": "high",
         "importance_reasons": [
@@ -4495,7 +4460,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 34.4,
+          "hours_since_update": 40.07,
           "event_count": 4,
           "timeline_entries": 3
         }
@@ -4513,7 +4478,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 26.47
+          "age_hours": 32.16
         },
         "level": "high",
         "importance_reasons": [
@@ -4556,7 +4521,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-08T02:40:27.108602+00:00",
-          "hours_since_update": 26.47,
+          "hours_since_update": 32.16,
           "event_count": 10,
           "timeline_entries": 10
         }
@@ -4574,7 +4539,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 34.4
+          "age_hours": 40.07
         },
         "level": "high",
         "importance_reasons": [
@@ -4617,7 +4582,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 34.4,
+          "hours_since_update": 40.07,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4635,7 +4600,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 9.77
+          "age_hours": 15.44
         },
         "level": "high",
         "importance_reasons": [
@@ -4671,7 +4636,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-08T19:20:00.077435+00:00",
-          "hours_since_update": 9.77,
+          "hours_since_update": 15.44,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4689,7 +4654,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 109.39
+          "age_hours": 115.06
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4737,63 +4702,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-04T15:42:16.034092+00:00",
-          "hours_since_update": 109.39,
+          "hours_since_update": 115.06,
           "event_count": 12,
           "timeline_entries": 12
-        }
-      },
-      {
-        "story_id": "story_009916",
-        "title": "Box Truck Driver Killed, Passenger Hospitalized After Florida’s Turnpike Crash in St. Lucie County - Flanagan & Bodenheimer",
-        "score": 65,
-        "editorial_priority": 64,
-        "editorial_score": 64,
-        "score_breakdown": {
-          "score": 64,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 1.12
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-09-09T04:01:42.517915+00:00",
-          "hours_since_update": 1.12,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -4809,7 +4720,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 31.46
+          "age_hours": 37.12
         },
         "level": "high",
         "importance_reasons": [
@@ -4850,7 +4761,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T21:38:34.170415+00:00",
-          "hours_since_update": 31.46,
+          "hours_since_update": 37.12,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4868,7 +4779,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 33.21
+          "age_hours": 38.88
         },
         "level": "high",
         "importance_reasons": [
@@ -4909,81 +4820,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-07T19:53:07.094197+00:00",
-          "hours_since_update": 33.21,
+          "hours_since_update": 38.88,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_009827",
-        "title": "Indian River County traffic stop over dark tint turns into drug arrest, deputies say - WPEC",
-        "score": 55,
-        "editorial_priority": 62,
-        "editorial_score": 62,
-        "score_breakdown": {
-          "score": 62,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 5.18
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Port St. Lucie",
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-08T23:58:04.937653+00:00",
-          "hours_since_update": 5.18,
-          "event_count": 3,
-          "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_009921",
+        "story_id": "story_009960",
         "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4995,7 +4838,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.04
         },
         "level": "high",
         "importance_reasons": [
@@ -5045,14 +4888,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
+          "hours_since_update": 0.04,
           "event_count": 7,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_009930",
+        "story_id": "story_009969",
         "title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -5116,14 +4959,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
           "hours_since_update": 0.03,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_009931",
+        "story_id": "story_009970",
         "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -5186,14 +5029,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
           "hours_since_update": 0.03,
           "event_count": 4,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_009938",
+        "story_id": "story_009977",
         "title": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -5256,14 +5099,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
           "hours_since_update": 0.04,
           "event_count": 7,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_009945",
+        "story_id": "story_009984",
         "title": "Multi-vehicle crash blocks left lane on I-95 North in St. Lucie County - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -5275,7 +5118,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.09
+          "age_hours": 0.12
         },
         "level": "high",
         "importance_reasons": [
@@ -5327,10 +5170,125 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-09T05:03:22.397772+00:00",
-          "hours_since_update": 0.09,
+          "last_updated": "2026-09-09T10:43:00.727445+00:00",
+          "hours_since_update": 0.12,
           "event_count": 9,
           "timeline_entries": 8
+        }
+      },
+      {
+        "story_id": "story_009916",
+        "title": "Box Truck Driver Killed, Passenger Hospitalized After Florida’s Turnpike Crash in St. Lucie County - Flanagan & Bodenheimer",
+        "score": 65,
+        "editorial_priority": 61,
+        "editorial_score": 61,
+        "score_breakdown": {
+          "score": 61,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.81
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-09-09T04:01:42.517915+00:00",
+          "hours_since_update": 6.81,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_007979",
+        "title": "Man found incompetent to stand trial in random stabbing death of Martin County woman - WPTV",
+        "score": 75,
+        "editorial_priority": 60,
+        "editorial_score": 60,
+        "score_breakdown": {
+          "score": 60,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 131.3
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Stuart"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 5,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Story is older than 48 hours but remains within the active news window",
+          "last_updated": "2026-09-03T23:27:52.005400+00:00",
+          "hours_since_update": 131.3,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       }
     ]
@@ -5338,7 +5296,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-09T05:09:47Z",
+    "generated_at": "2026-09-09T10:52:02Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5354,23 +5312,22 @@
       "category_count": 9,
       "statuses": {
         "category_eligibility_archive_recovery": 5,
-        "generation_failed_archive_recovery": 1,
-        "quality_gate_archive_recovery": 3
+        "generated_live": 2,
+        "quality_gate_archive_recovery": 2
       },
       "failures": {
-        "article_framing_integrity": 1,
         "no_category_eligible_sources": 5,
-        "publication_quality_rejected": 3
+        "publication_quality_rejected": 2
       },
-      "model_attempt_count": 5,
-      "model_elapsed_seconds": 52.904,
-      "archive_recovery_requested_count": 9,
+      "model_attempt_count": 4,
+      "model_elapsed_seconds": 92.667,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 2,
-      "category_eligibility_rejection_count": 1,
-      "published_story_duplicate_suppression_count": 43,
-      "story_aware_update_context_count": 0,
+      "article_framing_rejection_count": 1,
+      "category_eligibility_rejection_count": 3,
+      "published_story_duplicate_suppression_count": 31,
+      "story_aware_update_context_count": 3,
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -5383,7 +5340,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 26,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 9,
+        "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5432,22 +5389,22 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/08/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
-            "editorial_story_id": "story_009637",
-            "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
-            "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
             "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
             "editorial_story_id": "story_009635",
             "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
             "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/08/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
+            "editorial_story_id": "story_009637",
+            "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
+            "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
+            "basis": "same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5496,6 +5453,21 @@
             "canonical_headline": "Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
+            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:exact_source_url",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5520,21 +5492,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
             "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
@@ -5580,40 +5537,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.959
+        "elapsed_seconds": 31.007
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generation_failed_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 8,
-        "selected_source_count": 3,
+        "fresh_candidate_count": 25,
+        "publishable_source_count": 11,
+        "selected_source_count": 5,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 18.571,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Vehicle fire closes southbound Florida's Turnpike in St. Lucie County"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 16.471,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Vehicle fire closes southbound Florida's Turnpike in St. Lucie County"
+            "elapsed_seconds": 25.777,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 35.042,
-        "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
+        "model_elapsed_seconds": 25.777,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5622,21 +5569,26 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 4,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
-        "published_story_duplicate_suppressions": [
+        "category_eligibility_assessed_count": 7,
+        "category_eligibility_rejection_count": 1,
+        "category_eligibility_rejections": [
           {
+            "contract_version": "1.0-primary-crime-safety-focus",
             "category_key": "crime",
-            "source_headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - WPEC",
-            "source_url": "https://cbs12.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - WPEC",
+            "source_url": "https://cbs12.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement"
+          }
+        ],
+        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
             "source_headline": "Boat Club members concerned about closures, say they're not getting what they paid for",
@@ -5645,16 +5597,6 @@
             "canonical_slug": "2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac",
             "canonical_headline": "Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Ex-Fort Pierce police officer accused of illegally accessing Flock camera database to track ex-girlfriend - WPBF",
-            "source_url": "https://www.wpbf.com/article/fort-pierce-police-former-officer-database-misuse/73643478",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5676,26 +5618,6 @@
             "canonical_headline": "800 gallons of sewage spill at Port St. Lucie lift station after power failure",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Former Fort Pierce police officer arrested for alleged misuse of police database systems - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/08/former-fort-pierce-police-officer-arrested-alleged-misuse-police-database-systems?outputType=amp",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -5707,21 +5629,6 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
-            "source_headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - WPEC",
-            "source_url": "https://cbs12.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Boat Club members concerned about closures, say they're not getting what they paid for",
             "source_url": "https://www.wptv.com/news/treasure-coast/boat-club-members-concerned-about-closures-say-theyre-not-getting-what-they-paid-for",
             "canonical_slug": "2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac",
@@ -5729,21 +5636,6 @@
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Ex-Fort Pierce police officer accused of illegally accessing Flock camera database to track ex-girlfriend - WPBF",
-            "source_url": "https://www.wpbf.com/article/fort-pierce-police-former-officer-database-misuse/73643478",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -5779,50 +5671,22 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Former Fort Pierce police officer arrested for alleged misuse of police database systems - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/08/former-fort-pierce-police-officer-arrested-alleged-misuse-police-database-systems?outputType=amp",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 52.76
+        "live_hero_headline": "Fort Pierce police chief: Ex-officer ran 400+ database searches to track ex-girlfriend",
+        "generated_card_count": 1,
+        "elapsed_seconds": 56.924
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 10,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 11,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5839,10 +5703,30 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 6,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 1,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_public_safety:arrested"
+            ],
+            "local_nexus_signals": [
+              "source_locality:st lucie county",
+              "source_locality:fort pierce"
+            ],
+            "headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems"
+          }
+        ],
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -5851,16 +5735,6 @@
             "editorial_story_id": "story_009829",
             "canonical_slug": "2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac",
             "canonical_headline": "Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5905,8 +5779,30 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
+            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=source:https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -5918,21 +5814,6 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/boat-club-members-concerned-about-closures-say-theyre-not-getting-what-they-paid-for",
             "canonical_slug": "2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac",
             "canonical_headline": "Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -6004,7 +5885,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.885
+        "elapsed_seconds": 18.763
       },
       {
         "category_key": "sports",
@@ -6036,12 +5917,12 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "sports",
-            "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
-            "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
+            "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
             "editorial_story_id": "story_007607",
             "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
             "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6054,13 +5935,13 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "sports",
-            "source_headline": "Viral 'Cat in the Hat' threat targets Vero Beach High School; deemed not credible - WPEC",
-            "source_url": "https://cbs12.com/news/local/viral-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-not-credible-indian-river-county-vero-beach-high-school-vero-beach-florida-cat-in-the-hat-ai-generated-images-viral-trend-school-threats-school-shooting-threat-social-media-threat",
+            "source_headline": "Indian River County Schools warning students, parents about viral 'Cat in the Hat' trend - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-schools-viral-cat-in-the-hat-trend/73596904",
             "canonical_slug": "2026-09-02-viral-ai-generated-cat-in-the-hat-threat-targets-vero-beach-high-school-deemed-n",
             "canonical_headline": "Two Indian River County middle schools targeted in viral Cat in the Hat threat trend, district warns parents",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6069,15 +5950,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 18.087
+        "elapsed_seconds": 21.492
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 6,
+        "fresh_candidate_count": 17,
+        "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6166,12 +6047,12 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Mango Music and Art Festival on Saturday September 6, 2026 in Lake Worth Beach",
+              "Mango Music and Art Festival on Saturday in Lake Worth Beach",
               "National Deaf Awareness Month event at Busch Wildlife Sanctuary on Saturday",
               "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
-              "SoFlo Market one-year anniversary celebration in Boca Raton",
-              "Northwest BBQ Brews Blues 11th annual festival",
-              "Peachfest 5-Year Anniversary Art Walk in West Palm Beach",
+              "SoFlo Market 1-year anniversary on Saturday in Boca Raton",
+              "Northwest BBQ Brews Blues on Saturday at Heart Soul Park",
+              "Peachfest 5-Year Anniversary Art Walk on Saturday in West Palm Beach",
               "Hurricane Alley Blowout Rodeo Friday-Saturday in Vero Beach"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -6226,7 +6107,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.502
+        "elapsed_seconds": 30.604
       },
       {
         "category_key": "florida",
@@ -6273,14 +6154,14 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 22.333
+        "elapsed_seconds": 25.66
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
+        "fetched_candidate_count": 25,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -6305,22 +6186,22 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
+            "source_headline": "Deputies find stolen car, credit cards, documents, sleeping suspect at Treasure Coast mall - WPEC",
+            "source_url": "https://cbs12.com/news/local/deputies-find-stolen-car-stolen-documents-sleeping-suspect-at-treasure-coast-square-mall-fort-pierce-martin-county-treasure-coast-mall-martin-county-sheriffs-office-port-st-lucie-police-department-cedric-lenard-culver-stolen-car-stolen-vehicle-gra",
+            "editorial_story_id": "story_009774",
+            "canonical_slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
+            "canonical_headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WFLX",
             "source_url": "https://www.wflx.com/2026/09/08/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety?outputType=amp",
             "editorial_story_id": "story_009637",
             "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
             "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
-            "editorial_story_id": "story_009637",
-            "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
-            "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6331,6 +6212,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Deputies find stolen car, credit cards, documents, sleeping suspect at Treasure Coast mall - WPEC",
+            "source_url": "https://cbs12.com/news/local/deputies-find-stolen-car-stolen-documents-sleeping-suspect-at-treasure-coast-square-mall-fort-pierce-martin-county-treasure-coast-mall-martin-county-sheriffs-office-port-st-lucie-police-department-cedric-lenard-culver-stolen-car-stolen-vehicle-gra",
+            "canonical_slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
+            "canonical_headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "martin",
             "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WFLX",
@@ -6345,89 +6241,141 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
-            "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
-            "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.107
+        "elapsed_seconds": 31.902
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "quality_gate_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 17,
-        "publishable_source_count": 4,
-        "selected_source_count": 4,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 9,
+        "selected_source_count": 9,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 9.813,
+            "elapsed_seconds": 58.653,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 9.813,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 58.654,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 0,
-        "article_framing_rejections": [],
+        "article_framing_rejection_count": 1,
+        "article_framing_rejections": [
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "headline": "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ],
+            "lead_independence": {
+              "required": true,
+              "passed": true,
+              "headline": "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
+              "lead": "The fire was reported beyond mile marker 141, according to Florida's Turnpike traffic information. As of 5:44 p.m., the roadway was listed as closed.",
+              "lead_word_count": 27,
+              "headline_overlap_ratio": 0.333,
+              "new_context_token_count": 12,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "standard",
+              "surname_first_reference": {
+                "required": false,
+                "passed": true,
+                "missing": [],
+                "candidates": []
+              },
+              "update_diagnostics": {
+                "required": false,
+                "passed": true,
+                "story_form": "standard"
+              },
+              "missing": []
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": false,
+              "headline": "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
+              "lead": "The fire was reported beyond mile marker 141, according to Florida's Turnpike traffic information. As of 5:44 p.m., the roadway was listed as closed.",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [
+                "st_lucie_county"
+              ],
+              "lead_jurisdictions": [],
+              "missing_jurisdictions": [
+                "st_lucie_county"
+              ],
+              "headline_judge_claims": [],
+              "lead_judge_claims": [],
+              "missing_judge_claims": [],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": [
+                "headline_jurisdiction_missing_from_lead"
+              ]
+            },
+            "source_focus": {
+              "required": true,
+              "passed": true,
+              "generated_headline": "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
+              "generated_lead": "The fire was reported beyond mile marker 141, according to Florida's Turnpike traffic information. As of 5:44 p.m., the roadway was listed as closed.",
+              "source_title": "Vehicle fire closes southbound lanes of Florida's Turnpike in St. Lucie County",
+              "source_lead": "A vehicle fire has closed the southbound lanes of Florida's Turnpike in St. Lucie County Tuesday evening.",
+              "title_similarity": {
+                "score": 0.9609,
+                "overlap": 1.0,
+                "jaccard": 0.9,
+                "sorted_sequence": 0.9545,
+                "ordered_sequence": 0.9545,
+                "shared_token_count": 9.0
+              },
+              "lead_token_overlap": 0.333,
+              "missing": []
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "official_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
+          }
+        ],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 9,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 13,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - WPEC",
-            "source_url": "https://cbs12.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Former Fort Pierce officer arrested over alleged misuse of police databases - cw34.com",
-            "source_url": "https://cw34.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Ex-Fort Pierce police officer accused of illegally accessing Flock camera database to track ex-girlfriend - WPBF",
-            "source_url": "https://www.wpbf.com/article/fort-pierce-police-former-officer-database-misuse/73643478",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "Deputies find stolen car, credit cards, documents, sleeping suspect at Treasure Coast mall - WPEC",
+            "source_url": "https://cbs12.com/news/local/deputies-find-stolen-car-stolen-documents-sleeping-suspect-at-treasure-coast-square-mall-fort-pierce-martin-county-treasure-coast-mall-martin-county-sheriffs-office-port-st-lucie-police-department-cedric-lenard-culver-stolen-car-stolen-vehicle-gra",
+            "editorial_story_id": "story_009774",
+            "canonical_slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
+            "canonical_headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6437,36 +6385,6 @@
             "editorial_story_id": "story_009775",
             "canonical_slug": "2026-09-08-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-failure",
             "canonical_headline": "800 gallons of sewage spill at Port St. Lucie lift station after power failure",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Former Fort Pierce officer arrested over alleged misuse of police databases - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6531,8 +6449,30 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
+            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=source:https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -6540,43 +6480,13 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - WPEC",
-            "source_url": "https://cbs12.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
+            "source_headline": "Deputies find stolen car, credit cards, documents, sleeping suspect at Treasure Coast mall - WPEC",
+            "source_url": "https://cbs12.com/news/local/deputies-find-stolen-car-stolen-documents-sleeping-suspect-at-treasure-coast-square-mall-fort-pierce-martin-county-treasure-coast-mall-martin-county-sheriffs-office-port-st-lucie-police-department-cedric-lenard-culver-stolen-car-stolen-vehicle-gra",
+            "canonical_slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
+            "canonical_headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Former Fort Pierce officer arrested over alleged misuse of police databases - cw34.com",
-            "source_url": "https://cw34.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Ex-Fort Pierce police officer accused of illegally accessing Flock camera database to track ex-girlfriend - WPBF",
-            "source_url": "https://www.wpbf.com/article/fort-pierce-police-former-officer-database-misuse/73643478",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6589,51 +6499,6 @@
             "source_url": "https://cbs12.com/news/local/about-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-issue-170-hawthorne-circle-fpl-power-pumps-disinfected-lime-no-water-affected",
             "canonical_slug": "2026-09-08-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-failure",
             "canonical_headline": "800 gallons of sewage spill at Port St. Lucie lift station after power failure",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Former Fort Pierce officer arrested over alleged misuse of police databases - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -6737,15 +6602,17 @@
         "new_publication_stale_rejected_count": 1,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 27.8
+        "live_hero_headline": "Former Fort Pierce officer Josepher Crutchfield due in court Wednesday on felony database-misuse charges",
+        "generated_card_count": 2,
+        "elapsed_seconds": 87.622
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "quality_gate_archive_recovery",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 8,
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 26,
+        "publishable_source_count": 9,
         "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6754,11 +6621,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.002,
+            "elapsed_seconds": 8.189,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 8.002,
+        "model_elapsed_seconds": 8.189,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -6769,10 +6636,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 9,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -6786,26 +6653,6 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "editorial_story_id": "story_009635",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
-            "editorial_story_id": "story_009637",
-            "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
-            "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "JetBlue ends Vero Beach to New York JFK flights as demand falls short - cw34.com",
             "source_url": "https://cw34.com/news/local/jetblue-ends-flights-vero-beach-regional-airport-to-new-york-jfk-international-airport-adds-8-new-stops-fort-lauderdale-florida-news?teaserSource=trending",
             "editorial_story_id": "story_009723",
@@ -6815,8 +6662,30 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
+            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=source:https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -6830,36 +6699,6 @@
             "canonical_headline": "Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Former Fort Pierce officer accused of using Flock cameras, police databases to track ex-girlfriend",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database-systems",
-            "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-            "canonical_headline": "Fort Pierce police chief details arrest timeline for ex-officer who tracked woman 382 times",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
-            "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
-            "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6886,7 +6725,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 25.399
+        "elapsed_seconds": 34.01
       }
     ]
   }
