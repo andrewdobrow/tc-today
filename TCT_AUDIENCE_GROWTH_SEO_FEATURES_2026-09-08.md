@@ -7,7 +7,7 @@ Included:
 2. Substantive city news hubs for Stuart, Jensen Beach, Palm City, Hobe Sound, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian and Fellsmere when at least 3 matching stories exist.
 3. Internal event detail URLs with Event structured data and external official/ticket links.
 4. Smart article recirculation using durable story/event identity first, then geography/category/text relevance.
-5. Free Morning Brief fallback beneath the paywall without changing the existing paid membership offer/benefits copy.
+5. Existing post-paywall Morning Brief module retained without adding a duplicate newsletter CTA inside the paywall.
 6. Searchable/filterable archive while retaining crawlable chronological links.
 7. Privacy-preserving 24-hour Most Read module backed by aggregate hourly counts.
 8. News Tip page with location/details/contact/attachment fields and newsroom navigation.

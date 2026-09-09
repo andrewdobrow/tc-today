@@ -29,7 +29,7 @@ NEWSLETTER_URL = "https://treasure-coast-today.kit.com/cb848255f8"
 PREFERRED_SOURCE_URL = "https://www.google.com/preferences/source?q=treasurecoast.today"
 PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
 FORM_ENDPOINT = "https://formspree.io/f/mqejrpdv"
-ASSET_VERSION = "1.13.8.1"
+ASSET_VERSION = "1.13.8.2"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
@@ -628,6 +628,14 @@ def enhance_articles(archive: list[dict]) -> dict:
             skipped += 1; continue
         scanned += 1
         text = original
+        # Article pages should not inherit the generic page-level top padding;
+        # the article wrapper owns its spacing. Normalize retained shells too.
+        text = re.sub(r'<main(?![^>]*\bclass=)([^>]*)>', r'<main class="article-page-main"\1>', text, count=1, flags=re.I)
+        text = re.sub(
+            r'<main\b([^>]*\bclass=["\'])([^"\']*)(["\'][^>]*)>',
+            lambda m: m.group(0) if "article-page-main" in m.group(2).split() else '<main' + m.group(1) + (m.group(2) + ' article-page-main').strip() + m.group(3) + '>',
+            text, count=1, flags=re.I,
+        )
         visible_breadcrumb, breadcrumb_schema = _breadcrumb_for(entry)
         text = _replace_marker(text, BREADCRUMB_MARKER_START, BREADCRUMB_MARKER_END, visible_breadcrumb)
         if BREADCRUMB_MARKER_START not in text:
@@ -840,8 +848,9 @@ def _rewrite_event_listing_links(events: list[dict]) -> None:
     page_path.write_text(text, encoding="utf-8")
 
 
-def _site_search_button() -> str:
-    return '''<button type="button" class="tct-search-toggle" data-tct-search-toggle aria-label="Search Treasure Coast Today" aria-controls="tct-site-search" aria-expanded="false">
+def _site_search_button(placement: str = "universal") -> str:
+    placement = placement if placement in {"desktop", "mobile", "universal"} else "universal"
+    return f'''<button type="button" class="tct-search-toggle tct-search-toggle--{placement}" data-tct-search-toggle aria-label="Search Treasure Coast Today" aria-controls="tct-site-search" aria-expanded="false">
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
 </button>'''
 
@@ -914,21 +923,45 @@ def inject_site_navigation() -> dict:
                 inner = footer_links.group(2) + '\n        <a href="/news-tip.html">News Tip</a>'
                 text = text[:footer_links.start()] + footer_links.group(1) + inner + footer_links.group(3) + text[footer_links.end():]
 
-        # Sitewide article search: compact magnifying glass in the masthead plus
-        # one accessible overlay.  This is presentation-only and idempotent.
-        if 'data-tct-search-toggle' not in text and 'site-masthead' in text:
-            button = _site_search_button()
+        # Sitewide article search: keep a desktop trigger with account controls
+        # and a separate mobile trigger beside the hamburger. Both target the
+        # same accessible overlay. Rebuild the trigger pair every run so pages
+        # from the previous one-button rollout migrate cleanly and idempotently.
+        if 'site-masthead' in text:
+            text = re.sub(
+                r'\s*<button\b(?=[^>]*\bclass=["\'][^"\']*\btct-search-toggle\b[^"\']*["\'])[^>]*>.*?</button>',
+                '', text, flags=re.I | re.S,
+            )
+            # Previous fallback markup wraps its trigger; removing the button
+            # can leave an empty wrapper, so normalize that before reinserting.
+            text = re.sub(
+                r'\s*<div\b[^>]*class=["\'][^"\']*\btct-search-legacy-slot\b[^"\']*["\'][^>]*>\s*</div>',
+                '', text, flags=re.I | re.S,
+            )
             actions = re.search(r'(<div\b[^>]*class=["\'][^"\']*header-actions[^"\']*["\'][^>]*>)', text, re.I)
+            hamburger = re.search(
+                r'(<button\b(?=[^>]*\bclass=["\'][^"\']*\bmobile-nav-toggle-button\b[^"\']*["\'])[^>]*>.*?</button>)',
+                text, re.I | re.S,
+            )
             if actions:
-                text = text[:actions.end()] + '\n          ' + button + text[actions.end():]
+                desktop_button = _site_search_button("desktop" if hamburger else "universal")
+                text = text[:actions.end()] + '\n          ' + desktop_button + text[actions.end():]
             else:
                 weather = re.search(r'<a\b[^>]*class=["\'][^"\']*masthead-live-weather[^"\']*["\']', text, re.I)
                 if weather:
-                    text = text[:weather.start()] + button + '\n        ' + text[weather.start():]
+                    text = text[:weather.start()] + _site_search_button("universal") + '\n        ' + text[weather.start():]
                 else:
                     masthead_open = re.search(r'<header\b[^>]*class=["\'][^"\']*site-masthead[^"\']*["\'][^>]*>', text, re.I)
                     if masthead_open:
-                        text = text[:masthead_open.end()] + '\n    <div class="tct-search-legacy-slot">' + button + '</div>' + text[masthead_open.end():]
+                        text = text[:masthead_open.end()] + '\n    <div class="tct-search-legacy-slot">' + _site_search_button("universal") + '</div>' + text[masthead_open.end():]
+            if hamburger:
+                # Re-find after the desktop insertion because string offsets changed.
+                hamburger = re.search(
+                    r'(<button\b(?=[^>]*\bclass=["\'][^"\']*\bmobile-nav-toggle-button\b[^"\']*["\'])[^>]*>.*?</button>)',
+                    text, re.I | re.S,
+                )
+                if hamburger:
+                    text = text[:hamburger.end()] + '\n          ' + _site_search_button("mobile") + text[hamburger.end():]
         if 'data-tct-search-overlay' not in text and 'site-masthead' in text:
             masthead = re.search(r'<header\b[^>]*class=["\'][^"\']*site-masthead[^"\']*["\'][^>]*>.*?</header>', text, re.I | re.S)
             if masthead:

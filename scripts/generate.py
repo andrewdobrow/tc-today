@@ -17741,7 +17741,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 <body>
   <div class="article-reading-progress" aria-hidden="true"></div>
 {header}
-  <main>
+  <main class="article-page-main">
     <div class="article-wrap">
 {banner_slot}
       <div class="article-meta">

@@ -6511,3 +6511,105 @@ html.tct-search-open { overflow: hidden; }
   .tct-search-result--compact .tct-search-result-title { font-size: 16px; }
 }
 .tct-search-legacy-slot { position: absolute; top: 10px; right: 10px; z-index: 2; }
+
+
+/* ==========================================================
+   v1.13.8.2 — article top rhythm + masthead control alignment
+   ========================================================== */
+/* Article pages already own their horizontal and vertical gutters through
+   .article-wrap.  Remove the generic page padding so the story does not get
+   a second, invisible layer of whitespace below the masthead. */
+main.article-page-main {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 !important;
+}
+
+main.article-page-main > .article-wrap {
+  padding-top: 24px !important;
+}
+
+/* Breadcrumbs are part of the article hierarchy, not a separately centered
+   mini-container.  Keep their left edge exactly aligned with category/byline. */
+.tct-breadcrumb--article {
+  width: 100%;
+  max-width: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+/* Desktop account controls form one deliberate horizontal cluster. */
+@media (min-width: 901px) {
+  .site-masthead .header-actions {
+    flex-wrap: nowrap;
+    gap: 12px;
+    max-width: none;
+    white-space: nowrap;
+  }
+
+  .site-masthead .membership-header-signin {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    margin: 0;
+    padding: 0 2px;
+  }
+
+  .site-masthead .membership-header-welcome {
+    align-items: center;
+    min-height: 40px;
+    margin: 0;
+    padding: 0 2px;
+  }
+
+  .site-masthead .tct-search-toggle--desktop,
+  .site-masthead .tct-search-toggle--universal {
+    margin-right: 0;
+  }
+}
+
+/* Two search triggers share one search dialog: desktop stays with the account
+   controls; mobile lives beside the hamburger so it can never crowd the logo. */
+.tct-search-toggle--mobile {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .site-masthead .tct-search-toggle--desktop {
+    display: none !important;
+  }
+
+  .site-masthead .masthead-promo-slot {
+    gap: 8px;
+  }
+
+  .site-masthead .tct-search-toggle--mobile {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  main.article-page-main > .article-wrap {
+    padding-top: 18px !important;
+  }
+
+  .tct-breadcrumb--article {
+    margin-bottom: 13px;
+  }
+
+  .site-masthead .masthead-promo-slot {
+    gap: 6px;
+  }
+
+  .site-masthead .tct-search-toggle--mobile {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+    margin: 0;
+  }
+}

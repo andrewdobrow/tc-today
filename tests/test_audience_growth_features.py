@@ -96,6 +96,7 @@ def test_article_enhancement_handles_legacy_shell_and_adds_schema(tmp_path, monk
     assert report["scanned"] == 1
     page=article.read_text(encoding="utf-8")
     assert 'TCT_BREADCRUMB_START' in page
+    assert '<main class="article-page-main">' in page
     assert 'data-tct-most-read' in page
     assert 'google-add-preferred-source-btn' in page
     assert 'https://news.google.com/swg/js/v1/publisher.js' in page
@@ -138,10 +139,40 @@ def test_search_chrome_injection_is_idempotent(tmp_path, monkeypatch):
     assert second.count('data-tct-search-toggle') == 1
     assert second.count('data-tct-search-overlay') == 1
 
-def test_paywall_has_free_morning_brief_fallback_and_value_copy():
+
+def test_modern_masthead_search_splits_desktop_and_mobile_controls(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    modern = """<!doctype html><html><body>
+<header class="site-masthead"><div class="masthead-top-row">
+<div class="masthead-promo-slot"><button type="button" class="mobile-nav-toggle-button"><span></span></button><a class="masthead-newsletter" href="#">Brief</a></div>
+<div class="header-top"><a class="wordmark" href="/">TCT</a></div>
+<div class="header-actions"><a class="membership-subscribe-btn" href="/subscribe.html">Subscribe</a><a class="membership-header-signin" href="/subscribe.html?signin=1">Sign in</a></div>
+</div></header><main></main><footer><div class="footer-links"><a href="/contact.html">Contact</a></div></footer></body></html>"""
+    (tmp_path / "about.html").write_text(modern, encoding="utf-8")
+    features.inject_site_navigation()
+    first=(tmp_path/"about.html").read_text(encoding="utf-8")
+    features.inject_site_navigation()
+    second=(tmp_path/"about.html").read_text(encoding="utf-8")
+    assert first == second
+    assert second.count('data-tct-search-toggle') == 2
+    assert 'tct-search-toggle--desktop' in second
+    assert 'tct-search-toggle--mobile' in second
+    hamburger_end = second.index('</button>', second.index('mobile-nav-toggle-button'))
+    mobile_pos = second.index('tct-search-toggle--mobile')
+    newsletter_pos = second.index('masthead-newsletter')
+    assert hamburger_end < mobile_pos < newsletter_pos
+    actions_pos = second.index('header-actions')
+    desktop_pos = second.index('tct-search-toggle--desktop')
+    subscribe_pos = second.index('membership-subscribe-btn')
+    signin_pos = second.index('membership-header-signin')
+    assert actions_pos < desktop_pos < subscribe_pos < signin_pos
+
+
+def test_paywall_avoids_duplicate_newsletter_fallback_and_keeps_value_copy():
     html=paywall_section_html("sample-story")
-    assert "Not ready to subscribe?" in html
-    assert "free TCT Morning Brief" in html
+    assert "Not ready to subscribe?" not in html
+    assert "free TCT Morning Brief" not in html
+    assert "tct-paywall-newsletter-fallback" not in html
     assert "Get unlimited, ad-free access to independent local reporting" in html
     assert "Ad-free reading" in html
 
