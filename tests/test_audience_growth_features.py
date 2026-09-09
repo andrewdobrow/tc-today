@@ -62,14 +62,17 @@ def test_searchable_archive_keeps_crawlable_article_links(tmp_path, monkeypatch)
     assert page.count('data-archive-item') >= len(rows)
 
 
-def test_news_tip_form_supports_files_and_email_fallback(tmp_path, monkeypatch):
+def test_news_tip_page_is_email_only_and_has_no_third_party_form(tmp_path, monkeypatch):
     _setup_root(tmp_path, monkeypatch)
     features.render_news_tip_page()
     page=(tmp_path/"news-tip.html").read_text(encoding="utf-8")
-    assert 'enctype="multipart/form-data"' in page
-    assert 'name="attachment"' in page
-    assert 'tips@treasurecoast.today' in page
-    assert 'name="form_type" value="Treasure Coast Today News Tip"' in page
+    assert 'mailto:hello@treasurecoast.today' in page
+    assert 'Email a news tip' in page
+    assert 'news-tip-form' not in page
+    assert 'formspree.io' not in page
+    assert 'multipart/form-data' not in page
+    assert 'name="attachment"' not in page
+    assert 'name="form_type"' not in page
 
 
 def test_event_detail_pages_use_internal_canonical_and_event_schema(tmp_path, monkeypatch):
@@ -138,6 +141,17 @@ def test_search_chrome_injection_is_idempotent(tmp_path, monkeypatch):
     assert first == second
     assert second.count('data-tct-search-toggle') == 1
     assert second.count('data-tct-search-overlay') == 1
+
+
+def test_footer_quick_links_are_migrated_to_two_real_columns():
+    html = '''<footer><div class="footer-inner footer-v2"><div class="footer-column"><strong>Quick Links</strong><div class="footer-links">
+    <a href="/about.html">About</a><a href="/newsroom.html">Newsroom</a><a href="/archive.html">Archive</a><a href="/contact.html">Contact</a>
+    </div></div></div></footer>'''
+    first = features._normalize_quick_links_columns(html)
+    second = features._normalize_quick_links_columns(first)
+    assert first == second
+    assert first.count('class="footer-links-column"') == 2
+    assert first.count('<a ') == 4
 
 
 def test_modern_masthead_search_splits_desktop_and_mobile_controls(tmp_path, monkeypatch):

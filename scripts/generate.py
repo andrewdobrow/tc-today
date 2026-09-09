@@ -23230,19 +23230,23 @@ def _page_footer():
     return f"""  <footer>
     <div class="footer-inner footer-v2">
       <div class="footer-brand"><span class="footer-wordmark">TCT</span><p>Independent, hyperlocal journalism for the Treasure Coast.</p></div>
-      <div class="footer-column"><strong>Quick Links</strong><div class="footer-links">
-        <a href="/about.html">About</a>
-        <a href="/newsroom.html">Newsroom</a>
-        <a href="/editorial-standards.html">Editorial Standards</a>
-        <a href="/corrections-policy.html">Corrections</a>
-        <a href="/ownership.html">Ownership</a>
-        <a href="/weather.html">Weather</a>
-        <a href="/archive.html">Archive</a>
-        {RSS_FOOTER_LINK}
-        {membership_link}
-        <a href="/advertise.html">Advertise</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/contact.html">Contact</a>
+      <div class="footer-column footer-quick-links"><strong>Quick Links</strong><div class="footer-links">
+        <div class="footer-links-column">
+          <a href="/about.html">About</a>
+          <a href="/newsroom.html">Newsroom</a>
+          <a href="/editorial-standards.html">Editorial Standards</a>
+          <a href="/corrections-policy.html">Corrections</a>
+          <a href="/ownership.html">Ownership</a>
+          <a href="/weather.html">Weather</a>
+        </div>
+        <div class="footer-links-column">
+          <a href="/archive.html">Archive</a>
+          {RSS_FOOTER_LINK}
+          {membership_link}
+          <a href="/advertise.html">Advertise</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/contact.html">Contact</a>
+        </div>
       </div></div>
       <div class="footer-column"><strong>Counties</strong><a href="/?cat=martin">Martin County</a><a href="/?cat=st_lucie">St. Lucie County</a><a href="/?cat=indian_river">Indian River County</a></div>
       {connect_column}

@@ -28,8 +28,7 @@ SITE_URL = "https://treasurecoast.today"
 NEWSLETTER_URL = "https://treasure-coast-today.kit.com/cb848255f8"
 PREFERRED_SOURCE_URL = "https://www.google.com/preferences/source?q=treasurecoast.today"
 PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
-FORM_ENDPOINT = "https://formspree.io/f/mqejrpdv"
-ASSET_VERSION = "1.13.8.2"
+ASSET_VERSION = "1.13.8.3"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
@@ -406,23 +405,20 @@ def render_searchable_archive(archive: list[dict]) -> dict:
 
 
 def render_news_tip_page() -> None:
-    schema = {"@context": "https://schema.org", "@type": "ContactPage", "name": "Send a News Tip | Treasure Coast Today", "url": f"{SITE_URL}/news-tip.html", "description": "Send a local news tip, document or photo to the Treasure Coast Today newsroom."}
-    head = _page_head("Send a News Tip | Treasure Coast Today", "Tell the Treasure Coast Today newsroom about a local story, issue, document, photo or event we should investigate.", "/news-tip.html", structured_data=schema)
+    schema = {"@context": "https://schema.org", "@type": "ContactPage", "name": "Send a News Tip | Treasure Coast Today", "url": f"{SITE_URL}/news-tip.html", "description": "Contact the Treasure Coast Today newsroom with a local news tip."}
+    head = _page_head("Send a News Tip | Treasure Coast Today", "Contact the Treasure Coast Today newsroom about a local story, issue, document, photo or event we should investigate.", "/news-tip.html", structured_data=schema)
     page = f'''<!DOCTYPE html><html lang="en"><head>{head}</head><body>
 {_page_header(active='')}
 <main class="news-tip-page"><div class="news-tip-shell">
 <nav class="tct-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/newsroom.html">Newsroom</a><span aria-hidden="true">›</span><span aria-current="page">Send a News Tip</span></nav>
-<header class="news-tip-hero"><span class="news-tip-eyebrow">TCT Newsroom</span><h1>Send us a news tip</h1><p>Know something happening in Martin, St. Lucie or Indian River County that we should look into? Tell us what you know.</p></header>
-<div class="news-tip-layout"><section><form class="news-tip-form" action="{FORM_ENDPOINT}" method="POST" enctype="multipart/form-data">
-<input type="hidden" name="form_type" value="Treasure Coast Today News Tip"><input type="hidden" name="_subject" value="New TCT newsroom tip">
-<label><span>Where is this happening? *</span><input name="location" required placeholder="City, neighborhood, road, school or business"></label>
-<label><span>What should we know? *</span><textarea name="tip" required rows="8" placeholder="Describe what happened, when it happened and why it matters."></textarea></label>
-<div class="news-tip-two"><label><span>Your name <small>(optional)</small></span><input name="name" autocomplete="name"></label><label><span>Email <small>(optional)</small></span><input name="email" type="email" autocomplete="email"></label></div>
-<label><span>Phone <small>(optional)</small></span><input name="phone" type="tel" autocomplete="tel"></label>
-<label><span>How do you know about this? <small>(optional)</small></span><input name="relationship" placeholder="Witness, resident, employee, public record, etc."></label>
-<label class="news-tip-file"><span>Photo or document <small>(optional)</small></span><input name="attachment" type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx,.txt"><small>Attach supporting material if you have it. If an upload does not go through, email it to tips@treasurecoast.today.</small></label>
-<button type="submit" class="news-tip-submit">Send tip</button>
-</form></section><aside class="news-tip-aside"><h2>What makes a useful tip?</h2><p>Specific details help: names, dates, locations, public documents, photos and how you learned about the situation.</p><h2>Prefer email?</h2><p><a href="mailto:tips@treasurecoast.today">tips@treasurecoast.today</a></p><h2>Emergency?</h2><p>Do not use this form for emergencies. Call 911 or the appropriate local agency.</p><p class="news-tip-privacy">You do not have to provide your name. Avoid sending sensitive personal information unless it is necessary to understand the tip. Submission does not guarantee publication.</p></aside></div>
+<header class="news-tip-hero"><span class="news-tip-eyebrow">TCT Newsroom</span><h1>Send us a news tip</h1><p>Know something happening in Martin, St. Lucie or Indian River County that we should look into? Contact the newsroom directly.</p></header>
+<div class="news-tip-layout"><section class="news-tip-contact-card">
+<h2>Email the TCT newsroom</h2>
+<p>Tell us what happened, where and when it happened, why it matters, and how you know about it. You can attach supporting photos or documents in your email.</p>
+<a class="news-tip-email-button" href="mailto:hello@treasurecoast.today?subject=News%20tip%20for%20Treasure%20Coast%20Today">Email a news tip</a>
+<p class="news-tip-email-address"><a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a></p>
+<p class="news-tip-privacy">There is currently no web submission form on this page. Your email is sent through your own email provider directly to Treasure Coast Today.</p>
+</section><aside class="news-tip-aside"><h2>What makes a useful tip?</h2><p>Specific details help: names, dates, locations, public documents, photos and how you learned about the situation.</p><h2>Emergency?</h2><p>Do not use email for emergencies. Call 911 or the appropriate local agency.</p><p class="news-tip-privacy">Avoid sending sensitive personal information unless it is necessary to understand the tip. Sending a tip does not guarantee publication.</p></aside></div>
 </div></main>
 {_page_footer()}
 </body></html>'''
@@ -900,6 +896,40 @@ def render_article_search_page() -> None:
     (ROOT / "search.html").write_text(page, encoding="utf-8")
 
 
+def _normalize_quick_links_columns(text: str) -> str:
+    """Split the modern Quick Links footer group into two real columns.
+
+    Older retained pages may still have one flat footer-links list.  Migrate only
+    the footer-v2 Quick Links group and leave unrelated legacy/simple footers alone.
+    """
+    if "footer-v2" not in text or "Quick Links" not in text or "footer-links-column" in text:
+        return text
+    pattern = re.compile(
+        r'(<div\b[^>]*class=["\'][^"\']*\bfooter-column\b[^"\']*["\'][^>]*>\s*'
+        r'<strong>\s*Quick Links\s*</strong>\s*'
+        r'<div\b[^>]*class=["\'][^"\']*\bfooter-links\b[^"\']*["\'][^>]*>)'
+        r'(.*?)'
+        r'(</div>\s*</div>)',
+        re.I | re.S,
+    )
+    match = pattern.search(text)
+    if not match:
+        return text
+    links = re.findall(r'<a\b[^>]*>.*?</a>', match.group(2), re.I | re.S)
+    if len(links) < 2:
+        return text
+    split = (len(links) + 1) // 2
+    left = "\n".join(f"          {link.strip()}" for link in links[:split])
+    right = "\n".join(f"          {link.strip()}" for link in links[split:])
+    replacement = (
+        match.group(1)
+        + '\n        <div class="footer-links-column">\n' + left + '\n        </div>'
+        + '\n        <div class="footer-links-column">\n' + right + '\n        </div>\n      '
+        + match.group(3)
+    )
+    return text[:match.start()] + replacement + text[match.end():]
+
+
 def inject_site_navigation() -> dict:
     updated = scanned = 0
     for path in ROOT.rglob("*.html"):
@@ -922,6 +952,8 @@ def inject_site_navigation() -> dict:
             if footer_links:
                 inner = footer_links.group(2) + '\n        <a href="/news-tip.html">News Tip</a>'
                 text = text[:footer_links.start()] + footer_links.group(1) + inner + footer_links.group(3) + text[footer_links.end():]
+
+        text = _normalize_quick_links_columns(text)
 
         # Sitewide article search: keep a desktop trigger with account controls
         # and a separate mobile trigger beside the hamburger. Both target the
@@ -1080,8 +1112,10 @@ def validate_features(archive: list[dict]) -> dict:
     for token in ("data-archive-query","data-archive-county","data-archive-city","data-archive-category","data-archive-from","data-archive-to"):
         if token not in archive_text: failures.append(f"archive missing {token}")
     tip=(ROOT/"news-tip.html").read_text(encoding="utf-8")
-    for token in ('enctype="multipart/form-data"','name="attachment"','tips@treasurecoast.today'):
-        if token not in tip: failures.append(f"news tip missing {token}")
+    if 'mailto:hello@treasurecoast.today' not in tip:
+        failures.append("news tip missing newsroom email link")
+    for forbidden in ('news-tip-form', 'formspree.io', 'multipart/form-data', 'name="attachment"', 'name="form_type"'):
+        if forbidden.lower() in tip.lower(): failures.append(f"news tip contains forbidden form token {forbidden}")
     story_index=_read_json(ROOT/"data"/"story-index.json",{})
     stories = story_index.get("stories",{}) if isinstance(story_index,dict) else {}
     if len(stories) < 10: failures.append("story-index too small")

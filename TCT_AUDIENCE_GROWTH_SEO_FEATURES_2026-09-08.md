@@ -10,7 +10,7 @@ Included:
 5. Existing post-paywall Morning Brief module retained without adding a duplicate newsletter CTA inside the paywall.
 6. Searchable/filterable archive while retaining crawlable chronological links.
 7. Privacy-preserving 24-hour Most Read module backed by aggregate hourly counts.
-8. News Tip page with location/details/contact/attachment fields and newsroom navigation.
+8. News Tip page with direct newsroom email contact and newsroom navigation; no third-party web submission form.
 9. Final NewsArticle, author-profile, breadcrumb, paywall-schema and canonical SEO validation.
 
 The routine workflow builds these after the core newsroom generator and validates the final rendered output after membership paywall preparation.
