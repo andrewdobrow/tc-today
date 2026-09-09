@@ -211,6 +211,77 @@ def test_registry_pressure_uses_lossless_tighter_json_before_hard_ceiling(
     assert path.stat().st_size < StoryRegistry.REGISTRY_MAX_BYTES
 
 
+
+
+def test_registry_critical_mode_keeps_identity_and_reduces_candidate_evidence_to_one(
+    tmp_path: Path, monkeypatch
+) -> None:
+    path = tmp_path / "editorial_story_registry.json"
+    registry = StoryRegistry(path)
+    registry.data["stories"] = {}
+    registry.data["event_to_story"] = {}
+
+    for index in range(1, 251):
+        story_id = f"story_{index:06d}"
+        story = _minimal_story(story_id, [])
+        story["canonical_title"] = f"Authoritative local story {index}"
+        story["sources"] = [f"https://example.com/source/{index}"]
+        story["unified_incident_evidence"] = [
+            _incident_evidence(evidence_index + index * 100)
+            for evidence_index in range(20)
+        ]
+        registry.data["stories"][story_id] = story
+        registry.data["event_to_story"][f"event-{index}"] = story_id
+
+    # Compute a ceiling that is too small for two retained candidate-evidence rows
+    # per story but comfortably large enough for one. The difference is deliberately
+    # much larger than the compaction-report metadata added during save().
+    import copy
+
+    emergency_payload = copy.deepcopy(registry.data)
+    StoryRegistry._compact_payload_unified_incident_evidence(
+        emergency_payload, limit=StoryRegistry.UNIFIED_INCIDENT_EVIDENCE_EMERGENCY_LIMIT
+    )
+    critical_payload = copy.deepcopy(registry.data)
+    StoryRegistry._compact_payload_unified_incident_evidence(
+        critical_payload, limit=StoryRegistry.UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT
+    )
+    emergency_size = len(
+        StoryRegistry._serialize_payload(emergency_payload, indent=None).encode("utf-8")
+    )
+    critical_size = len(
+        StoryRegistry._serialize_payload(critical_payload, indent=None).encode("utf-8")
+    )
+    assert critical_size + 16_384 < emergency_size
+
+    monkeypatch.setattr(StoryRegistry, "REGISTRY_PRESSURE_BYTES", 1)
+    monkeypatch.setattr(
+        StoryRegistry,
+        "REGISTRY_MAX_BYTES",
+        critical_size + (emergency_size - critical_size) // 2,
+    )
+
+    registry.save()
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert path.stat().st_size < StoryRegistry.REGISTRY_MAX_BYTES
+    assert payload["history_compaction"]["last_pressure_mode"] == "critical"
+    assert payload["history_compaction"]["last_serialization_mode"] == "critical_compact"
+    assert payload["history_compaction"]["last_unified_incident_evidence_critical_write"][
+        "stories_compacted"
+    ] == 250
+    assert all(
+        len(story["unified_incident_evidence"])
+        == StoryRegistry.UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT
+        for story in payload["stories"].values()
+    )
+    assert payload["stories"]["story_000001"]["story_id"] == "story_000001"
+    assert payload["stories"]["story_000001"]["sources"] == [
+        "https://example.com/source/1"
+    ]
+    assert payload["event_to_story"]["event-1"] == "story_000001"
+
+
 def _quarantined_snapshot(story_id: str) -> dict:
     story = _minimal_story(story_id, [_entry(f"event-{index}") for index in range(40)])
     story["canonical_title"] = "Contaminated historical story retained only for quarantine"

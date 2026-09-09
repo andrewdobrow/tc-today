@@ -60,6 +60,7 @@ class StoryRegistry:
     UNIFIED_INCIDENT_EVIDENCE_LIMIT = 8
     UNIFIED_INCIDENT_EVIDENCE_PRESSURE_LIMIT = 4
     UNIFIED_INCIDENT_EVIDENCE_EMERGENCY_LIMIT = 2
+    UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT = 1
     REGISTRY_PRESSURE_BYTES = 45 * 1024 * 1024
     REGISTRY_MAX_BYTES = 50 * 1024 * 1024
     QUARANTINE_TOMBSTONE_VERSION = 1
@@ -558,6 +559,22 @@ class StoryRegistry:
             serialization_mode = "emergency_compact"
             serialized = self._serialize_payload(self.data, indent=serialization_indent)
             size_bytes = len(serialized.encode("utf-8"))
+        if size_bytes > self.REGISTRY_MAX_BYTES:
+            # Candidate-only unified-incident evidence has no publication or identity
+            # authority. If the compact registry is still over the hard ceiling, retain
+            # only the newest diagnostic row per story before aborting the build. This
+            # keeps authoritative timelines, sources, event mappings and story IDs intact
+            # while preventing non-authoritative evidence growth from becoming a
+            # publication outage.
+            critical_compaction = self._compact_payload_unified_incident_evidence(
+                self.data, limit=self.UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT
+            )
+            report["last_unified_incident_evidence_critical_write"] = critical_compaction
+            pressure_mode = "critical"
+            serialization_indent = None
+            serialization_mode = "critical_compact"
+            serialized = self._serialize_payload(self.data, indent=serialization_indent)
+            size_bytes = len(serialized.encode("utf-8"))
         report["last_serialized_bytes"] = size_bytes
         report["max_serialized_bytes"] = self.REGISTRY_MAX_BYTES
         report["pressure_serialized_bytes"] = self.REGISTRY_PRESSURE_BYTES
@@ -572,7 +589,7 @@ class StoryRegistry:
         if size_bytes > self.REGISTRY_MAX_BYTES:
             raise RuntimeError(
                 "Editorial story registry exceeds the 50 MiB safety ceiling after "
-                "adaptive candidate-evidence compaction and lossless JSON compaction: "
+                "critical candidate-evidence compaction and lossless JSON compaction: "
                 f"{size_bytes / (1024 * 1024):.2f} MiB"
             )
         temporary = self.path.with_suffix(self.path.suffix + ".tmp")
