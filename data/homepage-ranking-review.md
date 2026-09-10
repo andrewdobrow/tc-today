@@ -12,31 +12,29 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Fort Pierce police restrict Flock camera access after stalking case | Fort Pierce police restrict Flock camera access after stalking case | 73 | importance 35; freshness 99.88; urgency 8/10 |
-| 2 | Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds | C-23 Canal diversion project in Martin County complete, rerouting billions of gallons from St. Lucie Estuary | 62 | importance 10; freshness 97.56; urgency 7/10 |
-| 3 | C-23 Canal diversion project in Martin County complete, rerouting billions of gallons from St. Lucie Estuary | Vehicle fire closes southbound Florida's Turnpike in St. Lucie County | 59 | importance 35; freshness 78.37; urgency 4/10 |
-| 4 | Vehicle fire closes southbound Florida's Turnpike in St. Lucie County | Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds | 58 | importance 0; freshness 99.89; urgency 7/10 |
-| 5 | K-9 Tobi alerts deputies to heroin, marijuana in Indian River County traffic stop | Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027 | 54 | importance 20; freshness 97.57; urgency 2/10 |
-| 6 | Port St. Lucie mayor says infrastructure remains top priority as Gatlin Boulevard work advances | K-9 Tobi alerts deputies to heroin, marijuana in Indian River County traffic stop | 47 | importance 0; freshness 97.56; urgency 2/10 |
-| 7 | Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027 | Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards | 49 | importance 35; freshness 55.04; urgency 2/10; -6 category saturation |
-| 8 | Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety | JetBlue ends Vero Beach to JFK route permanently after demand falls short | 40 | importance 10; freshness 52.78; urgency 2/10 |
-| 9 | Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations | Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations | 39 | importance 0; freshness 60.48; urgency 2/10 |
-| 10 | Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards | Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety | 48 | importance 10; freshness 60.48; urgency 2/10; validated material update; -6 category saturation; -8 county saturation |
-| 11 | 800 gallons of sewage spill at Port St. Lucie lift station after power failure | 800 gallons of sewage spill at Port St. Lucie lift station after power failure | 40 | importance 10; freshness 55.03; urgency 2/10; -8 county saturation |
-| 12 | JetBlue ends Vero Beach to JFK route permanently after demand falls short | Tradition Entertainment District in Port St. Lucie to break ground within six months | 40 | importance 10; freshness 52.77; urgency 2/10; -12 county saturation |
+| 1 | C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup | C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup | 68 | importance 10; freshness 99.9; urgency 7/10; validated material update |
+| 2 | St. Lucie County advances bulk water agreement for P1 Motor Club racetrack | Florida Realtors puts $10 million behind Amendment 3 as opponents warn of service cuts | 61 | importance 25; freshness 99.89; urgency 6/10 |
+| 3 | Florida Realtors puts $10 million behind Amendment 3 as opponents warn of service cuts | Fort Pierce police restrict Flock camera access after stalking case | 58 | importance 35; freshness 95.64; urgency 2/10 |
+| 4 | Vehicle fire closes southbound Florida's Turnpike in St. Lucie County | Vehicle fire closes southbound Florida's Turnpike in St. Lucie County | 58 | importance 35; freshness 74.13; urgency 4/10 |
+| 5 | Fort Pierce police restrict Flock camera access after stalking case | St. Lucie County advances bulk water agreement for P1 Motor Club racetrack | 56 | importance 0; freshness 99.9; urgency 6/10 |
+| 6 | Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027 | Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027 | 53 | importance 20; freshness 93.33; urgency 2/10 |
+| 7 | K-9 Tobi alerts deputies to heroin, marijuana in Indian River County traffic stop | K-9 Tobi alerts deputies to heroin, marijuana in Indian River County traffic stop | 46 | importance 0; freshness 93.32; urgency 2/10 |
+| 8 | Port St. Lucie mayor says infrastructure remains top priority as Gatlin Boulevard work advances | Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards | 48 | importance 35; freshness 50.8; urgency 2/10; -6 category saturation |
+| 9 | Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety | JetBlue ends Vero Beach to JFK route permanently after demand falls short | 39 | importance 10; freshness 48.54; urgency 2/10 |
+| 10 | Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards | Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety | 47 | importance 10; freshness 56.25; urgency 2/10; validated material update; -6 category saturation; -4 county saturation |
+| 11 | 800 gallons of sewage spill at Port St. Lucie lift station after power failure | 800 gallons of sewage spill at Port St. Lucie lift station after power failure | 39 | importance 10; freshness 50.8; urgency 2/10; -8 county saturation |
+| 12 | JetBlue ends Vero Beach to JFK route permanently after demand falls short | Tradition Entertainment District in Port St. Lucie to break ground within six months | 39 | importance 10; freshness 48.54; urgency 2/10; -12 county saturation |
 
 ## Recommended moves
 
-- **Tradition Entertainment District in Port St. Lucie to break ground within six months**: 27 → 12 — importance 10; freshness 52.77; urgency 2/10; -12 county saturation
-- **Port St. Lucie mayor says infrastructure remains top priority as Gatlin Boulevard work advances**: 6 → 13 — importance 0; freshness 97.56; urgency 2/10
-- **JetBlue ends Vero Beach to JFK route permanently after demand falls short**: 12 → 8 — importance 10; freshness 52.78; urgency 2/10
-- **Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards**: 10 → 7 — importance 35; freshness 55.04; urgency 2/10; -6 category saturation
-- **Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds**: 2 → 4 — importance 0; freshness 99.89; urgency 7/10
-- **Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027**: 7 → 5 — importance 20; freshness 97.57; urgency 2/10
-- **Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety**: 8 → 10 — importance 10; freshness 60.48; urgency 2/10; validated material update; -6 category saturation; -8 county saturation
-- **C-23 Canal diversion project in Martin County complete, rerouting billions of gallons from St. Lucie Estuary**: 3 → 2 — importance 10; freshness 97.56; urgency 7/10
-- **Vehicle fire closes southbound Florida's Turnpike in St. Lucie County**: 4 → 3 — importance 35; freshness 78.37; urgency 4/10
-- **K-9 Tobi alerts deputies to heroin, marijuana in Indian River County traffic stop**: 5 → 6 — importance 0; freshness 97.56; urgency 2/10
+- **Port St. Lucie mayor says infrastructure remains top priority as Gatlin Boulevard work advances**: 8 → 13 — importance 0; freshness 93.32; urgency 2/10
+- **St. Lucie County advances bulk water agreement for P1 Motor Club racetrack**: 2 → 5 — importance 0; freshness 99.9; urgency 6/10
+- **JetBlue ends Vero Beach to JFK route permanently after demand falls short**: 12 → 9 — importance 10; freshness 48.54; urgency 2/10
+- **Fort Pierce police restrict Flock camera access after stalking case**: 5 → 3 — importance 35; freshness 95.64; urgency 2/10
+- **Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards**: 10 → 8 — importance 35; freshness 50.8; urgency 2/10; -6 category saturation
+- **Tradition Entertainment District in Port St. Lucie to break ground within six months**: 14 → 12 — importance 10; freshness 48.54; urgency 2/10; -12 county saturation
+- **Florida Realtors puts $10 million behind Amendment 3 as opponents warn of service cuts**: 3 → 2 — importance 25; freshness 99.89; urgency 6/10
+- **Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety**: 9 → 10 — importance 10; freshness 56.25; urgency 2/10; validated material update; -6 category saturation; -4 county saturation
 
 ## Guardrails
 
