@@ -88,6 +88,15 @@ def test_event_detail_pages_use_internal_canonical_and_event_schema(tmp_path, mo
     assert f'<link rel="canonical" href="https://treasurecoast.today{detail}">' in page
     assert '"@type":"Event"' in page
     assert 'Official event page' in page
+    assert '<link rel="stylesheet" href="/style.css?v=1.13.8.4">' in page
+
+
+def test_event_detail_title_header_is_not_sticky_over_site_masthead():
+    css = (Path(__file__).resolve().parents[1] / "style.css").read_text(encoding="utf-8")
+    assert ".event-detail-page > .event-detail-shell > .event-detail-hero {" in css
+    assert "position: static;" in css
+    assert "top: auto;" in css
+    assert "z-index: auto;" in css
 
 
 def test_article_enhancement_handles_legacy_shell_and_adds_schema(tmp_path, monkeypatch):
