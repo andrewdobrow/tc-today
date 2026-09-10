@@ -99,6 +99,21 @@ def test_event_detail_title_header_is_not_sticky_over_site_masthead():
     assert "z-index: auto;" in css
 
 
+def test_mobile_article_breadcrumb_and_byline_are_compact():
+    css = (Path(__file__).resolve().parents[1] / "style.css").read_text(encoding="utf-8")
+    assert features.ASSET_VERSION == "1.13.8.5"
+    assert "v1.13.8.5 — mobile article breadcrumb + byline rhythm" in css
+    assert ".tct-breadcrumb--article > span:nth-last-child(2)" in css
+    assert ".tct-breadcrumb--article .tct-breadcrumb-current" in css
+    assert "clip: rect(0, 0, 0, 0) !important;" in css
+    assert ".article-byline::before" in css
+    assert 'content: "·";' in css
+    assert ".article-times" in css
+    assert "display: grid !important;" in css
+    assert ".article-updated::before" in css
+    assert "content: none !important;" in css
+
+
 def test_article_enhancement_handles_legacy_shell_and_adds_schema(tmp_path, monkeypatch):
     _setup_root(tmp_path, monkeypatch)
     rows=_archive_rows()

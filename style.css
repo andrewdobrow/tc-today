@@ -6626,3 +6626,105 @@ main.article-page-main > .article-wrap {
     margin: 0;
   }
 }
+
+
+/* ==========================================================
+   v1.13.8.5 — mobile article breadcrumb + byline rhythm
+   Keep the article identity block compact on phones: the headline already
+   names the current page, so the visible breadcrumb only needs its ancestors.
+   The full current-page crumb stays available to assistive technology and in
+   the BreadcrumbList JSON-LD.
+   ========================================================== */
+@media (max-width: 600px) {
+  .tct-breadcrumb--article {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin: 0 0 16px;
+    padding: 0 !important;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .tct-breadcrumb--article a {
+    flex: 0 0 auto;
+  }
+
+  .tct-breadcrumb--article a:last-of-type {
+    min-width: 0;
+    flex: 0 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Hide the redundant visual headline crumb and its preceding chevron while
+     retaining the current-page label for screen readers. */
+  .tct-breadcrumb--article > span:nth-last-child(2) {
+    display: none !important;
+  }
+
+  .tct-breadcrumb--article .tct-breadcrumb-current {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  .article-meta {
+    display: flex !important;
+    align-items: baseline !important;
+    flex-wrap: wrap !important;
+    column-gap: 8px !important;
+    row-gap: 4px !important;
+    margin: 0 0 7px !important;
+  }
+
+  .article-category {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    letter-spacing: .09em !important;
+  }
+
+  .article-byline {
+    font-size: 12.5px !important;
+    line-height: 1.3 !important;
+    color: var(--text-secondary) !important;
+  }
+
+  .article-byline::before {
+    content: "·";
+    margin-right: 8px;
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  .article-byline a {
+    font-weight: 600 !important;
+  }
+
+  .article-times {
+    display: grid !important;
+    gap: 2px !important;
+    margin: 0 0 18px !important;
+    line-height: 1.35 !important;
+  }
+
+  .article-published,
+  .article-updated {
+    font-size: 11px !important;
+  }
+
+  .article-updated::before {
+    content: none !important;
+    margin: 0 !important;
+  }
+}
