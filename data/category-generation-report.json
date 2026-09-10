@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-10T15:51:24Z",
+  "generated_at": "2026-09-10T21:06:03Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,42 +15,61 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 3,
-      "generated_live": 6
+      "category_eligibility_archive_recovery": 2,
+      "generated_live": 6,
+      "generation_failed_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 3
+      "invalid_json": 1,
+      "no_category_eligible_sources": 2
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 106.67,
+    "model_attempt_count": 8,
+    "model_elapsed_seconds": 177.418,
     "archive_recovery_requested_count": 3,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 8,
-    "published_story_duplicate_suppression_count": 45,
+    "category_eligibility_rejection_count": 10,
+    "published_story_duplicate_suppression_count": 38,
     "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 6,
+    "material_update_promotion_evaluation_count": 9,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 2,
-    "material_update_promotion_model_call_count": 4
+    "material_update_promotion_cache_hit_count": 3,
+    "material_update_promotion_model_call_count": 6
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 9,
-      "selected_source_count": 0,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 12,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 3.942,
+          "result": "invalid_json",
+          "error_type": "ValueError",
+          "error_summary": "Assignment editor returned no valid hero source"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 21.104,
+          "result": "invalid_json",
+          "error_type": "ValueError",
+          "error_summary": "Shadow model returned no JSON object (0 chars)"
+        }
+      ],
+      "model_elapsed_seconds": 25.045,
+      "failure_code": "invalid_json",
+      "failure_summary": "Shadow model returned no JSON object (0 chars)",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -59,8 +78,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -73,22 +92,70 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Soaring diesel prices squeeze South Florida truck fleets as food bank spends thousands more",
-          "source_url": "https://www.wptv.com/money/consumer/soaring-diesel-prices-squeeze-south-florida-truck-fleets-as-food-bank-spends-thousands-more"
+          "headline": "Vero Beach gym owner becomes a top professional paintballer, helps Team USA win gold in France",
+          "source_url": "https://www.wptv.com/sports/local-sports/vero-beach-gym-owner-becomes-a-top-professional-paintballer-helps-team-usa-win-gold-in-france"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Bomb threat sent via email prompts evacuation at Martin County High School",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/bomb-threat-at-martin-county-high-school-prompts-evacuation-law-enforcement-response"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Bomb threat prompts evacuation at Martin County High School - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-bomb-threat-prompts-evacuation-at-martin-county-high-school/73671332"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
+          "source_url": "https://cbs12.com/news/instagram/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Fort Pierce police investigating death of unidentified man found near business",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigating-death-of-unidentified-man-found-near-business"
         }
       ],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world",
-          "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
-          "editorial_story_id": "story_010353",
-          "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
-          "canonical_headline": "Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "local_gov",
           "source_headline": "DeSantis says new Martin County project will reduce harmful water discharges, algal blooms - WPEC",
@@ -97,26 +164,6 @@
           "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
           "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
-          "editorial_story_id": "story_010154",
-          "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
-          "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members frustrated and seeking answers",
-          "source_url": "https://www.wptv.com/news/treasure-coast/jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-frustrated-and-seeking-answers",
-          "editorial_story_id": "story_010214",
-          "canonical_slug": "2026-09-09-jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-without-refu",
-          "canonical_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -140,28 +187,56 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
+          "source_url": "https://cbs12.com/news/instagram/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
+          "canonical_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
+          "basis": "event-identity-authority:participant_plus_precise_location",
+          "identity_keys": [
+            "story:story_010471",
+            "source:https://cbs12.com/news/instagram/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['indian-river', 'indian-river-county', 'martin-county', 'vero-beach']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=['boynton beach man', 'francis ostrowski after', 'two men in']",
+            "shared_precise_locations=['17th-avenue', '800-20th-avenue', '9th-street']",
+            "shared_agencies=['indian-river-county-school-board', 'school-board']",
+            "shared_subject_phrases=['berry-harvest-case', 'berry-harvest-case-wpec', 'harvest-case-wpec', 'palmetto-berry-harvest', 'palmetto-berry-harvest-case', 'saw-palmetto-berry', 'saw-palmetto-berry-harvest', 'separate-saw-palmetto', 'separate-saw-palmetto-berry', 'two-separate-saw', 'two-separate-saw-palmetto']",
+            "shared_headline_topic_core=['berry', 'case', 'harvest', 'palmetto', 'saw', 'separate', 'two', 'wpec']",
+            "shared_distinctive_token_count=135",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world",
-          "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
-          "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
-          "canonical_headline": "Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "local_gov",
           "source_headline": "DeSantis says new Martin County project will reduce harmful water discharges, algal blooms - WPEC",
@@ -201,36 +276,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
-          "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
-          "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members frustrated and seeking answers",
-          "source_url": "https://www.wptv.com/news/treasure-coast/jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-frustrated-and-seeking-answers",
-          "canonical_slug": "2026-09-09-jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-without-refu",
-          "canonical_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Fort Pierce police tighten Flock camera rules after former officer arrested for misuse - WPEC",
           "source_url": "https://cbs12.com/news/local/fort-pierce-police-tighten-flock-camera-rules-after-former-officer-arrested-for-misuse-flock-camera-system-chief-david-smith-fort-pierce-police-department-florida-news",
           "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
@@ -261,16 +306,18 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 27.836
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 86.416
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 11,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 12,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -278,11 +325,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 34.881,
+          "elapsed_seconds": 40.841,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 34.881,
+      "model_elapsed_seconds": 40.841,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -294,7 +341,7 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
       "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -307,39 +354,11 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Governor DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone - wflx.com",
-          "source_url": "https://www.wflx.com/2026/09/10/governor-desantis-says-completion-c-23-canal-diversion-project-palm-city-marks-major-milestone/?outputType=amp"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Soaring diesel prices squeeze South Florida truck fleets as food bank spends thousands more",
-          "source_url": "https://www.wptv.com/money/consumer/soaring-diesel-prices-squeeze-south-florida-truck-fleets-as-food-bank-spends-thousands-more"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/trial-for-palm-city-dog-trainer-nikki-camerlengo-delayed-until-at-least-2027"
+          "headline": "Vero Beach gym owner becomes a top professional paintballer, helps Team USA win gold in France",
+          "source_url": "https://www.wptv.com/sports/local-sports/vero-beach-gym-owner-becomes-a-top-professional-paintballer-helps-team-usa-win-gold-in-france"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -353,22 +372,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
+          "source_headline": "Governor DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/10/governor-desantis-says-completion-c-23-canal-diversion-project-palm-city-marks-major-milestone?outputType=amp",
           "editorial_story_id": "story_010154",
           "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
           "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members frustrated and seeking answers",
-          "source_url": "https://www.wptv.com/news/treasure-coast/jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-frustrated-and-seeking-answers",
-          "editorial_story_id": "story_010214",
-          "canonical_slug": "2026-09-09-jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-without-refu",
-          "canonical_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -383,31 +392,21 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - wflx.com",
-          "source_url": "https://www.wflx.com/2026/09/09/trial-palm-city-dog-trainer-nikki-camerlengo-delayed-until-least-2027?outputType=amp",
-          "editorial_story_id": "story_010121",
-          "canonical_slug": "2026-09-09-palm-city-dog-trainer-nikki-camerlengos-animal-cruelty-trial-delayed-to-2027",
-          "canonical_headline": "Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - cw34.com",
-          "source_url": "https://cw34.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement?teaserSource=trending",
-          "editorial_story_id": "story_010049",
-          "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-          "canonical_headline": "Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case",
+          "source_headline": "WATCH AT 3:30PM: Gov. Ron DeSantis scheduled to hold news conference at C-23 Canal project in Palm City - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/09/watch-330pm-gov-ron-desantis-scheduled-hold-news-conference-c-23-canal-project-palm-city?outputType=amp",
+          "editorial_story_id": "story_010154",
+          "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
+          "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "Deputies find stolen car, credit cards, documents, sleeping suspect at Treasure Coast mall - WPEC",
-          "source_url": "https://cbs12.com/news/local/deputies-find-stolen-car-stolen-documents-sleeping-suspect-at-treasure-coast-square-mall-fort-pierce-martin-county-treasure-coast-mall-martin-county-sheriffs-office-port-st-lucie-police-department-cedric-lenard-culver-stolen-car-stolen-vehicle-gra",
-          "editorial_story_id": "story_009774",
-          "canonical_slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
-          "canonical_headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
+          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/09/trial-palm-city-dog-trainer-nikki-camerlengo-delayed-until-least-2027?outputType=amp",
+          "editorial_story_id": "story_010121",
+          "canonical_slug": "2026-09-09-palm-city-dog-trainer-nikki-camerlengos-animal-cruelty-trial-delayed-to-2027",
+          "canonical_headline": "Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -415,24 +414,42 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/trial-for-palm-city-dog-trainer-nikki-camerlengo-delayed-until-at-least-2027",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-09-09-palm-city-dog-trainer-nikki-camerlengos-animal-cruelty-trial-delayed-to-2027",
-          "canonical_headline": "Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027",
-          "basis": "exact_structured_incident_key",
+          "source_headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
+          "source_url": "https://cbs12.com/news/instagram/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
+          "canonical_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
+          "basis": "event-identity-authority:participant_plus_precise_location",
           "identity_keys": [
-            "incident:named-person-death:pawsitively-paradise",
-            "story:story_010121",
-            "source:https://www.wptv.com/wptv-investigates/trial-for-palm-city-dog-trainer-nikki-camerlengo-delayed-until-at-least-2027"
+            "story:story_010471",
+            "source:https://cbs12.com/news/instagram/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit"
           ],
-          "match_confidence": 0.99,
+          "match_confidence": 0.95,
           "evidence_dimensions": [
-            "incident",
-            "story"
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:pawsitively-paradise,story:story_010121",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['indian-river', 'indian-river-county', 'martin-county', 'vero-beach']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=['boynton beach man', 'francis ostrowski after', 'two men in']",
+            "shared_precise_locations=['17th-avenue', '800-20th-avenue', '9th-street']",
+            "shared_agencies=['indian-river-county-school-board', 'school-board']",
+            "shared_subject_phrases=['berry-harvest-case', 'berry-harvest-case-wpec', 'harvest-case-wpec', 'palmetto-berry-harvest', 'palmetto-berry-harvest-case', 'saw-palmetto-berry', 'saw-palmetto-berry-harvest', 'separate-saw-palmetto', 'separate-saw-palmetto-berry', 'two-separate-saw', 'two-separate-saw-palmetto']",
+            "shared_headline_topic_core=['berry', 'case', 'harvest', 'palmetto', 'saw', 'separate', 'two', 'wpec']",
+            "shared_distinctive_token_count=135",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -461,27 +478,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
+          "source_headline": "Governor DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/10/governor-desantis-says-completion-c-23-canal-diversion-project-palm-city-marks-major-milestone?outputType=amp",
           "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
           "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members frustrated and seeking answers",
-          "source_url": "https://www.wptv.com/news/treasure-coast/jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-frustrated-and-seeking-answers",
-          "canonical_slug": "2026-09-09-jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-without-refu",
-          "canonical_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -506,40 +508,25 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - wflx.com",
+          "source_headline": "WATCH AT 3:30PM: Gov. Ron DeSantis scheduled to hold news conference at C-23 Canal project in Palm City - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/09/watch-330pm-gov-ron-desantis-scheduled-hold-news-conference-c-23-canal-project-palm-city?outputType=amp",
+          "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
+          "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - WFLX",
           "source_url": "https://www.wflx.com/2026/09/09/trial-palm-city-dog-trainer-nikki-camerlengo-delayed-until-least-2027?outputType=amp",
           "canonical_slug": "2026-09-09-palm-city-dog-trainer-nikki-camerlengos-animal-cruelty-trial-delayed-to-2027",
           "canonical_headline": "Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - cw34.com",
-          "source_url": "https://cw34.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement?teaserSource=trending",
-          "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-          "canonical_headline": "Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Deputies find stolen car, credit cards, documents, sleeping suspect at Treasure Coast mall - WPEC",
-          "source_url": "https://cbs12.com/news/local/deputies-find-stolen-car-stolen-documents-sleeping-suspect-at-treasure-coast-square-mall-fort-pierce-martin-county-treasure-coast-mall-martin-county-sheriffs-office-port-st-lucie-police-department-cedric-lenard-culver-stolen-car-stolen-vehicle-gra",
-          "canonical_slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
-          "canonical_headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -553,32 +540,25 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
-      "generated_card_count": 1,
-      "elapsed_seconds": 61.511
+      "live_hero_headline": "Bomb threat email prompts evacuation at Martin County High School",
+      "generated_card_count": 3,
+      "elapsed_seconds": 82.052
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "generated_live",
-      "fetched_candidate_count": 24,
+      "status": "category_eligibility_archive_recovery",
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 14,
-      "selected_source_count": 1,
+      "publishable_source_count": 12,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.2,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 12.2,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Business & Development category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -587,9 +567,62 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:vero beach",
+            "source_locality:sebastian"
+          ],
+          "headline": "Vero Beach gym owner becomes a top professional paintballer, helps Team USA win gold in France",
+          "source_url": "https://www.wptv.com/sports/local-sports/vero-beach-gym-owner-becomes-a-top-professional-paintballer-helps-team-usa-win-gold-in-france"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "schools_education:students"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county"
+          ],
+          "headline": "Bomb threat sent via email prompts evacuation at Martin County High School",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/bomb-threat-at-martin-county-high-school-prompts-evacuation-law-enforcement-response"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:st lucie county",
+            "source_locality:fort pierce"
+          ],
+          "headline": "Fort Pierce police investigating death of unidentified man found near business",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigating-death-of-unidentified-man-found-near-business"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -607,65 +640,9 @@
           ],
           "headline": "Palm Beach County ordinance would raise breeder fees, require inspections for hobby breeders",
           "source_url": "https://www.wptv.com/news/palm-beach-county/palm-beach-county-ordinance-would-raise-breeder-fees-require-inspections-for-hobby-breeders"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:port st lucie"
-          ],
-          "headline": "Soaring diesel prices squeeze South Florida truck fleets as food bank spends thousands more",
-          "source_url": "https://www.wptv.com/money/consumer/soaring-diesel-prices-squeeze-south-florida-truck-fleets-as-food-bank-spends-thousands-more"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested",
-            "animal_welfare:animal cruelty"
-          ],
-          "local_nexus_signals": [
-            "source_locality:martin county",
-            "source_locality:stuart",
-            "source_locality:palm city"
-          ],
-          "headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027",
-          "source_url": "https://www.wptv.com/wptv-investigates/trial-for-palm-city-dog-trainer-nikki-camerlengo-delayed-until-at-least-2027"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "schools_education:students"
-          ],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:port st lucie"
-          ],
-          "headline": "Treasure Coast youth designers shine at NY Fashion Week",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/treasure-coast-youth-designers-shine-at-ny-fashion-week"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -706,39 +683,24 @@
           "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
+        },
         {
-          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027",
-          "source_url": "https://www.wptv.com/wptv-investigates/trial-for-palm-city-dog-trainer-nikki-camerlengo-delayed-until-at-least-2027",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-09-09-palm-city-dog-trainer-nikki-camerlengos-animal-cruelty-trial-delayed-to-2027",
-          "canonical_headline": "Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:named-person-death:pawsitively-paradise",
-            "story:story_010121",
-            "source:https://www.wptv.com/wptv-investigates/trial-for-palm-city-dog-trainer-nikki-camerlengo-delayed-until-at-least-2027"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident",
-            "story"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:pawsitively-paradise,story:story_010121",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "category_key": "business",
+          "source_headline": "New entertainment district with restaurants and retail planned for Tradition in Port St. Lucie - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/08/new-entertainment-district-with-restaurants-retail-planned-tradition-port-st-lucie",
+          "editorial_story_id": "story_009642",
+          "canonical_slug": "2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon",
+          "canonical_headline": "Tradition Entertainment District in Port St. Lucie to break ground within six months",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
@@ -799,30 +761,71 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "New entertainment district with restaurants and retail planned for Tradition in Port St. Lucie - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/08/new-entertainment-district-with-restaurants-retail-planned-tradition-port-st-lucie",
+          "canonical_slug": "2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon",
+          "canonical_headline": "Tradition Entertainment District in Port St. Lucie to break ground within six months",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "85-acre entertainment district in Tradition community",
+            "Village Parkway location between Innovation Way and Hegener Drive",
+            "Gustavo Lumer/Lumer Real Estate developer",
+            "Four parcels",
+            "25 new restaurants planned",
+            "5.5-acre first phase off Innovation Way with 40,000 sq ft",
+            "60% of first phase already leased",
+            "Construction to start within six months",
+            "60-acre section near Stars and Stripes Park",
+            "Published same date (2026-09-08)"
+          ],
+          "novel_facts": [
+            "Neighbor quotes from LaVaughn Harvey and Tina Gramata",
+            "Additional detail about luxury gym and movie theater possibilities",
+            "Golf cart accessibility mentioned",
+            "Quote about 'pop it up next week' eagerness from retailers"
+          ],
+          "reason": "Both articles cover the exact same real-world development project with identical core facts: the 85-acre Tradition Entertainment District by Lumer Real Estate along Village Parkway, same timeline, same phases, same developer quotes. The incoming article adds only routine scene detail (neighbor reactions, slightly expanded facility descriptions) but no material developments like permits approved, financing secured, tenants announced, or timeline changes. This is typical same-day coverage from different outlets (WFLX vs WPTV) of the same announcement.",
+          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "85-acre entertainment district planned for Tradition in Port St. Lucie",
-      "generated_card_count": 0,
-      "elapsed_seconds": 31.193
+      "elapsed_seconds": 35.961
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 7,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 9,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Sports category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 14.188,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 14.188,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -831,7 +834,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -843,15 +846,19 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.287
+      "new_publication_stale_rejected_count": 1,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Vero Beach gym owner helps Team USA win gold in paintball at France event",
+      "generated_card_count": 0,
+      "elapsed_seconds": 51.454
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 16,
+      "fresh_candidate_count": 17,
       "publishable_source_count": 9,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -944,10 +951,10 @@
             "Mango Music and Art Festival on Saturday in Lake Worth Beach",
             "National Deaf Awareness Month event at Busch Wildlife Sanctuary in Jupiter on Saturday",
             "Barrio Fiesta Labor Day Picnic on Sunday in Port St. Lucie",
-            "SoFlo Market one-year anniversary celebration on Saturday in Boca Raton",
-            "Northwest BBQ Brews Blues Festival on Saturday in West Palm Beach",
-            "Peachfest 5-Year Anniversary Art Walk on Saturday in West Palm Beach",
-            "Hurricane Alley Blowout Rodeo Friday and Saturday in Vero Beach"
+            "SoFlo Market 1-year anniversary celebration in Boca Raton on Saturday",
+            "Northwest BBQ Brews Blues Festival at Heart and Soul Park",
+            "Peachfest 5-Year Anniversary Art Walk in West Palm Beach",
+            "Hurricane Alley Blowout Rodeo in Vero Beach Friday-Saturday"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1001,14 +1008,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 26.962
+      "elapsed_seconds": 28.579
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 2,
       "selected_source_count": 1,
       "cache_hit": false,
@@ -1018,11 +1025,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.398,
+          "elapsed_seconds": 41.44,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 16.398,
+      "model_elapsed_seconds": 41.44,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1036,8 +1043,18 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Trump announces $500 refunds for nearly 1 million 'Obamacare' enrollees",
+          "source_url": "https://www.wptv.com/politics/the-president/trump-announces-500-refunds-for-nearly-1-million-obamacare-enrollees",
+          "editorial_story_id": "story_010476",
+          "canonical_slug": "2026-09-10-florida-aca-enrollees-among-nearly-1-million-nationwide-set-to-receive-500-refun",
+          "canonical_headline": "Florida ACA enrollees among nearly 1 million nationwide set to receive $500 refund checks",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "florida",
           "source_headline": "Florida Realtors puts $10 million behind Amendment 3 as opponents warn of service cuts",
@@ -1058,6 +1075,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "florida",
+          "source_headline": "Trump announces $500 refunds for nearly 1 million 'Obamacare' enrollees",
+          "source_url": "https://www.wptv.com/politics/the-president/trump-announces-500-refunds-for-nearly-1-million-obamacare-enrollees",
+          "canonical_slug": "2026-09-10-florida-aca-enrollees-among-nearly-1-million-nationwide-set-to-receive-500-refun",
+          "canonical_headline": "Florida ACA enrollees among nearly 1 million nationwide set to receive $500 refund checks",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "florida",
           "source_headline": "Florida Realtors puts $10 million behind Amendment 3 as opponents warn of service cuts",
           "source_url": "https://www.wptv.com/news/state/florida-realtors-puts-10-million-behind-amendment-3-as-opponents-warn-of-service-cuts",
           "canonical_slug": "2026-09-09-florida-realtors-puts-10-million-behind-amendment-3-as-opponents-warn-of-service",
@@ -1075,18 +1107,18 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Florida ACA enrollees among nearly 1 million nationwide set to receive $500 refund checks",
+      "live_hero_headline": "Florida judge recommends discipline for Boca Raton nurse over TikTok post",
       "generated_card_count": 0,
-      "elapsed_seconds": 35.977
+      "elapsed_seconds": 71.001
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 18,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 4,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1094,11 +1126,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 10.864,
+          "elapsed_seconds": 11.18,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 10.864,
+      "model_elapsed_seconds": 11.18,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1109,10 +1141,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -1146,8 +1178,8 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
+          "source_headline": "Governor DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/10/governor-desantis-says-completion-c-23-canal-diversion-project-palm-city-marks-major-milestone?outputType=amp",
           "editorial_story_id": "story_010154",
           "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
           "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
@@ -1156,8 +1188,8 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
+          "source_headline": "Florida Gov. Ron DeSantis celebrates completion of C-23 Canal diversion project in Martin County - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/09/florida-gov-ron-desantis-celebrates-completion-c-23-canal-diversion-project-martin-county",
           "editorial_story_id": "story_010154",
           "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
           "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
@@ -1176,16 +1208,6 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members frustrated and seeking answers - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-frustrated-and-seeking-answers",
-          "editorial_story_id": "story_010214",
-          "canonical_slug": "2026-09-09-jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-without-refu",
-          "canonical_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Florida Gov. Ron DeSantis celebrates completion of C-23 Canal diversion project in Martin County - WPTV",
           "source_url": "https://www.wptv.com/news/state/watch-at-3-30pm-gov-ron-desantis-scheduled-to-hold-news-conference-at-c-23-canal-project-in-palm-city",
           "editorial_story_id": "story_010154",
@@ -1196,22 +1218,22 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - wflx.com",
-          "source_url": "https://www.wflx.com/2026/09/09/trial-palm-city-dog-trainer-nikki-camerlengo-delayed-until-least-2027?outputType=amp",
+          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/trial-for-palm-city-dog-trainer-nikki-camerlengo-delayed-until-at-least-2027",
           "editorial_story_id": "story_010121",
           "canonical_slug": "2026-09-09-palm-city-dog-trainer-nikki-camerlengos-animal-cruelty-trial-delayed-to-2027",
           "canonical_headline": "Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "martin",
-          "source_headline": "Deputies find stolen car, credit cards, documents, sleeping suspect at Treasure Coast mall - WPEC",
-          "source_url": "https://cbs12.com/news/local/deputies-find-stolen-car-stolen-documents-sleeping-suspect-at-treasure-coast-square-mall-fort-pierce-martin-county-treasure-coast-mall-martin-county-sheriffs-office-port-st-lucie-police-department-cedric-lenard-culver-stolen-car-stolen-vehicle-gra",
-          "editorial_story_id": "story_009774",
-          "canonical_slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
-          "canonical_headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "WATCH AT 3:30PM: Gov. Ron DeSantis scheduled to hold news conference at C-23 Canal project in Palm City - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/09/watch-330pm-gov-ron-desantis-scheduled-hold-news-conference-c-23-canal-project-palm-city",
+          "editorial_story_id": "story_010154",
+          "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
+          "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -1219,8 +1241,8 @@
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 3,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
@@ -1233,8 +1255,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1268,15 +1290,15 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.98,
+          "confidence": 0.95,
           "shared_anchors": [
             "Palm City location"
           ],
           "novel_facts": [
-            "Governor DeSantis speaking event scheduled for Wednesday at 3:30 p.m.",
+            "Governor Ron DeSantis speaking event on Wednesday",
+            "Florida Department of Environmental Protection Secretary Alexis Lambert attending",
             "C-23 Canal Estuary Discharge Diversion Project at 1097 Southwest Martin Highway",
-            "Florida DEP Secretary Alexis Lambert joining the governor",
-            "Environmental infrastructure project announcement"
+            "Event scheduled for 3:30 p.m."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1322,8 +1344,8 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
+          "source_headline": "Governor DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/10/governor-desantis-says-completion-c-23-canal-diversion-project-palm-city-marks-major-milestone?outputType=amp",
           "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
           "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
           "canonical_is_custom": false,
@@ -1337,8 +1359,8 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
+          "source_headline": "Florida Gov. Ron DeSantis celebrates completion of C-23 Canal diversion project in Martin County - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/09/florida-gov-ron-desantis-celebrates-completion-c-23-canal-diversion-project-martin-county",
           "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
           "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
           "canonical_is_custom": false,
@@ -1372,30 +1394,17 @@
             "Martin County"
           ],
           "novel_facts": [
-            "Governor Ron DeSantis speaking event on Wednesday",
-            "Florida Department of Environmental Protection Secretary Alexis Lambert attendance",
-            "C-23 Canal Estuary Discharge Diversion Project location at 1097 Southwest Martin Highway",
-            "3:30 p.m. speaking time"
+            "Governor Ron DeSantis speaking event",
+            "Florida Department of Environmental Protection Secretary Alexis Lambert",
+            "C-23 Canal Estuary Discharge Diversion Project",
+            "1097 Southwest Martin Highway",
+            "Wednesday 3:30 p.m. speech",
+            "environmental infrastructure project"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members frustrated and seeking answers - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-frustrated-and-seeking-answers",
-          "canonical_slug": "2026-09-09-jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-without-refu",
-          "canonical_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "martin",
@@ -1414,12 +1423,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - wflx.com",
-          "source_url": "https://www.wflx.com/2026/09/09/trial-palm-city-dog-trainer-nikki-camerlengo-delayed-until-least-2027?outputType=amp",
+          "source_headline": "Trial for Palm City dog trainer Nikki Camerlengo delayed until at least 2027 - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/trial-for-palm-city-dog-trainer-nikki-camerlengo-delayed-until-at-least-2027",
           "canonical_slug": "2026-09-09-palm-city-dog-trainer-nikki-camerlengos-animal-cruelty-trial-delayed-to-2027",
           "canonical_headline": "Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1429,12 +1438,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Deputies find stolen car, credit cards, documents, sleeping suspect at Treasure Coast mall - WPEC",
-          "source_url": "https://cbs12.com/news/local/deputies-find-stolen-car-stolen-documents-sleeping-suspect-at-treasure-coast-square-mall-fort-pierce-martin-county-treasure-coast-mall-martin-county-sheriffs-office-port-st-lucie-police-department-cedric-lenard-culver-stolen-car-stolen-vehicle-gra",
-          "canonical_slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
-          "canonical_headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
+          "source_headline": "WATCH AT 3:30PM: Gov. Ron DeSantis scheduled to hold news conference at C-23 Canal project in Palm City - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/09/watch-330pm-gov-ron-desantis-scheduled-hold-news-conference-c-23-canal-project-palm-city",
+          "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
+          "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1446,18 +1455,18 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "C-23 Canal diversion project in Martin County complete, has diverted 5 billion gallons from St. Lucie Estuary",
+      "live_hero_headline": "Martin County High School evacuated after bomb threat; sweep finds no evidence",
       "generated_card_count": 0,
-      "elapsed_seconds": 48.703
+      "elapsed_seconds": 52.826
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 6,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 7,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1465,11 +1474,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.5,
+          "elapsed_seconds": 30.751,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 24.5,
+      "model_elapsed_seconds": 30.751,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1480,14 +1489,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world",
+          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
           "editorial_story_id": "story_010353",
           "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
@@ -1497,7 +1506,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world - WPTV",
+          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world",
           "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
           "editorial_story_id": "story_010353",
           "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
@@ -1537,16 +1546,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County moves ahead on bulk water agreement for P1 Motor private racetrack club - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-moves-ahead-bulk-water-agreement-for-p1-motor-club-private-racetrack-club-water-capacity-motorsports-water-demand-erc-methodology-racetracks-garage-townhomes-clubhouse-commerce-park",
-          "editorial_story_id": "story_010129",
-          "canonical_slug": "2026-09-09-st-lucie-county-advances-bulk-water-agreement-for-p1-motor-club-racetrack",
-          "canonical_headline": "St. Lucie County advances bulk water agreement for P1 Motor Club racetrack",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - WPEC",
           "source_url": "https://cbs12.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
           "editorial_story_id": "story_010049",
@@ -1567,7 +1566,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Vehicle fire closes southbound lanes of Florida's Turnpike in St. Lucie County - wflx.com",
+          "source_headline": "Vehicle fire closes southbound lanes of Florida's Turnpike in St. Lucie County - WFLX",
           "source_url": "https://www.wflx.com/2026/09/08/vehicle-fire-closes-southbound-lanes-floridas-turnpike-st-lucie-county?outputType=amp",
           "editorial_story_id": "story_009831",
           "canonical_slug": "2026-09-09-vehicle-fire-closes-southbound-floridas-turnpike-in-st-lucie-county",
@@ -1577,40 +1576,56 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "About 800 gallons of sewage spill at Port St. Lucie lift station after power issue - WPEC",
-          "source_url": "https://cbs12.com/news/local/about-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-issue-170-hawthorne-circle-fpl-power-pumps-disinfected-lime-no-water-affected",
-          "editorial_story_id": "story_009775",
-          "canonical_slug": "2026-09-08-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-failure",
-          "canonical_headline": "800 gallons of sewage spill at Port St. Lucie lift station after power failure",
+          "source_headline": "Truck driver killed, passenger hospitalized after Turnpike crash in St. Lucie County - WPEC",
+          "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+          "editorial_story_id": "story_009348",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world",
+          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
           "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
           "canonical_headline": "Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Ayleen Charles, Port St. Lucie social studies teacher",
+            "Teaches 9/11 to students each fall as classroom centerpiece",
+            "Uses survivor stories, images, and audio recordings",
+            "Over a decade of teaching experience",
+            "Same source URL (WPTV)",
+            "Published same date (2026-09-10)",
+            "References voicemails from people on airplanes",
+            "Discusses TSA and airport security changes"
+          ],
+          "novel_facts": [],
+          "reason": "This is the exact same article from the same source on the same date. The incoming article is simply a longer version of the canonical candidate, containing the same quotes from Ayleen Charles, the same teaching methods (survivor stories, voicemails, audio recordings), and the same thematic points about keeping 9/11 memory alive. The retrieval evidence confirms this is a persistent_story_id_match with the same source_url. No new facts, updates, or developments are present—just additional detail and quotes expanding on the same story already published.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world - WPTV",
+          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world",
           "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
           "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
           "canonical_headline": "Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks",
@@ -1670,21 +1685,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County moves ahead on bulk water agreement for P1 Motor private racetrack club - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-moves-ahead-bulk-water-agreement-for-p1-motor-club-private-racetrack-club-water-capacity-motorsports-water-demand-erc-methodology-racetracks-garage-townhomes-clubhouse-commerce-park",
-          "canonical_slug": "2026-09-09-st-lucie-county-advances-bulk-water-agreement-for-p1-motor-club-racetrack",
-          "canonical_headline": "St. Lucie County advances bulk water agreement for P1 Motor Club racetrack",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Ex-Fort Pierce officer accused of using Flock database 382 times to track ex-girlfriend - WPEC",
           "source_url": "https://cbs12.com/news/local/former-fort-pierce-officer-arrested-over-alleged-misuse-of-police-databases-fort-pierce-police-department-fort-pierce-former-police-officer-former-officer-arrested-police-arrest-database-misuse-police-database-database-systems-law-enforcement",
           "canonical_slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
@@ -1715,7 +1715,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Vehicle fire closes southbound lanes of Florida's Turnpike in St. Lucie County - wflx.com",
+          "source_headline": "Vehicle fire closes southbound lanes of Florida's Turnpike in St. Lucie County - WFLX",
           "source_url": "https://www.wflx.com/2026/09/08/vehicle-fire-closes-southbound-lanes-floridas-turnpike-st-lucie-county?outputType=amp",
           "canonical_slug": "2026-09-09-vehicle-fire-closes-southbound-floridas-turnpike-in-st-lucie-county",
           "canonical_headline": "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
@@ -1730,10 +1730,10 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "About 800 gallons of sewage spill at Port St. Lucie lift station after power issue - WPEC",
-          "source_url": "https://cbs12.com/news/local/about-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-issue-170-hawthorne-circle-fpl-power-pumps-disinfected-lime-no-water-affected",
-          "canonical_slug": "2026-09-08-800-gallons-of-sewage-spill-at-port-st-lucie-lift-station-after-power-failure",
-          "canonical_headline": "800 gallons of sewage spill at Port St. Lucie lift station after power failure",
+          "source_headline": "Truck driver killed, passenger hospitalized after Turnpike crash in St. Lucie County - WPEC",
+          "source_url": "https://cbs12.com/news/local/deadly-crash-under-investigation-florida-turnpike-mile-marker-166-okeechobee-road-traffic-alert-st-lucie-county-sheriffs-office-florid-highway-patrol-florida-news",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1747,18 +1747,18 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Former Fort Pierce officer charged with four felonies for tracking ex-girlfriend",
-      "generated_card_count": 0,
-      "elapsed_seconds": 42.611
+      "live_hero_headline": "Fort Pierce police investigate death of unidentified man found near Okeechobee Road business",
+      "generated_card_count": 1,
+      "elapsed_seconds": 60.832
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 9,
-      "selected_source_count": 1,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 10,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1766,11 +1766,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.827,
+          "elapsed_seconds": 13.973,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 7.827,
+      "model_elapsed_seconds": 13.973,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1781,101 +1781,67 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
-          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world",
-          "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
-          "editorial_story_id": "story_010353",
-          "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
-          "canonical_headline": "Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
-          "editorial_story_id": "story_010154",
-          "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
-          "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members frustrated and seeking answers",
-          "source_url": "https://www.wptv.com/news/treasure-coast/jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-frustrated-and-seeking-answers",
-          "editorial_story_id": "story_010214",
-          "canonical_slug": "2026-09-09-jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-without-refu",
-          "canonical_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds",
+          "source_headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
+          "source_url": "https://cbs12.com/news/crime/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
+          "editorial_story_id": "story_010471",
+          "canonical_slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
+          "canonical_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
-          "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world",
-          "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
-          "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
-          "canonical_headline": "Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks",
+          "source_headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
+          "source_url": "https://cbs12.com/news/crime/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
+          "canonical_slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
+          "canonical_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Gov. Ron DeSantis says completion of C-23 canal diversion project in Palm City marks major milestone",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/governor-desantis-says-completion-of-c-23-canal-diversion-project-in-palm-city-marks-major-milestone",
-          "canonical_slug": "2026-09-09-c-23-canal-diversion-project-in-martin-county-complete-rerouting-billions-of-gal",
-          "canonical_headline": "C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members frustrated and seeking answers",
-          "source_url": "https://www.wptv.com/news/treasure-coast/jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-frustrated-and-seeking-answers",
-          "canonical_slug": "2026-09-09-jet-ride-boat-club-ceases-operations-leaving-treasure-coast-members-without-refu",
-          "canonical_headline": "Jet Ride Boat Club ceases operations, leaving Treasure Coast members without refunds",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Same source URL",
+            "Same publication date (2026-09-10)",
+            "Two men arrested in Indian River County over Labor Day weekend",
+            "Corey Michael Smith arrested Sept. 4",
+            "BP gas station on 9th Street Southwest",
+            "Trespassing call location",
+            "Indian River County School Board property",
+            "Saw palmetto berry harvesting cases"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article is identical to the existing canonical. Both share the exact same source URL, publication date, headline, lead paragraph, and begin with identical body text about Corey Michael Smith's arrest on Sept. 4. The retrieval evidence confirms this is a persistent_story_id_match with exact_source_and_persistent_story_skip basis. This is a clear duplicate with no new information.",
+          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Two arrested in Indian River County for illegal saw palmetto berry harvesting",
+      "live_hero_headline": "Vero Beach gym owner wins gold with Team USA at international paintball event in France",
       "generated_card_count": 0,
-      "elapsed_seconds": 25.609
+      "elapsed_seconds": 53.227
     }
   ]
 }
