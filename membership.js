@@ -446,7 +446,7 @@ function setMeterPaywallState(paywall, period, afterRead=false){
 }
 
 function placePostReadMeterAfterStory(paywall){
-  if (!paywall) return
+  if (!paywall) return false
   const memberOnly = paywall.closest('.tct-member-only')
   const articleRoot = paywall.closest('.article-main-column') || paywall.closest('.article-wrap') || document
 
@@ -459,19 +459,29 @@ function placePostReadMeterAfterStory(paywall){
     memberOnly.parentElement?.insertBefore(unlockedTarget, memberOnly)
   }
 
-  // The paywall itself -- not its wrapper -- belongs after all story content.
-  // Prefer the stable post-story boundary. This remains correct even if a future
-  // article shell contains multiple article-body blocks.
-  const boundary = qs('.article-share', articleRoot)
+  // Monthly-free end matter has one non-negotiable visual order:
+  // FULL STORY -> MEMBERSHIP OFFER -> MORNING BRIEF -> EVENT/SHARE.
+  // Do not merely place the paywall relative to wherever the newsletter happens
+  // to be. The Kit slot can already exist above or below the wrapper on retained
+  // pages, so normalize BOTH nodes against the stable ancillary boundary.
+  let newsletter = qs('.newsletter-inline-slot--article', articleRoot)
+  if (!newsletter) {
+    placeFullArticleNewsletter()
+    newsletter = qs('.newsletter-inline-slot--article', articleRoot)
+  }
+
+  const boundary = qs('.event-link-box', articleRoot) || qs('.article-share', articleRoot)
   let placed = false
   if (boundary?.parentElement) {
     boundary.parentElement.insertBefore(paywall, boundary)
+    if (newsletter) paywall.insertAdjacentElement('afterend', newsletter)
     placed = true
   } else {
     const bodies = qsa('.article-body', articleRoot).filter(node => !node.closest('.tct-member-only'))
     const lastBody = bodies[bodies.length - 1]
     if (lastBody) {
       lastBody.insertAdjacentElement('afterend', paywall)
+      if (newsletter) paywall.insertAdjacentElement('afterend', newsletter)
       placed = true
     }
   }
@@ -479,6 +489,7 @@ function placePostReadMeterAfterStory(paywall){
   // The original wrapper is now only scaffolding (fade and/or an empty protected
   // target). Remove it only after the CTA has a proven destination.
   if (placed) memberOnly?.remove()
+  return placed
 }
 
 function renderProtectedBody(protectedBody, paywall, access){
@@ -608,7 +619,6 @@ async function unlockArticle(statusPromise=null){
     if (rendered) {
       removePostArticleNewsletter()
       placePostReadMeterAfterStory(paywall)
-      placeFullArticleNewsletter()
       const meterPeriod = String(data.period || reservation.period || currentMeterPeriod())
       setMeterPaywallState(paywall, meterPeriod, true)
       armFreeArticleBanner(slug, meterPeriod, paywall)
