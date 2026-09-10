@@ -417,9 +417,10 @@ class EditorialEngine:
         payload = {
             "version": _STATE_VERSION,
             "articles": compacted_history,
-            # Exact derived event state eliminates the expensive historical replay on
-            # the next run.  It is accepted only when the authoritative registry's
-            # SHA-256 fingerprint still matches; otherwise load() replays normally.
+            # Keep the derived snapshot and registry fingerprint in saved state for
+            # compatibility/diagnostics, but load() deliberately does not use them
+            # to bypass historical replay. Full replay remains the safety-first
+            # behavior until snapshot restore has proven identity equivalence.
             "pipeline_state": self._pipeline.export_replay_state(),
             "registry_fingerprint": self._registry_fingerprint(self.registry_path),
         }
@@ -499,31 +500,13 @@ class EditorialEngine:
         cls._validate_history_records(articles)
 
         registry_already_exists = Path(registry_path).exists()
-        saved_fingerprint = payload.get("registry_fingerprint")
-        current_fingerprint = cls._registry_fingerprint(registry_path)
-        pipeline_state = payload.get("pipeline_state")
-        snapshot_matches_registry = bool(
-            registry_already_exists
-            and isinstance(saved_fingerprint, dict)
-            and saved_fingerprint == current_fingerprint
-            and isinstance(pipeline_state, dict)
-        )
 
-        if snapshot_matches_registry:
-            try:
-                engine._pipeline.restore_replay_state(pipeline_state)
-            except (TypeError, ValueError):
-                # Derived state is a performance cache only. Any corruption or schema
-                # mismatch falls back to the exact historical replay path below.
-                snapshot_matches_registry = False
-            else:
-                engine._history = articles
-                engine._state_restore_mode = "snapshot"
-                return engine
-
-        # Compatibility/fail-safe path: preserve the exact pre-optimization behavior
-        # whenever the snapshot is absent, malformed, or paired with different
-        # authoritative registry bytes. This makes the optimization quality-neutral.
+        # SAFETY HOLD: always rebuild derived editorial state by replaying the
+        # historical journal. The snapshot fast path is intentionally disabled
+        # because persisted story-registry compaction can remove historical
+        # unified-incident evidence that replay reconstructs in memory. Until
+        # snapshot restore is proven identity-equivalent against production-shaped
+        # history, skipping replay is not allowed.
         with engine._pipeline.defer_registry_saves(
             commit=not registry_already_exists
         ):

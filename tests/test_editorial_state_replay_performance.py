@@ -103,13 +103,16 @@ def test_deferred_registry_save_does_not_commit_after_exception(tmp_path, monkey
     assert not registry_path.exists()
 
 
-def test_matching_registry_snapshot_skips_historical_process_replay(tmp_path, monkeypatch):
+def test_matching_registry_snapshot_still_replays_historical_journal(tmp_path, monkeypatch):
     state_path, registry_path = _saved_state(tmp_path, count=12)
+    calls = []
+    original_process = EditorialEngine._process
 
-    def fail_if_replayed(*args, **kwargs):
-        raise AssertionError("historical journal replay should not run")
+    def counted_process(self, *args, **kwargs):
+        calls.append(1)
+        return original_process(self, *args, **kwargs)
 
-    monkeypatch.setattr(EditorialEngine, "_process", fail_if_replayed)
+    monkeypatch.setattr(EditorialEngine, "_process", counted_process)
 
     restored = EditorialEngine.load(
         state_path,
@@ -117,7 +120,8 @@ def test_matching_registry_snapshot_skips_historical_process_replay(tmp_path, mo
         registry_path=registry_path,
     )
 
-    assert restored.state_restore_mode == "snapshot"
+    assert restored.state_restore_mode == "replay"
+    assert len(calls) == 12
     assert len(restored._history) == 12
 
 
