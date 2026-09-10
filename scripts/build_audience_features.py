@@ -60,7 +60,7 @@ def _page_head(title: str, description: str, canonical_path: str = "", structure
 <meta name="geo.region" content="US-FL">
 <meta name="geo.placename" content="Treasure Coast, Florida">
 <meta name="google-adsense-account" content="ca-pub-9679836198092378">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png">
 <link rel="stylesheet" href="/style.css?v={ASSET_VERSION}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
@@ -1060,6 +1060,14 @@ def normalize_assets_and_analytics() -> dict:
         scanned += 1; original = text
         text = re.sub(r'/style\.css\?v=[^"\']+', f'/style.css?v={ASSET_VERSION}', text)
         text = re.sub(r'/main\.js\?v=[^"\']+', f'/main.js?v={ASSET_VERSION}', text)
+        # Migrate retained/static pages from the old SVG favicon to the current PNG.
+        text = re.sub(
+            r'<link\b(?=[^>]*\brel=["\'][^"\']*\bicon\b[^"\']*["\'])'
+            r'(?=[^>]*\bhref=["\'](?:https://treasurecoast\.today)?/favicon\.svg(?:\?[^"\']*)?["\'])[^>]*>',
+            '<link rel="icon" href="/favicon.png" type="image/png">',
+            text,
+            flags=re.I,
+        )
         if endpoint:
             text = _upsert_meta(text, "tct-story-analytics-endpoint", endpoint)
         if text != original:

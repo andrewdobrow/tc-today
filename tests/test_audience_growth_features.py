@@ -239,3 +239,21 @@ def test_workflow_runs_features_before_paywall_and_validates_after_paywall():
     validate=workflow.index("python scripts/validate_seo_contracts.py")
     assert build < paywall < validate
     assert "supabase functions deploy story-analytics" in workflow
+
+
+def test_asset_normalization_migrates_svg_favicon_to_png_sitewide(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    page = tmp_path / "legacy.html"
+    page.write_text(
+        '<!doctype html><html><head>'
+        '<link rel="icon" href="https://treasurecoast.today/favicon.svg" type="image/svg+xml">'
+        '</head><body></body></html>',
+        encoding="utf-8",
+    )
+
+    report = features.normalize_assets_and_analytics()
+
+    rendered = page.read_text(encoding="utf-8")
+    assert '<link rel="icon" href="/favicon.png" type="image/png">' in rendered
+    assert "favicon.svg" not in rendered
+    assert report["updated"] >= 1
