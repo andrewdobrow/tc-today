@@ -607,8 +607,8 @@ async function unlockArticle(statusPromise=null){
     setMessage(message, '')
     if (rendered) {
       removePostArticleNewsletter()
-      placeFullArticleNewsletter()
       placePostReadMeterAfterStory(paywall)
+      placeFullArticleNewsletter()
       const meterPeriod = String(data.period || reservation.period || currentMeterPeriod())
       setMeterPaywallState(paywall, meterPeriod, true)
       armFreeArticleBanner(slug, meterPeriod, paywall)
