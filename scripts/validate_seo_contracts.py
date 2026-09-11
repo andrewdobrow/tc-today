@@ -79,7 +79,17 @@ def validate() -> dict:
         events += 1
         soup=BeautifulSoup(path.read_text(encoding="utf-8",errors="ignore"),"html.parser")
         objs=list(_jsonld(soup))
-        if not any(o.get("@type")=="Event" for o in objs): failures.append(f"event schema:{path.name}")
+        has_event_schema=any(o.get("@type")=="Event" for o in objs)
+        # Event rich-result markup is intentionally removed after an event ends.
+        # Recently ended pages remain available during the 30-day grace period
+        # (with noindex), and retained high-value pages can remain longer, but
+        # neither should claim to be an active schema.org Event.
+        ended=soup.select_one("[data-tct-event-ended]") is not None
+        if ended:
+            if has_event_schema:
+                failures.append(f"ended event schema:{path.name}")
+        elif not has_event_schema:
+            failures.append(f"event schema:{path.name}")
         if soup.select_one(".event-detail-primary") is None and soup.select_one(".event-detail-secondary") is None: failures.append(f"event source link:{path.name}")
     if failures:
         raise RuntimeError("Final SEO contract FAILED: " + "; ".join(failures[:30]))

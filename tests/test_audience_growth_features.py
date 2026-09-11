@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from scripts import build_audience_features as features
+from scripts import validate_seo_contracts as seo_contracts
 from tct_engine.membership_paywall import paywall_section_html
 
 
@@ -341,6 +342,43 @@ def test_workflow_runs_features_before_paywall_and_validates_after_paywall():
     assert build < paywall < validate
     assert "supabase functions deploy story-analytics" in workflow
 
+
+
+def test_final_seo_contract_accepts_recently_ended_event_without_active_event_schema(tmp_path, monkeypatch):
+    (tmp_path / "archive.json").write_text("[]", encoding="utf-8")
+    (tmp_path / "events").mkdir()
+    ended = tmp_path / "events" / "0123456789abcdef12-stuart-art-walk.html"
+    ended.write_text(
+        """<!doctype html><html><head>
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://treasurecoast.today/events/0123456789abcdef12-stuart-art-walk.html">
+</head><body>
+<p class="event-detail-ended" data-tct-event-ended><strong>This event has ended.</strong></p>
+<a class="event-detail-primary" href="https://example.com/event">Official event page →</a>
+</body></html>""",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(seo_contracts, "ROOT", tmp_path)
+    report = seo_contracts.validate()
+    assert report["events"] == 1
+
+
+def test_final_seo_contract_still_requires_event_schema_for_active_event_page(tmp_path, monkeypatch):
+    import pytest
+    (tmp_path / "archive.json").write_text("[]", encoding="utf-8")
+    (tmp_path / "events").mkdir()
+    active = tmp_path / "events" / "0123456789abcdef12-stuart-art-walk.html"
+    active.write_text(
+        """<!doctype html><html><head>
+<link rel="canonical" href="https://treasurecoast.today/events/0123456789abcdef12-stuart-art-walk.html">
+</head><body>
+<a class="event-detail-primary" href="https://example.com/event">Official event page →</a>
+</body></html>""",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(seo_contracts, "ROOT", tmp_path)
+    with pytest.raises(RuntimeError, match=r"event schema:0123456789abcdef12-stuart-art-walk\.html"):
+        seo_contracts.validate()
 
 def test_asset_normalization_migrates_svg_favicon_to_png_sitewide(tmp_path, monkeypatch):
     _setup_root(tmp_path, monkeypatch)
