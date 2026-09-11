@@ -358,3 +358,46 @@ def test_asset_normalization_migrates_svg_favicon_to_png_sitewide(tmp_path, monk
     assert '<link rel="icon" href="/favicon.png" type="image/png">' in rendered
     assert "favicon.svg" not in rendered
     assert report["updated"] >= 1
+
+
+def test_event_detail_unknown_time_uses_date_only_schema_and_safe_copy(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    (tmp_path/"events.html").write_text(_chrome(), encoding="utf-8")
+    event = _event_fixture()
+    event.update({
+        "starts_at":"2026-09-12T00:00:00-04:00",
+        "ends_at":"2026-09-12T00:00:00-04:00",
+        "time_known":False,
+        "time_source":"unknown",
+    })
+    (tmp_path/"data"/"events.json").write_text(json.dumps({"schema_version":1,"events":[event]}), encoding="utf-8")
+    report = features.render_event_detail_pages()
+    assert report["rendered"] == 1
+    enriched = json.loads((tmp_path/"data"/"events.json").read_text())
+    detail = enriched["events"][0]["detail_url"]
+    page = (tmp_path/detail.lstrip('/')).read_text(encoding="utf-8")
+    assert "Saturday, September 12, 2026 · See official event for time" in page
+    assert '"startDate":"2026-09-12"' in page
+    assert '"endDate"' not in page
+    assert "at 12:00 AM" not in page
+    assert 'name="tct-event-lifecycle-end" content="2026-09-12T23:59:59-04:00"' in page
+
+
+def test_event_detail_all_day_uses_all_day_copy_and_date_only_schema(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    (tmp_path/"events.html").write_text(_chrome(), encoding="utf-8")
+    event = _event_fixture()
+    event.update({
+        "starts_at":"2026-09-12T00:00:00-04:00",
+        "ends_at":"",
+        "all_day":True,
+        "time_known":True,
+    })
+    (tmp_path/"data"/"events.json").write_text(json.dumps({"schema_version":1,"events":[event]}), encoding="utf-8")
+    features.render_event_detail_pages()
+    enriched = json.loads((tmp_path/"data"/"events.json").read_text())
+    detail = enriched["events"][0]["detail_url"]
+    page = (tmp_path/detail.lstrip('/')).read_text(encoding="utf-8")
+    assert "Saturday, September 12, 2026 · All day" in page
+    assert '"startDate":"2026-09-12"' in page
+    assert "at 12:00 AM" not in page

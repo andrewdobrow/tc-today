@@ -730,6 +730,12 @@ def _parse_event_datetime(raw: object) -> datetime | None:
 def _event_effective_end(event: dict) -> datetime | None:
     start = _parse_event_datetime(event.get("starts_at"))
     end = _parse_event_datetime(event.get("ends_at"))
+    if event.get("all_day") and start is not None:
+        if end is not None and end > start:
+            return end
+        return start.replace(hour=23, minute=59, second=59, microsecond=0)
+    if event.get("time_known") is False and start is not None:
+        return start.replace(hour=23, minute=59, second=59, microsecond=0)
     if end is not None and (start is None or end >= start):
         return end
     if start is not None:
@@ -766,6 +772,23 @@ def _format_event_datetime(raw: str) -> str:
         return dt.strftime("%A, %B %-d, %Y at %-I:%M %p")
     except Exception:
         return raw
+
+
+def _format_event_date(raw: str) -> str:
+    if not raw:
+        return ""
+    try:
+        dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        return dt.strftime("%A, %B %-d, %Y")
+    except Exception:
+        return str(raw)[:10]
+
+
+def _event_schema_start(event: dict) -> str:
+    raw = _clean_text(event.get("starts_at"))
+    if event.get("all_day") or event.get("time_known") is False:
+        return raw[:10]
+    return raw
 
 
 def _event_retention_overrides() -> tuple[set[str], set[str]]:
@@ -888,13 +911,25 @@ def render_event_detail_pages() -> dict:
         detail_path = _event_detail_path(event)
         event["detail_url"] = detail_path
         expected_paths.add((ROOT / detail_path.lstrip("/")).resolve())
-        start = _format_event_datetime(str(event.get("starts_at") or ""))
-        end = _format_event_datetime(str(event.get("ends_at") or ""))
+        all_day = bool(event.get("all_day"))
+        time_known = event.get("time_known") is not False
+        if all_day:
+            start = _format_event_date(str(event.get("starts_at") or ""))
+            end = ""
+            when_display = f"{start} · All day"
+        elif time_known:
+            start = _format_event_datetime(str(event.get("starts_at") or ""))
+            end = _format_event_datetime(str(event.get("ends_at") or ""))
+            when_display = start
+        else:
+            start = _format_event_date(str(event.get("starts_at") or ""))
+            end = ""
+            when_display = f"{start} · See official event for time"
         location = ", ".join(x for x in [_clean_text(event.get("venue")), _clean_text(event.get("address")), _clean_text(event.get("city"))] if x)
         title = _clean_text(event.get("title"))
         description = _clean_text(event.get("description")) or f"Event details for {title} on the Treasure Coast."
-        schema = {"@context":"https://schema.org","@type":"Event","name":title,"startDate":event.get("starts_at"),"url":f"{SITE_URL}{detail_path}","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode"}
-        if event.get("ends_at"): schema["endDate"] = event.get("ends_at")
+        schema = {"@context":"https://schema.org","@type":"Event","name":title,"startDate":_event_schema_start(event),"url":f"{SITE_URL}{detail_path}","eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode"}
+        if time_known and event.get("ends_at"): schema["endDate"] = event.get("ends_at")
         if description: schema["description"] = description
         if event.get("venue") or event.get("city"):
             schema["location"]={"@type":"Place","name":event.get("venue") or event.get("city"),"address":{"@type":"PostalAddress","streetAddress":event.get("address", ""),"addressLocality":event.get("city", ""),"addressRegion":"FL"}}
@@ -914,9 +949,9 @@ def render_event_detail_pages() -> dict:
 {_page_header(active='events')}
 <main class="event-detail-page"><div class="event-detail-shell">
 <nav class="tct-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/events.html">Events</a><span aria-hidden="true">›</span><span aria-current="page">{html_lib.escape(title)}</span></nav>
-<header class="event-detail-hero"><span class="event-detail-category">{html_lib.escape(_clean_text(event.get('category')))}</span><h1>{html_lib.escape(title)}</h1><p class="event-detail-when">{html_lib.escape(start)}</p></header>
+<header class="event-detail-hero"><span class="event-detail-category">{html_lib.escape(_clean_text(event.get('category')))}</span><h1>{html_lib.escape(title)}</h1><p class="event-detail-when">{html_lib.escape(when_display)}</p></header>
 <div class="event-detail-grid"><article class="event-detail-main">
-<dl class="event-detail-facts"><div><dt>When</dt><dd>{html_lib.escape(start)}{(' – ' + html_lib.escape(end)) if end and end != start else ''}</dd></div><div><dt>Where</dt><dd>{html_lib.escape(location or _clean_text(event.get('county')) + ' County')}</dd></div>{f'<div><dt>Price</dt><dd>{html_lib.escape(_clean_text(event.get("price")))}</dd></div>' if event.get('price') else ''}</dl>
+<dl class="event-detail-facts"><div><dt>When</dt><dd>{html_lib.escape(when_display)}{(' – ' + html_lib.escape(end)) if time_known and end and end != start else ''}</dd></div><div><dt>Where</dt><dd>{html_lib.escape(location or _clean_text(event.get('county')) + ' County')}</dd></div>{f'<div><dt>Price</dt><dd>{html_lib.escape(_clean_text(event.get("price")))}</dd></div>' if event.get('price') else ''}</dl>
 <p class="event-detail-description">{html_lib.escape(description)}</p><div class="event-detail-actions">{official_link}{tickets}</div>
 <p class="event-detail-source">Event information from {source_link}. Details can change; verify with the organizer before attending.</p>
 </article><aside class="event-detail-aside"><h2>More Treasure Coast events</h2><p>Browse concerts, community events, family activities, arts, markets and more across Martin, St. Lucie and Indian River counties.</p><a href="/events.html">Browse the full calendar →</a></aside></div>
@@ -1012,14 +1047,15 @@ def _rewrite_event_listing_links(events: list[dict]) -> None:
     # Point the listing ItemList at TCT's unique event leaf URLs where available.
     items = []
     for event in events[:10]:
+        time_known = event.get("time_known") is not False and not event.get("all_day")
         item = {
             "@type":"Event", "name":event.get("title", ""),
-            "startDate":event.get("starts_at", ""),
+            "startDate":event.get("starts_at", "") if time_known else str(event.get("starts_at", ""))[:10],
             "url":f"{SITE_URL}{event.get('detail_url')}" if event.get("detail_url") else event.get("event_url") or event.get("source_url"),
             "eventStatus":"https://schema.org/EventScheduled",
             "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
         }
-        if event.get("ends_at"): item["endDate"] = event.get("ends_at")
+        if time_known and event.get("ends_at"): item["endDate"] = event.get("ends_at")
         if event.get("description"): item["description"] = _clean_text(event.get("description"))
         if event.get("venue") or event.get("city"):
             item["location"] = {"@type":"Place","name":event.get("venue") or event.get("city"),"address":{"@type":"PostalAddress","streetAddress":event.get("address", ""),"addressLocality":event.get("city", ""),"addressRegion":"FL","addressCountry":"US"}}

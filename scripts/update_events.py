@@ -274,6 +274,141 @@ def _parse_iso_datetime(value: Any) -> datetime | None:
     return parsed.astimezone(TZ)
 
 
+def _clock_range_from_text(value: Any) -> tuple[tuple[int, int], tuple[int, int]] | None:
+    """Extract one explicit AM/PM time range from human event copy."""
+    match = TIME_RANGE_RE.search(_clean(value))
+    if not match:
+        return None
+    start_ampm = match.group(3) or match.group(6)
+    start = _parse_clock(f"{match.group(1)}:{match.group(2) or '00'} {start_ampm}m")
+    end = _parse_clock(f"{match.group(4)}:{match.group(5) or '00'} {match.group(6)}m")
+    if not start or not end:
+        return None
+    return start, end
+
+
+def _single_clock_from_text(value: Any) -> tuple[int, int] | None:
+    """Extract a clearly introduced single event time, avoiding arbitrary prose clocks."""
+    text_value = _clean(value)
+    hint = re.search(
+        r"\b(?:time\s*:?|starts?\s+at|begins?\s+at|from|at)\s+"
+        r"(\d{1,2}(?::\d{2})?\s*[ap]\.?m\.?)\b",
+        text_value,
+        re.I,
+    )
+    return _parse_clock(hint.group(1)) if hint else None
+
+
+def _minute_of_day(clock: tuple[int, int]) -> int:
+    return clock[0] * 60 + clock[1]
+
+
+def _time_evidence_conflicts(
+    primary: tuple[tuple[int, int], tuple[int, int] | None],
+    secondary: tuple[tuple[int, int], tuple[int, int] | None],
+) -> bool:
+    """Return True when two source time claims materially disagree."""
+    if abs(_minute_of_day(primary[0]) - _minute_of_day(secondary[0])) > 15:
+        return True
+    if primary[1] and secondary[1]:
+        return abs(_minute_of_day(primary[1]) - _minute_of_day(secondary[1])) > 15
+    return False
+
+
+def _description_time_evidence(value: Any) -> tuple[tuple[int, int], tuple[int, int] | None] | None:
+    time_range = _clock_range_from_text(value)
+    if time_range:
+        return time_range[0], time_range[1]
+    single = _single_clock_from_text(value)
+    return (single, None) if single else None
+
+
+def _labeled_time_evidence_from_html(html_text: str) -> tuple[tuple[int, int], tuple[int, int] | None] | None:
+    """Read an explicit Time/Event Time field from an event detail page."""
+    soup = BeautifulSoup(html_text, "html.parser")
+    for node in soup.find_all(["h1", "h2", "h3", "h4", "h5", "dt", "th", "strong", "span", "div", "p"]):
+        label = _clean(node.get_text(" ", strip=True)).lower().rstrip(":")
+        if label not in {"time", "event time"}:
+            continue
+        values: list[str] = []
+        for item in node.find_all_next(string=True, limit=12):
+            cleaned = _clean(item)
+            if cleaned and cleaned.lower().rstrip(":") not in {"time", "event time"}:
+                values.append(cleaned)
+            if len(values) >= 5:
+                break
+        context = " | ".join(values)
+        time_range = _clock_range_from_text(context)
+        if time_range:
+            return time_range[0], time_range[1]
+        single = _single_clock_from_text(context)
+        if single:
+            return single, None
+    return None
+
+
+def _apply_time_evidence(
+    event: dict[str, Any],
+    evidence: tuple[tuple[int, int], tuple[int, int] | None],
+    *,
+    source: str,
+) -> None:
+    start = _parse_iso_datetime(event.get("starts_at"))
+    if start is None:
+        return
+    start_clock, end_clock = evidence
+    repaired_start = start.replace(hour=start_clock[0], minute=start_clock[1], second=0, microsecond=0)
+    repaired_end = None
+    if end_clock:
+        repaired_end = repaired_start.replace(hour=end_clock[0], minute=end_clock[1])
+        if repaired_end <= repaired_start:
+            repaired_end += timedelta(days=1)
+    event["starts_at"] = _iso_local(repaired_start)
+    event["ends_at"] = _iso_local(repaired_end)
+    event["time_known"] = True
+    event["time_source"] = source
+    event.pop("time_conflict", None)
+
+
+def _enrich_unknown_event_times(
+    session: requests.Session,
+    events: list[dict[str, Any]],
+    source: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Repair date-only/midnight placeholders; fail safely to 'See event'.
+
+    Priority is an explicit Time field on the event's own detail page. Descriptive
+    copy is only a fallback. If those two source claims disagree, do not guess.
+    """
+    for event in events:
+        if event.get("all_day") or event.get("time_known", True):
+            continue
+        description_evidence = _description_time_evidence(event.get("description"))
+        detail_evidence = None
+        event_url = _clean(event.get("event_url"))
+        source_url = _source_url(source)
+        if event_url.startswith(("http://", "https://")) and event_url != source_url:
+            try:
+                response = _get(session, event_url)
+                detail_evidence = _labeled_time_evidence_from_html(response.text)
+            except Exception:
+                detail_evidence = None
+
+        if detail_evidence and description_evidence and _time_evidence_conflicts(detail_evidence, description_evidence):
+            event["time_known"] = False
+            event["time_source"] = "conflict"
+            event["time_conflict"] = True
+            continue
+        if detail_evidence:
+            _apply_time_evidence(event, detail_evidence, source="detail_page")
+        elif description_evidence:
+            _apply_time_evidence(event, description_evidence, source="description")
+        else:
+            event["time_known"] = False
+            event["time_source"] = "unknown"
+    return events
+
+
 def _source_url(source: dict[str, Any]) -> str:
     return _clean(source.get("page_url") or source.get("url"))
 
@@ -376,11 +511,27 @@ def _normalize_event(raw: dict[str, Any], source: dict[str, Any], window: Window
     address = _clean(raw.get("address") or source.get("address"))
     city = _clean(raw.get("city") or source.get("city"))
     county = _clean(raw.get("county") or source.get("county")) or _county_from_locality(city, address)
+    all_day = bool(raw.get("all_day", False))
+    explicit_time_known = raw.get("time_known")
+    if explicit_time_known is None:
+        suspicious_midnight_placeholder = (
+            not all_day
+            and start.hour == 0 and start.minute == 0
+            and (end is None or (end.date() == start.date() and end.hour == 0 and end.minute == 0))
+        )
+        time_known = not suspicious_midnight_placeholder
+    else:
+        time_known = bool(explicit_time_known)
+    if all_day:
+        time_known = True
+
     event = {
         "title": title,
         "starts_at": _iso_local(start),
         "ends_at": _iso_local(end),
-        "all_day": bool(raw.get("all_day", False)),
+        "all_day": all_day,
+        "time_known": time_known,
+        "time_source": _clean(raw.get("time_source")) or ("source" if time_known else "unknown"),
         "venue": _clean(raw.get("venue") or source.get("venue")),
         "address": address,
         "city": city,
@@ -405,7 +556,12 @@ def _normalize_event(raw: dict[str, Any], source: dict[str, Any], window: Window
         return None
     if start >= window.end:
         return None
-    effective_end = end or (start + timedelta(hours=4))
+    if all_day:
+        effective_end = end if end and end > start else start.replace(hour=23, minute=59, second=59, microsecond=0)
+    elif not event.get("time_known"):
+        effective_end = start.replace(hour=23, minute=59, second=59, microsecond=0)
+    else:
+        effective_end = end or (start + timedelta(hours=4))
     if effective_end < window.now:
         return None
 
@@ -472,6 +628,7 @@ def _parse_ical(text_value: str, source: dict[str, Any], window: Window) -> list
                     "starts_at": _iso_local(start),
                     "ends_at": _iso_local(end),
                     "all_day": all_day,
+                    "time_known": not all_day,
                     "venue": _unescape_ical(current.get("LOCATION", "")),
                     # CivicEngage municipal feeds commonly put the real event-detail
                     # page in DESCRIPTION while URL points back to the calendar feed.
@@ -1231,18 +1388,23 @@ def _recurring_events(html_text: str, source: dict[str, Any], window: Window) ->
 
 def _fetch_source(session: requests.Session, source: dict[str, Any], window: Window) -> list[dict[str, Any]]:
     adapter = source.get("adapter")
+
+    def finish(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        enriched = _enrich_unknown_event_times(session, list(rows), source)
+        return _dedupe_exact(enriched)
+
     if adapter == "ical":
         response = _get(session, source["url"])
-        return _parse_ical(response.text, source, window)
+        return finish(_parse_ical(response.text, source, window))
     if adapter == "tribe":
         events = _fetch_tribe(session, source, window)
         if source.get("recurring"):
             response = _get(session, source["url"])
             events.extend(_recurring_events(response.text, source, window))
-        return _dedupe_exact(events)
+        return finish(events)
     if adapter == "pineapple_linked_shows":
         response = _get(session, source["url"])
-        return _pineapple_events(session, response.text, source, window)
+        return finish(_pineapple_events(session, response.text, source, window))
 
     response = _get(session, source["url"])
     html_text = response.text
@@ -1267,7 +1429,7 @@ def _fetch_source(session: requests.Session, source: dict[str, Any], window: Win
     events = parsers[adapter]()
     if source.get("recurring") and adapter != "recurring_page":
         events.extend(_recurring_events(html_text, source, window))
-    return _dedupe_exact(events)
+    return finish(events)
 
 
 def _dedupe_exact(events: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1412,6 +1574,8 @@ def _date_label(dt: datetime) -> tuple[str, str, str]:
 def _format_time(event: dict[str, Any]) -> str:
     if event.get("all_day"):
         return "All day"
+    if event.get("time_known") is False:
+        return "See event"
     start = _parse_iso_datetime(event.get("starts_at"))
     end = _parse_iso_datetime(event.get("ends_at"))
     if not start:
@@ -1483,15 +1647,16 @@ def _render_dynamic(events: list[dict[str, Any]], status: dict[str, Any]) -> str
 def _jsonld_payload(events: list[dict[str, Any]]) -> dict[str, Any]:
     items = []
     for event in events[:EVENT_JSONLD_ROWS]:
+        timed = event.get("time_known") is not False and not event.get("all_day")
         item: dict[str, Any] = {
             "@type": "Event",
             "name": event["title"],
-            "startDate": event["starts_at"],
+            "startDate": event["starts_at"] if timed else str(event["starts_at"])[:10],
             "url": event.get("event_url") or event.get("source_url"),
             "eventStatus": "https://schema.org/EventScheduled",
             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
         }
-        if event.get("ends_at"):
+        if timed and event.get("ends_at"):
             item["endDate"] = event["ends_at"]
         if event.get("description"):
             item["description"] = event["description"]
@@ -1519,8 +1684,21 @@ def _replace_between(text: str, start_marker: str, end_marker: str, replacement:
     return text[:start] + replacement + text[end:]
 
 
+def _ensure_time_fallback_js(text: str) -> str:
+    """Keep progressively loaded cards from presenting unknown midnight as fact."""
+    marker = "if (event.time_known === false) return 'See event';"
+    if marker in text:
+        return text
+    old = "if (event.all_day) return 'All day';\n      if (!event.starts_at) return '';"
+    new = "if (event.all_day) return 'All day';\n      if (event.time_known === false) return 'See event';\n      if (!event.starts_at) return '';"
+    if old not in text:
+        raise RuntimeError("events.html is missing the expected progressive time formatter")
+    return text.replace(old, new, 1)
+
+
 def _render_page(events: list[dict[str, Any]], status: dict[str, Any]) -> None:
     text = EVENTS_HTML_PATH.read_text(encoding="utf-8")
+    text = _ensure_time_fallback_js(text)
     text = _replace_between(text, DYNAMIC_START, DYNAMIC_END, _render_dynamic(events, status))
     payload = json.dumps(_jsonld_payload(events), ensure_ascii=False, separators=(",", ":"))
     jsonld = f'{JSONLD_START}\n<script type="application/ld+json" data-tct-events-jsonld>{payload}</script>\n{JSONLD_END}'

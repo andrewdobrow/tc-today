@@ -982,3 +982,137 @@ def test_primary_nav_normalizer_targets_header_that_owns_nav_not_unrelated_page_
     assert rendered.count('class="site-masthead"') == 1
     assert 'href="/?cat=martin" class="cat-btn active" aria-current="page"' in rendered
     assert normalize(tmp_path) == {"scanned": 1, "updated": 0}
+
+
+def test_midnight_placeholder_is_not_published_as_12_am_time():
+    source = _source(county="St. Lucie", city="Port St. Lucie")
+    row = events._normalize_event({
+        "title": "Breakfast in the Square",
+        "starts_at": "2026-09-11T00:00:00-04:00",
+        "ends_at": "2026-09-11T00:00:00-04:00",
+        "description": "Breakfast is offered in the square.",
+        "event_url": "https://example.com/breakfast",
+    }, source, _window(30))
+    assert row is not None
+    assert row["time_known"] is False
+    assert events._format_time(row) == "See event"
+
+
+def test_unknown_time_falls_back_to_description_when_detail_page_has_no_time(monkeypatch):
+    source = _source(county="St. Lucie", city="Port St. Lucie")
+    row = events._normalize_event({
+        "title": "Breakfast in the Square",
+        "starts_at": "2026-09-11T00:00:00-04:00",
+        "ends_at": "2026-09-11T00:00:00-04:00",
+        "description": "Join us from 8:00 AM to 11:00 AM for coffee and pastries.",
+        "event_url": "https://example.com/breakfast",
+    }, source, _window(30))
+    assert row is not None and row["time_known"] is False
+
+    class Response:
+        text = "<html><body><h1>Breakfast in the Square</h1><p>No structured time is listed here.</p></body></html>"
+
+    monkeypatch.setattr(events, "_get", lambda *_args, **_kwargs: Response())
+    events._enrich_unknown_event_times(object(), [row], source)
+    assert row["time_known"] is True
+    assert row["time_source"] == "description"
+    assert row["starts_at"].startswith("2026-09-11T08:00")
+    assert row["ends_at"].startswith("2026-09-11T11:00")
+    assert events._format_time(row) == "8 AM–11 AM"
+
+
+def test_detail_page_time_wins_when_it_agrees_with_description(monkeypatch):
+    source = _source(county="St. Lucie", city="Port St. Lucie")
+    row = events._normalize_event({
+        "title": "Morning Market",
+        "starts_at": "2026-09-11T00:00:00-04:00",
+        "ends_at": "2026-09-11T00:00:00-04:00",
+        "description": "Open from 9:00 AM to 12:00 PM.",
+        "event_url": "https://example.com/morning-market",
+    }, source, _window(30))
+
+    class Response:
+        text = "<html><body><h3>Time</h3><div>9:00 am - 12:00 pm</div></body></html>"
+
+    monkeypatch.setattr(events, "_get", lambda *_args, **_kwargs: Response())
+    events._enrich_unknown_event_times(object(), [row], source)
+    assert row["time_known"] is True
+    assert row["time_source"] == "detail_page"
+    assert row["starts_at"].startswith("2026-09-11T09:00")
+    assert row["ends_at"].startswith("2026-09-11T12:00")
+
+
+def test_conflicting_detail_and_description_times_fail_safe_to_see_event(monkeypatch):
+    """Regression: Tradition Breakfast listing had midnight metadata and contradictory source copy."""
+    source = _source(county="St. Lucie", city="Port St. Lucie")
+    row = events._normalize_event({
+        "title": "Breakfast in the Square",
+        "starts_at": "2026-09-11T00:00:00-04:00",
+        "ends_at": "2026-09-11T00:00:00-04:00",
+        "description": "Join Tradition and Tueste Coffee from 8:00 AM to 11:00AM for delicious coffee & pastries.",
+        "event_url": "https://traditionfl.com/events/breakfast-in-the-square-12/",
+    }, source, _window(30))
+
+    class Response:
+        text = "<html><body><h3>Time</h3><div>9:00 am - 12:00 pm</div></body></html>"
+
+    monkeypatch.setattr(events, "_get", lambda *_args, **_kwargs: Response())
+    events._enrich_unknown_event_times(object(), [row], source)
+    assert row["time_known"] is False
+    assert row["time_source"] == "conflict"
+    assert row["time_conflict"] is True
+    assert events._format_time(row) == "See event"
+
+
+def test_unknown_time_event_remains_live_until_end_of_calendar_day(monkeypatch):
+    source = _source(county="St. Lucie", city="Port St. Lucie")
+    monkeypatch.setenv("TCT_EVENTS_NOW", "2026-09-11T20:00:00-04:00")
+    window = events._window(30)
+    row = events._normalize_event({
+        "title": "Time TBD Community Event",
+        "starts_at": "2026-09-11T00:00:00-04:00",
+        "ends_at": "2026-09-11T00:00:00-04:00",
+        "event_url": "https://example.com/time-tbd",
+    }, source, window)
+    assert row is not None
+    assert row["time_known"] is False
+
+
+def test_unknown_time_jsonld_uses_date_only_not_fake_midnight():
+    source = _source(county="St. Lucie", city="Port St. Lucie")
+    row = events._normalize_event({
+        "title": "Time TBD Community Event",
+        "starts_at": "2026-09-12T00:00:00-04:00",
+        "ends_at": "2026-09-12T00:00:00-04:00",
+        "event_url": "https://example.com/time-tbd",
+    }, source, _window(30))
+    payload = events._jsonld_payload([row])
+    item = payload["itemListElement"][0]["item"]
+    assert item["startDate"] == "2026-09-12"
+    assert "endDate" not in item
+    assert "12 AM" not in events._render_card(row)
+    assert "See event" in events._render_card(row)
+
+
+def test_render_page_upgrades_progressive_cards_to_safe_unknown_time_fallback():
+    original = """const formatTime = event => {
+      if (event.all_day) return 'All day';
+      if (!event.starts_at) return '';
+      return 'legacy';
+    };"""
+    upgraded = events._ensure_time_fallback_js(original)
+    assert "if (event.time_known === false) return 'See event';" in upgraded
+    assert events._ensure_time_fallback_js(upgraded) == upgraded
+
+
+def test_all_day_event_is_not_treated_as_midnight_or_expired_at_4_am(monkeypatch):
+    source = _source(county="Martin", city="Stuart")
+    monkeypatch.setenv("TCT_EVENTS_NOW", "2026-09-12T18:00:00-04:00")
+    row = events._normalize_event({
+        "title": "Community Festival",
+        "starts_at": "2026-09-12T00:00:00-04:00",
+        "all_day": True,
+    }, source, events._window(30))
+    assert row is not None
+    assert row["all_day"] is True
+    assert events._format_time(row) == "All day"
