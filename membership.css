@@ -859,12 +859,13 @@ html.tct-meter-precheck .tct-preview-copy {
 
 
 /* ================================================================
-   TCT v1.13.7.9 - branded monthly free-article reminder
-   A more prominent, dismissible bottom banner appears only after a
-   reader begins using the one-free-article monthly allowance.
+   TCT v1.13.7.17 - larger branded monthly free-article reminder
+   Preserve the existing appearance/dismissal rules while giving the
+   conversion panel substantially more viewport presence.
    ================================================================ */
 .tct-free-article-banner {
   position: fixed;
+  min-height: 20vh;
   left: 0;
   right: 0;
   bottom: 0;
@@ -885,7 +886,7 @@ html.tct-meter-precheck .tct-preview-copy {
 }
 .tct-free-article-banner-inner {
   width: min(1160px, 100%);
-  min-height: 84px;
+  min-height: 20vh;
   margin: 0 auto;
   padding: 12px 22px calc(12px + env(safe-area-inset-bottom));
   box-sizing: border-box;
@@ -960,8 +961,11 @@ html.tct-meter-precheck .tct-preview-copy {
 }
 .tct-free-article-banner-dismiss:hover { background: rgba(255,255,255,.18); }
 @media (max-width: 680px) {
+  .tct-free-article-banner {
+    min-height: 30vh;
+  }
   .tct-free-article-banner-inner {
-    min-height: 0;
+    min-height: 30vh;
     padding: 11px 13px calc(11px + env(safe-area-inset-bottom));
     grid-template-columns: auto minmax(0,1fr) 34px;
     grid-template-areas: 'brand copy dismiss' 'cta cta cta';
