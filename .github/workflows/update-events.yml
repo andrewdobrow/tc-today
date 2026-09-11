@@ -44,8 +44,13 @@ jobs:
       - name: Refresh Treasure Coast events
         run: python -u scripts/update_events.py
 
-      - name: Validate event artifacts
-        run: python scripts/update_events.py --validate-only
+      - name: Build event detail pages and lifecycle
+        run: python -u scripts/build_audience_features.py --events-only
+
+      - name: Validate event artifacts and lifecycle
+        run: |
+          python scripts/update_events.py --validate-only
+          python scripts/build_audience_features.py --validate-events-only
 
       - name: Remove transient Python artifacts
         run: |
@@ -63,7 +68,8 @@ jobs:
           # while this job is fetching calendars. If push loses that race, rebuild
           # the event artifacts on the new main tip and try again.
           for attempt in 1 2 3; do
-            git add events.html data/events.json data/events-source-cache.json data/events-source-status.json
+            git add events.html sitemap.xml data/events.json data/events-source-cache.json data/events-source-status.json data/events-retention.json
+            git add -A events/
             if git diff --staged --quiet; then
               echo "No event changes to publish."
               echo "committed=false" >> "$GITHUB_OUTPUT"
@@ -85,7 +91,9 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             python -u scripts/update_events.py
+            python -u scripts/build_audience_features.py --events-only
             python scripts/update_events.py --validate-only
+            python scripts/build_audience_features.py --validate-events-only
           done
 
   deploy:
