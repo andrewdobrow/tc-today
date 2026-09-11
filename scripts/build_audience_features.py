@@ -15,9 +15,10 @@ import re
 import shutil
 import sys
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import quote
+from zoneinfo import ZoneInfo
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +29,7 @@ SITE_URL = "https://treasurecoast.today"
 NEWSLETTER_URL = "https://treasure-coast-today.kit.com/cb848255f8"
 PREFERRED_SOURCE_URL = "https://www.google.com/preferences/source?q=treasurecoast.today"
 PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
-ASSET_VERSION = "1.13.8.5"
+ASSET_VERSION = "1.13.8.6"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
@@ -701,6 +702,41 @@ def write_story_index(archive: list[dict]) -> int:
     return len(rows)
 
 
+EVENT_DETAIL_GRACE_DAYS = 30
+EVENT_TZ = ZoneInfo("America/New_York")
+def _event_now() -> datetime:
+    forced = str(os.environ.get("TCT_EVENTS_NOW", "")).strip()
+    if forced:
+        parsed = datetime.fromisoformat(forced.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=EVENT_TZ)
+        return parsed.astimezone(EVENT_TZ)
+    return datetime.now(EVENT_TZ)
+
+
+def _parse_event_datetime(raw: object) -> datetime | None:
+    value = _clean_text(raw)
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=EVENT_TZ)
+    return parsed.astimezone(EVENT_TZ)
+
+
+def _event_effective_end(event: dict) -> datetime | None:
+    start = _parse_event_datetime(event.get("starts_at"))
+    end = _parse_event_datetime(event.get("ends_at"))
+    if end is not None and (start is None or end >= start):
+        return end
+    if start is not None:
+        return start + timedelta(hours=4)
+    return None
+
+
 def _event_slug(title: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", _clean_text(title).lower()).strip("-")
     return value[:70].rstrip("-") or "event"
@@ -732,16 +768,119 @@ def _format_event_datetime(raw: str) -> str:
         return raw
 
 
+def _event_retention_overrides() -> tuple[set[str], set[str]]:
+    payload = _read_json(ROOT / "data" / "events-retention.json", {})
+    if not isinstance(payload, dict):
+        return set(), set()
+    ids = {_clean_text(value) for value in payload.get("retain_ids", []) if _clean_text(value)}
+    paths = set()
+    for value in payload.get("retain_paths", []):
+        value = _clean_text(value)
+        if not value:
+            continue
+        if not value.startswith("/"):
+            value = "/" + value
+        if value.startswith("/events/") and value.endswith(".html"):
+            paths.add(value)
+    return ids, paths
+
+
+def _event_page_id(path: Path, text: str) -> str:
+    meta = re.search(r'<meta\s+name=["\']tct-event-id["\']\s+content=["\']([^"\']+)["\']\s*/?>', text, re.I)
+    if meta:
+        return _clean_text(meta.group(1))
+    match = re.match(r"([a-f0-9]{18,})-", path.name, re.I)
+    return match.group(1) if match else ""
+
+
+def _event_page_lifecycle_end(text: str) -> datetime | None:
+    meta = re.search(r'<meta\s+name=["\']tct-event-lifecycle-end["\']\s+content=["\']([^"\']+)["\']\s*/?>', text, re.I)
+    if meta:
+        parsed = _parse_event_datetime(meta.group(1))
+        if parsed is not None:
+            return parsed
+    for match in re.finditer(r'<script\s+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', text, re.I | re.S):
+        try:
+            payload = json.loads(html_lib.unescape(match.group(1)).strip())
+        except Exception:
+            continue
+        candidates = payload.get("@graph", []) if isinstance(payload, dict) and isinstance(payload.get("@graph"), list) else [payload]
+        for candidate in candidates:
+            if not isinstance(candidate, dict):
+                continue
+            kinds = candidate.get("@type")
+            kinds = kinds if isinstance(kinds, list) else [kinds]
+            if "Event" not in kinds:
+                continue
+            parsed_end = _parse_event_datetime(candidate.get("endDate"))
+            if parsed_end is not None:
+                return parsed_end
+            parsed_start = _parse_event_datetime(candidate.get("startDate"))
+            if parsed_start is not None:
+                return parsed_start + timedelta(hours=4)
+    return None
+
+
+def _remove_event_jsonld(text: str) -> str:
+    pattern = re.compile(r'<script\s+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', re.I | re.S)
+
+    def repl(match: re.Match) -> str:
+        try:
+            payload = json.loads(html_lib.unescape(match.group(1)).strip())
+        except Exception:
+            return match.group(0)
+        candidates = payload.get("@graph", []) if isinstance(payload, dict) and isinstance(payload.get("@graph"), list) else [payload]
+        for candidate in candidates:
+            if not isinstance(candidate, dict):
+                continue
+            kinds = candidate.get("@type")
+            kinds = kinds if isinstance(kinds, list) else [kinds]
+            if "Event" in kinds:
+                return ""
+        return match.group(0)
+
+    return pattern.sub(repl, text)
+
+
+def _mark_event_page_ended(text: str, end_at: datetime, *, retained: bool) -> str:
+    text = _remove_event_jsonld(text)
+    text = re.sub(r'\s*<meta\s+name=["\']robots["\'][^>]*>', '', text, flags=re.I)
+    lifecycle = end_at.isoformat(timespec="seconds")
+    if not re.search(r'name=["\']tct-event-lifecycle-end["\']', text, re.I):
+        text = text.replace('</head>', f'<meta name="tct-event-lifecycle-end" content="{html_lib.escape(lifecycle, quote=True)}">\n</head>', 1)
+    if not retained:
+        text = text.replace('</head>', '<meta name="robots" content="noindex,follow">\n</head>', 1)
+    if 'data-tct-event-ended' not in text:
+        notice = '<p class="event-detail-ended" data-tct-event-ended><strong>This event has ended.</strong> Browse current Treasure Coast events below.</p>'
+        text, count = re.subn(r'(<p\s+class="event-detail-when"[^>]*>.*?</p>)', r'\1' + notice, text, count=1, flags=re.I | re.S)
+        if count == 0:
+            text = text.replace('</header>', notice + '</header>', 1)
+    return text
+
+
+def _retained_event_paths() -> set[str]:
+    retain_ids, retain_paths = _event_retention_overrides()
+    event_dir = ROOT / "events"
+    if event_dir.exists() and retain_ids:
+        for path in event_dir.glob("*.html"):
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            if _event_page_id(path, text) in retain_ids:
+                retain_paths.add("/" + path.relative_to(ROOT).as_posix())
+    return retain_paths
+
+
 def render_event_detail_pages() -> dict:
     path = ROOT / "data" / "events.json"
     payload = _read_json(path, {})
     events = payload.get("events") if isinstance(payload, dict) else []
     if not isinstance(events, list):
-        return {"rendered":0,"eligible":0}
+        return {"rendered":0,"eligible":0,"recently_ended":0,"removed":0,"retained":0}
     event_dir = ROOT / "events"
     event_dir.mkdir(exist_ok=True)
-    expected_paths = set()
+    expected_paths: set[Path] = set()
     rendered = 0
+    now = _event_now()
+    retain_ids, retain_paths = _event_retention_overrides()
     for event in events:
         if not isinstance(event, dict) or not _event_detail_eligible(event):
             event.pop("detail_url", None)
@@ -760,13 +899,18 @@ def render_event_detail_pages() -> dict:
         if event.get("venue") or event.get("city"):
             schema["location"]={"@type":"Place","name":event.get("venue") or event.get("city"),"address":{"@type":"PostalAddress","streetAddress":event.get("address", ""),"addressLocality":event.get("city", ""),"addressRegion":"FL"}}
         if event.get("event_url"): schema["sameAs"] = event.get("event_url")
-        head = _page_head(f"{title} | Treasure Coast Events", description[:155], detail_path, structured_data=schema)
+        lifecycle_end = _event_effective_end(event)
+        lifecycle_meta = ''
+        if lifecycle_end is not None:
+            lifecycle_meta += f'\n<meta name="tct-event-lifecycle-end" content="{html_lib.escape(lifecycle_end.isoformat(timespec="seconds"), quote=True)}">'
+        lifecycle_meta += f'\n<meta name="tct-event-id" content="{html_lib.escape(_clean_text(event.get("id")), quote=True)}">'
+        head = _page_head(f"{title} | Treasure Coast Events", description[:155], detail_path, structured_data=schema) + lifecycle_meta
         source_url = _clean_text(event.get("source_url")); event_url = _clean_text(event.get("event_url")); ticket_url = _clean_text(event.get("ticket_url"))
         source_link = f'<a href="{html_lib.escape(source_url, quote=True)}" target="_blank" rel="noopener noreferrer external">{html_lib.escape(_clean_text(event.get("source_name")) or "Official source")}</a>' if source_url else "Official source"
         official = event_url or source_url
         official_link = f'<a class="event-detail-primary" href="{html_lib.escape(official, quote=True)}" target="_blank" rel="noopener noreferrer external">Official event page →</a>' if official else ""
         tickets = f'<a class="event-detail-secondary" href="{html_lib.escape(ticket_url, quote=True)}" target="_blank" rel="noopener noreferrer external">Tickets →</a>' if ticket_url and ticket_url != official else ""
-        page = f'''<!DOCTYPE html><html lang="en"><head>{head}</head><body>
+        page = f'''<!DOCTYPE html><html lang="en"><head>{head}</head><body data-tct-event-detail data-event-id="{html_lib.escape(_clean_text(event.get('id')), quote=True)}">
 {_page_header(active='events')}
 <main class="event-detail-page"><div class="event-detail-shell">
 <nav class="tct-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/events.html">Events</a><span aria-hidden="true">›</span><span aria-current="page">{html_lib.escape(title)}</span></nav>
@@ -783,13 +927,56 @@ def render_event_detail_pages() -> dict:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(page, encoding="utf-8")
         rendered += 1
-    # Keep expired detail pages as stable historical URLs. They naturally fall
-    # out of the live calendar and sitemap when no longer upcoming, but existing
-    # links/search results must not turn into 404s.
+
+    recently_ended = 0
+    removed = 0
+    retained = 0
+    future_orphans = 0
+    unknown_legacy = 0
+    grace = timedelta(days=EVENT_DETAIL_GRACE_DAYS)
+    for out in sorted(event_dir.glob("*.html")):
+        if out.resolve() in expected_paths:
+            continue
+        text = out.read_text(encoding="utf-8", errors="ignore")
+        detail_path = "/" + out.relative_to(ROOT).as_posix()
+        event_id = _event_page_id(out, text)
+        keep_forever = detail_path in retain_paths or event_id in retain_ids
+        end_at = _event_page_lifecycle_end(text)
+        if end_at is None:
+            unknown_legacy += 1
+            continue
+        if end_at > now:
+            future_orphans += 1
+            continue
+        if keep_forever:
+            updated = _mark_event_page_ended(text, end_at, retained=True)
+            if updated != text:
+                out.write_text(updated, encoding="utf-8")
+            retained += 1
+            continue
+        if now - end_at <= grace:
+            updated = _mark_event_page_ended(text, end_at, retained=False)
+            if updated != text:
+                out.write_text(updated, encoding="utf-8")
+            recently_ended += 1
+            continue
+        out.unlink()
+        removed += 1
+
     payload["events"] = events
     _write_json(path, payload)
     _rewrite_event_listing_links(events)
-    return {"rendered": rendered, "eligible": rendered, "total": len(events)}
+    return {
+        "rendered": rendered,
+        "eligible": rendered,
+        "total": len(events),
+        "recently_ended": recently_ended,
+        "removed": removed,
+        "retained": retained,
+        "future_orphans": future_orphans,
+        "unknown_legacy": unknown_legacy,
+        "grace_days": EVENT_DETAIL_GRACE_DAYS,
+    }
 
 
 def _rewrite_event_listing_links(events: list[dict]) -> None:
@@ -1079,9 +1266,21 @@ def normalize_assets_and_analytics() -> dict:
 
 def update_sitemap() -> dict:
     path = ROOT / "sitemap.xml"
-    if not path.exists(): return {"added":0}
+    if not path.exists(): return {"added":0,"removed_event_urls":0}
     ET.register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
     tree = ET.parse(path); root = tree.getroot(); ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+
+    # Event leaf URLs are workflow-owned and temporary. Reconcile them instead of
+    # append-only growth so ended events leave the sitemap immediately and a page
+    # deleted after the grace period cannot remain advertised to crawlers.
+    removed_event_urls = 0
+    event_prefix = f"{SITE_URL}/events/"
+    for node in list(root.findall(f"{ns}url")):
+        loc = node.find(f"{ns}loc")
+        value = loc.text if loc is not None else ""
+        if value and value.startswith(event_prefix) and value.endswith(".html"):
+            root.remove(node); removed_event_urls += 1
+
     existing = {node.text for node in root.findall(f"{ns}url/{ns}loc") if node.text}
     additions = []
     for static, priority, change in [("/events.html","0.8","daily"),("/news-tip.html","0.6","monthly")]:
@@ -1092,6 +1291,10 @@ def update_sitemap() -> dict:
     for e in events if isinstance(events,list) else []:
         detail = e.get("detail_url") if isinstance(e,dict) else None
         if detail: additions.append((f"{SITE_URL}{detail}","0.5","weekly",str(e.get("starts_at") or "")[:10]))
+    for retained in sorted(_retained_event_paths()):
+        if (ROOT / retained.lstrip("/")).exists():
+            additions.append((f"{SITE_URL}{retained}","0.3","monthly",""))
+
     added = 0
     for loc, priority, change, lastmod in additions:
         if loc in existing: continue
@@ -1101,7 +1304,93 @@ def update_sitemap() -> dict:
         existing.add(loc); added += 1
     ET.indent(tree, space="  ")
     tree.write(path, encoding="utf-8", xml_declaration=True)
-    return {"added":added,"total":len(existing)}
+    return {"added":added,"removed_event_urls":removed_event_urls,"total":len(existing)}
+
+
+def validate_event_detail_lifecycle() -> dict:
+    failures: list[str] = []
+    now = _event_now()
+    grace = timedelta(days=EVENT_DETAIL_GRACE_DAYS)
+    events_payload = _read_json(ROOT / "data" / "events.json", {})
+    events = events_payload.get("events", []) if isinstance(events_payload, dict) else []
+    active_paths = {
+        str(event.get("detail_url"))
+        for event in events if isinstance(event, dict) and event.get("detail_url")
+    }
+    retained_paths = _retained_event_paths()
+
+    sitemap_path = ROOT / "sitemap.xml"
+    sitemap_locs: set[str] = set()
+    if sitemap_path.exists():
+        try:
+            tree = ET.parse(sitemap_path); root = tree.getroot(); ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+            sitemap_locs = {node.text for node in root.findall(f"{ns}url/{ns}loc") if node.text}
+        except Exception as exc:
+            failures.append(f"sitemap parse: {exc}")
+
+    for detail in sorted(active_paths):
+        path = ROOT / detail.lstrip("/")
+        if not path.exists():
+            failures.append(f"active event page missing {detail}")
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if '"@type":"Event"' not in text:
+            failures.append(f"active event schema missing {detail}")
+        if "data-tct-event-ended" in text:
+            failures.append(f"active event marked ended {detail}")
+        if f"{SITE_URL}{detail}" not in sitemap_locs:
+            failures.append(f"active event missing sitemap {detail}")
+
+    checked = 0
+    event_dir = ROOT / "events"
+    if event_dir.exists():
+        for path in sorted(event_dir.glob("*.html")):
+            detail = "/" + path.relative_to(ROOT).as_posix()
+            if detail in active_paths:
+                continue
+            checked += 1
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            end_at = _event_page_lifecycle_end(text)
+            retained = detail in retained_paths
+            if end_at is None:
+                # Legacy pages without machine-readable lifecycle data are preserved
+                # fail-closed rather than guessed/deleted.
+                continue
+            if end_at > now:
+                if f"{SITE_URL}{detail}" in sitemap_locs and not retained:
+                    failures.append(f"orphan future event remains in sitemap {detail}")
+                continue
+            if retained:
+                if '"@type":"Event"' in text:
+                    failures.append(f"retained ended event still exposes Event schema {detail}")
+                if "data-tct-event-ended" not in text:
+                    failures.append(f"retained ended event missing ended notice {detail}")
+                if f"{SITE_URL}{detail}" not in sitemap_locs:
+                    failures.append(f"retained event missing sitemap {detail}")
+                continue
+            age = now - end_at
+            if age <= grace:
+                if "data-tct-event-ended" not in text:
+                    failures.append(f"recently ended event missing ended notice {detail}")
+                if '"@type":"Event"' in text:
+                    failures.append(f"recently ended event still exposes Event schema {detail}")
+                if '<meta name="robots" content="noindex,follow">' not in text:
+                    failures.append(f"recently ended event missing noindex {detail}")
+                if f"{SITE_URL}{detail}" in sitemap_locs:
+                    failures.append(f"recently ended event remains in sitemap {detail}")
+            else:
+                failures.append(f"expired event page still exists after grace period {detail}")
+
+    allowed_sitemap = active_paths | retained_paths
+    for loc in sitemap_locs:
+        if loc.startswith(f"{SITE_URL}/events/") and loc.endswith(".html"):
+            detail = loc[len(SITE_URL):]
+            if detail not in allowed_sitemap:
+                failures.append(f"unmanaged event sitemap URL {detail}")
+
+    if failures:
+        raise RuntimeError("Event detail lifecycle contract FAILED: " + "; ".join(failures[:20]))
+    return {"active":len(active_paths),"checked_inactive":checked,"retained":len(retained_paths),"failures":0,"grace_days":EVENT_DETAIL_GRACE_DAYS}
 
 
 def validate_features(archive: list[dict]) -> dict:
@@ -1168,6 +1457,7 @@ def build() -> dict:
     report["homepage"] = enhance_homepage()
     report["navigation"] = inject_site_navigation()
     report["sitemap"] = update_sitemap()
+    report["event_lifecycle"] = validate_event_detail_lifecycle()
     report["assets"] = normalize_assets_and_analytics()
     report["validation"] = validate_features(archive)
     _write_json(ROOT / "data" / "audience-features-report.json", report)
@@ -1178,10 +1468,19 @@ def build() -> dict:
 def main(argv=None) -> int:
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument("--events-only", action="store_true", help="Render and retire event detail pages, reconcile event sitemap URLs, and validate the event lifecycle.")
+    parser.add_argument("--validate-events-only", action="store_true", help="Validate only the event-detail lifecycle contract.")
     args=parser.parse_args(argv)
     archive=_read_json(ROOT/"archive.json",[])
+    if args.validate_events_only:
+        report = validate_event_detail_lifecycle()
+        print("Event detail lifecycle validation PASSED:", json.dumps(report, ensure_ascii=False)); return 0
+    if args.events_only:
+        report = {"events": render_event_detail_pages(), "sitemap": update_sitemap()}
+        report["validation"] = validate_event_detail_lifecycle()
+        print("Event detail pages built:", json.dumps(report, ensure_ascii=False)); return 0
     if args.validate_only:
-        validate_features(archive); print("Audience/SEO feature validation PASSED"); return 0
+        validate_features(archive); validate_event_detail_lifecycle(); print("Audience/SEO feature validation PASSED"); return 0
     build(); return 0
 
 

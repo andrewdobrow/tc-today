@@ -391,9 +391,12 @@ def test_events_workflow_is_independent_scheduled_and_serialized_with_pages_depl
     assert "cron: '17 10,22 * * *'" in text
     assert 'group: "pages"' in text
     assert "python -u scripts/update_events.py" in text
+    assert "python -u scripts/build_audience_features.py --events-only" in text
     assert "python scripts/update_events.py --validate-only" in text
+    assert "python scripts/build_audience_features.py --validate-events-only" in text
     assert "beautifulsoup4" in text
-    assert "git add events.html data/events.json data/events-source-cache.json data/events-source-status.json" in text
+    assert "git add events.html sitemap.xml data/events.json data/events-source-cache.json data/events-source-status.json data/events-retention.json" in text
+    assert "git add -A events/" in text
     assert "anthropic" not in text.lower()
 
 

@@ -88,7 +88,108 @@ def test_event_detail_pages_use_internal_canonical_and_event_schema(tmp_path, mo
     assert f'<link rel="canonical" href="https://treasurecoast.today{detail}">' in page
     assert '"@type":"Event"' in page
     assert 'Official event page' in page
-    assert '<link rel="stylesheet" href="/style.css?v=1.13.8.5">' in page
+    assert '<link rel="stylesheet" href="/style.css?v=1.13.8.6">' in page
+    assert 'name="tct-event-lifecycle-end" content="2026-09-12T20:00:00-04:00"' in page
+    assert 'name="tct-event-id" content="0123456789abcdef12"' in page
+    assert 'data-tct-event-ended' not in page
+
+
+def _minimal_sitemap(path):
+    path.write_text(
+        '<?xml version="1.0" encoding="utf-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        '<url><loc>https://treasurecoast.today/</loc></url>'
+        '</urlset>',
+        encoding="utf-8",
+    )
+
+
+def _event_fixture():
+    return {
+        "id":"0123456789abcdef12",
+        "title":"Stuart Art Walk",
+        "starts_at":"2026-09-12T18:00:00-04:00",
+        "ends_at":"2026-09-12T20:00:00-04:00",
+        "venue":"Downtown Stuart",
+        "address":"1 Main St",
+        "city":"Stuart",
+        "county":"Martin",
+        "category":"Arts & Culture",
+        "price":"Free",
+        "description":"A downtown art walk.",
+        "event_url":"https://example.com/event",
+        "ticket_url":"",
+        "source_name":"Example Calendar",
+        "source_url":"https://example.com/calendar",
+    }
+
+
+def test_event_detail_lifecycle_recently_ended_then_real_404_after_30_days(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    (tmp_path/"events.html").write_text(_chrome(), encoding="utf-8")
+    _minimal_sitemap(tmp_path/"sitemap.xml")
+    monkeypatch.setenv("TCT_EVENTS_NOW", "2026-09-12T19:00:00-04:00")
+    (tmp_path/"data"/"events.json").write_text(json.dumps({"schema_version":1,"events":[_event_fixture()]}), encoding="utf-8")
+
+    features.render_event_detail_pages()
+    features.update_sitemap()
+    active=json.loads((tmp_path/"data"/"events.json").read_text())
+    detail=active["events"][0]["detail_url"]
+    event_path=tmp_path/detail.lstrip('/')
+    assert event_path.exists()
+    assert f"https://treasurecoast.today{detail}" in (tmp_path/"sitemap.xml").read_text()
+    features.validate_event_detail_lifecycle()
+
+    # Ten days after the event, keep the URL available but remove rich-event
+    # markup and sitemap discovery. noindex prevents stale event search results.
+    monkeypatch.setenv("TCT_EVENTS_NOW", "2026-09-22T20:00:00-04:00")
+    (tmp_path/"data"/"events.json").write_text(json.dumps({"schema_version":1,"events":[]}), encoding="utf-8")
+    ended_report=features.render_event_detail_pages()
+    features.update_sitemap()
+    ended=event_path.read_text(encoding="utf-8")
+    assert ended_report["recently_ended"] == 1
+    assert "data-tct-event-ended" in ended
+    assert "This event has ended." in ended
+    assert '"@type":"Event"' not in ended
+    assert '<meta name="robots" content="noindex,follow">' in ended
+    assert f"https://treasurecoast.today{detail}" not in (tmp_path/"sitemap.xml").read_text()
+    features.validate_event_detail_lifecycle()
+
+    # Once the 30-day grace period is over, delete the static file. On GitHub
+    # Pages that makes the URL return a genuine HTTP 404; do not fake a 410 page.
+    monkeypatch.setenv("TCT_EVENTS_NOW", "2026-10-14T20:00:01-04:00")
+    removed_report=features.render_event_detail_pages()
+    features.update_sitemap()
+    assert removed_report["removed"] == 1
+    assert not event_path.exists()
+    assert f"https://treasurecoast.today{detail}" not in (tmp_path/"sitemap.xml").read_text()
+    features.validate_event_detail_lifecycle()
+
+
+def test_event_detail_retention_override_preserves_high_value_page(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    (tmp_path/"events.html").write_text(_chrome(), encoding="utf-8")
+    _minimal_sitemap(tmp_path/"sitemap.xml")
+    monkeypatch.setenv("TCT_EVENTS_NOW", "2026-09-12T19:00:00-04:00")
+    (tmp_path/"data"/"events.json").write_text(json.dumps({"schema_version":1,"events":[_event_fixture()]}), encoding="utf-8")
+    features.render_event_detail_pages()
+    active=json.loads((tmp_path/"data"/"events.json").read_text())
+    detail=active["events"][0]["detail_url"]
+    (tmp_path/"data"/"events-retention.json").write_text(json.dumps({"schema_version":1,"retain_ids":[],"retain_paths":[detail]}), encoding="utf-8")
+
+    monkeypatch.setenv("TCT_EVENTS_NOW", "2026-11-01T12:00:00-05:00")
+    (tmp_path/"data"/"events.json").write_text(json.dumps({"schema_version":1,"events":[]}), encoding="utf-8")
+    report=features.render_event_detail_pages()
+    features.update_sitemap()
+    event_path=tmp_path/detail.lstrip('/')
+    page=event_path.read_text(encoding="utf-8")
+    assert report["retained"] == 1
+    assert event_path.exists()
+    assert "data-tct-event-ended" in page
+    assert '"@type":"Event"' not in page
+    assert '<meta name="robots" content="noindex,follow">' not in page
+    assert f"https://treasurecoast.today{detail}" in (tmp_path/"sitemap.xml").read_text()
+    features.validate_event_detail_lifecycle()
 
 
 def test_event_detail_title_header_is_not_sticky_over_site_masthead():
@@ -101,7 +202,7 @@ def test_event_detail_title_header_is_not_sticky_over_site_masthead():
 
 def test_mobile_article_breadcrumb_and_byline_are_compact():
     css = (Path(__file__).resolve().parents[1] / "style.css").read_text(encoding="utf-8")
-    assert features.ASSET_VERSION == "1.13.8.5"
+    assert features.ASSET_VERSION == "1.13.8.6"
     assert "v1.13.8.5 — mobile article breadcrumb + byline rhythm" in css
     assert ".tct-breadcrumb--article > span:nth-last-child(2)" in css
     assert ".tct-breadcrumb--article .tct-breadcrumb-current" in css
