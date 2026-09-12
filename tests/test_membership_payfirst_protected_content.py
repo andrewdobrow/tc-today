@@ -181,13 +181,15 @@ def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
 
 def test_paywall_markup_uses_simple_locked_copy_primary_offer_and_home_exit():
     markup = paywall_html("example-story")
-    assert "Two ways to continue reading" in markup
+    assert "Keep reading for $1" in markup
     assert "Pay Annually" in markup
     assert "Pay Monthly" in markup
     assert '<div class="tct-paywall-card-price">$49</div>' in markup
-    assert '<div class="tct-paywall-card-price">$1</div>' in markup
+    assert '<div class="tct-paywall-card-price tct-paywall-card-price-discount"><span class="tct-paywall-current-price">$1</span><span class="tct-paywall-old-price">$4.99</span></div>' in markup
     assert markup.count(">Subscribe</button>") == 2
     assert "$4.99/month after" in markup
+    assert "$4.08/month billed annually" in markup
+    assert 'class="tct-paywall-old-price">$4.99</span>' in markup
     assert "Cancel anytime" in markup
     assert 'class="tct-paywall-exit" href="/"' in markup
     assert "return to the Treasure Coast Today homepage" in markup
@@ -510,8 +512,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.22"' in page
-    assert 'src="/membership.js?v=1.13.7.22"' in page
+    assert 'href="/membership.css?v=1.13.7.23"' in page
+    assert 'src="/membership.js?v=1.13.7.23"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -557,8 +559,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.22') == 1
-    assert first.count('/membership.js?v=1.13.7.22') == 1
+    assert first.count('/membership.css?v=1.13.7.23') == 1
+    assert first.count('/membership.js?v=1.13.7.23') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -609,8 +611,8 @@ def test_one_free_article_monthly_meter_contract_is_server_signed_and_repeat_saf
     assert "meter_token: existingMeterToken" in browser
     assert "data?.access === 'monthly_free'" in browser
     assert "You've read your free article this month." in browser
-    assert "Two ways to continue reading" in browser
-    assert "if (headline) headline.textContent = 'Two ways to continue reading'" in browser
+    assert "Keep reading for $1" in browser
+    assert "if (headline) headline.textContent = 'Keep reading for $1'" in browser
     assert "clearPendingMeterFor(slug)" in browser
     assert "METER_PENDING_TTL_MS = 120000" in browser
     assert "html.tct-meter-precheck .tct-member-only" in css
@@ -624,7 +626,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
     assert "if (access === 'member') memberOnly?.remove()" in browser
     assert "setMeterPaywallState(paywall" in browser
     assert "tct-paywall-metered-after-read" in browser
-    assert "if (headline) headline.textContent = 'Two ways to continue reading'" in browser
+    assert "if (headline) headline.textContent = 'Keep reading for $1'" in browser
     assert "placePostReadMeterAfterStory(paywall)" in browser
     assert "#tct-protected-content.is-unlocked" in browser
     assert "memberOnly.contains(unlockedTarget)" in browser
@@ -645,7 +647,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.22"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.23"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():

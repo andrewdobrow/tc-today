@@ -30,12 +30,14 @@ def test_checkout_completion_keeps_backward_compatibility_for_old_trial_sessions
 def test_paywall_discloses_one_dollar_intro_and_renewal_price():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
-    assert "Two ways to continue reading" in markup
+    assert "Keep reading for $1" in markup
     assert "Pay Annually" in markup
     assert "Pay Monthly" in markup
     assert '<div class="tct-paywall-card-price">$49</div>' in markup
-    assert '<div class="tct-paywall-card-price">$1</div>' in markup
+    assert '<div class="tct-paywall-card-price tct-paywall-card-price-discount"><span class="tct-paywall-current-price">$1</span><span class="tct-paywall-old-price">$4.99</span></div>' in markup
     assert "for your first month" in markup
+    assert "$4.08/month billed annually" in markup
+    assert 'class="tct-paywall-old-price">$4.99</span>' in markup
     assert "$4.99/month after" in markup
     assert "Cancel anytime" in markup
     assert markup.count(">Subscribe</button>") == 2

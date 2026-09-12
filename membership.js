@@ -444,7 +444,7 @@ function setMeterPaywallState(paywall, period, afterRead=false){
   const headline = qs('[data-paywall-headline]', paywall)
   status?.classList.remove('hidden')
   if (status) status.textContent = "You've read your free article this month."
-  if (headline) headline.textContent = 'Two ways to continue reading'
+  if (headline) headline.textContent = 'Keep reading for $1'
   paywall.classList.toggle('tct-paywall-metered-after-read', afterRead)
   syncPaywallFullBleed(paywall)
   qs('.tct-paywall-fade', paywall.parentElement || document)?.remove()
