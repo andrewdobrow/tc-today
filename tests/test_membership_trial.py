@@ -84,7 +84,8 @@ def test_article_paywall_uses_simple_full_width_green_presentation():
     assert 'class="tct-paywall-exit" href="/"' in markup
     release_css = css.split("TCT v1.13.7.20 - simple full-width article paywall cards",1)[1]
     assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
-    assert "background: #174f3d" in release_css
+    assert "radial-gradient(ellipse at 50% 14%" in release_css
+    assert "linear-gradient(180deg, #1d6b50 0%, #176247 52%, #12553e 100%)" in release_css
     assert "border-radius: 0" in release_css
     assert "grid-template-columns: repeat(2, minmax(0, 1fr))" in release_css
     assert "white-space: nowrap" in release_css

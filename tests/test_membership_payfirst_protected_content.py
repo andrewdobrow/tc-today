@@ -236,7 +236,8 @@ def test_membership_article_paywall_uses_simple_full_width_primary_offer():
     assert "tct-paywall-plan-offer-annual" not in markup
     release_css = css.split("TCT v1.13.7.20 - simple full-width article paywall cards", 1)[1]
     assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
-    assert "background: #174f3d" in release_css
+    assert "radial-gradient(ellipse at 50% 14%" in release_css
+    assert "linear-gradient(180deg, #1d6b50 0%, #176247 52%, #12553e 100%)" in release_css
     assert "border-radius: 0" in release_css
     assert "white-space: nowrap" in release_css
     assert "font-size: clamp(1.12rem, 5.25vw, 1.5rem)" in release_css
@@ -509,8 +510,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.21"' in page
-    assert 'src="/membership.js?v=1.13.7.21"' in page
+    assert 'href="/membership.css?v=1.13.7.22"' in page
+    assert 'src="/membership.js?v=1.13.7.22"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -556,8 +557,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.21') == 1
-    assert first.count('/membership.js?v=1.13.7.21') == 1
+    assert first.count('/membership.css?v=1.13.7.22') == 1
+    assert first.count('/membership.js?v=1.13.7.22') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -644,7 +645,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.21"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.22"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
