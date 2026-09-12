@@ -161,10 +161,10 @@ def test_paid_content_schema_targets_protected_content_placeholder():
     markup = paywall_html("example-story")
     assert "tct-paywalled-content" in markup
     assert "Then $4.99/month. Cancel anytime." in markup
-    assert "Annual membership" in markup
-    assert '<strong>$49</strong><span>per year</span>' in markup
-    assert "Continue annually" in markup
-    assert "Subscriptions renew automatically until canceled." in markup
+    assert "Prefer annual? $49/year." in markup
+    assert "Choose annual" in markup
+    assert 'class="tct-paywall-exit" href="/"' in markup
+    assert "Secure checkout powered by Stripe." in markup
 
 
 def test_workflow_passes_payment_mode_to_browser_launch_guard():
@@ -239,8 +239,8 @@ def test_sitewide_subscriber_chrome_loads_membership_state_and_prepaints(tmp_pat
     assert "data-tct-member-prepaint" in rendered
     assert "tct_member_entitled_hint" in rendered
     assert 'src="/membership-config.js"' in rendered
-    assert 'src="/membership.js?v=1.13.7.17"' in rendered
-    assert rendered.count('/membership.js?v=1.13.7.17') == 1
+    assert 'src="/membership.js?v=1.13.7.18"' in rendered
+    assert rendered.count('/membership.js?v=1.13.7.18') == 1
 
 
 def test_entitled_subscriber_chrome_replaces_sales_header_and_hides_membership_card():

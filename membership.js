@@ -420,6 +420,22 @@ function armFreeArticleBanner(slug, period, paywall){
   return true
 }
 
+function syncPaywallFullBleed(paywall){
+  if (!paywall) return
+  const apply = () => {
+    if (!paywall.isConnected || !paywall.parentElement) return
+    const left = Math.max(0, Math.round(paywall.parentElement.getBoundingClientRect().left))
+    paywall.style.setProperty('--tct-paywall-viewport-left', `${left}px`)
+    paywall.style.setProperty('--tct-paywall-viewport-width', `${document.documentElement.clientWidth}px`)
+    paywall.classList.add('tct-paywall-full-bleed')
+  }
+  apply()
+  if (!paywall._tctFullBleedResize) {
+    paywall._tctFullBleedResize = apply
+    window.addEventListener('resize', apply, { passive:true })
+  }
+}
+
 function setMeterPaywallState(paywall, period, afterRead=false){
   if (!paywall) return
   const month = monthNameForPeriod(period)
@@ -429,19 +445,20 @@ function setMeterPaywallState(paywall, period, afterRead=false){
   const copy = qs('[data-paywall-copy]', paywall)
   const reset = qs('[data-meter-reset]', paywall)
   status?.classList.remove('hidden')
-  if (status) status.textContent = afterRead ? `Your free article for ${month}` : '1 free article each month'
-  if (brand) brand.textContent = 'Treasure Coast Today Membership'
+  if (status) status.textContent = "You've read your free article this month."
+  if (brand) brand.textContent = 'Treasure Coast Today'
   if (headline) headline.textContent = afterRead
-    ? "You've read your free article this month."
-    : 'Continue reading Treasure Coast Today for just $1.'
+    ? 'Keep reading Treasure Coast Today every day'
+    : 'Keep reading with Treasure Coast Today'
   if (copy) copy.textContent = afterRead
-    ? 'Thanks for reading. Get unlimited, ad-free access to every Treasure Coast Today story and support independent local journalism.'
-    : "You've read your free article this month. Get unlimited, ad-free access to every Treasure Coast Today story and support independent local journalism."
+    ? 'Thanks for reading. Get unlimited access to local news across Martin, St. Lucie and Indian River counties.'
+    : 'Unlimited access to local news across Martin, St. Lucie and Indian River counties.'
   if (reset) {
     reset.textContent = resetLabelForPeriod(period)
     reset.classList.toggle('hidden', !reset.textContent)
   }
   paywall.classList.toggle('tct-paywall-metered-after-read', afterRead)
+  syncPaywallFullBleed(paywall)
   qs('.tct-paywall-fade', paywall.parentElement || document)?.remove()
 }
 
@@ -488,7 +505,10 @@ function placePostReadMeterAfterStory(paywall){
 
   // The original wrapper is now only scaffolding (fade and/or an empty protected
   // target). Remove it only after the CTA has a proven destination.
-  if (placed) memberOnly?.remove()
+  if (placed) {
+    memberOnly?.remove()
+    syncPaywallFullBleed(paywall)
+  }
   return placed
 }
 
@@ -612,6 +632,7 @@ async function unlockArticle(statusPromise=null){
       pending: false,
       started_at: Date.now(),
     })
+    window.dispatchEvent(new CustomEvent('tct:monthly-free-article'))
     const rendered = renderProtectedBody(String(data.protected_body || ''), paywall, 'monthly_free')
     endMemberPrepaint()
     endMeterPrepaint()
@@ -663,6 +684,8 @@ function revealRequestedSignIn(){
   const trigger = qs('[data-reveal-signin]')
   if (trigger) revealSignIn(trigger)
 }
+
+qsa('[data-tct-paywall]').forEach(syncPaywallFullBleed)
 
 if (!configured) {
   showPaywallNewsletter()

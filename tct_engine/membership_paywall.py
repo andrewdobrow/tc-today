@@ -126,44 +126,38 @@ def split_article_body(body_html: str, preview_max_chars: int = PREVIEW_MAX_CHAR
 def paywall_section_html(slug: str) -> str:
     escaped_slug = html.escape(slug, quote=True)
     return f'''<section class="tct-paywall" data-tct-paywall data-slug="{escaped_slug}" aria-label="Treasure Coast Today membership">
-  <div class="tct-paywall-topline">Already a subscriber? <button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
-  <div class="tct-paywall-meter-status hidden" data-meter-status></div>
-  <div class="tct-paywall-brand" data-paywall-brand>Treasure Coast Today Membership</div>
-  <h2 class="tct-paywall-offer-headline" data-paywall-headline>Continue reading Treasure Coast Today for just $1.</h2>
-  <p class="tct-paywall-copy" data-paywall-copy>Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties.</p>
-  <p class="tct-paywall-meter-reset hidden" data-meter-reset></p>
-  <div class="membership-message hidden"></div>
-  <div class="tct-paywall-signin hidden" data-paywall-signin>
-    <form class="membership-form" data-signin-form>
-      <input type="email" autocomplete="email" placeholder="Email address" aria-label="Membership email address" required>
-      <button class="tct-member-btn" type="submit">Email me a sign-in link</button>
-    </form>
+  <a class="tct-paywall-exit" href="/" aria-label="Close subscription offer and return to the Treasure Coast Today homepage">&times;</a>
+  <div class="tct-paywall-inner">
+    <div class="tct-paywall-topline">Already a subscriber? <button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
+    <div class="tct-paywall-meter-status hidden" data-meter-status></div>
+    <div class="tct-paywall-brand" data-paywall-brand>Treasure Coast Today</div>
+    <h2 class="tct-paywall-offer-headline" data-paywall-headline>Keep reading with Treasure Coast Today</h2>
+    <p class="tct-paywall-copy" data-paywall-copy>Unlimited access to local news across Martin, St. Lucie and Indian River counties.</p>
+    <p class="tct-paywall-meter-reset hidden" data-meter-reset></p>
     <div class="membership-message hidden"></div>
-  </div>
-  <div class="tct-paywall-plans" data-paywall-plans>
-    <div class="tct-paywall-plan-offer tct-paywall-plan-offer-monthly">
-      <div class="tct-paywall-offer-copy">
-        <span class="tct-paywall-eyebrow">Introductory offer</span>
-        <div class="tct-paywall-price-line"><strong>$1</strong><span>for your first month</span></div>
-        <div class="tct-paywall-plan-note">Then $4.99/month. Cancel anytime.</div>
-      </div>
-      <button class="tct-member-btn tct-paywall-plan-button" data-plan="monthly" type="button">Continue for $1</button>
+    <div class="tct-paywall-signin hidden" data-paywall-signin>
+      <form class="membership-form" data-signin-form>
+        <input type="email" autocomplete="email" placeholder="Email address" aria-label="Membership email address" required>
+        <button class="tct-member-btn" type="submit">Email me a sign-in link</button>
+      </form>
+      <div class="membership-message hidden"></div>
     </div>
-    <div class="tct-paywall-plan-offer tct-paywall-plan-offer-annual">
-      <div class="tct-paywall-offer-copy">
-        <span class="tct-paywall-eyebrow">Annual membership</span>
-        <div class="tct-paywall-price-line"><strong>$49</strong><span>per year</span></div>
-        <div class="tct-paywall-plan-note">About $4.08/month. Cancel anytime.</div>
+    <div class="tct-paywall-plans" data-paywall-plans>
+      <div class="tct-paywall-primary-offer">
+        <div class="tct-paywall-offer-copy">
+          <span class="tct-paywall-eyebrow">$1 first month</span>
+          <div class="tct-paywall-price-line"><strong>$1</strong><span>for your first month</span></div>
+          <div class="tct-paywall-plan-note">Then $4.99/month. Cancel anytime.</div>
+        </div>
+        <button class="tct-member-btn tct-paywall-primary-button" data-plan="monthly" type="button">Continue reading for $1</button>
       </div>
-      <button class="tct-member-btn tct-paywall-plan-button" data-plan="annual" type="button">Continue annually</button>
+      <div class="tct-paywall-annual-row">
+        <span>Prefer annual? $49/year.</span>
+        <button class="tct-member-btn tct-member-btn-secondary" data-plan="annual" type="button">Choose annual</button>
+      </div>
     </div>
+    <p class="tct-paywall-secure">Secure checkout powered by Stripe.</p>
   </div>
-  <div class="tct-paywall-benefits" aria-label="Membership benefits">
-    <span>Comprehensive local reporting</span>
-    <span>Ad-free reading</span>
-    <span>Support independent journalism</span>
-  </div>
-  <p class="tct-paywall-secure">Secure checkout powered by Stripe. Subscriptions renew automatically until canceled.</p>
 </section>'''
 
 
@@ -196,7 +190,7 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.7.17"
+MEMBERSHIP_ASSET_VERSION = "1.13.7.18"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'

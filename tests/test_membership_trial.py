@@ -30,17 +30,15 @@ def test_checkout_completion_keeps_backward_compatibility_for_old_trial_sessions
 def test_paywall_discloses_one_dollar_intro_and_renewal_price():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
-    assert "Continue reading Treasure Coast Today for just $1." in markup
-    assert "Treasure Coast Today Membership" in markup
-    assert "Introductory offer" in markup
+    assert "Keep reading with Treasure Coast Today" in markup
+    assert ">Treasure Coast Today<" in markup
+    assert "$1 first month" in markup
     assert '<strong>$1</strong><span>for your first month</span>' in markup
     assert "Then $4.99/month. Cancel anytime." in markup
-    assert "Continue for $1" in markup
-    assert "Annual membership" in markup
-    assert '<strong>$49</strong><span>per year</span>' in markup
-    assert "Continue annually" in markup
-    assert "Get unlimited, ad-free access to independent local reporting" in markup
-    assert "Comprehensive local reporting" in markup
+    assert "Continue reading for $1" in markup
+    assert "Prefer annual? $49/year." in markup
+    assert "Choose annual" in markup
+    assert "Unlimited access to local news across Martin, St. Lucie and Indian River counties." in markup
     assert "Secure checkout powered by Stripe." in markup
     assert "FREE for 1 week" not in markup
     assert "free trial" not in markup.lower()
@@ -73,17 +71,16 @@ def test_generated_site_chrome_advertises_intro_offer_consistently():
     assert "footer_pattern" in generator
 
 
-def test_article_paywall_uses_restrained_publication_presentation():
+def test_article_paywall_uses_simple_full_width_green_presentation():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
     css = (ROOT / "membership.css").read_text()
-    assert markup.count("tct-paywall-plan-offer") >= 2
-    assert "tct-paywall-plan-offer-monthly" in markup
-    assert "tct-paywall-plan-offer-annual" in markup
-    assert "tct-paywall-benefits" in markup
-    assert "tct-paywall-plan best" not in markup
-    assert "offer-forward publication paywall" in css
-    assert "border-top:5px solid var(--pw-green)" in css
-    release_css = css.split("TCT v1.13.6.8g",1)[1]
-    assert "grid-template-columns:minmax(0,1fr) auto" in release_css
-    assert "linear-gradient(135deg,#f26445" not in release_css
+    assert "tct-paywall-primary-offer" in markup
+    assert "tct-paywall-annual-row" in markup
+    assert "tct-paywall-benefits" not in markup
+    assert 'class="tct-paywall-exit" href="/"' in markup
+    release_css = css.split("TCT v1.13.7.18 - full-width green article paywall",1)[1]
+    assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
+    assert "background: #174f3d" in release_css
+    assert "border-radius: 0" in release_css
+    assert "grid-template-columns: minmax(0,1fr) auto" in release_css

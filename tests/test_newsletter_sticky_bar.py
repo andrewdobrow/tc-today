@@ -19,19 +19,21 @@ def test_shared_footer_delegates_kit_loading_to_main_javascript():
     assert f'data-uid="{MODAL_UID}"' not in source
 
 
-def test_main_javascript_loads_sitewide_modal_and_not_sticky_bar():
+def test_main_javascript_loads_desktop_newsletter_modal_and_not_sticky_bar():
     js = _read("main.js")
     assert f'uid: "{MODAL_UID}"' in js
     assert f'src: "{MODAL_SRC}"' in js
-    assert 'mode: "sitewide-modal"' in js
+    assert 'mode: "desktop-newsletter-modal"' in js
+    assert 'const MOBILE_QUERY = "(max-width: 680px)"' in js
+    assert 'if (mobile.matches) return;' in js
     assert LEGACY_STICKY_UID not in js
     assert "KIT STICKY BAR LAYERING" not in js
     assert "kit-sticky-visible" not in js
 
 
-def test_sitewide_modal_loader_initializes_exactly_once():
+def test_desktop_modal_loader_initializes_exactly_once():
     js = _read("main.js")
-    assert 'document.querySelector(`script[data-uid="${config.uid}"]`)' in js
-    assert 'script.dataset.tctNewsletterMode = config.mode' in js
+    assert 'document.querySelector(`script[data-uid="${desktopKit.uid}"]`)' in js
+    assert 'script.dataset.tctNewsletterMode = desktopKit.mode' in js
     assert 'document.body.appendChild(script)' in js
-    assert "window.setTimeout(loadSitewideKitModal, 0)" in js
+    assert "loadDesktopKitModal();" in js

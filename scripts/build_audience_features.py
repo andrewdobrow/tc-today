@@ -29,7 +29,7 @@ SITE_URL = "https://treasurecoast.today"
 NEWSLETTER_URL = "https://treasure-coast-today.kit.com/cb848255f8"
 PREFERRED_SOURCE_URL = "https://www.google.com/preferences/source?q=treasurecoast.today"
 PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
-ASSET_VERSION = "1.13.8.6"
+ASSET_VERSION = "1.13.8.8"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (

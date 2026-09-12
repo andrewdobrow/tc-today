@@ -179,15 +179,18 @@ def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
     assert [row["slug"] for row in payload["articles"]] == [slug]
 
 
-def test_paywall_markup_uses_locked_copy_and_pay_first_buttons():
+def test_paywall_markup_uses_simple_locked_copy_primary_offer_and_home_exit():
     markup = paywall_html("example-story")
-    assert "Continue reading Treasure Coast Today for just $1." in markup
-    assert "Treasure Coast Today Membership" in markup
-    assert "Introductory offer" in markup
+    assert "Keep reading with Treasure Coast Today" in markup
+    assert ">Treasure Coast Today<" in markup
+    assert "$1 first month" in markup
     assert '<strong>$1</strong><span>for your first month</span>' in markup
-    assert "Continue for $1" in markup
-    assert markup.count("Continue for $1") == 1
-    assert markup.count("Continue annually") == 1
+    assert "Continue reading for $1" in markup
+    assert markup.count("Continue reading for $1") == 1
+    assert "Prefer annual? $49/year." in markup
+    assert "Choose annual" in markup
+    assert 'class="tct-paywall-exit" href="/"' in markup
+    assert "return to the Treasure Coast Today homepage" in markup
     assert "Already a subscriber?" in markup
     assert "Create account" not in markup
     assert "password" not in markup.lower()
@@ -215,26 +218,29 @@ def test_subscribe_page_has_no_registration_gate_before_plan_buttons():
 
 
 
-def test_membership_article_paywall_uses_publication_grade_equal_plan_hierarchy():
+def test_membership_article_paywall_uses_simple_full_width_primary_offer():
     page = (ROOT / "subscribe.html").read_text()
     css = (ROOT / "membership.css").read_text()
+    browser = (ROOT / "membership.js").read_text()
     markup = paywall_html("example-story")
     # The standalone subscribe page keeps its full two-plan treatment.
     assert "Best annual value" in page
     assert 'membership-price-dollar">$1</span>' in page
     assert 'membership-price-period"> first month</span>' in page
     assert '<div class="membership-plan-note">Then $4.99/month</div>' in page
-    # The in-article gate uses the same restrained editorial structure for both plans.
-    assert "tct-paywall-plan-offer-monthly" in markup
-    assert "tct-paywall-plan-offer-annual" in markup
-    assert "Continue for $1" in markup
-    assert "Continue annually" in markup
-    assert "tct-paywall-plan best" not in markup
-    release_css = css.split("TCT v1.13.6.8g", 1)[1]
-    assert "background:var(--pw-paper)" in css
-    assert "border-top:5px solid var(--pw-green)" in css
-    assert "grid-template-columns:minmax(0,1fr) auto" in release_css
-    assert "linear-gradient(135deg,#f26445" not in release_css
+    # The in-article wall deliberately reduces choice complexity.
+    assert "tct-paywall-primary-offer" in markup
+    assert "Continue reading for $1" in markup
+    assert "tct-paywall-annual-row" in markup
+    assert "Choose annual" in markup
+    assert "tct-paywall-plan-offer-monthly" not in markup
+    assert "tct-paywall-plan-offer-annual" not in markup
+    release_css = css.split("TCT v1.13.7.18 - full-width green article paywall", 1)[1]
+    assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
+    assert "background: #174f3d" in release_css
+    assert "border-radius: 0" in release_css
+    assert "syncPaywallFullBleed(paywall)" in browser
+    assert "--tct-paywall-viewport-left" in browser
 
 
 def test_checkout_completion_creates_or_links_identity_then_sends_passwordless_access():
@@ -493,8 +499,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.17"' in page
-    assert 'src="/membership.js?v=1.13.7.17"' in page
+    assert 'href="/membership.css?v=1.13.7.18"' in page
+    assert 'src="/membership.js?v=1.13.7.18"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -540,8 +546,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.17') == 1
-    assert first.count('/membership.js?v=1.13.7.17') == 1
+    assert first.count('/membership.css?v=1.13.7.18') == 1
+    assert first.count('/membership.js?v=1.13.7.18') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -592,7 +598,7 @@ def test_one_free_article_monthly_meter_contract_is_server_signed_and_repeat_saf
     assert "meter_token: existingMeterToken" in browser
     assert "data?.access === 'monthly_free'" in browser
     assert "You've read your free article this month." in browser
-    assert "Continue reading Treasure Coast Today for just $1." in browser
+    assert "Keep reading with Treasure Coast Today" in browser
     assert "if (headline) headline.textContent = afterRead" in browser
     assert "clearPendingMeterFor(slug)" in browser
     assert "METER_PENDING_TTL_MS = 120000" in browser
@@ -607,7 +613,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
     assert "if (access === 'member') memberOnly?.remove()" in browser
     assert "setMeterPaywallState(paywall" in browser
     assert "tct-paywall-metered-after-read" in browser
-    assert "Thanks for reading. Get unlimited, ad-free access" in browser
+    assert "Thanks for reading. Get unlimited access to local news" in browser
     assert "placePostReadMeterAfterStory(paywall)" in browser
     assert "#tct-protected-content.is-unlocked" in browser
     assert "memberOnly.contains(unlockedTarget)" in browser
@@ -621,12 +627,14 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
     assert "paywall.insertAdjacentElement('afterend', newsletter)" in post_read
     assert post_read.index("boundary.parentElement.insertBefore(paywall, boundary)") < post_read.index("paywall.insertAdjacentElement('afterend', newsletter)")
     assert "boundary.parentElement.insertBefore(memberOnly, boundary)" not in browser
-    assert "if (placed) memberOnly?.remove()" in browser
+    assert "if (placed) {" in browser
+    assert "memberOnly?.remove()" in browser
+    assert "syncPaywallFullBleed(paywall)" in browser
 
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.17"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.18"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():

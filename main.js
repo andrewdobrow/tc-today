@@ -306,31 +306,167 @@ document.addEventListener("keydown", (event) => {
 });
 
 
-// -- SITEWIDE KIT NEWSLETTER MODAL --
-// Use one modal presentation on every viewport. The inline newsletter form remains
-// embedded in article/category content, while the former sticky-bar embed is no
-// longer loaded or given masthead offset behavior.
+// -- RESPONSIVE ACQUISITION MODAL --
+// Desktop keeps the existing Kit newsletter modal. Mobile article traffic gets
+// a first-party subscription prompt after 5 seconds OR about one viewport of
+// reading, whichever comes first. The prompt is suppressed for subscribers,
+// the current monthly-free article, and readers already at the inline paywall.
 (() => {
-  const config = {
+  const desktopKit = {
     uid: "be625cadfe",
     src: "https://treasure-coast-today.kit.com/be625cadfe/index.js",
-    mode: "sitewide-modal"
+    mode: "desktop-newsletter-modal"
   };
+  const MOBILE_QUERY = "(max-width: 680px)";
+  const MOBILE_DELAY_MS = 5000;
+  const MOBILE_SCROLL_RATIO = 0.85;
+  const MOBILE_DISMISS_KEY = "tct_mobile_subscription_modal_dismissed_until_v1";
+  const MOBILE_DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
+  const MEMBER_HINT_KEY = "tct_member_entitled_hint";
+  const METER_STATE_KEY = "tct_monthly_free_article_v1";
 
-  function loadSitewideKitModal() {
-    if (document.querySelector(`script[data-uid="${config.uid}"]`)) return;
+  const mobile = window.matchMedia(MOBILE_QUERY);
 
+  function loadDesktopKitModal() {
+    if (mobile.matches) return;
+    if (document.querySelector(`script[data-uid="${desktopKit.uid}"]`)) return;
     const script = document.createElement("script");
     script.async = true;
-    script.dataset.uid = config.uid;
-    script.dataset.tctNewsletterMode = config.mode;
-    script.src = config.src;
+    script.dataset.uid = desktopKit.uid;
+    script.dataset.tctNewsletterMode = desktopKit.mode;
+    script.src = desktopKit.src;
     document.body.appendChild(script);
   }
 
-  // Defer one task so any legacy embed already present in a cached page can be
-  // detected rather than initialized a second time.
-  window.setTimeout(loadSitewideKitModal, 0);
+  function currentArticleSlug() {
+    const match = window.location.pathname.match(/^\/articles\/([^/]+?)(?:\.html)?$/i);
+    return match ? match[1] : "";
+  }
+
+  function currentMeterPeriod() {
+    try {
+      const parts = new Intl.DateTimeFormat("en-US", { timeZone:"America/New_York", year:"numeric", month:"2-digit" }).formatToParts(new Date());
+      const year = parts.find(part => part.type === "year")?.value || "";
+      const month = parts.find(part => part.type === "month")?.value || "";
+      return `${year}-${month}`;
+    } catch {
+      const now = new Date();
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    }
+  }
+
+  function currentArticleIsMonthlyFree() {
+    const slug = currentArticleSlug();
+    if (!slug) return false;
+    try {
+      const state = JSON.parse(localStorage.getItem(METER_STATE_KEY) || "null");
+      return Boolean(state && state.period === currentMeterPeriod() && state.slug === slug);
+    } catch {
+      return false;
+    }
+  }
+
+  function paywallIsVisible() {
+    const paywall = document.querySelector("[data-tct-paywall]");
+    if (!paywall) return false;
+    const rect = paywall.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  }
+
+  function mobilePromptSuppressed() {
+    if (!mobile.matches || !currentArticleSlug()) return true;
+    if (document.body.classList.contains("tct-member-entitled")) return true;
+    try {
+      if (localStorage.getItem(MEMBER_HINT_KEY) === "1") return true;
+      const dismissedUntil = Number(localStorage.getItem(MOBILE_DISMISS_KEY) || 0);
+      if (dismissedUntil > Date.now()) return true;
+    } catch {}
+    if (currentArticleIsMonthlyFree()) return true;
+    if (document.querySelector("[data-tct-free-article-banner]")) return true;
+    if (paywallIsVisible()) return true;
+    return false;
+  }
+
+  function dismissMobileSubscriptionModal(persistCooldown = true) {
+    const overlay = document.querySelector("[data-tct-mobile-subscription-modal]");
+    if (!overlay) return;
+    if (persistCooldown) {
+      try { localStorage.setItem(MOBILE_DISMISS_KEY, String(Date.now() + MOBILE_DISMISS_MS)); } catch {}
+    }
+    overlay.remove();
+    document.documentElement.classList.remove("tct-mobile-subscription-open");
+  }
+
+  function showMobileSubscriptionModal() {
+    if (document.querySelector("[data-tct-mobile-subscription-modal]") || mobilePromptSuppressed()) return false;
+    const next = encodeURIComponent(window.location.pathname + window.location.search);
+    const overlay = document.createElement("div");
+    overlay.className = "tct-mobile-subscription-overlay";
+    overlay.setAttribute("data-tct-mobile-subscription-modal", "true");
+    overlay.innerHTML = `
+      <section class="tct-mobile-subscription-modal" role="dialog" aria-modal="true" aria-labelledby="tct-mobile-subscription-title">
+        <button class="tct-mobile-subscription-close" type="button" aria-label="Close subscription offer">&times;</button>
+        <div class="tct-mobile-subscription-brand">Treasure Coast Today</div>
+        <div class="tct-mobile-subscription-price">$1 <span>first month</span></div>
+        <h2 id="tct-mobile-subscription-title">Local news worth knowing.</h2>
+        <p>Unlimited access to reporting across Martin, St. Lucie and Indian River counties.</p>
+        <a class="tct-mobile-subscription-cta" href="/subscribe.html?next=${next}">Get unlimited access for $1</a>
+        <small>$4.99/month after. Cancel anytime.</small>
+        <a class="tct-mobile-subscription-signin" href="/subscribe.html?signin=1&next=${next}">Already a subscriber? Sign in</a>
+      </section>`;
+    document.body.appendChild(overlay);
+    document.documentElement.classList.add("tct-mobile-subscription-open");
+    overlay.querySelector(".tct-mobile-subscription-close")?.addEventListener("click", dismissMobileSubscriptionModal);
+    overlay.addEventListener("click", event => { if (event.target === overlay) dismissMobileSubscriptionModal(); });
+    return true;
+  }
+
+  function armMobileSubscriptionModal() {
+    if (!mobile.matches || !currentArticleSlug()) return;
+    const startY = window.scrollY;
+    let finished = false;
+    let timer = null;
+
+    const cleanup = () => {
+      if (timer !== null) window.clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("keydown", onKeydown);
+      window.removeEventListener("tct:monthly-free-article", suppressForFreeArticle);
+    };
+    const attempt = () => {
+      if (finished) return;
+      if (mobilePromptSuppressed()) {
+        if (currentArticleIsMonthlyFree() || document.body.classList.contains("tct-member-entitled") || paywallIsVisible()) {
+          finished = true;
+          cleanup();
+        }
+        return;
+      }
+      finished = showMobileSubscriptionModal();
+      if (finished) cleanup();
+    };
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - startY) >= Math.max(320, window.innerHeight * MOBILE_SCROLL_RATIO)) attempt();
+    };
+    const onKeydown = event => {
+      if (event.key === "Escape" && document.querySelector("[data-tct-mobile-subscription-modal]")) dismissMobileSubscriptionModal();
+    };
+    const suppressForFreeArticle = () => {
+      finished = true;
+      dismissMobileSubscriptionModal(false);
+      cleanup();
+    };
+
+    window.addEventListener("scroll", onScroll, { passive:true });
+    window.addEventListener("keydown", onKeydown);
+    window.addEventListener("tct:monthly-free-article", suppressForFreeArticle);
+    timer = window.setTimeout(attempt, MOBILE_DELAY_MS);
+  }
+
+  window.setTimeout(() => {
+    loadDesktopKitModal();
+    armMobileSubscriptionModal();
+  }, 0);
 })();
 
 // -- FIRST-PARTY MOST READ (privacy-preserving aggregate counts) --
