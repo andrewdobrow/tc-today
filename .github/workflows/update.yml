@@ -236,21 +236,35 @@ jobs:
           response = requests.post(
               f"{base}/functions/v1/sync-protected-articles",
               headers={"X-TCT-Content-Sync": secret, "Content-Type": "application/json"},
-              json={"action": "snapshot", "offset": 0, "limit": 1},
+              json={"action": "snapshot-capability"},
               timeout=30,
           )
           output = os.environ["GITHUB_OUTPUT"]
           if response.status_code < 300:
-              print("Protected-content snapshot capability is current.")
-              with open(output, "a", encoding="utf-8") as handle:
-                  handle.write("needs_deploy=false\n")
-              raise SystemExit(0)
-          if response.status_code == 400 and "Batch must contain 1-100 articles" in response.text:
-              print("Legacy sync-protected-articles function detected; current function will be deployed automatically.")
+              try:
+                  version = int((response.json() or {}).get("snapshot_version") or 0)
+              except Exception:
+                  version = 0
+              if version >= 2:
+                  print(f"Protected-content snapshot capability is current (v{version}).")
+                  with open(output, "a", encoding="utf-8") as handle:
+                      handle.write("needs_deploy=false\n")
+                  raise SystemExit(0)
+              print(f"Protected-content snapshot capability is stale (v{version}); current function will be deployed automatically.")
               with open(output, "a", encoding="utf-8") as handle:
                   handle.write("needs_deploy=true\n")
               raise SystemExit(0)
-          raise SystemExit(f"Protected-content capability probe failed with HTTP {response.status_code}.")
+          if response.status_code in {401, 403, 503}:
+              raise SystemExit(
+                  f"Protected-content capability probe failed with HTTP {response.status_code}; "
+                  "check the content-sync secret/function configuration."
+              )
+          print(
+              f"Protected-content capability probe returned HTTP {response.status_code}; "
+              "redeploying the current sync function automatically."
+          )
+          with open(output, "a", encoding="utf-8") as handle:
+              handle.write("needs_deploy=true\n")
           PY
 
       - name: Probe monthly free-article meter capability
@@ -337,16 +351,25 @@ jobs:
           TCT_CONTENT_SYNC_SECRET: ${{ secrets.TCT_CONTENT_SYNC_SECRET }}
           TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
         run: |
+          rm -f /tmp/tct-protected-current.json
           if [ "$TCT_MEMBERSHIP_UI_ENABLED" = "true" ]; then
-            python scripts/sync_protected_articles.py --snapshot-file /tmp/tct-protected-current.json --required
+            if ! python scripts/sync_protected_articles.py --snapshot-file /tmp/tct-protected-current.json --required; then
+              echo "::warning::Protected-content snapshot is temporarily unavailable. Existing paywalled pages will be preserved unchanged; new/full articles will still be protected and synced this run."
+              rm -f /tmp/tct-protected-current.json
+            fi
           fi
 
       - name: Prepare member-only article payload
         env:
           TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
           TCT_PROTECTED_EXPORT_PATH: /tmp/tct-protected-articles.json
-          TCT_PROTECTED_SNAPSHOT_PATH: /tmp/tct-protected-current.json
-        run: python scripts/prepare_membership_paywall.py
+        run: |
+          if [ -s /tmp/tct-protected-current.json ]; then
+            export TCT_PROTECTED_SNAPSHOT_PATH=/tmp/tct-protected-current.json
+          else
+            unset TCT_PROTECTED_SNAPSHOT_PATH
+          fi
+          python scripts/prepare_membership_paywall.py
 
       - name: Validate final SEO and audience contracts
         run: |

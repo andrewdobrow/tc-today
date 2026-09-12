@@ -44,7 +44,8 @@ jobs:
             --request POST "https://${PROJECT_ID}.supabase.co/functions/v1/sync-protected-articles" \
             --header "X-TCT-Content-Sync: ${TCT_CONTENT_SYNC_SECRET}" \
             --header "Content-Type: application/json" \
-            --data '{"action":"snapshot","offset":0,"limit":1}')
+            --data '{"action":"snapshot-capability"}')
+          test "$status" = "200" || { cat /tmp/tct-protected-sync-probe.json; echo "Protected-content snapshot capability verification failed with HTTP $status"; exit 1; }
+          jq -e '.snapshot_version >= 2 and .max_batch >= 1' /tmp/tct-protected-sync-probe.json >/dev/null || { cat /tmp/tct-protected-sync-probe.json; echo "Protected-content snapshot capability is stale"; exit 1; }
           rm -f /tmp/tct-protected-sync-probe.json
-          test "$status" = "200" || { echo "Protected-content snapshot capability verification failed with HTTP $status"; exit 1; }
           echo "Protected-content snapshot capability verified."
