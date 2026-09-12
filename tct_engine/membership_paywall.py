@@ -146,6 +146,7 @@ def paywall_section_html(slug: str) -> str:
         <div class="tct-paywall-card-price">$49</div>
         <div class="tct-paywall-card-note">per year</div>
         <button class="tct-member-btn" data-plan="annual" type="button">Subscribe</button>
+        <small>Cancel anytime</small>
       </article>
       <article class="tct-paywall-card tct-paywall-card-monthly">
         <h3>Pay Monthly</h3>
@@ -188,7 +189,7 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.7.19"
+MEMBERSHIP_ASSET_VERSION = "1.13.7.20"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'

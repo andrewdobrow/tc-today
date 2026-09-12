@@ -37,6 +37,7 @@ def test_paywall_discloses_one_dollar_intro_and_renewal_price():
     assert '<div class="tct-paywall-card-price">$1</div>' in markup
     assert "for your first month" in markup
     assert "$4.99/month after" in markup
+    assert "Cancel anytime" in markup
     assert markup.count(">Subscribe</button>") == 2
     assert "Best value" in markup
     assert "Unlimited access to local news across Martin, St. Lucie and Indian River counties." not in markup
@@ -81,8 +82,10 @@ def test_article_paywall_uses_simple_full_width_green_presentation():
     assert "tct-paywall-card-monthly" in markup
     assert "tct-paywall-benefits" not in markup
     assert 'class="tct-paywall-exit" href="/"' in markup
-    release_css = css.split("TCT v1.13.7.19 - simple full-width article paywall cards",1)[1]
+    release_css = css.split("TCT v1.13.7.20 - simple full-width article paywall cards",1)[1]
     assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
     assert "background: #174f3d" in release_css
     assert "border-radius: 0" in release_css
     assert "grid-template-columns: repeat(2, minmax(0, 1fr))" in release_css
+    assert "white-space: nowrap" in release_css
+    assert "font-size: clamp(1.12rem, 5.25vw, 1.5rem)" in release_css
