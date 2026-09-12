@@ -181,14 +181,13 @@ def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
 
 def test_paywall_markup_uses_simple_locked_copy_primary_offer_and_home_exit():
     markup = paywall_html("example-story")
-    assert "Keep reading with Treasure Coast Today" in markup
-    assert ">Treasure Coast Today<" in markup
-    assert "$1 first month" in markup
-    assert '<strong>$1</strong><span>for your first month</span>' in markup
-    assert "Continue reading for $1" in markup
-    assert markup.count("Continue reading for $1") == 1
-    assert "Prefer annual? $49/year." in markup
-    assert "Choose annual" in markup
+    assert "Two ways to continue reading" in markup
+    assert "Pay Annually" in markup
+    assert "Pay Monthly" in markup
+    assert '<div class="tct-paywall-card-price">$49</div>' in markup
+    assert '<div class="tct-paywall-card-price">$1</div>' in markup
+    assert markup.count(">Subscribe</button>") == 2
+    assert "$4.99/month after" in markup
     assert 'class="tct-paywall-exit" href="/"' in markup
     assert "return to the Treasure Coast Today homepage" in markup
     assert "Already a subscriber?" in markup
@@ -228,14 +227,13 @@ def test_membership_article_paywall_uses_simple_full_width_primary_offer():
     assert 'membership-price-dollar">$1</span>' in page
     assert 'membership-price-period"> first month</span>' in page
     assert '<div class="membership-plan-note">Then $4.99/month</div>' in page
-    # The in-article wall deliberately reduces choice complexity.
-    assert "tct-paywall-primary-offer" in markup
-    assert "Continue reading for $1" in markup
-    assert "tct-paywall-annual-row" in markup
-    assert "Choose annual" in markup
+    # The in-article wall uses the same low-friction two-card choice on desktop and mobile.
+    assert markup.count("tct-paywall-card ") == 2
+    assert "Pay Annually" in markup and "Pay Monthly" in markup
+    assert markup.count(">Subscribe</button>") == 2
     assert "tct-paywall-plan-offer-monthly" not in markup
     assert "tct-paywall-plan-offer-annual" not in markup
-    release_css = css.split("TCT v1.13.7.18 - full-width green article paywall", 1)[1]
+    release_css = css.split("TCT v1.13.7.19 - simple full-width article paywall cards", 1)[1]
     assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
     assert "background: #174f3d" in release_css
     assert "border-radius: 0" in release_css
@@ -499,8 +497,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.18"' in page
-    assert 'src="/membership.js?v=1.13.7.18"' in page
+    assert 'href="/membership.css?v=1.13.7.19"' in page
+    assert 'src="/membership.js?v=1.13.7.19"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -546,8 +544,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.18') == 1
-    assert first.count('/membership.js?v=1.13.7.18') == 1
+    assert first.count('/membership.css?v=1.13.7.19') == 1
+    assert first.count('/membership.js?v=1.13.7.19') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -598,14 +596,14 @@ def test_one_free_article_monthly_meter_contract_is_server_signed_and_repeat_saf
     assert "meter_token: existingMeterToken" in browser
     assert "data?.access === 'monthly_free'" in browser
     assert "You've read your free article this month." in browser
-    assert "Keep reading with Treasure Coast Today" in browser
-    assert "if (headline) headline.textContent = afterRead" in browser
+    assert "Two ways to continue reading" in browser
+    assert "if (headline) headline.textContent = 'Two ways to continue reading'" in browser
     assert "clearPendingMeterFor(slug)" in browser
     assert "METER_PENDING_TTL_MS = 120000" in browser
     assert "html.tct-meter-precheck .tct-member-only" in css
     assert "data-meter-status" in helper
     assert "data-paywall-headline" in helper
-    assert "data-meter-reset" in helper
+    assert "data-meter-reset" not in helper
 
 
 def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_content():
@@ -613,7 +611,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
     assert "if (access === 'member') memberOnly?.remove()" in browser
     assert "setMeterPaywallState(paywall" in browser
     assert "tct-paywall-metered-after-read" in browser
-    assert "Thanks for reading. Get unlimited access to local news" in browser
+    assert "if (headline) headline.textContent = 'Two ways to continue reading'" in browser
     assert "placePostReadMeterAfterStory(paywall)" in browser
     assert "#tct-protected-content.is-unlocked" in browser
     assert "memberOnly.contains(unlockedTarget)" in browser
@@ -634,7 +632,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.18"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.19"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
@@ -830,6 +828,7 @@ def test_monthly_free_article_uses_branded_dismissible_bottom_banner_only_after_
     css = (ROOT / "membership.css").read_text()
 
     assert "function armFreeArticleBanner(slug, period, paywall)" in browser
+    assert "window.matchMedia?.('(max-width: 680px)').matches" in browser
     assert "You're reading your free article for this month." in browser
     assert "Subscribe for unlimited access" in browser
     assert "$1 first month" in browser

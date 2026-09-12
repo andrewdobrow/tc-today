@@ -89,7 +89,7 @@ def test_event_detail_pages_use_internal_canonical_and_event_schema(tmp_path, mo
     assert f'<link rel="canonical" href="https://treasurecoast.today{detail}">' in page
     assert '"@type":"Event"' in page
     assert 'Official event page' in page
-    assert '<link rel="stylesheet" href="/style.css?v=1.13.8.8">' in page
+    assert '<link rel="stylesheet" href="/style.css?v=1.13.8.9">' in page
     assert 'name="tct-event-lifecycle-end" content="2026-09-12T20:00:00-04:00"' in page
     assert 'name="tct-event-id" content="0123456789abcdef12"' in page
     assert 'data-tct-event-ended' not in page
@@ -203,7 +203,7 @@ def test_event_detail_title_header_is_not_sticky_over_site_masthead():
 
 def test_mobile_article_breadcrumb_and_byline_are_compact():
     css = (Path(__file__).resolve().parents[1] / "style.css").read_text(encoding="utf-8")
-    assert features.ASSET_VERSION == "1.13.8.8"
+    assert features.ASSET_VERSION == "1.13.8.9"
     assert "v1.13.8.5 — mobile article breadcrumb + byline rhythm" in css
     assert ".tct-breadcrumb--article > span:nth-last-child(2)" in css
     assert ".tct-breadcrumb--article .tct-breadcrumb-current" in css
@@ -313,8 +313,10 @@ def test_paywall_avoids_duplicate_newsletter_fallback_and_keeps_value_copy():
     assert "Not ready to subscribe?" not in html
     assert "free TCT Morning Brief" not in html
     assert "tct-paywall-newsletter-fallback" not in html
-    assert "Unlimited access to local news across Martin, St. Lucie and Indian River counties." in html
-    assert "Continue reading for $1" in html
+    assert "Two ways to continue reading" in html
+    assert "Pay Annually" in html
+    assert "Pay Monthly" in html
+    assert html.count(">Subscribe</button>") == 2
 
 
 def test_most_read_implementation_is_aggregate_and_privacy_preserving():

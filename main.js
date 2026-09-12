@@ -307,10 +307,10 @@ document.addEventListener("keydown", (event) => {
 
 
 // -- RESPONSIVE ACQUISITION MODAL --
-// Desktop keeps the existing Kit newsletter modal. Mobile article traffic gets
-// a first-party subscription prompt after 5 seconds OR about one viewport of
-// reading, whichever comes first. The prompt is suppressed for subscribers,
-// the current monthly-free article, and readers already at the inline paywall.
+// Desktop keeps the Kit Morning Brief modal. Mobile article traffic gets a
+// simple subscription prompt after 5 seconds OR a short reading scroll. The
+// monthly-free article is intentionally eligible: on mobile this modal replaces
+// the old free-article sticky banner so the acquisition path is not suppressed.
 (() => {
   const desktopKit = {
     uid: "be625cadfe",
@@ -319,12 +319,11 @@ document.addEventListener("keydown", (event) => {
   };
   const MOBILE_QUERY = "(max-width: 680px)";
   const MOBILE_DELAY_MS = 5000;
-  const MOBILE_SCROLL_RATIO = 0.85;
-  const MOBILE_DISMISS_KEY = "tct_mobile_subscription_modal_dismissed_until_v1";
+  const MOBILE_SCROLL_RATIO = 0.45;
+  const MOBILE_DISMISS_KEY = "tct_mobile_subscription_modal_dismissed_until_v2";
   const MOBILE_DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
   const MEMBER_HINT_KEY = "tct_member_entitled_hint";
   const METER_STATE_KEY = "tct_monthly_free_article_v1";
-
   const mobile = window.matchMedia(MOBILE_QUERY);
 
   function loadDesktopKitModal() {
@@ -339,7 +338,7 @@ document.addEventListener("keydown", (event) => {
   }
 
   function currentArticleSlug() {
-    const match = window.location.pathname.match(/^\/articles\/([^/]+?)(?:\.html)?$/i);
+    const match = window.location.pathname.match(/^\/articles\/([^/]+?)(?:\.html)?\/?$/i);
     return match ? match[1] : "";
   }
 
@@ -360,7 +359,7 @@ document.addEventListener("keydown", (event) => {
     if (!slug) return false;
     try {
       const state = JSON.parse(localStorage.getItem(METER_STATE_KEY) || "null");
-      return Boolean(state && state.period === currentMeterPeriod() && state.slug === slug);
+      return Boolean(state && state.period === currentMeterPeriod() && state.slug === slug && !state.pending);
     } catch {
       return false;
     }
@@ -373,17 +372,24 @@ document.addEventListener("keydown", (event) => {
     return rect.top < window.innerHeight && rect.bottom > 0;
   }
 
+  function cooldownActive() {
+    try { return Number(localStorage.getItem(MOBILE_DISMISS_KEY) || 0) > Date.now(); }
+    catch { return false; }
+  }
+
+  function subscriberLikely() {
+    if (document.body?.classList.contains("tct-member-entitled")) return true;
+    try { return localStorage.getItem(MEMBER_HINT_KEY) === "1"; }
+    catch { return false; }
+  }
+
   function mobilePromptSuppressed() {
     if (!mobile.matches || !currentArticleSlug()) return true;
-    if (document.body.classList.contains("tct-member-entitled")) return true;
-    try {
-      if (localStorage.getItem(MEMBER_HINT_KEY) === "1") return true;
-      const dismissedUntil = Number(localStorage.getItem(MOBILE_DISMISS_KEY) || 0);
-      if (dismissedUntil > Date.now()) return true;
-    } catch {}
-    if (currentArticleIsMonthlyFree()) return true;
-    if (document.querySelector("[data-tct-free-article-banner]")) return true;
-    if (paywallIsVisible()) return true;
+    if (subscriberLikely() || cooldownActive()) return true;
+    // If the reader is already looking at the inline paywall, do not cover it
+    // with a second sales surface. Monthly-free readers are still eligible while
+    // they are reading because their paywall sits below the completed article.
+    if (!currentArticleIsMonthlyFree() && paywallIsVisible()) return true;
     return false;
   }
 
@@ -400,24 +406,24 @@ document.addEventListener("keydown", (event) => {
   function showMobileSubscriptionModal() {
     if (document.querySelector("[data-tct-mobile-subscription-modal]") || mobilePromptSuppressed()) return false;
     const next = encodeURIComponent(window.location.pathname + window.location.search);
+    const freeArticle = currentArticleIsMonthlyFree();
     const overlay = document.createElement("div");
     overlay.className = "tct-mobile-subscription-overlay";
     overlay.setAttribute("data-tct-mobile-subscription-modal", "true");
     overlay.innerHTML = `
       <section class="tct-mobile-subscription-modal" role="dialog" aria-modal="true" aria-labelledby="tct-mobile-subscription-title">
         <button class="tct-mobile-subscription-close" type="button" aria-label="Close subscription offer">&times;</button>
-        <div class="tct-mobile-subscription-brand">Treasure Coast Today</div>
-        <div class="tct-mobile-subscription-price">$1 <span>first month</span></div>
-        <h2 id="tct-mobile-subscription-title">Local news worth knowing.</h2>
-        <p>Unlimited access to reporting across Martin, St. Lucie and Indian River counties.</p>
-        <a class="tct-mobile-subscription-cta" href="/subscribe.html?next=${next}">Get unlimited access for $1</a>
+        ${freeArticle ? '<div class="tct-mobile-subscription-kicker">Your free article is unlocked</div>' : ''}
+        <div class="tct-mobile-subscription-offer">$1 FOR YOUR FIRST MONTH</div>
+        <h2 id="tct-mobile-subscription-title">Unlimited Treasure Coast news.</h2>
+        <a class="tct-mobile-subscription-cta" href="/subscribe.html?next=${next}">SUBSCRIBE NOW</a>
         <small>$4.99/month after. Cancel anytime.</small>
         <a class="tct-mobile-subscription-signin" href="/subscribe.html?signin=1&next=${next}">Already a subscriber? Sign in</a>
       </section>`;
     document.body.appendChild(overlay);
     document.documentElement.classList.add("tct-mobile-subscription-open");
-    overlay.querySelector(".tct-mobile-subscription-close")?.addEventListener("click", dismissMobileSubscriptionModal);
-    overlay.addEventListener("click", event => { if (event.target === overlay) dismissMobileSubscriptionModal(); });
+    overlay.querySelector(".tct-mobile-subscription-close")?.addEventListener("click", () => dismissMobileSubscriptionModal(true));
+    overlay.addEventListener("click", event => { if (event.target === overlay) dismissMobileSubscriptionModal(true); });
     return true;
   }
 
@@ -426,40 +432,39 @@ document.addEventListener("keydown", (event) => {
     const startY = window.scrollY;
     let finished = false;
     let timer = null;
+    let retryTimer = null;
 
     const cleanup = () => {
       if (timer !== null) window.clearTimeout(timer);
+      if (retryTimer !== null) window.clearTimeout(retryTimer);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("keydown", onKeydown);
-      window.removeEventListener("tct:monthly-free-article", suppressForFreeArticle);
     };
     const attempt = () => {
       if (finished) return;
-      if (mobilePromptSuppressed()) {
-        if (currentArticleIsMonthlyFree() || document.body.classList.contains("tct-member-entitled") || paywallIsVisible()) {
-          finished = true;
-          cleanup();
-        }
+      if (showMobileSubscriptionModal()) {
+        finished = true;
+        cleanup();
         return;
       }
-      finished = showMobileSubscriptionModal();
-      if (finished) cleanup();
+      // Membership state can settle shortly after main.js. Retry once rather
+      // than letting a stale entitlement hint permanently kill the prompt.
+      if (!cooldownActive() && mobile.matches && currentArticleSlug() && retryTimer === null) {
+        retryTimer = window.setTimeout(() => {
+          retryTimer = null;
+          attempt();
+        }, 1500);
+      }
     };
     const onScroll = () => {
-      if (Math.abs(window.scrollY - startY) >= Math.max(320, window.innerHeight * MOBILE_SCROLL_RATIO)) attempt();
+      if (Math.abs(window.scrollY - startY) >= Math.max(180, window.innerHeight * MOBILE_SCROLL_RATIO)) attempt();
     };
     const onKeydown = event => {
-      if (event.key === "Escape" && document.querySelector("[data-tct-mobile-subscription-modal]")) dismissMobileSubscriptionModal();
-    };
-    const suppressForFreeArticle = () => {
-      finished = true;
-      dismissMobileSubscriptionModal(false);
-      cleanup();
+      if (event.key === "Escape" && document.querySelector("[data-tct-mobile-subscription-modal]")) dismissMobileSubscriptionModal(true);
     };
 
     window.addEventListener("scroll", onScroll, { passive:true });
     window.addEventListener("keydown", onKeydown);
-    window.addEventListener("tct:monthly-free-article", suppressForFreeArticle);
     timer = window.setTimeout(attempt, MOBILE_DELAY_MS);
   }
 

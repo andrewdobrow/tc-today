@@ -339,6 +339,7 @@ function removeFreeArticleBanner(){
   window.setTimeout(() => banner.remove(), 220)
 }
 function armFreeArticleBanner(slug, period, paywall){
+  if (window.matchMedia?.('(max-width: 680px)').matches) return false
   if (!slug || !period || qs('[data-tct-free-article-banner]')) return false
   const dismissKey = freeArticleBannerDismissKey(slug, period)
   try { if (sessionStorage.getItem(dismissKey) === '1') return false } catch {}
@@ -440,23 +441,10 @@ function setMeterPaywallState(paywall, period, afterRead=false){
   if (!paywall) return
   const month = monthNameForPeriod(period)
   const status = qs('[data-meter-status]', paywall)
-  const brand = qs('[data-paywall-brand]', paywall)
   const headline = qs('[data-paywall-headline]', paywall)
-  const copy = qs('[data-paywall-copy]', paywall)
-  const reset = qs('[data-meter-reset]', paywall)
   status?.classList.remove('hidden')
   if (status) status.textContent = "You've read your free article this month."
-  if (brand) brand.textContent = 'Treasure Coast Today'
-  if (headline) headline.textContent = afterRead
-    ? 'Keep reading Treasure Coast Today every day'
-    : 'Keep reading with Treasure Coast Today'
-  if (copy) copy.textContent = afterRead
-    ? 'Thanks for reading. Get unlimited access to local news across Martin, St. Lucie and Indian River counties.'
-    : 'Unlimited access to local news across Martin, St. Lucie and Indian River counties.'
-  if (reset) {
-    reset.textContent = resetLabelForPeriod(period)
-    reset.classList.toggle('hidden', !reset.textContent)
-  }
+  if (headline) headline.textContent = 'Two ways to continue reading'
   paywall.classList.toggle('tct-paywall-metered-after-read', afterRead)
   syncPaywallFullBleed(paywall)
   qs('.tct-paywall-fade', paywall.parentElement || document)?.remove()

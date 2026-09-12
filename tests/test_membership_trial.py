@@ -30,16 +30,17 @@ def test_checkout_completion_keeps_backward_compatibility_for_old_trial_sessions
 def test_paywall_discloses_one_dollar_intro_and_renewal_price():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
-    assert "Keep reading with Treasure Coast Today" in markup
-    assert ">Treasure Coast Today<" in markup
-    assert "$1 first month" in markup
-    assert '<strong>$1</strong><span>for your first month</span>' in markup
-    assert "Then $4.99/month. Cancel anytime." in markup
-    assert "Continue reading for $1" in markup
-    assert "Prefer annual? $49/year." in markup
-    assert "Choose annual" in markup
-    assert "Unlimited access to local news across Martin, St. Lucie and Indian River counties." in markup
-    assert "Secure checkout powered by Stripe." in markup
+    assert "Two ways to continue reading" in markup
+    assert "Pay Annually" in markup
+    assert "Pay Monthly" in markup
+    assert '<div class="tct-paywall-card-price">$49</div>' in markup
+    assert '<div class="tct-paywall-card-price">$1</div>' in markup
+    assert "for your first month" in markup
+    assert "$4.99/month after" in markup
+    assert markup.count(">Subscribe</button>") == 2
+    assert "Best value" in markup
+    assert "Unlimited access to local news across Martin, St. Lucie and Indian River counties." not in markup
+    assert "Secure checkout powered by Stripe." not in markup
     assert "FREE for 1 week" not in markup
     assert "free trial" not in markup.lower()
 
@@ -75,12 +76,13 @@ def test_article_paywall_uses_simple_full_width_green_presentation():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
     css = (ROOT / "membership.css").read_text()
-    assert "tct-paywall-primary-offer" in markup
-    assert "tct-paywall-annual-row" in markup
+    assert markup.count("tct-paywall-card ") == 2
+    assert "tct-paywall-card-annual" in markup
+    assert "tct-paywall-card-monthly" in markup
     assert "tct-paywall-benefits" not in markup
     assert 'class="tct-paywall-exit" href="/"' in markup
-    release_css = css.split("TCT v1.13.7.18 - full-width green article paywall",1)[1]
+    release_css = css.split("TCT v1.13.7.19 - simple full-width article paywall cards",1)[1]
     assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
     assert "background: #174f3d" in release_css
     assert "border-radius: 0" in release_css
-    assert "grid-template-columns: minmax(0,1fr) auto" in release_css
+    assert "grid-template-columns: repeat(2, minmax(0, 1fr))" in release_css

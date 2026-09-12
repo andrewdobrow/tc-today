@@ -17,33 +17,45 @@ def test_desktop_keeps_kit_newsletter_while_mobile_uses_subscription_modal():
     assert "window.matchMedia(MOBILE_QUERY)" in js
     assert "if (mobile.matches) return;" in js
     assert "showMobileSubscriptionModal" in js
-    assert "Get unlimited access for $1" in js
-    assert "Local news worth knowing." in js
+    assert "$1 FOR YOUR FIRST MONTH" in js
+    assert "Unlimited Treasure Coast news." in js
+    assert ">SUBSCRIBE NOW</a>" in js
 
 
-def test_mobile_subscription_modal_uses_fast_or_scroll_trigger_and_seven_day_cooldown():
+def test_mobile_subscription_modal_uses_fast_or_short_scroll_trigger_and_seven_day_cooldown():
     js = (ROOT / "main.js").read_text(encoding="utf-8")
     assert "const MOBILE_DELAY_MS = 5000" in js
-    assert "const MOBILE_SCROLL_RATIO = 0.85" in js
+    assert "const MOBILE_SCROLL_RATIO = 0.45" in js
     assert "window.setTimeout(attempt, MOBILE_DELAY_MS)" in js
-    assert "window.innerHeight * MOBILE_SCROLL_RATIO" in js
+    assert "Math.max(180, window.innerHeight * MOBILE_SCROLL_RATIO)" in js
     assert "const MOBILE_DISMISS_MS = 7 * 24 * 60 * 60 * 1000" in js
     assert "MOBILE_DISMISS_KEY" in js
 
 
-def test_mobile_subscription_modal_does_not_compete_with_membership_or_paywall_state():
+def test_monthly_free_article_is_eligible_for_mobile_subscription_modal():
     js = (ROOT / "main.js").read_text(encoding="utf-8")
-    assert 'document.body.classList.contains("tct-member-entitled")' in js
+    membership = (ROOT / "membership.js").read_text(encoding="utf-8")
     assert "currentArticleIsMonthlyFree()" in js
-    assert 'document.querySelector("[data-tct-free-article-banner]")' in js
-    assert "paywallIsVisible()" in js
-    assert 'window.addEventListener("tct:monthly-free-article", suppressForFreeArticle)' in js
+    assert "if (!currentArticleIsMonthlyFree() && paywallIsVisible()) return true;" in js
+    assert "Your free article is unlocked" in js
+    assert 'document.querySelector("[data-tct-free-article-banner]")' not in js
+    assert 'tct:monthly-free-article' not in js
+    assert "window.matchMedia?.('(max-width: 680px)').matches" in membership
 
 
-def test_mobile_subscription_modal_has_bounded_first_party_green_presentation():
+def test_mobile_subscription_modal_retries_after_membership_state_settles():
+    js = (ROOT / "main.js").read_text(encoding="utf-8")
+    assert "const MEMBER_HINT_KEY" in js
+    assert "subscriberLikely()" in js
+    assert "retryTimer = window.setTimeout" in js
+    assert "1500" in js
+
+
+def test_mobile_subscription_modal_has_simple_green_presentation():
     css = (ROOT / "style.css").read_text(encoding="utf-8")
-    assert "TCT v1.13.8.8 - responsive acquisition modal" in css
+    assert "TCT v1.13.8.9 - simple mobile subscription modal" in css
     assert ".tct-mobile-subscription-overlay" in css
-    assert "max-height:calc(100dvh - 44px)" in css
+    assert "width:min(100%,390px)" in css
     assert "background:#174f3d" in css
     assert ".tct-mobile-subscription-close" in css
+    assert "border-radius:999px" in css
