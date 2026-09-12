@@ -200,6 +200,14 @@ def test_bootstrap_directory_exists_at_repo_root_and_is_not_a_false_zero_state()
     assert page.exists(), "missing-persons.html must ship in the repo root so navigation never lands on a 404"
     html = page.read_text(encoding="utf-8")
     assert "Missing Persons on the Treasure Coast" in html
+    assert "Current FDLE listings" in html
+    assert "Public service directory" not in html
     assert "Directory update in progress" in html
     assert "Directory initializing" in html
     assert "0 current FDLE records" not in html
+
+
+def test_directory_kicker_identifies_the_live_source_instead_of_generic_public_service_copy():
+    source = (ROOT / "scripts" / "update_missing_persons.py").read_text(encoding="utf-8")
+    assert "Current FDLE listings" in source
+    assert "Public service directory" not in source

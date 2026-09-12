@@ -312,13 +312,17 @@ def test_paywall_avoids_duplicate_newsletter_fallback_and_keeps_value_copy():
     assert "Not ready to subscribe?" not in html
     assert "free TCT Morning Brief" not in html
     assert "tct-paywall-newsletter-fallback" not in html
-    assert "Keep reading for $1" in html
-    assert "Pay Annually" in html
-    assert "$4.08/month billed annually" in html
-    assert "Pay Monthly" in html
+    assert "Keep reading for" in html and "$1</span>" in html
+    assert "Get full access to every story" in html
+    assert "Start for $1" in html
     assert 'tct-paywall-current-price">$1<' in html
     assert 'tct-paywall-old-price">$4.99<' in html
-    assert html.count(">Subscribe</button>") == 2
+    assert "$4.99/month after your first month. Cancel anytime." in html
+    assert "Prefer annual billing?" in html
+    assert "$49/year" in html and "$4.08/month" in html
+    assert "Unlimited access to every TCT story" in html
+    assert "Morning Brief" not in html
+    assert "tct-paywall-card" not in html
 
 
 def test_most_read_implementation_is_aggregate_and_privacy_preserving():

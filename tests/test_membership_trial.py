@@ -30,20 +30,24 @@ def test_checkout_completion_keeps_backward_compatibility_for_old_trial_sessions
 def test_paywall_discloses_one_dollar_intro_and_renewal_price():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
-    assert "Keep reading for $1" in markup
-    assert "Pay Annually" in markup
-    assert "Pay Monthly" in markup
-    assert '<div class="tct-paywall-card-price">$49</div>' in markup
-    assert '<div class="tct-paywall-card-price tct-paywall-card-price-discount"><span class="tct-paywall-current-price">$1</span><span class="tct-paywall-old-price">$4.99</span></div>' in markup
-    assert "for your first month" in markup
-    assert "$4.08/month billed annually" in markup
+    assert "Keep reading for" in markup
+    assert 'class="tct-paywall-headline-accent">$1</span>' in markup
+    assert "Get full access to every story" in markup
+    assert 'class="tct-paywall-current-price">$1</strong>' in markup
     assert 'class="tct-paywall-old-price">$4.99</span>' in markup
-    assert "$4.99/month after" in markup
-    assert "Cancel anytime" in markup
-    assert markup.count(">Subscribe</button>") == 2
-    assert "Best value" in markup
-    assert "Unlimited access to local news across Martin, St. Lucie and Indian River counties." not in markup
-    assert "Secure checkout powered by Stripe." not in markup
+    assert "for your first month" in markup
+    assert "Start for $1" in markup
+    assert "$4.99/month after your first month. Cancel anytime." in markup
+    assert "Prefer annual billing?" in markup
+    assert "$49/year" in markup
+    assert "$4.08/month" in markup
+    assert "Choose annual" in markup
+    assert "Unlimited access to every TCT story" in markup
+    assert "Read on any device" in markup
+    assert "Support local, independent journalism" in markup
+    assert "Morning Brief" not in markup
+    assert "tct-paywall-card" not in markup
+    assert "Best value" not in markup
     assert "FREE for 1 week" not in markup
     assert "free trial" not in markup.lower()
 
@@ -75,20 +79,24 @@ def test_generated_site_chrome_advertises_intro_offer_consistently():
     assert "footer_pattern" in generator
 
 
-def test_article_paywall_uses_simple_full_width_green_presentation():
+def test_article_paywall_uses_editorial_single_offer_presentation():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
     css = (ROOT / "membership.css").read_text()
-    assert markup.count("tct-paywall-card ") == 2
-    assert "tct-paywall-card-annual" in markup
-    assert "tct-paywall-card-monthly" in markup
-    assert "tct-paywall-benefits" not in markup
+    assert "tct-paywall-subscriber-strip" in markup
+    assert "Already a subscriber?" in markup
+    assert "tct-paywall-offer-panel" in markup
+    assert "tct-paywall-primary-offer" in markup
+    assert "tct-paywall-benefits" in markup
+    assert markup.count('data-plan="monthly"') == 1
+    assert markup.count('data-plan="annual"') == 1
+    assert "tct-paywall-card" not in markup
     assert 'class="tct-paywall-exit" href="/"' in markup
-    release_css = css.split("TCT v1.13.7.20 - simple full-width article paywall cards",1)[1]
-    assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
-    assert "radial-gradient(ellipse at 50% 14%" in release_css
-    assert "linear-gradient(180deg, #1d6b50 0%, #176247 52%, #12553e 100%)" in release_css
-    assert "border-radius: 0" in release_css
-    assert "grid-template-columns: repeat(2, minmax(0, 1fr))" in release_css
+    release_css = css.split("TCT v1.13.7.25 — editorial single-offer article paywall",1)[1]
+    assert "linear-gradient(145deg, #fffaf8 0%, #fdeee9 54%, #f9ddd4 100%)" in release_css
+    assert 'font-family: "Fraunces", Georgia, "Times New Roman", serif' in release_css
+    assert "linear-gradient(135deg, #ff765c 0%, #f26445 55%, #df5135 100%)" in release_css
+    assert "font-size: clamp(2.25rem, 10.6vw, 2.85rem)" in release_css
     assert "white-space: nowrap" in release_css
-    assert "font-size: clamp(1.12rem, 5.25vw, 1.5rem)" in release_css
+    assert "tct-paywall-subscriber-strip" in release_css
+

@@ -306,179 +306,30 @@ document.addEventListener("keydown", (event) => {
 });
 
 
-// -- RESPONSIVE ACQUISITION MODAL --
-// Desktop keeps the Kit Morning Brief modal. Mobile article traffic gets a
-// simple subscription prompt after 5 seconds OR a short reading scroll. The
-// monthly-free article is intentionally eligible: on mobile this modal replaces
-// the old free-article sticky banner so the acquisition path is not suppressed.
+// -- SITEWIDE KIT NEWSLETTER MODAL --
+// The Morning Brief is the lower-friction acquisition step on both desktop and
+// mobile. Subscription conversion stays inside the article paywall.
 (() => {
-  const desktopKit = {
+  const config = {
     uid: "be625cadfe",
     src: "https://treasure-coast-today.kit.com/be625cadfe/index.js",
-    mode: "desktop-newsletter-modal"
+    mode: "sitewide-modal"
   };
-  const MOBILE_QUERY = "(max-width: 680px)";
-  const MOBILE_DELAY_MS = 5000;
-  const MOBILE_SCROLL_RATIO = 0.45;
-  const MOBILE_DISMISS_KEY = "tct_mobile_subscription_modal_dismissed_until_v2";
-  const MOBILE_DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
-  const MEMBER_HINT_KEY = "tct_member_entitled_hint";
-  const METER_STATE_KEY = "tct_monthly_free_article_v1";
-  const mobile = window.matchMedia(MOBILE_QUERY);
 
-  function loadDesktopKitModal() {
-    if (mobile.matches) return;
-    if (document.querySelector(`script[data-uid="${desktopKit.uid}"]`)) return;
+  function loadSitewideKitModal() {
+    if (document.querySelector(`script[data-uid="${config.uid}"]`)) return;
+
     const script = document.createElement("script");
     script.async = true;
-    script.dataset.uid = desktopKit.uid;
-    script.dataset.tctNewsletterMode = desktopKit.mode;
-    script.src = desktopKit.src;
+    script.dataset.uid = config.uid;
+    script.dataset.tctNewsletterMode = config.mode;
+    script.src = config.src;
     document.body.appendChild(script);
   }
 
-  function currentArticleSlug() {
-    const match = window.location.pathname.match(/^\/articles\/([^/]+?)(?:\.html)?\/?$/i);
-    return match ? match[1] : "";
-  }
-
-  function currentMeterPeriod() {
-    try {
-      const parts = new Intl.DateTimeFormat("en-US", { timeZone:"America/New_York", year:"numeric", month:"2-digit" }).formatToParts(new Date());
-      const year = parts.find(part => part.type === "year")?.value || "";
-      const month = parts.find(part => part.type === "month")?.value || "";
-      return `${year}-${month}`;
-    } catch {
-      const now = new Date();
-      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-    }
-  }
-
-  function currentArticleIsMonthlyFree() {
-    const slug = currentArticleSlug();
-    if (!slug) return false;
-    try {
-      const state = JSON.parse(localStorage.getItem(METER_STATE_KEY) || "null");
-      return Boolean(state && state.period === currentMeterPeriod() && state.slug === slug && !state.pending);
-    } catch {
-      return false;
-    }
-  }
-
-  function paywallIsVisible() {
-    const paywall = document.querySelector("[data-tct-paywall]");
-    if (!paywall) return false;
-    const rect = paywall.getBoundingClientRect();
-    return rect.top < window.innerHeight && rect.bottom > 0;
-  }
-
-  function cooldownActive() {
-    try { return Number(localStorage.getItem(MOBILE_DISMISS_KEY) || 0) > Date.now(); }
-    catch { return false; }
-  }
-
-  function subscriberLikely() {
-    if (document.body?.classList.contains("tct-member-entitled")) return true;
-    try { return localStorage.getItem(MEMBER_HINT_KEY) === "1"; }
-    catch { return false; }
-  }
-
-  function mobilePromptSuppressed() {
-    if (!mobile.matches || !currentArticleSlug()) return true;
-    if (subscriberLikely() || cooldownActive()) return true;
-    // If the reader is already looking at the inline paywall, do not cover it
-    // with a second sales surface. Monthly-free readers are still eligible while
-    // they are reading because their paywall sits below the completed article.
-    if (!currentArticleIsMonthlyFree() && paywallIsVisible()) return true;
-    return false;
-  }
-
-  function dismissMobileSubscriptionModal(persistCooldown = true) {
-    const overlay = document.querySelector("[data-tct-mobile-subscription-modal]");
-    if (!overlay) return;
-    if (persistCooldown) {
-      try { localStorage.setItem(MOBILE_DISMISS_KEY, String(Date.now() + MOBILE_DISMISS_MS)); } catch {}
-    }
-    overlay.remove();
-    document.documentElement.classList.remove("tct-mobile-subscription-open");
-  }
-
-  function showMobileSubscriptionModal() {
-    if (document.querySelector("[data-tct-mobile-subscription-modal]") || mobilePromptSuppressed()) return false;
-    const next = encodeURIComponent(window.location.pathname + window.location.search);
-    const overlay = document.createElement("div");
-    overlay.className = "tct-mobile-subscription-overlay";
-    overlay.setAttribute("data-tct-mobile-subscription-modal", "true");
-    overlay.innerHTML = `
-      <section class="tct-mobile-subscription-modal" role="dialog" aria-modal="true" aria-labelledby="tct-mobile-subscription-title">
-        <button class="tct-mobile-subscription-close" type="button" aria-label="Close subscription offer">&times;</button>
-        <div class="tct-mobile-subscription-card">
-          <div class="tct-mobile-subscription-regular-price">$4.99</div>
-          <div class="tct-mobile-subscription-offer">$1 FOR THE FIRST MONTH</div>
-          <h2 id="tct-mobile-subscription-title">Never miss another local story.</h2>
-          <ul class="tct-mobile-subscription-benefits" aria-label="Subscription benefits">
-            <li>Unlimited access to Treasure Coast news</li>
-            <li>Read on any device</li>
-            <li>Support local, independent journalism</li>
-          </ul>
-          <div class="tct-mobile-subscription-brand" aria-hidden="true">TCT</div>
-          <a class="tct-mobile-subscription-cta" href="/subscribe.html?next=${next}">SUBSCRIBE NOW</a>
-        </div>
-        <div class="tct-mobile-subscription-after">$4.99/month after. Cancel anytime.</div>
-        <a class="tct-mobile-subscription-signin" href="/subscribe.html?signin=1&next=${next}">Already a subscriber? Sign in</a>
-      </section>`;
-    document.body.appendChild(overlay);
-    document.documentElement.classList.add("tct-mobile-subscription-open");
-    overlay.querySelector(".tct-mobile-subscription-close")?.addEventListener("click", () => dismissMobileSubscriptionModal(true));
-    overlay.addEventListener("click", event => { if (event.target === overlay) dismissMobileSubscriptionModal(true); });
-    return true;
-  }
-
-  function armMobileSubscriptionModal() {
-    if (!mobile.matches || !currentArticleSlug()) return;
-    const startY = window.scrollY;
-    let finished = false;
-    let timer = null;
-    let retryTimer = null;
-
-    const cleanup = () => {
-      if (timer !== null) window.clearTimeout(timer);
-      if (retryTimer !== null) window.clearTimeout(retryTimer);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("keydown", onKeydown);
-    };
-    const attempt = () => {
-      if (finished) return;
-      if (showMobileSubscriptionModal()) {
-        finished = true;
-        cleanup();
-        return;
-      }
-      // Membership state can settle shortly after main.js. Retry once rather
-      // than letting a stale entitlement hint permanently kill the prompt.
-      if (!cooldownActive() && mobile.matches && currentArticleSlug() && retryTimer === null) {
-        retryTimer = window.setTimeout(() => {
-          retryTimer = null;
-          attempt();
-        }, 1500);
-      }
-    };
-    const onScroll = () => {
-      if (Math.abs(window.scrollY - startY) >= Math.max(180, window.innerHeight * MOBILE_SCROLL_RATIO)) attempt();
-    };
-    const onKeydown = event => {
-      if (event.key === "Escape" && document.querySelector("[data-tct-mobile-subscription-modal]")) dismissMobileSubscriptionModal(true);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive:true });
-    window.addEventListener("keydown", onKeydown);
-    timer = window.setTimeout(attempt, MOBILE_DELAY_MS);
-  }
-
-  window.setTimeout(() => {
-    loadDesktopKitModal();
-    armMobileSubscriptionModal();
-  }, 0);
+  // Defer one task so a legacy embed already present in a cached page can be
+  // detected rather than initialized a second time.
+  window.setTimeout(loadSitewideKitModal, 0);
 })();
 
 // -- FIRST-PARTY MOST READ (privacy-preserving aggregate counts) --

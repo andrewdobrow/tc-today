@@ -614,7 +614,7 @@ def _directory_page(payload: dict, status: dict) -> str:
 {_chrome_header(active=True)}
 <main class="missing-persons-page">
   <section class="missing-persons-hero">
-    <p class="missing-persons-kicker">Public service directory</p>
+    <p class="missing-persons-kicker">Current FDLE listings</p>
     <h1>Missing Persons on the Treasure Coast</h1>
     <p>People currently listed by the Florida Department of Law Enforcement as missing from Martin, St. Lucie or Indian River counties.</p>
     <div class="missing-persons-summary">{('<strong>Directory initializing</strong><span>Waiting for the first FDLE refresh</span>' if initializing else f'<strong>{count}</strong> current FDLE record{"s" if count != 1 else ""}<span>Last checked {_format_updated(payload.get("updated_at",""))}</span>')}</div>

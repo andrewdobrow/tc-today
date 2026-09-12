@@ -28,28 +28,28 @@ def test_desktop_latest_rail_stretches_beside_hero_and_newsletter_stack():
     assert "overflow-y: auto !important" in css
 
 
-def test_desktop_kit_modal_and_mobile_subscription_modal_replace_sticky_bar():
+def test_sitewide_kit_modal_replaces_temporary_mobile_subscription_funnel():
     js = _read("main.js")
-    assert "RESPONSIVE ACQUISITION MODAL" in js
+    assert "SITEWIDE KIT NEWSLETTER MODAL" in js
     assert 'uid: "be625cadfe"' in js
-    assert 'mode: "desktop-newsletter-modal"' in js
-    assert 'const MOBILE_DELAY_MS = 5000' in js
-    assert "showMobileSubscriptionModal" in js
+    assert 'mode: "sitewide-modal"' in js
+    assert "loadSitewideKitModal" in js
+    assert "showMobileSubscriptionModal" not in js
     assert "4edef44197" not in js
     assert "KIT STICKY BAR LAYERING" not in js
     assert "--kit-sticky-height" not in js
 
 
-def test_mobile_subscription_modal_is_bounded_with_dismissible_backdrop_space():
+def test_mobile_kit_modal_is_bounded_with_dismissible_backdrop_space():
     css = _read("style.css")
-    responsive = css.index("TCT v1.13.8.11 - mobile subscription modal copy refinement")
+    responsive = css.index("TCT v1.12.2.9 — sitewide newsletter modal presentation")
     tail = css[responsive:]
-    assert '@media (max-width:680px)' in tail
-    assert '.tct-mobile-subscription-modal' in tail
-    assert 'width:min(100%,390px)' in tail
-    assert 'padding:18px 0 0' in tail
-    assert '.tct-mobile-subscription-card' in tail
-    assert '.tct-mobile-subscription-close' in tail
+    assert '@media (max-width: 680px)' in tail
+    assert '.formkit-modal .formkit-form' in tail
+    assert 'width: calc(100vw - 48px) !important' in tail
+    assert 'max-width: 420px !important' in tail
+    assert 'max-height: calc(100dvh - 64px) !important' in tail
+    assert 'margin: 32px auto !important' in tail
 
 
 def test_modal_layer_is_above_masthead_without_page_offset():

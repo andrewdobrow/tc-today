@@ -1083,7 +1083,10 @@ html.tct-meter-precheck .tct-preview-copy {
     radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 38%, rgba(5,38,27,.10) 72%, rgba(5,38,27,.18) 100%),
     linear-gradient(180deg, #1d6b50 0%, #176247 52%, #12553e 100%);
   color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), inset 0 -32px 70px rgba(5,38,27,.08);
+  box-shadow:
+    inset 0 4px 0 #f26445,
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -32px 70px rgba(5,38,27,.08);
 }
 .tct-paywall.tct-paywall-full-bleed .tct-paywall-inner {
   position: relative;
@@ -1136,15 +1139,27 @@ html.tct-meter-precheck .tct-preview-copy {
   font-weight: 800;
 }
 .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {
-  max-width: 660px;
-  margin: 0 auto 22px;
+  max-width: 700px;
+  margin: 0 auto 8px;
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -.025em;
+  font-size: clamp(2.4rem, 4.3vw, 3.1rem);
+  font-weight: 900;
+  line-height: .98;
+  letter-spacing: -.045em;
   white-space: nowrap;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-headline-accent {
+  color: #ff7a5f;
+  text-shadow: 0 1px 0 rgba(0,0,0,.16), 0 0 18px rgba(242,100,69,.18);
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-subhead {
+  margin: 0 auto 24px;
+  color: rgba(255,255,255,.96);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
 }
 .tct-paywall.tct-paywall-full-bleed .tct-paywall-plans {
   display: grid;
@@ -1218,10 +1233,14 @@ html.tct-meter-precheck .tct-preview-copy {
   margin-top: auto;
   border: 0;
   border-radius: 999px;
-  background: #222;
+  background: #f26445;
   color: #fff;
   font-size: .86rem;
   font-weight: 900;
+  box-shadow: 0 5px 14px rgba(242,100,69,.24);
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-card .tct-member-btn:hover {
+  background: #df5539;
 }
 .tct-paywall.tct-paywall-full-bleed .tct-paywall-signin {
   width: min(100%, 610px);
@@ -1259,11 +1278,14 @@ html.tct-meter-precheck .tct-preview-copy {
     white-space: nowrap;
   }
   .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {
-    margin-bottom: 18px;
-    font-size: clamp(1.12rem, 5.25vw, 1.5rem);
-    line-height: 1.05;
-    letter-spacing: -.035em;
+    margin-bottom: 7px;
+    line-height: .98;
+    letter-spacing: -.05em;
     white-space: nowrap;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-subhead {
+    margin-bottom: 20px;
+    font-size: .95rem;
   }
   .tct-paywall.tct-paywall-full-bleed .tct-paywall-plans {
     gap: 10px;
@@ -1338,8 +1360,378 @@ html.tct-meter-precheck .tct-preview-copy {
 }
 @media(max-width:680px){
   .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {
-    font-size:clamp(1.55rem,7vw,1.95rem);
-    letter-spacing:-.04em;
+    font-size:clamp(1.95rem,9.7vw,2.4rem);
+    letter-spacing:-.05em;
     white-space:nowrap;
+  }
+}
+
+/* TCT v1.13.7.24 - stronger mobile paywall hierarchy and branded coral conversion path */
+
+/* ================================================================
+   TCT v1.13.7.25 — editorial single-offer article paywall
+   One premium conversion panel, with a separate subscriber utility strip.
+   Coral is used as the conversion system rather than as a flat color block.
+   ================================================================ */
+.tct-paywall.tct-paywall-full-bleed {
+  box-sizing: border-box;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #171717;
+  box-shadow: none;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-subscriber-strip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  box-sizing: border-box;
+  padding: 12px 54px;
+  border: 1px solid #ead9d3;
+  border-top: 4px solid #f26445;
+  border-radius: 10px 10px 0 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,250,248,.98)),
+    #fff;
+  box-shadow: 0 5px 18px rgba(87,47,35,.05);
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-topline {
+  justify-content: center;
+  margin: 0;
+  color: #4d4541;
+  font-size: .88rem;
+  line-height: 1.3;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-member-link {
+  color: #7f2f20;
+  font-weight: 800;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-exit {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  right: 13px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #766b66;
+  font: 400 25px/1 Arial,sans-serif;
+  text-decoration: none;
+  box-shadow: none;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-exit:hover {
+  background: #f7ebe7;
+  color: #53291f;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-panel {
+  position: relative;
+  box-sizing: border-box;
+  padding: clamp(30px, 4.8vw, 48px) clamp(24px, 4vw, 42px) clamp(28px, 4.2vw, 42px);
+  overflow: hidden;
+  border: 1px solid #e7c9c0;
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  background:
+    radial-gradient(circle at 12% 4%, rgba(255,255,255,.96) 0%, rgba(255,255,255,.48) 25%, rgba(255,255,255,0) 48%),
+    radial-gradient(circle at 90% 92%, rgba(221,77,49,.12) 0%, rgba(221,77,49,0) 39%),
+    linear-gradient(145deg, #fffaf8 0%, #fdeee9 54%, #f9ddd4 100%);
+  color: #181512;
+  text-align: center;
+  box-shadow: 0 16px 38px rgba(87,47,35,.10);
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255,255,255,.14), transparent 36%, rgba(170,54,33,.035));
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-panel > * {
+  position: relative;
+  z-index: 1;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-meter-status {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 15px;
+  padding: 5px 10px;
+  border: 1px solid rgba(130,52,36,.28);
+  border-radius: 999px;
+  background: rgba(255,255,255,.56);
+  color: #7d3324;
+  font-size: .68rem;
+  line-height: 1;
+  font-weight: 850;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {
+  max-width: none;
+  margin: 0 auto 8px;
+  color: #171411;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-size: clamp(2.75rem, 5.2vw, 4.25rem);
+  font-weight: 600;
+  line-height: .98;
+  letter-spacing: -.045em;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-headline-accent {
+  color: #d95137;
+  text-shadow: none;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-subhead {
+  margin: 0 auto 24px;
+  color: #342d29;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-size: clamp(1.05rem, 2vw, 1.28rem);
+  font-weight: 400;
+  line-height: 1.35;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-signin {
+  width: min(100%, 560px);
+  margin: 0 auto 20px;
+  padding: 16px;
+  border: 1px solid #e0c2b8;
+  border-radius: 8px;
+  background: rgba(255,255,255,.82);
+  color: #171717;
+  text-align: left;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-plans {
+  display: block;
+  width: min(100%, 560px);
+  margin: 0 auto;
+  border: 0;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-primary-offer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 17px;
+  padding: 0;
+  border: 0;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-price-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 0;
+  color: #211c19;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-current-price {
+  color: #171411;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-size: clamp(2.25rem, 4.2vw, 3.25rem);
+  font-weight: 600;
+  line-height: .9;
+  letter-spacing: -.045em;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-old-price {
+  color: #827975;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-price-copy {
+  color: #2d2825;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-primary-button {
+  width: min(100%, 330px);
+  min-height: 50px;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, #ff765c 0%, #f26445 55%, #df5135 100%);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 900;
+  box-shadow: 0 8px 20px rgba(184,67,43,.22);
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-primary-button:hover {
+  filter: brightness(.97);
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-benefits {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: min(100%, 430px);
+  margin: 24px auto 0;
+  padding: 20px 0 0;
+  border-top: 1px solid rgba(126,83,69,.20);
+  border-bottom: 0;
+  color: #2e2926;
+  list-style: none;
+  font-size: .88rem;
+  line-height: 1.35;
+  font-weight: 650;
+  text-align: left;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-benefits li {
+  position: relative;
+  padding-left: 28px;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-benefits li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #174f3d;
+  color: #fff;
+  font-size: .72rem;
+  line-height: 1;
+  font-weight: 900;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-renewal {
+  margin: 18px auto 0;
+  color: #6f625c;
+  font-size: .75rem;
+  line-height: 1.4;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-annual-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 21px auto 0;
+  padding: 18px 0 0;
+  border-top: 1px solid rgba(126,83,69,.16);
+  color: #514842;
+  font-size: .79rem;
+  line-height: 1.4;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-annual-row strong {
+  color: #241e1b;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-member-btn-secondary {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #913722;
+  font-size: inherit;
+  font-weight: 850;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  box-shadow: none;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-member-btn-secondary:hover {
+  filter: none;
+  color: #6e2819;
+}
+.tct-paywall.tct-paywall-full-bleed .tct-paywall-exit:focus-visible,
+.tct-paywall.tct-paywall-full-bleed .tct-member-btn:focus-visible,
+.tct-paywall.tct-paywall-full-bleed .tct-member-link:focus-visible {
+  outline: 3px solid rgba(242,100,69,.32);
+  outline-offset: 3px;
+}
+.tct-paywall.tct-paywall-metered-after-read.tct-paywall-full-bleed {
+  margin-top: 34px;
+  border-top: 0;
+  box-shadow: none;
+}
+@media (min-width: 681px) {
+  .tct-paywall.tct-paywall-full-bleed {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 10px;
+  }
+}
+@media (max-width: 680px) {
+  .tct-paywall.tct-paywall-full-bleed {
+    margin-bottom: 24px;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-subscriber-strip {
+    min-height: 50px;
+    padding: 10px 46px 10px 18px;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-topline {
+    font-size: .84rem;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-exit {
+    right: 9px;
+    width: 31px;
+    height: 31px;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-panel {
+    padding: 30px 18px 28px;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-meter-status {
+    margin-bottom: 13px;
+    padding-inline: 8px;
+    font-size: clamp(.56rem, 2.45vw, .66rem);
+    letter-spacing: .055em;
+    white-space: nowrap;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {
+    margin-bottom: 7px;
+    font-size: clamp(2.25rem, 10.6vw, 2.85rem);
+    line-height: .96;
+    letter-spacing: -.05em;
+    white-space: nowrap;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-subhead {
+    margin-bottom: 22px;
+    font-size: 1rem;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-current-price {
+    font-size: 2.55rem;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-price-copy {
+    font-size: .93rem;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-primary-button {
+    width: min(100%, 320px);
+    min-height: 52px;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-benefits {
+    width: min(100%, 360px);
+    margin-top: 22px;
+    font-size: .84rem;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-annual-row {
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 19px;
+  }
+}
+@media (max-width: 350px) {
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {
+    font-size: clamp(2rem, 10.2vw, 2.35rem);
   }
 }
