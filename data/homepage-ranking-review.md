@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **Fort Pierce man charged with possessing eight improvised explosive devices**
-- Recommended: **Martin County Sheriff links bomb threat at high school to Russia-based swatting scheme**
-- Recommendation: CHANGE (not enforced)
+- Current: **Martin County High School bomb threat traced to hacked Stuart account**
+- Recommended: **Martin County High School bomb threat traced to hacked Stuart account**
+- Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Martin County Sheriff links bomb threat at high school to Russia-based swatting scheme | Martin County Sheriff links bomb threat at high school to Russia-based swatting scheme | 90 | importance 70; freshness 95.46; urgency 8/10; validated material update |
-| 2 | Fellsmere officials project $12 million economic impact from The Point Surf Park | Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony | 64 | importance 35; freshness 99.93; urgency 4/10 |
-| 3 | Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony | Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11 | 64 | importance 35; freshness 98.56; urgency 4/10 |
-| 4 | Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11 | Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case | 59 | importance 55; freshness 42.83; urgency 2/10; validated material update |
-| 5 | Vero Beach Regional Airport adds dual baggage claim gates in $3 million renovation | Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity | 58 | importance 35; freshness 92.95; urgency 2/10 |
-| 6 | Bomb threat forces evacuation at Indian River State College in Fort Pierce | Vero Beach Regional Airport adds dual baggage claim gates in $3 million renovation | 57 | importance 10; freshness 96.75; urgency 2/10; validated material update |
-| 7 | Treasure Coast traffic report: I-95 ramp closures and roadwork for Sept. 11-18 | Fort Pierce police investigate death of unidentified man found near Okeechobee Road business | 62 | importance 75; freshness 53.3; urgency 2/10; -8 county saturation |
-| 8 | Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity | Fellsmere officials project $12 million economic impact from The Point Surf Park | 57 | importance 10; freshness 95.47; urgency 5/10; -4 county saturation |
-| 9 | Port St. Lucie Police Chief Leo Niemczyk shares 9/11 story after 25 years | Bomb threat forces evacuation at Indian River State College in Fort Pierce | 50 | importance 10; freshness 96.75; urgency 2/10; -6 category saturation |
-| 10 | Port St. Lucie holds 25th anniversary 9/11 remembrance ceremony Friday morning | Port St. Lucie holds 25th anniversary 9/11 remembrance ceremony Friday morning | 59 | importance 45; freshness 84.57; urgency 2/10; -6 category saturation; -12 county saturation |
-| 11 | Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks | Stuart commission votes 3-2 to rehire former city manager at reduced salary | 44 | importance 10; freshness 67.35; urgency 2/10; -4 county saturation |
-| 12 | Stuart commission votes 3-2 to rehire former city manager at reduced salary | C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup | 39 | importance 10; freshness 22.0; urgency 2/10; validated material update |
+| 1 | Fellsmere officials project $12 million economic impact from The Point Surf Park | Fort Pierce police investigate death of unidentified man found near Okeechobee Road business | 62 | importance 75; freshness 52.28; urgency 2/10 |
+| 2 | Vero Beach Regional Airport adds dual baggage claim gates in $3 million renovation | Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony | 60 | importance 35; freshness 98.91; urgency 2/10 |
+| 3 | Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony | Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11 | 59 | importance 35; freshness 97.54; urgency 2/10 |
+| 4 | Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11 | Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case | 59 | importance 55; freshness 41.82; urgency 2/10; validated material update |
+| 5 | Bomb threat forces evacuation at Indian River State College in Fort Pierce | Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity | 58 | importance 35; freshness 91.93; urgency 2/10 |
+| 6 | Treasure Coast traffic report: I-95 ramp closures and roadwork for Sept. 11-18 | Vero Beach Regional Airport adds dual baggage claim gates in $3 million renovation | 56 | importance 10; freshness 95.74; urgency 2/10; validated material update |
+| 7 | Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity | Fellsmere officials project $12 million economic impact from The Point Surf Park | 54 | importance 10; freshness 94.45; urgency 4/10 |
+| 8 | Port St. Lucie Police Chief Leo Niemczyk shares 9/11 story after 25 years | Port St. Lucie holds 25th anniversary 9/11 remembrance ceremony Friday morning | 59 | importance 45; freshness 83.55; urgency 2/10; -6 category saturation; -8 county saturation |
+| 9 | Port St. Lucie holds 25th anniversary 9/11 remembrance ceremony Friday morning | Bomb threat forces evacuation at Indian River State College in Fort Pierce | 50 | importance 10; freshness 95.73; urgency 2/10; -6 category saturation |
+| 10 | Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks | Treasure Coast traffic report: I-95 ramp closures and roadwork for Sept. 11-18 | 43 | importance 0; freshness 94.45; urgency 2/10 |
+| 11 | Stuart commission votes 3-2 to rehire former city manager at reduced salary | Stuart commission votes 3-2 to rehire former city manager at reduced salary | 43 | importance 10; freshness 66.34; urgency 2/10; -4 county saturation |
+| 12 | Vehicle fire closes southbound Florida's Turnpike in St. Lucie County | C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup | 38 | importance 10; freshness 20.99; urgency 2/10; validated material update |
 
 ## Recommended moves
 
-- **C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup**: 46 → 12 — importance 10; freshness 22.0; urgency 2/10; validated material update
-- **Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case**: 26 → 4 — importance 55; freshness 42.83; urgency 2/10; validated material update
-- **Fort Pierce police investigate death of unidentified man found near Okeechobee Road business**: 27 → 7 — importance 75; freshness 53.3; urgency 2/10; -8 county saturation
-- **Fellsmere officials project $12 million economic impact from The Point Surf Park**: 2 → 8 — importance 10; freshness 95.47; urgency 5/10; -4 county saturation
-- **Treasure Coast traffic report: I-95 ramp closures and roadwork for Sept. 11-18**: 7 → 13 — importance 0; freshness 95.47; urgency 2/10
-- **Port St. Lucie Police Chief Leo Niemczyk shares 9/11 story after 25 years**: 9 → 14 — importance 0; freshness 92.96; urgency 2/10
-- **Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks**: 11 → 15 — importance 10; freshness 36.26; urgency 4/10
-- **Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity**: 8 → 5 — importance 35; freshness 92.95; urgency 2/10
-- **Bomb threat forces evacuation at Indian River State College in Fort Pierce**: 6 → 9 — importance 10; freshness 96.75; urgency 2/10; -6 category saturation
-- **Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony**: 3 → 2 — importance 35; freshness 99.93; urgency 4/10
-- **Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11**: 4 → 3 — importance 35; freshness 98.56; urgency 4/10
-- **Vero Beach Regional Airport adds dual baggage claim gates in $3 million renovation**: 5 → 6 — importance 10; freshness 96.75; urgency 2/10; validated material update
+- **C-23 Canal diversion project in Palm City diverts 5 billion gallons since May startup**: 46 → 12 — importance 10; freshness 20.99; urgency 2/10; validated material update
+- **Fort Pierce police investigate death of unidentified man found near Okeechobee Road business**: 27 → 1 — importance 75; freshness 52.28; urgency 2/10
+- **Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case**: 25 → 4 — importance 55; freshness 41.82; urgency 2/10; validated material update
+- **Fellsmere officials project $12 million economic impact from The Point Surf Park**: 1 → 7 — importance 10; freshness 94.45; urgency 4/10
+- **Port St. Lucie Police Chief Leo Niemczyk shares 9/11 story after 25 years**: 8 → 13 — importance 0; freshness 91.94; urgency 2/10
+- **Vero Beach Regional Airport adds dual baggage claim gates in $3 million renovation**: 2 → 6 — importance 10; freshness 95.74; urgency 2/10; validated material update
+- **Bomb threat forces evacuation at Indian River State College in Fort Pierce**: 5 → 9 — importance 10; freshness 95.73; urgency 2/10; -6 category saturation
+- **Treasure Coast traffic report: I-95 ramp closures and roadwork for Sept. 11-18**: 6 → 10 — importance 0; freshness 94.45; urgency 2/10
+- **Port St. Lucie teacher uses survivor accounts to teach 9/11 to students born after attacks**: 10 → 14 — importance 10; freshness 35.24; urgency 4/10
+- **Vehicle fire closes southbound Florida's Turnpike in St. Lucie County**: 12 → 15 — importance 35; freshness 0.0; urgency 4/10
+- **Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity**: 7 → 5 — importance 35; freshness 91.93; urgency 2/10
+- **Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony**: 3 → 2 — importance 35; freshness 98.91; urgency 2/10
 
 ## Guardrails
 
