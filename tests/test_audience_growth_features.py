@@ -89,7 +89,7 @@ def test_event_detail_pages_use_internal_canonical_and_event_schema(tmp_path, mo
     assert f'<link rel="canonical" href="https://treasurecoast.today{detail}">' in page
     assert '"@type":"Event"' in page
     assert 'Official event page' in page
-    assert '<link rel="stylesheet" href="/style.css?v=1.13.8.11">' in page
+    assert '<link rel="stylesheet" href="/style.css?v=1.13.9.0">' in page
     assert 'name="tct-event-lifecycle-end" content="2026-09-12T20:00:00-04:00"' in page
     assert 'name="tct-event-id" content="0123456789abcdef12"' in page
     assert 'data-tct-event-ended' not in page
@@ -203,7 +203,7 @@ def test_event_detail_title_header_is_not_sticky_over_site_masthead():
 
 def test_mobile_article_breadcrumb_and_byline_are_compact():
     css = (Path(__file__).resolve().parents[1] / "style.css").read_text(encoding="utf-8")
-    assert features.ASSET_VERSION == "1.13.8.11"
+    assert features.ASSET_VERSION == "1.13.9.0"
     assert "v1.13.8.5 — mobile article breadcrumb + byline rhythm" in css
     assert ".tct-breadcrumb--article > span:nth-last-child(2)" in css
     assert ".tct-breadcrumb--article .tct-breadcrumb-current" in css

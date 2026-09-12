@@ -29,7 +29,7 @@ SITE_URL = "https://treasurecoast.today"
 NEWSLETTER_URL = "https://treasure-coast-today.kit.com/cb848255f8"
 PREFERRED_SOURCE_URL = "https://www.google.com/preferences/source?q=treasurecoast.today"
 PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
-ASSET_VERSION = "1.13.8.11"
+ASSET_VERSION = "1.13.9.0"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
@@ -1162,6 +1162,23 @@ def inject_site_navigation() -> dict:
             continue
         scanned += 1
         original = text
+        if '/missing-persons.html' not in text:
+            # Public-service directory: keep it in More on both desktop/mobile and
+            # in Quick Links without promoting it to a primary top-level section.
+            text = text.replace(
+                '<a href="/weather.html" class="mobile-nav-link">Weather</a>',
+                '<a href="/weather.html" class="mobile-nav-link">Weather</a>\n          <a href="/missing-persons.html" class="mobile-nav-link">Missing Persons</a>',
+            )
+            text = text.replace(
+                '<a href="/weather.html" class="nav-section-link">Weather</a>',
+                '<a href="/weather.html" class="nav-section-link">Weather</a>\n              <a href="/missing-persons.html" class="nav-section-link">Missing Persons</a>',
+            )
+            text = text.replace(
+                '<a href="/weather.html">Weather</a>',
+                '<a href="/weather.html">Weather</a>\n          <a href="/missing-persons.html">Missing Persons</a>',
+                1,
+            )
+
         if '/news-tip.html' not in text:
             # Mobile More menu: place before Contact.
             text = text.replace('<a href="/contact.html" class="mobile-nav-link">Contact</a>', '<a href="/news-tip.html" class="mobile-nav-link">News Tip</a>\n          <a href="/contact.html" class="mobile-nav-link">Contact</a>')
@@ -1319,14 +1336,24 @@ def update_sitemap() -> dict:
 
     existing = {node.text for node in root.findall(f"{ns}url/{ns}loc") if node.text}
     additions = []
-    for static, priority, change in [("/events.html","0.8","daily"),("/news-tip.html","0.6","monthly")]:
-        additions.append((f"{SITE_URL}{static}", priority, change, ""))
+    for static, priority, change in [("/events.html","0.8","daily"),("/missing-persons.html","0.7","daily"),("/news-tip.html","0.6","monthly")]:
+        if static != "/missing-persons.html" or (ROOT / static.lstrip("/")).exists():
+            additions.append((f"{SITE_URL}{static}", priority, change, ""))
     for city in CITY_CONFIG:
         if (ROOT / city["slug"] / "index.html").exists(): additions.append((f"{SITE_URL}/{city['slug']}/","0.8","daily",""))
     events = _read_json(ROOT / "data" / "events.json", {}).get("events", [])
     for e in events if isinstance(events,list) else []:
         detail = e.get("detail_url") if isinstance(e,dict) else None
         if detail: additions.append((f"{SITE_URL}{detail}","0.5","weekly",str(e.get("starts_at") or "")[:10]))
+
+    missing_payload = _read_json(ROOT / "data" / "missing-persons.json", {})
+    missing_people = missing_payload.get("people", []) if isinstance(missing_payload, dict) else []
+    missing_lastmod = str(missing_payload.get("updated_at") or "")[:10] if isinstance(missing_payload, dict) else ""
+    for person in missing_people if isinstance(missing_people, list) else []:
+        detail = person.get("detail_url") if isinstance(person, dict) else None
+        if detail and (ROOT / str(detail).lstrip("/")).exists():
+            additions.append((f"{SITE_URL}{detail}", "0.5", "weekly", missing_lastmod))
+
     for retained in sorted(_retained_event_paths()):
         if (ROOT / retained.lstrip("/")).exists():
             additions.append((f"{SITE_URL}{retained}","0.3","monthly",""))
