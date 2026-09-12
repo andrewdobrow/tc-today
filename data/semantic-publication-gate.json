@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-12T00:22:23.184329+00:00",
+  "generated_at": "2026-09-12T01:10:55.927846+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,41 +62,41 @@
     }
   },
   "summary": {
-    "evaluations": 51,
+    "evaluations": 53,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 51,
+    "no_candidate_passes": 53,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 50,
+    "new_stories_allowed": 2,
+    "retroactive_rows_retained": 51,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
     "material_update_composer_calls": 0,
     "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 2,
-    "pre_generation_materiality_evaluations": 8,
+    "pre_generation_materiality_evaluations": 10,
     "pre_generation_materiality_promotions": 1,
-    "pre_generation_materiality_duplicates": 5,
-    "pre_generation_materiality_holds": 2,
+    "pre_generation_materiality_duplicates": 6,
+    "pre_generation_materiality_holds": 3,
     "pre_generation_materiality_model_calls": 3,
-    "pre_generation_materiality_cache_hits": 5,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_cache_hits": 7,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
     "terminal_permalink_new_authorized": 1,
-    "terminal_permalink_duplicates_blocked": 0,
+    "terminal_permalink_duplicates_blocked": 1,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
     "late_published_skip_materiality_evaluations": 0,
@@ -114,8 +114,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": true,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "update_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "update_existing_canonical",
@@ -170,35 +170,42 @@
       "validation_errors": []
     },
     {
-      "category_key": "local_gov",
-      "source_headline": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
-      "source_url": "https://cbs12.com/news/local/bomb-threat-at-martin-county-high-school-prompts-evacuation-campus-search-martin-county-school-district-law-enforcement-martin-county-sheriffs-office-florida-news",
-      "canonical_slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
-      "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
+      "category_key": "crime",
+      "source_headline": "Maryland man accused of inappropriate online relationship with Martin County minor - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-martin-county-minor-maryland-man-online/73675961",
+      "canonical_slug": "2026-09-10-maryland-man-arrested-in-martin-county-on-child-sex-charges-after-roblox-chat-wi",
+      "canonical_headline": "Maryland man arrested in Martin County on child sex charges after Roblox chat with 12-year-old",
       "canonical_is_custom": false,
-      "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+      "identity_basis": "exact_source_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 0.95,
-      "shared_anchors": [],
-      "novel_facts": [
-        "Bomb threat at Martin County High School on Thursday",
-        "Students and staff evacuated",
-        "Emailed bomb threat received",
-        "Martin County Sheriff's Office conducted campus search",
-        "No evidence of threat found after search",
-        "Location: Stuart, Florida"
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Ting Bawi, 22-year-old Maryland man",
+        "Martin County arrest",
+        "12-year-old victim met through Roblox",
+        "Arrested Wednesday on warrant",
+        "Booked into Martin County Jail",
+        "$30,000 bond",
+        "Child sexual abuse material discovered on phone",
+        "Same WPBF source URL"
       ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
+      "novel_facts": [
+        "Victim claimed to be 16 on Roblox",
+        "Communication began in 2025",
+        "Specific text messages quoted: 'You belong to me', 'I can't wait to have you in my possession'",
+        "Baltimore County did not charge him due to Maryland's age of consent being 16",
+        "Bawi has since bonded out",
+        "Victim confirmed to be in middle school"
+      ],
+      "reason": "This is the exact same arrest event as the canonical candidate. Both articles cover Ting Bawi's Wednesday arrest in Martin County on charges related to an inappropriate online relationship with a 12-year-old girl met through Roblox. The incoming article provides additional detail (specific text messages, bond status, Maryland jurisdiction explanation) but these are elaborations on the same facts, not material updates like new charges, court proceedings, or identification of additional victims. The bonding out is a routine procedural step, not a material development. This is the same story with more background detail that should have been included in the original, not a new event or consequential update.",
+      "validation_errors": []
     },
     {
       "category_key": "crime",
@@ -228,6 +235,79 @@
       ],
       "novel_facts": [],
       "reason": "This is an exact duplicate of the canonical candidate. Both articles cover the same two arrests (Corey Michael Smith on Sept. 4 and Francis Ostrowski on Sept. 5) for illegal saw palmetto berry harvesting in Indian River County over Labor Day weekend. The source URL is identical, the publication date is the same, and the content is virtually word-for-word identical. The incoming article contains no new material updates beyond what is already in the canonical version.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-2026/73684080",
+      "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
+      "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Both are weekend event roundups for Treasure Coast and Palm Beach",
+        "Both mention Palm City and Stuart locations",
+        "Both published by WPBF with similar headline format"
+      ],
+      "novel_facts": [
+        "Incoming covers weekend of September 11, 2026",
+        "Candidate covers weekend of July 27-28, 2026",
+        "Completely different events: Skate Jam vs Christmas in July",
+        "Different events: 9/11 Memorial Stair Climb vs Rockn Riverwalk concerts",
+        "Different events: Cuban sandwich record attempt, Morikami koto workshop, Sebastian Touch a Truck",
+        "No overlap in specific events, locations, or participants"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Maryland man accused of inappropriate online relationship with Martin County minor - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-martin-county-minor-maryland-man-online/73675961",
+      "canonical_slug": "2026-09-10-maryland-man-arrested-in-martin-county-on-child-sex-charges-after-roblox-chat-wi",
+      "canonical_headline": "Maryland man arrested in Martin County on child sex charges after Roblox chat with 12-year-old",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Ting Bawi, 22-year-old Maryland man",
+        "Martin County arrest",
+        "12-year-old victim met through Roblox",
+        "Arrested Wednesday on warrant",
+        "Booked into Martin County Jail",
+        "$30,000 bond",
+        "Child sexual abuse material discovered on phone",
+        "Same WPBF source URL"
+      ],
+      "novel_facts": [
+        "Victim claimed to be 16 on Roblox",
+        "Communication began in 2025",
+        "Specific text messages quoted: 'You belong to me', 'I can't wait to have you in my possession'",
+        "Baltimore County did not charge him due to Maryland's age of consent being 16",
+        "Bawi has since bonded out",
+        "Victim confirmed to be in middle school"
+      ],
+      "reason": "This is the exact same arrest event as the canonical candidate. Both articles cover Ting Bawi's Wednesday arrest in Martin County on charges related to an inappropriate online relationship with a 12-year-old girl met through Roblox. The incoming article provides additional detail (specific text messages, bond status, Maryland jurisdiction explanation) but these are elaborations on the same facts, not material updates like new charges, court proceedings, or identification of additional victims. The bonding out is a routine procedural step, not a material development. This is the same story with more background detail that should have been included in the original, not a new event or consequential update.",
       "validation_errors": []
     },
     {
@@ -314,8 +394,8 @@
       "confidence": 0.95,
       "shared_anchors": [],
       "novel_facts": [
-        "Flood Advisory issued until 7:45 PM EDT",
-        "Affects West Central Martin County, Southeastern Okeechobee County, and St. Lucie County",
+        "Flood Advisory issued until 7:45 PM EDT for Martin, Okeechobee, and St. Lucie counties",
+        "Heavy rainfall from thunderstorms on September 10, 2026",
         "1-3 inches of rain already fallen with 1-2 additional inches expected",
         "Minor flooding expected in low-lying and poor drainage areas"
       ],
@@ -325,35 +405,34 @@
       ]
     },
     {
-      "category_key": "indian_river",
-      "source_headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
-      "source_url": "https://cbs12.com/news/crime/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
-      "canonical_slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
-      "canonical_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
+      "category_key": "st_lucie",
+      "source_headline": "Vehicle fire shuts down Florida Turnpike south near Port St. Lucie Blvd. Exit - WPEC",
+      "source_url": "https://cbs12.com/news/local/vehicle-fire-shuts-down-florida-turnpike-south-near-port-st-lucie-blvd-exit",
+      "canonical_slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
+      "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
       "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
+      "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
-      "shared_anchors": [
-        "Two men arrested in Indian River County over Labor Day weekend for saw palmetto berry harvesting",
-        "Corey Michael Smith of Vero Beach arrested Sept. 4",
-        "BP gas station on 9th Street Southwest",
-        "Trespassing call and helicopter crew involvement",
-        "Indian River County School Board property near 800 20th Ave",
-        "Francis Ostrowski arrested a day later",
-        "Same source URL: cbs12.com article",
-        "Identical lead paragraph"
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Vehicle fire on Florida Turnpike southbound",
+        "Location beyond Exit 142 at Port St. Lucie Boulevard before Mile Marker 141",
+        "All southbound lanes closed",
+        "Closure reported at 5:30 p.m. on 2026-09-08",
+        "St. Lucie County location"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article is identical to the existing canonical. They share the exact same source URL, identical lead paragraph, same two arrestees (Corey Michael Smith and Francis Ostrowski), same Labor Day weekend timeframe, same locations (BP gas station on 9th Street Southwest, School Board property), and same arrest dates (Sept. 4 and day later). The retrieval evidence confirms this is tracked as the same persistent story with an exact source match. No new information has been added.",
-      "validation_errors": []
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     }
   ],
   "decisions": [
@@ -541,7 +620,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
       "incoming_source_url": "https://cbs12.com/news/crisis-in-the-classroom/bomb-threat-reported-fort-pierce-central-high-school-students-evacuate-residents-avoid-area-st-lucie-county-sheriffs-office-florida-news",
-      "incoming_story_id": "story_010976",
+      "incoming_story_id": "story_011019",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -601,7 +680,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Driver airlifted after single-car rollover on I-95 southbound near High Meadows in Palm City",
       "incoming_source_url": "https://www.wpbf.com/article/florida-driver-airlifted-to-trauma-center-after-car-crashes-into-tree-on-i-95-in-palm-city/73620418",
-      "incoming_story_id": "story_010980",
+      "incoming_story_id": "story_011023",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -641,7 +720,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
       "incoming_source_url": "https://cbs12.com/news/crime/teen-suspect-arrested-within-24-hours-in-fort-pierce-armed-robbery-probe-fppd-says-florida-news-florida-crime-local-news-local-crime-teen-suspect-arrested",
-      "incoming_story_id": "story_010973",
+      "incoming_story_id": "story_011017",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1358,10 +1437,30 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11",
       "incoming_source_url": "https://www.wpbf.com/article/florida-fort-pierce-flight-attendant-ceecee-lyles-911-anniversary/73687899",
       "incoming_story_id": "story_011033",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fellsmere approves The Point Surf Park, expecting $12M economic impact",
+      "incoming_source_url": "https://cw34.com/news/local/new-surf-park-could-turn-indian-river-county-into-a-surfing-destination-wave-surf-lagoon-fellsmere-91011-florida-news-local-news?teaserSource=trending",
+      "incoming_story_id": "story_010627",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1382,82 +1481,211 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-fort-pierce-flight-attendant-ceecee-lyles-911-anniversary/73687899",
-      "incoming_story_id": "story_011033",
+      "incoming_headline": "Fellsmere approves The Point Surf Park, expecting $12M economic impact",
+      "incoming_source_url": "https://cw34.com/news/local/new-surf-park-could-turn-indian-river-county-into-a-surfing-destination-wave-surf-lagoon-fellsmere-91011-florida-news-local-news?teaserSource=trending",
+      "incoming_story_id": "story_010627",
       "candidates": [
         {
-          "slug": "2026-09-08-fort-pierce-man-found-asleep-in-stolen-car-at-treasure-coast-square-mall-with-st",
-          "headline": "Fort Pierce man found asleep in stolen car at Treasure Coast Square mall with stolen credit cards",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6141,
-          "retrieval_score": 0.4831,
+          "slug": "2026-09-11-fellsmere-officials-project-12-million-economic-impact-from-the-point-surf-park",
+          "headline": "Fellsmere officials project $12 million economic impact from The Point Surf Park",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 1.037,
+          "retrieval_score": 1.0,
           "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_3_days"
+            "strong_fuzzy_headline",
+            "publication_gap_1_days"
           ]
         },
         {
-          "slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
-          "headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5857,
-          "retrieval_score": 0.4667,
+          "slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+          "headline": "Fort Pierce man's shooting of charging dog confirmed justified after investigation",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4961,
+          "retrieval_score": 0.4651,
           "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_7_days"
+            "publication_gap_4_days"
           ]
         },
         {
-          "slug": "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
-          "headline": "Fort Pierce police arrest 16-year-old within 24 hours in armed robbery involving AR-15-style rifle",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5743,
-          "retrieval_score": 0.4523,
+          "slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
+          "headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4771,
+          "retrieval_score": 0.4371,
           "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_6_days"
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-08-31-data-center-proposed-for-174-acres-off-west-midway-road-in-st-lucie-county",
+          "headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4402,
+          "retrieval_score": 0.4302,
+          "reasons": [
+            "publication_gap_10_days"
           ]
         },
         {
           "slug": "2026-09-02-indian-river-county-sheriffs-office-assists-fellsmere-police-in-search-for-mache",
           "headline": "Indian River County Sheriff's Office assists Fellsmere Police in search for machete stabbing suspect",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5345,
-          "retrieval_score": 0.4215,
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4368,
+          "retrieval_score": 0.4208,
           "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_9_days"
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-09-05-fellsmere-woman-75-wakes-at-230-am-daily-to-feed-stray-cats-volunteers-60-hours",
+          "headline": "Fellsmere woman, 75, wakes at 2:30 a.m. daily to feed stray cats, volunteers 60 hours a week at animal sanctuary",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4202,
+          "retrieval_score": 0.3952,
+          "reasons": [
+            "publication_gap_5_days"
           ]
         },
         {
           "slug": "2026-09-01-indian-river-county-sheriffs-office-employee-dies-in-brevard-county-vehicle-cras",
           "headline": "Indian River County Sheriff's Office employee dies in Brevard County vehicle crash",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.4508,
-          "retrieval_score": 0.3408,
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4173,
+          "retrieval_score": 0.4043,
           "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_10_days",
-            "structured_identity_conflict"
+            "publication_gap_9_days"
           ]
         },
         {
-          "slug": "2026-09-04-four-fort-pierce-officers-credited-with-pulling-woman-from-south-causeway-bridge",
-          "headline": "Four Fort Pierce officers credited with pulling woman from South Causeway Bridge railing",
+          "slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
+          "headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5137,
-          "retrieval_score": 0.4947,
+          "terminal_recall_score": 0.4104,
+          "retrieval_score": 0.3974,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
+          "headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4081,
+          "retrieval_score": 0.3921,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
+          "headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.401,
+          "retrieval_score": 0.379,
           "reasons": [
             "publication_gap_7_days"
           ]
         },
         {
-          "slug": "2026-09-11-bomb-squad-fbi-respond-to-fort-pierce-home-after-suspected-devices-found",
-          "headline": "Fort Pierce man charged with possessing eight improvised explosive devices",
+          "slug": "2026-09-09-palm-city-dog-trainer-nikki-camerlengos-animal-cruelty-trial-delayed-to-2027",
+          "headline": "Palm City dog trainer Nikki Camerlengo's animal cruelty trial delayed to 2027",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4967,
-          "retrieval_score": 0.4567,
+          "terminal_recall_score": 0.3924,
+          "retrieval_score": 0.3554,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-09-03-port-st-lucie-police-search-for-man-missing-since-monday-morning",
+          "headline": "Port St. Lucie police search for man missing since Monday morning",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3761,
+          "retrieval_score": 0.3571,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-09-11-fellsmere-officials-project-12-million-economic-impact-from-the-point-surf-park",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "The Point Surf Park",
+          "Fellsmere",
+          "$12 million economic impact figure",
+          "Robert Loring, community development director",
+          "same slug/source story reworded"
+        ],
+        "novel_facts": [],
+        "reason": "Both articles report the identical approval of The Point Surf Park in Fellsmere with the same $12M economic impact projection, same quoted official (Robert Loring), and near-identical phrasing sourced from the same wire story, just republished by a different outlet with minor rewording. No new facts, updates, or accountability angle are introduced.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-09-11-fellsmere-officials-project-12-million-economic-impact-from-the-point-surf-park",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "The Point Surf Park",
+          "Fellsmere",
+          "$12 million economic impact figure",
+          "Robert Loring, community development director",
+          "same slug/source story reworded"
+        ],
+        "novel_facts": [],
+        "reason": "Both articles report the identical approval of The Point Surf Park in Fellsmere with the same $12M economic impact projection, same quoted official (Robert Loring), and near-identical phrasing sourced from the same wire story, just republished by a different outlet with minor rewording. No new facts, updates, or accountability angle are introduced.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-9-11-hijack-plane-pentagon-flight-memorial/73692653",
+      "incoming_story_id": "story_009650",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-9-11-hijack-plane-pentagon-flight-memorial/73692653",
+      "incoming_story_id": "story_009650",
+      "candidates": [
+        {
+          "slug": "2026-09-11-fort-pierce-native-ceecee-lyles-honored-at-flight-93-memorial-on-25th-anniversar",
+          "headline": "Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6643,
+          "retrieval_score": 0.6243,
           "reasons": [
             "publication_gap_0_days"
           ]
@@ -1466,8 +1694,8 @@
           "slug": "2026-09-11-port-st-lucie-holds-25th-anniversary-911-remembrance-ceremony-friday-morning",
           "headline": "Port St. Lucie holds 25th anniversary 9/11 remembrance ceremony Friday morning",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4593,
-          "retrieval_score": 0.4193,
+          "terminal_recall_score": 0.5332,
+          "retrieval_score": 0.4932,
           "reasons": [
             "publication_gap_0_days"
           ]
@@ -1476,41 +1704,100 @@
           "slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
           "headline": "Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4446,
-          "retrieval_score": 0.4076,
+          "terminal_recall_score": 0.5278,
+          "retrieval_score": 0.4908,
           "reasons": [
             "publication_gap_3_days"
           ]
         },
         {
-          "slug": "2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac",
-          "headline": "Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations",
+          "slug": "2026-09-11-bomb-squad-fbi-respond-to-fort-pierce-home-after-suspected-devices-found",
+          "headline": "Fort Pierce man charged with possessing eight improvised explosive devices",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4374,
-          "retrieval_score": 0.4064,
+          "terminal_recall_score": 0.5031,
+          "retrieval_score": 0.4631,
           "reasons": [
-            "publication_gap_3_days"
+            "publication_gap_0_days"
           ]
         },
         {
-          "slug": "2026-09-09-k-9-tobi-alerts-deputies-to-heroin-marijuana-in-indian-river-county-traffic-stop",
-          "headline": "K-9 Tobi alerts deputies to heroin, marijuana in Indian River County traffic stop",
+          "slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+          "headline": "Fort Pierce man's shooting of charging dog confirmed justified after investigation",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4367,
-          "retrieval_score": 0.4027,
+          "terminal_recall_score": 0.4828,
+          "retrieval_score": 0.4548,
           "reasons": [
-            "publication_gap_2_days"
+            "publication_gap_5_days"
           ]
         },
         {
           "slug": "2026-09-01-indian-river-county-sheriffs-office-to-host-911-memorial-ceremony-at-fairgrounds",
           "headline": "Indian River County Sheriff's Office to host 9/11 memorial ceremony at fairgrounds",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.425,
-          "retrieval_score": 0.415,
+          "terminal_recall_score": 0.4823,
+          "retrieval_score": 0.4723,
           "reasons": [
-            "publication_gap_10_days",
-            "structured_identity_conflict"
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
+          "headline": "Fort Pierce Central High cleared after bomb threat as sheriff warns hoax calls bring charges, real costs",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4694,
+          "retrieval_score": 0.4504,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-09-02-fort-pierce-felon-arrested-with-33-pounds-of-marijuana-150k-cash-and-guns-in-dru",
+          "headline": "Fort Pierce felon arrested with 33 pounds of marijuana, $150K cash and guns in drug bust",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4663,
+          "retrieval_score": 0.4533,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-09-11-bomb-threat-forces-evacuation-at-indian-river-state-college-in-fort-pierce",
+          "headline": "Bomb threat forces evacuation at Indian River State College in Fort Pierce",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4592,
+          "retrieval_score": 0.4192,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-09-04-fort-pierce-opens-public-survey-through-oct-15-to-help-shape-strategic-plan-thro",
+          "headline": "Fort Pierce opens public survey through Oct. 15 to help shape strategic plan through 2041",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4582,
+          "retrieval_score": 0.4392,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-09-08-fort-pierce-carefree-boat-club-location-goes-dark-leaving-members-unable-to-reac",
+          "headline": "Fort Pierce Carefree Boat Club location goes dark, leaving members unable to reach staff or make reservations",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4486,
+          "retrieval_score": 0.4176,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-09-04-man-killed-in-fort-pierce-shooting-as-three-masked-suspects-remain-at-large",
+          "headline": "Verbal altercation preceded fatal Fort Pierce shooting as police search for three masked suspects",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4445,
+          "retrieval_score": 0.4225,
+          "reasons": [
+            "publication_gap_7_days"
           ]
         }
       ],
@@ -1522,17 +1809,19 @@
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.9,
+        "confidence": 0.72,
         "shared_anchors": [
-          "9/11 25th anniversary theme"
+          "CeeCee Ross Lyles",
+          "Fort Pierce",
+          "9/11 anniversary"
         ],
         "novel_facts": [
-          "CeeCee Ross Lyles specific profile",
-          "Flight 93 Shanksville memorial ceremony",
-          "family scholarship program",
-          "husband's answering machine message"
+          "Local Fort Pierce ceremony at Veterans Memorial Park",
+          "Wreath-laying at local park, not Shanksville",
+          "Quotes from Jerome Sangalli, Dennis McWilliams, Commissioner Chris Dzadovsky",
+          "Fort Pierce community gathering distinct from family's trip to Pennsylvania memorial"
         ],
-        "reason": "No candidate concerns CeeCee Lyles or the Flight 93 Shanksville memorial specifically; the only topically adjacent candidates are separate local 9/11 ceremonies in Port St. Lucie and Indian River County, which are distinct events with different locations and participants. This is a new, independent story about a named 9/11 victim's family at a different memorial site.",
+        "reason": "The closest candidate describes the Lyles family traveling to Shanksville, Pennsylvania for the Flight 93 Memorial ceremony, while this incoming article describes a separate local Fort Pierce community ceremony at Veterans Memorial Park with different participants (union rep, local family, city commissioner). These are distinct real-world events (different location, different attendees, different ceremony) despite both honoring the same person on the same anniversary, so no candidate qualifies as the same event.",
         "validation_errors": [],
         "consistency_repairs": []
       },
@@ -1545,17 +1834,19 @@
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.9,
+        "confidence": 0.72,
         "shared_anchors": [
-          "9/11 25th anniversary theme"
+          "CeeCee Ross Lyles",
+          "Fort Pierce",
+          "9/11 anniversary"
         ],
         "novel_facts": [
-          "CeeCee Ross Lyles specific profile",
-          "Flight 93 Shanksville memorial ceremony",
-          "family scholarship program",
-          "husband's answering machine message"
+          "Local Fort Pierce ceremony at Veterans Memorial Park",
+          "Wreath-laying at local park, not Shanksville",
+          "Quotes from Jerome Sangalli, Dennis McWilliams, Commissioner Chris Dzadovsky",
+          "Fort Pierce community gathering distinct from family's trip to Pennsylvania memorial"
         ],
-        "reason": "No candidate concerns CeeCee Lyles or the Flight 93 Shanksville memorial specifically; the only topically adjacent candidates are separate local 9/11 ceremonies in Port St. Lucie and Indian River County, which are distinct events with different locations and participants. This is a new, independent story about a named 9/11 victim's family at a different memorial site.",
+        "reason": "The closest candidate describes the Lyles family traveling to Shanksville, Pennsylvania for the Flight 93 Memorial ceremony, while this incoming article describes a separate local Fort Pierce community ceremony at Veterans Memorial Park with different participants (union rep, local family, city commissioner). These are distinct real-world events (different location, different attendees, different ceremony) despite both honoring the same person on the same anniversary, so no candidate qualifies as the same event.",
         "validation_errors": [],
         "consistency_repairs": []
       }
@@ -1565,11 +1856,11 @@
   "material_update_compositions": [],
   "material_updates": [],
   "registry_consolidation": {
-    "status": "no_changes",
-    "directives_considered": 12,
-    "story_records_merged": 0,
-    "aliases_written": 0,
-    "already_consolidated": 1,
+    "status": "consolidated",
+    "directives_considered": 11,
+    "story_records_merged": 1,
+    "aliases_written": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_010810",
@@ -1650,7 +1941,7 @@
       },
       {
         "source_story_id": "story_008278",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High cleared after bomb threat prompts evacuation, sheriff warns of false alarm costs",
         "confidence": 0.98,
@@ -1675,7 +1966,7 @@
       },
       {
         "source_story_id": "story_008842",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High School given all-clear after bomb threat evacuation",
         "confidence": 0.95,
@@ -1697,7 +1988,7 @@
       },
       {
         "source_story_id": "story_008709",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High School given all-clear after bomb threat evacuation, modified dismissal underway",
         "confidence": 0.95,
@@ -1718,7 +2009,7 @@
       },
       {
         "source_story_id": "story_008549",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High evacuated after bomb threat; Sheriff Del Toro gives all-clear following search",
         "confidence": 0.95,
@@ -1742,7 +2033,7 @@
       },
       {
         "source_story_id": "story_008143",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Bomb threat forces evacuation at Fort Pierce Central High School; modified dismissal underway",
         "confidence": 0.95,
@@ -1762,7 +2053,7 @@
       },
       {
         "source_story_id": "story_008325",
-        "target_story_id": "story_010980",
+        "target_story_id": "story_011023",
         "target_slug": "2026-09-05-driver-airlifted-after-single-car-rollover-on-i-95-southbound-near-high-meadows",
         "incoming_headline": "Rollover crash on I-95 southbound in Palm City leaves driver with traumatic injuries, requiring airlift",
         "confidence": 0.97,
@@ -1781,7 +2072,7 @@
       },
       {
         "source_story_id": "story_008144",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High School cleared after bomb threat; sheriff warns hoax calls carry real costs and possible charges",
         "confidence": 0.95,
@@ -1911,7 +2202,7 @@
       },
       {
         "source_story_id": "story_008278",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High cleared after bomb threat prompts evacuation, sheriff warns of false alarm costs",
         "confidence": 0.98,
@@ -1934,7 +2225,7 @@
       },
       {
         "source_story_id": "story_008842",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High School given all-clear after bomb threat evacuation",
         "confidence": 0.95,
@@ -1954,7 +2245,7 @@
       },
       {
         "source_story_id": "story_008709",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High School given all-clear after bomb threat evacuation, modified dismissal underway",
         "confidence": 0.95,
@@ -1973,7 +2264,7 @@
       },
       {
         "source_story_id": "story_008549",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High evacuated after bomb threat; Sheriff Del Toro gives all-clear following search",
         "confidence": 0.95,
@@ -1995,7 +2286,7 @@
       },
       {
         "source_story_id": "story_008143",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Bomb threat forces evacuation at Fort Pierce Central High School; modified dismissal underway",
         "confidence": 0.95,
@@ -2013,7 +2304,7 @@
       },
       {
         "source_story_id": "story_008325",
-        "target_story_id": "story_010980",
+        "target_story_id": "story_011023",
         "target_slug": "2026-09-05-driver-airlifted-after-single-car-rollover-on-i-95-southbound-near-high-meadows",
         "incoming_headline": "Rollover crash on I-95 southbound in Palm City leaves driver with traumatic injuries, requiring airlift",
         "confidence": 0.97,
@@ -2030,7 +2321,7 @@
       },
       {
         "source_story_id": "story_008144",
-        "target_story_id": "story_010976",
+        "target_story_id": "story_011019",
         "target_slug": "2026-09-04-fort-pierce-central-high-evacuated-after-bomb-threat-deputies-give-all-clear",
         "incoming_headline": "Fort Pierce Central High School cleared after bomb threat; sheriff warns hoax calls carry real costs and possible charges",
         "confidence": 0.95,
@@ -2083,6 +2374,36 @@
       }
     ],
     "rejected_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_010810",
+        "target_story_id": "story_011073",
+        "target_slug": "2026-09-11-bomb-squad-fbi-respond-to-fort-pierce-home-after-suspected-devices-found",
+        "incoming_headline": "Fort Pierce man arrested after deputies find 8 suspected explosive devices at home",
+        "confidence": 0.98,
+        "shared_anchors": [
+          "Keith Anthony Morrone, 57, arrested",
+          "Fort Pierce home near Balsam Drive",
+          "Thursday, September 11, 2026",
+          "St. Lucie County Sheriff's Office",
+          "Eight suspected explosive devices found",
+          "Risk protection order being served",
+          "Eight counts of possessing/making destructive devices",
+          "$20,000 bond at St. Lucie County Jail"
+        ],
+        "reason": "Both articles report the exact same arrest of Keith Anthony Morrone on Thursday at his Fort Pierce home near Balsam Drive for eight counts involving explosive devices found while serving a risk protection order. The incoming article adds procedural details (timing, unit names, Sheriff quotes, FBI/ATF involvement) and context, but no material developments that change what readers need to know. The arrest, charges, bond amount, and core facts are identical. These are supplementary details that should update the existing canonical rather than create a new story.",
+        "relationship_type": "duplicate",
+        "novel_facts": [
+          "Specific time of 12:20 p.m. Thursday",
+          "Targeted Violence Unit identified",
+          "Seven devices initially removed, eighth found after search warrant",
+          "Eight firearms seized as part of risk protection order",
+          "Sheriff Richard Del Toro quotes about investigation seriousness",
+          "FBI and ATF partnership mentioned"
+        ],
+        "resolved_source_story_id": "story_010810",
+        "resolved_target_story_id": "story_011073"
+      }
+    ]
   }
 }
