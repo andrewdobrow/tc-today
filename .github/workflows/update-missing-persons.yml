@@ -1,0 +1,134 @@
+name: Update Treasure Coast Missing Persons
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '43 10,22 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Share the publication lock with Generate News and Events so generated site
+# artifacts cannot race each other while committing/deploying.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Refresh FDLE missing-person records
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      committed: ${{ steps.push.outputs.committed }}
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ingestion dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests beautifulsoup4
+
+      - name: Refresh and render missing-person directory
+        run: python -u scripts/update_missing_persons.py
+
+      - name: Validate missing-person artifacts
+        run: python scripts/update_missing_persons.py --validate-only
+
+      - name: Remove transient Python artifacts
+        run: |
+          find . -type d -name '__pycache__' -prune -exec rm -rf {} +
+          find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+
+      - name: Commit changed missing-person data
+        id: push
+        run: |
+          git config user.name "TCT Missing Persons Bot"
+          git config user.email "bot@treasurecoast.today"
+
+          for attempt in 1 2 3; do
+            mkdir -p missing-persons images/missing-persons
+            git add missing-persons.html sitemap.xml data/missing-persons.json data/missing-persons-source-status.json
+            git add -A missing-persons/ images/missing-persons/
+            if git diff --staged --quiet; then
+              echo "No missing-person changes to publish."
+              echo "committed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            git commit -m "Missing persons: refresh $(date -u '+%b %d %Y %H:%M UTC')"
+            if git push origin HEAD:main; then
+              echo "committed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Missing-person publish could not catch up with main after 3 attempts." >&2
+              exit 1
+            fi
+
+            echo "main advanced during missing-person refresh; rebuilding on latest main (attempt $((attempt + 1))/3)."
+            git fetch origin main
+            git reset --hard origin/main
+            python -u scripts/update_missing_persons.py
+            python scripts/update_missing_persons.py --validate-only
+          done
+
+  deploy:
+    needs: update
+    if: needs.update.outputs.committed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.d1.outputs.page_url || steps.d2.outputs.page_url || steps.d3.outputs.page_url }}
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy attempt 1
+        id: d1
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before retry 1
+        if: steps.d1.outcome == 'failure'
+        run: sleep 45
+
+      - name: Deploy attempt 2
+        id: d2
+        if: steps.d1.outcome == 'failure'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before retry 2
+        if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
+        run: sleep 90
+
+      - name: Deploy attempt 3
+        id: d3
+        if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
+        uses: actions/deploy-pages@v4
