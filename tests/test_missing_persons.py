@@ -73,30 +73,68 @@ def test_flyer_parser_preserves_multiple_official_images_and_case_notes():
 def test_county_scrape_follows_pagination_and_requires_complete_count(monkeypatch):
     m = _load_module()
     page1 = f"""
-    <html><body><p>Displaying 1 to 1 of 2 record(s).</p>
-    <a href=\"results.asp?ID=abc&Page=2&Pclick=1&cou=Martin\">2</a>
+    <html><body><p>You Searched For: County: 'Martin'</p><p>Displaying 1 to 1 of 2 record(s).</p>
+    <a href="results.asp?ID=abc&Page=2&Pclick=1&cou=43&cat=99">2</a>
     <table>{_result_row('Parsons, Andrea','7/11/1993','Port Salerno','4099','30980')}</table></body></html>
     """
     page2 = f"""
-    <html><body><p>Displaying 2 to 2 of 2 record(s).</p>
+    <html><body><p>You Searched For: County: 'Martin'</p><p>Displaying 2 to 2 of 2 record(s).</p>
     <table>{_result_row('Doe, Jane','9/1/2026','Stuart','5000','50000')}</table></body></html>
     """
 
-    def fake_fetch(_session, url, binary=False):
-        return page2 if "Page=2" in url else page1
-
-    monkeypatch.setattr(m, "_fetch", fake_fetch)
+    monkeypatch.setattr(
+        m,
+        "_start_county_search",
+        lambda _session, county: (
+            page1,
+            "https://www.fdle.state.fl.us/MCICSearch/Results.asp",
+            {"category_text": "All Categories"},
+        ),
+    )
+    monkeypatch.setattr(m, "_fetch", lambda _session, url, binary=False: page2)
     monkeypatch.setattr(m, "_enrich_record", lambda _session, record: record)
     people, status = m.scrape_county(object(), "Martin")
     assert len(people) == 2
     assert status["expected_records"] == 2
-    assert status["pages"] >= 2
+    assert status["pages"] == 2
+    assert status["search_mode"] == "fdle_form"
+    assert status["category"] == "All Categories"
 
-    no_pagination = page1.replace('<a href="results.asp?ID=abc&Page=2&Pclick=1&cou=Martin">2</a>', "")
-    monkeypatch.setattr(m, "_fetch", lambda _session, url, binary=False: no_pagination)
+    no_pagination = page1.replace('<a href="results.asp?ID=abc&Page=2&Pclick=1&cou=43&cat=99">2</a>', "")
+    monkeypatch.setattr(
+        m,
+        "_start_county_search",
+        lambda _session, county: (
+            no_pagination,
+            "https://www.fdle.state.fl.us/MCICSearch/Results.asp",
+            {"category_text": "All Categories"},
+        ),
+    )
     with pytest.raises(RuntimeError, match="incomplete FDLE result set"):
         m.scrape_county(object(), "Martin")
 
+
+
+def test_county_scrape_rejects_under_scoped_category_even_when_count_matches(monkeypatch):
+    m = _load_module()
+    page = f"""
+    <html><body>
+    <p>You Searched For: Category: 'Missing Person' County: 'Martin'</p>
+    <p>Displaying 1 to 1 of 1 record(s).</p>
+    <table>{_result_row('Parsons, Andrea','7/11/1993','Port Salerno','4099','30980')}</table>
+    </body></html>
+    """
+    monkeypatch.setattr(
+        m,
+        "_start_county_search",
+        lambda _session, county: (
+            page,
+            "https://www.fdle.state.fl.us/MCICSearch/Results.asp",
+            {"category_text": "All Categories"},
+        ),
+    )
+    with pytest.raises(RuntimeError, match="under-scoped category"):
+        m.scrape_county(object(), "Martin")
 
 def _configure_tmp_root(m, monkeypatch, tmp_path: Path):
     monkeypatch.setattr(m, "ROOT", tmp_path)
@@ -213,17 +251,51 @@ def test_directory_kicker_identifies_the_live_source_instead_of_generic_public_s
     assert "Public service directory" not in source
 
 
-def test_county_query_is_self_contained_and_does_not_rely_on_server_search_state():
+def test_county_search_is_driven_by_live_fdle_form_and_forces_all_categories():
     m = _load_module()
-    entries = m._county_entry_urls("St. Lucie")
-    assert len(entries) == 2
-    url = m._county_results_url("St. Lucie")
-    assert "From=QR" in url
-    assert "Rvw=Original" in url
-    assert "cou=St.+Lucie" in url
-    assert "cat=" in url and "cit=" in url and "fn=" in url and "ln=" in url
-    page2 = m._county_results_url("St. Lucie", 2)
-    assert "Page=2" in page2 and "Pclick=1" in page2
+    search_html = """
+    <html><body>
+      <form action="Results.asp" method="post">
+        <input type="hidden" name="From" value="QR">
+        <select name="cat">
+          <option value="0">Select</option>
+          <option value="99">All Categories</option>
+          <option value="4">Missing Person</option>
+        </select>
+        <select name="cou">
+          <option value="0">Select</option>
+          <option value="43">Martin</option>
+          <option value="56">St. Lucie</option>
+          <option value="31">Indian River</option>
+        </select>
+        <input type="radio" name="Rvw" value="Original" checked>
+        <input type="text" name="fn" value="">
+        <input type="image" name="Search" src="search.gif">
+      </form>
+    </body></html>
+    """
+    spec = m._search_form_submission(search_html, m.SOURCE_HOME, "St. Lucie")
+    assert spec["method"] == "POST"
+    assert spec["action"].endswith("/mcicsearch/Results.asp")
+    assert spec["county_field"] == "cou"
+    assert spec["county_value"] == "56"
+    assert spec["category_field"] == "cat"
+    assert spec["category_value"] == "99"
+    assert spec["category_text"] == "All Categories"
+    assert spec["data"]["cou"] == "56"
+    assert spec["data"]["cat"] == "99"
+    assert spec["data"]["Rvw"] == "Original"
+    assert spec["data"]["Search.x"] == "1"
+    assert spec["data"]["Search.y"] == "1"
+
+
+def test_pagination_accepts_fdle_internal_county_option_codes():
+    m = _load_module()
+    html = '<a href="Results.asp?Page=2&Pclick=1&cou=56&cat=99">2</a>'
+    urls = m._pagination_urls(html, "https://www.fdle.state.fl.us/MCICSearch/Results.asp", "St. Lucie")
+    assert len(urls) == 1
+    assert "cou=56" in urls[0]
+    assert "cat=99" in urls[0]
 
 
 def test_result_parser_anchors_each_fdle_thumbnail_to_its_own_record_row():

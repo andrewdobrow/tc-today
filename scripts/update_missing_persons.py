@@ -21,7 +21,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
-from urllib.parse import parse_qs, quote_plus, urlencode, urljoin, urlparse, urlunparse
+from urllib.parse import parse_qs, urljoin, urlparse, urlunparse
 import xml.etree.ElementTree as ET
 
 import requests
@@ -34,7 +34,6 @@ from scripts import build_audience_features as audience
 
 SITE_URL = "https://treasurecoast.today"
 SOURCE_HOME = "https://www.fdle.state.fl.us/mcicsearch/Search.asp"
-RESULTS_BASE_URL = "https://www.fdle.state.fl.us/MCICSearch/Results.asp"
 FDLE_PHONE = "1-888-356-4774"
 COUNTIES = ("Martin", "St. Lucie", "Indian River")
 COUNTY_SLUG = {"Martin": "martin", "St. Lucie": "st-lucie", "Indian River": "indian-river"}
@@ -94,19 +93,163 @@ def _session() -> requests.Session:
     return session
 
 
-def _fetch(session: requests.Session, url: str, *, binary: bool = False):
+def _request_response(
+    session: requests.Session,
+    method: str,
+    url: str,
+    *,
+    data: dict[str, str] | None = None,
+):
+    """Issue one browser-like FDLE request and preserve the resulting URL.
+
+    MEPIC is a classic ASP application whose search form may use option values
+    that are not the human-readable county/category labels.  Callers therefore
+    need the actual response URL/cookies produced by the form submission rather
+    than a guessed Results.asp query string.
+    """
     last_error = None
+    method = (method or "GET").upper()
     for attempt in range(3):
         try:
-            response = session.get(url, timeout=25)
+            kwargs = {"timeout": 25, "allow_redirects": True}
+            if method == "POST":
+                kwargs["data"] = data or {}
+            else:
+                kwargs["params"] = data or {}
+            response = session.request(method, url, **kwargs)
             response.raise_for_status()
             time.sleep(REQUEST_DELAY_SECONDS)
-            return response.content if binary else response.text
+            return response
         except Exception as exc:
             last_error = exc
             if attempt < 2:
                 time.sleep(1.0 + attempt)
     raise RuntimeError(f"FDLE request failed for {url}: {last_error}")
+
+
+def _fetch(session: requests.Session, url: str, *, binary: bool = False):
+    # Keep this small GET helper for flyers/images and for tests that stub it.
+    response = _request_response(session, "GET", url)
+    return response.content if binary else response.text
+
+
+def _option_text(option) -> str:
+    return _clean(option.get_text(" ", strip=True))
+
+
+def _select_option_value(select, wanted_text: str) -> str | None:
+    wanted = _normalized_county(wanted_text)
+    for option in select.find_all("option"):
+        text = _option_text(option)
+        if _normalized_county(text) == wanted:
+            return str(option.get("value", text))
+    return None
+
+
+def _all_categories_option(select) -> tuple[str, str] | None:
+    for option in select.find_all("option"):
+        text = _option_text(option)
+        normalized = re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+        if normalized in {"all categories", "all category", "all"}:
+            return str(option.get("value", text)), text
+    return None
+
+
+def _form_defaults(form) -> dict[str, str]:
+    """Collect the defaults a normal browser would send with the search form."""
+    data: dict[str, str] = {}
+    for control in form.find_all(["input", "select", "textarea"]):
+        name = _clean(control.get("name", ""))
+        if not name:
+            continue
+        tag = control.name.lower()
+        if tag == "select":
+            options = control.find_all("option")
+            selected = next((opt for opt in options if opt.has_attr("selected")), options[0] if options else None)
+            if selected is not None:
+                data[name] = str(selected.get("value", _option_text(selected)))
+            continue
+        if tag == "textarea":
+            data[name] = control.get_text() or ""
+            continue
+        control_type = _clean(control.get("type", "text")).lower()
+        if control_type in {"checkbox", "radio"}:
+            if control.has_attr("checked"):
+                data[name] = str(control.get("value", "on"))
+            continue
+        if control_type in {"submit", "button", "reset", "file"}:
+            continue
+        if control_type == "image":
+            # Browsers submit image-button coordinates.  Some older ASP forms
+            # use their presence to distinguish an actual search submission.
+            data[f"{name}.x"] = "1"
+            data[f"{name}.y"] = "1"
+            continue
+        data[name] = str(control.get("value", ""))
+    return data
+
+
+def _search_form_submission(html: str, page_url: str, county: str) -> dict:
+    """Build the exact county + All Categories request from FDLE's live form."""
+    soup = BeautifulSoup(html, "html.parser")
+    candidate_forms = soup.find_all("form")
+    for form in candidate_forms:
+        selects = [sel for sel in form.find_all("select") if _clean(sel.get("name", ""))]
+        county_select = None
+        county_value = None
+        for select in selects:
+            value = _select_option_value(select, county)
+            if value is not None:
+                county_select = select
+                county_value = value
+                break
+        if county_select is None:
+            continue
+
+        category_select = None
+        category_choice = None
+        for select in selects:
+            choice = _all_categories_option(select)
+            if choice is not None:
+                category_select = select
+                category_choice = choice
+                break
+        if category_select is None or category_choice is None:
+            raise RuntimeError("FDLE search form did not expose an All Categories option")
+
+        data = _form_defaults(form)
+        county_field = _clean(county_select.get("name", ""))
+        category_field = _clean(category_select.get("name", ""))
+        data[county_field] = str(county_value)
+        data[category_field] = str(category_choice[0])
+
+        # If the search button has a named submit value, send it too.  This is
+        # separate from image-button coordinates handled in _form_defaults().
+        submit = form.find(["input", "button"], attrs={"type": re.compile(r"^submit$", re.I)})
+        if submit is not None and _clean(submit.get("name", "")):
+            data[_clean(submit.get("name", ""))] = str(submit.get("value", _clean(submit.get_text(" ", strip=True))))
+
+        method = _clean(form.get("method", "GET")).upper() or "GET"
+        action = urljoin(page_url, _clean(form.get("action", "")) or page_url)
+        return {
+            "method": method,
+            "action": action,
+            "data": data,
+            "county_field": county_field,
+            "county_value": str(county_value),
+            "category_field": category_field,
+            "category_value": str(category_choice[0]),
+            "category_text": category_choice[1],
+        }
+    raise RuntimeError(f"FDLE search form did not expose county option for {county}")
+
+
+def _start_county_search(session: requests.Session, county: str) -> tuple[str, str, dict]:
+    """Open FDLE's public search page and submit it exactly as a browser would."""
+    search_response = _request_response(session, "GET", SOURCE_HOME)
+    spec = _search_form_submission(search_response.text, search_response.url or SOURCE_HOME, county)
+    result_response = _request_response(session, spec["method"], spec["action"], data=spec["data"])
+    return result_response.text, result_response.url or spec["action"], spec
 
 
 def _normalize_name(raw: str) -> str:
@@ -148,44 +291,22 @@ def _normalized_county(value: str) -> str:
 
 
 def _result_county(text: str) -> str:
-    match = re.search(r"You\s+Searched\s+For:\s*County:\s*['\"]([^'\"]+)['\"]", text, re.I)
+    match = re.search(
+        r"You\s+Searched\s+For:.{0,600}?\bCounty:\s*['\"]([^'\"]+)['\"]",
+        text,
+        re.I,
+    )
     return _clean(match.group(1)) if match else ""
 
 
-def _county_results_url(county: str, page: int = 1) -> str:
-    # FDLE's own pagination links carry the complete query state.  Supplying
-    # those blank criteria explicitly avoids inheriting an unrelated server-side
-    # search state and makes every county request self-contained.
-    params = {
-        "From": "QR",
-        "Rvw": "Original",
-        "agef": "",
-        "aget": "",
-        "cat": "",
-        "cit": "",
-        "cou": county,
-        "cp": "1",
-        "ep": str(FDLE_PAGE_SIZE),
-        "fn": "",
-        "ln": "",
-        "rce": "",
-        "rgn": "",
-        "sp": "1",
-        "sx": "",
-    }
-    if page > 1:
-        params["Page"] = str(page)
-        params["Pclick"] = "1"
-    return RESULTS_BASE_URL + "?" + urlencode(params)
+def _result_category(text: str) -> str:
+    match = re.search(
+        r"You\s+Searched\s+For:.{0,600}?\bCategory:\s*['\"]([^'\"]+)['\"]",
+        text,
+        re.I,
+    )
+    return _clean(match.group(1)) if match else ""
 
-def _county_entry_urls(county: str) -> list[str]:
-    # Keep both FDLE-supported entry shapes.  The short QR URL is the form used
-    # by FDLE's public indexed results, while the explicit URL clears every
-    # other search field.  Unioning them prevents a transient/session-specific
-    # query state from collapsing a county to an incomplete first-page result.
-    short = f"{RESULTS_BASE_URL}?From=QR&cou={quote_plus(county)}"
-    explicit = _county_results_url(county)
-    return list(dict.fromkeys([short, explicit]))
 
 
 def _extract_flyer_url(node, base_url: str) -> tuple[str, str]:
@@ -310,22 +431,29 @@ def _parse_result_rows(html: str, page_url: str, county: str) -> list[dict]:
 
 
 def _pagination_urls(html: str, page_url: str, county: str) -> list[str]:
+    """Return FDLE-owned Results.asp page links from a verified county result.
+
+    Do not compare the raw ``cou`` query value with the human county name: the
+    live form is allowed to use an internal option code.  Every fetched page is
+    independently checked via its rendered "You Searched For" county text.
+    """
     soup = BeautifulSoup(html, "html.parser")
     urls = []
+    base = urlparse(page_url)
     for link in soup.find_all("a", href=True):
         href = urljoin(page_url, html_lib.unescape(link["href"]))
         parsed = urlparse(href)
+        if parsed.netloc and base.netloc and parsed.netloc.lower() != base.netloc.lower():
+            continue
         if not parsed.path.lower().endswith("/results.asp"):
             continue
         query = parse_qs(parsed.query)
-        qcounty = _clean((query.get("cou") or [""])[0]).lower()
-        if qcounty and qcounty != county.lower():
-            continue
-        if "Page" not in query and "page" not in {k.lower() for k in query}:
+        if "page" not in {k.lower() for k in query}:
             continue
         if href not in urls:
             urls.append(href)
     return urls
+
 
 
 def _candidate_flyers(record_id: str) -> list[str]:
@@ -411,26 +539,37 @@ def _enrich_record(session: requests.Session, record: dict) -> dict:
 
 
 def scrape_county(session: requests.Session, county: str) -> tuple[list[dict], dict]:
-    queue = _county_entry_urls(county)
+    # IMPORTANT: start from the live Search.asp form.  Hard-coding Results.asp
+    # query parameters can produce a syntactically valid but under-scoped FDLE
+    # result set (for example only one category), which previously looked
+    # "complete" because the reported total matched that narrower query.
+    first_html, first_url, search_spec = _start_county_search(session, county)
+    queue: list[tuple[str, str | None]] = [(first_url, first_html)]
     seen_pages: set[str] = set()
-    synthetic_pages_queued: set[int] = set()
     by_key: dict[str, dict] = {}
     expected_total: int | None = None
     page_size = FDLE_PAGE_SIZE
 
     while queue and len(seen_pages) < 60:
-        url = queue.pop(0)
+        url, supplied_html = queue.pop(0)
         if url in seen_pages:
             continue
-        html = _fetch(session, url)
+        html = supplied_html if supplied_html is not None else _fetch(session, url)
         seen_pages.add(url)
         page_text = _clean(BeautifulSoup(html, "html.parser").get_text(" ", strip=True))
 
         reported_county = _result_county(page_text)
         if reported_county and _normalized_county(reported_county) != _normalized_county(county):
-            # Try the alternate self-contained entry URL rather than accepting
-            # or publishing data from a different county.
-            continue
+            raise RuntimeError(
+                f"FDLE returned the wrong county for {county}: {reported_county}"
+            )
+        reported_category = _result_category(page_text)
+        if reported_category:
+            normalized_category = re.sub(r"[^a-z0-9]+", " ", reported_category.lower()).strip()
+            if normalized_category not in {"all", "all category", "all categories"}:
+                raise RuntimeError(
+                    f"FDLE returned an under-scoped category for {county}: {reported_category}"
+                )
 
         window = _result_window(page_text)
         total = _result_total(page_text)
@@ -443,23 +582,8 @@ def scrape_county(session: requests.Session, county: str) -> tuple[list[dict], d
             by_key[record["record_key"]] = record
 
         for next_url in _pagination_urls(html, url, county):
-            # Keep FDLE's own session-bearing pagination URL even when we have
-            # also queued a synthetic fallback for the same page number.
-            if next_url not in seen_pages and next_url not in queue:
-                queue.append(next_url)
-
-        # FDLE currently exposes five records per page.  Do not depend solely on
-        # the visible 1-5 / >> pagination controls: once the source tells us the
-        # verified total, explicitly queue every remaining page.
-        if expected_total is not None and expected_total > 0:
-            total_pages = max(1, math.ceil(expected_total / max(1, page_size)))
-            for page_number in range(2, total_pages + 1):
-                if page_number in synthetic_pages_queued:
-                    continue
-                candidate = _county_results_url(county, page_number)
-                synthetic_pages_queued.add(page_number)
-                if candidate not in seen_pages and candidate not in queue:
-                    queue.append(candidate)
+            if next_url not in seen_pages and all(existing != next_url for existing, _ in queue):
+                queue.append((next_url, None))
 
         if expected_total is not None and len(by_key) >= expected_total:
             break
@@ -480,6 +604,8 @@ def scrape_county(session: requests.Session, county: str) -> tuple[list[dict], d
         "records": len(enriched),
         "pages": len(seen_pages),
         "page_size": page_size,
+        "search_mode": "fdle_form",
+        "category": search_spec.get("category_text") or "All Categories",
     }
 
 
