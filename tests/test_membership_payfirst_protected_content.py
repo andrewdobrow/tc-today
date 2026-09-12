@@ -199,8 +199,8 @@ def test_paywall_markup_uses_editorial_single_offer_and_home_exit():
     assert "Support local, independent journalism" in markup
     assert "Morning Brief" not in markup
     assert "tct-paywall-card" not in markup
-    assert 'class="tct-paywall-exit" href="/"' in markup
-    assert "return to the Treasure Coast Today homepage" in markup
+    assert 'tct-paywall-exit' not in markup
+    assert "return to the Treasure Coast Today homepage" not in markup
     assert "Create account" not in markup
     assert "password" not in markup.lower()
 
@@ -481,6 +481,47 @@ def test_prepare_rehydrates_v154_split_without_leaking_ellipsis(tmp_path, monkey
     assert "truck accidents" in stored
     assert later in stored
 
+
+
+def test_prepare_removes_paywall_exit_even_when_snapshot_is_unavailable(tmp_path, monkeypatch):
+    script_path = ROOT / "scripts/prepare_membership_paywall.py"
+    spec = importlib.util.spec_from_file_location("prepare_membership_no_snapshot_exit_cleanup", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+
+    root = tmp_path / "repo"
+    articles = root / "articles"
+    articles.mkdir(parents=True)
+    slug = "already-protected-story"
+    page = f'''<!doctype html><html><head>
+<link rel="stylesheet" href="/membership.css?v=1.13.7.26">
+</head><body>
+<div class="article-body tct-member-preview"><div class="tct-preview-copy"><p>Public teaser remains public.</p></div></div>
+<div class="tct-member-only"><section class="tct-paywall" data-tct-paywall data-slug="{slug}">
+<div class="tct-paywall-subscriber-strip"><div class="tct-paywall-topline">Already a subscriber?</div>
+<a class="tct-paywall-exit" href="/" aria-label="Close subscription offer and return to the Treasure Coast Today homepage">&times;</a></div>
+</section><div id="tct-protected-content" class="article-body tct-protected-content tct-paywalled-content"></div></div>
+<script type="module" src="/membership.js?v=1.13.7.26"></script></body></html>'''
+    article = articles / f"{slug}.html"
+    article.write_text(page, encoding="utf-8")
+    export = tmp_path / "protected.json"
+
+    monkeypatch.setattr(module, "ROOT", root)
+    monkeypatch.setattr(module, "ARTICLES", articles)
+    monkeypatch.setenv("TCT_MEMBERSHIP_UI_ENABLED", "true")
+    monkeypatch.setenv("TCT_PROTECTED_EXPORT_PATH", str(export))
+    monkeypatch.delenv("TCT_PROTECTED_SNAPSHOT_PATH", raising=False)
+    module.main()
+
+    public = article.read_text(encoding="utf-8")
+    assert "tct-paywall-exit" not in public
+    assert "&times;" not in public
+    assert '/membership.css?v=1.13.7.27' in public
+    assert '/membership.js?v=1.13.7.27' in public
+    assert "Public teaser remains public." in public
+
+
 def test_protected_snapshot_uses_small_adaptive_batches(monkeypatch, tmp_path):
     script_path = ROOT / "scripts/sync_protected_articles.py"
     spec = importlib.util.spec_from_file_location("sync_protected_articles_adaptive_snapshot", script_path)
@@ -557,8 +598,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.26"' in page
-    assert 'src="/membership.js?v=1.13.7.26"' in page
+    assert 'href="/membership.css?v=1.13.7.27"' in page
+    assert 'src="/membership.js?v=1.13.7.27"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -604,8 +645,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.26') == 1
-    assert first.count('/membership.js?v=1.13.7.26') == 1
+    assert first.count('/membership.css?v=1.13.7.27') == 1
+    assert first.count('/membership.js?v=1.13.7.27') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -694,7 +735,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.26"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.27"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():

@@ -91,6 +91,8 @@ def test_newsroom_is_in_desktop_mobile_navigation_and_sitemap():
     sitemap = g.update_sitemap([])
     assert 'href="/newsroom.html"' in desktop
     assert 'href="/newsroom.html"' in mobile
+    assert 'href="/missing-persons.html"' in desktop
+    assert 'href="/missing-persons.html"' in mobile
     assert 'https://treasurecoast.today/newsroom.html' in sitemap
     assert 'aria-current="page"' in desktop
     assert 'aria-current="page"' in mobile

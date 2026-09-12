@@ -257,6 +257,29 @@ def test_sitewide_article_search_builds_index_page_and_masthead_control(tmp_path
     assert 'aria-label="Search Treasure Coast Today"' in chrome
 
 
+
+
+def test_missing_persons_nav_is_repaired_even_when_footer_already_has_link(tmp_path, monkeypatch):
+    monkeypatch.setattr(features, "ROOT", tmp_path)
+    page = tmp_path / "article-like.html"
+    page.write_text('''<!doctype html><html><body>
+<header class="site-masthead">
+<nav id="tct-mobile-nav" class="mobile-nav-panel"><a href="/weather.html" class="mobile-nav-link">Weather</a></nav>
+<nav class="category-nav category-nav--primary"><div class="nav-sections-links"><a href="/weather.html" class="nav-section-link">Weather</a></div></nav>
+</header>
+<footer><div class="footer-links"><a href="/weather.html">Weather</a><a href="/missing-persons.html">Missing Persons</a></div></footer>
+</body></html>''', encoding="utf-8")
+
+    features.inject_site_navigation()
+    rendered = page.read_text(encoding="utf-8")
+    header = rendered.split('</header>', 1)[0]
+    assert header.count('/missing-persons.html') == 2
+    assert rendered.count('/missing-persons.html') == 3
+
+    features.inject_site_navigation()
+    assert page.read_text(encoding="utf-8") == rendered
+
+
 def test_search_chrome_injection_is_idempotent(tmp_path, monkeypatch):
     _setup_root(tmp_path, monkeypatch)
     features.inject_site_navigation()

@@ -1162,22 +1162,39 @@ def inject_site_navigation() -> dict:
             continue
         scanned += 1
         original = text
-        if '/missing-persons.html' not in text:
-            # Public-service directory: keep it in More on both desktop/mobile and
-            # in Quick Links without promoting it to a primary top-level section.
-            text = text.replace(
+        # Public-service directory: keep it in More on both desktop/mobile and
+        # in Quick Links without promoting it to a primary top-level section.
+        # Check each surface independently. A footer/breadcrumb link must not
+        # suppress a missing masthead link on the same page.
+        mobile_match = re.search(r'<nav\s+id=["\']tct-mobile-nav["\'][^>]*>.*?</nav>', text, re.I | re.S)
+        if mobile_match and '/missing-persons.html' not in mobile_match.group(0):
+            mobile = mobile_match.group(0).replace(
                 '<a href="/weather.html" class="mobile-nav-link">Weather</a>',
                 '<a href="/weather.html" class="mobile-nav-link">Weather</a>\n          <a href="/missing-persons.html" class="mobile-nav-link">Missing Persons</a>',
+                1,
             )
-            text = text.replace(
+            text = text[:mobile_match.start()] + mobile + text[mobile_match.end():]
+
+        desktop_match = re.search(
+            r'<nav\s+class=["\'][^"\']*\bcategory-nav\b[^"\']*["\'][^>]*>.*?</nav>',
+            text, re.I | re.S,
+        )
+        if desktop_match and '/missing-persons.html' not in desktop_match.group(0):
+            desktop = desktop_match.group(0).replace(
                 '<a href="/weather.html" class="nav-section-link">Weather</a>',
                 '<a href="/weather.html" class="nav-section-link">Weather</a>\n              <a href="/missing-persons.html" class="nav-section-link">Missing Persons</a>',
+                1,
             )
-            text = text.replace(
+            text = text[:desktop_match.start()] + desktop + text[desktop_match.end():]
+
+        footer_match = re.search(r'<footer\b.*?</footer>', text, re.I | re.S)
+        if footer_match and '/missing-persons.html' not in footer_match.group(0):
+            footer = footer_match.group(0).replace(
                 '<a href="/weather.html">Weather</a>',
                 '<a href="/weather.html">Weather</a>\n          <a href="/missing-persons.html">Missing Persons</a>',
                 1,
             )
+            text = text[:footer_match.start()] + footer + text[footer_match.end():]
 
         if '/news-tip.html' not in text:
             # Mobile More menu: place before Contact.

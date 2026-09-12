@@ -22433,6 +22433,7 @@ def _primary_navigation_html(active="", homepage_filters=False):
         ("sports", CATEGORIES["sports"]["label"], "/?cat=sports"),
         ("things_to_do", CATEGORIES["things_to_do"]["label"], "/?cat=things_to_do"),
         ("weather", "Weather", "/weather.html"),
+        ("missing_persons", "Missing Persons", "/missing-persons.html"),
         ("archive", "Archive", "/archive.html"),
         ("newsroom", "Newsroom", "/newsroom.html"),
     ]
@@ -22510,6 +22511,7 @@ def _mobile_navigation_html(active="", homepage_filters=False):
     more_items = [
         ("events", "Events", "/events.html"),
         ("weather", "Weather", "/weather.html"),
+        ("missing_persons", "Missing Persons", "/missing-persons.html"),
         ("archive", "Archive", "/archive.html"),
         ("newsroom", "Newsroom", "/newsroom.html"),
         ("about", "About", "/about.html"),
@@ -22744,6 +22746,7 @@ def _normalize_primary_navigation_sitewide(output_root):
         "Events": "events",
         "Archive": "archive",
         "Newsroom": "newsroom",
+        "Missing Persons": "missing_persons",
     }
 
     def detect_active(nav, path):
@@ -22754,6 +22757,7 @@ def _normalize_primary_navigation_sitewide(output_root):
                 "weather.html": "weather",
                 "archive.html": "archive",
                 "newsroom.html": "newsroom",
+                "missing-persons.html": "missing_persons",
             }
             if path.name.lower() in by_name:
                 return by_name[path.name.lower()]
@@ -22863,6 +22867,7 @@ def _normalize_primary_navigation_sitewide(output_root):
         florida_pos = final.find('href="/?cat=florida"')
         news_heading = final.find('class="nav-sections-heading">News</span>')
         more_heading = final.find('class="nav-sections-heading">More</span>')
+        missing_persons_pos = final.find('href="/missing-persons.html"')
         masthead_ok = (
             len(final_headers) == 1
             and final_header.count('class="masthead-newsletter"') == 1
@@ -22876,13 +22881,14 @@ def _normalize_primary_navigation_sitewide(output_root):
             and final_header.count('class="mobile-nav-heading">Counties</h2>') == 1
             and final_header.count('class="mobile-nav-heading">Categories</h2>') == 1
             and final_header.count('class="mobile-nav-heading">More</h2>') == 1
+            and final_header.count('href="/missing-persons.html"') == 2
             and 'class="newsroom-strip"' not in normalized
         )
         if (
             min(top_news_pos, *county_positions, events_pos, sections_pos) < 0
             or not (top_news_pos < county_positions[0] < county_positions[1] < county_positions[2] < events_pos < sections_pos)
-            or min(news_heading, florida_pos, more_heading) < 0
-            or not (news_heading < florida_pos < more_heading)
+            or min(news_heading, florida_pos, more_heading, missing_persons_pos) < 0
+            or not (news_heading < florida_pos < more_heading < missing_persons_pos)
             or final.count('>Top News</a>') != 1
             or final.count('<details class="nav-sections">') != 1
             or not masthead_ok

@@ -128,7 +128,6 @@ def paywall_section_html(slug: str) -> str:
     return f'''<section class="tct-paywall" data-tct-paywall data-slug="{escaped_slug}" aria-label="Treasure Coast Today membership">
   <div class="tct-paywall-subscriber-strip">
     <div class="tct-paywall-topline">Already a subscriber? <button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
-    <a class="tct-paywall-exit" href="/" aria-label="Close subscription offer and return to the Treasure Coast Today homepage">&times;</a>
   </div>
   <div class="tct-paywall-offer-panel">
     <div class="tct-paywall-meter-status hidden" data-meter-status></div>
@@ -195,7 +194,7 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.7.26"
+MEMBERSHIP_ASSET_VERSION = "1.13.7.27"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'

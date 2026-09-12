@@ -50,6 +50,10 @@ PAYWALL_NEWSLETTER_SLOT_RE = re.compile(
     r'\s*<aside\b(?=[^>]*data-tct-paywall-newsletter)[^>]*>.*?</aside>',
     re.I | re.S,
 )
+PAYWALL_EXIT_RE = re.compile(
+    r'\s*<a\b(?=[^>]*class=["\'][^"\']*\btct-paywall-exit\b[^"\']*["\'])[^>]*>.*?</a>',
+    re.I | re.S,
+)
 CURRENT_PREVIEW_P_RE = re.compile(
     r'<p([^>]*)data-tct-preview-paragraph="true"([^>]*)>(.*?)</p>', re.I | re.S
 )
@@ -158,6 +162,13 @@ def main() -> None:
             elif snapshot_expected:
                 raise RuntimeError(f"Protected store is missing existing paywalled article: {slug}")
             else:
+                # A temporary protected-store snapshot outage must not keep stale
+                # presentation chrome. Removing the obsolete home/close X and
+                # refreshing public membership assets cannot expose protected text.
+                cleaned = PAYWALL_EXIT_RE.sub("", text)
+                cleaned = inject_membership_assets(cleaned, slug)
+                if cleaned != original_text:
+                    path.write_text(cleaned, encoding="utf-8")
                 already += 1
                 continue
 

@@ -91,7 +91,7 @@ def test_article_paywall_uses_editorial_single_offer_presentation():
     assert markup.count('data-plan="monthly"') == 1
     assert markup.count('data-plan="annual"') == 1
     assert "tct-paywall-card" not in markup
-    assert 'class="tct-paywall-exit" href="/"' in markup
+    assert 'tct-paywall-exit' not in markup
     release_css = css.split("TCT v1.13.7.25 — editorial single-offer article paywall",1)[1]
     assert "linear-gradient(145deg, #fffaf8 0%, #fdeee9 54%, #f9ddd4 100%)" in release_css
     assert 'font-family: "Fraunces", Georgia, "Times New Roman", serif' in release_css

@@ -802,6 +802,8 @@ def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent
     desktop_nav = rendered[desktop_nav_start:desktop_nav_end]
     assert desktop_nav.index('class="nav-sections-heading">News</span>') < desktop_nav.index('href="/?cat=florida"')
     assert desktop_nav.index('href="/?cat=florida"') < desktop_nav.index('class="nav-sections-heading">More</span>')
+    assert 'href="/missing-persons.html" class="nav-section-link"' in desktop_nav
+    assert rendered.count('href="/missing-persons.html"') == 2
     assert 'href="/style.css?v=1.13.7.5t"' in rendered
     assert 'class="masthead-newsletter"' in rendered
     assert 'https://treasure-coast-today.kit.com/cb848255f8' in rendered
