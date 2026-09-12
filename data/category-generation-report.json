@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-12T10:51:03Z",
+  "generated_at": "2026-09-12T15:51:54Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,25 +15,24 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 2,
       "category_eligibility_archive_recovery": 6,
-      "generated_live": 1
+      "generated_live": 3
     },
     "failures": {
       "no_category_eligible_sources": 6
     },
-    "model_attempt_count": 1,
-    "model_elapsed_seconds": 38.874,
+    "model_attempt_count": 3,
+    "model_elapsed_seconds": 81.135,
     "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 40,
-    "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 10,
+    "published_story_duplicate_suppression_count": 36,
+    "story_aware_update_context_count": 1,
+    "material_update_promotion_evaluation_count": 11,
     "material_update_promotion_count": 1,
-    "material_update_promotion_cache_hit_count": 7,
+    "material_update_promotion_cache_hit_count": 8,
     "material_update_promotion_model_call_count": 3
   },
   "categories": [
@@ -41,8 +40,8 @@
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 25,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 26,
       "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -106,7 +105,7 @@
             "crime_incident:suspect"
           ],
           "local_nexus_signals": [],
-          "headline": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
+          "headline": "Martin County Sheriff believes Thursday's school bomb threat originated out of Russia - WPEC",
           "source_url": "https://cbs12.com/news/local/bomb-threat-at-martin-county-high-school-prompts-evacuation-campus-search-martin-county-school-district-law-enforcement-martin-county-sheriffs-office-florida-news"
         }
       ],
@@ -145,10 +144,10 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
@@ -158,12 +157,31 @@
           "canonical_headline": "Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Veterans Memorial Park in Fort Pierce",
+            "9/11 remembrance ceremony",
+            "Dennis McWilliams who lost four family members",
+            "CeeCee Ross Lyles, Fort Pierce native flight attendant on United Flight 93",
+            "wreath-laying ceremony",
+            "Jerome Sangalli, United Airlines purser",
+            "same source URL (https://www.wpbf.com/article/florida-9-11-hijack-plane-pentagon-flight-memorial/73692653)",
+            "exact same quotes from McWilliams and Lyles' final phone call"
+          ],
+          "novel_facts": [
+            "Incoming article published day after (2026-09-12 vs 2026-09-11)",
+            "Additional quote from Commissioner Chris Dzadovsky about unity"
+          ],
+          "reason": "This is the exact same event - the same 9/11 remembrance ceremony at Veterans Memorial Park in Fort Pierce. The incoming article shares the identical source URL, same participants (Dennis McWilliams, CeeCee Ross Lyles tribute, Jerome Sangalli), same quotes, and same ceremony details. The only difference is the incoming article was published one day later (Sept 12 vs Sept 11) and includes one additional quote from Commissioner Dzadovsky about unity, which is routine ceremonial color commentary, not a material update. No arrests, new findings, policy changes, or other developments warrant a new URL.",
+          "validation_errors": []
         },
         {
           "category_key": "local_gov",
@@ -232,16 +250,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 34.232
+      "elapsed_seconds": 33.978
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 13,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 10,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -249,11 +267,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 38.874,
+          "elapsed_seconds": 19.483,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 38.874,
+      "model_elapsed_seconds": 19.483,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -264,10 +282,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -302,11 +320,21 @@
         {
           "category_key": "crime",
           "source_headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
-          "source_url": "https://cbs12.com/news/crime/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
+          "source_url": "https://cbs12.com/news/instagram/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
           "editorial_story_id": "story_010471",
           "canonical_slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
           "canonical_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Fort Pierce police investigating death of unidentified man found near business - wflx.com",
+          "source_url": "https://www.wflx.com/2026/09/10/fort-pierce-police-investigating-death-unidentified-man-found-near-business?outputType=amp",
+          "editorial_story_id": "story_010521",
+          "canonical_slug": "2026-09-10-fort-pierce-police-investigate-death-of-unidentified-man-found-near-okeechobee-r",
+          "canonical_headline": "Fort Pierce police investigate death of unidentified man found near Okeechobee Road business",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -388,11 +416,11 @@
         {
           "category_key": "crime",
           "source_headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
-          "source_url": "https://cbs12.com/news/crime/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
+          "source_url": "https://cbs12.com/news/instagram/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
           "canonical_slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
           "canonical_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -403,26 +431,40 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 1.0,
           "shared_anchors": [
-            "Two men arrested in Indian River County over Labor Day weekend for saw palmetto berry harvesting",
-            "Corey Michael Smith of Vero Beach arrested Sept. 4",
-            "BP gas station on 9th Street Southwest",
-            "Trespassing call and helicopter crew involvement",
-            "Indian River County School Board property near 800 20th Ave",
-            "Francis Ostrowski arrested a day later",
-            "Same source URL: cbs12.com article",
-            "Identical lead paragraph"
+            "Two men arrested in Indian River County over Labor Day weekend",
+            "Corey Michael Smith arrested Sept. 4 at BP gas station on 9th Street Southwest",
+            "Francis Ostrowski arrested Sept. 5 in North County Conservation Area",
+            "Both cases involve illegal saw palmetto berry harvesting",
+            "Same arrest affidavits referenced",
+            "Identical source URL",
+            "Same publication date"
           ],
           "novel_facts": [],
-          "reason": "The incoming article is identical to the existing canonical. They share the exact same source URL, identical lead paragraph, same two arrestees (Corey Michael Smith and Francis Ostrowski), same Labor Day weekend timeframe, same locations (BP gas station on 9th Street Southwest, School Board property), and same arrest dates (Sept. 4 and day later). The retrieval evidence confirms this is tracked as the same persistent story with an exact source match. No new information has been added.",
+          "reason": "This is an exact duplicate of the canonical candidate. Both articles cover the same two arrests (Corey Michael Smith on Sept. 4 and Francis Ostrowski on Sept. 5) for illegal saw palmetto berry harvesting in Indian River County over Labor Day weekend. The source URL is identical, the publication date is the same, and the content is virtually word-for-word identical. The incoming article contains no new material updates beyond what is already in the canonical version.",
           "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Fort Pierce police investigating death of unidentified man found near business - wflx.com",
+          "source_url": "https://www.wflx.com/2026/09/10/fort-pierce-police-investigating-death-unidentified-man-found-near-business?outputType=amp",
+          "canonical_slug": "2026-09-10-fort-pierce-police-investigate-death-of-unidentified-man-found-near-okeechobee-r",
+          "canonical_headline": "Fort Pierce police investigate death of unidentified man found near Okeechobee Road business",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce man arrested after 8 explosive devices found during court-ordered search",
-      "generated_card_count": 1,
-      "elapsed_seconds": 57.721
+      "live_hero_headline": "Fort Pierce man arrested after 8 explosive devices found at Balsam Drive home",
+      "generated_card_count": 0,
+      "elapsed_seconds": 42.392
     },
     {
       "category_key": "business",
@@ -653,7 +695,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 22.362
+      "elapsed_seconds": 19.962
     },
     {
       "category_key": "sports",
@@ -718,14 +760,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 17.536
+      "elapsed_seconds": 28.571
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -808,14 +850,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.572
+      "elapsed_seconds": 19.167
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -836,58 +878,38 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Florida governor's race turns to ideology, affordability and donor ties",
-          "source_url": "https://www.wptv.com/state/florida-governors-race-turns-to-ideology-afforability-and-donor-ties",
-          "editorial_story_id": "story_010594",
-          "canonical_slug": "2026-09-10-donalds-attacks-jolly-as-socialist-democrats-counter-with-donor-ties-in-florida",
-          "canonical_headline": "Donalds attacks Jolly as socialist, Democrats counter with donor ties in Florida governor's race",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Florida governor's race turns to ideology, affordability and donor ties",
-          "source_url": "https://www.wptv.com/state/florida-governors-race-turns-to-ideology-afforability-and-donor-ties",
-          "canonical_slug": "2026-09-10-donalds-attacks-jolly-as-socialist-democrats-counter-with-donor-ties-in-florida",
-          "canonical_headline": "Donalds attacks Jolly as socialist, Democrats counter with donor ties in Florida governor's race",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.186
+      "elapsed_seconds": 29.533
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "cache_hit",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 3,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 2,
       "selected_source_count": 2,
-      "cache_hit": true,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 34.811,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 34.811,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -898,31 +920,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Stuart city commission votes to rehire former city manager Michael Mortell - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNXy1ZajNSX1c5UTNpelJlblUtSmk5NlcybnYtckdFdkxrSTlzLTEtVjRJS21rS2VoQktQWXRDQjhxWlVWNnRqS3lDLXh3SjlVbmV1NVp6YU1feE1RVXpBSkR0N3hjcHo5YnpxUnF6bWVaeklUSmNmTkxRM09QeDZGY2RmZXVxT2dkY09qTnk5dkpyZWY5cG8tRFlLaTFtME9qQ0dZdDdqSDY3NjEwWEcyaFJ0UFJLYkJzZTZDdXlLYlBSWGM",
-          "editorial_story_id": "story_010703",
-          "canonical_slug": "2026-09-11-stuart-commission-votes-3-2-to-rehire-former-city-manager-at-reduced-salary",
-          "canonical_headline": "Stuart commission votes 3-2 to rehire former city manager at reduced salary",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County leaders urge return to unity felt after 9/11 attacks - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/11/martin-county-leaders-urge-return-unity-felt-after-911-attacks?outputType=amp",
-          "editorial_story_id": "story_010886",
-          "canonical_slug": "2026-09-11-martin-county-marks-911-anniversary-with-palm-city-bridge-walk-calling-for-unity",
-          "canonical_headline": "Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "Martin County leaders urge return to unity felt after 9/11 attacks - WPTV",
@@ -974,43 +976,54 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County leaders urge return to unity felt after 9/11 attacks - wflx.com",
+          "source_url": "https://www.wflx.com/2026/09/11/martin-county-leaders-urge-return-unity-felt-after-911-attacks?outputType=amp",
+          "publisher": "www.wflx.com",
+          "canonical_slug": "2026-09-11-martin-county-marks-911-anniversary-with-palm-city-bridge-walk-calling-for-unity",
+          "canonical_headline": "Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity",
+          "basis": "event-identity-authority:governing_body_plus_policy_subject",
+          "identity_keys": [
+            "story:story_010886",
+            "source:https://www.wflx.com/2026/09/11/martin-county-leaders-urge-return-unity-felt-after-911-attacks?outputType=amp"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['martin-county', 'palm-city']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=[]",
+            "shared_agencies=['martin-county-commission']",
+            "shared_subject_phrases=['lead-urge-return', 'lead-urge-return-unity', 'return-unity-felt', 'return-unity-felt-attack', 'unity-felt-attack', 'urge-return-unity', 'urge-return-unity-felt']",
+            "shared_headline_topic_core=['attack', 'felt', 'lead', 'return', 'unity', 'urge']",
+            "shared_distinctive_token_count=160",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Stuart city commission votes to rehire former city manager Michael Mortell - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNXy1ZajNSX1c5UTNpelJlblUtSmk5NlcybnYtckdFdkxrSTlzLTEtVjRJS21rS2VoQktQWXRDQjhxWlVWNnRqS3lDLXh3SjlVbmV1NVp6YU1feE1RVXpBSkR0N3hjcHo5YnpxUnF6bWVaeklUSmNmTkxRM09QeDZGY2RmZXVxT2dkY09qTnk5dkpyZWY5cG8tRFlLaTFtME9qQ0dZdDdqSDY3NjEwWEcyaFJ0UFJLYkJzZTZDdXlLYlBSWGM",
-          "canonical_slug": "2026-09-11-stuart-commission-votes-3-2-to-rehire-former-city-manager-at-reduced-salary",
-          "canonical_headline": "Stuart commission votes 3-2 to rehire former city manager at reduced salary",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County leaders urge return to unity felt after 9/11 attacks - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/11/martin-county-leaders-urge-return-unity-felt-after-911-attacks?outputType=amp",
-          "canonical_slug": "2026-09-11-martin-county-marks-911-anniversary-with-palm-city-bridge-walk-calling-for-unity",
-          "canonical_headline": "Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "martin",
           "source_headline": "Martin County leaders urge return to unity felt after 9/11 attacks - WPTV",
@@ -1044,17 +1057,16 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "Both are weekend event roundups covering the Treasure Coast and Palm Beach County",
-            "Both mention events in Stuart and Palm City"
+            "Both are weekend event roundups for Treasure Coast and Palm Beach County"
           ],
           "novel_facts": [
-            "Incoming covers September 11, 2026 weekend events",
-            "Specific events: Treasure Coast Skate Jam at Langford Park on Saturday",
-            "Family Fun Day and Touch N Tour at Sebastian City Hall on Saturday",
-            "Morikami Museum koto workshop in Delray Beach on Saturday",
-            "House of Hope Cuban sandwich world record attempt on Saturday",
-            "7th Annual 9/11 Memorial Stair Climb and 5K on Sunday",
-            "Art After Dark performances on Friday"
+            "September 11, 2026 weekend events",
+            "Treasure Coast Skate Jam at Langford Park on Saturday",
+            "Family Fun Day in Sebastian",
+            "Morikami Museum koto workshop",
+            "Cuban sandwich world record attempt in Stuart/Palm City",
+            "9/11 Memorial Stair Climb on Sunday",
+            "Art After Dark on Friday"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1131,22 +1143,32 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Martin County Sheriff links bomb threat at high school to Russia-based swatting scheme",
-      "elapsed_seconds": 27.731
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Martin County leaders call for return to post-9/11 unity at Palm City bridge walk",
+      "generated_card_count": 1,
+      "elapsed_seconds": 67.832
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "cache_hit",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 5,
       "selected_source_count": 5,
-      "cache_hit": true,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 26.841,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 26.841,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1160,18 +1182,8 @@
       "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce family remembers flight attendant CeeCee Lyles on 9/11 anniversary - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-flight-attendant-ceecee-lyles-911-anniversary/73687899",
-          "editorial_story_id": "story_011033",
-          "canonical_slug": "2026-09-11-fort-pierce-native-ceecee-lyles-honored-at-flight-93-memorial-on-25th-anniversar",
-          "canonical_headline": "Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "st_lucie",
           "source_headline": "'They're all angels': Fort Pierce community gathers to honor 9/11 victims - WPBF",
@@ -1179,6 +1191,16 @@
           "editorial_story_id": "story_009650",
           "canonical_slug": "2026-09-11-fort-pierce-honors-911-victims-at-veterans-memorial-park-ceremony",
           "canonical_headline": "Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce family remembers flight attendant CeeCee Lyles on 9/11 anniversary - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-flight-attendant-ceecee-lyles-911-anniversary/73687899",
+          "editorial_story_id": "story_011033",
+          "canonical_slug": "2026-09-11-fort-pierce-native-ceecee-lyles-honored-at-flight-93-memorial-on-25th-anniversar",
+          "canonical_headline": "Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1216,7 +1238,7 @@
           "category_key": "st_lucie",
           "source_headline": "Deputies serving a risk protection order at a Fort Pierce home discovered items 'indicative of destructive devices' - WPBF",
           "source_url": "https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588",
-          "editorial_story_id": "story_011241",
+          "editorial_story_id": "story_011287",
           "canonical_slug": "2026-09-11-bomb-squad-fbi-respond-to-fort-pierce-home-after-suspected-devices-found",
           "canonical_headline": "Fort Pierce man charged with possessing eight improvised explosive devices",
           "basis": "exact_source_and_persistent_story_skip",
@@ -1234,26 +1256,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police investigating death of unidentified man found near business - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigating-death-of-unidentified-man-found-near-business",
-          "editorial_story_id": "story_010521",
-          "canonical_slug": "2026-09-10-fort-pierce-police-investigate-death-of-unidentified-man-found-near-okeechobee-r",
-          "canonical_headline": "Fort Pierce police investigate death of unidentified man found near Okeechobee Road business",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Flood Advisory for Martin, Okeechobee & St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/flood-advisory-for-martin-okeechobee-st-lucie-county",
-          "editorial_story_id": "story_007964",
-          "canonical_slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
-          "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Vehicle fire closes southbound lanes of Florida's Turnpike in St. Lucie County - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/vehicle-fire-closes-southbound-lanes-of-floridas-turnpike-in-st-lucie-county",
           "editorial_story_id": "story_009831",
@@ -1261,50 +1263,65 @@
           "canonical_headline": "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Vehicle fire shuts down Florida Turnpike south near Port St. Lucie Blvd. Exit - WPEC",
+          "source_url": "https://cbs12.com/news/local/vehicle-fire-shuts-down-florida-turnpike-south-near-port-st-lucie-blvd-exit",
+          "editorial_story_id": "story_007964",
+          "canonical_slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
+          "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce family remembers flight attendant CeeCee Lyles on 9/11 anniversary - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-flight-attendant-ceecee-lyles-911-anniversary/73687899",
-          "canonical_slug": "2026-09-11-fort-pierce-native-ceecee-lyles-honored-at-flight-93-memorial-on-25th-anniversar",
-          "canonical_headline": "Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "CeeCee Ross Lyles of Fort Pierce",
-            "United Flight 93",
-            "25th anniversary ceremony at Flight 93 Memorial",
-            "Shanksville, Pennsylvania",
-            "Sept. 11, 2001 hijacking",
-            "identical source URL: wpbf.com/article/florida-fort-pierce-flight-attendant-ceecee-lyles-911-anniversary/73687899"
-          ],
-          "novel_facts": [],
-          "reason": "This is the exact same article from the same source URL (wpbf.com) covering the same memorial event. The incoming article published 2026-09-12 is identical to the canonical published 2026-09-11, just with the full body text versus a truncated version. All details match: CeeCee Lyles' family attending the 25th anniversary ceremony in Shanksville, the statue in Fort Pierce, quotes from her husband and sons Jerome and Javon, the scholarship program. No new developments, arrests, findings, or independently newsworthy follow-up—just the same anniversary remembrance story with more quoted detail. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match'.",
-          "validation_errors": []
-        },
         {
           "category_key": "st_lucie",
           "source_headline": "'They're all angels': Fort Pierce community gathers to honor 9/11 victims - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-9-11-hijack-plane-pentagon-flight-memorial/73692653",
           "canonical_slug": "2026-09-11-fort-pierce-honors-911-victims-at-veterans-memorial-park-ceremony",
           "canonical_headline": "Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Veterans Memorial Park in Fort Pierce",
+            "9/11 remembrance ceremony",
+            "Dennis McWilliams who lost four family members",
+            "CeeCee Ross Lyles, Fort Pierce native flight attendant on United Flight 93",
+            "wreath-laying ceremony",
+            "Jerome Sangalli, United Airlines purser",
+            "same source URL (https://www.wpbf.com/article/florida-9-11-hijack-plane-pentagon-flight-memorial/73692653)",
+            "exact same quotes from McWilliams and Lyles' final phone call"
+          ],
+          "novel_facts": [
+            "Incoming article published day after (2026-09-12 vs 2026-09-11)",
+            "Additional quote from Commissioner Chris Dzadovsky about unity"
+          ],
+          "reason": "This is the exact same event - the same 9/11 remembrance ceremony at Veterans Memorial Park in Fort Pierce. The incoming article shares the identical source URL, same participants (Dennis McWilliams, CeeCee Ross Lyles tribute, Jerome Sangalli), same quotes, and same ceremony details. The only difference is the incoming article was published one day later (Sept 12 vs Sept 11) and includes one additional quote from Commissioner Dzadovsky about unity, which is routine ceremonial color commentary, not a material update. No arrests, new findings, policy changes, or other developments warrant a new URL.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce family remembers flight attendant CeeCee Lyles on 9/11 anniversary - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-flight-attendant-ceecee-lyles-911-anniversary/73687899",
+          "canonical_slug": "2026-09-11-fort-pierce-native-ceecee-lyles-honored-at-flight-93-memorial-on-25th-anniversar",
+          "canonical_headline": "Fort Pierce native CeeCee Lyles honored at Flight 93 Memorial on 25th anniversary of 9/11",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1426,10 +1443,10 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police investigating death of unidentified man found near business - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigating-death-of-unidentified-man-found-near-business",
-          "canonical_slug": "2026-09-10-fort-pierce-police-investigate-death-of-unidentified-man-found-near-okeechobee-r",
-          "canonical_headline": "Fort Pierce police investigate death of unidentified man found near Okeechobee Road business",
+          "source_headline": "Vehicle fire closes southbound lanes of Florida's Turnpike in St. Lucie County - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/vehicle-fire-closes-southbound-lanes-of-floridas-turnpike-in-st-lucie-county",
+          "canonical_slug": "2026-09-09-vehicle-fire-closes-southbound-floridas-turnpike-in-st-lucie-county",
+          "canonical_headline": "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1441,8 +1458,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Flood Advisory for Martin, Okeechobee & St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/flood-advisory-for-martin-okeechobee-st-lucie-county",
+          "source_headline": "Vehicle fire shuts down Florida Turnpike south near Port St. Lucie Blvd. Exit - WPEC",
+          "source_url": "https://cbs12.com/news/local/vehicle-fire-shuts-down-florida-turnpike-south-near-port-st-lucie-blvd-exit",
           "canonical_slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
           "canonical_headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
           "canonical_is_custom": false,
@@ -1458,44 +1475,31 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Flood Advisory issued until 7:45 PM EDT",
-            "Affects West Central Martin County, Southeastern Okeechobee County, St. Lucie County",
-            "1-3 inches of rain already fallen",
-            "Additional 1-2 inches expected",
-            "Minor flooding in low-lying areas expected"
+            "Vehicle fire on Florida Turnpike southbound",
+            "Location: beyond Exit 142 at Port St. Lucie Boulevard, before Mile Marker 141",
+            "All southbound lanes closed in St. Lucie County",
+            "Fire reported and closure updated at 5:30 p.m. on September 8, 2026"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Vehicle fire closes southbound lanes of Florida's Turnpike in St. Lucie County - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/vehicle-fire-closes-southbound-lanes-of-floridas-turnpike-in-st-lucie-county",
-          "canonical_slug": "2026-09-09-vehicle-fire-closes-southbound-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Fort Pierce man charged after 8 explosive devices found at Balsam Drive home",
-      "elapsed_seconds": 39.475
+      "new_publication_stale_rejected_count": 1,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Fort Pierce man arrested after 8 explosive devices found at home on Balsam Drive",
+      "generated_card_count": 0,
+      "elapsed_seconds": 54.374
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 7,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1512,10 +1516,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1534,16 +1538,6 @@
           "editorial_story_id": "story_010877",
           "canonical_slug": "2026-09-11-port-st-lucie-police-chief-leo-niemczyk-shares-911-story-after-25-years",
           "canonical_headline": "Port St. Lucie Police Chief Leo Niemczyk shares 9/11 story after 25 years",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Martin County leaders urge return to unity felt after 9/11 attacks",
-          "source_url": "https://www.wptv.com/shining-a-light/martin-county-leaders-urge-return-to-unity-felt-after-9-11-attacks",
-          "editorial_story_id": "story_010886",
-          "canonical_slug": "2026-09-11-martin-county-marks-911-anniversary-with-palm-city-bridge-walk-calling-for-unity",
-          "canonical_headline": "Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1617,21 +1611,6 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Martin County leaders urge return to unity felt after 9/11 attacks",
-          "source_url": "https://www.wptv.com/shining-a-light/martin-county-leaders-urge-return-to-unity-felt-after-9-11-attacks",
-          "canonical_slug": "2026-09-11-martin-county-marks-911-anniversary-with-palm-city-bridge-walk-calling-for-unity",
-          "canonical_headline": "Martin County marks 9/11 anniversary with Palm City bridge walk calling for unity",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
           "source_headline": "Two arrested in Indian River County in separate saw palmetto berry harvesting cases - WPEC",
           "source_url": "https://cbs12.com/news/crime/florida-crime-news-two-arrested-in-indian-river-county-in-separate-saw-palmetto-berry-harvesting-cases-labor-day-weekend-bags-saw-palmetto-stalks-berries-permit-harvest-endangered-plant-without-permit",
           "canonical_slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
@@ -1693,7 +1672,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 22.785
+      "elapsed_seconds": 18.469
     }
   ]
 }
