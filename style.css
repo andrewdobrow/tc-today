@@ -6736,7 +6736,7 @@ main.article-page-main > .article-wrap {
 
 
 /* ============================================================
-   TCT v1.13.8.9 - simple mobile subscription modal
+   TCT v1.13.8.11 - mobile subscription modal copy refinement
    Desktop keeps the Kit Morning Brief modal.
    ============================================================ */
 .tct-mobile-subscription-overlay { display:none; }
@@ -6750,36 +6750,44 @@ main.article-page-main > .article-wrap {
     display:grid;
     align-items:center;
     justify-items:center;
-    padding:28px 18px;
+    padding:30px 18px;
     box-sizing:border-box;
-    background:rgba(7,18,13,.78);
+    background:rgba(8,24,18,.88);
   }
   .tct-mobile-subscription-modal {
     position:relative;
     width:min(100%,390px);
     box-sizing:border-box;
-    padding:54px 22px 24px;
-    border-radius:18px;
-    background:#174f3d;
+    padding:18px 0 0;
     color:#fff;
-    box-shadow:0 20px 60px rgba(0,0,0,.34);
     text-align:center;
+  }
+  .tct-mobile-subscription-card {
+    position:relative;
+    box-sizing:border-box;
+    padding:34px 24px 58px;
+    border-radius:20px;
+    background:#dce9df;
+    color:#10251d;
+    box-shadow:0 18px 55px rgba(0,0,0,.30);
   }
   .tct-mobile-subscription-close {
     position:absolute;
-    top:-16px;
-    right:-10px;
+    z-index:2;
+    top:-6px;
+    right:-9px;
     display:grid;
     place-items:center;
-    width:50px;
-    height:50px;
+    width:54px;
+    height:54px;
     padding:0;
     border:4px solid #fff;
     border-radius:50%;
-    background:#222;
+    background:#242424;
     color:#fff;
-    font:400 34px/1 Arial,sans-serif;
+    font:400 36px/1 Arial,sans-serif;
     cursor:pointer;
+    box-shadow:0 4px 16px rgba(0,0,0,.18);
   }
   .tct-mobile-subscription-close:focus-visible,
   .tct-mobile-subscription-cta:focus-visible,
@@ -6787,51 +6795,94 @@ main.article-page-main > .article-wrap {
     outline:3px solid #f3c84b;
     outline-offset:3px;
   }
-  .tct-mobile-subscription-kicker {
-    margin:0 0 14px;
-    color:#dfeee7;
-    font-size:.76rem;
+  .tct-mobile-subscription-regular-price {
+    width:fit-content;
+    margin:0 auto 3px;
+    color:#1c2924;
+    font-size:1.03rem;
     font-weight:900;
-    letter-spacing:.05em;
-    text-transform:uppercase;
+    line-height:1;
+    text-decoration:line-through;
+    text-decoration-thickness:3px;
   }
   .tct-mobile-subscription-offer {
-    margin:0 0 22px;
-    color:#fff;
-    font-size:1.18rem;
-    font-weight:900;
-    letter-spacing:.015em;
+    margin:0 0 28px;
+    color:#10251d;
+    font-size:1.16rem;
+    font-weight:950;
+    letter-spacing:.02em;
+    line-height:1.15;
   }
   .tct-mobile-subscription-modal h2 {
-    margin:0 auto 26px;
-    max-width:310px;
-    color:#fff;
+    margin:0 auto 28px;
+    max-width:330px;
+    color:#10251d;
     font-family:Georgia,"Times New Roman",serif;
-    font-size:clamp(2rem,10vw,2.65rem);
-    line-height:1.03;
-    letter-spacing:-.025em;
+    font-size:clamp(2rem,9vw,2.6rem);
+    font-weight:500;
+    line-height:1.05;
+    letter-spacing:-.03em;
+  }
+  .tct-mobile-subscription-benefits {
+    display:grid;
+    gap:12px;
+    margin:0 auto 26px;
+    padding:0;
+    max-width:310px;
+    list-style:none;
+    text-align:left;
+    color:#10251d;
+    font-size:1rem;
+    line-height:1.25;
+  }
+  .tct-mobile-subscription-benefits li {
+    position:relative;
+    padding-left:31px;
+  }
+  .tct-mobile-subscription-benefits li::before {
+    content:"✓";
+    position:absolute;
+    left:0;
+    top:-2px;
+    color:#174f3d;
+    font-size:1.45rem;
+    font-weight:900;
+    line-height:1;
+  }
+  .tct-mobile-subscription-brand {
+    margin:4px 0 0;
+    color:#174f3d;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:2.25rem;
+    font-weight:900;
+    letter-spacing:-.07em;
   }
   .tct-mobile-subscription-cta {
+    position:absolute;
+    left:50%;
+    bottom:-28px;
+    transform:translateX(-50%);
     display:flex;
     align-items:center;
     justify-content:center;
-    width:100%;
-    min-height:54px;
+    width:min(82%,300px);
+    min-height:58px;
     box-sizing:border-box;
-    padding:12px 16px;
-    border:2px solid #fff;
+    padding:12px 18px;
+    border:3px solid #dce9df;
     border-radius:999px;
-    background:#fff;
-    color:#174f3d;
-    font-size:1rem;
-    font-weight:900;
+    background:#174f3d;
+    color:#fff;
+    box-shadow:0 0 0 3px #174f3d;
+    font-size:1.12rem;
+    font-weight:950;
+    letter-spacing:.015em;
     text-decoration:none;
   }
-  .tct-mobile-subscription-modal small {
-    display:block;
-    margin:10px 0 18px;
-    color:rgba(255,255,255,.72);
-    font-size:.74rem;
+  .tct-mobile-subscription-after {
+    margin:42px 0 8px;
+    color:rgba(255,255,255,.78);
+    font-size:.75rem;
     line-height:1.3;
   }
   .tct-mobile-subscription-signin {

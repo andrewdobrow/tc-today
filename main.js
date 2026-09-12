@@ -406,18 +406,25 @@ document.addEventListener("keydown", (event) => {
   function showMobileSubscriptionModal() {
     if (document.querySelector("[data-tct-mobile-subscription-modal]") || mobilePromptSuppressed()) return false;
     const next = encodeURIComponent(window.location.pathname + window.location.search);
-    const freeArticle = currentArticleIsMonthlyFree();
     const overlay = document.createElement("div");
     overlay.className = "tct-mobile-subscription-overlay";
     overlay.setAttribute("data-tct-mobile-subscription-modal", "true");
     overlay.innerHTML = `
       <section class="tct-mobile-subscription-modal" role="dialog" aria-modal="true" aria-labelledby="tct-mobile-subscription-title">
         <button class="tct-mobile-subscription-close" type="button" aria-label="Close subscription offer">&times;</button>
-        ${freeArticle ? '<div class="tct-mobile-subscription-kicker">Your free article is unlocked</div>' : ''}
-        <div class="tct-mobile-subscription-offer">$1 FOR YOUR FIRST MONTH</div>
-        <h2 id="tct-mobile-subscription-title">Unlimited Treasure Coast news.</h2>
-        <a class="tct-mobile-subscription-cta" href="/subscribe.html?next=${next}">SUBSCRIBE NOW</a>
-        <small>$4.99/month after. Cancel anytime.</small>
+        <div class="tct-mobile-subscription-card">
+          <div class="tct-mobile-subscription-regular-price">$4.99</div>
+          <div class="tct-mobile-subscription-offer">$1 FOR THE FIRST MONTH</div>
+          <h2 id="tct-mobile-subscription-title">Never miss another local story.</h2>
+          <ul class="tct-mobile-subscription-benefits" aria-label="Subscription benefits">
+            <li>Unlimited access to Treasure Coast news</li>
+            <li>Read on any device</li>
+            <li>Support local, independent journalism</li>
+          </ul>
+          <div class="tct-mobile-subscription-brand" aria-hidden="true">TCT</div>
+          <a class="tct-mobile-subscription-cta" href="/subscribe.html?next=${next}">SUBSCRIBE NOW</a>
+        </div>
+        <div class="tct-mobile-subscription-after">$4.99/month after. Cancel anytime.</div>
         <a class="tct-mobile-subscription-signin" href="/subscribe.html?signin=1&next=${next}">Already a subscriber? Sign in</a>
       </section>`;
     document.body.appendChild(overlay);

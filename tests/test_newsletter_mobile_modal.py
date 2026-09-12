@@ -17,8 +17,11 @@ def test_desktop_keeps_kit_newsletter_while_mobile_uses_subscription_modal():
     assert "window.matchMedia(MOBILE_QUERY)" in js
     assert "if (mobile.matches) return;" in js
     assert "showMobileSubscriptionModal" in js
-    assert "$1 FOR YOUR FIRST MONTH" in js
-    assert "Unlimited Treasure Coast news." in js
+    assert "$1 FOR THE FIRST MONTH" in js
+    assert "Never miss another local story." in js
+    assert "Unlimited access to Treasure Coast news" in js
+    assert "Read on any device" in js
+    assert "Support local, independent journalism" in js
     assert ">SUBSCRIBE NOW</a>" in js
 
 
@@ -37,7 +40,7 @@ def test_monthly_free_article_is_eligible_for_mobile_subscription_modal():
     membership = (ROOT / "membership.js").read_text(encoding="utf-8")
     assert "currentArticleIsMonthlyFree()" in js
     assert "if (!currentArticleIsMonthlyFree() && paywallIsVisible()) return true;" in js
-    assert "Your free article is unlocked" in js
+    assert "Your free article is unlocked" not in js
     assert 'document.querySelector("[data-tct-free-article-banner]")' not in js
     assert 'tct:monthly-free-article' not in js
     assert "window.matchMedia?.('(max-width: 680px)').matches" in membership
@@ -51,11 +54,14 @@ def test_mobile_subscription_modal_retries_after_membership_state_settles():
     assert "1500" in js
 
 
-def test_mobile_subscription_modal_has_simple_green_presentation():
+def test_mobile_subscription_modal_matches_simple_tcpalm_style_presentation():
     css = (ROOT / "style.css").read_text(encoding="utf-8")
-    assert "TCT v1.13.8.9 - simple mobile subscription modal" in css
+    assert "TCT v1.13.8.11 - mobile subscription modal copy refinement" in css
     assert ".tct-mobile-subscription-overlay" in css
     assert "width:min(100%,390px)" in css
-    assert "background:#174f3d" in css
+    assert "background:#dce9df" in css
+    assert ".tct-mobile-subscription-regular-price" in css
+    assert "text-decoration:line-through" in css
+    assert ".tct-mobile-subscription-benefits" in css
     assert ".tct-mobile-subscription-close" in css
     assert "border-radius:999px" in css

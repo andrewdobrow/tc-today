@@ -42,12 +42,13 @@ def test_desktop_kit_modal_and_mobile_subscription_modal_replace_sticky_bar():
 
 def test_mobile_subscription_modal_is_bounded_with_dismissible_backdrop_space():
     css = _read("style.css")
-    responsive = css.index("TCT v1.13.8.9 - simple mobile subscription modal")
+    responsive = css.index("TCT v1.13.8.11 - mobile subscription modal copy refinement")
     tail = css[responsive:]
     assert '@media (max-width:680px)' in tail
     assert '.tct-mobile-subscription-modal' in tail
     assert 'width:min(100%,390px)' in tail
-    assert 'padding:54px 22px 24px' in tail
+    assert 'padding:18px 0 0' in tail
+    assert '.tct-mobile-subscription-card' in tail
     assert '.tct-mobile-subscription-close' in tail
 
 
