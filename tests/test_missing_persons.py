@@ -240,8 +240,14 @@ def test_bootstrap_directory_exists_at_repo_root_and_is_not_a_false_zero_state()
     assert "Missing Persons on the Treasure Coast" in html
     assert "Current FDLE listings" in html
     assert "Public service directory" not in html
-    assert "Directory update in progress" in html
-    assert "Directory initializing" in html
+
+    # The committed root page can legitimately be in either lifecycle state:
+    # the pre-refresh bootstrap shipped with the feature, or a populated page
+    # written back by the scheduled FDLE refresh. Do not require bootstrap copy
+    # after real records have already been committed.
+    bootstrap = "Directory update in progress" in html and "Directory initializing" in html
+    populated = 'class="missing-person-card"' in html
+    assert bootstrap or populated, "missing-persons.html must be either the bootstrap state or a populated FDLE directory"
     assert "0 current FDLE records" not in html
 
 
