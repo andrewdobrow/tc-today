@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-12T15:51:54Z",
+  "generated_at": "2026-09-12T21:12:48Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 23,
-    "rejected_count": 5,
+    "assessed_count": 27,
+    "rejected_count": 4,
     "enforced_categories": [
       "business",
       "crime",
@@ -44,6 +44,22 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Indian River County school bus driver accused of threatening child, arrested - WPBF",
+          "source_url": "https://www.wpbf.com/article/treasure-coast-school-bus-driver-child-abuse-charge/73698666"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
@@ -65,23 +81,7 @@
           ],
           "local_nexus_signals": [],
           "headline": "Fort Pierce man arrested after deputies find 8 suspected explosive devices at home - WPEC",
-          "source_url": "https://cbs12.com/news/crime/fort-pierce-man-arrested-explosive-devices-found-home-destructive-devices-bomb-squad-explosive-materials-crime-st-lucie-county-sheriffs-office-florida-news"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:suspect"
-          ],
-          "local_nexus_signals": [],
-          "headline": "Martin County Sheriff believes Thursday's school bomb threat originated out of Russia - WPEC",
-          "source_url": "https://cbs12.com/news/local/bomb-threat-at-martin-county-high-school-prompts-evacuation-campus-search-martin-county-school-district-law-enforcement-martin-county-sheriffs-office-florida-news"
+          "source_url": "https://cbs12.com/news/local/fort-pierce-man-arrested-explosive-devices-found-home-destructive-devices-bomb-squad-explosive-materials-crime-st-lucie-county-sheriffs-office-florida-news"
         }
       ]
     },
@@ -90,59 +90,33 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 7,
+      "rejected_count": 1,
+      "rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Martin County breaks world record with 400-foot Cuban sandwich - WPEC",
+          "source_url": "https://cbs12.com/news/florida/martin-county-breaks-world-record-with-400-foot-cuban-sandwich-florida-news-florida-food-news-cuban-sandwich"
+        }
+      ]
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 2,
-      "rejections": [
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "election_political_process:election day"
-          ],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:martin county"
-          ],
-          "headline": "25 years after 9/11, first responders and survivors reflect on a day that changed everything",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/25-years-after-9-11-first-responders-and-survivors-reflect-on-a-day-that-changed-everything"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [
-            "development_project:construction"
-          ],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "local_nexus_signals": [
-            "source_locality:st lucie county",
-            "source_locality:fort pierce"
-          ],
-          "headline": "Fort Pierce man arrested after 8 explosive devices found at home during risk protection order",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/bomb-team-conducting-investigation-in-fort-pierce-st-lucie-county-sheriffs-office"
-        }
-      ]
+      "assessed_count": 0,
+      "rejected_count": 0,
+      "rejections": []
     },
     {
       "category_key": "sports",
@@ -176,7 +150,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 2,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -194,7 +168,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 6,
+      "assessed_count": 7,
       "rejected_count": 0,
       "rejections": []
     }
