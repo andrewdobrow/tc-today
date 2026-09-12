@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-12T01:48:19Z",
+  "generated_at": "2026-09-12T02:11:56Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -105,21 +105,21 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 180,
+    "candidates_processed": 181,
     "routes": {
-      "generate_new": 12,
-      "skip": 167,
+      "generate_new": 7,
+      "skip": 173,
       "update_existing": 1
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 111,
-      "publishable": 67
+      "low_value": 113,
+      "publishable": 66
     },
     "source_classes": {
-      "aggregator": 113,
+      "aggregator": 115,
       "local_news": 39,
-      "regional_news": 23,
+      "regional_news": 22,
       "unknown": 5
     },
     "rejected_count": 2,
@@ -146,10 +146,24 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 11,
-      "same_event": 169
+      "new_story": 5,
+      "same_event": 176
     },
     "examples": [
+      {
+        "story_id": "story_010876",
+        "title": "Florida school bus driver arrested and charged with child abuse - Treasure Coast News",
+        "event_key": "unknown-event-3bbdb999db",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
       {
         "story_id": "story_009650",
         "title": "'They're all angels': Fort Pierce community gathers to honor 9/11 victims - WPBF",
@@ -221,20 +235,6 @@
         ]
       },
       {
-        "story_id": "story_010876",
-        "title": "Florida school bus driver arrested and charged with child abuse - Treasure Coast News",
-        "event_key": "unknown-event-3bbdb999db",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_010803",
         "title": "Florida state college campus buildings evacuated after bomb threat - Treasure Coast News",
         "event_key": "unknown-event-9642e59bd0",
@@ -254,10 +254,11 @@
         "event_key": "unknown-event-5110d9d7cb",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -388,7 +389,7 @@
         ]
       },
       {
-        "story_id": "story_011073",
+        "story_id": "story_011106",
         "title": "Fort Pierce man arrested after deputies find 8 suspected explosive devices at home - WPEC",
         "event_key": "unknown-event-888b46a274",
         "relationship": "same_event",
@@ -432,6 +433,21 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_010876",
+        "title": "Florida school bus driver arrested and charged with child abuse - Treasure Coast News",
+        "event_key": "unknown-event-3bbdb999db",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_009650",
         "title": "'They're all angels': Fort Pierce community gathers to honor 9/11 victims - WPBF",
         "event_key": "traffic-crash-fort-pierce-48d9fdc01f",
@@ -507,21 +523,6 @@
         ]
       },
       {
-        "story_id": "story_010876",
-        "title": "Florida school bus driver arrested and charged with child abuse - Treasure Coast News",
-        "event_key": "unknown-event-3bbdb999db",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_010803",
         "title": "Florida state college campus buildings evacuated after bomb threat - Treasure Coast News",
         "event_key": "unknown-event-9642e59bd0",
@@ -543,10 +544,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -686,7 +688,7 @@
         ]
       },
       {
-        "story_id": "story_011073",
+        "story_id": "story_011106",
         "title": "Fort Pierce man arrested after deputies find 8 suspected explosive devices at home - WPEC",
         "event_key": "unknown-event-888b46a274",
         "relationship": "same_event",
@@ -735,66 +737,24 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
+    "candidate_count": 0,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 1
-    },
-    "milestones": {
-      "arrest": 1
-    },
-    "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1
-    },
-    "examples": [
-      {
-        "headline": "Fort Pierce man arrested after deputies find 8 suspected explosive devices at home - WPEC",
-        "event_key": "unknown-event-5e88b668c1",
-        "current_story_id": "story_011106",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_009553",
-        "candidate_confidence": 0.63,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "entity_match",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_009553",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.30",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.63"
-        ]
-      }
-    ],
-    "retrospective_candidate_count": 29,
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
+    "retrospective_candidate_count": 30,
     "retrospective_high_confidence_candidate_count": 11,
     "retrospective_activation_eligible_candidate_count": 7,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1361,
-      "timeline_entries_examined": 3801,
-      "transitions_examined": 2278,
+      "stories_with_timelines": 1355,
+      "timeline_entries_examined": 3792,
+      "transitions_examined": 2276,
       "candidate_scope": "distinct_article_transitions",
-      "candidate_count": 29,
+      "candidate_count": 30,
       "high_confidence_candidate_count": 11,
       "activation_eligible_candidate_count": 7,
       "same_source_evolution_count": 9,
@@ -1117,9 +1077,9 @@
           }
         }
       ],
-      "identity_anchor_rejected_count": 15,
-      "incoherent_transition_count": 15,
-      "incoherent_story_count": 9,
+      "identity_anchor_rejected_count": 16,
+      "incoherent_transition_count": 16,
+      "incoherent_story_count": 10,
       "incoherent_stories": [
         {
           "story_id": "story_010514",
@@ -1599,11 +1559,47 @@
               "prior_title_overlap": 0.285714
             }
           ]
+        },
+        {
+          "story_id": "story_011124",
+          "story_title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
+          "transition_count": 1,
+          "blocking_reasons": {
+            "timeline_identity_unanchored": 1
+          },
+          "examples": [
+            {
+              "prior_article": {
+                "article_id": "rss-51d62bcc4676d6e5fd34",
+                "event_key": "fire-fort-pierce-3428a9d8b4",
+                "published_at": "2026-09-12T01:59:51.057020+00:00",
+                "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - cw34.com",
+                "source": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire",
+                "url": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
+              },
+              "newer_article": {
+                "article_id": "rss-596746811b3b9ec096d9",
+                "event_key": "unknown-event-7340026fe5",
+                "published_at": "2026-09-12T01:59:51.057020+00:00",
+                "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach",
+                "source": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach",
+                "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach"
+              },
+              "milestones": [
+                "arrest"
+              ],
+              "identity_anchor_codes": [
+                "shared_discriminative_title_tokens",
+                "identity_anchor_missing"
+              ],
+              "prior_title_overlap": 0.25
+            }
+          ]
         }
       ],
       "milestones": {
         "approval": 1,
-        "arrest": 10,
+        "arrest": 11,
         "court_action": 2,
         "death": 4,
         "identified": 3,
@@ -1615,13 +1611,13 @@
       },
       "blocking_conflicts": {
         "event_family_conflict": 2,
-        "same_timestamp_order_uncertain": 11,
-        "timeline_identity_unanchored": 15,
+        "same_timestamp_order_uncertain": 12,
+        "timeline_identity_unanchored": 16,
         "weak_title_continuity": 3
       },
-      "excluded_entry_count": 177,
+      "excluded_entry_count": 176,
       "exclusion_reasons": {
-        "insufficient_title_detail": 46,
+        "insufficient_title_detail": 45,
         "low_value_title": 18,
         "social_source": 114
       },
@@ -3384,6 +3380,76 @@
           ]
         },
         {
+          "story_id": "story_011124",
+          "story_title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
+          "milestones": [
+            "arrest"
+          ],
+          "matched_phrases": {
+            "arrest": [
+              "arrested",
+              "charges"
+            ]
+          },
+          "confidence": 0.74,
+          "activation_eligible": false,
+          "timeline_incoherent": true,
+          "identity_anchor_qualified": false,
+          "identity_anchor_codes": [
+            "shared_discriminative_title_tokens",
+            "identity_anchor_missing"
+          ],
+          "shared_title_tokens": [
+            "fort",
+            "man",
+            "pierce"
+          ],
+          "blocking_conflicts": [
+            "same_timestamp_order_uncertain",
+            "timeline_identity_unanchored"
+          ],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_missing",
+            "canonical_title_continuity_context_only",
+            "timeline_incoherent"
+          ],
+          "prior_title_overlap": 0.25,
+          "canonical_title_overlap": 1.0,
+          "prior_article": {
+            "article_id": "rss-51d62bcc4676d6e5fd34",
+            "event_key": "fire-fort-pierce-3428a9d8b4",
+            "published_at": "2026-09-12T01:59:51.057020+00:00",
+            "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - cw34.com",
+            "source": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire",
+            "url": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
+          },
+          "newer_article": {
+            "article_id": "rss-596746811b3b9ec096d9",
+            "event_key": "unknown-event-7340026fe5",
+            "published_at": "2026-09-12T01:59:51.057020+00:00",
+            "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach",
+            "source": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach",
+            "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_011124",
+            "Novel milestones: arrest",
+            "Identity anchor qualified: False",
+            "Identity anchor codes: shared_discriminative_title_tokens, identity_anchor_missing",
+            "Prior title overlap: 0.25",
+            "Canonical title overlap (context only): 1.00",
+            "Same timestamp: True",
+            "Blocking conflicts: same_timestamp_order_uncertain, timeline_identity_unanchored",
+            "Candidate confidence: 0.74",
+            "Activation eligible: False"
+          ]
+        },
+        {
           "story_id": "story_010514",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
@@ -3660,27 +3726,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1084,
-      "treasure_coast_local": 892,
-      "treasure_coast_region": 392,
-      "unknown": 2143
+      "florida": 1075,
+      "treasure_coast_local": 887,
+      "treasure_coast_region": 388,
+      "unknown": 2136
     },
-    "average_score": 60.28
+    "average_score": 60.23
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1084,
-      "treasure_coast_local": 892,
-      "treasure_coast_region": 392,
-      "unknown": 2143
+      "florida": 1075,
+      "treasure_coast_local": 887,
+      "treasure_coast_region": 388,
+      "unknown": 2136
     },
-    "average_priority": 4.09
+    "average_priority": 4.1
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3596,
-      "developing": 241,
-      "ongoing": 670,
+      "active": 3595,
+      "developing": 244,
+      "ongoing": 643,
       "resolved": 4
     }
   },
@@ -3688,8 +3754,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 7505,
-    "active_stories_after": 7505,
+    "active_stories_before": 7513,
+    "active_stories_after": 7513,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3718,17 +3784,17 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-12T01:33:17Z",
-    "quarantined_story_records_retained": 1680,
-    "active_story_count": 7530
+    "generated_at": "2026-09-12T02:00:20Z",
+    "quarantined_story_records_retained": 1696,
+    "active_story_count": 7534
   },
   "stories": {
-    "total": 4511,
+    "total": 4486,
     "importance_levels": {
       "breaking": 5,
       "high": 111,
-      "normal": 736,
-      "low": 3659,
+      "normal": 730,
+      "low": 3640,
       "archived": 0
     },
     "average_importance": 10.05,
@@ -3746,7 +3812,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 3.35
+          "age_hours": 3.79
         },
         "level": "high",
         "importance_reasons": [
@@ -3789,13 +3855,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-11T22:15:19.966379+00:00",
-          "hours_since_update": 3.35,
+          "hours_since_update": 3.79,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_011082",
+        "story_id": "story_011121",
         "title": "Fatal I-95 crash jams traffic in St. Lucie County - cbs12.com",
         "score": 75,
         "editorial_priority": 84,
@@ -3807,7 +3873,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.03
+          "age_hours": 0.02
         },
         "level": "high",
         "importance_reasons": [
@@ -3852,14 +3918,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-12T01:32:40.728766+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-12T01:59:51.057020+00:00",
+          "hours_since_update": 0.02,
           "event_count": 6,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_011083",
+        "story_id": "story_011122",
         "title": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - wpbf.com",
         "score": 75,
         "editorial_priority": 84,
@@ -3871,7 +3937,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.03
+          "age_hours": 0.02
         },
         "level": "high",
         "importance_reasons": [
@@ -3913,8 +3979,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-12T01:32:40.728766+00:00",
-          "hours_since_update": 0.03,
+          "last_updated": "2026-09-12T01:59:51.057020+00:00",
+          "hours_since_update": 0.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3932,7 +3998,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 1.53
+          "age_hours": 1.93
         },
         "level": "high",
         "importance_reasons": [
@@ -3992,7 +4058,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-12T00:07:00.630003+00:00",
-          "hours_since_update": 1.53,
+          "hours_since_update": 1.93,
           "event_count": 102,
           "timeline_entries": 99
         }
@@ -4010,7 +4076,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 51.39
+          "age_hours": 51.84
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4063,9 +4129,65 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-09T22:11:34.732746+00:00",
-          "hours_since_update": 51.39,
+          "hours_since_update": 51.84,
           "event_count": 5,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_011135",
+        "title": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
+        "score": 65,
+        "editorial_priority": 74,
+        "editorial_score": 74,
+        "score_breakdown": {
+          "score": 74,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.04
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-09-12T01:59:51.057020+00:00",
+          "hours_since_update": 0.04,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -4081,7 +4203,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 102.91
+          "age_hours": 103.35
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4127,7 +4249,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 102.91,
+          "hours_since_update": 103.35,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4145,7 +4267,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 51.41
+          "age_hours": 51.85
         },
         "level": "high",
         "importance_reasons": [
@@ -4186,82 +4308,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-09T22:11:34.732746+00:00",
-          "hours_since_update": 51.41,
+          "hours_since_update": 51.85,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_011075",
-        "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
-        "score": 55,
-        "editorial_priority": 62,
-        "editorial_score": 62,
-        "score_breakdown": {
-          "score": 62,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 0.04
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Palm City",
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 7,
-        "timeline_entries": 6,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 6,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-12T01:32:40.728766+00:00",
-          "hours_since_update": 0.04,
-          "event_count": 7,
-          "timeline_entries": 6
-        }
-      },
-      {
-        "story_id": "story_011085",
+        "story_id": "story_011125",
         "title": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -4273,7 +4326,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4324,14 +4377,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-12T01:32:40.728766+00:00",
-          "hours_since_update": 0.04,
+          "last_updated": "2026-09-12T01:59:51.057020+00:00",
+          "hours_since_update": 0.03,
           "event_count": 4,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_011090",
+        "story_id": "story_011130",
         "title": "IRCSO assists Fellsmere PD in search for machete stabbing suspect - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4343,7 +4396,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.05
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4394,14 +4447,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-12T01:32:40.728766+00:00",
-          "hours_since_update": 0.05,
+          "last_updated": "2026-09-12T01:59:51.057020+00:00",
+          "hours_since_update": 0.03,
           "event_count": 7,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_011097",
+        "story_id": "story_011138",
         "title": "Multi-vehicle crash blocks left lane on I-95 North in St. Lucie County - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4413,7 +4466,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.06
+          "age_hours": 0.04
         },
         "level": "high",
         "importance_reasons": [
@@ -4465,8 +4518,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-12T01:32:40.728766+00:00",
-          "hours_since_update": 0.06,
+          "last_updated": "2026-09-12T01:59:51.057020+00:00",
+          "hours_since_update": 0.04,
           "event_count": 9,
           "timeline_entries": 8
         }
@@ -4484,7 +4537,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 102.91
+          "age_hours": 103.35
         },
         "level": "high",
         "importance_reasons": [
@@ -4528,7 +4581,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 102.91,
+          "hours_since_update": 103.35,
           "event_count": 42,
           "timeline_entries": 38
         }
@@ -4546,7 +4599,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 164.06
+          "age_hours": 164.5
         },
         "level": "high",
         "importance_reasons": [
@@ -4589,7 +4642,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 164.06,
+          "hours_since_update": 164.5,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4607,7 +4660,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 94.93
+          "age_hours": 95.37
         },
         "level": "high",
         "importance_reasons": [
@@ -4650,7 +4703,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-08T02:40:27.108602+00:00",
-          "hours_since_update": 94.93,
+          "hours_since_update": 95.37,
           "event_count": 10,
           "timeline_entries": 10
         }
@@ -4668,7 +4721,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 345.12
+          "age_hours": 345.56
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4722,7 +4775,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 345.12,
+          "hours_since_update": 345.56,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -4740,7 +4793,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 102.9
+          "age_hours": 103.35
         },
         "level": "high",
         "importance_reasons": [
@@ -4784,7 +4837,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 102.9,
+          "hours_since_update": 103.35,
           "event_count": 4,
           "timeline_entries": 3
         }
@@ -4802,7 +4855,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 102.9
+          "age_hours": 103.35
         },
         "level": "high",
         "importance_reasons": [
@@ -4845,7 +4898,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 102.9,
+          "hours_since_update": 103.35,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4863,7 +4916,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 686.88
+          "age_hours": 687.33
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4909,7 +4962,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 686.88,
+          "hours_since_update": 687.33,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4927,7 +4980,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 245.57
+          "age_hours": 246.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4975,7 +5028,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 245.57,
+          "hours_since_update": 246.02,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4993,7 +5046,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 34.94
+          "age_hours": 35.38
         },
         "level": "high",
         "importance_reasons": [
@@ -5042,7 +5095,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-10T14:39:50.961106+00:00",
-          "hours_since_update": 34.94,
+          "hours_since_update": 35.38,
           "event_count": 18,
           "timeline_entries": 18
         }
@@ -5052,7 +5105,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-12T01:40:08Z",
+    "generated_at": "2026-09-12T02:05:32Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5067,22 +5120,21 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 2,
-        "category_eligibility_archive_recovery": 6,
-        "generated_live": 1
+        "cache_hit": 3,
+        "category_eligibility_archive_recovery": 6
       },
       "failures": {
         "no_category_eligible_sources": 6
       },
-      "model_attempt_count": 1,
-      "model_elapsed_seconds": 15.05,
+      "model_attempt_count": 0,
+      "model_elapsed_seconds": 0.0,
       "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 7,
+      "category_eligibility_rejection_count": 6,
       "published_story_duplicate_suppression_count": 47,
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 0,
       "material_update_promotion_evaluation_count": 10,
       "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 7,
@@ -5094,8 +5146,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 9,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5112,8 +5164,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 4,
-        "category_eligibility_rejection_count": 4,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-local-government-central-action",
@@ -5152,20 +5204,6 @@
             "policy": "central_government_action_required",
             "eligible": false,
             "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Deputies serving a risk protection order at a Fort Pierce home discovered items 'indicative of destructive devices' - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
             "reason": "competing_story_form_without_government_action",
             "positive_signals": [],
             "competing_signals": [
@@ -5176,7 +5214,7 @@
             "source_url": "https://cbs12.com/news/local/bomb-threat-at-martin-county-high-school-prompts-evacuation-campus-search-martin-county-school-district-law-enforcement-martin-county-sheriffs-office-florida-news"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -5227,32 +5265,20 @@
             "canonical_headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
+          },
           {
-            "source_headline": "Deputies serving a risk protection order at a Fort Pierce home discovered items 'indicative of destructive devices' - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-09-11-bomb-squad-fbi-respond-to-fort-pierce-home-after-suspected-devices-found",
-            "canonical_headline": "Fort Pierce man charged with possessing eight improvised explosive devices",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "source:https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=source:https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
+            "category_key": "local_gov",
+            "source_headline": "Bomb threat at Martin County High School prompts evacuation and campus search - cw34.com",
+            "source_url": "https://cw34.com/news/local/bomb-threat-at-martin-county-high-school-prompts-evacuation-campus-search-martin-county-school-district-law-enforcement-martin-county-sheriffs-office-florida-news",
+            "editorial_story_id": "story_010514",
+            "canonical_slug": "2026-09-10-martin-county-high-school-evacuated-after-bomb-threat-sweep-finds-no-evidence",
+            "canonical_headline": "Martin County High School bomb threat traced to hacked Stuart account",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 1,
         "material_update_promotion_cache_hit_count": 2,
@@ -5383,10 +5409,25 @@
             "novel_facts": [],
             "reason": "The incoming article is identical to the existing canonical. They share the exact same source URL, identical lead paragraph, same two arrestees (Corey Michael Smith and Francis Ostrowski), same Labor Day weekend timeframe, same locations (BP gas station on 9th Street Southwest, School Board property), and same arrest dates (Sept. 4 and day later). The retrieval evidence confirms this is tracked as the same persistent story with an exact source match. No new information has been added.",
             "validation_errors": []
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Bomb threat at Martin County High School prompts evacuation and campus search - cw34.com",
+            "source_url": "https://cw34.com/news/local/bomb-threat-at-martin-county-high-school-prompts-evacuation-campus-search-martin-county-school-district-law-enforcement-martin-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-09-10-martin-county-high-school-evacuated-after-bomb-threat-sweep-finds-no-evidence",
+            "canonical_headline": "Martin County High School bomb threat traced to hacked Stuart account",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 29.295
+        "elapsed_seconds": 21.976
       },
       {
         "category_key": "crime",
@@ -5590,7 +5631,7 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Fort Pierce man arrested after deputies find 8 suspected explosive devices at home",
-        "elapsed_seconds": 20.201
+        "elapsed_seconds": 14.607
       },
       {
         "category_key": "business",
@@ -5840,7 +5881,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.281
+        "elapsed_seconds": 16.517
       },
       {
         "category_key": "sports",
@@ -5904,15 +5945,15 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 23.823
+        "new_publication_stale_rejected_count": 5,
+        "elapsed_seconds": 15.716
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5995,7 +6036,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 20.516
+        "elapsed_seconds": 16.951
       },
       {
         "category_key": "florida",
@@ -6085,7 +6126,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.569
+        "elapsed_seconds": 10.871
       },
       {
         "category_key": "martin",
@@ -6276,15 +6317,16 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "Both are weekend event roundups for Treasure Coast and Palm Beach area",
-              "Both mention Stuart and Palm City locations",
-              "Both published by WPBF with similar headline format"
+              "Both are weekend event roundups for Treasure Coast and Palm Beach County from WPBF"
             ],
             "novel_facts": [
-              "Incoming covers weekend of September 11, 2026",
-              "Candidate covers weekend of July 27-28, 2026",
-              "Completely different events: Treasure Coast Skate Jam, Family Fun Day Sebastian, Morikami Museum koto workshop, Cuban sandwich record attempt, 9/11 memorial events, Art After Dark",
-              "Different locations: Langford Park Jensen Beach, Sebastian City Hall, Morikami Museum Delray Beach, L. Justin Wilson Memorial Park, 515 N. Flagler Drive West Palm Beach, 1450 S. Dixie Highway"
+              "September 11, 2026 weekend events",
+              "Treasure Coast Skate Jam at Langford Park",
+              "Sebastian Family Fun Day and Touch N Tour",
+              "Morikami Museum koto workshop",
+              "Cuban sandwich world record attempt",
+              "9/11 Memorial Stair Climb",
+              "Art After Dark Friday events"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6392,28 +6434,21 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Martin County Sheriff links bomb threat at high school to Russia-based swatting scheme",
-        "elapsed_seconds": 24.246
+        "elapsed_seconds": 21.322
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 5,
         "selected_source_count": 5,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 15.05,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 15.05,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6427,7 +6462,7 @@
         "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 10,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -6446,16 +6481,6 @@
             "editorial_story_id": "story_009650",
             "canonical_slug": "2026-09-11-fort-pierce-honors-911-victims-at-veterans-memorial-park-ceremony",
             "canonical_headline": "Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Bomb threat forces evacuation at Indian River State College in Fort Pierce - WPBF",
-            "source_url": "https://www.wpbf.com/article/indian-river-state-college-fort-pierce-bomb-threat-evacuation/73691708",
-            "editorial_story_id": "story_010993",
-            "canonical_slug": "2026-09-11-bomb-threat-forces-evacuation-at-indian-river-state-college-in-fort-pierce",
-            "canonical_headline": "Bomb threat forces evacuation at Indian River State College in Fort Pierce",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6530,30 +6555,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Deputies serving a risk protection order at a Fort Pierce home discovered items 'indicative of destructive devices' - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-09-11-bomb-squad-fbi-respond-to-fort-pierce-home-after-suspected-devices-found",
-            "canonical_headline": "Fort Pierce man charged with possessing eight improvised explosive devices",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "source:https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=source:https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 4,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 2,
@@ -6580,21 +6583,6 @@
             "source_url": "https://www.wpbf.com/article/florida-9-11-hijack-plane-pentagon-flight-memorial/73692653",
             "canonical_slug": "2026-09-11-fort-pierce-honors-911-victims-at-veterans-memorial-park-ceremony",
             "canonical_headline": "Fort Pierce honors 9/11 victims at Veterans Memorial Park ceremony",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Bomb threat forces evacuation at Indian River State College in Fort Pierce - WPBF",
-            "source_url": "https://www.wpbf.com/article/indian-river-state-college-fort-pierce-bomb-threat-evacuation/73691708",
-            "canonical_slug": "2026-09-11-bomb-threat-forces-evacuation-at-indian-river-state-college-in-fort-pierce",
-            "canonical_headline": "Bomb threat forces evacuation at Indian River State College in Fort Pierce",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -6670,6 +6658,21 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Deputies serving a risk protection order at a Fort Pierce home discovered items 'indicative of destructive devices' - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-bomb-investigation-fort-pierce/73674588",
+            "canonical_slug": "2026-09-11-bomb-squad-fbi-respond-to-fort-pierce-home-after-suspected-devices-found",
+            "canonical_headline": "Fort Pierce man charged with possessing eight improvised explosive devices",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:exact_source_url",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Port St. Lucie teacher keeps 9/11 memory alive for students born into a post-attack world - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/remembering-9-11/port-st-lucie-teacher-keeps-9-11-memory-alive-for-students-born-into-a-post-attack-world",
             "canonical_slug": "2026-09-10-port-st-lucie-teacher-uses-survivor-accounts-to-teach-911-to-students-born-after",
@@ -6720,9 +6723,8 @@
             "novel_facts": [
               "Flood Advisory issued until 7:45 PM EDT",
               "Affects West Central Martin County, Southeastern Okeechobee County, and St. Lucie County",
-              "1-3 inches of rain already fallen",
-              "Additional 1-2 inches expected",
-              "Advisory issued at 6:19 PM EDT on September 10, 2026"
+              "1-3 inches of rain already fallen with 1-2 additional inches expected",
+              "Minor flooding in low-lying and poor drainage areas expected"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6760,14 +6762,13 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.95,
+            "confidence": 0.98,
             "shared_anchors": [],
             "novel_facts": [
               "Vehicle fire on Florida Turnpike southbound",
-              "Location beyond Exit 142 at Port St. Lucie Boulevard before Mile Marker 141",
-              "All southbound lanes closed",
-              "Closure reported at 5:30 p.m. on September 8, 2026",
-              "St. Lucie County location"
+              "Location: beyond Exit 142 at Port St. Lucie Boulevard, before Mile Marker 141",
+              "All southbound lanes closed in St. Lucie County",
+              "Incident reported/updated at 5:30 p.m. on September 8, 2026"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6776,11 +6777,8 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Fort Pierce man charged with eight counts after bomb squad removes explosive devices from Balsam Drive home",
-        "generated_card_count": 0,
-        "elapsed_seconds": 48.364
+        "elapsed_seconds": 32.761
       },
       {
         "category_key": "indian_river",
@@ -6995,7 +6993,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.068
+        "elapsed_seconds": 13.231
       }
     ]
   }
