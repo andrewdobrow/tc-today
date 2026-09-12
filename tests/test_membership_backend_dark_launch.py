@@ -63,11 +63,33 @@ def test_checkout_is_checkout_first_and_uses_only_server_side_stripe_secrets():
 def test_webhook_verifies_signature_before_writing_entitlement():
     webhook = (ROOT / "supabase/functions/stripe-webhook/index.ts").read_text()
     verify_at = webhook.index("constructEventAsync")
-    sync_at = webhook.index("syncSubscription(event.data.object")
+    sync_at = webhook.index("syncSubscriptionEvent(event.data.object")
     assert verify_at < sync_at
     assert "STRIPE_WEBHOOK_SECRET" in webhook
     assert "stripe_webhook_events" in webhook
     assert "Do not record the event as processed" in webhook
+
+
+
+
+def test_subscription_webhook_recovers_identity_when_subscription_arrives_before_checkout():
+    webhook = (ROOT / "supabase/functions/stripe-webhook/index.ts").read_text()
+
+    assert "async function syncSubscriptionEvent(subscription: Stripe.Subscription, supabaseAdmin: any)" in webhook
+    assert ".eq('stripe_customer_id', customerId)" in webhook
+    assert "await stripe.customers.retrieve(customerId)" in webhook
+    assert "resolveMembershipUser(supabaseAdmin, email, customerId)" in webhook
+    assert "stripe.subscriptions.update(resolvedSubscription.id" in webhook
+    assert "supabase_user_id: userId" in webhook
+    assert "await syncSubscription(resolvedSubscription, supabaseAdmin, userId)" in webhook
+    assert "await syncSubscriptionEvent(event.data.object as Stripe.Subscription, ctx.supabaseAdmin)" in webhook
+
+    resolve_at = webhook.index("await stripe.customers.retrieve(customerId)")
+    membership_at = webhook.index("resolveMembershipUser(supabaseAdmin, email, customerId)")
+    stamp_at = webhook.index("stripe.subscriptions.update(resolvedSubscription.id")
+    sync_at = webhook.index("await syncSubscription(resolvedSubscription, supabaseAdmin, userId)")
+    record_at = webhook.index(".insert({ event_id: event.id, event_type: event.type })")
+    assert resolve_at < membership_at < stamp_at < sync_at < record_at
 
 
 def test_browser_config_writer_refuses_privileged_keys(monkeypatch, tmp_path):

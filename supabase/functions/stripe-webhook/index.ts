@@ -7,6 +7,45 @@ const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? ''
 const stripe = new Stripe(stripeSecret)
 const cryptoProvider = Stripe.createSubtleCryptoProvider()
 
+async function syncSubscriptionEvent(subscription: Stripe.Subscription, supabaseAdmin: any) {
+  const customerId = idFromExpandable(subscription.customer as any)
+  let userId = subscription.metadata?.supabase_user_id || null
+
+  if (!userId && customerId) {
+    const { data: profile, error } = await supabaseAdmin
+      .from('profiles')
+      .select('id')
+      .eq('stripe_customer_id', customerId)
+      .maybeSingle()
+    if (error) throw error
+    userId = profile?.id ?? null
+  }
+
+  let resolvedSubscription = subscription
+  if (!userId && customerId) {
+    const customer = await stripe.customers.retrieve(customerId)
+    if ('deleted' in customer && customer.deleted) {
+      throw new Error(`Stripe customer ${customerId} was deleted before membership identity could be resolved.`)
+    }
+
+    const email = 'email' in customer ? customer.email : null
+    const resolved = await resolveMembershipUser(supabaseAdmin, email, customerId)
+    userId = resolved.userId
+
+    if (resolvedSubscription.metadata?.supabase_user_id !== userId) {
+      resolvedSubscription = await stripe.subscriptions.update(resolvedSubscription.id, {
+        metadata: { ...resolvedSubscription.metadata, supabase_user_id: userId },
+      })
+    }
+  }
+
+  if (!userId) {
+    throw new Error(`No membership identity for Stripe subscription ${subscription.id}`)
+  }
+
+  await syncSubscription(resolvedSubscription, supabaseAdmin, userId)
+}
+
 export default {
   fetch: withSupabase({ auth: 'none' }, async (req, ctx) => {
     if (!stripeSecret || !webhookSecret) return new Response('Stripe webhook secrets are not configured.', { status: 503 })
@@ -73,7 +112,7 @@ export default {
         event.type === 'customer.subscription.updated' ||
         event.type === 'customer.subscription.deleted'
       ) {
-        await syncSubscription(event.data.object as Stripe.Subscription, ctx.supabaseAdmin)
+        await syncSubscriptionEvent(event.data.object as Stripe.Subscription, ctx.supabaseAdmin)
       }
 
       const { error: recordError } = await ctx.supabaseAdmin.from('stripe_webhook_events')
