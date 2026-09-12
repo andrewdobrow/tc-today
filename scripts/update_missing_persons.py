@@ -34,7 +34,7 @@ from scripts import build_audience_features as audience
 
 SITE_URL = "https://treasurecoast.today"
 SOURCE_HOME = "https://www.fdle.state.fl.us/mcicsearch/Search.asp"
-RESULTS_URL = "https://www.fdle.state.fl.us/MCICSearch/Results.asp?From=QR&cou={county}"
+RESULTS_BASE_URL = "https://www.fdle.state.fl.us/MCICSearch/Results.asp"
 FDLE_PHONE = "1-888-356-4774"
 COUNTIES = ("Martin", "St. Lucie", "Indian River")
 COUNTY_SLUG = {"Martin": "martin", "St. Lucie": "st-lucie", "Indian River": "indian-river"}
@@ -48,6 +48,7 @@ USER_AGENT = (
     "(+https://treasurecoast.today/contact.html; public-service directory)"
 )
 MAX_RECORDS_PER_COUNTY = 250
+FDLE_PAGE_SIZE = 5
 REQUEST_DELAY_SECONDS = 0.20
 
 
@@ -121,13 +122,70 @@ def _first_date(text: str) -> str:
     return match.group(1) if match else ""
 
 
-def _result_total(text: str) -> int | None:
-    match = re.search(r"Displaying\s+\d+\s+to\s+\d+\s+of\s+(\d+)\s+record", text, re.I)
+def _result_window(text: str) -> tuple[int, int, int] | None:
+    match = re.search(
+        r"Displaying\s+(\d+)\s+to\s+(\d+)\s+of\s+(\d+)\s+record",
+        text,
+        re.I,
+    )
     if match:
-        return int(match.group(1))
+        return tuple(int(match.group(i)) for i in range(1, 4))
+    return None
+
+
+def _result_total(text: str) -> int | None:
+    window = _result_window(text)
+    if window:
+        return window[2]
     if re.search(r"\b0\s+record", text, re.I) or re.search(r"no\s+(?:matching\s+)?records", text, re.I):
         return 0
     return None
+
+
+def _normalized_county(value: str) -> str:
+    value = _clean(value).lower().replace("saint", "st")
+    return re.sub(r"[^a-z0-9]+", "", value)
+
+
+def _result_county(text: str) -> str:
+    match = re.search(r"You\s+Searched\s+For:\s*County:\s*['\"]([^'\"]+)['\"]", text, re.I)
+    return _clean(match.group(1)) if match else ""
+
+
+def _county_results_url(county: str, page: int = 1) -> str:
+    # FDLE's own pagination links carry the complete query state.  Supplying
+    # those blank criteria explicitly avoids inheriting an unrelated server-side
+    # search state and makes every county request self-contained.
+    params = {
+        "From": "QR",
+        "Rvw": "Original",
+        "agef": "",
+        "aget": "",
+        "cat": "",
+        "cit": "",
+        "cou": county,
+        "cp": "1",
+        "ep": str(FDLE_PAGE_SIZE),
+        "fn": "",
+        "ln": "",
+        "rce": "",
+        "rgn": "",
+        "sp": "1",
+        "sx": "",
+    }
+    if page > 1:
+        params["Page"] = str(page)
+        params["Pclick"] = "1"
+    return RESULTS_BASE_URL + "?" + urlencode(params)
+
+def _county_entry_urls(county: str) -> list[str]:
+    # Keep both FDLE-supported entry shapes.  The short QR URL is the form used
+    # by FDLE's public indexed results, while the explicit URL clears every
+    # other search field.  Unioning them prevents a transient/session-specific
+    # query state from collapsing a county to an incomplete first-page result.
+    short = f"{RESULTS_BASE_URL}?From=QR&cou={quote_plus(county)}"
+    explicit = _county_results_url(county)
+    return list(dict.fromkeys([short, explicit]))
 
 
 def _extract_flyer_url(node, base_url: str) -> tuple[str, str]:
@@ -159,31 +217,57 @@ def _extract_flyer_url(node, base_url: str) -> tuple[str, str]:
     return flyer, record_id
 
 
+def _candidate_result_rows(soup: BeautifulSoup) -> list:
+    """Return likely record rows, anchored to the FDLE flyer/photo cells first."""
+    rows = []
+    seen: set[int] = set()
+
+    for img in soup.find_all("img", src=True):
+        alt = _clean(img.get("alt", "")).lower()
+        src = _clean(img.get("src", "")).lower()
+        if "click to view flyer" not in alt and "getimage.asp" not in src:
+            continue
+        row = img.find_parent("tr")
+        while row is not None:
+            direct_cells = row.find_all("td", recursive=False)
+            if len(direct_cells) >= 7:
+                break
+            row = row.find_parent("tr")
+        if row is not None and id(row) not in seen:
+            seen.add(id(row)); rows.append(row)
+
+    # Keep a structural fallback for FDLE markup variants where the thumbnail
+    # is background/JS driven rather than a normal <img>.
+    for row in soup.find_all("tr"):
+        direct_cells = row.find_all("td", recursive=False)
+        row_text = _clean(row.get_text(" ", strip=True))
+        if len(direct_cells) >= 7 and _first_date(row_text) and id(row) not in seen:
+            seen.add(id(row)); rows.append(row)
+    return rows
+
+
 def _parse_result_rows(html: str, page_url: str, county: str) -> list[dict]:
     soup = BeautifulSoup(html, "html.parser")
     records: list[dict] = []
-    for row in soup.find_all("tr"):
-        cells = [_clean(cell.get_text(" ", strip=True)) for cell in row.find_all("td")]
-        if len(cells) < 6:
-            continue
-        row_text = _clean(row.get_text(" ", strip=True))
-        missing_since = _first_date(row_text)
-        if not missing_since or "Race:" not in row_text or "Sex:" not in row_text:
+    for row in _candidate_result_rows(soup):
+        direct = row.find_all("td", recursive=False)
+        cells = [_clean(cell.get_text(" ", strip=True)) for cell in direct]
+        if len(cells) < 7:
+            cells = [_clean(cell.get_text(" ", strip=True)) for cell in row.find_all("td")]
+        if len(cells) < 7:
             continue
 
-        # The FDLE result table uses: photo, missing date, name, race/sex,
-        # current age, age missing, category, missing from.  Work from both ends
-        # so a cosmetic/empty cell does not shift the important fields.
         date_idx = next((i for i, value in enumerate(cells) if _first_date(value)), None)
-        if date_idx is None or date_idx + 5 >= len(cells):
+        if date_idx is None or date_idx + 6 >= len(cells):
             continue
+        missing_since = _first_date(cells[date_idx])
         raw_name = cells[date_idx + 1]
         race_sex = cells[date_idx + 2]
-        age_today = cells[date_idx + 3] if date_idx + 3 < len(cells) else ""
-        age_missing = cells[date_idx + 4] if date_idx + 4 < len(cells) else ""
-        category = cells[date_idx + 5] if date_idx + 5 < len(cells) else ""
-        missing_from = cells[date_idx + 6] if date_idx + 6 < len(cells) else ""
-        if not raw_name or not missing_from:
+        age_today = cells[date_idx + 3]
+        age_missing = cells[date_idx + 4]
+        category = cells[date_idx + 5]
+        missing_from = cells[date_idx + 6]
+        if not missing_since or not raw_name or not missing_from:
             continue
 
         race_match = re.search(r"Race:\s*(.*?)(?=\s+Sex:|$)", race_sex, re.I)
@@ -196,7 +280,7 @@ def _parse_result_rows(html: str, page_url: str, county: str) -> list[dict]:
         image_urls = []
         for img in row.find_all("img", src=True):
             src = urljoin(page_url, img.get("src", ""))
-            if "GetImage.asp" in src and "FIN=" in src and src not in image_urls:
+            if "getimage.asp" in src.lower() and "fin=" in src.lower() and src not in image_urls:
                 image_urls.append(src)
 
         key_seed = f"{county}|{raw_name}|{missing_since}".lower()
@@ -327,26 +411,56 @@ def _enrich_record(session: requests.Session, record: dict) -> dict:
 
 
 def scrape_county(session: requests.Session, county: str) -> tuple[list[dict], dict]:
-    first_url = RESULTS_URL.format(county=quote_plus(county))
-    queue = [first_url]
+    queue = _county_entry_urls(county)
     seen_pages: set[str] = set()
+    synthetic_pages_queued: set[int] = set()
     by_key: dict[str, dict] = {}
     expected_total: int | None = None
+    page_size = FDLE_PAGE_SIZE
 
-    while queue and len(seen_pages) < 50:
+    while queue and len(seen_pages) < 60:
         url = queue.pop(0)
         if url in seen_pages:
             continue
         html = _fetch(session, url)
         seen_pages.add(url)
-        total = _result_total(_clean(BeautifulSoup(html, "html.parser").get_text(" ", strip=True)))
+        page_text = _clean(BeautifulSoup(html, "html.parser").get_text(" ", strip=True))
+
+        reported_county = _result_county(page_text)
+        if reported_county and _normalized_county(reported_county) != _normalized_county(county):
+            # Try the alternate self-contained entry URL rather than accepting
+            # or publishing data from a different county.
+            continue
+
+        window = _result_window(page_text)
+        total = _result_total(page_text)
         if total is not None:
             expected_total = total if expected_total is None else max(expected_total, total)
+        if window and window[1] >= window[0]:
+            page_size = max(page_size, window[1] - window[0] + 1)
+
         for record in _parse_result_rows(html, url, county):
             by_key[record["record_key"]] = record
+
         for next_url in _pagination_urls(html, url, county):
+            # Keep FDLE's own session-bearing pagination URL even when we have
+            # also queued a synthetic fallback for the same page number.
             if next_url not in seen_pages and next_url not in queue:
                 queue.append(next_url)
+
+        # FDLE currently exposes five records per page.  Do not depend solely on
+        # the visible 1-5 / >> pagination controls: once the source tells us the
+        # verified total, explicitly queue every remaining page.
+        if expected_total is not None and expected_total > 0:
+            total_pages = max(1, math.ceil(expected_total / max(1, page_size)))
+            for page_number in range(2, total_pages + 1):
+                if page_number in synthetic_pages_queued:
+                    continue
+                candidate = _county_results_url(county, page_number)
+                synthetic_pages_queued.add(page_number)
+                if candidate not in seen_pages and candidate not in queue:
+                    queue.append(candidate)
+
         if expected_total is not None and len(by_key) >= expected_total:
             break
         if expected_total is not None and expected_total > MAX_RECORDS_PER_COUNTY:
@@ -359,14 +473,13 @@ def scrape_county(session: requests.Session, county: str) -> tuple[list[dict], d
             f"incomplete FDLE result set for {county}: expected {expected_total}, parsed {len(by_key)}"
         )
 
-    enriched = []
-    for record in by_key.values():
-        enriched.append(_enrich_record(session, record))
+    enriched = [_enrich_record(session, record) for record in by_key.values()]
     return enriched, {
         "status": "fresh",
         "expected_records": expected_total,
         "records": len(enriched),
         "pages": len(seen_pages),
+        "page_size": page_size,
     }
 
 
@@ -442,13 +555,27 @@ def refresh() -> dict:
     statuses: dict[str, dict] = {}
     fresh_counties = 0
     for county in COUNTIES:
+        prior = previous_by_county[county]
         try:
             people, status = scrape_county(session, county)
+
+            # A parser/source regression should never wipe most of a county's
+            # established directory in one run.  Large legitimate removals are
+            # rare enough that retaining the last-known-good set for one cycle
+            # is safer than publishing an obviously collapsed scrape.
+            if prior and len(prior) >= 4:
+                drop = len(prior) - len(people)
+                if drop >= 3 and len(people) < math.ceil(len(prior) * 0.50):
+                    raise RuntimeError(
+                        f"suspicious FDLE record-count drop for {county}: "
+                        f"previous {len(prior)}, source now {len(people)}"
+                    )
+
             fresh_counties += 1
             status["checked_at"] = checked_at
             statuses[county] = status
         except Exception as exc:
-            people = [dict(p) for p in previous_by_county[county]]
+            people = [dict(p) for p in prior]
             statuses[county] = {
                 "status": "stale" if people else "unavailable",
                 "records": len(people),
@@ -459,6 +586,17 @@ def refresh() -> dict:
 
     if fresh_counties == 0 and not previous_people:
         raise RuntimeError("FDLE refresh failed for all three counties and no prior data is available")
+
+    unavailable_without_baseline = [
+        county for county in COUNTIES
+        if statuses.get(county, {}).get("status") == "unavailable" and not previous_by_county[county]
+    ]
+    if unavailable_without_baseline:
+        raise RuntimeError(
+            "FDLE refresh was incomplete and there is no last-known-good baseline for: "
+            + ", ".join(unavailable_without_baseline)
+            + ". Refusing to publish a partial Treasure Coast directory."
+        )
 
     # Stable URLs and resilient local image copies.
     normalized: list[dict] = []

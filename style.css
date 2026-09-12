@@ -6970,7 +6970,17 @@ main.article-page-main > .article-wrap {
   padding: 0;
 }
 
-.missing-person-profile-head { max-width: 900px; }
+/* Only the site masthead should be sticky. The profile title is a semantic
+   <header>, so explicitly neutralize the sitewide header rule here just as
+   event-detail pages do. */
+.missing-person-profile-page > .missing-person-profile-head {
+  position: static;
+  top: auto;
+  z-index: auto;
+  max-width: 900px;
+  background: transparent;
+  border-bottom: 0;
+}
 
 .missing-person-profile-layout {
   display: grid;
@@ -6994,7 +7004,13 @@ main.article-page-main > .article-wrap {
   background: #fff;
 }
 
-.missing-person-gallery figure:first-child:last-child { grid-column: 1 / -1; }
+/* A single FDLE portrait should remain a deliberate portrait frame rather
+   than expanding across the entire media column. */
+.missing-person-gallery figure:first-child:last-child {
+  grid-column: 1 / -1;
+  width: min(100%, 390px);
+  justify-self: center;
+}
 
 .missing-person-gallery img {
   width: 100%;
@@ -7085,6 +7101,7 @@ main.article-page-main > .article-wrap {
   .missing-person-gallery { grid-template-columns: 1fr 1fr; }
   .missing-person-profile-facts { padding: 18px; }
   .missing-person-fact { grid-template-columns: 105px minmax(0, 1fr); }
+  .missing-person-gallery figure:first-child:last-child { width: min(100%, 340px); }
 }
 
 @media (max-width: 430px) {

@@ -90,7 +90,7 @@ def test_county_scrape_follows_pagination_and_requires_complete_count(monkeypatc
     people, status = m.scrape_county(object(), "Martin")
     assert len(people) == 2
     assert status["expected_records"] == 2
-    assert status["pages"] == 2
+    assert status["pages"] >= 2
 
     no_pagination = page1.replace('<a href="results.asp?ID=abc&Page=2&Pclick=1&cou=Martin">2</a>', "")
     monkeypatch.setattr(m, "_fetch", lambda _session, url, binary=False: no_pagination)
@@ -211,3 +211,99 @@ def test_directory_kicker_identifies_the_live_source_instead_of_generic_public_s
     source = (ROOT / "scripts" / "update_missing_persons.py").read_text(encoding="utf-8")
     assert "Current FDLE listings" in source
     assert "Public service directory" not in source
+
+
+def test_county_query_is_self_contained_and_does_not_rely_on_server_search_state():
+    m = _load_module()
+    entries = m._county_entry_urls("St. Lucie")
+    assert len(entries) == 2
+    url = m._county_results_url("St. Lucie")
+    assert "From=QR" in url
+    assert "Rvw=Original" in url
+    assert "cou=St.+Lucie" in url
+    assert "cat=" in url and "cit=" in url and "fn=" in url and "ln=" in url
+    page2 = m._county_results_url("St. Lucie", 2)
+    assert "Page=2" in page2 and "Pclick=1" in page2
+
+
+def test_result_parser_anchors_each_fdle_thumbnail_to_its_own_record_row():
+    m = _load_module()
+    html = f"""
+    <table><tr><td><table>
+      {_result_row('Parsons, Andrea','7/11/1993','Port Salerno','4099','30980')}
+      {_result_row('Andres, Jose','9/16/2021','Stuart','330579','3305790')}
+    </table></td></tr></table>
+    """
+    rows = m._parse_result_rows(
+        html,
+        "https://www.fdle.state.fl.us/MCICSearch/Results.asp?From=QR&cou=Martin",
+        "Martin",
+    )
+    assert {row["record_key"] for row in rows} == {"4099", "330579"}
+    assert {row["name"] for row in rows} == {"Andrea Parsons", "Jose Andres"}
+
+
+def test_first_refresh_refuses_to_publish_partial_counties_without_baseline(monkeypatch, tmp_path):
+    m = _load_module()
+    _configure_tmp_root(m, monkeypatch, tmp_path)
+    monkeypatch.setattr(m, "_session", lambda: object())
+    monkeypatch.setattr(m, "_download_person_images", lambda *_args, **_kwargs: [])
+
+    def fake_scrape(_session, county):
+        if county == "St. Lucie":
+            raise RuntimeError("source parse failed")
+        person = {
+            "record_key": county, "name": f"{county} Person", "missing_since": "1/1/2026",
+            "missing_from": f"Somewhere,FL", "county": county, "source_images": [],
+        }
+        return [person], {"status": "fresh", "expected_records": 1, "records": 1, "pages": 1}
+
+    monkeypatch.setattr(m, "scrape_county", fake_scrape)
+    with pytest.raises(RuntimeError, match="Refusing to publish a partial Treasure Coast directory"):
+        m.refresh()
+    assert not m.DATA_PATH.exists()
+
+
+def test_large_count_collapse_keeps_last_known_good_county(monkeypatch, tmp_path):
+    m = _load_module()
+    _configure_tmp_root(m, monkeypatch, tmp_path)
+    prior = []
+    for idx in range(8):
+        prior.append({
+            "record_key": f"old-{idx}", "name": f"Prior {idx}", "missing_since": "1/1/2025",
+            "missing_from": "Stuart,FL", "county": "Martin",
+            "detail_url": f"/missing-persons/prior-{idx}.html", "images": [],
+        })
+    m._write_json(m.DATA_PATH, {"people": prior})
+    monkeypatch.setattr(m, "_session", lambda: object())
+    monkeypatch.setattr(m, "_download_person_images", lambda _session, person, previous: (previous or {}).get("images", []))
+
+    def fake_scrape(_session, county):
+        if county == "Martin":
+            return [{
+                "record_key": "new-only", "name": "New Only", "missing_since": "9/1/2026",
+                "missing_from": "Stuart,FL", "county": "Martin", "source_images": [],
+            }], {"status": "fresh", "expected_records": 1, "records": 1, "pages": 1}
+        return [], {"status": "fresh", "expected_records": 0, "records": 0, "pages": 1}
+
+    monkeypatch.setattr(m, "scrape_county", fake_scrape)
+    result = m.refresh()
+    payload = json.loads(m.DATA_PATH.read_text(encoding="utf-8"))
+    status = json.loads(m.STATUS_PATH.read_text(encoding="utf-8"))
+    assert result["fresh_counties"] == 2
+    assert len([p for p in payload["people"] if p["county"] == "Martin"]) == 8
+    assert status["counties"]["Martin"]["status"] == "stale"
+    assert "suspicious FDLE record-count drop" in status["counties"]["Martin"]["error"]
+
+
+def test_missing_person_profile_title_is_not_sticky_and_single_photo_is_framed():
+    css = (ROOT / "style.css").read_text(encoding="utf-8")
+    assert ".missing-person-profile-page > .missing-person-profile-head" in css
+    profile_rule = css.split(".missing-person-profile-page > .missing-person-profile-head", 1)[1].split("}", 1)[0]
+    assert "position: static" in profile_rule
+    assert "top: auto" in profile_rule
+    assert "background: transparent" in profile_rule
+    assert "border-bottom: 0" in profile_rule
+    single_rule = css.split(".missing-person-gallery figure:first-child:last-child", 1)[1].split("}", 1)[0]
+    assert "width: min(100%, 390px)" in single_rule
+    assert "justify-self: center" in single_rule
