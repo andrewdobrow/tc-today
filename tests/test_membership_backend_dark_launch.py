@@ -95,6 +95,7 @@ def test_membership_backend_deploy_verifies_snapshot_capability():
     workflow = (ROOT / ".github/workflows/deploy-membership-backend.yml").read_text()
     assert "supabase functions deploy sync-protected-articles --use-api" in workflow
     assert "Verify protected-content snapshot capability" in workflow
-    assert '"action":"snapshot"' in workflow
+    assert '"action":"snapshot-capability"' in workflow
+    assert ".snapshot_version >= 2" in workflow
     assert "TCT_CONTENT_SYNC_SECRET" in workflow
     assert "Protected-content snapshot capability verified." in workflow

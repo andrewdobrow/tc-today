@@ -298,11 +298,15 @@ def test_protected_sync_uses_dedicated_secret_and_never_browser_config():
     writer = (ROOT / "scripts/write_membership_browser_config.py").read_text()
     assert "TCT_CONTENT_SYNC_SECRET" in sync_fn
     assert "X-TCT-Content-Sync" in sync_fn
+    assert "action === 'snapshot-capability'" in sync_fn
+    assert "SNAPSHOT_MAX_BATCH = 25" in sync_fn
     assert "action === 'snapshot'" in sync_fn
     assert "secrets.TCT_CONTENT_SYNC_SECRET" in workflow
     assert "--snapshot-file /tmp/tct-protected-current.json --required" in workflow
-    assert "TCT_PROTECTED_SNAPSHOT_PATH: /tmp/tct-protected-current.json" in workflow
-    assert "Legacy sync-protected-articles function detected" in workflow
+    assert "export TCT_PROTECTED_SNAPSHOT_PATH=/tmp/tct-protected-current.json" in workflow
+    assert "unset TCT_PROTECTED_SNAPSHOT_PATH" in workflow
+    assert "Existing paywalled pages will be preserved unchanged" in workflow
+    assert 'json={"action": "snapshot-capability"}' in workflow
     assert "supabase functions deploy sync-protected-articles --use-api" in workflow
     assert "SUPABASE_ACCESS_TOKEN" in workflow
     assert "TCT_CONTENT_SYNC_SECRET" not in writer
@@ -476,6 +480,41 @@ def test_prepare_rehydrates_v154_split_without_leaking_ellipsis(tmp_path, monkey
     assert "… accidents" not in stored
     assert "truck accidents" in stored
     assert later in stored
+
+def test_protected_snapshot_uses_small_adaptive_batches(monkeypatch, tmp_path):
+    script_path = ROOT / "scripts/sync_protected_articles.py"
+    spec = importlib.util.spec_from_file_location("sync_protected_articles_adaptive_snapshot", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+
+    calls = []
+
+    class Response:
+        def __init__(self, payload):
+            self._payload = payload
+        def json(self):
+            return self._payload
+
+    def fake_request(_url, _secret, payload):
+        calls.append(dict(payload))
+        # Simulate the production failure mode: a large body batch trips the
+        # backend, but smaller protected-content pages are healthy.
+        if payload["limit"] > 12:
+            raise RuntimeError('Protected article sync failed (500): {"error":"Protected article snapshot failed."}')
+        offset = payload["offset"]
+        if offset == 0:
+            return Response({"articles": [{"slug": "a", "protected_body": "A"}], "next_offset": 1})
+        return Response({"articles": [{"slug": "b", "protected_body": "B"}], "next_offset": None})
+
+    monkeypatch.setattr(module, "_request", fake_request)
+    output = tmp_path / "snapshot.json"
+    total = module.snapshot_store("https://example.invalid", "secret", output)
+    assert total == 2
+    assert calls[0]["limit"] == 25
+    assert any(call["limit"] == 12 for call in calls)
+    assert json.loads(output.read_text())["articles"][1]["slug"] == "b"
+
 
 def test_membership_cli_scripts_bootstrap_repo_package_when_executed_by_path():
     env = os.environ.copy()

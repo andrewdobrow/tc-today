@@ -257,6 +257,100 @@ def test_directory_kicker_identifies_the_live_source_instead_of_generic_public_s
     assert "Public service directory" not in source
 
 
+
+
+def test_st_lucie_qr_search_probes_known_fdle_aliases():
+    m = _load_module()
+    assert m.FDLE_QUERY_COUNTY_ALIASES["St. Lucie"] == ("St. Lucie", "Saint Lucie", "St Lucie")
+    urls = [m._qr_county_url("St. Lucie", value) for value in m.FDLE_QUERY_COUNTY_ALIASES["St. Lucie"]]
+    assert any("cou=St.+Lucie" in url for url in urls)
+    assert any("cou=Saint+Lucie" in url for url in urls)
+    assert any("cou=St+Lucie" in url for url in urls)
+
+
+def test_county_search_chooses_largest_verified_result_across_aliases_and_live_form(monkeypatch):
+    m = _load_module()
+
+    class Response:
+        def __init__(self, text, url):
+            self.text = text
+            self.url = url
+
+    def result(total: int, county: str = "Saint Lucie") -> str:
+        end = min(5, total)
+        return f"<html><body><div>You Searched For: County: '{county}' Cases.</div><div>Displaying 1 to {end} of {total} record(s).</div></body></html>"
+
+    search_html = """
+    <html><body><form action="Results.asp" method="post">
+      <select name="cat"><option value="99">All Categories</option></select>
+      <select name="cou"><option value="56">Saint Lucie</option></select>
+      <input type="hidden" name="From" value="QR">
+    </form></body></html>
+    """
+    calls = []
+
+    def fake_request(_session, method, url, **kwargs):
+        calls.append((method, url, kwargs))
+        if url == m.SOURCE_HOME:
+            return Response(search_html, m.SOURCE_HOME)
+        if method == "POST":
+            return Response(result(14), "https://www.fdle.state.fl.us/MCICSearch/Results.asp?session=form")
+        if "cou=St.+Lucie" in url:
+            return Response(result(0), url)
+        if "cou=Saint+Lucie" in url:
+            return Response(result(12), url)
+        if "cou=St+Lucie" in url:
+            return Response(result(9), url)
+        raise AssertionError(url)
+
+    monkeypatch.setattr(m, "_request_response", fake_request)
+    first_html, first_url, spec = m._start_county_search(object(), "St. Lucie")
+    assert "of 14 record(s)" in first_html
+    assert "session=form" in first_url
+    assert spec["search_mode"] == "fdle_form"
+    assert spec["selected_total"] == 14
+    assert [item["records"] for item in spec["candidate_totals"]] == [14, 12, 9, 0]
+    assert len(calls) == 5  # three QR aliases + Search.asp + submitted form
+
+
+def test_county_search_falls_back_to_live_form_when_qr_endpoint_is_not_verifiable(monkeypatch):
+    m = _load_module()
+
+    class Response:
+        def __init__(self, text, url):
+            self.text = text
+            self.url = url
+
+    search_html = """
+    <html><body><form action="Results.asp" method="post">
+      <select name="cat"><option value="99">All Categories</option></select>
+      <select name="cou"><option value="Saint Lucie">Saint Lucie</option></select>
+      <input type="hidden" name="From" value="QR">
+    </form></body></html>
+    """
+    result_html = """
+    <html><body>
+      <div>You Searched For: County: 'Saint Lucie' Cases.</div>
+      <div>Displaying 1 to 5 of 9 record(s).</div>
+    </body></html>
+    """
+    calls = []
+
+    def fake_request(_session, method, url, **kwargs):
+        calls.append((method, url, kwargs))
+        if url == m.SOURCE_HOME:
+            return Response(search_html, m.SOURCE_HOME)
+        if method == "POST":
+            return Response(result_html, "https://www.fdle.state.fl.us/MCICSearch/Results.asp")
+        return Response("<html>not a result</html>", url)
+
+    monkeypatch.setattr(m, "_request_response", fake_request)
+    _html, _url, spec = m._start_county_search(object(), "St. Lucie")
+    assert spec["search_mode"] == "fdle_form"
+    assert spec["category_text"] == "All Categories"
+    assert spec["selected_total"] == 9
+    assert len(calls) == 5
+
 def test_county_search_is_driven_by_live_fdle_form_and_forces_all_categories():
     m = _load_module()
     search_html = """
@@ -337,7 +431,7 @@ def test_first_refresh_refuses_to_publish_partial_counties_without_baseline(monk
         return [person], {"status": "fresh", "expected_records": 1, "records": 1, "pages": 1}
 
     monkeypatch.setattr(m, "scrape_county", fake_scrape)
-    with pytest.raises(RuntimeError, match="Refusing to publish a partial Treasure Coast directory"):
+    with pytest.raises(RuntimeError, match=r"Refusing to publish a partial Treasure Coast directory.*St\. Lucie: source parse failed"):
         m.refresh()
     assert not m.DATA_PATH.exists()
 

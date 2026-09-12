@@ -1,6 +1,8 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 
 const expectedSecret = Deno.env.get('TCT_CONTENT_SYNC_SECRET') ?? ''
+const SNAPSHOT_VERSION = 2
+const SNAPSHOT_MAX_BATCH = 25
 
 async function digest(value: string) {
   return new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))
@@ -29,22 +31,33 @@ export default {
     }
     try { body = await req.json() } catch { return Response.json({ error: 'Invalid request body.' }, { status: 400 }) }
 
+    // Versioned capability probe lets production repair an older function before
+    // it attempts a real snapshot.  Old deployments do not recognize this action.
+    if (body.action === 'snapshot-capability') {
+      return Response.json({ snapshot_version: SNAPSHOT_VERSION, max_batch: SNAPSHOT_MAX_BATCH })
+    }
+
     // Server-to-server snapshot used only to rehydrate already-paywalled repository
-    // pages before applying a newer teaser format. It is protected by the dedicated
-    // content-sync secret and is never available through browser configuration.
+    // pages before applying a newer teaser format. Protected bodies are large, so
+    // intentionally cap each database/result payload to a small batch.
     if (body.action === 'snapshot') {
       const offset = Math.max(0, Math.floor(Number(body.offset ?? 0)))
-      const limit = Math.min(250, Math.max(1, Math.floor(Number(body.limit ?? 200))))
+      const limit = Math.min(SNAPSHOT_MAX_BATCH, Math.max(1, Math.floor(Number(body.limit ?? SNAPSHOT_MAX_BATCH))))
       const { data, error } = await ctx.supabaseAdmin.from('protected_articles')
-        .select('slug,protected_body,updated_at')
+        .select('slug,protected_body')
         .order('slug', { ascending: true })
         .range(offset, offset + limit - 1)
       if (error) {
         console.error('sync-protected-articles snapshot failed', error)
-        return Response.json({ error: 'Protected article snapshot failed.' }, { status: 500 })
+        return Response.json({
+          error: 'Protected article snapshot failed.',
+          code: String(error.code ?? ''),
+          detail: String(error.message ?? '').slice(0, 240),
+        }, { status: 500 })
       }
       const rows = data ?? []
       return Response.json({
+        snapshot_version: SNAPSHOT_VERSION,
         articles: rows,
         next_offset: rows.length === limit ? offset + rows.length : null,
       })

@@ -21,7 +21,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
-from urllib.parse import parse_qs, urljoin, urlparse, urlunparse
+from urllib.parse import parse_qs, urlencode, urljoin, urlparse, urlunparse
 import xml.etree.ElementTree as ET
 
 import requests
@@ -37,6 +37,22 @@ SOURCE_HOME = "https://www.fdle.state.fl.us/mcicsearch/Search.asp"
 FDLE_PHONE = "1-888-356-4774"
 COUNTIES = ("Martin", "St. Lucie", "Indian River")
 COUNTY_SLUG = {"Martin": "martin", "St. Lucie": "st-lucie", "Indian River": "indian-river"}
+# FDLE uses the formal county name "Saint Lucie" in its public MEPIC records
+# and in the county-only QR results endpoint, even though TCT displays the
+# familiar local style "St. Lucie."  Keep source vocabulary separate from
+# presentation vocabulary so the search never silently becomes a zero-result
+# query because of the abbreviation.
+FDLE_QUERY_COUNTY = {"Martin": "Martin", "St. Lucie": "St. Lucie", "Indian River": "Indian River"}
+# FDLE has exposed St. Lucie under more than one spelling across its classic ASP
+# search/result surfaces.  Never trust one spelling to be authoritative: probe the
+# small set of known aliases and choose the largest independently verified result
+# set.  This prevents a syntactically valid zero/small result page from being
+# mistaken for the county's complete directory.
+FDLE_QUERY_COUNTY_ALIASES = {
+    "Martin": ("Martin",),
+    "St. Lucie": ("St. Lucie", "Saint Lucie", "St Lucie"),
+    "Indian River": ("Indian River",),
+}
 DATA_PATH = ROOT / "data" / "missing-persons.json"
 STATUS_PATH = ROOT / "data" / "missing-persons-source-status.json"
 PAGE_PATH = ROOT / "missing-persons.html"
@@ -244,12 +260,111 @@ def _search_form_submission(html: str, page_url: str, county: str) -> dict:
     raise RuntimeError(f"FDLE search form did not expose county option for {county}")
 
 
+def _qr_county_url(county: str, source_county: str | None = None) -> str:
+    """Build one FDLE public county-only QR result URL."""
+    source_county = source_county or FDLE_QUERY_COUNTY.get(county, county)
+    return "https://www.fdle.state.fl.us/MCICSearch/Results.asp?" + urlencode({"From": "QR", "cou": source_county})
+
+
+def _verified_county_result(html: str, county: str) -> tuple[bool, str, int | None]:
+    """Verify county/category scope and return the source-reported record total."""
+    text = _clean(BeautifulSoup(html, "html.parser").get_text(" ", strip=True))
+    reported_county = _result_county(text)
+    total = _result_total(text)
+    if not reported_county:
+        return False, "result page did not report the searched county", total
+    if _normalized_county(reported_county) != _normalized_county(county):
+        return False, f"result page reported county {reported_county!r}", total
+    reported_category = _result_category(text)
+    if reported_category:
+        normalized_category = re.sub(r"[^a-z0-9]+", " ", reported_category.lower()).strip()
+        if normalized_category not in {"all", "all category", "all categories"}:
+            return False, f"result page reported under-scoped category {reported_category!r}", total
+    if total is None:
+        return False, "result page did not report a verifiable record total", total
+    return True, "", total
+
+
 def _start_county_search(session: requests.Session, county: str) -> tuple[str, str, dict]:
-    """Open FDLE's public search page and submit it exactly as a browser would."""
-    search_response = _request_response(session, "GET", SOURCE_HOME)
-    spec = _search_form_submission(search_response.text, search_response.url or SOURCE_HOME, county)
-    result_response = _request_response(session, spec["method"], spec["action"], data=spec["data"])
-    return result_response.text, result_response.url or spec["action"], spec
+    """Start the most complete independently verified FDLE county search.
+
+    MEPIC's classic ASP surfaces have historically accepted multiple St. Lucie
+    spellings and can return a valid-looking but smaller result set for one alias.
+    Probe every known public county alias plus the live search form, then select
+    the candidate with the largest verified total.  A zero/small alias can no
+    longer short-circuit a more complete result set.
+    """
+    errors: list[str] = []
+    candidates: list[tuple[int, int, str, str, dict]] = []
+
+    aliases = FDLE_QUERY_COUNTY_ALIASES.get(county, (FDLE_QUERY_COUNTY.get(county, county),))
+    seen_aliases: set[str] = set()
+    for source_county in aliases:
+        key = source_county.casefold()
+        if key in seen_aliases:
+            continue
+        seen_aliases.add(key)
+        qr_url = _qr_county_url(county, source_county)
+        try:
+            response = _request_response(session, "GET", qr_url)
+            ok, reason, total = _verified_county_result(response.text, county)
+            if ok and total is not None:
+                candidates.append((total, 1, response.text, response.url or qr_url, {
+                    "search_mode": "fdle_qr_county",
+                    "county_value": source_county,
+                    "category_text": "All Categories",
+                }))
+            else:
+                errors.append(f"QR county search {source_county!r}: {reason}")
+        except Exception as exc:
+            errors.append(f"QR county search {source_county!r}: {exc}")
+
+    # Independently submit the current live form as a second authority.  Even when
+    # one QR alias works, the form can reveal a larger canonical result set.
+    try:
+        search_response = _request_response(session, "GET", SOURCE_HOME)
+        spec = _search_form_submission(search_response.text, search_response.url or SOURCE_HOME, county)
+        result_response = _request_response(session, spec["method"], spec["action"], data=spec["data"])
+        ok, reason, total = _verified_county_result(result_response.text, county)
+        if ok and total is not None:
+            form_spec = dict(spec)
+            form_spec["search_mode"] = "fdle_form"
+            candidates.append((total, 2, result_response.text, result_response.url or spec["action"], form_spec))
+        else:
+            errors.append(f"live form search: {reason}")
+    except Exception as exc:
+        errors.append(f"live form search: {exc}")
+
+    if not candidates:
+        raise RuntimeError(f"FDLE county search failed for {county}: " + " | ".join(errors))
+
+    # Largest verified total wins.  On equal totals prefer the live form because
+    # it reflects FDLE's current option values/session state.
+    total, _priority, html, url, spec = max(candidates, key=lambda item: (item[0], item[1]))
+    spec = dict(spec)
+
+    # Probing the live form can change classic-ASP session state after a QR result
+    # was first fetched.  If a QR candidate wins, fetch its first page once more
+    # now so the pagination links/ID we follow belong to the final active search.
+    if spec.get("search_mode") == "fdle_qr_county":
+        try:
+            refreshed = _request_response(session, "GET", _qr_county_url(county, spec.get("county_value") or None))
+            ok, reason, refreshed_total = _verified_county_result(refreshed.text, county)
+            if not ok or refreshed_total != total:
+                raise RuntimeError(reason or f"record total changed from {total} to {refreshed_total}")
+            html = refreshed.text
+            url = refreshed.url or url
+        except Exception as exc:
+            raise RuntimeError(f"FDLE selected county search could not be re-established for {county}: {exc}") from exc
+
+    spec["candidate_totals"] = [
+        {"records": item[0], "search_mode": item[4].get("search_mode"), "county_value": item[4].get("county_value", "")}
+        for item in sorted(candidates, key=lambda item: (item[0], item[1]), reverse=True)
+    ]
+    spec["selected_total"] = total
+    if errors:
+        spec["search_warnings"] = errors[:8]
+    return html, url, spec
 
 
 def _normalize_name(raw: str) -> str:
@@ -604,8 +719,10 @@ def scrape_county(session: requests.Session, county: str) -> tuple[list[dict], d
         "records": len(enriched),
         "pages": len(seen_pages),
         "page_size": page_size,
-        "search_mode": "fdle_form",
+        "search_mode": search_spec.get("search_mode") or "fdle_form",
         "category": search_spec.get("category_text") or "All Categories",
+        "candidate_totals": search_spec.get("candidate_totals") or [],
+        "search_warnings": search_spec.get("search_warnings") or [],
     }
 
 
@@ -702,12 +819,14 @@ def refresh() -> dict:
             statuses[county] = status
         except Exception as exc:
             people = [dict(p) for p in prior]
+            error_text = str(exc)[:500]
             statuses[county] = {
                 "status": "stale" if people else "unavailable",
                 "records": len(people),
                 "checked_at": checked_at,
-                "error": str(exc)[:500],
+                "error": error_text,
             }
+            print(f"FDLE county refresh failed: {county}: {error_text}", file=sys.stderr, flush=True)
         merged.extend(people)
 
     if fresh_counties == 0 and not previous_people:
@@ -718,10 +837,15 @@ def refresh() -> dict:
         if statuses.get(county, {}).get("status") == "unavailable" and not previous_by_county[county]
     ]
     if unavailable_without_baseline:
+        details = "; ".join(
+            f"{county}: {statuses.get(county, {}).get('error', 'unknown source error')}"
+            for county in unavailable_without_baseline
+        )
         raise RuntimeError(
             "FDLE refresh was incomplete and there is no last-known-good baseline for: "
             + ", ".join(unavailable_without_baseline)
-            + ". Refusing to publish a partial Treasure Coast directory."
+            + ". Refusing to publish a partial Treasure Coast directory. Source error(s): "
+            + details
         )
 
     # Stable URLs and resilient local image copies.

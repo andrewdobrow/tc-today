@@ -20,6 +20,9 @@ BODY_RE = re.compile(r'<div class="article-body">(.*?)</div>', re.I | re.S)
 # Keep this exact: data-tct-paywall-newsletter is a dormant newsletter slot,
 # not the membership paywall itself.
 ACTUAL_PAYWALL_MARKER_RE = re.compile(r'(?<![\w-])data-tct-paywall(?![\w-])', re.I)
+SNAPSHOT_BATCH_SIZE = 25
+SNAPSHOT_MIN_BATCH_SIZE = 1
+
 
 
 def scan_public_articles() -> list[dict[str, str]]:
@@ -71,10 +74,34 @@ def _request(url: str, secret: str, payload: dict) -> requests.Response:
 
 
 def snapshot_store(url: str, secret: str, output: Path) -> int:
+    """Snapshot the protected store in deliberately small, adaptive batches.
+
+    Protected bodies are large HTML payloads.  Asking the Edge Function/PostgREST
+    for hundreds of rows at once can exceed a response/resource limit even though
+    a one-row capability probe succeeds.  Start small and halve the request size
+    on a server-side 500 before giving up.
+    """
     rows: list[dict[str, str]] = []
     offset = 0
+    limit = SNAPSHOT_BATCH_SIZE
     while True:
-        response = _request(url, secret, {"action": "snapshot", "offset": offset, "limit": 200})
+        while True:
+            try:
+                response = _request(url, secret, {"action": "snapshot", "offset": offset, "limit": limit})
+                break
+            except RuntimeError as exc:
+                message = str(exc)
+                if "Protected article sync failed (500)" in message and limit > SNAPSHOT_MIN_BATCH_SIZE:
+                    new_limit = max(SNAPSHOT_MIN_BATCH_SIZE, limit // 2)
+                    print(
+                        f"Protected article snapshot batch failed at offset {offset}; "
+                        f"retrying with {new_limit} row(s).",
+                        file=sys.stderr,
+                    )
+                    limit = new_limit
+                    continue
+                raise
+
         payload = response.json()
         batch = payload.get("articles") if isinstance(payload, dict) else None
         if not isinstance(batch, list):
@@ -83,7 +110,10 @@ def snapshot_store(url: str, secret: str, output: Path) -> int:
         next_offset = payload.get("next_offset")
         if next_offset is None:
             break
-        offset = int(next_offset)
+        next_offset = int(next_offset)
+        if next_offset <= offset:
+            raise RuntimeError("Protected article snapshot returned a non-advancing offset")
+        offset = next_offset
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps({"articles": rows}, ensure_ascii=False), encoding="utf-8")
     return len(rows)
