@@ -193,3 +193,13 @@ def test_navigation_and_workflow_contracts_include_missing_persons():
     assert "python scripts/update_missing_persons.py --validate-only" in workflow
     assert "git add -A missing-persons/ images/missing-persons/" in workflow
     assert 'group: "pages"' in workflow
+
+
+def test_bootstrap_directory_exists_at_repo_root_and_is_not_a_false_zero_state():
+    page = ROOT / "missing-persons.html"
+    assert page.exists(), "missing-persons.html must ship in the repo root so navigation never lands on a 404"
+    html = page.read_text(encoding="utf-8")
+    assert "Missing Persons on the Treasure Coast" in html
+    assert "Directory update in progress" in html
+    assert "Directory initializing" in html
+    assert "0 current FDLE records" not in html

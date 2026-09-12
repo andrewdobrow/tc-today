@@ -581,8 +581,15 @@ def _directory_page(payload: dict, status: dict) -> str:
     people = payload.get("people", [])
     cards = "\n".join(_person_card(person) for person in people)
     stale = [county for county, row in (status.get("counties") or {}).items() if row.get("status") != "fresh"]
+    initializing = not payload.get("updated_at") and not (status.get("counties") or {})
     stale_html = ""
-    if stale:
+    if initializing:
+        stale_html = (
+            '<div class="missing-person-source-warning"><strong>Directory update in progress:</strong> '
+            'TCT is loading the current FDLE listings for Martin, St. Lucie and Indian River counties. '
+            'This page will populate automatically after the first successful source update.</div>'
+        )
+    elif stale:
         stale_html = (
             '<div class="missing-person-source-warning"><strong>Refresh note:</strong> '
             f'FDLE data for {html_lib.escape(", ".join(stale))} could not be fully refreshed. '
@@ -610,7 +617,7 @@ def _directory_page(payload: dict, status: dict) -> str:
     <p class="missing-persons-kicker">Public service directory</p>
     <h1>Missing Persons on the Treasure Coast</h1>
     <p>People currently listed by the Florida Department of Law Enforcement as missing from Martin, St. Lucie or Indian River counties.</p>
-    <div class="missing-persons-summary"><strong>{count}</strong> current FDLE record{'s' if count != 1 else ''}<span>Last checked {_format_updated(payload.get('updated_at',''))}</span></div>
+    <div class="missing-persons-summary">{('<strong>Directory initializing</strong><span>Waiting for the first FDLE refresh</span>' if initializing else f'<strong>{count}</strong> current FDLE record{"s" if count != 1 else ""}<span>Last checked {_format_updated(payload.get("updated_at",""))}</span>')}</div>
   </section>
   {stale_html}
   <section class="missing-persons-tools" aria-label="Filter missing persons by county">
