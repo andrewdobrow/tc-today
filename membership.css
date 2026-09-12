@@ -1283,3 +1283,26 @@ html.tct-meter-precheck .tct-preview-copy {
   .tct-paywall.tct-paywall-full-bleed .tct-paywall-plans { grid-template-columns: 1fr; gap: 18px; }
   .tct-paywall.tct-paywall-full-bleed .tct-paywall-card { min-height: 190px; }
 }
+
+/* ================================================================
+   TCT v1.13.7.21 - desktop article-column paywall containment
+   Keep the full-bleed treatment on mobile, but on desktop the paywall
+   stays inside the article column so it does not run beneath the sidebar.
+   ================================================================ */
+@media (min-width: 681px) {
+  .tct-paywall.tct-paywall-full-bleed {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 10px;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-inner {
+    width: 100%;
+    max-width: 760px;
+    padding: 28px 24px 38px;
+  }
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-exit {
+    right: 14px;
+  }
+}

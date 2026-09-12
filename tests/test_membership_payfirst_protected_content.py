@@ -243,6 +243,14 @@ def test_membership_article_paywall_uses_simple_full_width_primary_offer():
     assert "font-size: clamp(.58rem, 2.55vw, .7rem)" in release_css
     assert "syncPaywallFullBleed(paywall)" in browser
     assert "--tct-paywall-viewport-left" in browser
+    desktop_override = css.split("TCT v1.13.7.21 - desktop article-column paywall containment", 1)[1]
+    assert "@media (min-width: 681px)" in desktop_override
+    assert "width: 100%" in desktop_override
+    assert "max-width: 100%" in desktop_override
+    assert "margin-left: 0" in desktop_override
+    assert "border-radius: 10px" in desktop_override
+    # Mobile keeps the prior viewport-width full-bleed treatment.
+    assert "width: var(--tct-paywall-viewport-width, 100vw)" in release_css
 
 
 def test_checkout_completion_creates_or_links_identity_then_sends_passwordless_access():
@@ -501,8 +509,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.7.20"' in page
-    assert 'src="/membership.js?v=1.13.7.20"' in page
+    assert 'href="/membership.css?v=1.13.7.21"' in page
+    assert 'src="/membership.js?v=1.13.7.21"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -548,8 +556,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.7.20') == 1
-    assert first.count('/membership.js?v=1.13.7.20') == 1
+    assert first.count('/membership.css?v=1.13.7.21') == 1
+    assert first.count('/membership.js?v=1.13.7.21') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -636,7 +644,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.20"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.7.21"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
