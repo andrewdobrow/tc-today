@@ -24019,6 +24019,15 @@ ST_LUCIE_ALPR_POLICY_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-09-02-port-st-lucie-police-pause-license-plate-readers-limit-use-to-life-threatening-s",
 })
 
+# Permanent SEO/permalink regression for Ronald Corbin. This URL earned organic
+# search visibility before a contaminated historical story ID incorrectly joined the
+# obituary to an unrelated Port St. Lucie DUI article. It is an independent article
+# and must never be converted into a canonical redirect source again.
+RONALD_CORBIN_CANONICAL_SLUG = (
+    "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies"
+)
+
+
 
 def _publication_slug_claim_diagnostics(item, entry):
     """Compare the immutable URL claim with the current headline/lead claim.
@@ -24766,12 +24775,19 @@ def _incident_anchor_can_own_canonical(anchor):
 
 
 def _publication_identity_key_can_consolidate(key, safe_story_ids=()):
-    """Single authority boundary for identity-graph destructive edges."""
+    """Single authority boundary for identity-graph destructive edges.
+
+    Persistent story IDs are candidate-retrieval identities only. Even an ID that
+    currently passes registry health checks can have inherited historical members
+    from an earlier broad merge, so it may not by itself create a permanent redirect
+    or collapse two published permalinks. Exact source/custom/weather identities and
+    write-authoritative incident anchors remain deterministic destructive edges.
+    """
     value = str(key or "").strip()
     if not value:
         return False
     if value.startswith("story:"):
-        return value.split(":", 1)[1] in set(safe_story_ids or ())
+        return False
     if value.startswith("incident:"):
         return _incident_anchor_can_own_canonical(value.split(":", 1)[1])
     return value.startswith(("source:", "custom-event:", "weather:"))
@@ -24862,10 +24878,10 @@ def _ensure_publication_identity_fields(entry, canonical_slug=""):
 def _publication_ledger_identity_keys(item, identity_index=None, *, include_archive_body=False):
     """Return deterministic identities that may own one canonical TCT permalink.
 
-    Exact source identity, the persistent story ID and structured incident identity
-    are independent evidence channels. The publication writer may use any one of them
-    to find an existing canonical, but historical auto-redirects use only safe story
-    IDs or independently structured incident/source identity.
+    Exact source identity and structured incident identity may independently own a
+    canonical permalink. A persistent story ID is retained as candidate-retrieval
+    context only; it must be re-proven from source/event facts before any destructive
+    historical redirect or overwrite.
     """
     if not isinstance(item, dict):
         return ()
@@ -29807,10 +29823,10 @@ def _update_replacement_diagnostics(item, canonical):
 def _reconcile_canonical_publication_ledger(archive, identity_index, output_root):
     """Collapse connected duplicate publication records before new writing begins.
 
-    Structured incident anchors, exact source URLs and safe duplicate-story IDs form
-    a connected identity graph. Each connected component may retain one live slug.
-    Follow-up/related story IDs are not used for historical auto-redirects, preserving
-    room for a future explicit major-update publication contract.
+    Write-authoritative structured incident anchors, exact source URLs and explicit
+    custom/weather identities form the destructive identity graph. Persistent story
+    IDs may retrieve candidates but never create a graph edge by themselves. Each
+    independently proven component may retain one live slug.
     """
     archive = [entry for entry in (archive or []) if isinstance(entry, dict)]
     safe_story_ids = set(getattr(identity_index, "safe_story_ids", set()) or set())
@@ -30685,6 +30701,26 @@ def enforce_canonical_redirects(archive, articles_dir, output_root, current_run_
         if record.get("source_slug"):
             merged[record["source_slug"]] = record
     records = list(merged.values())[-CANONICAL_REDIRECT_LIMIT:]
+
+    # A cumulative redirect is destructive: it replaces the substantive article file
+    # and emits a permanent 301.  Keep a hard regression barrier around the Ronald
+    # Corbin permalink after the Sept. 1 identity-contamination incident.  This runs
+    # before any redirect page or _redirects rule is written, so a future registry
+    # regression fails the production run instead of silently sacrificing the URL.
+    corbin_redirect = next(
+        (
+            row for row in records
+            if str(row.get("source_slug") or "") == RONALD_CORBIN_CANONICAL_SLUG
+            and str(row.get("target_slug") or "") != RONALD_CORBIN_CANONICAL_SLUG
+        ),
+        None,
+    )
+    if corbin_redirect is not None:
+        raise RuntimeError(
+            "Canonical redirect safety FAILED: the independent Ronald Corbin "
+            "permalink cannot be redirected to "
+            + str(corbin_redirect.get("target_slug") or "unknown target")
+        )
 
     source_slugs = {r["source_slug"] for r in records if r.get("source_slug")}
     cleaned = [e for e in (archive or []) if e.get("slug") not in source_slugs]
@@ -32240,13 +32276,11 @@ def _destructive_publication_write_authorized(item, entry, story_id, basis):
 
 
 def _reconcile_archive_publication_identity(archive, identity_index):
-    """Collapse archive rows that the persistent registry already proved identical.
+    """Collapse archive rows only after independent event/source corroboration.
 
-    A legacy prospective-overwrite quarantine may be repaired only when the archive
-    row's current headline is still aligned with its own slug and another row with the
-    same safe persistent story ID independently corroborates the same event. This
-    closes the failure mode where a harmless rewritten headline quarantined the older
-    canonical page and forced a second permalink for the same exact source story.
+    Persistent story IDs are candidate groups, not destructive proof. This prevents a
+    historically contaminated registry ID from permanently redirecting unrelated URLs.
+    Legacy prospective-overwrite quarantines follow the same independent-evidence rule.
     """
     archive = list(archive or [])
     if identity_index is None:
@@ -32302,15 +32336,13 @@ def _reconcile_archive_publication_identity(archive, identity_index):
                 or _same_event_items(left, right)
             )
 
-        # Safe registry-backed rows keep the established publication-identity
-        # behavior: the persistent story ID is sufficient to consolidate them.
-        # Only a legacy prospective-overwrite quarantine needs extra evidence
-        # before it may re-enter the canonical group.
+        # A persistent story ID retrieves a candidate group but is never sufficient
+        # destructive authority by itself. Every row must be independently
+        # corroborated against at least one other row before it may participate in a
+        # historical permalink collapse. This prevents a formerly contaminated
+        # registry ID from turning unrelated published URLs into permanent redirects.
         eligible = []
         for member in active:
-            if not repairable_prospective_quarantine(member):
-                eligible.append(member)
-                continue
             if any(
                 other is not member and independently_corroborated(member, other)
                 for other in active
@@ -32338,14 +32370,10 @@ def _reconcile_archive_publication_identity(archive, identity_index):
         for duplicate in active:
             if duplicate is canonical or duplicate.get("slug") == canonical.get("slug"):
                 continue
-            # Extra corroboration is required only when either side is a repaired
-            # prospective-overwrite quarantine. Ordinary safe rows were already
-            # proven identical by the persistent registry and retain the existing
-            # consolidation behavior.
-            if (
-                repairable_prospective_quarantine(canonical)
-                or repairable_prospective_quarantine(duplicate)
-            ) and not independently_corroborated(canonical, duplicate):
+            # Destructive consolidation always requires independent event/source
+            # corroboration between the chosen canonical and the duplicate. A shared
+            # persistent story ID alone is candidate evidence, never redirect authority.
+            if not independently_corroborated(canonical, duplicate):
                 continue
             source_slug = duplicate.get("slug", "")
             if not source_slug:

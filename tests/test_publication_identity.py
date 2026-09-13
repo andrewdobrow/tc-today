@@ -106,7 +106,7 @@ def test_follow_up_story_remains_outside_publication_enforcement():
     assert index.resolve({"source_url": "https://example.com/arrest"}) == ""
 
 
-def test_archive_reconciliation_creates_redirects_and_keeps_oldest_permalink():
+def test_archive_reconciliation_does_not_redirect_on_story_id_alone():
     generate = _load_generate_module()
     index = build_publication_identity_index(_registry_payload())
     archive = [
@@ -128,12 +128,14 @@ def test_archive_reconciliation_creates_redirects_and_keeps_oldest_permalink():
         },
     ]
     cleaned, redirects, report = generate._reconcile_archive_publication_identity(archive, index)
-    assert [entry["slug"] for entry in cleaned] == ["2026-07-23-big-taste-returns"]
-    assert redirects[0]["target_slug"] == "2026-07-23-big-taste-returns"
-    assert redirects[0]["source_slug"] == "2026-07-23-big-taste-fundraiser"
-    assert report["groups_resolved"] == 1
-    assert report["records_removed"] == 1
-    assert report["remaining_duplicate_groups"] == 0
+    assert [entry["slug"] for entry in cleaned] == [
+        "2026-07-23-big-taste-returns",
+        "2026-07-23-big-taste-fundraiser",
+    ]
+    assert redirects == []
+    assert report["groups_resolved"] == 0
+    assert report["records_removed"] == 0
+    assert report["remaining_duplicate_groups"] == 1
 
 
 def test_custom_permalink_wins_publication_identity_group():
@@ -143,7 +145,7 @@ def test_custom_permalink_wins_publication_identity_group():
         {
             "slug": "generated-childcare",
             "headline": "Fort Pierce child care crisis forces mother to leave nursing job",
-            "source_url": "https://news.google.com/rss/articles/CHILDCARE?oc=5",
+            "source_url": "https://www.wptv.com/money/consumer/fort-pierce-mom-childcare-crisis",
             "first_published": "Wed, 22 Jul 2026 08:00:00 -0400",
             "editorial_story_id": "story_childcare",
         },
