@@ -470,3 +470,101 @@ def test_event_detail_all_day_uses_all_day_copy_and_date_only_schema(tmp_path, m
     assert "Saturday, September 12, 2026 · All day" in page
     assert '"startDate":"2026-09-12"' in page
     assert "at 12:00 AM" not in page
+
+
+def _extract_event_schema(page: str) -> dict:
+    import re
+    for raw in re.findall(r'<script type="application/ld\+json"[^>]*>(.*?)</script>', page, flags=re.S):
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(payload, dict) and payload.get("@type") == "Event":
+            return payload
+    raise AssertionError("event JSON-LD block missing")
+
+
+def test_event_leaf_schema_emits_only_truthful_recommended_google_fields(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    (tmp_path/"events.html").write_text(_chrome(), encoding="utf-8")
+    event = _event_fixture()
+    event.update({
+        "source_kind":"venue",
+        "organizer_name":"Downtown Stuart Arts Council",
+        "organizer_url":"https://example.com/organizer",
+        "performer_names":["The River Band"],
+        "image_url":"https://example.com/images/art-walk.jpg",
+        "offer_price":"0",
+        "offer_currency":"USD",
+        "offer_url":"https://example.com/tickets",
+    })
+    (tmp_path/"data"/"events.json").write_text(
+        json.dumps({"schema_version":1,"events":[event]}), encoding="utf-8"
+    )
+
+    features.render_event_detail_pages()
+    enriched=json.loads((tmp_path/"data"/"events.json").read_text())
+    detail=enriched["events"][0]["detail_url"]
+    page=(tmp_path/detail.lstrip('/')).read_text(encoding="utf-8")
+    schema=_extract_event_schema(page)
+
+    assert schema["@type"] == "Event"
+    assert schema["organizer"] == {
+        "@type":"Organization",
+        "name":"Downtown Stuart Arts Council",
+        "url":"https://example.com/organizer",
+    }
+    assert schema["performer"] == {"@type":"PerformingGroup","name":"The River Band"}
+    assert schema["offers"]["price"] == "0"
+    assert schema["offers"]["priceCurrency"] == "USD"
+    assert schema["offers"]["url"] == "https://example.com/tickets"
+    assert schema["image"] == ["https://example.com/images/art-walk.jpg"]
+
+
+def test_event_leaf_schema_does_not_invent_google_recommended_fields(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    (tmp_path/"events.html").write_text(_chrome(), encoding="utf-8")
+    event = _event_fixture()
+    event.update({
+        "price":"Registration details vary; see event page",
+        "source_kind":"aggregator",
+        "source_name":"Regional Calendar",
+        "image_url":"",
+        "performer_names":[],
+        "organizer_name":"",
+        "organizer_url":"",
+    })
+    (tmp_path/"data"/"events.json").write_text(
+        json.dumps({"schema_version":1,"events":[event]}), encoding="utf-8"
+    )
+
+    features.render_event_detail_pages()
+    enriched=json.loads((tmp_path/"data"/"events.json").read_text())
+    detail=enriched["events"][0]["detail_url"]
+    page=(tmp_path/detail.lstrip('/')).read_text(encoding="utf-8")
+    schema=_extract_event_schema(page)
+
+    assert "organizer" not in schema
+    assert "performer" not in schema
+    assert "offers" not in schema
+    assert "image" not in schema
+
+
+def test_events_listing_schema_is_itemlist_of_unique_leaf_urls(tmp_path, monkeypatch):
+    _setup_root(tmp_path, monkeypatch)
+    (tmp_path/"events.html").write_text(_chrome(), encoding="utf-8")
+    (tmp_path/"data"/"events.json").write_text(
+        json.dumps({"schema_version":1,"events":[_event_fixture()]}), encoding="utf-8"
+    )
+    features.render_event_detail_pages()
+    page=(tmp_path/"events.html").read_text(encoding="utf-8")
+    import re
+    match=re.search(r'<script type="application/ld\+json" data-tct-events-jsonld>(.*?)</script>', page, re.S)
+    assert match
+    schema=json.loads(match.group(1))
+    assert schema["@type"] == "ItemList"
+    item=schema["itemListElement"][0]
+    assert item["@type"] == "ListItem"
+    assert item["url"].startswith("https://treasurecoast.today/events/")
+    assert "item" not in item
+    assert '"@type":"Event"' not in match.group(1)

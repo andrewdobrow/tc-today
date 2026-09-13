@@ -779,6 +779,12 @@ CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
 # carrying validated pre-generation material-update authority. This is narrower than
 # every source-level promotion and drives the terminal no-silent-loss invariant.
 CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
+# Explicit terminal waivers for selected material updates that a later, stricter
+# publication-quality gate intentionally rejects or recognizes as already absorbed.
+# A waiver is source-URL bound and never excuses an unrelated selected update for
+# the same canonical slug. This keeps the no-silent-loss invariant fail-closed while
+# allowing an explicit UPDATE CONTEXT HOLD / REPLAY LOCK to preserve the canonical.
+CURRENT_RUN_MATERIAL_UPDATE_WAIVERS = {}
 # Deep copies of the FINAL category placements that created those obligations.
 # These are publication-only receipts: they are never added back to the visible
 # category deck, but write_archives() consumes them so later hero/card coalescing
@@ -24027,6 +24033,68 @@ RONALD_CORBIN_CANONICAL_SLUG = (
     "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies"
 )
 
+# v1.13.9.20 historical redirect audit.  These are public permalinks that were
+# proven to have been damaged by identity contamination.  A standalone slug must
+# never become a redirect source again.  Alias slugs are genuine duplicate URLs
+# from the same source/event and may redirect only to the audited target below.
+# This is intentionally explicit and narrow: unrelated redirects outside the audit
+# continue to be governed by the general pairwise authority contract.
+HISTORICAL_REDIRECT_STANDALONE_SLUGS = frozenset({
+    RONALD_CORBIN_CANONICAL_SLUG,
+    "2026-08-09-2-year-old-horse-reported-stolen-from-pasture-in-port-st-lucie",
+    "2026-08-06-flood-advisory-issued-for-western-martin-county-through-730-pm-thursday",
+    "2026-08-06-firefighters-battle-blaze-at-st-lucie-county-home-on-melaleuca-boulevard",
+    "2026-08-10-centennial-high-school-student-hit-by-car-at-port-st-lucie-intersection",
+    "2026-08-21-donalds-pledges-20-insurance-cut-backs-data-centers-as-florida-governors-race-pi",
+    "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
+    "2026-08-24-funnel-cloud-spotted-over-port-st-lucie-neighborhood-during-tornado-warning-sund",
+    "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
+    "2026-08-27-corgi-found-three-streets-away-after-port-st-lucie-tornado",
+    "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
+    "2026-06-29-palm-city-man-dies-after-suv-collides-with-semi-truck-on-floridas-turnpike-in-ma",
+    "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
+    "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+    "2026-09-01-port-st-lucie-police-search-for-missing-38-year-old-man-last-seen-monday-morning",
+    "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+    "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
+})
+
+HISTORICAL_REDIRECT_ALIAS_TARGETS = {
+    # Eight bad horse permalinks all came from the same WPBF source. Keep the
+    # cleanest/earliest slug as the recovered canonical and preserve the rest as 301s.
+    "2026-08-09-st-lucie-county-sheriffs-office-searches-for-stolen-american-paint-horse-from-wi":
+        "2026-08-09-2-year-old-horse-reported-stolen-from-pasture-in-port-st-lucie",
+    "2026-08-09-american-paint-horse-stolen-from-port-st-lucie-pasture-sheriffs-office-seeks-pub":
+        "2026-08-09-2-year-old-horse-reported-stolen-from-pasture-in-port-st-lucie",
+    "2026-08-09-2-year-old-stallion-stolen-from-pasture-in-port-st-lucie":
+        "2026-08-09-2-year-old-horse-reported-stolen-from-pasture-in-port-st-lucie",
+    "2026-08-09-horse-reported-stolen-from-pasture-on-williams-road-in-port-st-lucie":
+        "2026-08-09-2-year-old-horse-reported-stolen-from-pasture-in-port-st-lucie",
+    "2026-08-09-horse-reported-stolen-from-port-st-lucie-pasture-sheriff-seeks-public-help":
+        "2026-08-09-2-year-old-horse-reported-stolen-from-pasture-in-port-st-lucie",
+    "2026-08-09-st-lucie-county-sheriffs-office-seeks-help-finding-horse-stolen-from-port-st-luc":
+        "2026-08-09-2-year-old-horse-reported-stolen-from-pasture-in-port-st-lucie",
+    "2026-08-09-american-paint-horse-stolen-from-pasture-in-port-st-lucie-sheriffs-office-seeks":
+        "2026-08-09-2-year-old-horse-reported-stolen-from-pasture-in-port-st-lucie",
+    # Two Centennial URLs were generated from the same WPTV source.
+    "2026-08-10-centennial-high-school-student-hit-by-car-while-crossing-crosstown-parkway-in-po":
+        "2026-08-10-centennial-high-school-student-hit-by-car-at-port-st-lucie-intersection",
+    # Four Corgi URLs were generated from the same WPBF source.
+    "2026-08-27-corgi-found-three-streets-away-after-ef0-tornado-in-port-st-lucie":
+        "2026-08-27-corgi-found-three-streets-away-after-port-st-lucie-tornado",
+    "2026-08-28-corgi-found-three-streets-away-after-ef0-tornado-in-port-st-lucie":
+        "2026-08-27-corgi-found-three-streets-away-after-port-st-lucie-tornado",
+    "2026-08-28-corgi-reunited-with-owner-after-ef0-tornado-in-port-st-lucie":
+        "2026-08-27-corgi-found-three-streets-away-after-port-st-lucie-tornado",
+    # This PSLPD Flock URL belongs to the already-established Sept. 1 ALPR policy
+    # canonical, not the unrelated liquor-store DUI article it was pointed at.
+    "2026-09-02-port-st-lucie-police-pause-flock-camera-use-after-state-revokes-permits-on-state":
+        ST_LUCIE_ALPR_POLICY_CANONICAL_SLUG,
+    # Same CBS12 armed-robbery source as the surviving Sept. 5 canonical.
+    "2026-09-03-fort-pierce-police-arrest-16-year-old-suspect-within-24-hours-in-armed-robbery-c":
+        "2026-09-05-fort-pierce-police-arrest-16-year-old-within-24-hours-in-armed-robbery-involving",
+}
+
 
 
 def _publication_slug_claim_diagnostics(item, entry):
@@ -24789,8 +24857,92 @@ def _publication_identity_key_can_consolidate(key, safe_story_ids=()):
     if value.startswith("story:"):
         return False
     if value.startswith("incident:"):
-        return _incident_anchor_can_own_canonical(value.split(":", 1)[1])
+        # Structured incident anchors are candidate-retrieval keys only at the
+        # publication-graph layer. Even a normally write-authoritative anchor can
+        # be stale or historically malformed; destructive consolidation requires
+        # direct pairwise source-fact corroboration in _cross_source_same_event_evidence.
+        return False
     return value.startswith(("source:", "custom-event:", "weather:"))
+
+
+def _recomputed_published_incident_anchor(item):
+    """Recompute a structured incident key from the pair's own publication facts.
+
+    Never trust a stored ``incident_anchor_key`` for destructive pairwise authority:
+    historical registry/graph contamination can leave that field stale.  Recomputing
+    from the article's own title/teaser/body makes a shared anchor direct evidence
+    rather than a transitive graph assertion.
+    """
+    if not isinstance(item, dict) or incident_anchor_key is None:
+        return ""
+    body = str(item.get("body") or item.get("article_text") or "")
+    if not body:
+        body = _archive_article_body(item)
+    try:
+        return str(incident_anchor_key(
+            titles=(
+                item.get("headline", ""),
+                item.get("source_headline", ""),
+                item.get("title", ""),
+                item.get("source_title", ""),
+                item.get("teaser", ""),
+            ),
+            facts=item.get("facts", ()) or (),
+            locations=item.get("locations", ()) or (),
+            agencies=item.get("agencies", ()) or (),
+            event_types=item.get("event_types", ()) or (),
+            entities=item.get("entities", ()) or (),
+            body=body,
+        ) or "").strip()
+    except Exception:
+        return ""
+
+
+def _published_pair_can_share_permalink(left, right, identity_index=None):
+    """Require direct evidence before one published permalink can destroy another.
+
+    Graph connectivity is not enough: A can match B and B can match C while A and C
+    are different stories. That exact transitive failure class produced historical
+    unrelated redirects. Exact immutable source/custom/weather identity remains
+    deterministic. A structured incident identity is accepted only when it is
+    independently recomputed from BOTH published records and is write-authoritative;
+    stored/transitive incident keys never authorize destruction on their own.
+    """
+    if not isinstance(left, dict) or not isinstance(right, dict):
+        return False, {"proof_type": "missing_payload", "write_authorized": False}
+    if str(left.get("slug") or "") == str(right.get("slug") or ""):
+        return True, {"proof_type": "same_permalink", "write_authorized": True}
+
+    left_keys = set(_publication_ledger_identity_keys(left, identity_index, include_archive_body=True))
+    right_keys = set(_publication_ledger_identity_keys(right, identity_index, include_archive_body=True))
+    shared = left_keys & right_keys
+    deterministic = sorted(
+        key for key in shared
+        if key.startswith(("source:", "custom-event:", "weather:"))
+    )
+    if deterministic:
+        return True, {
+            "proof_type": "direct_deterministic_identity",
+            "write_authorized": True,
+            "identity_keys": deterministic,
+        }
+
+    left_anchor = _recomputed_published_incident_anchor(left)
+    right_anchor = _recomputed_published_incident_anchor(right)
+    if (
+        left_anchor
+        and left_anchor == right_anchor
+        and _incident_anchor_can_own_canonical(left_anchor)
+    ):
+        return True, {
+            "proof_type": "direct_recomputed_incident_identity",
+            "write_authorized": True,
+            "incident_anchor_key": left_anchor,
+            "evidence_dimensions": ["recomputed_incident_anchor"],
+        }
+
+    evidence = _cross_source_same_event_evidence(left, right)
+    return bool(evidence.get("write_authorized")), evidence
 
 
 def _publication_copy_rank(entry):
@@ -29950,14 +30102,21 @@ def _reconcile_canonical_publication_ledger(archive, identity_index, output_root
                         pair_seed.encode("utf-8")
                     ).hexdigest()[:16]
                 )
+        component_removed = set()
         for duplicate in members:
             slug = str(duplicate.get("slug") or "")
+            if not slug or slug == canonical_slug:
+                continue
+            pair_authorized, pair_evidence = _published_pair_can_share_permalink(
+                duplicate, canonical, identity_index
+            )
+            if not pair_authorized:
+                continue
             merged_memberships.update(
                 _item_category_memberships(duplicate, duplicate.get("category_key"))
             )
-            if not slug or slug == canonical_slug:
-                continue
             removed.add(slug)
+            component_removed.add(slug)
             _ensure_publication_identity_fields(duplicate, canonical_slug)
             redirects.append({
                 "source_slug": slug,
@@ -29972,9 +30131,11 @@ def _reconcile_canonical_publication_ledger(archive, identity_index, output_root
                 "identity_keys": sorted(component_keys),
                 "source_publication_id": duplicate.get("publication_id", ""),
                 "canonical_publication_id": _stable_publication_id(canonical_slug),
+                "pairwise_proof_type": str(pair_evidence.get("proof_type") or ""),
+                "pairwise_evidence_dimensions": list(pair_evidence.get("evidence_dimensions") or ()),
                 "reason": (
-                    "Canonical publication ledger enforced one live permalink for "
-                    "the same proven story or incident."
+                    "Canonical publication ledger enforced one live permalink only "
+                    "after direct pairwise identity authorization."
                 ),
             })
         _apply_category_memberships(
@@ -29983,12 +30144,13 @@ def _reconcile_canonical_publication_ledger(archive, identity_index, output_root
             merged_memberships,
         )
         _ensure_publication_identity_fields(canonical, canonical_slug)
-        groups.append({
-            "canonical_slug": canonical_slug,
-            "canonical_headline": canonical.get("headline", ""),
-            "removed_slugs": sorted(unique_slugs - {canonical_slug}),
-            "identity_keys": sorted(component_keys),
-        })
+        if component_removed:
+            groups.append({
+                "canonical_slug": canonical_slug,
+                "canonical_headline": canonical.get("headline", ""),
+                "removed_slugs": sorted(component_removed),
+                "identity_keys": sorted(component_keys),
+            })
 
     cleaned = [entry for entry in archive if entry.get("slug") not in removed]
     ledger = _build_canonical_publication_ledger(cleaned, identity_index)
@@ -30204,6 +30366,11 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             source_slug = duplicate["slug"]
             if source_slug in existing_redirect_sources:
                 continue
+            pair_authorized, pair_evidence = _published_pair_can_share_permalink(
+                duplicate, canonical
+            )
+            if not pair_authorized:
+                continue
             removed_slugs.add(source_slug)
             existing_redirect_sources.add(source_slug)
             redirects.append({
@@ -30215,7 +30382,8 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                 "match_confidence": 100,
                 "canonical_is_custom": bool(canonical.get("is_custom") or canonical.get("authoritative_custom")),
                 "event_key": event_key,
-                "reason": "Duplicate development consolidated under the single canonical event URL.",
+                "pairwise_proof_type": str(pair_evidence.get("proof_type") or ""),
+                "reason": "Duplicate development consolidated only after direct pairwise identity authorization.",
             })
 
     # Global structured-incident consolidation. This is independent of the
@@ -30241,6 +30409,11 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             source_slug = str(duplicate.get("slug") or "")
             if not source_slug or source_slug == canonical.get("slug"):
                 continue
+            pair_authorized, pair_evidence = _published_pair_can_share_permalink(
+                duplicate, canonical
+            )
+            if not pair_authorized:
+                continue
             _merge_category_memberships(
                 canonical,
                 duplicate,
@@ -30259,9 +30432,11 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                     canonical.get("is_custom") or canonical.get("authoritative_custom")
                 ),
                 "incident_anchor_key": anchor,
+                "pairwise_proof_type": str(pair_evidence.get("proof_type") or ""),
+                "pairwise_evidence_dimensions": list(pair_evidence.get("evidence_dimensions") or ()),
                 "reason": (
-                    "Duplicate public URL consolidated by the global structured "
-                    "incident identity contract."
+                    "Duplicate public URL consolidated by the structured incident "
+                    "contract only after direct pairwise corroboration."
                 ),
             })
 
@@ -30318,9 +30493,34 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             if len(members) < 2:
                 continue
             canonical = min(members, key=_incident_canonical_key)
+            canonical_evidence = build_unified_incident_evidence(
+                title=canonical.get("headline") or canonical.get("title") or "",
+                body=" ".join(str(canonical.get(field) or "") for field in ("teaser", "body", "article_text", "source_title", "source_headline", "source_url")),
+                locations=canonical.get("locations", ()) or (),
+                agencies=canonical.get("agencies", ()) or (),
+                entities=canonical.get("entities", ()) or (),
+                published_at=canonical.get("first_published") or canonical.get("date"),
+                source_url=canonical.get("source_url") or "",
+            )
             for duplicate in members:
                 source_slug = str(duplicate.get("slug") or "")
                 if not source_slug or source_slug == canonical.get("slug"):
+                    continue
+                duplicate_evidence = build_unified_incident_evidence(
+                    title=duplicate.get("headline") or duplicate.get("title") or "",
+                    body=" ".join(str(duplicate.get(field) or "") for field in ("teaser", "body", "article_text", "source_title", "source_headline", "source_url")),
+                    locations=duplicate.get("locations", ()) or (),
+                    agencies=duplicate.get("agencies", ()) or (),
+                    entities=duplicate.get("entities", ()) or (),
+                    published_at=duplicate.get("first_published") or duplicate.get("date"),
+                    source_url=duplicate.get("source_url") or "",
+                )
+                try:
+                    from tct_engine.unified_incident_identity import compare_unified_incident_evidence
+                    direct_score, direct_trace = compare_unified_incident_evidence(duplicate_evidence, canonical_evidence)
+                except Exception:
+                    direct_score, direct_trace = 0.0, ()
+                if direct_score < 0.86:
                     continue
                 _merge_category_memberships(
                     canonical,
@@ -30335,7 +30535,8 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                     "target_slug": canonical.get("slug", ""),
                     "target_headline": canonical.get("headline", ""),
                     "story_stage": "unified-incident-identity",
-                    "match_confidence": 98,
+                    "match_confidence": int(round(direct_score * 100)),
+                    "direct_unified_incident_trace": list(direct_trace),
                     "canonical_is_custom": bool(
                         canonical.get("is_custom") or canonical.get("authoritative_custom")
                     ),
@@ -30697,9 +30898,65 @@ def enforce_canonical_redirects(archive, articles_dir, output_root, current_run_
     manifest_path = data_dir / "canonical-redirects.json"
     payload = _read_json_file(manifest_path, {"redirects": []})
     merged = {r.get("source_slug"): r for r in payload.get("redirects", []) if r.get("source_slug")}
+    current_by_source = {}
     for record in current_run_redirects or []:
         if record.get("source_slug"):
+            current_by_source[record["source_slug"]] = record
             merged[record["source_slug"]] = record
+
+    # Apply the Sept. 13 historical redirect audit before any destructive output is
+    # written. Stale cumulative manifest rows are repairable state; a NEW current-run
+    # attempt to redirect an audited standalone or to point an alias at a different
+    # story is a regression and fails closed.
+    for source_slug in HISTORICAL_REDIRECT_STANDALONE_SLUGS:
+        current = current_by_source.get(source_slug)
+        if current and str(current.get("target_slug") or "") != source_slug:
+            raise RuntimeError(
+                "Canonical redirect safety FAILED: audited standalone permalink "
+                f"{source_slug} was redirected in the current run to "
+                f"{current.get('target_slug') or 'unknown target'}"
+            )
+        merged.pop(source_slug, None)
+
+    archive_by_slug = {
+        str(row.get("slug") or ""): row
+        for row in (archive or [])
+        if isinstance(row, dict) and str(row.get("slug") or "")
+    }
+    for source_slug, approved_target in HISTORICAL_REDIRECT_ALIAS_TARGETS.items():
+        current = current_by_source.get(source_slug)
+        if current and str(current.get("target_slug") or "") != approved_target:
+            raise RuntimeError(
+                "Canonical redirect safety FAILED: audited alias permalink "
+                f"{source_slug} attempted to target "
+                f"{current.get('target_slug') or 'unknown target'} instead of "
+                f"{approved_target}"
+            )
+        # Repair only when this audited alias is actually part of the current
+        # publication state.  Do not make a small/unit-test archive (or a future
+        # intentionally pruned archive) synthesize every historical alias merely
+        # because the safety table exists in code.
+        if (
+            source_slug not in merged
+            and source_slug not in archive_by_slug
+            and approved_target not in archive_by_slug
+        ):
+            continue
+        prior = merged.get(source_slug) or {"source_slug": source_slug}
+        target_row = archive_by_slug.get(approved_target) or {}
+        merged[source_slug] = {
+            **prior,
+            "source_slug": source_slug,
+            "target_slug": approved_target,
+            "target_headline": target_row.get("headline") or prior.get("target_headline", ""),
+            "story_stage": "historical-redirect-audit-repair",
+            "match_confidence": 100,
+            "reason": (
+                "Sept. 13 redirect audit repaired a previously misdirected permalink; "
+                "this alias is independently verified to represent the approved target story."
+            ),
+        }
+
     records = list(merged.values())[-CANONICAL_REDIRECT_LIMIT:]
 
     # A cumulative redirect is destructive: it replaces the substantive article file
@@ -30785,11 +31042,33 @@ def validate_archive_incident_uniqueness(archive, output_root):
                 "headline": entry.get("headline", ""),
                 "editorial_story_id": entry.get("editorial_story_id", ""),
             })
-    duplicates = [
-        {"incident_anchor_key": anchor, "articles": rows}
-        for anchor, rows in sorted(groups.items())
-        if len({row["slug"] for row in rows}) > 1
-    ]
+    duplicates = []
+    archive_by_slug = {
+        str(row.get("slug") or ""): row
+        for row in (archive or [])
+        if isinstance(row, dict) and str(row.get("slug") or "")
+    }
+    for anchor, rows in sorted(groups.items()):
+        if len({row["slug"] for row in rows}) < 2:
+            continue
+        verified_pairs = []
+        for offset, left_row in enumerate(rows):
+            for right_row in rows[offset + 1:]:
+                left = archive_by_slug.get(left_row["slug"])
+                right = archive_by_slug.get(right_row["slug"])
+                authorized, evidence = _published_pair_can_share_permalink(left, right)
+                if authorized:
+                    verified_pairs.append({
+                        "left_slug": left_row["slug"],
+                        "right_slug": right_row["slug"],
+                        "proof_type": str(evidence.get("proof_type") or ""),
+                    })
+        if verified_pairs:
+            duplicates.append({
+                "incident_anchor_key": anchor,
+                "articles": rows,
+                "verified_pairs": verified_pairs,
+            })
     headline_groups = defaultdict(list)
     for entry in [row for row in (archive or []) if isinstance(row, dict)]:
         if entry.get("is_custom") or entry.get("authoritative_custom"):
@@ -33188,6 +33467,11 @@ def write_archives(all_categories, top_cat):
                 hero["_publication_skip_reason"] = (
                     "semantic_material_update_source_already_absorbed"
                 )
+                _waive_selected_material_update_target(
+                    hero,
+                    _absorbed_update_canonical.get("slug", ""),
+                    "semantic_material_update_source_already_absorbed",
+                )
                 print(
                     "  SEMANTIC UPDATE REPLAY LOCK: preserved "
                     f"'{_absorbed_update_canonical.get('slug','')}' for "
@@ -33662,6 +33946,9 @@ def write_archives(all_categories, top_cat):
                     })
                     hero["_publication_skip_reason"] = (
                         "contextless_update_preserve_existing"
+                    )
+                    _waive_selected_material_update_target(
+                        hero, slug, "contextless_update_preserve_existing"
                     )
                     print(
                         "  UPDATE CONTEXT HOLD: preserved canonical page "
@@ -35684,6 +35971,47 @@ def _has_self_consistent_pre_generation_material_update_authority(item):
     )
 
 
+def _waive_selected_material_update_target(item, canonical_slug, reason):
+    """Record an explicit source-bound waiver for a selected update obligation.
+
+    The category writer can legitimately select a validated material update that a
+    later final-copy gate rejects because the replacement lead is not independently
+    readable, or because that exact source was already absorbed into the canonical.
+    Those are intentional preservation decisions, not silent publication loss. The
+    waiver is bound to the selected source URL so a different update targeting the
+    same canonical still has to commit or fail the terminal invariant.
+    """
+    slug = str(canonical_slug or "").strip()
+    if not slug or not isinstance(item, dict):
+        return False
+    source_url = _normalized_external_source_url(
+        item.get("source_url") or item.get("_source_url") or item.get("link")
+    )
+    if not source_url:
+        return False
+    row = CURRENT_RUN_MATERIAL_UPDATE_WAIVERS.setdefault(slug, {
+        "canonical_slug": slug,
+        "source_urls": [],
+        "source_headlines": [],
+        "reasons": [],
+    })
+    if source_url not in row["source_urls"]:
+        row["source_urls"].append(source_url)
+    headline = str(
+        item.get("source_headline")
+        or item.get("source_title")
+        or item.get("title")
+        or item.get("headline")
+        or ""
+    ).strip()
+    if headline and headline not in row["source_headlines"]:
+        row["source_headlines"].append(headline)
+    reason = str(reason or "explicit_publication_hold").strip()
+    if reason and reason not in row["reasons"]:
+        row["reasons"].append(reason)
+    return True
+
+
 def _remember_selected_material_update_target(item, selection_surface=""):
     """Record one FINAL live-writer-selected material-update target for commit checks.
 
@@ -37047,11 +37375,49 @@ def _validate_promoted_material_updates_committed(output_root=None):
     re-stamped in the current run). Once selected, that validated development must
     produce a committed canonical material update before the workflow may succeed.
     """
-    expected = {
+    all_expected = {
         str(slug): copy.deepcopy(row)
         for slug, row in (CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS or {}).items()
         if str(slug or "").strip() and isinstance(row, dict)
     }
+    waivers = {
+        str(slug): copy.deepcopy(row)
+        for slug, row in (CURRENT_RUN_MATERIAL_UPDATE_WAIVERS or {}).items()
+        if str(slug or "").strip() and isinstance(row, dict)
+    }
+    expected = {}
+    fully_waived = []
+    partial_waivers = []
+    for slug, row in all_expected.items():
+        selected_urls = {
+            _normalized_external_source_url(value)
+            for value in (row.get("source_urls") or [])
+            if _normalized_external_source_url(value)
+        }
+        waiver_row = waivers.get(slug) or {}
+        waived_urls = {
+            _normalized_external_source_url(value)
+            for value in (waiver_row.get("source_urls") or [])
+            if _normalized_external_source_url(value)
+        }
+        if selected_urls and selected_urls <= waived_urls:
+            fully_waived.append({
+                "canonical_slug": slug,
+                "selected_source_urls": sorted(selected_urls),
+                "waived_source_urls": sorted(waived_urls),
+                "reasons": list(waiver_row.get("reasons") or []),
+                "source_headlines": list(waiver_row.get("source_headlines") or []),
+            })
+            continue
+        if waived_urls:
+            partial_waivers.append({
+                "canonical_slug": slug,
+                "selected_source_urls": sorted(selected_urls),
+                "waived_source_urls": sorted(waived_urls),
+                "remaining_source_urls": sorted(selected_urls - waived_urls),
+                "reasons": list(waiver_row.get("reasons") or []),
+            })
+        expected[slug] = row
 
     root = Path(output_root or OUTPUT_DIR)
     gate = _read_json_file(root / "data" / "semantic-publication-gate.json", {})
@@ -37081,14 +37447,19 @@ def _validate_promoted_material_updates_committed(output_root=None):
                 "reason": "material_update_headline_did_not_advance",
             })
     report = {
-        "schema_version": 2,
+        "schema_version": 3,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "policy": "every_selected_validated_material_update_must_commit_and_advance_headline",
+        "policy": "every_selected_validated_material_update_must_commit_and_advance_headline_unless_explicitly_source_bound_held",
+        "selected_canonical_count": len(all_expected),
+        "waived_canonical_count": len(fully_waived),
+        "partial_waiver_count": len(partial_waivers),
         "expected_canonical_count": len(expected),
         "applied_canonical_count": len(set(expected) & applied),
         "missing_canonical_count": len(missing),
         "stale_headline_count": len(stale_headlines),
         "expected": [copy.deepcopy(expected[slug]) for slug in sorted(expected)],
+        "waived": fully_waived,
+        "partial_waivers": partial_waivers,
         "applied_target_slugs": sorted(applied),
         "missing_target_slugs": missing,
         "stale_headlines": stale_headlines,
@@ -37115,10 +37486,11 @@ def _validate_promoted_material_updates_committed(output_root=None):
             "MATERIAL UPDATE HEADLINE INVARIANT FAILED: committed material update(s) "
             "did not advance the visible canonical headline — " + "; ".join(details)
         )
-    if expected:
+    if expected or fully_waived:
         print(
             "  Material-update publication invariant PASSED: "
-            f"{len(expected)} selected canonical update(s) committed with refreshed headline(s)"
+            f"{len(expected)} selected canonical update(s) committed; "
+            f"{len(fully_waived)} explicitly held/absorbed update(s) waived by source-bound final gate"
         )
     return report
 
@@ -37130,6 +37502,7 @@ def main():
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS
     global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS
     global CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS
+    global CURRENT_RUN_MATERIAL_UPDATE_WAIVERS
     global CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS
     _build_started = time.perf_counter()
     _stage_started = _build_started
@@ -37142,6 +37515,7 @@ def main():
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
     CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {}
+    CURRENT_RUN_MATERIAL_UPDATE_WAIVERS = {}
     CURRENT_RUN_SELECTED_MATERIAL_UPDATE_ITEMS = {}
     # The publication-to-shadow identity bridge is strictly per build. A reused
     # interpreter (tests, local tooling, or a future worker process) must never let a

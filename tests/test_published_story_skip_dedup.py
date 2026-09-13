@@ -1862,3 +1862,73 @@ def test_martin_motorcycle_update_receipt_survives_coalescing_and_commit_queue()
     assert len(commits) == 1
     assert commits[0][2]["_pre_generation_material_update_canonical_slug"] == canonical["slug"]
     assert commits[0][2]["source_headline"] == source["title"]
+
+
+def test_material_update_publication_invariant_allows_exact_source_bound_final_hold(tmp_path):
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
+        canonical["slug"]: {
+            "canonical_slug": canonical["slug"],
+            "canonical_headline": canonical["headline"],
+            "selected_headlines": [source["title"]],
+            "source_headlines": [source["title"]],
+            "source_urls": [source["source_url"]],
+            "max_confidence": 0.99,
+        }
+    }
+    g.CURRENT_RUN_MATERIAL_UPDATE_WAIVERS = {
+        canonical["slug"]: {
+            "canonical_slug": canonical["slug"],
+            "source_urls": [source["source_url"]],
+            "reasons": ["update_context_hold"],
+        }
+    }
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "semantic-publication-gate.json").write_text(
+        json.dumps({"material_updates": []}), encoding="utf-8"
+    )
+
+    report = g._validate_promoted_material_updates_committed(tmp_path)
+    assert report["passed"] is True
+    assert report["missing_target_slugs"] == []
+    row = report["waived"][0]
+    assert row["waived_source_urls"] == [source["source_url"]]
+    assert row["selected_source_urls"] == [source["source_url"]]
+
+
+def test_material_update_publication_invariant_waiver_cannot_hide_other_selected_source(tmp_path):
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+    second_url = source["source_url"] + "?independent=second"
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
+        canonical["slug"]: {
+            "canonical_slug": canonical["slug"],
+            "canonical_headline": canonical["headline"],
+            "selected_headlines": [source["title"], "Independent second update"],
+            "source_headlines": [source["title"], "Independent second update"],
+            "source_urls": [source["source_url"], second_url],
+            "max_confidence": 0.99,
+        }
+    }
+    g.CURRENT_RUN_MATERIAL_UPDATE_WAIVERS = {
+        canonical["slug"]: {
+            "canonical_slug": canonical["slug"],
+            "source_urls": [source["source_url"]],
+            "reasons": ["update_context_hold"],
+        }
+    }
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "semantic-publication-gate.json").write_text(
+        json.dumps({"material_updates": []}), encoding="utf-8"
+    )
+
+    import pytest
+    with pytest.raises(RuntimeError, match="MATERIAL UPDATE PUBLICATION INVARIANT FAILED"):
+        g._validate_promoted_material_updates_committed(tmp_path)
+    report = json.loads((data_dir / "material-update-publication-invariant.json").read_text())
+    row = report["partial_waivers"][0]
+    assert row["waived_source_urls"] == [source["source_url"]]
+    assert row["remaining_source_urls"] == [second_url]

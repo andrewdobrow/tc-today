@@ -68,7 +68,7 @@ def test_production_corbin_permalink_is_restored_as_substantive_article():
     assert f"/articles/{DUI_SLUG}.html" not in article
 
 
-def test_corbin_redirect_regression_fails_before_article_is_overwritten(tmp_path):
+def test_corbin_stale_historical_redirect_is_repaired_without_overwriting_article(tmp_path):
     generate = _load_generate()
     articles = tmp_path / "articles"
     data_dir = tmp_path / "data"
@@ -96,8 +96,41 @@ def test_corbin_redirect_regression_fails_before_article_is_overwritten(tmp_path
         encoding="utf-8",
     )
 
-    with pytest.raises(RuntimeError, match="Ronald Corbin"):
-        generate.enforce_canonical_redirects([], articles, tmp_path)
+    cleaned, verification = generate.enforce_canonical_redirects([], articles, tmp_path)
+
+    assert cleaned == []
+    assert verification == []
+    assert article_path.read_text(encoding="utf-8") == original
+    manifest = json.loads((data_dir / "canonical-redirects.json").read_text(encoding="utf-8"))
+    assert not any(row.get("source_slug") == CORBIN_SLUG for row in manifest.get("redirects", []))
+    assert (tmp_path / "_redirects").read_text(encoding="utf-8") == ""
+
+
+def test_corbin_new_current_run_redirect_still_fails_closed(tmp_path):
+    generate = _load_generate()
+    articles = tmp_path / "articles"
+    data_dir = tmp_path / "data"
+    articles.mkdir()
+    data_dir.mkdir()
+    original = "<html><body><h1>Ronald Corbin</h1></body></html>"
+    article_path = articles / f"{CORBIN_SLUG}.html"
+    article_path.write_text(original, encoding="utf-8")
+    (data_dir / "canonical-redirects.json").write_text(
+        json.dumps({"schema_version": 2, "redirects": []}), encoding="utf-8"
+    )
+
+    with pytest.raises(RuntimeError, match="audited standalone permalink"):
+        generate.enforce_canonical_redirects(
+            [],
+            articles,
+            tmp_path,
+            [{
+                "source_slug": CORBIN_SLUG,
+                "source_headline": "Ronald Corbin",
+                "target_slug": DUI_SLUG,
+                "target_headline": "Unrelated DUI story",
+            }],
+        )
 
     assert article_path.read_text(encoding="utf-8") == original
     assert not (tmp_path / "_redirects").exists()

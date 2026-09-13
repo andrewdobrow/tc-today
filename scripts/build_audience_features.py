@@ -892,6 +892,107 @@ def _retained_event_paths() -> set[str]:
     return retain_paths
 
 
+def _event_absolute_url(value: object) -> str:
+    raw = _clean_text(value)
+    if not raw:
+        return ""
+    if raw.startswith("//"):
+        return "https:" + raw
+    if raw.startswith(("https://", "http://")):
+        return raw
+    return ""
+
+
+def _event_schema_organizer(event: dict) -> dict | None:
+    """Return a truthful organizer when the source supplies or owns the event.
+
+    Tourism calendars are aggregators, so their brand is not promoted to organizer.
+    A venue's first-party event feed is safe to identify as the hosting organization
+    when no explicit organizer was supplied by source schema.
+    """
+    name = _clean_text(event.get("organizer_name"))
+    url = _event_absolute_url(event.get("organizer_url"))
+    if name:
+        row = {"@type":"Organization", "name":name}
+        if url:
+            row["url"] = url
+        return row
+    if _clean_text(event.get("source_kind")) == "venue":
+        source_name = _clean_text(event.get("source_name"))
+        source_url = _event_absolute_url(event.get("source_url"))
+        if source_name:
+            row = {"@type":"Organization", "name":source_name}
+            if source_url:
+                row["url"] = source_url
+            return row
+    return None
+
+
+def _event_schema_performers(event: dict) -> list[dict]:
+    names = event.get("performer_names") or []
+    if not isinstance(names, list):
+        return []
+    seen = set()
+    rows = []
+    for value in names:
+        name = _clean_text(value)
+        key = name.lower()
+        if not name or key in seen:
+            continue
+        seen.add(key)
+        rows.append({"@type":"PerformingGroup", "name":name})
+    return rows
+
+
+def _event_schema_offer(event: dict) -> dict | None:
+    """Emit Offer only for an explicit machine-safe price.
+
+    Some feeds currently put descriptive prose into their ``price`` field.  Those
+    values must never become Schema.org prices. Explicit source offer metadata wins;
+    otherwise accept only Free/no-cost or one unambiguous dollar amount.
+    """
+    explicit = _clean_text(event.get("offer_price"))
+    currency = _clean_text(event.get("offer_currency")) or "USD"
+    price = ""
+    if explicit and re.fullmatch(r"\d+(?:\.\d{1,2})?", explicit):
+        price = explicit
+    else:
+        display = _clean_text(event.get("price"))
+        if re.fullmatch(r"(?i)(?:free|free admission|no cost)", display):
+            price = "0"
+            currency = "USD"
+        else:
+            match = re.fullmatch(r"\$\s*(\d+(?:\.\d{1,2})?)", display)
+            if match:
+                price = match.group(1)
+                currency = "USD"
+    if not price:
+        return None
+    detail_url = _clean_text(event.get("detail_url"))
+    internal_detail_url = f"{SITE_URL}{detail_url}" if detail_url.startswith("/") else ""
+    url = (
+        _event_absolute_url(event.get("offer_url"))
+        or _event_absolute_url(event.get("ticket_url"))
+        or _event_absolute_url(event.get("event_url"))
+        or internal_detail_url
+    )
+    row = {
+        "@type":"Offer",
+        "price":price,
+        "priceCurrency":currency,
+        "availability":"https://schema.org/InStock",
+    }
+    if url:
+        row["url"] = url
+    return row
+
+
+def _event_schema_image(event: dict) -> str:
+    # Only a source-supplied event image qualifies.  A generic TCT/category image
+    # does not represent the event and is intentionally omitted.
+    return _event_absolute_url(event.get("image_url"))
+
+
 def render_event_detail_pages() -> dict:
     path = ROOT / "data" / "events.json"
     payload = _read_json(path, {})
@@ -934,6 +1035,18 @@ def render_event_detail_pages() -> dict:
         if event.get("venue") or event.get("city"):
             schema["location"]={"@type":"Place","name":event.get("venue") or event.get("city"),"address":{"@type":"PostalAddress","streetAddress":event.get("address", ""),"addressLocality":event.get("city", ""),"addressRegion":"FL"}}
         if event.get("event_url"): schema["sameAs"] = event.get("event_url")
+        organizer = _event_schema_organizer(event)
+        if organizer:
+            schema["organizer"] = organizer
+        performers = _event_schema_performers(event)
+        if performers:
+            schema["performer"] = performers[0] if len(performers) == 1 else performers
+        offer = _event_schema_offer(event)
+        if offer:
+            schema["offers"] = offer
+        event_image = _event_schema_image(event)
+        if event_image:
+            schema["image"] = [event_image]
         lifecycle_end = _event_effective_end(event)
         lifecycle_meta = ''
         if lifecycle_end is not None:
@@ -1044,26 +1157,35 @@ def _rewrite_event_listing_links(events: list[dict]) -> None:
         '<div class="event-card-footer"><span>Source: <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer external">${escapeHtml(event.source_name)}</a></span><div class="event-actions"><a href="${escapeHtml(detailsUrl)}" target="_blank" rel="noopener noreferrer external">Event details →</a>${tickets}</div></div>',
         '<div class="event-card-footer"><span>Source: <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer external">${escapeHtml(event.source_name)}</a></span><div class="event-actions"><a href="${escapeHtml(detailsUrl)}"${detailAttrs}>Event details →</a>${tickets}</div></div>',
     )
-    # Point the listing ItemList at TCT's unique event leaf URLs where available.
+    # The calendar is a collection page, not an Event rich-result landing page.
+    # Keep Event entities on the unique leaf URLs and make this page a plain ItemList
+    # of those canonical detail pages.
     items = []
     for event in events[:10]:
-        time_known = event.get("time_known") is not False and not event.get("all_day")
-        item = {
-            "@type":"Event", "name":event.get("title", ""),
-            "startDate":event.get("starts_at", "") if time_known else str(event.get("starts_at", ""))[:10],
-            "url":f"{SITE_URL}{event.get('detail_url')}" if event.get("detail_url") else event.get("event_url") or event.get("source_url"),
-            "eventStatus":"https://schema.org/EventScheduled",
-            "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
-        }
-        if time_known and event.get("ends_at"): item["endDate"] = event.get("ends_at")
-        if event.get("description"): item["description"] = _clean_text(event.get("description"))
-        if event.get("venue") or event.get("city"):
-            item["location"] = {"@type":"Place","name":event.get("venue") or event.get("city"),"address":{"@type":"PostalAddress","streetAddress":event.get("address", ""),"addressLocality":event.get("city", ""),"addressRegion":"FL","addressCountry":"US"}}
-        items.append({"@type":"ListItem","position":len(items)+1,"item":item})
+        detail = _clean_text(event.get("detail_url"))
+        url = f"{SITE_URL}{detail}" if detail.startswith("/") else (
+            _event_absolute_url(event.get("event_url"))
+            or _event_absolute_url(event.get("source_url"))
+        )
+        if not url:
+            continue
+        items.append({
+            "@type":"ListItem",
+            "position":len(items)+1,
+            "name":_clean_text(event.get("title")),
+            "url":url,
+        })
     listing_schema = {"@context":"https://schema.org","@type":"ItemList","name":"Treasure Coast Events","itemListElement":items}
     marker_pattern = re.compile(r'<!-- TCT_EVENTS_JSONLD_START -->.*?<!-- TCT_EVENTS_JSONLD_END -->', re.I | re.S)
     listing_json = '<!-- TCT_EVENTS_JSONLD_START -->\n<script type="application/ld+json" data-tct-events-jsonld>' + json.dumps(listing_schema, ensure_ascii=False, separators=(",", ":")) + '</script>\n<!-- TCT_EVENTS_JSONLD_END -->'
-    text = marker_pattern.sub(listing_json, text, count=1)
+    if marker_pattern.search(text):
+        text = marker_pattern.sub(listing_json, text, count=1)
+    elif re.search(r'</head\s*>', text, flags=re.I):
+        # Legacy/minimal event pages may predate the marker block. Insert it once
+        # rather than silently leaving stale nested Event markup or no collection schema.
+        text = re.sub(r'</head\s*>', listing_json + '\n</head>', text, count=1, flags=re.I)
+    else:
+        text = listing_json + '\n' + text
     page_path.write_text(text, encoding="utf-8")
 
 

@@ -1080,7 +1080,7 @@ def test_unknown_time_event_remains_live_until_end_of_calendar_day(monkeypatch):
     assert row["time_known"] is False
 
 
-def test_unknown_time_jsonld_uses_date_only_not_fake_midnight():
+def test_event_collection_jsonld_links_to_leaf_or_source_instead_of_nesting_event():
     source = _source(county="St. Lucie", city="Port St. Lucie")
     row = events._normalize_event({
         "title": "Time TBD Community Event",
@@ -1089,9 +1089,13 @@ def test_unknown_time_jsonld_uses_date_only_not_fake_midnight():
         "event_url": "https://example.com/time-tbd",
     }, source, _window(30))
     payload = events._jsonld_payload([row])
-    item = payload["itemListElement"][0]["item"]
-    assert item["startDate"] == "2026-09-12"
-    assert "endDate" not in item
+    item = payload["itemListElement"][0]
+    assert payload["@type"] == "ItemList"
+    assert item["@type"] == "ListItem"
+    assert item["name"] == "Time TBD Community Event"
+    assert item["url"] == "https://example.com/time-tbd"
+    assert "item" not in item
+    assert "startDate" not in item
     assert "12 AM" not in events._render_card(row)
     assert "See event" in events._render_card(row)
 

@@ -543,6 +543,22 @@ def _normalize_event(raw: dict[str, Any], source: dict[str, Any], window: Window
             raw.get("event_url") or raw.get("url") or _source_url(source), source
         ),
         "ticket_url": _absolute_event_url(raw.get("ticket_url"), source),
+        # Optional structured-data authority. These fields are carried only when a
+        # source explicitly supplies them; leaf-page rendering may additionally infer
+        # a host organization from an organizer-owned source. Never invent a
+        # performer, ticket offer, or event image just to silence a Search Console
+        # recommendation.
+        "image_url": _absolute_event_url(raw.get("image_url") or raw.get("image"), source),
+        "organizer_name": _clean(raw.get("organizer_name") or raw.get("organizer")),
+        "organizer_url": _absolute_event_url(raw.get("organizer_url"), source),
+        "performer_names": [
+            _clean(value) for value in (raw.get("performer_names") or []) if _clean(value)
+        ] if isinstance(raw.get("performer_names"), list) else (
+            [_clean(raw.get("performer_name"))] if _clean(raw.get("performer_name")) else []
+        ),
+        "offer_price": _clean(raw.get("offer_price")),
+        "offer_currency": _clean(raw.get("offer_currency")),
+        "offer_url": _absolute_event_url(raw.get("offer_url"), source),
         "source_name": _clean(source.get("name")),
         "source_url": _source_url(source),
         "source_id": _clean(source.get("id")),
@@ -693,6 +709,24 @@ def _jsonld_events(html_text: str, source: dict[str, Any], window: Window) -> li
             ]
             price = offers.get("price")
             currency = offers.get("priceCurrency")
+            organizer = obj.get("organizer")
+            if isinstance(organizer, list):
+                organizer = organizer[0] if organizer else {}
+            if not isinstance(organizer, dict):
+                organizer = {}
+            performers = obj.get("performer") or obj.get("performers") or []
+            if isinstance(performers, dict):
+                performers = [performers]
+            performer_names = [
+                _clean(value.get("name"))
+                for value in performers
+                if isinstance(value, dict) and _clean(value.get("name"))
+            ] if isinstance(performers, list) else []
+            image = obj.get("image")
+            if isinstance(image, list):
+                image = image[0] if image else ""
+            if isinstance(image, dict):
+                image = image.get("url") or image.get("contentUrl") or ""
             raw = {
                 "title": obj.get("name"),
                 "starts_at": obj.get("startDate"),
@@ -704,6 +738,13 @@ def _jsonld_events(html_text: str, source: dict[str, Any], window: Window) -> li
                 "event_url": obj.get("url"),
                 "ticket_url": offers.get("url"),
                 "price": (f"{currency} {price}" if price not in (None, "") and currency else price),
+                "offer_price": price,
+                "offer_currency": currency,
+                "offer_url": offers.get("url"),
+                "organizer_name": organizer.get("name"),
+                "organizer_url": organizer.get("url"),
+                "performer_names": performer_names,
+                "image_url": image,
             }
             event = _normalize_event(raw, source, window)
             if event:
@@ -719,6 +760,11 @@ def _tribe_api_events(payload: dict[str, Any], source: dict[str, Any], window: W
         venue = item.get("venue") if isinstance(item.get("venue"), dict) else {}
         cost = item.get("cost")
         description = BeautifulSoup(str(item.get("description") or ""), "html.parser").get_text(" ", strip=True)
+        organizers = item.get("organizer") or item.get("organizers") or []
+        if isinstance(organizers, dict):
+            organizers = [organizers]
+        organizer = next((value for value in organizers if isinstance(value, dict)), {}) if isinstance(organizers, list) else {}
+        image_obj = item.get("image") if isinstance(item.get("image"), dict) else {}
         raw = {
             "title": item.get("title"),
             "starts_at": item.get("start_date_details", {}).get("year") and item.get("start_date") or item.get("start_date"),
@@ -730,6 +776,9 @@ def _tribe_api_events(payload: dict[str, Any], source: dict[str, Any], window: W
             "description": description,
             "event_url": item.get("url") or item.get("website"),
             "price": cost,
+            "organizer_name": organizer.get("organizer") or organizer.get("name"),
+            "organizer_url": organizer.get("website") or organizer.get("url"),
+            "image_url": image_obj.get("url") or image_obj.get("full") or "",
         }
         event = _normalize_event(raw, source, window)
         if event:
@@ -1645,35 +1694,30 @@ def _render_dynamic(events: list[dict[str, Any]], status: dict[str, Any]) -> str
 
 
 def _jsonld_payload(events: list[dict[str, Any]]) -> dict[str, Any]:
+    """Render collection markup only; Event schema belongs on event leaf pages.
+
+    Google recommends one unique leaf URL per event.  The calendar is therefore an
+    ItemList of links rather than a page containing many nested Event entities.  The
+    audience-feature pass rewrites these URLs to TCT detail pages after those pages
+    are assigned.
+    """
     items = []
     for event in events[:EVENT_JSONLD_ROWS]:
-        timed = event.get("time_known") is not False and not event.get("all_day")
-        item: dict[str, Any] = {
-            "@type": "Event",
-            "name": event["title"],
-            "startDate": event["starts_at"] if timed else str(event["starts_at"])[:10],
-            "url": event.get("event_url") or event.get("source_url"),
-            "eventStatus": "https://schema.org/EventScheduled",
-            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-        }
-        if timed and event.get("ends_at"):
-            item["endDate"] = event["ends_at"]
-        if event.get("description"):
-            item["description"] = event["description"]
-        if event.get("venue"):
-            item["location"] = {
-                "@type": "Place",
-                "name": event["venue"],
-                "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": event.get("address", ""),
-                    "addressLocality": event.get("city", ""),
-                    "addressRegion": "FL",
-                },
-            }
-        items.append({"@type": "ListItem", "position": len(items) + 1, "item": item})
-    return {"@context": "https://schema.org", "@type": "ItemList", "name": "Treasure Coast Events", "itemListElement": items}
-
+        url = event.get("detail_url") or event.get("event_url") or event.get("source_url")
+        if not url:
+            continue
+        items.append({
+            "@type": "ListItem",
+            "position": len(items) + 1,
+            "name": event.get("title", ""),
+            "url": url,
+        })
+    return {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Treasure Coast Events",
+        "itemListElement": items,
+    }
 
 def _replace_between(text: str, start_marker: str, end_marker: str, replacement: str) -> str:
     start = text.find(start_marker)
