@@ -42,11 +42,17 @@ def test_redirect_audit_static_manifest_has_expected_repair_shape():
     redirects = payload["redirects"]
     by_source = {row["source_slug"]: row for row in redirects}
 
-    # v1.13.9.19 had 220 cumulative redirects. Sixteen independently valid
-    # permalinks are restored, while thirteen genuine aliases remain as repaired 301s.
-    assert payload["redirect_count"] == 204
-    assert len(payload["verification"]) == 204
+    # v1.13.9.20 established a post-audit baseline of 204 cumulative redirects:
+    # sixteen independently valid permalinks were restored, while thirteen genuine
+    # aliases remained as repaired 301s. The global redirect ledger is intentionally
+    # cumulative, so later production runs may add newly verified redirects. Do not
+    # freeze the total count at the release-time baseline; validate ledger integrity
+    # and the audited repair invariants instead.
+    assert payload["redirect_count"] == len(redirects)
+    assert payload["redirect_count"] >= 204
+    assert len(payload["verification"]) == len(redirects)
     assert payload["all_redirect_pages_verified"] is True
+    assert len({row["source_slug"] for row in redirects}) == len(redirects)
 
     standalone = set(g.HISTORICAL_REDIRECT_STANDALONE_SLUGS)
     assert not (standalone & set(by_source))
