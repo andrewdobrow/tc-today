@@ -355,3 +355,123 @@ def test_quarantine_tombstone_compaction_is_idempotent_and_preserves_denylist_id
     identity = build_publication_identity_index(second_payload)
     assert "story_009998" in identity.quarantined_story_ids
     assert "story_009998" not in identity.safe_story_ids
+
+
+
+def test_registry_storage_projection_omits_only_recomputed_runtime_caches(tmp_path: Path) -> None:
+    path = tmp_path / "editorial_story_registry.json"
+    registry = StoryRegistry(path)
+    story = _minimal_story("story_000001", [_entry()])
+    story.update({
+        "canonical_title": "Port St. Lucie council approves a public project",
+        "sources": ["https://example.com/authoritative-source"],
+        "timeline": [{
+            "event_key": "event-1",
+            "article_id": "article-1",
+            "published_at": "2026-09-14T00:00:00+00:00",
+            "title": "Original publication",
+            "source": "Treasure Coast Today",
+            "url": "https://example.com/article-1",
+            "editorial_action": "publish_new",
+            "canonical_article_id": "article-1",
+        }],
+        "title_candidates": [{"title": "Port St. Lucie council approves a public project", "source": "https://example.com/authoritative-source"}],
+        "relationship_history": [{"relationship": "same_event", "confidence": 1.0}],
+        "lifecycle": {"state": "stale-cache"},
+        "importance": {"score": 999, "level": "stale-cache"},
+        "editorial_proximity": {"score": 999, "scope": "stale-cache"},
+        "editorial_priority": 999,
+        "editorial_score": 999,
+        "score_breakdown": {"total": 999},
+    })
+    registry.data["stories"] = {"story_000001": story}
+    registry.data["event_to_story"] = {"event-1": "story_000001"}
+
+    runtime_cache_before = {
+        field: registry.data["stories"]["story_000001"][field]
+        for field in StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
+    }
+    registry.save()
+
+    # Saving must not mutate the live registry just to make the file smaller.
+    assert {
+        field: registry.data["stories"]["story_000001"][field]
+        for field in StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
+    } == runtime_cache_before
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    saved_story = payload["stories"]["story_000001"]
+    assert all(
+        field not in saved_story
+        for field in StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
+    )
+    # Status is intentionally persisted because importance scoring consults the
+    # previous status before lifecycle is recomputed during load.
+    assert saved_story["status"] == "developing"
+
+    # Authoritative identity/history/provenance must remain byte-for-byte present.
+    assert saved_story["story_id"] == "story_000001"
+    assert saved_story["canonical_title"] == story["canonical_title"]
+    assert saved_story["sources"] == story["sources"]
+    assert saved_story["timeline"] == story["timeline"]
+    assert saved_story["title_candidates"] == story["title_candidates"]
+    assert saved_story["resolution_history"] == story["resolution_history"]
+    assert saved_story["relationship_history"] == story["relationship_history"]
+    assert payload["event_to_story"] == {"event-1": "story_000001"}
+    assert payload["history_compaction"]["storage_projection_version"] == 1
+
+    # A normal reload deterministically rebuilds every omitted cache.
+    reloaded = StoryRegistry(path)
+    reloaded_story = reloaded.data["stories"]["story_000001"]
+    assert all(
+        field in reloaded_story
+        for field in StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
+    )
+    assert reloaded_story["story_id"] == saved_story["story_id"]
+    assert reloaded_story["canonical_title"] == saved_story["canonical_title"]
+    assert reloaded_story["sources"] == saved_story["sources"]
+    assert reloaded_story["timeline"] == saved_story["timeline"]
+    assert reloaded_story["title_candidates"] == saved_story["title_candidates"]
+    assert reloaded_story["resolution_history"] == saved_story["resolution_history"]
+    assert reloaded_story["relationship_history"] == saved_story["relationship_history"]
+
+
+def test_registry_storage_projection_creates_headroom_without_raising_safety_ceiling(
+    tmp_path: Path, monkeypatch
+) -> None:
+    path = tmp_path / "editorial_story_registry.json"
+    registry = StoryRegistry(path)
+    story = _minimal_story("story_000001", [])
+    story["canonical_title"] = "Port St. Lucie council approves a public project"
+    # Deliberately large deterministic caches: old behavior serialized these and
+    # would cross this synthetic ceiling. The projected on-disk state must fit.
+    story["lifecycle"] = {"reason": "x" * 40_000}
+    story["importance"] = {"reason": "y" * 40_000}
+    story["editorial_proximity"] = {"reason": "z" * 40_000}
+    story["score_breakdown"] = {"reason": "q" * 40_000}
+    story["editorial_priority"] = 88
+    story["editorial_score"] = 88
+    registry.data["stories"] = {"story_000001": story}
+    registry.data["event_to_story"] = {"event-1": "story_000001"}
+
+    unprojected_size = len(
+        StoryRegistry._serialize_payload(registry.data, indent=None).encode("utf-8")
+    )
+    projected_size = len(
+        StoryRegistry._serialize_payload(
+            StoryRegistry._payload_for_storage(registry.data), indent=None
+        ).encode("utf-8")
+    )
+    assert projected_size + 100_000 < unprojected_size
+
+    ceiling = projected_size + 32_768
+    assert ceiling < unprojected_size
+    monkeypatch.setattr(StoryRegistry, "REGISTRY_PRESSURE_BYTES", 1)
+    monkeypatch.setattr(StoryRegistry, "REGISTRY_MAX_BYTES", ceiling)
+
+    registry.save()
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert path.stat().st_size < ceiling
+    assert payload["stories"]["story_000001"]["canonical_title"] == story["canonical_title"]
+    assert payload["event_to_story"] == {"event-1": "story_000001"}

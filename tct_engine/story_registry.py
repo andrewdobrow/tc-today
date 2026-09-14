@@ -63,6 +63,19 @@ class StoryRegistry:
     UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT = 1
     REGISTRY_PRESSURE_BYTES = 45 * 1024 * 1024
     REGISTRY_MAX_BYTES = 50 * 1024 * 1024
+    STORAGE_PROJECTION_VERSION = 1
+    # These are deterministic runtime caches rebuilt by _load(). Persisting them
+    # duplicated several MiB of data without adding identity or publication
+    # authority. Keep status on disk because StoryImportanceEngine consults the
+    # prior status before lifecycle is recomputed during load.
+    RECOMPUTED_STORY_STORAGE_FIELDS = frozenset({
+        "lifecycle",
+        "importance",
+        "editorial_proximity",
+        "editorial_priority",
+        "editorial_score",
+        "score_breakdown",
+    })
     QUARANTINE_TOMBSTONE_VERSION = 1
     QUARANTINE_TITLE_SAMPLE_LIMIT = 4
     QUARANTINE_SOURCE_SAMPLE_LIMIT = 4
@@ -80,6 +93,35 @@ class StoryRegistry:
                 payload, ensure_ascii=False, separators=(",", ":")
             )
         return json.dumps(payload, indent=indent, ensure_ascii=False)
+
+    @classmethod
+    def _payload_for_storage(cls, payload: dict[str, Any]) -> dict[str, Any]:
+        """Return a lossless-on-reload storage projection of registry state.
+
+        Several per-story ranking/lifecycle values are deterministic caches that
+        ``_load`` recalculates every time the registry is opened.  Omitting only
+        those caches from the on-disk JSON creates durable headroom under the
+        repository safety ceiling without discarding story IDs, timelines, sources,
+        title candidates, resolver history, relationship history, event mappings,
+        or quarantine evidence.  The live in-memory registry is not mutated.
+        """
+        stories = payload.get("stories")
+        if not isinstance(stories, dict):
+            return payload
+
+        projected = dict(payload)
+        projected_stories: dict[str, Any] = {}
+        for story_id, story in stories.items():
+            if not isinstance(story, dict):
+                projected_stories[story_id] = story
+                continue
+            projected_stories[story_id] = {
+                key: value
+                for key, value in story.items()
+                if key not in cls.RECOMPUTED_STORY_STORAGE_FIELDS
+            }
+        projected["stories"] = projected_stories
+        return projected
 
     @staticmethod
     def _resolution_history_key(entry: dict[str, Any]) -> str:
@@ -515,6 +557,10 @@ class StoryRegistry:
             "version": 1,
             "resolution_history_limit_per_story": self.RESOLUTION_HISTORY_LIMIT,
             "unified_incident_evidence_limit_per_story": self.UNIFIED_INCIDENT_EVIDENCE_LIMIT,
+            "storage_projection_version": self.STORAGE_PROJECTION_VERSION,
+            "recomputed_story_fields_omitted": sorted(
+                self.RECOMPUTED_STORY_STORAGE_FIELDS
+            ),
             "last_write": compaction,
             "last_unified_incident_evidence_write": incident_compaction,
             "last_quarantine_tombstone_write": quarantine_compaction,
@@ -532,7 +578,9 @@ class StoryRegistry:
             report.get("total_unified_incident_evidence_truncated", 0) or 0
         ) + incident_compaction["unique_entries_truncated"]
         serialization_indent: int | None = 2
-        serialized = self._serialize_payload(self.data, indent=serialization_indent)
+        serialized = self._serialize_payload(
+            self._payload_for_storage(self.data), indent=serialization_indent
+        )
         size_bytes = len(serialized.encode("utf-8"))
         pressure_mode = "normal"
         serialization_mode = "pretty_2"
@@ -546,7 +594,9 @@ class StoryRegistry:
             # discarding any more candidate evidence.
             serialization_indent = 1
             serialization_mode = "pressure_1"
-            serialized = self._serialize_payload(self.data, indent=serialization_indent)
+            serialized = self._serialize_payload(
+                self._payload_for_storage(self.data), indent=serialization_indent
+            )
             size_bytes = len(serialized.encode("utf-8"))
         if size_bytes > self.REGISTRY_MAX_BYTES:
             emergency_compaction = self._compact_payload_unified_incident_evidence(
@@ -557,7 +607,9 @@ class StoryRegistry:
             # Compact JSON is the final lossless storage step before the hard ceiling.
             serialization_indent = None
             serialization_mode = "emergency_compact"
-            serialized = self._serialize_payload(self.data, indent=serialization_indent)
+            serialized = self._serialize_payload(
+                self._payload_for_storage(self.data), indent=serialization_indent
+            )
             size_bytes = len(serialized.encode("utf-8"))
         if size_bytes > self.REGISTRY_MAX_BYTES:
             # Candidate-only unified-incident evidence has no publication or identity
@@ -573,7 +625,9 @@ class StoryRegistry:
             pressure_mode = "critical"
             serialization_indent = None
             serialization_mode = "critical_compact"
-            serialized = self._serialize_payload(self.data, indent=serialization_indent)
+            serialized = self._serialize_payload(
+                self._payload_for_storage(self.data), indent=serialization_indent
+            )
             size_bytes = len(serialized.encode("utf-8"))
         report["last_serialized_bytes"] = size_bytes
         report["max_serialized_bytes"] = self.REGISTRY_MAX_BYTES
@@ -581,10 +635,14 @@ class StoryRegistry:
         report["last_pressure_mode"] = pressure_mode
         report["last_serialization_mode"] = serialization_mode
         # Re-serialize so the recorded byte count and storage mode are present.
-        serialized = self._serialize_payload(self.data, indent=serialization_indent)
+        serialized = self._serialize_payload(
+            self._payload_for_storage(self.data), indent=serialization_indent
+        )
         size_bytes = len(serialized.encode("utf-8"))
         report["last_serialized_bytes"] = size_bytes
-        serialized = self._serialize_payload(self.data, indent=serialization_indent)
+        serialized = self._serialize_payload(
+            self._payload_for_storage(self.data), indent=serialization_indent
+        )
         size_bytes = len(serialized.encode("utf-8"))
         if size_bytes > self.REGISTRY_MAX_BYTES:
             raise RuntimeError(
