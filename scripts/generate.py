@@ -14421,6 +14421,44 @@ def _latest_news_publication_datetime(entry):
     return _slug_date(entry.get("slug"))
 
 
+def _latest_news_entry_eligible(entry):
+    """Return whether an archived publication may appear in Latest News.
+
+    Latest News is a *post-publication* stream.  Do not re-run
+    ``_archive_entry_publishable`` here: that archive/recovery helper has a generic
+    120-word floor, while the publication gate intentionally allows a shorter
+    source-constrained breaking brief when the verified source itself is short.
+    Re-applying the generic floor after publication can therefore create a real,
+    canonical article and then silently omit it from Latest News.
+
+    Trust the final archive's explicit live-placement safety state instead.  New
+    publications are stamped ``ranking_eligible=True``; quarantined/retired rows are
+    explicitly excluded.  Legacy rows without a ranking flag remain compatible.
+    """
+    if not isinstance(entry, dict):
+        return False
+    if _is_nonstory_placeholder(entry) or _is_publisher_self_promotion(entry):
+        return False
+    if entry.get("exclude_from_live_recovery"):
+        return False
+    if entry.get("retired_custom"):
+        return False
+    if entry.get("identity_quarantine_reason"):
+        return False
+    if entry.get("ranking_eligible") is False:
+        return False
+
+    # Historical Sports pages remain available in the archive, but an expired event
+    # preview must not be resurrected onto a current homepage surface.
+    category_keys = set(_item_category_memberships(entry))
+    category_keys.update(
+        value for value in (entry.get("category_key"), entry.get("cat_key")) if value
+    )
+    if "sports" in category_keys and _archive_sports_event_window_expired(entry):
+        return False
+    return True
+
+
 def _select_latest_news_entries(archive_entries, limit=5):
     """Select the newest canonical TCT publications in strict reverse chronology."""
     try:
@@ -14433,7 +14471,7 @@ def _select_latest_news_entries(archive_entries, limit=5):
     candidates = []
     seen_publications = set()
     for entry in archive_entries or []:
-        if not isinstance(entry, dict) or not _archive_entry_publishable(entry):
+        if not _latest_news_entry_eligible(entry):
             continue
         slug = _normalize_existing_article_slug(entry.get("canonical_slug") or entry.get("slug"))
         if not slug:

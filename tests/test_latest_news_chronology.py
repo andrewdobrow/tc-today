@@ -157,3 +157,65 @@ def test_renderer_does_not_take_latest_news_from_top_stories_slice():
     ).read_text(encoding="utf-8")
     assert "for _latest in all_cards_display[:5]" not in source
     assert "latest_entries = _select_latest_news_entries(archive_for_links, limit=5)" in source
+
+
+def test_latest_news_keeps_valid_published_source_constrained_brief():
+    """A real published brief must not disappear behind the archive's 120-word recovery floor."""
+    g = _load_generate()
+    concise_newest = _entry(
+        "2026-09-14-florida-highway-agency-confirms-data-breach",
+        "Mon, 14 Sep 2026 11:50:00 -0400",
+        date="2026-09-14",
+    )
+    concise_newest["category_key"] = "florida"
+    concise_newest["category_label"] = "Florida"
+    concise_newest["article_word_count"] = 78
+    concise_newest["article_paragraph_count"] = 2
+
+    older = _entry(
+        "2026-09-13-older-local-story",
+        "Sun, 13 Sep 2026 18:32:00 -0400",
+        date="2026-09-13",
+    )
+
+    # This is the exact policy mismatch that caused the production omission: the
+    # generic archive/recovery helper rejects the concise body even though the
+    # publication pipeline already accepted and stamped the canonical article.
+    assert g._archive_entry_publishable(concise_newest) is False
+    assert g._latest_news_entry_eligible(concise_newest) is True
+
+    selected = g._select_latest_news_entries([older, concise_newest], limit=5)
+    assert [item["slug"] for item in selected] == [
+        concise_newest["slug"],
+        older["slug"],
+    ]
+
+
+def test_latest_news_still_rejects_quarantined_or_retired_publications():
+    g = _load_generate()
+    safe = _entry(
+        "2026-09-14-safe-current-story",
+        "Mon, 14 Sep 2026 12:00:00 -0400",
+        date="2026-09-14",
+    )
+    quarantined = _entry(
+        "2026-09-14-quarantined-story",
+        "Mon, 14 Sep 2026 13:00:00 -0400",
+        date="2026-09-14",
+    )
+    quarantined["ranking_eligible"] = False
+    quarantined["exclude_from_live_recovery"] = True
+    quarantined["identity_quarantine_reason"] = "identity_mismatch"
+
+    retired = _entry(
+        "2026-09-14-retired-custom-story",
+        "Mon, 14 Sep 2026 14:00:00 -0400",
+        date="2026-09-14",
+    )
+    retired["is_custom"] = True
+    retired["retired_custom"] = True
+    retired["ranking_eligible"] = False
+    retired["exclude_from_live_recovery"] = True
+
+    selected = g._select_latest_news_entries([quarantined, retired, safe], limit=5)
+    assert [item["slug"] for item in selected] == [safe["slug"]]
