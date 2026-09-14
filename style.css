@@ -7114,33 +7114,20 @@ main.article-page-main > .article-wrap {
 }
 
 /* ==========================================================
-   v1.13.7.5u - iOS in-app browser masthead bleed shield
+   v1.13.7.5v - Nextdoor iOS in-app browser sticky-header workaround
    ========================================================== */
 /*
-   iOS 26 WebKit-based in-app browsers can render the page underneath a
-   translucent native browser toolbar above a sticky/fixed site header.
-   Paint a solid extension immediately above the TCT masthead so those native
-   glass controls sample the masthead background instead of the scrolled
-   article image/body. The extension is off-screen in normal browsers and does
-   not change document layout, header height, hit testing, or scroll position.
+   Nextdoor's iOS in-app browser can expose scrolled page content through its
+   translucent native toolbar above TCT's sticky masthead. The native toolbar
+   is outside the webpage, so CSS cannot paint over it reliably. main.js adds
+   .tct-nextdoor-ios only when the Nextdoor iOS user agent is detected. In
+   that one environment, keep the masthead in normal document flow so it
+   scrolls away with the article instead of remaining anchored underneath the
+   translucent app chrome. Every other browser keeps the standard sticky
+   masthead.
 */
-@supports (-webkit-touch-callout: none) {
-  @media (max-width: 900px) {
-    header.site-masthead {
-      isolation: isolate;
-      overflow: visible;
-    }
-
-    header.site-masthead::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 100%;
-      height: 220px;
-      background: var(--bg);
-      pointer-events: none;
-    }
-  }
+html.tct-nextdoor-ios header.site-masthead {
+  position: relative !important;
+  top: auto !important;
 }
 

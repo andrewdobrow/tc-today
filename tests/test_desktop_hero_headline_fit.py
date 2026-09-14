@@ -58,7 +58,7 @@ def test_desktop_copy_panel_can_expand_without_overlapping_media():
 
 def test_stylesheet_url_is_cache_busted_for_release():
     source = GENERATOR_PATH.read_text(encoding="utf-8")
-    assert '<link rel="stylesheet" href="/style.css?v=1.13.7.5u">' in source
+    assert '<link rel="stylesheet" href="/style.css?v=1.13.7.5v">' in source
 
 
 def test_desktop_masthead_uses_125_percent_visual_target():

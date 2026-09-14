@@ -1,3 +1,20 @@
+// -- NEXTDOOR iOS IN-APP BROWSER COMPATIBILITY --
+// Nextdoor's iOS WKWebView currently exposes page content through its native
+// translucent toolbar above a sticky site header. Keep the workaround tightly
+// scoped: only the Nextdoor iOS app loses sticky masthead behavior.
+(function applyNextdoorIosMastheadCompatibility() {
+  const ua = navigator.userAgent || "";
+  const platform = navigator.platform || "";
+  const touchPoints = Number(navigator.maxTouchPoints || 0);
+  const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+    (platform === "MacIntel" && touchPoints > 1);
+  const isNextdoor = /\bNextdoor(?:\/|\s|$)/i.test(ua);
+
+  if (isIOS && isNextdoor) {
+    document.documentElement.classList.add("tct-nextdoor-ios");
+  }
+})();
+
 // -- HERO EXPAND / COLLAPSE (grid cards link out, only heroes expand) --
 function toggleExpand(btn) {
   const container = btn.closest(".hero");
