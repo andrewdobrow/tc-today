@@ -22363,7 +22363,7 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.png" type="image/png">
-  <link rel="stylesheet" href="/style.css?v=1.13.7.5t">
+  <link rel="stylesheet" href="/style.css?v=1.13.7.5u">
   <style id="tct-mobile-overflow-fix">
     html, body {{ width: 100%; max-width: 100%; overflow-x: clip; }}
     *, *::before, *::after {{ box-sizing: border-box; }}
@@ -22829,14 +22829,14 @@ def _normalize_primary_navigation_sitewide(output_root):
         normalized = newsroom_strip_re.sub('', normalized)
         normalized = re.sub(
             r'href=["\']/?style\.css(?:\?v=[^"\']+)?["\']',
-            'href="/style.css?v=1.13.7.5t"',
+            'href="/style.css?v=1.13.7.5u"',
             normalized,
             count=1,
             flags=re.I,
         )
         normalized = re.sub(
             r'src=["\']/?main\.js(?:\?v=[^"\']+)?["\']',
-            'src="/main.js?v=1.13.7.5t"',
+            'src="/main.js?v=1.13.7.5u"',
             normalized,
             count=1,
             flags=re.I,
@@ -22846,7 +22846,7 @@ def _normalize_primary_navigation_sitewide(output_root):
         # masthead, the button exists but has no click handler. Inject the shared
         # script when it is absent so every normalized masthead is functional.
         if not re.search(r'<script\b[^>]*\bsrc=["\']/?main\.js(?:\?v=[^"\']+)?["\'][^>]*>', normalized, re.I):
-            main_script = '  <script src="/main.js?v=1.13.7.5t"></script>\n'
+            main_script = '  <script src="/main.js?v=1.13.7.5u"></script>\n'
             if re.search(r'</body>', normalized, re.I):
                 normalized = re.sub(r'</body>', main_script + '</body>', normalized, count=1, flags=re.I)
             else:
@@ -23265,7 +23265,7 @@ def _page_footer():
     </div>
     <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
   </footer>
-  <script src="/main.js?v=1.13.7.5t"></script>"""
+  <script src="/main.js?v=1.13.7.5u"></script>"""
 
 
 def render_newsroom_page():

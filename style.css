@@ -7112,3 +7112,35 @@ main.article-page-main > .article-wrap {
   .missing-person-card p { font-size: 11px; }
   .missing-person-card-more { font-size: 11px; }
 }
+
+/* ==========================================================
+   v1.13.7.5u - iOS in-app browser masthead bleed shield
+   ========================================================== */
+/*
+   iOS 26 WebKit-based in-app browsers can render the page underneath a
+   translucent native browser toolbar above a sticky/fixed site header.
+   Paint a solid extension immediately above the TCT masthead so those native
+   glass controls sample the masthead background instead of the scrolled
+   article image/body. The extension is off-screen in normal browsers and does
+   not change document layout, header height, hit testing, or scroll position.
+*/
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 900px) {
+    header.site-masthead {
+      isolation: isolate;
+      overflow: visible;
+    }
+
+    header.site-masthead::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 100%;
+      height: 220px;
+      background: var(--bg);
+      pointer-events: none;
+    }
+  }
+}
+
