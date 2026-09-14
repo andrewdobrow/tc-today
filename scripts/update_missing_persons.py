@@ -942,6 +942,12 @@ def _chrome_footer() -> str:
     return footer
 
 
+def _display_location(value: str) -> str:
+    """Normalize FDLE locality punctuation for public display without changing source data."""
+    text = _clean(value or "")
+    return re.sub(r",\s*", ", ", text)
+
+
 def _person_card(person: dict) -> str:
     esc = html_lib.escape
     image = (person.get("images") or [""])[0]
@@ -957,7 +963,7 @@ def _person_card(person: dict) -> str:
       <div class="missing-person-card-meta"><span>{esc(person.get('county',''))} County</span><span>{esc(person.get('category','Missing Person'))}</span></div>
       <h2>{esc(person.get('name',''))}</h2>
       <p><strong>Missing since:</strong> {_format_date(person.get('missing_since',''))}</p>
-      <p><strong>Missing from:</strong> {esc(person.get('missing_from',''))}</p>
+      <p><strong>Missing from:</strong> {esc(_display_location(person.get('missing_from','')))}</p>
       {f'<p><strong>Age now:</strong> {esc(person.get("current_age",""))}</p>' if person.get('current_age') else ''}
       <span class="missing-person-card-more">View case details →</span>
     </div>
@@ -1051,7 +1057,7 @@ def _profile_page(person: dict, payload: dict) -> str:
     name = person.get("name", "Missing Person")
     detail = person.get("detail_url", "")
     description = (
-        f"FDLE missing-person information for {name}, missing from {person.get('missing_from','the Treasure Coast')} "
+        f"FDLE missing-person information for {name}, missing from {_display_location(person.get('missing_from','the Treasure Coast'))} "
         f"since {_format_date(person.get('missing_since',''))}."
     )
     schema = {
@@ -1080,7 +1086,7 @@ def _profile_page(person: dict, payload: dict) -> str:
 
     facts = "".join([
         _fact("Missing since", _format_date(person.get("missing_since", ""))),
-        _fact("Missing from", person.get("missing_from", "")),
+        _fact("Missing from", _display_location(person.get("missing_from", ""))),
         _fact("County", f"{person.get('county','')} County" if person.get("county") else ""),
         _fact("Category", person.get("category", "")),
         _fact("Current age", person.get("current_age", "")),
@@ -1108,7 +1114,7 @@ def _profile_page(person: dict, payload: dict) -> str:
   <header class="missing-person-profile-head">
     <p class="missing-persons-kicker">FDLE missing-person record</p>
     <h1>{esc(name)}</h1>
-    <p>Missing from <strong>{esc(person.get('missing_from',''))}</strong> since <strong>{esc(_format_date(person.get('missing_since','')))}</strong>.</p>
+    <p>Missing from <strong>{esc(_display_location(person.get('missing_from','')))}</strong> since <strong>{esc(_format_date(person.get('missing_since','')))}</strong>.</p>
   </header>
   <div class="missing-person-profile-layout">
     <section>{gallery}</section>

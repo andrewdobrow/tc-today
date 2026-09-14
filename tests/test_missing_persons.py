@@ -193,6 +193,12 @@ def test_render_keeps_all_cards_visible_and_builds_multi_image_profiles(monkeypa
     assert profile.count("Additional or age-progression FDLE image") == 2  # alt + figcaption
     assert "4099-1.jpg" in profile and "4099-2.jpg" in profile
     assert "View the official FDLE record" in profile
+    assert "Missing from:</strong> Port Salerno, FL" in directory
+    assert "Port Salerno,FL" not in directory
+    assert "Missing from <strong>Port Salerno, FL</strong>" in profile
+    assert "<dt>Missing from</dt><dd>Port Salerno, FL</dd>" in profile
+    assert "missing from Port Salerno, FL since" in profile
+    assert "Port Salerno,FL" not in profile
 
 
 def test_refresh_retains_last_known_good_county_on_source_failure(monkeypatch, tmp_path):
