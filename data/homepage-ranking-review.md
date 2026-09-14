@@ -12,9 +12,9 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Two Fort Pierce residents arrested after firing weapons at Happiness Street residence | Two Fort Pierce residents arrested after firing weapons at Happiness Street residence | 45 | importance 0; freshness 85.94; urgency 2/10 |
-| 2 | Martin County breaks world record with 400-foot Cuban sandwich in Palm City | Martin County breaks world record with 400-foot Cuban sandwich in Palm City | 38 | importance 0; freshness 58.63; urgency 2/10 |
-| 3 | Indian River County school bus driver arrested on child abuse charge | Indian River County school bus driver arrested on child abuse charge | 38 | importance 0; freshness 58.63; urgency 2/10 |
+| 1 | Two Fort Pierce residents arrested after firing weapons at Happiness Street residence | Two Fort Pierce residents arrested after firing weapons at Happiness Street residence | 43 | importance 0; freshness 79.31; urgency 2/10 |
+| 2 | Martin County breaks world record with 400-foot Cuban sandwich in Palm City | Martin County breaks world record with 400-foot Cuban sandwich in Palm City | 36 | importance 0; freshness 52.01; urgency 2/10 |
+| 3 | Indian River County school bus driver arrested on child abuse charge | Indian River County school bus driver arrested on child abuse charge | 36 | importance 0; freshness 52.0; urgency 2/10 |
 
 ## Recommended moves
 
