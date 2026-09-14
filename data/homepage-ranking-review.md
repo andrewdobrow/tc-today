@@ -4,22 +4,25 @@
 
 ## Hero
 
-- Current: **FBI probes link between four Treasure Coast bomb threats in eight days**
-- Recommended: **FBI probes link between four Treasure Coast bomb threats in eight days**
+- Current: **Martin County High School evacuated after second bomb threat this month**
+- Recommended: **Martin County High School evacuated after second bomb threat this month**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida highway agency confirms data breach by international criminals using Plant City police login | Florida highway agency confirms data breach by international criminals using Plant City police login | 55 | importance 0; freshness 99.94; urgency 7/10 |
-| 2 | Two Fort Pierce residents arrested after firing weapons at Happiness Street residence | Two Fort Pierce residents arrested after firing weapons at Happiness Street residence | 41 | importance 0; freshness 71.12; urgency 2/10 |
-| 3 | Martin County breaks world record with 400-foot Cuban sandwich in Palm City | Martin County breaks world record with 400-foot Cuban sandwich in Palm City | 34 | importance 0; freshness 43.81; urgency 2/10 |
-| 4 | Indian River County school bus driver arrested on child abuse charge | Indian River County school bus driver arrested on child abuse charge | 34 | importance 0; freshness 43.81; urgency 2/10 |
+| 1 | Flock cameras help deputies track Vero Beach burglary suspect to arrest | Flock cameras help deputies track Vero Beach burglary suspect to arrest | 56 | importance 0; freshness 99.9; urgency 6/10 |
+| 2 | Florida highway agency confirms data breach by international criminals using Plant City police login | Fort Pierce pair who fired guns while drinking face only misdemeanor charges | 54 | importance 0; freshness 99.9; urgency 2/10; validated material update |
+| 3 | Fort Pierce pair who fired guns while drinking face only misdemeanor charges | Florida highway agency confirms data breach by international criminals using Plant City police login | 46 | importance 0; freshness 92.19; urgency 4/10 |
+| 4 | FBI probes link between four Treasure Coast bomb threats in eight days | FBI probes link between four Treasure Coast bomb threats in eight days | 48 | importance 0; freshness 74.16; urgency 2/10; validated material update; -6 category saturation |
+| 5 | Martin County breaks world record with 400-foot Cuban sandwich in Palm City | Martin County breaks world record with 400-foot Cuban sandwich in Palm City | 37 | importance 0; freshness 36.06; urgency 4/10 |
+| 6 | Indian River County school bus driver arrested on child abuse charge | Indian River County school bus driver arrested on child abuse charge | 32 | importance 0; freshness 36.06; urgency 2/10; -12 category saturation |
 
 ## Recommended moves
 
-No top-deck moves recommended.
+- **Fort Pierce pair who fired guns while drinking face only misdemeanor charges**: 3 → 2 — importance 0; freshness 99.9; urgency 2/10; validated material update
+- **Florida highway agency confirms data breach by international criminals using Plant City police login**: 2 → 3 — importance 0; freshness 92.19; urgency 4/10
 
 ## Guardrails
 
