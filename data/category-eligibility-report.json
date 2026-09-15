@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T04:55:46Z",
+  "generated_at": "2026-09-15T10:49:17Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 26,
-    "rejected_count": 5,
+    "assessed_count": 22,
+    "rejected_count": 7,
     "enforced_categories": [
       "business",
       "crime",
@@ -35,7 +35,7 @@
       "mode": "enforce",
       "policy": "central_government_action_required",
       "assessed_count": 3,
-      "rejected_count": 2,
+      "rejected_count": 3,
       "rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -44,12 +44,14 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:arrest"
+          ],
           "local_nexus_signals": [],
-          "headline": "Former FBI agent stresses importance of taking Treasure Coast bomb threats seriously - WPBF",
-          "source_url": "https://www.wpbf.com/article/former-fbi-agent-stresses-importance-of-taking-treasure-coast-bomb-threats-seriously/73731513"
+          "headline": "New details emerge on Fort Pierce man found with several explosives in his home - WPEC",
+          "source_url": "https://cbs12.com/news/local/new-details-emerge-on-fort-pierce-man-found-with-several-explosives-in-his-home-florida-news-florida-crime-local-news-local-crime-st-lucie-county-fort-pierce"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -64,6 +66,22 @@
           "local_nexus_signals": [],
           "headline": "Gas prices in Palm Beach County jump more than 20 cents a gallon in just one week",
           "source_url": "https://www.wptv.com/traffic/gas-prices/gas-prices-in-palm-beach-county-jump-more-than-20-cents-a-gallon-in-just-one-week"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:charged"
+          ],
+          "local_nexus_signals": [],
+          "headline": "St. Lucie County deputies seek 16-year-old who has been missing for almost a month - WPEC",
+          "source_url": "https://cbs12.com/news/florida/st-lucie-county-deputies-seek-16-year-old-who-has-been-missing-for-almost-a-month-florida-news-missing-children-local-news-find-missing-kids-juveniles"
         }
       ]
     },
@@ -73,8 +91,22 @@
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
       "assessed_count": 3,
-      "rejected_count": 1,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "New details emerge on Fort Pierce man found with several explosives in his home - WPEC",
+          "source_url": "https://cbs12.com/news/crime/new-details-emerge-on-fort-pierce-man-found-with-several-explosives-in-his-home-florida-news-florida-crime-local-news-local-crime-st-lucie-county-fort-pierce"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -162,7 +194,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -171,7 +203,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 2,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -180,7 +212,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -189,7 +221,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     }
