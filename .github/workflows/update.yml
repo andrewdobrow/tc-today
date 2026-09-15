@@ -28,6 +28,9 @@ jobs:
     env:
       PYTHONDONTWRITEBYTECODE: "1"
       TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
+      # Pin the CLI so production never depends on GitHub's unauthenticated
+      # "latest release" lookup, which can be rate-limited mid-run.
+      SUPABASE_CLI_VERSION: "2.117.0"
     outputs:
       committed: ${{ steps.push.outputs.committed }}
 
@@ -59,6 +62,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install feedparser anthropic requests beautifulsoup4 json-repair pytest
+
+      - name: Set up Node for pinned Supabase CLI
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Preflight pinned Supabase CLI
+        run: |
+          cli_root="$RUNNER_TEMP/tct-supabase-cli"
+          rm -rf "$cli_root"
+          mkdir -p "$cli_root"
+          npm install --prefix "$cli_root" --no-save --no-package-lock --no-audit --no-fund "supabase@${SUPABASE_CLI_VERSION}"
+          echo "$cli_root/node_modules/.bin" >> "$GITHUB_PATH"
+          "$cli_root/node_modules/.bin/supabase" --version
 
       - name: Sanitize persistent generation cache
         run: python scripts/sanitize_generation_cache.py
@@ -308,12 +325,6 @@ jobs:
               raise SystemExit(0)
           raise SystemExit(f"Monthly meter capability probe failed with HTTP {response.status_code}.")
           PY
-
-      - name: Set up Supabase CLI for runtime endpoint repair
-        if: ${{ steps.protected_sync_probe.outputs.needs_deploy == 'true' || steps.protected_article_meter_probe.outputs.needs_deploy == 'true' || steps.story_analytics_probe.outputs.needs_deploy == 'true' }}
-        uses: supabase/setup-cli@v1
-        with:
-          version: latest
 
       - name: Deploy Most Read analytics endpoint
         if: steps.story_analytics_probe.outputs.needs_deploy == 'true'
