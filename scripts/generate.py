@@ -19416,6 +19416,32 @@ def _custom_publication_identity_match(current, archived):
         )
     return False
 
+def _generated_custom_publication_slug(item, today, headline):
+    """Build a safe automatic slug for a new custom publication.
+
+    Generic headline slugs intentionally clip at 80 characters. Recurring custom
+    editions often place their visible date range near the end of a long headline,
+    so that clipping can remove the edition marker and make the new permalink fail
+    the recurring-edition identity contract. Keep the normal headline slug when it
+    already carries the edition marker; otherwise fall back to a concise
+    ``date-series-edition`` slug that preserves the publication identity.
+    """
+    base_slug = f"{today}-{slugify(headline)}"
+    if not isinstance(item, dict) or not (
+        item.get("is_custom") or item.get("authoritative_custom")
+    ):
+        return base_slug
+
+    series_key = _custom_series_key(item)
+    edition_key = _normalize_custom_edition_key(_custom_edition_marker(item))
+    if not series_key or not edition_key:
+        return base_slug
+    if not _custom_series_slug_mismatch(item, base_slug):
+        return base_slug
+
+    return _normalize_custom_slug(f"{today}-{series_key}-{edition_key}")
+
+
 def _custom_series_slug_mismatch(item, slug):
     """Detect a recurring edition published under another edition's permalink.
 
@@ -34146,7 +34172,7 @@ def write_archives(all_categories, top_cat):
             if _forced_slug:
                 base_slug = _forced_slug
             else:
-                base_slug = f"{today}-{slugify(headline)}"
+                base_slug = _generated_custom_publication_slug(hero, today, headline)
             slug = _allocate_new_publication_slug(base_slug, archive, OUTPUT_DIR)
             # Byline timestamp: brand-new article, first-published is now.
             hero["first_published"] = hero.get("first_published") or _now_eastern_rfc822()

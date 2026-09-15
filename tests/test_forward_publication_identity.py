@@ -355,3 +355,30 @@ def test_forward_live_identity_accepts_exact_long_custom_edition_slug(tmp_path):
 
     assert report["passed"] is True
     assert report["violation_count"] == 0
+
+
+def test_generated_weekend_custom_slug_keeps_edition_marker_after_headline_clipping():
+    g = _load_generate()
+    headline = (
+        "Looking for something to do this weekend? Here are the top 5 local events "
+        "for Sept. 19-20"
+    )
+    hero = {
+        "headline": headline,
+        "teaser": "Five Treasure Coast events worth checking out this weekend.",
+        "body": "Treasure Coast weekend events across Martin, St. Lucie and Indian River counties.",
+        "category": "things_to_do",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_id": "weekend-events-2026-09-19-20",
+    }
+
+    generic = f"2026-09-14-{g.slugify(headline)}"
+    assert "sep-19-20" not in generic
+    assert g._custom_series_slug_mismatch(hero, generic) is True
+
+    slug = g._generated_custom_publication_slug(hero, "2026-09-14", headline)
+
+    assert slug == "2026-09-14-treasure-coast-weekend-events-sep-19-20"
+    assert g._custom_series_slug_mismatch(hero, slug) is False
+    assert g._archive_headline_slug_alignment({**hero, "slug": slug})["aligned"] is True
