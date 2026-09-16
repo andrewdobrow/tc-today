@@ -818,6 +818,28 @@ def _selective_named_person_death_repair(
                 if str(entry.get("article_id") or "").strip()
             }
 
+            # Some legacy timeline rows have neither an article_id nor an
+            # event_key.  The selective named-person repair can still identify
+            # those rows from title-level death evidence, but the old removal
+            # predicate had no stable key with which to remove them from the
+            # secondary story.  That caused the same row to be "moved" on
+            # every top-level repair pass forever.  Use the full retained
+            # timeline identity as a lossless fallback so the exact rows copied
+            # to the primary are actually detached from the contaminated story.
+            def _moving_timeline_key(entry: Mapping[str, Any]) -> tuple[str, ...]:
+                return (
+                    str(entry.get("event_key") or "").strip(),
+                    str(entry.get("article_id") or "").strip(),
+                    str(entry.get("canonical_article_id") or "").strip(),
+                    str(entry.get("url") or entry.get("source") or "").strip(),
+                    normalize_identity_title(entry.get("title")),
+                    str(entry.get("published_at") or "").strip(),
+                )
+
+            moving_timeline_keys = {
+                _moving_timeline_key(entry) for entry in moving_entries
+            }
+
             primary["timeline"] = _unique_dicts(
                 [*primary.get("timeline", ()), *moving_entries],
                 ("event_key", "article_id", "url", "title"),
@@ -866,7 +888,8 @@ def _selective_named_person_death_repair(
             remaining_timeline = [
                 dict(entry)
                 for entry in secondary.get("timeline", ()) or ()
-                if not (
+                if _moving_timeline_key(entry) not in moving_timeline_keys
+                and not (
                     str(entry.get("article_id") or "").strip() in moving_article_ids
                     or str(entry.get("event_key") or "").strip() in moving_event_keys
                 )

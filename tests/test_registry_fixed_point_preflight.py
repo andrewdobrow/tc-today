@@ -306,3 +306,78 @@ def test_registry_preflight_does_not_oscillate_split_fragment_back_into_origin(
     assert result["repair_passes"] == 2
     assert set(persisted["stories"]) == {"story_000001", "story_000002"}
     assert persisted["story_aliases"] == {}
+
+
+def test_registry_preflight_converges_when_named_death_row_has_no_article_or_event_id(tmp_path):
+    """Regression for production story_002044/story_012322 non-convergence.
+
+    Legacy timeline rows can carry enough title evidence for the selective
+    named-person-death repair while still having blank article/event IDs.  The
+    moved row must be detached by its full timeline identity; otherwise every
+    top-level pass reports the same move forever.
+    """
+    primary_title = (
+        "Indian River County firefighter Geoffrey Lang dies following personal "
+        "tragedy at Sebastian home"
+    )
+    secondary_title = (
+        "Indian River County Fire Rescue mourns death of firefighter Geoffrey Lang "
+        "who dedicated his life to service"
+    )
+    unrelated_title = "Unrelated local story"
+    payload = {
+        "stories": {
+            "story_002044": {
+                "story_id": "story_002044",
+                "canonical_title": primary_title,
+                "titles": [primary_title],
+                "events": ["death-geoffrey-lang"],
+                "timeline": [
+                    {
+                        "article_id": "lang-a",
+                        "event_key": "death-geoffrey-lang",
+                        "title": primary_title,
+                    }
+                ],
+            },
+            "story_012322": {
+                "story_id": "story_012322",
+                "canonical_title": secondary_title,
+                "titles": [secondary_title, unrelated_title],
+                "events": ["unrelated-event"],
+                "timeline": [
+                    {
+                        "article_id": "",
+                        "event_key": "",
+                        "title": secondary_title,
+                    },
+                    {
+                        "article_id": "other-a",
+                        "event_key": "unrelated-event",
+                        "title": unrelated_title,
+                    },
+                ],
+            },
+        },
+        "event_to_story": {},
+        "incident_anchor_to_story": {},
+        "story_aliases": {},
+        "quarantined_stories": {},
+        "next_story_id": 12323,
+    }
+    path = tmp_path / "registry.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    result = normalize_registry(path)
+    persisted = json.loads(path.read_text(encoding="utf-8"))
+
+    assert result["verification_clean"] is True
+    assert result["repair_passes"] == 2
+    assert set(persisted["stories"]) == {"story_002044", "story_012322"}
+    assert [
+        row["title"] for row in persisted["stories"]["story_012322"]["timeline"]
+    ] == [unrelated_title]
+    assert secondary_title in {
+        row["title"] for row in persisted["stories"]["story_002044"]["timeline"]
+    }
+    assert normalize_registry(path)["changed"] is False
