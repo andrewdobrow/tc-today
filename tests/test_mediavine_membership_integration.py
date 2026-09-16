@@ -18,8 +18,8 @@ def test_membership_assets_normalize_prepaint_for_early_mv_no_ads_targeting():
     assert updated.count("data-tct-member-prepaint") == 1
     assert "mv-no-ads" in updated
     assert "MutationObserver" in updated
-    assert "/membership.css?v=1.13.9.31" in updated
-    assert "/membership.js?v=1.13.9.31" in updated
+    assert "/membership.css?v=1.13.9.32" in updated
+    assert "/membership.js?v=1.13.9.32" in updated
 
 
 def test_membership_client_tracks_verified_mv_no_ads_entitlement():
@@ -48,3 +48,13 @@ def test_article_sidebar_is_static_for_mediavine_targeting():
 def test_subscribe_page_lists_no_ads_on_both_plans():
     page = (ROOT / "subscribe.html").read_text(encoding="utf-8")
     assert page.count("<li>No ads</li>") >= 2
+
+
+def test_monthly_free_postread_paywall_keeps_mediavine_leader_above_offer():
+    js = (ROOT / "membership.js").read_text(encoding="utf-8")
+    start = js.index("function placePostReadMeterAfterStory(paywall){")
+    end = js.index("function renderProtectedBody", start)
+    block = js[start:end]
+    assert "const mediavineLeader = memberOnly ? qs('.mv-leader', memberOnly) : null" in block
+    assert "paywall.insertAdjacentElement('beforebegin', mediavineLeader)" in block
+    assert block.index("paywall.insertAdjacentElement('beforebegin', mediavineLeader)") < block.index("memberOnly?.remove()")

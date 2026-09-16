@@ -458,6 +458,7 @@ function placePostReadMeterAfterStory(paywall){
   if (!paywall) return false
   const memberOnly = paywall.closest('.tct-member-only')
   const articleRoot = paywall.closest('.article-main-column') || paywall.closest('.article-wrap') || document
+  const mediavineLeader = memberOnly ? qs('.mv-leader', memberOnly) : null
 
   // Legacy protected rows can leave the unlocked continuation inside the same
   // wrapper as the paywall. Normalize that continuation back into the article
@@ -498,6 +499,11 @@ function placePostReadMeterAfterStory(paywall){
   // The original wrapper is now only scaffolding (fade and/or an empty protected
   // target). Remove it only after the CTA has a proven destination.
   if (placed) {
+    // Keep Mediavine's reserved leaderboard immediately above the post-read
+    // subscription offer. The monthly-free flow moves the paywall out of its
+    // original wrapper, so the ad slot must move with it before that wrapper is
+    // removed or free-article readers would lose the requested placement.
+    if (mediavineLeader) paywall.insertAdjacentElement('beforebegin', mediavineLeader)
     memberOnly?.remove()
     syncPaywallFullBleed(paywall)
   }
