@@ -381,3 +381,166 @@ def test_registry_preflight_converges_when_named_death_row_has_no_article_or_eve
         row["title"] for row in persisted["stories"]["story_002044"]["timeline"]
     }
     assert normalize_registry(path)["changed"] is False
+
+
+def test_registry_preflight_does_not_rejoin_timeline_split_siblings_via_named_death(tmp_path):
+    """Regression for the production split -> move -> split oscillation.
+
+    A legacy archived story can carry stale cross-source crash evidence plus a
+    bogus named-person-death anchor derived from a publisher suffix.  Unified
+    incident repair first combines the real crash record with that legacy story;
+    timeline coherence then correctly splits the incompatible shark/death row
+    back out.  The selective named-person-death layer must respect that durable
+    split lineage on the following pass instead of moving the row back and
+    forcing a fresh split forever.
+    """
+    shark_title = (
+        "Hammerhead shark found dead in Florida as death toll grows to 6 in 2026 "
+        "- Tallahassee Democrat"
+    )
+    stale_crash_title = (
+        "Port St. Lucie man dies in Gadsden County crash - Tallahassee Democrat"
+    )
+    live_crash_title = (
+        "Port St. Lucie man dies in Gadsden County crash, passenger injured - Yahoo"
+    )
+    old_source = "https://news.google.com/rss/articles/legacy-crash"
+    shark_source = "https://news.google.com/rss/articles/legacy-shark"
+    live_source = "https://news.google.com/rss/articles/live-crash"
+    published = "2026-09-16T01:43:22.445674+00:00"
+
+    payload = {
+        "stories": {
+            "story_002044": {
+                "story_id": "story_002044",
+                "events": ["named-person-death:tallahassee-democrat"],
+                "incident_anchors": ["named-person-death:tallahassee-democrat"],
+                "status": "archived",
+                "titles": [shark_title, stale_crash_title],
+                "sources": [old_source, shark_source],
+                "title_candidates": [
+                    {
+                        "title": shark_title,
+                        "source": shark_source,
+                        "source_class": "aggregator",
+                        "source_trust": 45,
+                        "is_custom": False,
+                        "priority": 40,
+                    },
+                    {
+                        "title": stale_crash_title,
+                        "source": old_source,
+                        "source_class": "aggregator",
+                        "source_trust": 45,
+                        "is_custom": False,
+                        "priority": 40,
+                    },
+                ],
+                "canonical_title": shark_title,
+                "unified_incident_evidence": [
+                    {
+                        "evidence_version": 4,
+                        "family": "traffic_crash",
+                        "concepts": [],
+                        "people": [],
+                        "locations": ["port st lucie"],
+                        "agencies": [],
+                        "distinctive_tokens": [
+                            "com", "democrat", "gadsden", "google", "https", "rss",
+                            "tallahassee",
+                        ],
+                        "title_tokens": [
+                            "crash", "democrat", "dies", "gadsden", "lucie", "port",
+                            "tallahassee",
+                        ],
+                        "published_at": published,
+                    }
+                ],
+                "timeline": [
+                    {
+                        "article_id": "rss-shark",
+                        "canonical_article_id": "rss-shark",
+                        "event_key": "named-person-death:tallahassee-democrat",
+                        "title": shark_title,
+                        "source": shark_source,
+                        "url": shark_source,
+                        "published_at": "2026-08-04T23:11:38.621211+00:00",
+                    }
+                ],
+            },
+            "story_012307": {
+                "story_id": "story_012307",
+                "events": ["traffic-crash-port-st-lucie-5f7dd71218"],
+                "status": "active",
+                "titles": [live_crash_title],
+                "sources": [live_source],
+                "title_candidates": [
+                    {
+                        "title": live_crash_title,
+                        "source": live_source,
+                        "source_class": "aggregator",
+                        "source_trust": 45,
+                        "is_custom": False,
+                        "priority": 40,
+                    }
+                ],
+                "canonical_title": live_crash_title,
+                "unified_incident_evidence": [
+                    {
+                        "evidence_version": 4,
+                        "family": "traffic_crash",
+                        "concepts": [],
+                        "people": [],
+                        "locations": ["port st lucie"],
+                        "agencies": [],
+                        "distinctive_tokens": [
+                            "com", "gadsden", "google", "https", "injured", "passenger",
+                            "rss", "yahoo",
+                        ],
+                        "title_tokens": [
+                            "crash", "dies", "gadsden", "injured", "lucie", "passenger",
+                            "port", "yahoo",
+                        ],
+                        "published_at": published,
+                    }
+                ],
+                "timeline": [
+                    {
+                        "article_id": "rss-crash",
+                        "canonical_article_id": "rss-crash",
+                        "event_key": "traffic-crash-port-st-lucie-5f7dd71218",
+                        "title": live_crash_title,
+                        "source": live_source,
+                        "url": live_source,
+                        "published_at": published,
+                    }
+                ],
+            },
+        },
+        "event_to_story": {},
+        "incident_anchor_to_story": {},
+        "story_aliases": {},
+        "quarantined_stories": {},
+        "next_story_id": 12308,
+    }
+    path = tmp_path / "registry.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    result = normalize_registry(path)
+    persisted = json.loads(path.read_text(encoding="utf-8"))
+
+    assert result["verification_clean"] is True
+    assert result["repair_passes"] == 3
+    assert len(persisted["stories"]) == 2
+    assert normalize_registry(path)["changed"] is False
+
+    rows = [
+        row
+        for story in persisted["stories"].values()
+        for row in story.get("timeline", ())
+    ]
+    assert {row["article_id"] for row in rows} == {"rss-shark", "rss-crash"}
+    assert all(
+        "story_002044" in (story.get("timeline_coherence_split_roots") or [])
+        for story in persisted["stories"].values()
+    )

@@ -781,6 +781,29 @@ def _selective_named_person_death_repair(
                     stories[only]["incident_anchors"].append(anchor)
             continue
 
+        # Timeline-coherence repair is stronger negative-identity authority than
+        # a named-person-death anchor.  In particular, legacy publisher suffixes
+        # can be misread as a person's name (for example ``Tallahassee Democrat``),
+        # causing two components that were deliberately split apart to appear to
+        # share the same death anchor.  Rejoining those siblings here creates an
+        # endless split -> selective-move -> split oscillation across top-level
+        # repair passes.  Fail closed for the entire ambiguous anchor group when
+        # any participating records share a durable split lineage: the anchor no
+        # longer has enough authority to decide which component owns the row.
+        story_ids = sorted(by_story, key=_story_number)
+        split_lineages = {
+            story_id: _timeline_split_lineage_roots(stories[story_id])
+            for story_id in story_ids
+            if story_id in stories
+        }
+        if any(
+            split_lineages.get(left, frozenset())
+            & split_lineages.get(right, frozenset())
+            for index, left in enumerate(story_ids)
+            for right in story_ids[index + 1 :]
+        ):
+            continue
+
         def _primary_key(story_id: str) -> tuple[float, int, int, int, int, int]:
             story = stories[story_id]
             matching = len(by_story[story_id])
