@@ -68,3 +68,33 @@ def test_obsolete_newsroom_strip_shell_is_not_mistaken_for_modern(tmp_path: Path
     assert report["repaired"] == 1
     migrated = page.read_text(encoding="utf-8")
     assert migrated != original
+
+
+def test_modern_retained_article_sidebar_sticky_css_is_migrated_without_rebuilding_shell(tmp_path: Path):
+    generate = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    page = articles / "modern-sticky.html"
+    original = """<html><head><style>
+.article-side-rail { min-width: 0; position: sticky; top: 118px; display: grid; gap: 24px; }
+@media(max-width:900px){.article-side-rail { position: static; display: grid; }}
+</style></head><body>
+<header class=\"site-masthead\"></header>
+<div class=\"article-wrap\">
+<a class=\"article-banner-slot article-ad-banner\"></a>
+<div class=\"article-meta\"></div><h1>Modern retained page</h1>
+<div class=\"article-editorial-grid\"><div class=\"article-main-column\">
+<div class=\"article-body\">Body</div></div><aside class=\"article-side-rail\"></aside></div>
+</div></body></html>"""
+    page.write_text(original, encoding="utf-8")
+
+    report = generate._repair_article_shells(tmp_path)
+    migrated = page.read_text(encoding="utf-8")
+
+    assert report["checked"] == 1
+    assert report["skipped_modern"] == 1
+    assert report["repaired"] == 1
+    assert report["sidebar_css_normalized"] == 1
+    assert "position: sticky" not in migrated
+    assert "position: static; top: auto; display: grid" in migrated
+    assert migrated.count('class="article-side-rail"') == 1

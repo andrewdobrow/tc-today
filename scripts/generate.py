@@ -31865,12 +31865,38 @@ def _repair_article_shells(output_root):
         updated = raw[:body_match.start()] + replacement + raw[main_match.end():]
         return updated, updated != raw
 
-    checked = repaired = wrapped = unrepairable = header_normalized = skipped_modern = 0
+    def _normalize_retained_sidebar_css(raw):
+        """Remove legacy sticky positioning from retained article side rails.
+
+        Current articles render the rail as static for Mediavine sidebar targeting,
+        but retained modern article files carry their original inline template CSS.
+        Normalize only the article-side-rail rule so old pages do not remain sticky.
+        """
+        pattern = re.compile(r"(\.article-side-rail\s*\{)([^}]*)(\})", re.I | re.S)
+
+        def _replace_rule(match):
+            body = match.group(2)
+            updated = re.sub(r"position\s*:\s*sticky\s*;", "position: static;", body, flags=re.I)
+            updated = re.sub(r"top\s*:\s*118px\s*;", "top: auto;", updated, flags=re.I)
+            return match.group(1) + updated + match.group(3)
+
+        return pattern.sub(_replace_rule, raw)
+
+    checked = repaired = wrapped = unrepairable = header_normalized = skipped_modern = sidebar_css_normalized = 0
     for path in articles_dir.glob("*.html"):
         html = path.read_text(encoding="utf-8", errors="ignore")
         if 'http-equiv="refresh"' in html or "window.location.replace" in html:
             continue
         checked += 1
+
+        # Mediavine requires the publisher-owned article sidebar to be static.
+        # Modern retained pages are intentionally skipped below for performance, so
+        # normalize this one CSS rule before the modern-shell fast path.
+        normalized_sidebar_html = _normalize_retained_sidebar_css(html)
+        sidebar_changed = normalized_sidebar_html != html
+        if sidebar_changed:
+            html = normalized_sidebar_html
+            sidebar_css_normalized += 1
 
         # This function is a legacy migration/repair pass, not a site-wide refresh.
         # Current article pages are already rendered by render_article_page() with
@@ -31888,13 +31914,16 @@ def _repair_article_shells(output_root):
         if not MEMBERSHIP_UI_ENABLED:
             modern_shell_tokens.insert(2, 'class="article-banner-slot')
         if all(token in html for token in modern_shell_tokens):
+            if sidebar_changed:
+                path.write_text(html, encoding="utf-8")
+                repaired += 1
             skipped_modern += 1
             continue
 
         if 'class="article-wrap"' not in html or 'class="article-meta"' not in html:
             continue
 
-        changed = False
+        changed = sidebar_changed
         headline = _extract(r'<h1[^>]*>(.*?)</h1>', html)
         category = _extract(r'class="article-category"[^>]*>(.*?)</', html)
         body_excerpt = _extract(r'class="article-body"[^>]*>(.*?)</div>', html)
@@ -31965,11 +31994,12 @@ def _repair_article_shells(output_root):
     print(
         f"  Article shell repair: checked {checked}, repaired {repaired}, "
         f"skipped modern {skipped_modern}, headers normalized {header_normalized}, "
-        f"legacy grids wrapped {wrapped}, unrepairable {unrepairable}"
+        f"legacy grids wrapped {wrapped}, sidebar CSS normalized {sidebar_css_normalized}, "
+        f"unrepairable {unrepairable}"
     )
     return {"checked": checked, "repaired": repaired, "skipped_modern": skipped_modern,
             "wrapped": wrapped, "header_normalized": header_normalized,
-            "unrepairable": unrepairable}
+            "sidebar_css_normalized": sidebar_css_normalized, "unrepairable": unrepairable}
 
 def _validate_presentation_contract(output_root):
     """Validate current presentation without blocking an urgent deploy on old archives.
