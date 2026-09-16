@@ -168,9 +168,9 @@
     }
   </style>
   <script data-tct-member-prepaint>
-(function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1')document.documentElement.classList.add('tct-member-preverified')}catch(_e){}})();
+(function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1'){document.documentElement.classList.add('tct-member-preverified');var a=function(){if(!document.body)return false;document.body.classList.add('mv-no-ads');return true;};if(!a()){var o=new MutationObserver(function(){if(a())o.disconnect();});o.observe(document.documentElement,{childList:true});}return;}var z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit'}).formatToParts(new Date());var y=(z.find(function(p){return p.type==='year'})||{}).value||'';var m=(z.find(function(p){return p.type==='month'})||{}).value||'';var period=y+'-'+m;var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');var raw=localStorage.getItem('tct_monthly_free_article_v1');var state=raw?JSON.parse(raw):null;var stalePending=state&&state.pending&&!state.meter_token&&(Date.now()-Number(state.started_at||0)>120000);if(stalePending){localStorage.removeItem('tct_monthly_free_article_v1');state=null;}if(slug&&(!state||state.period!==period||state.slug===slug)){document.documentElement.classList.add('tct-meter-precheck');setTimeout(function(){document.documentElement.classList.remove('tct-meter-precheck')},5000);}}catch(_e){}})();
 </script>
-  <link rel="stylesheet" href="/membership.css?v=1.13.7.27">
+  <link rel="stylesheet" href="/membership.css?v=1.13.9.31">
 <style id="tct-banner-critical">
 .article-wrap>.article-banner-slot{width:min(100%,970px)!important;margin:0 auto 30px!important}
 .article-wrap>.article-ad-banner{display:block!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;border:0!important;border-radius:0!important;background:transparent!important;overflow:visible!important;box-shadow:none!important}
@@ -413,6 +413,7 @@
           <figure class="article-hero-image"><img src="https://bloximages.newyork1.vip.townnews.com/hometownnewstc.com/content/tncms/assets/v3/editorial/c/e5/ce5b2737-1a1c-5298-96c4-f182ab3450bc/6a7badff77870.image.jpg?crop=420%2C221%2C0%2C9" alt="Fort Pierce proposes fines up to $500 per day for chronic noise violators" loading="eager"><figcaption class="img-credit">Photo: Hometown News</figcaption></figure>
           <div class="article-body tct-member-preview"><div class="tct-preview-copy" data-tct-preview-copy="true"><p>Fort Pierce city officials are considering tougher noise enforcement that would allow fines of $250 to $500 per day for chronic violators and let the city place liens on properties where violations occur. Law enforcement responded to nearly 2,000 noise complaint calls in Fort Pierce between April 1, 2025 and April 30, 2026, with about one</p></div></div>
 <div class="tct-member-only"><div class="tct-paywall-fade" aria-hidden="true"></div>
+<div class="mv-leader"></div>
 <section class="tct-paywall" data-tct-paywall data-slug="2026-08-13-fort-pierce-proposes-fines-up-to-500-per-day-for-chronic-noise-violators" aria-label="Treasure Coast Today membership">
   <div class="tct-paywall-subscriber-strip">
     <div class="tct-paywall-topline">Already a subscriber? <button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
@@ -440,6 +441,7 @@
       </div>
       <ul class="tct-paywall-benefits" aria-label="Subscription benefits">
         <li>Unlimited access to every TCT story</li>
+        <li>No ads</li>
         <li>Read on any device</li>
         <li>Support local, independent journalism</li>
       </ul>
@@ -567,6 +569,6 @@ function tctCopyLink(btn) {
 })();
 </script>
   <script src="/membership-config.js"></script>
-  <script type="module" src="/membership.js?v=1.13.7.27"></script>
+  <script type="module" src="/membership.js?v=1.13.9.31"></script>
 </body>
 </html>
