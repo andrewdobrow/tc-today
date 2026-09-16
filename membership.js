@@ -16,11 +16,13 @@ const FREE_ARTICLE_BANNER_DELAY_MS = 1750
 const FREE_ARTICLE_BANNER_SCROLL_PX = 120
 
 function setMemberHint(entitled){
+  const active = Boolean(entitled)
   try {
-    if (entitled) localStorage.setItem(MEMBER_HINT_KEY, '1')
+    if (active) localStorage.setItem(MEMBER_HINT_KEY, '1')
     else localStorage.removeItem(MEMBER_HINT_KEY)
   } catch {}
-  document.documentElement.classList.toggle('tct-member-preverified', Boolean(entitled))
+  document.documentElement.classList.toggle('tct-member-preverified', active)
+  document.body?.classList.toggle('mv-no-ads', active)
 }
 function endMemberPrepaint(){
   document.documentElement.classList.remove('tct-member-preverified')
@@ -188,6 +190,7 @@ async function membershipStatus(){
     const entitled = Boolean(data?.entitled)
     setMemberHint(entitled)
     document.body.classList.toggle('tct-member-entitled', entitled)
+    document.body.classList.toggle('mv-no-ads', entitled)
     return data
   })()
   return membershipStatusPromise
@@ -207,6 +210,7 @@ function applySubscriberChrome(status){
     el.textContent = entitled && firstName ? `Welcome, ${firstName}` : 'Welcome, subscriber'
   })
   document.body.classList.toggle('tct-member-entitled', entitled)
+  document.body.classList.toggle('mv-no-ads', entitled)
 }
 
 async function refreshSubscribeAccount(statusOverride=null){
@@ -605,6 +609,7 @@ async function unlockArticle(statusPromise=null){
     clearPendingMeterFor(slug)
     setMemberHint(true)
     document.body.classList.add('tct-member-entitled')
+    document.body.classList.add('mv-no-ads')
     const rendered = renderProtectedBody(String(data.protected_body || ''), paywall, 'member')
     endMemberPrepaint()
     endMeterPrepaint()

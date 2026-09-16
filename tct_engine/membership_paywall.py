@@ -152,6 +152,7 @@ def paywall_section_html(slug: str) -> str:
       </div>
       <ul class="tct-paywall-benefits" aria-label="Subscription benefits">
         <li>Unlimited access to every TCT story</li>
+        <li>No ads</li>
         <li>Read on any device</li>
         <li>Support local, independent journalism</li>
       </ul>
@@ -168,6 +169,7 @@ def paywall_section_html(slug: str) -> str:
 def paywall_html(slug: str) -> str:
     return (
         '<div class="tct-paywall-fade" aria-hidden="true"></div>\n'
+        + '<div class="mv-leader"></div>\n'
         + paywall_section_html(slug)
         + '\n<div id="tct-protected-content" class="article-body tct-protected-content tct-paywalled-content" aria-live="polite"></div>'
     )
@@ -194,12 +196,16 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.7.27"
+MEMBERSHIP_ASSET_VERSION = "1.13.9.31"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'
     "(function(){try{"
-    "if(localStorage.getItem('tct_member_entitled_hint')==='1'){document.documentElement.classList.add('tct-member-preverified');return;}"
+    "if(localStorage.getItem('tct_member_entitled_hint')==='1'){"
+    "document.documentElement.classList.add('tct-member-preverified');"
+    "var a=function(){if(!document.body)return false;document.body.classList.add('mv-no-ads');return true;};"
+    "if(!a()){var o=new MutationObserver(function(){if(a())o.disconnect();});o.observe(document.documentElement,{childList:true});}"
+    "return;}"
     "var z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit'}).formatToParts(new Date());"
     "var y=(z.find(function(p){return p.type==='year'})||{}).value||'';var m=(z.find(function(p){return p.type==='month'})||{}).value||'';"
     "var period=y+'-'+m;var slug=(location.pathname.split('/').pop()||'').replace(/\\.html$/,'');"
@@ -219,7 +225,13 @@ def inject_membership_assets(page_html: str, slug: str) -> str:
     # Run the visual member hint before first paint. This only suppresses the
     # sales treatment while entitlement is rechecked; protected article text is
     # still available only through the server-side protected-article function.
-    if MEMBER_PREPAINT_MARKER not in page_html:
+    prepaint_pattern = re.compile(
+        r'<script\b(?=[^>]*\bdata-tct-member-prepaint\b)[^>]*>.*?</script>',
+        re.I | re.S,
+    )
+    if prepaint_pattern.search(page_html):
+        page_html = prepaint_pattern.sub(MEMBER_PREPAINT_SCRIPT, page_html, count=1)
+    else:
         page_html = page_html.replace("</head>", f"  {MEMBER_PREPAINT_SCRIPT}\n</head>", 1)
 
     # Normalize retained pages to cache-busted membership assets so a browser

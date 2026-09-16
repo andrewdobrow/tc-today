@@ -17713,7 +17713,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-headline {{ max-width: 920px; font-family: "Fraunces", serif; font-size: clamp(38px, 5vw, 68px); font-weight: 600; line-height: 1.02; letter-spacing: -.045em; color: var(--text); margin: 0 0 38px; text-wrap: balance; overflow-wrap: anywhere; }}
     .article-editorial-grid {{ display: grid; grid-template-columns: minmax(0, 760px) minmax(260px, 320px); gap: clamp(42px, 6vw, 82px); align-items: start; }}
     .article-main-column {{ min-width: 0; }}
-    .article-side-rail {{ min-width: 0; position: sticky; top: 118px; display: grid; gap: 24px; }}
+    .article-side-rail {{ min-width: 0; position: static; top: auto; display: grid; gap: 24px; }}
     .article-side-rail .related-section {{ margin: 0; padding: 24px; border: 1px solid var(--border); border-top: 4px solid var(--accent); border-radius: 10px; background: var(--surface); }}
     .article-side-rail .related-title {{ margin: 0 0 16px; font-family: "Fraunces", serif; font-size: 22px; line-height: 1.15; }}
     .article-side-rail .related-list {{ list-style: none; padding: 0; margin: 0; }}
