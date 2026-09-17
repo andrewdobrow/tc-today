@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-17T20:57:46.405552+00:00",
+  "generated_at": "2026-09-17T21:43:03.361874+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -70,8 +70,8 @@
     "no_candidate_passes": 45,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 2,
-    "retroactive_rows_retained": 43,
+    "new_stories_allowed": 0,
+    "retroactive_rows_retained": 45,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 6,
+    "pre_generation_materiality_evaluations": 7,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 4,
+    "pre_generation_materiality_duplicates": 5,
     "pre_generation_materiality_holds": 2,
-    "pre_generation_materiality_model_calls": 2,
+    "pre_generation_materiality_model_calls": 3,
     "pre_generation_materiality_cache_hits": 4,
-    "terminal_permalink_evaluations": 2,
-    "terminal_permalink_candidate_pairs": 24,
-    "terminal_permalink_model_calls": 2,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 2,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -105,8 +105,37 @@
   "pre_generation_materiality_decisions": [
     {
       "category_key": "local_gov",
-      "source_headline": "Deputies say liquor theft suspect led chase from Martin County into Palm Beach County - WPBF",
+      "source_headline": "Deputies say liquor theft suspect led chase from Martin County into Palm Beach County - wpbf.com",
       "source_url": "https://www.wpbf.com/article/martin-county-publix-theft-chase-arrest/73755590",
+      "canonical_slug": "2026-09-15-martin-county-deputies-use-helicopter-to-capture-lake-worth-man-after-high-speed",
+      "canonical_headline": "Martin County deputies use helicopter to capture Lake Worth man after high-speed liquor theft chase",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Derwyn Edwards (24 years old)",
+        "Liquor theft from Martin County Publix",
+        "Chase from Martin County into Palm Beach County",
+        "Martin County Sheriff's Office pursuit",
+        "Helicopter/air crew tracking",
+        "Charges include theft and fleeing police"
+      ],
+      "novel_facts": [],
+      "reason": "This is the same incident. Both articles describe a 24-year-old Derwyn Edwards stealing liquor from a Publix in Martin County, fleeing from deputies, being tracked by helicopter/air crew into Palm Beach County, and facing theft and fleeing charges. The incoming article (published Sept 16) provides no material updates beyond what the canonical (published Sept 15) already reported. The incoming article actually contains less detail (no specific speeds, locations, or full name). This is simply another outlet covering the same arrest with no new developments.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "local_gov",
+      "source_headline": "Aerial video shows Lake Worth man running red lights, fleeing deputies in Martin County - cw34.com",
+      "source_url": "https://cw34.com/news/local/martin-county-aerial-video-shows-riviera-beach-man-running-red-light-fleeing-deputies-charges-petit-theft-aggravated-fleeing-reckless-driving-body-southeast-federal-highway-treasure-coast-crime-florida-news?teaserSource=trending",
       "canonical_slug": "2026-09-15-martin-county-deputies-use-helicopter-to-capture-lake-worth-man-after-high-speed",
       "canonical_headline": "Martin County deputies use helicopter to capture Lake Worth man after high-speed liquor theft chase",
       "canonical_is_custom": false,
@@ -121,20 +150,28 @@
       "semantic_action": "duplicate_use_existing_canonical",
       "confidence": 0.98,
       "shared_anchors": [
-        "Derwyn Edwards/Derwyn Don Edwards, 24 years old",
+        "Derwyn Don Edwards, 24-year-old suspect",
         "Liquor theft from Martin County Publix",
-        "Chase from Martin County into Palm Beach County",
-        "Martin County Sheriff's Office pursuit",
-        "Helicopter/air crew tracking",
-        "Charges of theft and fleeing police"
+        "Chase exceeding 80 mph",
+        "Helicopter tracking into Palm Beach County",
+        "Location near SE Dominica Terrace and Federal Highway",
+        "Arrested with Florida Highway Patrol assistance",
+        "Charges of reckless fleeing and petit theft"
       ],
-      "novel_facts": [],
-      "reason": "Same real-world event: both articles describe the arrest of 24-year-old Derwyn Edwards after stealing liquor from a Publix in Martin County and leading deputies on a chase into Palm Beach County tracked by helicopter. The incoming article from WPBF (Sept 16) contains no material new information beyond what the canonical from cw34.com (Sept 15) already reported. Both cover the same theft, chase, helicopter tracking, and arrest with the same charges. The incoming article provides less detail (no specific speeds, locations, or agency assistance mentioned). This is simply another outlet's coverage of the same incident without new developments.",
+      "novel_facts": [
+        "Exact Publix address: 8605 SE Federal Highway (vs 6805 in candidate - likely typo in one)",
+        "Specific time: 11:24 a.m.",
+        "Detail about deputy disengaging pursuit per policy",
+        "Edwards eventually parked and attempted to hide",
+        "Unmarked unit used for final apprehension",
+        "Currently held at Martin County Jail"
+      ],
+      "reason": "Both articles cover the identical incident: Derwyn Don Edwards stealing liquor from a Martin County Publix, fleeing deputies at high speed, being tracked by helicopter into Palm Beach County, and being arrested. The incoming article adds procedural details (pursuit policy, timing, jail status) but contains no material update such as new charges, court proceedings, victim identification, or other developments that change what readers need to know. These are scene and procedural details that should update the existing canonical rather than create a new URL.",
       "validation_errors": []
     },
     {
       "category_key": "crime",
-      "source_headline": "Deputies say liquor theft suspect led chase from Martin County into Palm Beach County - WPBF",
+      "source_headline": "Deputies say liquor theft suspect led chase from Martin County into Palm Beach County - wpbf.com",
       "source_url": "https://www.wpbf.com/article/martin-county-publix-theft-chase-arrest/73755590",
       "canonical_slug": "2026-09-15-martin-county-deputies-use-helicopter-to-capture-lake-worth-man-after-high-speed",
       "canonical_headline": "Martin County deputies use helicopter to capture Lake Worth man after high-speed liquor theft chase",
@@ -150,20 +187,20 @@
       "semantic_action": "duplicate_use_existing_canonical",
       "confidence": 0.98,
       "shared_anchors": [
-        "Derwyn Edwards/Derwyn Don Edwards, 24 years old",
+        "Derwyn Edwards (24 years old)",
         "Liquor theft from Martin County Publix",
         "Chase from Martin County into Palm Beach County",
         "Martin County Sheriff's Office pursuit",
         "Helicopter/air crew tracking",
-        "Charges of theft and fleeing police"
+        "Charges include theft and fleeing police"
       ],
       "novel_facts": [],
-      "reason": "Same real-world event: both articles describe the arrest of 24-year-old Derwyn Edwards after stealing liquor from a Publix in Martin County and leading deputies on a chase into Palm Beach County tracked by helicopter. The incoming article from WPBF (Sept 16) contains no material new information beyond what the canonical from cw34.com (Sept 15) already reported. Both cover the same theft, chase, helicopter tracking, and arrest with the same charges. The incoming article provides less detail (no specific speeds, locations, or agency assistance mentioned). This is simply another outlet's coverage of the same incident without new developments.",
+      "reason": "This is the same incident. Both articles describe a 24-year-old Derwyn Edwards stealing liquor from a Publix in Martin County, fleeing from deputies, being tracked by helicopter/air crew into Palm Beach County, and facing theft and fleeing charges. The incoming article (published Sept 16) provides no material updates beyond what the canonical (published Sept 15) already reported. The incoming article actually contains less detail (no specific speeds, locations, or full name). This is simply another outlet covering the same arrest with no new developments.",
       "validation_errors": []
     },
     {
       "category_key": "business",
-      "source_headline": "New entertainment district with restaurants and retail planned for Tradition in Port St. Lucie - wptv.com",
+      "source_headline": "New entertainment district with restaurants and retail planned for Tradition in Port St. Lucie - WPTV",
       "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/new-entertainment-district-with-restaurants-and-retail-planned-for-tradition-in-port-st-lucie",
       "canonical_slug": "2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon",
       "canonical_headline": "Tradition Entertainment District in Port St. Lucie to break ground within six months",
@@ -179,24 +216,23 @@
       "semantic_action": "duplicate_use_existing_canonical",
       "confidence": 0.98,
       "shared_anchors": [
-        "Nearly 85-acre entertainment district in Tradition community",
-        "Village Parkway location between Innovation Way and Hegener Drive",
+        "Nearly 85-acre entertainment district",
+        "Village Parkway in Tradition community",
+        "Four parcels between Innovation Way and Hegener Drive",
         "Gustavo Lumer CEO of Lumer Real Estate as developer",
-        "Four parcels of development",
         "Approximately 25 new restaurants planned",
-        "5.5-acre first phase off Innovation Way with 40,000 square feet",
-        "60% of first phase already leased",
+        "5.5-acre first parcel off Innovation Way with 40,000 square feet",
+        "60 percent of first phase already leased",
         "Construction to start within six months",
         "60-acre section near Stars and Stripes Park",
-        "Same source URL (wptv.com)"
+        "Same exact source URL"
       ],
       "novel_facts": [
-        "Additional quotes from Gustavo Lumer about retailers being 'eager to open yesterday'",
-        "Quotes from neighbors LaVaughn Harvey and Tina Gramata",
-        "Additional detail about golf cart accessibility",
-        "More elaboration on site approval process"
+        "Neighbor quotes from LaVaughn Harvey and Tina Gramata",
+        "Additional detail about luxury gym and movie theater possibilities",
+        "Golf cart accessibility mentioned"
       ],
-      "reason": "This is the exact same development announcement. The incoming article shares identical concrete anchors: the 85-acre size, Village Parkway location, specific street boundaries (Innovation Way to Hegener Drive), developer Gustavo Lumer, 25 restaurants, 5.5-acre first phase, 60% leased, and six-month construction timeline. The incoming article adds neighbor reactions and additional developer quotes, but contains no material update such as groundbreaking, approval, tenant announcements, timeline changes, or other development that changes what readers need to know. These are routine color details and reordered content from the same source, not a newsworthy development.",
+      "reason": "This is the exact same development announcement with identical core facts: same developer, same location, same acreage, same timeline, same leasing percentage. The incoming article adds only routine neighbor reactions and minor color details about amenities, which do not constitute a material update. No new government action, approval milestone, tenant announcement, or construction start has occurred. The identical source URL confirms this is a republication of the same reporting.",
       "validation_errors": []
     },
     {
@@ -219,15 +255,15 @@
       "shared_anchors": [
         "Martin County Commission",
         "data center concerns from residents",
-        "general policy topic area"
+        "general timeframe (August 26 vs September 17, 2026)"
       ],
       "novel_facts": [
-        "Specific zoning vote on property along Southeast Powerline Avenue in Hobe Sound",
-        "3-2 vote approving limited-industrial zoning",
-        "Property owner Bob Reins/Gunster law firm accepting compromise",
-        "Commissioner Blake Capps voting against",
-        "Residents Steve Addison, Kim Call, Patrick McDonough testifying",
-        "Vote occurred at Tuesday September 17, 2026 meeting"
+        "Specific rezoning vote on property along Southeast Powerline Avenue in Hobe Sound",
+        "3-2 vote to approve limited-industrial zoning",
+        "Property owner Bob Reins/Gunster law firm accepted downgrade from general industrial",
+        "Commissioner Blake Capps voted against citing data center concerns",
+        "Specific residents named: Steve Addison, Kim Call, Patrick McDonough",
+        "100,000 square foot threshold for board approval mentioned"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -236,7 +272,7 @@
     },
     {
       "category_key": "martin",
-      "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns - wptv.com",
+      "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns - WPTV",
       "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
       "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
       "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
@@ -254,16 +290,15 @@
       "shared_anchors": [
         "Martin County Commission",
         "data center concerns from residents",
-        "general timeframe (August-September 2026)"
+        "general timeframe (late August/September 2026)"
       ],
       "novel_facts": [
-        "3-2 vote on September 16, 2026 to approve limited-industrial zoning",
-        "Specific property on Southeast Powerline Avenue in Hobe Sound",
-        "Rezoning from general industrial to limited-industrial classification",
+        "Specific rezoning vote on property along Southeast Powerline Avenue in Hobe Sound",
+        "3-2 vote to approve limited-industrial zoning",
         "Property owner Bob Reins/Gunster law firm accepted compromise",
         "Commissioner Blake Capps voted against citing data center concerns",
-        "Specific residents named: Steve Addison, Kim Call, Patrick McDonough",
-        "Any proposal over 100,000 square feet requires board approval"
+        "Specific residents quoted: Steve Addison, Kim Call, Patrick McDonough",
+        "Vote occurred on Tuesday September 16, 2026"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -272,7 +307,7 @@
     },
     {
       "category_key": "st_lucie",
-      "source_headline": "New entertainment district with restaurants and retail planned for Tradition in Port St. Lucie - wptv.com",
+      "source_headline": "New entertainment district with restaurants and retail planned for Tradition in Port St. Lucie - WPTV",
       "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/new-entertainment-district-with-restaurants-and-retail-planned-for-tradition-in-port-st-lucie",
       "canonical_slug": "2026-09-08-tradition-entertainment-district-in-port-st-lucie-to-break-ground-within-six-mon",
       "canonical_headline": "Tradition Entertainment District in Port St. Lucie to break ground within six months",
@@ -288,24 +323,23 @@
       "semantic_action": "duplicate_use_existing_canonical",
       "confidence": 0.98,
       "shared_anchors": [
-        "Nearly 85-acre entertainment district in Tradition community",
-        "Village Parkway location between Innovation Way and Hegener Drive",
+        "Nearly 85-acre entertainment district",
+        "Village Parkway in Tradition community",
+        "Four parcels between Innovation Way and Hegener Drive",
         "Gustavo Lumer CEO of Lumer Real Estate as developer",
-        "Four parcels of development",
         "Approximately 25 new restaurants planned",
-        "5.5-acre first phase off Innovation Way with 40,000 square feet",
-        "60% of first phase already leased",
+        "5.5-acre first parcel off Innovation Way with 40,000 square feet",
+        "60 percent of first phase already leased",
         "Construction to start within six months",
         "60-acre section near Stars and Stripes Park",
-        "Same source URL (wptv.com)"
+        "Same exact source URL"
       ],
       "novel_facts": [
-        "Additional quotes from Gustavo Lumer about retailers being 'eager to open yesterday'",
-        "Quotes from neighbors LaVaughn Harvey and Tina Gramata",
-        "Additional detail about golf cart accessibility",
-        "More elaboration on site approval process"
+        "Neighbor quotes from LaVaughn Harvey and Tina Gramata",
+        "Additional detail about luxury gym and movie theater possibilities",
+        "Golf cart accessibility mentioned"
       ],
-      "reason": "This is the exact same development announcement. The incoming article shares identical concrete anchors: the 85-acre size, Village Parkway location, specific street boundaries (Innovation Way to Hegener Drive), developer Gustavo Lumer, 25 restaurants, 5.5-acre first phase, 60% leased, and six-month construction timeline. The incoming article adds neighbor reactions and additional developer quotes, but contains no material update such as groundbreaking, approval, tenant announcements, timeline changes, or other development that changes what readers need to know. These are routine color details and reordered content from the same source, not a newsworthy development.",
+      "reason": "This is the exact same development announcement with identical core facts: same developer, same location, same acreage, same timeline, same leasing percentage. The incoming article adds only routine neighbor reactions and minor color details about amenities, which do not constitute a material update. No new government action, approval milestone, tenant announcement, or construction start has occurred. The identical source URL confirms this is a republication of the same reporting.",
       "validation_errors": []
     }
   ],
@@ -1171,7 +1205,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone",
       "incoming_source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-alleged-drug-dealer-using-dead-mans-phone-florida-news-florida-crime-local-news-local-crime-drug-deal-gone-wrong",
       "incoming_story_id": "story_012939",
@@ -1191,182 +1225,7 @@
       }
     },
     {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone",
-      "incoming_source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-alleged-drug-dealer-using-dead-mans-phone-florida-news-florida-crime-local-news-local-crime-drug-deal-gone-wrong",
-      "incoming_story_id": "story_012939",
-      "candidates": [
-        {
-          "slug": "2026-09-17-port-st-lucie-police-investigate-death-of-man-found-inside-vehicle",
-          "headline": "Port St. Lucie police investigate death of man found inside vehicle",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.7355,
-          "retrieval_score": 0.6455,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
-          "headline": "Travel MRI technician arrested on sexual battery charge at HCA Florida St. Lucie Hospital",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6443,
-          "retrieval_score": 0.5543,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-09-04-port-st-lucie-man-arrested-on-warrant-for-allegedly-hitting-mother-of-his-childr",
-          "headline": "Port St. Lucie man arrested on warrant for allegedly hitting mother of his children with car in Vero Beach",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6009,
-          "retrieval_score": 0.5999,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-09-11-port-st-lucie-police-chief-leo-niemczyk-shares-911-story-after-25-years",
-          "headline": "Port St. Lucie Police Chief Leo Niemczyk shares 9/11 story after 25 years",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5725,
-          "retrieval_score": 0.5005,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-09-01-speeding-driver-crashes-into-two-parked-trucks-on-sw-lucero-drive-in-port-st-luc",
-          "headline": "Port St. Lucie police confirm medical episode caused SW Lucero Drive crash; driver's family says he had seizure",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5636,
-          "retrieval_score": 0.5096,
-          "reasons": [
-            "publication_gap_16_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-03-port-st-lucie-woman-among-7-charged-in-alleged-57m-irs-tax-refund-fraud-scheme",
-          "headline": "Port St. Lucie woman among 7 charged in alleged $57M IRS tax refund fraud scheme",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5023,
-          "retrieval_score": 0.5023,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-09-10-fort-pierce-police-investigate-death-of-unidentified-man-found-near-okeechobee-r",
-          "headline": "Fort Pierce police investigate death of unidentified man found near Okeechobee Road business",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5018,
-          "retrieval_score": 0.4828,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-09-15-st-lucie-county-sends-30-day-removal-notices-to-50-55-license-plate-camera-permi",
-          "headline": "St. Lucie County finds 14 unpermitted license plate readers during sweep, with more checks ahead",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4996,
-          "retrieval_score": 0.4626,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-09-02-vero-beach-man-arrested-for-creating-ai-deepfake-sexual-images-police-seek-addit",
-          "headline": "Vero Beach police expect more victims, charges in AI deepfake case against Peter Ruma",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.495,
-          "retrieval_score": 0.495,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
-          "headline": "Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4891,
-          "retrieval_score": 0.4701,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-09-11-port-st-lucie-holds-25th-anniversary-911-remembrance-ceremony-friday-morning",
-          "headline": "Port St. Lucie holds 25th anniversary 9/11 remembrance ceremony Friday morning",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.482,
-          "retrieval_score": 0.41,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-          "headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4727,
-          "retrieval_score": 0.4727,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.9,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Danilo Jaramillo arrested on fentanyl trafficking and felon-in-possession charges",
-          "Victim Miqueias Oliveira Silva found dead of overdose at 700 SE Collins Lane",
-          "Police used victim's phone to arrange sting buy leading to traffic stop of black Kia Telluride",
-          "Search of SW Longfellow Road home yielded firearms, $17,715 cash, drugs and ledger"
-        ],
-        "reason": "No candidate describes this fentanyl trafficking arrest, the named suspect Danilo Jaramillo, victim Miqueias Oliveira Silva, or the Collins Lane/Longfellow Road locations. The closest candidate (man found dead in vehicle) involves a different scenario with explicit 'no foul play' language and no named individuals, indicating a distinct incident despite same date/agency. This is a standalone new event.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.9,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Danilo Jaramillo arrested on fentanyl trafficking and felon-in-possession charges",
-          "Victim Miqueias Oliveira Silva found dead of overdose at 700 SE Collins Lane",
-          "Police used victim's phone to arrange sting buy leading to traffic stop of black Kia Telluride",
-          "Search of SW Longfellow Road home yielded firearms, $17,715 cash, drugs and ledger"
-        ],
-        "reason": "No candidate describes this fentanyl trafficking arrest, the named suspect Danilo Jaramillo, victim Miqueias Oliveira Silva, or the Collins Lane/Longfellow Road locations. The closest candidate (man found dead in vehicle) involves a different scenario with explicit 'no foul play' language and no named individuals, indicating a distinct incident despite same date/agency. This is a standalone new event.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Flood Advisory issued for parts of Martin County as Atlantic showers stream onshore",
       "incoming_source_url": "https://www.wpbf.com/article/flood-advisory-issued-for-eastern-martin-county/73758179",
       "incoming_story_id": "story_012403",
@@ -1383,184 +1242,6 @@
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Flood Advisory issued for parts of Martin County as Atlantic showers stream onshore",
-      "incoming_source_url": "https://www.wpbf.com/article/flood-advisory-issued-for-eastern-martin-county/73758179",
-      "incoming_story_id": "story_012403",
-      "candidates": [
-        {
-          "slug": "2026-09-10-martin-county-high-school-evacuated-after-bomb-threat-sweep-finds-no-evidence",
-          "headline": "Martin County High School bomb threat traced to hacked Stuart account",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5518,
-          "retrieval_score": 0.5268,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-09-10-maryland-man-arrested-in-martin-county-on-child-sex-charges-after-roblox-chat-wi",
-          "headline": "Maryland man arrested in Martin County on child sex charges after Roblox chat with 12-year-old",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5477,
-          "retrieval_score": 0.5257,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-09-15-martin-county-deputies-use-helicopter-to-capture-lake-worth-man-after-high-speed",
-          "headline": "Martin County deputies use helicopter to capture Lake Worth man after high-speed liquor theft chase",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5038,
-          "retrieval_score": 0.4668,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-09-14-martin-county-high-school-evacuated-after-second-bomb-threat-this-month",
-          "headline": "Martin County High School evacuated after second bomb threat this month",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4753,
-          "retrieval_score": 0.4413,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-09-01-tiger-woods-scheduled-for-change-of-plea-hearing-wednesday-in-jupiter-island-dui",
-          "headline": "Tiger Woods' five-year license suspension in Martin County crash case restricts golf cart use on public roads, prosecutors say",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4616,
-          "retrieval_score": 0.4616,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
-          "headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4604,
-          "retrieval_score": 0.4444,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-09-01-motorcycle-crash-shuts-down-i-95-southbound-near-hobe-sound-in-martin-county",
-          "headline": "Motorcycle crash shuts down I-95 southbound in southern Martin County near Hobe Sound",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4585,
-          "retrieval_score": 0.4585,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-05-76-year-old-ejected-after-golf-cart-crashes-into-tractor-in-tropical-farms-commu",
-          "headline": "76-year-old ejected after golf cart crashes into tractor in Tropical Farms community",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4537,
-          "retrieval_score": 0.4467,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-09-03-stuart-judge-rules-man-incompetent-to-stand-trial-in-fatal-stabbing-of-73-year-o",
-          "headline": "Stuart judge rules man incompetent to stand trial in fatal stabbing of 73-year-old woman",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4462,
-          "retrieval_score": 0.4452,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-09-09-k-9-tobi-alerts-deputies-to-heroin-marijuana-in-indian-river-county-traffic-stop",
-          "headline": "K-9 Tobi alerts deputies to heroin, marijuana in Indian River County traffic stop",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4343,
-          "retrieval_score": 0.4153,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-09-16-south-fork-high-school-expands-co-teaching-model-with-martin-county-planning-ele",
-          "headline": "South Fork High School expands co-teaching model with Martin County planning elementary rollout",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4296,
-          "retrieval_score": 0.3896,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-09-03-former-st-lucie-gop-chairman-arrested-in-martin-county-saw-palmetto-berry-case",
-          "headline": "Former St. Lucie GOP chairman arrested in Martin County saw palmetto berry case",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4226,
-          "retrieval_score": 0.4216,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "martin-county locality only"
-        ],
-        "novel_facts": [
-          "Flood Advisory issued for parts of Martin County",
-          "onshore winds from Atlantic driving repeated showers",
-          "Small Craft Advisories for boaters this afternoon",
-          "winds gusting up to 25 mph from northeast"
-        ],
-        "reason": "This is a routine weather advisory story with no shared incident, participant, or case with any candidate; candidates cover unrelated topics (bomb threats, arrests, crashes, court rulings, school features). No same real-world event exists among candidates, so this is a new story.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "martin-county locality only"
-        ],
-        "novel_facts": [
-          "Flood Advisory issued for parts of Martin County",
-          "onshore winds from Atlantic driving repeated showers",
-          "Small Craft Advisories for boaters this afternoon",
-          "winds gusting up to 25 mph from northeast"
-        ],
-        "reason": "This is a routine weather advisory story with no shared incident, participant, or case with any candidate; candidates cover unrelated topics (bomb threats, arrests, crashes, court rulings, school features). No same real-world event exists among candidates, so this is a new story.",
-        "validation_errors": [],
-        "consistency_repairs": []
       }
     }
   ],
