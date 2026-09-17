@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-17T02:01:23Z",
+  "generated_at": "2026-09-17T06:59:22Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 1,
     "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 7,
-    "placements_after": 6,
+    "placements_before": 4,
+    "placements_after": 3,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -105,19 +105,19 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 177,
+    "candidates_processed": 175,
     "routes": {
-      "generate_new": 53,
-      "skip": 124
+      "generate_new": 31,
+      "skip": 144
     },
     "eligibility": {
-      "low_value": 129,
-      "publishable": 48
+      "low_value": 128,
+      "publishable": 47
     },
     "source_classes": {
-      "aggregator": 129,
-      "local_news": 26,
-      "regional_news": 17,
+      "aggregator": 128,
+      "local_news": 27,
+      "regional_news": 15,
       "unknown": 5
     },
     "rejected_count": 0,
@@ -125,44 +125,70 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 22,
-      "same_event": 155
+      "new_story": 17,
+      "same_event": 158
     },
     "examples": [
       {
-        "story_id": "story_012591",
-        "title": "Jupiter renter’s car towed after HOA changes parking rules; family says they were never notified",
-        "event_key": "unknown-event-40869f7d76",
+        "story_id": "story_012634",
+        "title": "Federal Reserve raises interest rates for first time since 2023: What it means for your South Florida wallet",
+        "event_key": "unknown-event-205b3ebeb2",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_012446",
+        "title": "'It definitely disturbed me': Boynton Beach neighbors react to shocking video of service dog abuse",
+        "event_key": "unknown-event-5ff5cb9e4d",
+        "relationship": "same_event",
+        "confidence": 0.98,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: animal_cruelty",
+          "Shared people: juan latrez poole",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: age_52, animal_cruelty, bond_30000, missing_person_signal, public_search",
+          "Shared distinctive tokens: 20",
+          "Distinctive-token overlap: 0.42",
+          "Title overlap: 0.44",
+          "Identity anchors qualified: True",
+          "Confidence: 0.98"
+        ]
+      },
+      {
+        "story_id": "story_012591",
+        "title": "Jupiter renter’s car towed after HOA changes parking rules; family says they were never notified",
+        "event_key": "unknown-event-40869f7d76",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_012592",
         "title": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
         "event_key": "unknown-event-1f60741100",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_012471",
-        "title": "Man severely burned in Stuart boat fire while working on engine - WPEC",
-        "event_key": "fire-stuart-e733741ade",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -172,10 +198,11 @@
         "event_key": "traffic-crash-9434a12fb8-9434a12fb8",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -210,7 +237,7 @@
       {
         "story_id": "story_012544",
         "title": "Police confiscate loaded handgun from West Riviera Elementary student’s backpack - WPEC",
-        "event_key": "unknown-event-d79826a5ac",
+        "event_key": "unknown-event-93b1d7fb2e",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -225,20 +252,6 @@
         "story_id": "story_012545",
         "title": "David Jolly, Byron Donalds turn AI data centers into Florida campaign battleground",
         "event_key": "unknown-event-6b2a0ba57f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007017",
-        "title": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - WPEC",
-        "event_key": "animal-rescue-port-st-lucie-cats",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -279,14 +292,15 @@
       },
       {
         "story_id": "story_012438",
-        "title": "City warns patience is running out for King's Landing in Fort Pierce - tcpalm.com",
-        "event_key": "unknown-event-3bbad4c401",
+        "title": "City warns patience is running out for King's Landing in Fort Pierce - Treasure Coast News",
+        "event_key": "unknown-event-b2e456b9e6",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -320,14 +334,16 @@
       },
       {
         "story_id": "story_012593",
-        "title": "White House chief of staff Susie Wiles says she no longer shows evidence of cancer after treatment - MyNorthwest.com",
+        "title": "White House chief of staff Susie Wiles says she no longer shows evidence of cancer after treatment - mynorthwest.com",
         "event_key": "unknown-event-a6ac7b4d62",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -374,21 +390,22 @@
       },
       {
         "story_id": "story_012444",
-        "title": "Florida election 2026 for House District 84 is Nov. 3 - tcpalm.com",
-        "event_key": "unknown-event-7a7ea2b546",
+        "title": "Florida election 2026 for House District 84 is Nov. 3 - Treasure Coast News",
+        "event_key": "unknown-event-c8a6e1d230",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_012547",
-        "title": "Florida boaters rescued after capsized vessel leaves them stranded in tree - WPEC",
-        "event_key": "unknown-event-d7492dbde9",
+        "story_id": "story_012445",
+        "title": "Dolly Parton's Imagination Library sees surge in donations and registrations after her death",
+        "event_key": "unknown-event-66cd97bd3e",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -402,9 +419,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_012591",
-        "title": "Jupiter renter’s car towed after HOA changes parking rules; family says they were never notified",
-        "event_key": "unknown-event-40869f7d76",
+        "story_id": "story_012634",
+        "title": "Federal Reserve raises interest rates for first time since 2023: What it means for your South Florida wallet",
+        "event_key": "unknown-event-205b3ebeb2",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -412,32 +429,59 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_012446",
+        "title": "'It definitely disturbed me': Boynton Beach neighbors react to shocking video of service dog abuse",
+        "event_key": "unknown-event-5ff5cb9e4d",
+        "relationship": "same_event",
+        "confidence": 0.98,
+        "matched_existing": true,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: animal_cruelty",
+          "Shared people: juan latrez poole",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: age_52, animal_cruelty, bond_30000, missing_person_signal, public_search",
+          "Shared distinctive tokens: 20",
+          "Distinctive-token overlap: 0.42",
+          "Title overlap: 0.44",
+          "Identity anchors qualified: True",
+          "Confidence: 0.98"
+        ]
+      },
+      {
+        "story_id": "story_012591",
+        "title": "Jupiter renter’s car towed after HOA changes parking rules; family says they were never notified",
+        "event_key": "unknown-event-40869f7d76",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_012592",
         "title": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
         "event_key": "unknown-event-1f60741100",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_012471",
-        "title": "Man severely burned in Stuart boat fire while working on engine - WPEC",
-        "event_key": "fire-stuart-e733741ade",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -448,10 +492,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -488,7 +533,7 @@
       {
         "story_id": "story_012544",
         "title": "Police confiscate loaded handgun from West Riviera Elementary student’s backpack - WPEC",
-        "event_key": "unknown-event-d79826a5ac",
+        "event_key": "unknown-event-93b1d7fb2e",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -504,21 +549,6 @@
         "story_id": "story_012545",
         "title": "David Jolly, Byron Donalds turn AI data centers into Florida campaign battleground",
         "event_key": "unknown-event-6b2a0ba57f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_007017",
-        "title": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - WPEC",
-        "event_key": "animal-rescue-port-st-lucie-cats",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -562,15 +592,16 @@
       },
       {
         "story_id": "story_012438",
-        "title": "City warns patience is running out for King's Landing in Fort Pierce - tcpalm.com",
-        "event_key": "unknown-event-3bbad4c401",
+        "title": "City warns patience is running out for King's Landing in Fort Pierce - Treasure Coast News",
+        "event_key": "unknown-event-b2e456b9e6",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -606,15 +637,17 @@
       },
       {
         "story_id": "story_012593",
-        "title": "White House chief of staff Susie Wiles says she no longer shows evidence of cancer after treatment - MyNorthwest.com",
+        "title": "White House chief of staff Susie Wiles says she no longer shows evidence of cancer after treatment - mynorthwest.com",
         "event_key": "unknown-event-a6ac7b4d62",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -664,22 +697,23 @@
       },
       {
         "story_id": "story_012444",
-        "title": "Florida election 2026 for House District 84 is Nov. 3 - tcpalm.com",
-        "event_key": "unknown-event-7a7ea2b546",
+        "title": "Florida election 2026 for House District 84 is Nov. 3 - Treasure Coast News",
+        "event_key": "unknown-event-c8a6e1d230",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_012547",
-        "title": "Florida boaters rescued after capsized vessel leaves them stranded in tree - WPEC",
-        "event_key": "unknown-event-d7492dbde9",
+        "story_id": "story_012445",
+        "title": "Dolly Parton's Imagination Library sees surge in donations and registrations after her death",
+        "event_key": "unknown-event-66cd97bd3e",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -696,66 +730,24 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
+    "candidate_count": 0,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 1
-    },
-    "milestones": {
-      "approval": 1
-    },
-    "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1
-    },
-    "examples": [
-      {
-        "headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
-        "event_key": "unknown-event-1f60741100",
-        "current_story_id": "story_012592",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_003907",
-        "candidate_confidence": 0.625,
-        "candidate_milestones": [
-          "approval"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "entity_match",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_003907",
-          "Novel milestones: approval",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.25",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.62"
-        ]
-      }
-    ],
-    "retrospective_candidate_count": 34,
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
+    "retrospective_candidate_count": 33,
     "retrospective_high_confidence_candidate_count": 11,
     "retrospective_activation_eligible_candidate_count": 7,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1371,
-      "timeline_entries_examined": 3890,
-      "transitions_examined": 2348,
+      "stories_with_timelines": 1385,
+      "timeline_entries_examined": 3917,
+      "transitions_examined": 2361,
       "candidate_scope": "distinct_article_transitions",
-      "candidate_count": 34,
+      "candidate_count": 33,
       "high_confidence_candidate_count": 11,
       "activation_eligible_candidate_count": 7,
       "same_source_evolution_count": 8,
@@ -1046,9 +1038,9 @@
           }
         }
       ],
-      "identity_anchor_rejected_count": 17,
-      "incoherent_transition_count": 17,
-      "incoherent_story_count": 11,
+      "identity_anchor_rejected_count": 16,
+      "incoherent_transition_count": 16,
+      "incoherent_story_count": 10,
       "incoherent_stories": [
         {
           "story_id": "story_010514",
@@ -1562,47 +1554,11 @@
               "prior_title_overlap": 0.111111
             }
           ]
-        },
-        {
-          "story_id": "story_012576",
-          "story_title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
-          "transition_count": 1,
-          "blocking_reasons": {
-            "timeline_identity_unanchored": 1
-          },
-          "examples": [
-            {
-              "prior_article": {
-                "article_id": "rss-51d62bcc4676d6e5fd34",
-                "event_key": "fire-fort-pierce-3428a9d8b4",
-                "published_at": "2026-09-17T01:43:15.467232+00:00",
-                "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - cw34.com",
-                "source": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire",
-                "url": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
-              },
-              "newer_article": {
-                "article_id": "rss-596746811b3b9ec096d9",
-                "event_key": "unknown-event-7340026fe5",
-                "published_at": "2026-09-17T01:43:15.467232+00:00",
-                "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach",
-                "source": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach",
-                "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach"
-              },
-              "milestones": [
-                "arrest"
-              ],
-              "identity_anchor_codes": [
-                "shared_discriminative_title_tokens",
-                "identity_anchor_missing"
-              ],
-              "prior_title_overlap": 0.25
-            }
-          ]
         }
       ],
       "milestones": {
         "approval": 1,
-        "arrest": 12,
+        "arrest": 11,
         "closure": 1,
         "court_action": 2,
         "death": 5,
@@ -1615,8 +1571,8 @@
       },
       "blocking_conflicts": {
         "event_family_conflict": 2,
-        "same_timestamp_order_uncertain": 17,
-        "timeline_identity_unanchored": 17,
+        "same_timestamp_order_uncertain": 16,
+        "timeline_identity_unanchored": 16,
         "weak_title_continuity": 5
       },
       "excluded_entry_count": 191,
@@ -3565,76 +3521,6 @@
           ]
         },
         {
-          "story_id": "story_012576",
-          "story_title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
-          "milestones": [
-            "arrest"
-          ],
-          "matched_phrases": {
-            "arrest": [
-              "arrested",
-              "charges"
-            ]
-          },
-          "confidence": 0.74,
-          "activation_eligible": false,
-          "timeline_incoherent": true,
-          "identity_anchor_qualified": false,
-          "identity_anchor_codes": [
-            "shared_discriminative_title_tokens",
-            "identity_anchor_missing"
-          ],
-          "shared_title_tokens": [
-            "fort",
-            "man",
-            "pierce"
-          ],
-          "blocking_conflicts": [
-            "same_timestamp_order_uncertain",
-            "timeline_identity_unanchored"
-          ],
-          "reason_codes": [
-            "retrospective_timeline_transition",
-            "novel_milestone",
-            "persistent_story_identity_untrusted",
-            "shared_discriminative_title_tokens",
-            "identity_anchor_missing",
-            "canonical_title_continuity_context_only",
-            "timeline_incoherent"
-          ],
-          "prior_title_overlap": 0.25,
-          "canonical_title_overlap": 1.0,
-          "prior_article": {
-            "article_id": "rss-51d62bcc4676d6e5fd34",
-            "event_key": "fire-fort-pierce-3428a9d8b4",
-            "published_at": "2026-09-17T01:43:15.467232+00:00",
-            "title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - cw34.com",
-            "source": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire",
-            "url": "https://cw34.com/news/local/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
-          },
-          "newer_article": {
-            "article_id": "rss-596746811b3b9ec096d9",
-            "event_key": "unknown-event-7340026fe5",
-            "published_at": "2026-09-17T01:43:15.467232+00:00",
-            "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach",
-            "source": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach",
-            "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/fort-pierce-man-arrested-on-attempted-murder-charges-after-domestic-shooting-near-porpoise-beach"
-          },
-          "candidate_trace": [
-            "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_012576",
-            "Novel milestones: arrest",
-            "Identity anchor qualified: False",
-            "Identity anchor codes: shared_discriminative_title_tokens, identity_anchor_missing",
-            "Prior title overlap: 0.25",
-            "Canonical title overlap (context only): 1.00",
-            "Same timestamp: True",
-            "Blocking conflicts: same_timestamp_order_uncertain, timeline_identity_unanchored",
-            "Candidate confidence: 0.74",
-            "Activation eligible: False"
-          ]
-        },
-        {
           "story_id": "story_010514",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
@@ -3976,27 +3862,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1086,
-      "treasure_coast_local": 844,
-      "treasure_coast_region": 374,
-      "unknown": 2226
+      "florida": 1091,
+      "treasure_coast_local": 845,
+      "treasure_coast_region": 377,
+      "unknown": 2231
     },
-    "average_score": 59.26
+    "average_score": 59.27
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1086,
-      "treasure_coast_local": 844,
-      "treasure_coast_region": 374,
-      "unknown": 2226
+      "florida": 1091,
+      "treasure_coast_local": 845,
+      "treasure_coast_region": 377,
+      "unknown": 2231
     },
-    "average_priority": 3.73
+    "average_priority": 3.68
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3635,
-      "developing": 208,
-      "ongoing": 681,
+      "active": 3667,
+      "developing": 206,
+      "ongoing": 665,
       "resolved": 6
     }
   },
@@ -4004,8 +3890,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 8236,
-    "active_stories_after": 8236,
+    "active_stories_before": 8259,
+    "active_stories_after": 8259,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -4030,24 +3916,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 137,
+    "incident_anchor_to_story_count": 139,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-17T01:43:56Z",
-    "quarantined_story_records_retained": 2149,
-    "active_story_count": 8267
+    "generated_at": "2026-09-17T06:43:56Z",
+    "quarantined_story_records_retained": 2166,
+    "active_story_count": 8281
   },
   "stories": {
-    "total": 4530,
+    "total": 4544,
     "importance_levels": {
       "breaking": 5,
-      "high": 99,
-      "normal": 719,
-      "low": 3707,
+      "high": 96,
+      "normal": 720,
+      "low": 3723,
       "archived": 0
     },
-    "average_importance": 9.72,
+    "average_importance": 9.68,
     "top": [
       {
         "story_id": "story_012523",
@@ -4062,7 +3948,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 44.96
+          "age_hours": 49.95
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4115,7 +4001,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-15T04:48:12.688168+00:00",
-          "hours_since_update": 44.96,
+          "hours_since_update": 49.95,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -4133,7 +4019,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 75.5
+          "age_hours": 80.49
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4193,7 +4079,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-13T22:16:14.414876+00:00",
-          "hours_since_update": 75.5,
+          "hours_since_update": 80.49,
           "event_count": 48,
           "timeline_entries": 35
         }
@@ -4211,7 +4097,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.14
+          "age_hours": 5.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4254,136 +4140,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-17T01:43:15.467232+00:00",
-          "hours_since_update": 0.14,
+          "hours_since_update": 5.05,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_012582",
-        "title": "Man dies after shooting in Fort Pierce, 3 masked suspects flee on foot",
-        "score": 65,
-        "editorial_priority": 74,
-        "editorial_score": 74,
-        "score_breakdown": {
-          "score": 74,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 0.05
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-09-17T01:43:15.467232+00:00",
-          "hours_since_update": 0.05,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_012434",
-        "title": "St. Lucie County deputies seek 16-year-old who has been missing for almost a month - cbs12.com",
-        "score": 55,
-        "editorial_priority": 62,
-        "editorial_score": 62,
-        "score_breakdown": {
-          "score": 62,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 5.77
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 10,
-        "timeline_entries": 6,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 6,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-16T20:05:04.526552+00:00",
-          "hours_since_update": 5.77,
-          "event_count": 10,
-          "timeline_entries": 6
-        }
-      },
-      {
-        "story_id": "story_012568",
+        "story_id": "story_012615",
         "title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -4395,7 +4158,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 0.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4445,10 +4208,81 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-17T01:43:15.467232+00:00",
-          "hours_since_update": 0.04,
+          "last_updated": "2026-09-17T06:43:19.448601+00:00",
+          "hours_since_update": 0.03,
           "event_count": 7,
           "timeline_entries": 6
+        }
+      },
+      {
+        "story_id": "story_012623",
+        "title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - WPEC",
+        "score": 55,
+        "editorial_priority": 62,
+        "editorial_score": 62,
+        "score_breakdown": {
+          "score": 62,
+          "importance": 55,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 0.03
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Hobe Sound",
+            "Port St. Lucie",
+            "Fort Pierce",
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-17T06:43:19.448601+00:00",
+          "hours_since_update": 0.03,
+          "event_count": 3,
+          "timeline_entries": 3
         }
       },
       {
@@ -4464,7 +4298,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 34.05
+          "age_hours": 39.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4503,7 +4337,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-15T15:43:17.773528+00:00",
-          "hours_since_update": 34.05,
+          "hours_since_update": 39.05,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4521,7 +4355,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 123.52
+          "age_hours": 128.51
         },
         "level": "high",
         "importance_reasons": [
@@ -4564,7 +4398,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-11T22:15:19.966379+00:00",
-          "hours_since_update": 123.52,
+          "hours_since_update": 128.51,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4582,7 +4416,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 465.29
+          "age_hours": 470.29
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4636,7 +4470,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 465.29,
+          "hours_since_update": 470.29,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -4654,7 +4488,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 9.31
+          "age_hours": 14.31
         },
         "level": "high",
         "importance_reasons": [
@@ -4684,8 +4518,8 @@
           "score": 100,
           "counties": [
             "St. Lucie County",
-            "Martin County",
-            "Indian River County"
+            "Indian River County",
+            "Martin County"
           ],
           "places": [
             "Port St. Lucie",
@@ -4705,7 +4539,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-16T16:27:36.717144+00:00",
-          "hours_since_update": 9.31,
+          "hours_since_update": 14.31,
           "event_count": 5,
           "timeline_entries": 2
         }
@@ -4723,7 +4557,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 9.35
+          "age_hours": 14.33
         },
         "level": "high",
         "importance_reasons": [
@@ -4772,25 +4606,25 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-16T16:27:36.717144+00:00",
-          "hours_since_update": 9.35,
+          "hours_since_update": 14.33,
           "event_count": 9,
           "timeline_entries": 9
         }
       },
       {
-        "story_id": "story_010514",
-        "title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
-        "score": 70,
-        "editorial_priority": 56,
-        "editorial_score": 56,
+        "story_id": "story_012434",
+        "title": "St. Lucie County deputies seek 16-year-old who has been missing for almost a month - cbs12.com",
+        "score": 55,
+        "editorial_priority": 59,
+        "editorial_score": 59,
         "score_breakdown": {
-          "score": 56,
-          "importance": 70,
+          "score": 59,
+          "importance": 55,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 100.7
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 10.68
         },
         "level": "high",
         "importance_reasons": [
@@ -4798,11 +4632,6 @@
             "code": "public_safety",
             "label": "Public-safety event",
             "points": 25
-          },
-          {
-            "code": "government_action",
-            "label": "Government action",
-            "points": 15
           },
           {
             "code": "follow_up",
@@ -4824,17 +4653,11 @@
           "scope": "treasure_coast_local",
           "score": 100,
           "counties": [
-            "Martin County",
             "St. Lucie County",
             "Indian River County"
           ],
           "places": [
-            "Stuart",
-            "Palm City",
-            "Hobe Sound",
-            "Port St. Lucie",
-            "Fort Pierce",
-            "Vero Beach"
+            "Port St. Lucie"
           ]
         },
         "editorial_proximity": {
@@ -4842,17 +4665,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 110,
-        "timeline_entries": 107,
-        "relationship_decisions": 43,
-        "canonical_source_candidates": 160,
+        "event_count": 10,
+        "timeline_entries": 6,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 6,
         "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-09-12T21:04:08.358970+00:00",
-          "hours_since_update": 100.7,
-          "event_count": 110,
-          "timeline_entries": 107
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-16T20:05:04.526552+00:00",
+          "hours_since_update": 10.68,
+          "event_count": 10,
+          "timeline_entries": 6
         }
       },
       {
@@ -4868,7 +4691,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 365.75
+          "age_hours": 370.75
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4916,7 +4739,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 365.75,
+          "hours_since_update": 370.75,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -4934,7 +4757,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 223.08
+          "age_hours": 228.08
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4980,74 +4803,13 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 223.08,
+          "hours_since_update": 228.08,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_012576",
-        "title": "Fort Pierce man arrested on attempted murder charges after domestic shooting near Porpoise Beach - WPTV",
-        "score": 45,
-        "editorial_priority": 51,
-        "editorial_score": 51,
-        "score_breakdown": {
-          "score": 51,
-          "importance": 45,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 0.03
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 8,
-        "timeline_entries": 8,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 8,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-17T01:43:15.467232+00:00",
-          "hours_since_update": 0.03,
-          "event_count": 8,
-          "timeline_entries": 8
-        }
-      },
-      {
-        "story_id": "story_012577",
+        "story_id": "story_012624",
         "title": "Port St. Lucie police search for endangered man last seen at Jimmy John's in Fort Pierce - WPEC",
         "score": 45,
         "editorial_priority": 50,
@@ -5059,7 +4821,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 0.03
         },
         "level": "normal",
         "importance_reasons": [
@@ -5106,14 +4868,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-17T01:43:15.467232+00:00",
-          "hours_since_update": 0.04,
+          "last_updated": "2026-09-17T06:43:19.448601+00:00",
+          "hours_since_update": 0.03,
           "event_count": 7,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_012589",
+        "story_id": "story_012632",
         "title": "Crash blocks right lane on I-95 North in St. Lucie County near Exit 131 - cbs12.com",
         "score": 45,
         "editorial_priority": 50,
@@ -5125,7 +4887,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.14
+          "age_hours": 0.11
         },
         "level": "normal",
         "importance_reasons": [
@@ -5168,8 +4930,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-17T01:43:15.467232+00:00",
-          "hours_since_update": 0.14,
+          "last_updated": "2026-09-17T06:43:19.448601+00:00",
+          "hours_since_update": 0.11,
           "event_count": 6,
           "timeline_entries": 5
         }
@@ -5187,7 +4949,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 223.09
+          "age_hours": 228.08
         },
         "level": "high",
         "importance_reasons": [
@@ -5231,7 +4993,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 223.09,
+          "hours_since_update": 228.08,
           "event_count": 42,
           "timeline_entries": 38
         }
@@ -5249,7 +5011,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 314.3
+          "age_hours": 319.3
         },
         "level": "high",
         "importance_reasons": [
@@ -5292,7 +5054,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-09-03T23:27:52.005400+00:00",
-          "hours_since_update": 314.3,
+          "hours_since_update": 319.3,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -5310,7 +5072,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 284.22
+          "age_hours": 289.22
         },
         "level": "high",
         "importance_reasons": [
@@ -5353,9 +5115,122 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-05T05:32:40.743369+00:00",
-          "hours_since_update": 284.22,
+          "hours_since_update": 289.22,
           "event_count": 3,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_009348",
+        "title": "All northbound lanes of Florida's Turnpike closed in St. Lucie County after fatal box truck crash",
+        "score": 75,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 220.09
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 10,
+        "timeline_entries": 10,
+        "relationship_decisions": 4,
+        "canonical_source_candidates": 19,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-09-08T02:40:27.108602+00:00",
+          "hours_since_update": 220.09,
+          "event_count": 10,
+          "timeline_entries": 10
+        }
+      },
+      {
+        "story_id": "story_012365",
+        "title": "5 facts about NFL Vikings owner ties to Florida condo where girl died - Treasure Coast News",
+        "score": 50,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 50,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 5.07
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-17T01:43:15.467232+00:00",
+          "hours_since_update": 5.07,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       }
     ]
@@ -5363,7 +5238,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-17T01:52:43Z",
+    "generated_at": "2026-09-17T06:51:33Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5379,61 +5254,51 @@
       "category_count": 9,
       "statuses": {
         "cache_hit": 1,
-        "category_eligibility_archive_recovery": 3,
-        "generated_live": 4,
+        "category_eligibility_archive_recovery": 5,
+        "generated_live": 2,
         "generation_failed_archive_recovery": 1
       },
       "failures": {
-        "contextless_update_lead": 1,
-        "no_category_eligible_sources": 3
+        "article_framing_integrity": 1,
+        "no_category_eligible_sources": 5
       },
-      "model_attempt_count": 6,
-      "model_elapsed_seconds": 125.13,
-      "archive_recovery_requested_count": 4,
+      "model_attempt_count": 4,
+      "model_elapsed_seconds": 58.828,
+      "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 2,
-      "article_framing_rejection_count": 1,
-      "category_eligibility_rejection_count": 1,
-      "published_story_duplicate_suppression_count": 23,
-      "story_aware_update_context_count": 6,
-      "material_update_promotion_evaluation_count": 3,
+      "contextual_update_lead_rejection_count": 0,
+      "article_framing_rejection_count": 2,
+      "category_eligibility_rejection_count": 0,
+      "published_story_duplicate_suppression_count": 34,
+      "story_aware_update_context_count": 1,
+      "material_update_promotion_evaluation_count": 9,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 0
+      "material_update_promotion_model_call_count": 6
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "generation_failed_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 25,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 12,
-        "selected_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 22.661,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_context_missing — Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 20.896,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_context_missing — Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns"
+            "elapsed_seconds": 8.779,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 43.558,
-        "failure_code": "contextless_update_lead",
-        "failure_summary": "Contextless update lead for hero: original_event_context_missing — Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+        "model_elapsed_seconds": 8.779,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5442,19 +5307,39 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
-            "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-finds-14-unpermitted-license-plate-readers-st-lucie-county-flock-cameras-mystery-cameras-flock-camera-removal-st-lucie-county-commission-florida-news",
-            "editorial_story_id": "story_012266",
-            "canonical_slug": "2026-09-15-st-lucie-county-sends-30-day-removal-notices-to-50-55-license-plate-camera-permi",
-            "canonical_headline": "St. Lucie County finds 14 unpermitted license plate readers during sweep, with more checks ahead",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "editorial_story_id": "story_006022",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
             "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "David Jolly, Byron Donalds turn AI data centers into Florida campaign battleground",
+            "source_url": "https://www.wptv.com/news/state/david-jolly-byron-donalds-turn-ai-data-centers-into-florida-campaign-battleground",
+            "editorial_story_id": "story_012545",
+            "canonical_slug": "2026-09-16-jolly-proposes-ai-data-center-moratorium-donalds-warns-freeze-would-drive-invest",
+            "canonical_headline": "Jolly proposes AI data center moratorium; Donalds warns freeze would drive investment from Florida",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "editorial_story_id": "story_012441",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5498,62 +5383,72 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-            "basis": "event-identity-authority:governing_body_plus_policy_subject",
-            "identity_keys": [
-              "story:story_012592",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=22",
-              "shared_locality=['martin-county']",
-              "shared_event_families=['public-policy']",
-              "shared_named_people=[]",
-              "shared_precise_locations=[]",
-              "shared_agencies=['martin-county-commission']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['cent', 'data']",
-              "shared_distinctive_token_count=39",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 1,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "local_gov",
-            "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-finds-14-unpermitted-license-plate-readers-st-lucie-county-flock-cameras-mystery-cameras-flock-camera-removal-st-lucie-county-commission-florida-news",
-            "canonical_slug": "2026-09-15-st-lucie-county-sends-30-day-removal-notices-to-50-55-license-plate-camera-permi",
-            "canonical_headline": "St. Lucie County finds 14 unpermitted license plate readers during sweep, with more checks ahead",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
             "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-            "eligibility_reason": "material_update_source_already_absorbed",
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.92,
+            "shared_anchors": [
+              "Martin County Commission",
+              "data center concerns",
+              "residents voicing concerns"
+            ],
+            "novel_facts": [
+              "September 17, 2026 commission meeting and vote",
+              "3-2 vote on rezoning specific property on Southeast Powerline Avenue in Hobe Sound",
+              "Rezoning from general industrial to limited-industrial classification",
+              "Property owner Bob Reins/Gunster law firm accepting compromise",
+              "Commissioner Blake Capps voting against citing data center concerns",
+              "Specific residents named: Steve Addison, Kim Call, Patrick McDonough"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "David Jolly, Byron Donalds turn AI data centers into Florida campaign battleground",
+            "source_url": "https://www.wptv.com/news/state/david-jolly-byron-donalds-turn-ai-data-centers-into-florida-campaign-battleground",
+            "canonical_slug": "2026-09-16-jolly-proposes-ai-data-center-moratorium-donalds-warns-freeze-would-drive-invest",
+            "canonical_headline": "Jolly proposes AI data center moratorium; Donalds warns freeze would drive investment from Florida",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -5643,16 +5538,18 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 83.418
+        "live_hero_headline": "Fort Pierce approves $10.1 million contract for police body cameras and AI tools",
+        "generated_card_count": 0,
+        "elapsed_seconds": 54.095
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "cache_hit",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 25,
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 24,
         "publishable_source_count": 9,
         "selected_source_count": 1,
         "cache_hit": true,
@@ -5670,26 +5567,31 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 1,
-        "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-primary-crime-safety-focus",
-            "category_key": "crime",
-            "mode": "enforce",
-            "policy": "primary_crime_safety_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_crime_safety_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns"
-          }
-        ],
-        "published_story_duplicate_suppression_count": 2,
+        "category_eligibility_assessed_count": 1,
+        "category_eligibility_rejection_count": 0,
+        "category_eligibility_rejections": [],
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "editorial_story_id": "story_006022",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "editorial_story_id": "story_012441",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - cw34.com",
@@ -5711,53 +5613,63 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-            "basis": "event-identity-authority:governing_body_plus_policy_subject",
-            "identity_keys": [
-              "story:story_006022",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=22",
-              "shared_locality=['martin-county']",
-              "shared_event_families=['public-policy']",
-              "shared_named_people=[]",
-              "shared_precise_locations=[]",
-              "shared_agencies=['martin-county-commission']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['cent', 'data']",
-              "shared_distinctive_token_count=39",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 1,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.92,
+            "shared_anchors": [
+              "Martin County Commission",
+              "data center concerns from residents",
+              "general timeframe (both August-September 2026)"
+            ],
+            "novel_facts": [
+              "3-2 vote on September 17, 2026 to rezone specific property on Southeast Powerline Avenue in Hobe Sound",
+              "Rezoning from general industrial to limited-industrial classification",
+              "Property owner Bob Reins/Gunster law firm accepted compromise",
+              "Commissioner Blake Capps voted against citing data center concerns",
+              "Residents Steve Addison, Kim Call, Patrick McDonough (Eaglewood Community HOA president) testified",
+              "County clarified no data center plans for this site, any facility over 100,000 sq ft requires board approval"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "crime",
             "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - cw34.com",
@@ -5809,30 +5721,23 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Liquor theft suspect led Martin County deputies on high-speed chase into Palm Beach County",
-        "elapsed_seconds": 29.488
+        "elapsed_seconds": 27.085
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
-        "status": "generated_live",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 23,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 11,
-        "selected_source_count": 1,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 10.955,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 10.955,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Business & Development category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5841,11 +5746,31 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "editorial_story_id": "story_006022",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "editorial_story_id": "story_012441",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "Port St. Lucie parent raises safety concerns over bus stop",
@@ -5867,53 +5792,64 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-            "basis": "event-identity-authority:governing_body_plus_policy_subject",
-            "identity_keys": [
-              "story:story_006022",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=22",
-              "shared_locality=['martin-county']",
-              "shared_event_families=['public-policy']",
-              "shared_named_people=[]",
-              "shared_precise_locations=[]",
-              "shared_agencies=['martin-county-commission']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['cent', 'data']",
-              "shared_distinctive_token_count=39",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 0,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "business",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.92,
+            "shared_anchors": [
+              "Martin County Commission",
+              "data center concerns from residents",
+              "general timeframe (late summer 2026)"
+            ],
+            "novel_facts": [
+              "3-2 vote on September 17, 2026 approving limited-industrial zoning",
+              "Specific property along Southeast Powerline Avenue in Hobe Sound",
+              "Rezoning from outdated designation to limited-industrial (rejected general industrial)",
+              "Property owner Bob Reins/Gunster law firm accepted compromise",
+              "Commissioner Blake Capps voted against citing data center concerns",
+              "Residents Steve Addison, Kim Call, Patrick McDonough testified",
+              "Eaglewood Community HOA involvement"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "business",
             "source_headline": "Port St. Lucie parent raises safety concerns over bus stop",
@@ -5946,11 +5882,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Martin County approves limited-industrial zoning for Hobe Sound Powerline Avenue property in 3-2 vote",
-        "generated_card_count": 0,
-        "elapsed_seconds": 30.272
+        "elapsed_seconds": 26.526
       },
       {
         "category_key": "sports",
@@ -5958,7 +5890,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 7,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5988,7 +5920,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 20.882
+        "elapsed_seconds": 21.893
       },
       {
         "category_key": "things_to_do",
@@ -5996,7 +5928,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 4,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6053,30 +5985,23 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.206
+        "elapsed_seconds": 15.779
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "generated_live",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 4,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 2,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 34.473,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 34.473,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Florida category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6085,33 +6010,81 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
+        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppressions": [
+          {
+            "category_key": "florida",
+            "source_headline": "David Jolly, Byron Donalds turn AI data centers into Florida campaign battleground",
+            "source_url": "https://www.wptv.com/news/state/david-jolly-byron-donalds-turn-ai-data-centers-into-florida-campaign-battleground",
+            "editorial_story_id": "story_012545",
+            "canonical_slug": "2026-09-16-jolly-proposes-ai-data-center-moratorium-donalds-warns-freeze-would-drive-invest",
+            "canonical_headline": "Jolly proposes AI data center moratorium; Donalds warns freeze would drive investment from Florida",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "florida",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "editorial_story_id": "story_012441",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          }
+        ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "florida",
+            "source_headline": "David Jolly, Byron Donalds turn AI data centers into Florida campaign battleground",
+            "source_url": "https://www.wptv.com/news/state/david-jolly-byron-donalds-turn-ai-data-centers-into-florida-campaign-battleground",
+            "canonical_slug": "2026-09-16-jolly-proposes-ai-data-center-moratorium-donalds-warns-freeze-would-drive-invest",
+            "canonical_headline": "Jolly proposes AI data center moratorium; Donalds warns freeze would drive investment from Florida",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "florida",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Jolly proposes AI data center moratorium; Donalds warns freeze would drive investment from Florida",
-        "generated_card_count": 1,
-        "elapsed_seconds": 54.594
+        "elapsed_seconds": 21.802
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 3,
-        "selected_source_count": 3,
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -6119,11 +6092,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 10.794,
+            "elapsed_seconds": 10.898,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 10.794,
+        "model_elapsed_seconds": 10.898,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6134,19 +6107,29 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
-            "source_headline": "Teacher Feature: Martin County math teacher spotlighted as model as co-teaching expands - WPEC",
-            "source_url": "https://cbs12.com/news/local/teacher-feature-martin-county-math-teacher-spotlighted-as-model-as-co-teaching-expands-florida-news",
-            "editorial_story_id": "story_012339",
-            "canonical_slug": "2026-09-16-south-fork-high-school-expands-co-teaching-model-with-martin-county-planning-ele",
-            "canonical_headline": "South Fork High School expands co-teaching model with Martin County planning elementary rollout",
-            "basis": "exact_source_and_persistent_story_skip",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "editorial_story_id": "story_006022",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "editorial_story_id": "story_006022",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6160,57 +6143,18 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
-            "publisher": "www.wptv.com",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/17/martin-county-approves-limited-industrial-zoning-hobe-sound-despite-some-data-center-concerns?outputType=amp",
+            "publisher": "www.wflx.com",
             "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
             "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
             "basis": "event-identity-authority:governing_body_plus_policy_subject",
             "identity_keys": [
-              "story:story_006022",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=22",
-              "shared_locality=['martin-county']",
-              "shared_event_families=['public-policy']",
-              "shared_named_people=[]",
-              "shared_precise_locations=[]",
-              "shared_agencies=['martin-county-commission']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['cent', 'data']",
-              "shared_distinctive_token_count=39",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-            "basis": "event-identity-authority:governing_body_plus_policy_subject",
-            "identity_keys": [
-              "story:story_006022",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns"
+              "story:story_012592",
+              "source:https://www.wflx.com/2026/09/17/martin-county-approves-limited-industrial-zoning-hobe-sound-despite-some-data-center-concerns?outputType=amp"
             ],
             "match_confidence": 0.95,
             "evidence_dimensions": [
@@ -6241,25 +6185,82 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 2,
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
-            "source_headline": "Teacher Feature: Martin County math teacher spotlighted as model as co-teaching expands - WPEC",
-            "source_url": "https://cbs12.com/news/local/teacher-feature-martin-county-math-teacher-spotlighted-as-model-as-co-teaching-expands-florida-news",
-            "canonical_slug": "2026-09-16-south-fork-high-school-expands-co-teaching-model-with-martin-county-planning-ele",
-            "canonical_headline": "South Fork High School expands co-teaching model with Martin County planning elementary rollout",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.92,
+            "shared_anchors": [
+              "Martin County Commission",
+              "data center concerns in Martin County",
+              "resident concerns about industrial development"
+            ],
+            "novel_facts": [
+              "3-2 vote on September 17, 2026",
+              "Specific property along Southeast Powerline Avenue in Hobe Sound",
+              "Rezoning from general industrial to limited-industrial",
+              "Property owner Bob Reins/Gunster law firm accepted compromise",
+              "Commissioner Blake Capps voted against",
+              "Steve Addison, Kim Call, Patrick McDonough (Eaglewood Community HOA) testified",
+              "100,000 square feet threshold for board approval established"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.9,
+            "shared_anchors": [
+              "Martin County Commission",
+              "data center concerns",
+              "resident concerns about industrial development"
+            ],
+            "novel_facts": [
+              "3-2 vote on September 16, 2026 approving limited-industrial zoning",
+              "Specific property along Southeast Powerline Avenue in Hobe Sound",
+              "Rezoning from proposed general industrial to limited-industrial classification",
+              "Property owner Bob Reins/Gunster law firm accepted compromise",
+              "Commissioner Blake Capps voted against citing data center concerns",
+              "Steve Addison, Kim Call, Patrick McDonough (Eaglewood Community HOA president) testimony",
+              "100,000 square feet threshold requiring board approval"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           },
           {
             "category_key": "martin",
@@ -6298,138 +6299,65 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Martin County approves limited-industrial zoning for Powerline Avenue site in Hobe Sound",
+        "live_hero_headline": "Martin County approves limited-industrial zoning in Hobe Sound 3-2 despite data center concerns",
         "generated_card_count": 0,
-        "elapsed_seconds": 34.232
+        "elapsed_seconds": 57.534
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 19,
-        "publishable_source_count": 5,
-        "selected_source_count": 5,
+        "publishable_source_count": 4,
+        "selected_source_count": 4,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 25.35,
-            "result": "success"
+            "elapsed_seconds": 18.425,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Navy confirms Fort Pierce coastal blast was controlled detonation"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 20.726,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Navy confirms underwater blast off Fort Pierce was controlled detonation"
           }
         ],
-        "model_elapsed_seconds": 25.35,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 39.151,
+        "failure_code": "article_framing_integrity",
+        "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Navy confirms underwater blast off Fort Pierce was controlled detonation",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "headline": "Fort Pierce approves $10.1 million Axon contract for police body cameras, Tasers, AI tools",
-            "missing": [
-              "headline_money_claim_missing_from_lead"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": true,
-              "headline": "Fort Pierce approves $10.1 million Axon contract for police body cameras, Tasers, AI tools",
-              "lead": "The Fort Pierce city commission voted unanimously 5-0 on Monday, Sept. 14, to approve a 10-year contract with Axon Enterprise, Inc. worth $10,139,037.87 for body cameras, Tasers, and artificial intelligence technology for the police department. The contract runs for five years with an optional automatic renewal for another five years.",
-              "lead_word_count": 55,
-              "headline_overlap_ratio": 0.692,
-              "new_context_token_count": 26,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "standard",
-              "surname_first_reference": {
-                "required": false,
-                "passed": true,
-                "missing": [],
-                "candidates": []
-              },
-              "update_diagnostics": {
-                "required": false,
-                "passed": true,
-                "story_form": "standard"
-              },
-              "missing": []
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": false,
-              "headline": "Fort Pierce approves $10.1 million Axon contract for police body cameras, Tasers, AI tools",
-              "lead": "The Fort Pierce city commission voted unanimously 5-0 on Monday, Sept. 14, to approve a 10-year contract with Axon Enterprise, Inc. worth $10,139,037.87 for body cameras, Tasers, and artificial intelligence technology for the police department. The contract runs for five years with an optional automatic renewal for another five years.",
-              "headline_money_claims": [
-                10100000
-              ],
-              "lead_money_claims": [
-                10139038
-              ],
-              "missing_money_claims": [
-                10100000
-              ],
-              "headline_jurisdictions": [
-                "fort_pierce"
-              ],
-              "lead_jurisdictions": [
-                "fort_pierce"
-              ],
-              "missing_jurisdictions": [],
-              "headline_judge_claims": [],
-              "lead_judge_claims": [],
-              "missing_judge_claims": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": [
-                "headline_money_claim_missing_from_lead"
-              ]
-            },
-            "source_focus": {
-              "required": true,
-              "passed": true,
-              "generated_headline": "Fort Pierce approves $10.1 million Axon contract for police body cameras, Tasers, AI tools",
-              "generated_lead": "The Fort Pierce city commission voted unanimously 5-0 on Monday, Sept. 14, to approve a 10-year contract with Axon Enterprise, Inc. worth $10,139,037.87 for body cameras, Tasers, and artificial intelligence technology for the police department.",
-              "source_title": "Fort Pierce approves $10 million contract for police body cameras and AI tools - WPBF",
-              "source_lead": "The Fort Pierce city commission approved a contract with a body-worn camera manufacturer to provide equipment for its police department. During a meeting on Monday, Sept.",
-              "title_similarity": {
-                "score": 0.8538,
-                "overlap": 0.9167,
-                "jaccard": 0.7333,
-                "sorted_sequence": 0.8774,
-                "ordered_sequence": 0.8774,
-                "shared_token_count": 11.0
-              },
-              "lead_token_overlap": 0.556,
-              "missing": []
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "official_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 11,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "'Really blew my mind': Diver finds suspected WWII torpedo off Fort Pierce beach - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-munition-torpedo-diver-lobster-beach/73763593",
+            "editorial_story_id": "story_012607",
+            "canonical_slug": "2026-09-16-diver-finds-suspected-wwii-torpedo-off-fort-pierce-beach-during-lobster-hunt",
+            "canonical_headline": "Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - WPEC",
@@ -6492,8 +6420,8 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Fort Pierce commissioners give Kings Landing developers 6 months to find $15 million for hotel - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/15/fort-pierce-commissioners-give-kings-landing-developers-6-months-find-15-million-hotel?outputType=amp",
+            "source_headline": "Fort Pierce commissioners give Kings Landing developers 6 months to find $15 million for hotel - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-commissioners-give-kings-landing-developers-6-months-to-find-15-million-for-hotel",
             "editorial_story_id": "story_011993",
             "canonical_slug": "2026-09-15-fort-pierce-commission-votes-3-2-to-give-kings-landing-developer-six-more-months",
             "canonical_headline": "Fort Pierce grants King's Landing fifth extension after motion to terminate fails",
@@ -6529,16 +6457,6 @@
             "canonical_headline": "Fort Pierce man admitted modifying grenades found at home, affidavit shows",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Fort Pierce commission gives King's Landing developer 6 more months to fund Marriott hotel - WPEC",
-            "source_url": "https://cbs12.com/news/local/fort-pierce-commission-gives-kings-landing-developer-6-more-months-to-fund-marriott-hotel-live-oak-waterfront-project-9-14-26",
-            "editorial_story_id": "story_011993",
-            "canonical_slug": "2026-09-15-fort-pierce-commission-votes-3-2-to-give-kings-landing-developer-six-more-months",
-            "canonical_headline": "Fort Pierce grants King's Landing fifth extension after motion to terminate fails",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -6548,6 +6466,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "'Really blew my mind': Diver finds suspected WWII torpedo off Fort Pierce beach - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-munition-torpedo-diver-lobster-beach/73763593",
+            "canonical_slug": "2026-09-16-diver-finds-suspected-wwii-torpedo-off-fort-pierce-beach-during-lobster-hunt",
+            "canonical_headline": "Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - WPEC",
@@ -6640,13 +6573,13 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Fort Pierce commissioners give Kings Landing developers 6 months to find $15 million for hotel - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/15/fort-pierce-commissioners-give-kings-landing-developers-6-months-find-15-million-hotel?outputType=amp",
+            "source_headline": "Fort Pierce commissioners give Kings Landing developers 6 months to find $15 million for hotel - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-commissioners-give-kings-landing-developers-6-months-to-find-15-million-for-hotel",
             "canonical_slug": "2026-09-15-fort-pierce-commission-votes-3-2-to-give-kings-landing-developer-six-more-months",
             "canonical_headline": "Fort Pierce grants King's Landing fifth extension after motion to terminate fails",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6697,37 +6630,20 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Fort Pierce commission gives King's Landing developer 6 more months to fund Marriott hotel - WPEC",
-            "source_url": "https://cbs12.com/news/local/fort-pierce-commission-gives-kings-landing-developer-6-more-months-to-fund-marriott-hotel-live-oak-waterfront-project-9-14-26",
-            "canonical_slug": "2026-09-15-fort-pierce-commission-votes-3-2-to-give-kings-landing-developer-six-more-months",
-            "canonical_headline": "Fort Pierce grants King's Landing fifth extension after motion to terminate fails",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "generation_status": "success",
+        "new_publication_stale_rejected_count": 0,
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt",
-        "generated_card_count": 0,
-        "elapsed_seconds": 50.16
+        "elapsed_seconds": 57.823
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 10,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6744,60 +6660,93 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 10,
+        "category_eligibility_assessed_count": 8,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
+        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppressions": [
           {
+            "category_key": "indian_river",
             "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
-            "publisher": "www.wptv.com",
+            "editorial_story_id": "story_006022",
             "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
             "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-            "basis": "event-identity-authority:governing_body_plus_policy_subject",
-            "identity_keys": [
-              "story:story_006022",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=22",
-              "shared_locality=['martin-county']",
-              "shared_event_families=['public-policy']",
-              "shared_named_people=[]",
-              "shared_precise_locations=[]",
-              "shared_agencies=['martin-county-commission']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['cent', 'data']",
-              "shared_distinctive_token_count=39",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "editorial_story_id": "story_012441",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
-        "material_update_promotion_evaluation_count": 0,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
+        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.92,
+            "shared_anchors": [
+              "Martin County Commission",
+              "data center concerns",
+              "resident concerns about community impact"
+            ],
+            "novel_facts": [
+              "September 17, 2026 commission vote on Southeast Powerline Avenue property rezoning",
+              "3-2 vote approving limited-industrial zoning",
+              "Property owner Bob Reins/Gunster law firm accepted compromise",
+              "Commissioner Blake Capps voted against citing data center concerns",
+              "Specific residents named: Steve Addison, Kim Call, Patrick McDonough",
+              "Eaglewood Community HOA involvement",
+              "Property rezoned from general industrial to limited-industrial"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Florida ranks 8th most expensive in US for cost of grocery essentials, study says",
+            "source_url": "https://www.wptv.com/money/consumer/florida-ranks-8th-in-the-nation-for-cost-of-grocery-essentials-shoppers-share-money-saving-tips",
+            "canonical_slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
+            "canonical_headline": "Florida ranks 8th most expensive in US for grocery essentials",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 32.572
+        "elapsed_seconds": 30.078
       }
     ]
   }
