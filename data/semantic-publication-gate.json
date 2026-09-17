@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-17T15:58:53.811297+00:00",
+  "generated_at": "2026-09-17T17:21:53.761859+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,40 +62,40 @@
     }
   },
   "summary": {
-    "evaluations": 39,
-    "candidate_pairs": 0,
+    "evaluations": 41,
+    "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "model_calls": 1,
     "cache_hits": 0,
-    "no_candidate_passes": 39,
-    "duplicates_preserved": 0,
+    "no_candidate_passes": 40,
+    "duplicates_preserved": 1,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 39,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
     "material_update_composer_calls": 0,
     "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 0,
-    "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 9,
+    "material_update_replays_suppressed": 1,
+    "pre_generation_materiality_evaluations": 8,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 3,
-    "pre_generation_materiality_holds": 6,
-    "pre_generation_materiality_model_calls": 7,
+    "pre_generation_materiality_holds": 5,
+    "pre_generation_materiality_model_calls": 6,
     "pre_generation_materiality_cache_hits": 2,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -119,20 +119,19 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.9,
+      "confidence": 0.92,
       "shared_anchors": [
         "Martin County Commission",
-        "data center concerns",
-        "residents voicing concerns"
+        "data center concerns from residents",
+        "meetings in August-September 2026 timeframe"
       ],
       "novel_facts": [
-        "September 17, 2026 commission vote (3-2)",
-        "Specific property rezoning along Southeast Powerline Avenue in Hobe Sound",
-        "Rezoning from general industrial to limited-industrial approved",
-        "Named residents: Steve Addison, Kim Call, Patrick McDonough",
-        "Property owner Bob Reins offered compromise",
-        "Commissioner Blake Capps voted against",
-        "Any proposal over 100,000 square feet requires board approval"
+        "Specific rezoning vote on property along Southeast Powerline Avenue in Hobe Sound",
+        "3-2 vote to approve limited-industrial zoning",
+        "Property owner Bob Reins/Gunster law firm accepted compromise",
+        "Commissioner Blake Capps voted against citing data center concerns",
+        "Specific residents named: Steve Addison, Kim Call, Patrick McDonough",
+        "Rezoning from general industrial to limited-industrial"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -150,29 +149,30 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
       "confidence": 0.98,
       "shared_anchors": [
         "Derwyn Don Edwards, 24-year-old suspect",
-        "Lake Worth man",
-        "Publix liquor store at 6805 SE Federal Highway",
-        "Theft of multiple liquor bottles",
-        "11:24 a.m. on the 26th",
-        "SE Dominica Terrace and Federal Highway traffic stop location",
-        "Speeds exceeding 80 mph",
-        "Running red lights",
-        "MCSO Air 1 helicopter tracking",
-        "Flight into Palm Beach County on I-95",
-        "Florida Highway Patrol assistance",
-        "Charges: reckless fleeing and eluding, petit theft",
-        "Martin County Jail custody"
+        "Liquor theft from Martin County Publix",
+        "Chase exceeding 80 mph",
+        "Helicopter tracking into Palm Beach County",
+        "Location near SE Dominica Terrace and Federal Highway",
+        "Arrested with Florida Highway Patrol assistance",
+        "Charges of reckless fleeing and petit theft"
       ],
-      "novel_facts": [],
-      "reason": "These articles describe the identical event with the same suspect (Derwyn Don Edwards, 24), same theft location (Publix liquor store at 6805 SE Federal Highway), same time (11:24 a.m. on the 26th), same pursuit details (80+ mph, red lights, helicopter tracking), and same outcome (arrest with FHP assistance, same charges). The incoming article contains no material updates—it repeats the same facts with slightly expanded detail about the deputy disengaging due to pursuit policy and Edwards attempting to hide. These are routine scene details, not material developments like new charges, court proceedings, or investigative findings.",
+      "novel_facts": [
+        "Exact Publix address: 8605 SE Federal Highway (vs 6805 in candidate - likely typo in one)",
+        "Specific time: 11:24 a.m.",
+        "Detail about deputy disengaging pursuit per policy",
+        "Edwards eventually parked and attempted to hide",
+        "Unmarked unit used for final apprehension",
+        "Currently held at Martin County Jail"
+      ],
+      "reason": "Both articles cover the identical incident: Derwyn Don Edwards stealing liquor from a Martin County Publix, fleeing deputies at high speed, being tracked by helicopter into Palm Beach County, and being arrested. The incoming article adds procedural details (pursuit policy, timing, jail status) but contains no material update such as new charges, court proceedings, victim identification, or other developments that change what readers need to know. These are scene and procedural details that should update the existing canonical rather than create a new URL.",
       "validation_errors": []
     },
     {
@@ -194,16 +194,16 @@
       "confidence": 0.92,
       "shared_anchors": [
         "Martin County Commission",
-        "data center concerns mentioned",
-        "same general timeframe (August-September 2026)"
+        "data center concerns from residents",
+        "general timeframe (both 2026)"
       ],
       "novel_facts": [
-        "Specific rezoning vote on property along Southeast Powerline Avenue in Hobe Sound",
-        "3-2 vote on limited-industrial zoning compromise",
-        "Property owner Bob Reins/Gunster law firm",
-        "Residents Steve Addison, Kim Call, Patrick McDonough from Eaglewood Community HOA",
+        "September 17, 2026 commission meeting and vote",
+        "Specific property rezoning along Southeast Powerline Avenue in Hobe Sound",
+        "3-2 vote to rezone to limited-industrial from general industrial",
+        "Property owner Bob Reins/Gunster law firm accepted compromise",
         "Commissioner Blake Capps voted against citing data center concerns",
-        "Rezoning changed from general industrial to limited-industrial"
+        "Specific residents named: Steve Addison, Kim Call, Patrick McDonough"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -221,8 +221,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -266,18 +266,17 @@
       "confidence": 0.92,
       "shared_anchors": [
         "Martin County Commission",
-        "data center concerns from residents",
-        "general topic of industrial development policy"
+        "data center concerns",
+        "same general timeframe (August-September 2026)"
       ],
       "novel_facts": [
-        "September 17, 2026 commission meeting",
-        "3-2 vote on specific property rezoning",
-        "Property located along Southeast Powerline Avenue in Hobe Sound",
-        "Rezoning from outdated designation to limited-industrial",
-        "Initial proposal was for general industrial zoning",
+        "3-2 vote on September 17, 2026 (Tuesday)",
+        "Specific property rezoning along Southeast Powerline Avenue in Hobe Sound",
+        "Rezoned from proposed general industrial to limited-industrial",
         "Property owner Bob Reins/Gunster law firm accepted compromise",
         "Commissioner Blake Capps voted against citing data center concerns",
-        "Specific residents named: Steve Addison, Kim Call, Patrick McDonough"
+        "Residents Steve Addison, Kim Call, Patrick McDonough (Eaglewood Community HOA president) testified",
+        "100,000 square feet threshold mentioned for board approval"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -303,16 +302,16 @@
       "confidence": 0.92,
       "shared_anchors": [
         "Martin County Commission",
-        "data center concerns",
-        "same timeframe (August-September 2026)"
+        "data center concerns from residents",
+        "general geographic area (Martin County)"
       ],
       "novel_facts": [
-        "3-2 vote on rezoning property along Southeast Powerline Avenue in Hobe Sound",
-        "Changed from general industrial to limited-industrial zoning",
-        "Specific property owner (represented by Bob Reins/Gunster law firm) accepted compromise",
-        "Commissioner Blake Capps voted against citing data center concerns",
+        "3-2 vote on September 17, 2026 to rezone specific property on Southeast Powerline Avenue in Hobe Sound",
+        "Rezoning from general industrial to limited-industrial classification",
+        "Property owner Bob Reins/Gunster law firm accepted compromise",
+        "Commissioner Blake Capps voted against",
         "Residents Steve Addison, Kim Call, Patrick McDonough testified",
-        "Any proposal over 100,000 square feet requires board approval"
+        "Specific Eaglewood Community HOA involvement"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -339,17 +338,15 @@
       "shared_anchors": [
         "Martin County Commission",
         "data center concerns from residents",
-        "general policy topic area"
+        "August-September 2026 timeframe"
       ],
       "novel_facts": [
-        "September 16, 2026 commission meeting and vote",
-        "Specific property rezoning along Southeast Powerline Avenue in Hobe Sound",
+        "Specific rezoning vote on Southeast Powerline Avenue property in Hobe Sound on September 16",
         "3-2 vote approving limited-industrial zoning",
-        "Property owner Bob Reins and Gunster law firm representation",
-        "Commissioner Blake Capps voting against",
-        "Residents Steve Addison, Kim Call, Patrick McDonough speaking",
-        "Eaglewood Community HOA involvement",
-        "Compromise from general industrial to limited-industrial classification"
+        "Property owner Bob Reins/Gunster law firm offered compromise",
+        "Commissioner Blake Capps voted against citing data center concerns",
+        "Specific residents named: Steve Addison, Kim Call, Patrick McDonough",
+        "Original proposal was general industrial, compromised to limited-industrial"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -392,42 +389,6 @@
       ],
       "reason": "This is the exact same development announcement with identical core facts: same developer, same location, same acreage, same timeline, same leasing percentage. The incoming article adds only routine neighbor reactions and minor color details about amenities, which do not constitute a material update. No new government action, approval milestone, tenant announcement, or construction start has occurred. The identical source URL confirms this is a republication of the same reporting.",
       "validation_errors": []
-    },
-    {
-      "category_key": "indian_river",
-      "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
-      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
-      "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-      "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-      "canonical_is_custom": false,
-      "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 0.92,
-      "shared_anchors": [
-        "Martin County Commission",
-        "data center concerns from residents",
-        "same general timeframe (August-September 2026)"
-      ],
-      "novel_facts": [
-        "Specific rezoning vote on property along Southeast Powerline Avenue in Hobe Sound",
-        "3-2 vote on limited-industrial zoning classification",
-        "Property owner Bob Reins represented by Gunster law firm",
-        "Commissioner Blake Capps voted against",
-        "Specific residents named: Steve Addison, Kim Call, Patrick McDonough",
-        "Compromise from general industrial to limited industrial",
-        "Specific rule that proposals over 100,000 sq ft require board approval"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
     }
   ],
   "decisions": [
@@ -1210,16 +1171,299 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Indian River County Sheriff's Office to reveal multi-agency sex sting results",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+      "incoming_story_id": "story_012823",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Indian River County Sheriff's Office to reveal multi-agency sex sting results",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+      "incoming_story_id": "story_012823",
+      "candidates": [
+        {
+          "slug": "2026-09-13-indian-river-county-school-bus-driver-arrested-on-child-abuse-charge",
+          "headline": "Indian River County school bus driver arrested on child abuse charge",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.623,
+          "retrieval_score": 0.545,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-03-two-teens-fired-at-each-other-in-indian-river-county-shootout-deputies-say",
+          "headline": "17-year-old in custody after Indian River County shootout with 15-year-old, weapon recovered",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5426,
+          "retrieval_score": 0.4916,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-09-10-two-arrested-in-indian-river-county-over-labor-day-weekend-for-illegal-saw-palme",
+          "headline": "Two arrested in Indian River County over Labor Day weekend for illegal saw palmetto harvesting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5034,
+          "retrieval_score": 0.4844,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-09-11-fellsmere-officials-project-12-million-economic-impact-from-the-point-surf-park",
+          "headline": "Fellsmere officials project $12 million economic impact from The Point Surf Park",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4589,
+          "retrieval_score": 0.4369,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-09-14-flock-cameras-help-deputies-track-vero-beach-burglary-suspect-to-arrest",
+          "headline": "Flock cameras help deputies track Vero Beach burglary suspect to arrest",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4429,
+          "retrieval_score": 0.3619,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-09-09-k-9-tobi-alerts-deputies-to-heroin-marijuana-in-indian-river-county-traffic-stop",
+          "headline": "K-9 Tobi alerts deputies to heroin, marijuana in Indian River County traffic stop",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4265,
+          "retrieval_score": 0.4105,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-09-04-florida-drivers-face-record-high-labor-day-gas-prices-as-strait-of-hormuz-tensio",
+          "headline": "Florida drivers face record-high Labor Day gas prices as Strait of Hormuz tensions drive fuel costs up",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4172,
+          "retrieval_score": 0.4162,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-09-16-diver-finds-suspected-wwii-torpedo-off-fort-pierce-beach-during-lobster-hunt",
+          "headline": "Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3938,
+          "retrieval_score": 0.3568,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-09-06-st-lucie-county-deputies-investigate-man-who-shot-dog-during-driveway-confrontat",
+          "headline": "Fort Pierce man's shooting of charging dog confirmed justified after investigation",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3902,
+          "retrieval_score": 0.3802,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-09-08-former-fort-pierce-police-officer-arrested-for-alleged-misuse-of-police-database",
+          "headline": "Fort Pierce tightens Flock camera rules after ex-officer charged in tracking case",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.386,
+          "retrieval_score": 0.367,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-09-14-dhs-finds-detainees-held-in-metal-enclosures-at-alligator-alcatraz-desantis-defe",
+          "headline": "Detainees held in 18-square-foot metal enclosures at Alligator Alcatraz, DHS finds",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3842,
+          "retrieval_score": 0.3502,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-09-15-st-lucie-county-sends-30-day-removal-notices-to-50-55-license-plate-camera-permi",
+          "headline": "St. Lucie County finds 14 unpermitted license plate readers during sweep, with more checks ahead",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3759,
+          "retrieval_score": 0.3389,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.93,
+        "shared_anchors": [
+          "indian-river-county-sheriff agency",
+          "indian-river-county locality"
+        ],
+        "novel_facts": [
+          "Upcoming press conference announcing results of a multi-agency sex sting operation targeting individuals seeking illegal sexual activity"
+        ],
+        "reason": "No candidate covers a multi-agency sex sting operation; the closest matches share only agency/locality (school bus driver arrest, teen shootout, saw palmetto arrests, etc.) which are distinct, unrelated incidents. This is a previously uncovered event announcement.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.93,
+        "shared_anchors": [
+          "indian-river-county-sheriff agency",
+          "indian-river-county locality"
+        ],
+        "novel_facts": [
+          "Upcoming press conference announcing results of a multi-agency sex sting operation targeting individuals seeking illegal sexual activity"
+        ],
+        "reason": "No candidate covers a multi-agency sex sting operation; the closest matches share only agency/locality (school bus driver arrest, teen shootout, saw palmetto arrests, etc.) which are distinct, unrelated incidents. This is a previously uncovered event announcement.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Liquor theft at Martin County Publix leads to high-speed chase into Palm Beach County",
+      "incoming_source_url": "https://www.wpbf.com/article/martin-county-publix-theft-chase-arrest/73755590",
+      "incoming_story_id": "story_012356",
+      "candidates": [
+        {
+          "slug": "2026-09-15-martin-county-deputies-use-helicopter-to-capture-lake-worth-man-after-high-speed",
+          "headline": "Martin County deputies use helicopter to capture Lake Worth man after high-speed liquor theft chase",
+          "retrieval_score": 0.8074,
+          "headline_similarity": 0.5571,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "chase",
+            "county",
+            "high",
+            "liquor",
+            "martin",
+            "speed",
+            "theft"
+          ],
+          "shared_topic_tokens": [
+            "chase",
+            "high",
+            "liquor",
+            "speed",
+            "theft"
+          ],
+          "content_similarity": {
+            "score": 0.4559,
+            "overlap": 0.5484,
+            "jaccard": 0.2179,
+            "shared_token_count": 17,
+            "shared_tokens": [
+              "chase",
+              "com",
+              "deputies",
+              "fleeing",
+              "high",
+              "lights",
+              "liquor",
+              "man",
+              "publix",
+              "red",
+              "running",
+              "shows",
+              "speed",
+              "stole",
+              "theft",
+              "tracked",
+              "video"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 1,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "strong_content_event_continuity",
+            "publication_gap_1_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-09-15-martin-county-deputies-use-helicopter-to-capture-lake-worth-man-after-high-speed",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "Derwyn Edwards/Derwyn Don Edwards, 24-year-old suspect",
+          "Liquor theft from Martin County Publix",
+          "High-speed chase from Martin County into Palm Beach County",
+          "Martin County Sheriff's Office pursuit",
+          "Helicopter/air crew tracking",
+          "Running red lights during chase",
+          "Charges of theft and fleeing"
+        ],
+        "novel_facts": [],
+        "reason": "Both articles describe the identical incident: Derwyn Edwards, 24, stole liquor from a Martin County Publix and led deputies on a high-speed chase into Palm Beach County while being tracked by helicopter/air crews, running red lights, before being arrested. The incoming article contains no material new information beyond what the canonical already reported (suspect name, age, theft details, chase across county lines, helicopter tracking, reckless driving, arrest, charges). This is simply another outlet's coverage of the same event with the same facts.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
     }
   ],
   "archive_repairs": [],
   "material_update_compositions": [],
   "material_updates": [],
   "registry_consolidation": {
-    "status": "no_changes",
+    "status": "consolidated",
     "directives_considered": 8,
-    "story_records_merged": 0,
-    "aliases_written": 0,
+    "story_records_merged": 1,
+    "aliases_written": 1,
     "already_consolidated": 0,
     "skipped": [
       {
@@ -1586,6 +1830,28 @@
       }
     ],
     "rejected_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_012356",
+        "target_story_id": "story_012334",
+        "target_slug": "2026-09-15-martin-county-deputies-use-helicopter-to-capture-lake-worth-man-after-high-speed",
+        "incoming_headline": "Liquor theft at Martin County Publix leads to high-speed chase into Palm Beach County",
+        "confidence": 0.95,
+        "shared_anchors": [
+          "Derwyn Edwards/Derwyn Don Edwards, 24-year-old suspect",
+          "Liquor theft from Martin County Publix",
+          "High-speed chase from Martin County into Palm Beach County",
+          "Martin County Sheriff's Office pursuit",
+          "Helicopter/air crew tracking",
+          "Running red lights during chase",
+          "Charges of theft and fleeing"
+        ],
+        "reason": "Both articles describe the identical incident: Derwyn Edwards, 24, stole liquor from a Martin County Publix and led deputies on a high-speed chase into Palm Beach County while being tracked by helicopter/air crews, running red lights, before being arrested. The incoming article contains no material new information beyond what the canonical already reported (suspect name, age, theft details, chase across county lines, helicopter tracking, reckless driving, arrest, charges). This is simply another outlet's coverage of the same event with the same facts.",
+        "relationship_type": "duplicate",
+        "novel_facts": [],
+        "resolved_source_story_id": "story_012356",
+        "resolved_target_story_id": "story_012334"
+      }
+    ]
   }
 }
