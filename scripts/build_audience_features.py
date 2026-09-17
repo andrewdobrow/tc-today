@@ -60,7 +60,6 @@ def _page_head(title: str, description: str, canonical_path: str = "", structure
 <meta name="twitter:image" content="{SITE_URL}/og-image.png">
 <meta name="geo.region" content="US-FL">
 <meta name="geo.placename" content="Treasure Coast, Florida">
-<meta name="google-adsense-account" content="ca-pub-9679836198092378">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="stylesheet" href="/style.css?v={ASSET_VERSION}">
 <link rel="preconnect" href="https://fonts.googleapis.com">

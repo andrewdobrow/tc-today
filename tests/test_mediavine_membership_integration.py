@@ -58,3 +58,50 @@ def test_monthly_free_postread_paywall_keeps_mediavine_leader_above_offer():
     assert "const mediavineLeader = memberOnly ? qs('.mv-leader', memberOnly) : null" in block
     assert "paywall.insertAdjacentElement('beforebegin', mediavineLeader)" in block
     assert block.index("paywall.insertAdjacentElement('beforebegin', mediavineLeader)") < block.index("memberOnly?.remove()")
+
+
+def test_legacy_adsense_markup_is_removed_without_touching_mediavine_loader(tmp_path):
+    import importlib
+    import os
+    import sys
+    import types
+
+    if "feedparser" not in sys.modules:
+        feedparser = types.ModuleType("feedparser")
+        feedparser.parse = lambda *args, **kwargs: types.SimpleNamespace(entries=[])
+        sys.modules["feedparser"] = feedparser
+    if "anthropic" not in sys.modules:
+        anthropic = types.ModuleType("anthropic")
+
+        class _Anthropic:
+            def __init__(self, *args, **kwargs):
+                self.messages = types.SimpleNamespace(create=lambda **kwargs: None)
+
+        anthropic.Anthropic = _Anthropic
+        sys.modules["anthropic"] = anthropic
+    os.environ.setdefault("ANTHROPIC_API_KEY", "offline-test-key")
+    generate = importlib.import_module("scripts.generate")
+
+    page = tmp_path / "legacy.html"
+    page.write_text(
+        '<html><head>'
+        '<meta name="google-adsense-account" content="ca-pub-9679836198092378">'
+        '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9679836198092378" crossorigin="anonymous"></script>'
+        f'{generate.MEDIAVINE_SCRIPT_TAG}'
+        '</head><body>Story</body></html>',
+        encoding="utf-8",
+    )
+
+    report = generate._remove_legacy_adsense_sitewide(tmp_path)
+    cleaned = page.read_text(encoding="utf-8")
+
+    assert report == {"scanned": 1, "updated": 1}
+    assert "google-adsense-account" not in cleaned
+    assert "pagead2.googlesyndication.com" not in cleaned
+    assert generate.MEDIAVINE_SCRIPT_SRC in cleaned
+
+
+def test_html_generators_no_longer_emit_adsense_account_meta_tag():
+    for rel in ("scripts/generate.py", "generate.py", "scripts/build_audience_features.py"):
+        source = (ROOT / rel).read_text(encoding="utf-8")
+        assert '<meta name="google-adsense-account"' not in source

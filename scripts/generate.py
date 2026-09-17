@@ -174,6 +174,53 @@ MEMBERSHIP_UI_ENABLED = os.getenv("TCT_MEMBERSHIP_UI_ENABLED", "0").strip().lowe
 MEMBERSHIP_SUBSCRIBE_URL = os.getenv("TCT_SUBSCRIBE_URL", "/subscribe.html").strip() or "/subscribe.html"
 
 
+_LEGACY_ADSENSE_META_RE = re.compile(
+    r"<meta\b(?=[^>]*\bname=[\"\']google-adsense-account[\"\'])[^>]*>\s*",
+    re.IGNORECASE,
+)
+_LEGACY_ADSENSE_SCRIPT_RE = re.compile(
+    r"<script\b(?=[^>]*\bsrc=[\"\'][^\"\']*pagead2\.googlesyndication\.com/"
+    r"pagead/js/adsbygoogle\.js[^\"\']*[\"\'])[^>]*>\s*</script>\s*",
+    re.IGNORECASE,
+)
+_LEGACY_ADSENSE_FORBIDDEN = (
+    "google-adsense-account",
+    "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
+)
+
+
+def _normalize_legacy_adsense_in_html(page_html):
+    """Remove TCT's retired AdSense integration without touching analytics or Mediavine."""
+    text = str(page_html or "")
+    text = _LEGACY_ADSENSE_META_RE.sub("", text)
+    text = _LEGACY_ADSENSE_SCRIPT_RE.sub("", text)
+    return text
+
+
+def _remove_legacy_adsense_sitewide(output_root):
+    """Strip retained AdSense markup from every published HTML page and fail closed."""
+    root = Path(output_root)
+    html_paths = sorted(path for path in root.rglob("*.html") if path.is_file())
+    updated = 0
+    failures = []
+    for path in html_paths:
+        original = path.read_text(encoding="utf-8")
+        normalized = _normalize_legacy_adsense_in_html(original)
+        if normalized != original:
+            path.write_text(normalized, encoding="utf-8")
+            updated += 1
+        lowered = normalized.lower()
+        for marker in _LEGACY_ADSENSE_FORBIDDEN:
+            if marker in lowered:
+                failures.append(f"{path.relative_to(root)}:{marker}")
+
+    if failures:
+        raise RuntimeError(
+            "Legacy AdSense removal contract FAILED: " + "; ".join(failures[:10])
+        )
+    return {"scanned": len(html_paths), "updated": updated}
+
+
 def _normalize_mediavine_script_in_html(page_html):
     """Place the Mediavine loader exactly once, immediately before </head>."""
     text = str(page_html or "")
@@ -22425,7 +22472,6 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta name="twitter:image" content="{og_image}">
   <meta name="geo.region" content="US-FL">
   <meta name="geo.placename" content="Treasure Coast, Florida">
-  <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.png" type="image/png">
   <link rel="stylesheet" href="/style.css?v=1.13.7.5v">
   <style id="tct-mobile-overflow-fix">
@@ -39100,6 +39146,12 @@ def main():
         "  Membership advertising promise contract PASSED: "
         f"{_membership_ad_promises['scanned']} HTML page(s) verified; "
         f"{_membership_ad_promises['updated']} obsolete ad-free promise page(s) normalized"
+    )
+    _legacy_adsense_cleanup = _remove_legacy_adsense_sitewide(OUTPUT_DIR)
+    print(
+        "  Legacy AdSense removal contract PASSED: "
+        f"{_legacy_adsense_cleanup['scanned']} HTML page(s) verified; "
+        f"{_legacy_adsense_cleanup['updated']} retained page(s) cleaned"
     )
     _mediavine_sitewide = _apply_mediavine_script_sitewide(OUTPUT_DIR)
     print(
