@@ -11,9 +11,6 @@ const METER_STATE_KEY = 'tct_monthly_free_article_v1'
 const METER_PENDING_TTL_MS = 120000
 const FULL_ARTICLE_NEWSLETTER_UID = '30e15672d3'
 const FULL_ARTICLE_NEWSLETTER_SRC = 'https://treasure-coast-today.kit.com/30e15672d3/index.js'
-const FREE_ARTICLE_BANNER_DISMISS_PREFIX = 'tct_free_article_banner_dismissed_v1:'
-const FREE_ARTICLE_BANNER_DELAY_MS = 1750
-const FREE_ARTICLE_BANNER_SCROLL_PX = 120
 
 function setMemberHint(entitled){
   const active = Boolean(entitled)
@@ -331,100 +328,6 @@ function placeFullArticleNewsletter(){
 }
 
 
-function freeArticleBannerDismissKey(slug, period){
-  return `${FREE_ARTICLE_BANNER_DISMISS_PREFIX}${period}:${slug}`
-}
-function removeFreeArticleBanner(){
-  const banner = qs('[data-tct-free-article-banner]')
-  if (!banner) return
-  if (typeof banner._tctCleanup === 'function') banner._tctCleanup()
-  banner.classList.remove('is-visible')
-  banner.setAttribute('aria-hidden', 'true')
-  window.setTimeout(() => banner.remove(), 220)
-}
-function armFreeArticleBanner(slug, period, paywall){
-  if (window.matchMedia?.('(max-width: 680px)').matches) return false
-  if (!slug || !period || qs('[data-tct-free-article-banner]')) return false
-  const dismissKey = freeArticleBannerDismissKey(slug, period)
-  try { if (sessionStorage.getItem(dismissKey) === '1') return false } catch {}
-
-  const subscribeHref = `/subscribe.html?next=${encodeURIComponent(window.location.pathname)}`
-  const banner = document.createElement('aside')
-  banner.className = 'tct-free-article-banner'
-  banner.setAttribute('data-tct-free-article-banner', 'true')
-  banner.setAttribute('aria-label', 'Free article notice')
-  banner.setAttribute('aria-hidden', 'true')
-  banner.innerHTML = `
-    <div class="tct-free-article-banner-inner">
-      <div class="tct-free-article-banner-monogram" aria-hidden="true">TCT</div>
-      <div class="tct-free-article-banner-copy">
-        <strong>You're reading your free article for this month.</strong>
-      </div>
-      <a class="tct-free-article-banner-cta" href="${subscribeHref}">
-        <span>Subscribe for unlimited access</span>
-        <small>$1 first month</small>
-      </a>
-      <button class="tct-free-article-banner-dismiss" type="button" aria-label="Dismiss free article notice">&times;</button>
-    </div>`
-  document.body.appendChild(banner)
-
-  const dismiss = qs('.tct-free-article-banner-dismiss', banner)
-  dismiss?.addEventListener('click', () => {
-    try { sessionStorage.setItem(dismissKey, '1') } catch {}
-    removeFreeArticleBanner()
-  })
-
-  // The banner is informational, not the paywall itself. Surface it early once
-  // the full monthly-free article has been delivered: after a short grace period
-  // or a small amount of deliberate reading scroll, whichever happens first.
-  const armedScrollY = window.scrollY
-  let delayElapsed = false
-  let reachedEnd = false
-  let ticking = false
-  let delayTimer = null
-
-  const cleanup = () => {
-    if (delayTimer !== null) {
-      window.clearTimeout(delayTimer)
-      delayTimer = null
-    }
-    window.removeEventListener('scroll', requestUpdate)
-    window.removeEventListener('resize', requestUpdate)
-  }
-  banner._tctCleanup = cleanup
-
-  const update = () => {
-    ticking = false
-    if (!banner.isConnected || reachedEnd) return
-    const endVisible = Boolean(paywall && paywall.isConnected && paywall.getBoundingClientRect().top <= window.innerHeight - 24)
-    if (endVisible) {
-      reachedEnd = true
-      banner.classList.remove('is-visible')
-      banner.setAttribute('aria-hidden', 'true')
-      cleanup()
-      window.setTimeout(() => banner.remove(), 220)
-      return
-    }
-    const scrolledEnough = Math.abs(window.scrollY - armedScrollY) >= FREE_ARTICLE_BANNER_SCROLL_PX
-    const triggerReached = delayElapsed || scrolledEnough
-    banner.classList.toggle('is-visible', triggerReached)
-    banner.setAttribute('aria-hidden', triggerReached ? 'false' : 'true')
-  }
-  const requestUpdate = () => {
-    if (ticking) return
-    ticking = true
-    window.requestAnimationFrame(update)
-  }
-  window.addEventListener('scroll', requestUpdate, { passive:true })
-  window.addEventListener('resize', requestUpdate)
-  delayTimer = window.setTimeout(() => {
-    delayElapsed = true
-    requestUpdate()
-  }, FREE_ARTICLE_BANNER_DELAY_MS)
-  requestUpdate()
-  return true
-}
-
 function syncPaywallFullBleed(paywall){
   if (!paywall) return
   const apply = () => {
@@ -573,7 +476,6 @@ async function unlockArticle(statusPromise=null){
   // reader whose free article is already reserved cannot send a second blank-token
   // request. An authenticated reader still gets a chance to prove membership.
   if (!reservation.allowed && !session) {
-    removeFreeArticleBanner()
     endMemberPrepaint()
     endMeterPrepaint()
     setMessage(message, '')
@@ -590,7 +492,6 @@ async function unlockArticle(statusPromise=null){
   if (!reservation.allowed && session && !existingMeterToken) {
     const status = statusPromise ? await statusPromise : await membershipStatus()
     if (!status?.authenticated || !status?.entitled) {
-      removeFreeArticleBanner()
       endMemberPrepaint()
       endMeterPrepaint()
       setMessage(message, '')
@@ -611,7 +512,6 @@ async function unlockArticle(statusPromise=null){
   // membership-status, while the separate status request can update account chrome
   // in parallel.
   if (!error && data?.protected_body && data?.access === 'member') {
-    removeFreeArticleBanner()
     clearPendingMeterFor(slug)
     setMemberHint(true)
     document.body.classList.add('tct-member-entitled')
@@ -641,7 +541,6 @@ async function unlockArticle(statusPromise=null){
       placePostReadMeterAfterStory(paywall)
       const meterPeriod = String(data.period || reservation.period || currentMeterPeriod())
       setMeterPaywallState(paywall, meterPeriod, true)
-      armFreeArticleBanner(slug, meterPeriod, paywall)
     }
     return { access:'monthly_free', rendered }
   }
@@ -652,7 +551,6 @@ async function unlockArticle(statusPromise=null){
   } catch {}
   const serverCode = String(data?.code || errorPayload?.code || '')
   if (serverCode === 'FREE_ARTICLE_USED') {
-    removeFreeArticleBanner()
     endMemberPrepaint()
     endMeterPrepaint()
     plans?.classList.remove('hidden')

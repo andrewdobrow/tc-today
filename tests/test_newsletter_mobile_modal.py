@@ -30,8 +30,9 @@ def test_mobile_subscription_modal_styles_are_retired():
     assert ".tct-mobile-subscription-card" not in css
 
 
-def test_monthly_free_banner_remains_suppressed_on_mobile_while_newsletter_modal_returns():
+def test_monthly_free_anchored_banner_is_retired_while_newsletter_modal_remains():
     membership = (ROOT / "membership.js").read_text(encoding="utf-8")
     main = (ROOT / "main.js").read_text(encoding="utf-8")
-    assert "window.matchMedia?.('(max-width: 680px)').matches" in membership
+    assert "armFreeArticleBanner" not in membership
+    assert "tct-free-article-banner" not in membership
     assert 'mode: "sitewide-modal"' in main

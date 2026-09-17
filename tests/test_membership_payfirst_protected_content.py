@@ -517,8 +517,8 @@ def test_prepare_removes_paywall_exit_even_when_snapshot_is_unavailable(tmp_path
     public = article.read_text(encoding="utf-8")
     assert "tct-paywall-exit" not in public
     assert "&times;" not in public
-    assert '/membership.css?v=1.13.9.32' in public
-    assert '/membership.js?v=1.13.9.32' in public
+    assert '/membership.css?v=1.13.9.36' in public
+    assert '/membership.js?v=1.13.9.36' in public
     assert "Public teaser remains public." in public
 
 
@@ -598,8 +598,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.9.32"' in page
-    assert 'src="/membership.js?v=1.13.9.32"' in page
+    assert 'href="/membership.css?v=1.13.9.36"' in page
+    assert 'src="/membership.js?v=1.13.9.36"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -645,8 +645,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.9.32') == 1
-    assert first.count('/membership.js?v=1.13.9.32') == 1
+    assert first.count('/membership.css?v=1.13.9.36') == 1
+    assert first.count('/membership.js?v=1.13.9.36') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -735,7 +735,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.32"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.36"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
@@ -926,39 +926,14 @@ def test_prepare_protects_event_link_article_and_short_public_article_drops_dorm
     assert "data-tct-paywall-newsletter" not in short_public
 
 
-def test_monthly_free_article_uses_branded_dismissible_bottom_banner_only_after_unlock():
+def test_monthly_free_article_has_no_anchored_free_article_banner():
     browser = (ROOT / "membership.js").read_text()
     css = (ROOT / "membership.css").read_text()
 
-    assert "function armFreeArticleBanner(slug, period, paywall)" in browser
-    assert "window.matchMedia?.('(max-width: 680px)').matches" in browser
-    assert "You're reading your free article for this month." in browser
-    assert "Subscribe for unlimited access" in browser
-    assert "$1 first month" in browser
-    banner_section = browser[browser.index('function armFreeArticleBanner'):browser.index('const armedScrollY')]
-    assert 'const subscribeHref = `/subscribe.html?next=${encodeURIComponent(window.location.pathname)}`' in banner_section
-    assert 'class="tct-free-article-banner-cta" href="${subscribeHref}"' in banner_section
-    assert 'data-plan="monthly"' not in banner_section
-    assert "startCheckout(cta)" not in banner_section
-    assert "armFreeArticleBanner(slug, meterPeriod, paywall)" in browser
-    assert browser.index("data?.access === 'monthly_free'") < browser.index("armFreeArticleBanner(slug, meterPeriod, paywall)")
-    assert "const FREE_ARTICLE_BANNER_DELAY_MS = 1750" in browser
-    assert "const FREE_ARTICLE_BANNER_SCROLL_PX = 120" in browser
-    assert "delayElapsed || scrolledEnough" in browser
-    assert "window.setTimeout(() =>" in browser
-    assert "FREE_ARTICLE_BANNER_DELAY_MS" in browser
-    assert "sessionStorage.setItem(dismissKey, '1')" in browser
-    assert "removeFreeArticleBanner()" in browser
-    assert ".tct-free-article-banner" in css
-    assert "position: fixed" in css
-    assert "background: #174f3d" in css
-    assert "border-top: 4px solid #f26445" in css
-    assert "min-height: 20vh" in css
-    assert "min-height: 30vh" in css
-    assert 'class="tct-free-article-banner-monogram" aria-hidden="true">TCT</div>' in browser
-    assert ".tct-free-article-banner-monogram" in css
-    assert "min-height: 55px" in css
-    assert "font-size: 36px" in css
-    assert "font-size: 30px" in css
-    assert "min-height:48px" in css
-    assert "—" not in "You're reading your free article for this month. Subscribe for unlimited access. $1 first month"
+    assert "armFreeArticleBanner" not in browser
+    assert "data-tct-free-article-banner" not in browser
+    assert "tct-free-article-banner" not in browser
+    assert "FREE_ARTICLE_BANNER_" not in browser
+    assert "You're reading your free article for this month." not in browser
+    assert ".tct-free-article-banner" not in css
+

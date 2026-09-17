@@ -18,8 +18,8 @@ def test_membership_assets_normalize_prepaint_for_early_mv_no_ads_targeting():
     assert updated.count("data-tct-member-prepaint") == 1
     assert "mv-no-ads" in updated
     assert "MutationObserver" in updated
-    assert "/membership.css?v=1.13.9.32" in updated
-    assert "/membership.js?v=1.13.9.32" in updated
+    assert "/membership.css?v=1.13.9.36" in updated
+    assert "/membership.js?v=1.13.9.36" in updated
 
 
 def test_membership_client_tracks_verified_mv_no_ads_entitlement():
