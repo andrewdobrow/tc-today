@@ -63,7 +63,7 @@ class StoryRegistry:
     UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT = 1
     REGISTRY_PRESSURE_BYTES = 45 * 1024 * 1024
     REGISTRY_MAX_BYTES = 50 * 1024 * 1024
-    STORAGE_PROJECTION_VERSION = 1
+    STORAGE_PROJECTION_VERSION = 2
     # These are deterministic runtime caches rebuilt by _load(). Persisting them
     # duplicated several MiB of data without adding identity or publication
     # authority. Keep status on disk because StoryImportanceEngine consults the
@@ -75,6 +75,24 @@ class StoryRegistry:
         "editorial_priority",
         "editorial_score",
         "score_breakdown",
+        "title_tokens",
+        "fact_tokens",
+    })
+    # Unified incident evidence is a derived acceleration cache. When it is absent,
+    # story_unified_evidence() deterministically rebuilds it from authoritative
+    # titles, facts, locations, agencies, entities, and timeline provenance.
+    REBUILDABLE_STORY_STORAGE_FIELDS = frozenset({
+        "unified_incident_evidence",
+    })
+    # These histories are observability only. No resolver, publication-identity,
+    # timeline-coherence, or registry-repair decision reads them as authority.
+    # Keeping them forever made each candidate audit permanently enlarge the
+    # registry. They remain available for the current process, but are deliberately
+    # not carried across process restarts.
+    DIAGNOSTIC_HISTORY_STORAGE_FIELDS = frozenset({
+        "resolution_history",
+        "relationship_history",
+        "lifecycle_history",
     })
     QUARANTINE_TOMBSTONE_VERSION = 1
     QUARANTINE_TITLE_SAMPLE_LIMIT = 4
@@ -98,17 +116,24 @@ class StoryRegistry:
     def _payload_for_storage(cls, payload: dict[str, Any]) -> dict[str, Any]:
         """Return a lossless-on-reload storage projection of registry state.
 
-        Several per-story ranking/lifecycle values are deterministic caches that
-        ``_load`` recalculates every time the registry is opened.  Omitting only
-        those caches from the on-disk JSON creates durable headroom under the
-        repository safety ceiling without discarding story IDs, timelines, sources,
-        title candidates, resolver history, relationship history, event mappings,
-        or quarantine evidence.  The live in-memory registry is not mutated.
+        Persist only state that must survive a process restart. Ranking/lifecycle
+        values and token sets are deterministic caches; unified-incident evidence is
+        rebuildable from authoritative story content; resolver/relationship/lifecycle
+        histories are diagnostic-only and never authorize identity or publication.
+        Omitting those fields creates durable headroom without discarding story IDs,
+        event mappings, aliases, timelines, sources, title candidates, canonical
+        titles, facts, entities, local relevance, or quarantine identity. The live
+        in-memory registry is not mutated.
         """
         stories = payload.get("stories")
         if not isinstance(stories, dict):
             return payload
 
+        omitted_fields = (
+            cls.RECOMPUTED_STORY_STORAGE_FIELDS
+            | cls.REBUILDABLE_STORY_STORAGE_FIELDS
+            | cls.DIAGNOSTIC_HISTORY_STORAGE_FIELDS
+        )
         projected = dict(payload)
         projected_stories: dict[str, Any] = {}
         for story_id, story in stories.items():
@@ -118,7 +143,7 @@ class StoryRegistry:
             projected_stories[story_id] = {
                 key: value
                 for key, value in story.items()
-                if key not in cls.RECOMPUTED_STORY_STORAGE_FIELDS
+                if key not in omitted_fields
             }
         projected["stories"] = projected_stories
         return projected
@@ -497,6 +522,23 @@ class StoryRegistry:
             story.setdefault("canonical_title", story.get("titles", [""])[0] if story.get("titles") else "")
             story["timeline"] = StoryTimeline.from_list(story.get("timeline", [])).to_list()
 
+            # title_tokens and fact_tokens are deterministic caches omitted from
+            # storage projection v2. Rebuild them before registry repair/resolution
+            # so every downstream identity check sees the same runtime shape as
+            # older persisted registries. Include canonical_title defensively for
+            # legacy records where it was not also present in titles.
+            title_values = [story.get("canonical_title", ""), *story.get("titles", ())]
+            story["title_tokens"] = sorted({
+                token
+                for title_value in title_values
+                for token in _tokens(str(title_value or ""))
+            })
+            story["fact_tokens"] = sorted({
+                token
+                for fact_value in story.get("facts", ())
+                for token in _tokens(str(fact_value or ""))
+            })
+
         repair_registry_payload(payload)
         compaction = self._compact_payload_resolution_history(payload)
         previous_compaction = payload.get("history_compaction", {})
@@ -561,6 +603,12 @@ class StoryRegistry:
             "recomputed_story_fields_omitted": sorted(
                 self.RECOMPUTED_STORY_STORAGE_FIELDS
             ),
+            "rebuildable_story_fields_omitted": sorted(
+                self.REBUILDABLE_STORY_STORAGE_FIELDS
+            ),
+            "diagnostic_history_fields_omitted": sorted(
+                self.DIAGNOSTIC_HISTORY_STORAGE_FIELDS
+            ),
             "last_write": compaction,
             "last_unified_incident_evidence_write": incident_compaction,
             "last_quarantine_tombstone_write": quarantine_compaction,
@@ -577,64 +625,51 @@ class StoryRegistry:
         report["total_unified_incident_evidence_truncated"] = int(
             report.get("total_unified_incident_evidence_truncated", 0) or 0
         ) + incident_compaction["unique_entries_truncated"]
+        # Storage projection v2 has already removed diagnostic-only histories and
+        # rebuildable caches. Size pressure therefore reflects the authoritative
+        # persistent core, not candidate-evidence accumulation. Preserve that core
+        # exactly and reduce JSON formatting bytes before considering the write fatal.
+        for stale_key in (
+            "last_unified_incident_evidence_pressure_write",
+            "last_unified_incident_evidence_emergency_write",
+            "last_unified_incident_evidence_critical_write",
+        ):
+            report.pop(stale_key, None)
+
         serialization_indent: int | None = 2
+        pressure_mode = "normal"
+        serialization_mode = "pretty_2"
         serialized = self._serialize_payload(
             self._payload_for_storage(self.data), indent=serialization_indent
         )
         size_bytes = len(serialized.encode("utf-8"))
-        pressure_mode = "normal"
-        serialization_mode = "pretty_2"
+
         if size_bytes > self.REGISTRY_PRESSURE_BYTES:
-            pressure_compaction = self._compact_payload_unified_incident_evidence(
-                self.data, limit=self.UNIFIED_INCIDENT_EVIDENCE_PRESSURE_LIMIT
-            )
-            report["last_unified_incident_evidence_pressure_write"] = pressure_compaction
             pressure_mode = "pressure"
-            # Formatting bytes are not identity.  Tighten indentation before
-            # discarding any more candidate evidence.
             serialization_indent = 1
             serialization_mode = "pressure_1"
             serialized = self._serialize_payload(
                 self._payload_for_storage(self.data), indent=serialization_indent
             )
             size_bytes = len(serialized.encode("utf-8"))
+
         if size_bytes > self.REGISTRY_MAX_BYTES:
-            emergency_compaction = self._compact_payload_unified_incident_evidence(
-                self.data, limit=self.UNIFIED_INCIDENT_EVIDENCE_EMERGENCY_LIMIT
-            )
-            report["last_unified_incident_evidence_emergency_write"] = emergency_compaction
             pressure_mode = "emergency"
-            # Compact JSON is the final lossless storage step before the hard ceiling.
             serialization_indent = None
             serialization_mode = "emergency_compact"
             serialized = self._serialize_payload(
                 self._payload_for_storage(self.data), indent=serialization_indent
             )
             size_bytes = len(serialized.encode("utf-8"))
-        if size_bytes > self.REGISTRY_MAX_BYTES:
-            # Candidate-only unified-incident evidence has no publication or identity
-            # authority. If the compact registry is still over the hard ceiling, retain
-            # only the newest diagnostic row per story before aborting the build. This
-            # keeps authoritative timelines, sources, event mappings and story IDs intact
-            # while preventing non-authoritative evidence growth from becoming a
-            # publication outage.
-            critical_compaction = self._compact_payload_unified_incident_evidence(
-                self.data, limit=self.UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT
-            )
-            report["last_unified_incident_evidence_critical_write"] = critical_compaction
-            pressure_mode = "critical"
-            serialization_indent = None
-            serialization_mode = "critical_compact"
-            serialized = self._serialize_payload(
-                self._payload_for_storage(self.data), indent=serialization_indent
-            )
-            size_bytes = len(serialized.encode("utf-8"))
-        report["last_serialized_bytes"] = size_bytes
+
         report["max_serialized_bytes"] = self.REGISTRY_MAX_BYTES
         report["pressure_serialized_bytes"] = self.REGISTRY_PRESSURE_BYTES
         report["last_pressure_mode"] = pressure_mode
         report["last_serialization_mode"] = serialization_mode
-        # Re-serialize so the recorded byte count and storage mode are present.
+        report["last_serialized_bytes"] = size_bytes
+
+        # Re-serialize once with observability fields included so the byte count and
+        # chosen mode describe the actual file that will be written.
         serialized = self._serialize_payload(
             self._payload_for_storage(self.data), indent=serialization_indent
         )
@@ -646,8 +681,9 @@ class StoryRegistry:
         size_bytes = len(serialized.encode("utf-8"))
         if size_bytes > self.REGISTRY_MAX_BYTES:
             raise RuntimeError(
-                "Editorial story registry exceeds the 50 MiB safety ceiling after "
-                "critical candidate-evidence compaction and lossless JSON compaction: "
+                "Editorial story registry authoritative storage projection exceeds "
+                "the 50 MiB safety ceiling after diagnostic/rebuildable fields were "
+                "omitted and JSON was losslessly compacted: "
                 f"{size_bytes / (1024 * 1024):.2f} MiB"
             )
         temporary = self.path.with_suffix(self.path.suffix + ".tmp")

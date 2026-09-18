@@ -87,8 +87,12 @@ def test_registry_write_stays_below_safety_limit_after_compaction(tmp_path: Path
     payload = json.loads(path.read_text(encoding="utf-8"))
     assert path.stat().st_size < StoryRegistry.REGISTRY_MAX_BYTES
     assert all(
-        len(story["resolution_history"]) == 1
+        "resolution_history" not in story
         for story in payload["stories"].values()
+    )
+    assert all(
+        len(story["resolution_history"]) == 1
+        for story in registry.data["stories"].values()
     )
     assert payload["history_compaction"]["last_write"]["duplicates_removed"] > 0
 
@@ -132,11 +136,9 @@ def test_registry_write_compacts_old_unified_incident_candidate_evidence(tmp_pat
     registry.save()
 
     payload = json.loads(path.read_text(encoding="utf-8"))
-    retained = payload["stories"]["story_000001"]["unified_incident_evidence"]
+    assert "unified_incident_evidence" not in payload["stories"]["story_000001"]
+    retained = registry.data["stories"]["story_000001"]["unified_incident_evidence"]
     assert len(retained) == StoryRegistry.UNIFIED_INCIDENT_EVIDENCE_LIMIT
-    assert [row["incident_key"] for row in retained] == [
-        f"traffic-crash-port-st-lucie-{i:04d}" for i in range(22, 30)
-    ]
     report = payload["history_compaction"]["last_unified_incident_evidence_write"]
     assert report["unique_entries_truncated"] == 22
     assert report["stories_compacted"] == 1
@@ -161,7 +163,7 @@ def test_registry_pressure_mode_compacts_candidate_evidence_without_identity_los
 
     payload = json.loads(path.read_text(encoding="utf-8"))
     saved_story = payload["stories"]["story_000001"]
-    assert len(saved_story["unified_incident_evidence"]) == StoryRegistry.UNIFIED_INCIDENT_EVIDENCE_PRESSURE_LIMIT
+    assert "unified_incident_evidence" not in saved_story
     assert saved_story["story_id"] == "story_000001"
     assert saved_story["canonical_title"] == story["canonical_title"]
     assert saved_story["sources"] == story["sources"]
@@ -213,73 +215,35 @@ def test_registry_pressure_uses_lossless_tighter_json_before_hard_ceiling(
 
 
 
-def test_registry_critical_mode_keeps_identity_and_reduces_candidate_evidence_to_one(
+def test_registry_projection_makes_candidate_evidence_irrelevant_to_file_ceiling(
     tmp_path: Path, monkeypatch
 ) -> None:
     path = tmp_path / "editorial_story_registry.json"
     registry = StoryRegistry(path)
-    registry.data["stories"] = {}
-    registry.data["event_to_story"] = {}
+    story = _minimal_story("story_000001", [])
+    story["canonical_title"] = "Authoritative local story"
+    story["sources"] = ["https://example.com/source/1"]
+    story["unified_incident_evidence"] = [_incident_evidence(i) for i in range(200)]
+    registry.data["stories"] = {"story_000001": story}
+    registry.data["event_to_story"] = {"event-1": "story_000001"}
 
-    for index in range(1, 251):
-        story_id = f"story_{index:06d}"
-        story = _minimal_story(story_id, [])
-        story["canonical_title"] = f"Authoritative local story {index}"
-        story["sources"] = [f"https://example.com/source/{index}"]
-        story["unified_incident_evidence"] = [
-            _incident_evidence(evidence_index + index * 100)
-            for evidence_index in range(20)
-        ]
-        registry.data["stories"][story_id] = story
-        registry.data["event_to_story"][f"event-{index}"] = story_id
-
-    # Compute a ceiling that is too small for two retained candidate-evidence rows
-    # per story but comfortably large enough for one. The difference is deliberately
-    # much larger than the compaction-report metadata added during save().
-    import copy
-
-    emergency_payload = copy.deepcopy(registry.data)
-    StoryRegistry._compact_payload_unified_incident_evidence(
-        emergency_payload, limit=StoryRegistry.UNIFIED_INCIDENT_EVIDENCE_EMERGENCY_LIMIT
+    projected_size = len(
+        StoryRegistry._serialize_payload(
+            StoryRegistry._payload_for_storage(registry.data), indent=None
+        ).encode("utf-8")
     )
-    critical_payload = copy.deepcopy(registry.data)
-    StoryRegistry._compact_payload_unified_incident_evidence(
-        critical_payload, limit=StoryRegistry.UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT
-    )
-    emergency_size = len(
-        StoryRegistry._serialize_payload(emergency_payload, indent=None).encode("utf-8")
-    )
-    critical_size = len(
-        StoryRegistry._serialize_payload(critical_payload, indent=None).encode("utf-8")
-    )
-    assert critical_size + 16_384 < emergency_size
-
     monkeypatch.setattr(StoryRegistry, "REGISTRY_PRESSURE_BYTES", 1)
-    monkeypatch.setattr(
-        StoryRegistry,
-        "REGISTRY_MAX_BYTES",
-        critical_size + (emergency_size - critical_size) // 2,
-    )
+    monkeypatch.setattr(StoryRegistry, "REGISTRY_MAX_BYTES", projected_size + 32_768)
 
     registry.save()
 
     payload = json.loads(path.read_text(encoding="utf-8"))
-    assert path.stat().st_size < StoryRegistry.REGISTRY_MAX_BYTES
-    assert payload["history_compaction"]["last_pressure_mode"] == "critical"
-    assert payload["history_compaction"]["last_serialization_mode"] == "critical_compact"
-    assert payload["history_compaction"]["last_unified_incident_evidence_critical_write"][
-        "stories_compacted"
-    ] == 250
-    assert all(
-        len(story["unified_incident_evidence"])
-        == StoryRegistry.UNIFIED_INCIDENT_EVIDENCE_CRITICAL_LIMIT
-        for story in payload["stories"].values()
-    )
+    assert payload["history_compaction"]["last_pressure_mode"] == "pressure"
+    assert "unified_incident_evidence" not in payload["stories"]["story_000001"]
     assert payload["stories"]["story_000001"]["story_id"] == "story_000001"
     assert payload["stories"]["story_000001"]["sources"] == [
         "https://example.com/source/1"
     ]
-    assert payload["event_to_story"]["event-1"] == "story_000001"
 
 
 def _quarantined_snapshot(story_id: str) -> dict:
@@ -358,13 +322,16 @@ def test_quarantine_tombstone_compaction_is_idempotent_and_preserves_denylist_id
 
 
 
-def test_registry_storage_projection_omits_only_recomputed_runtime_caches(tmp_path: Path) -> None:
+def test_registry_storage_projection_persists_only_restart_authority(tmp_path: Path) -> None:
+    from tct_engine.unified_incident_identity import story_unified_evidence
+
     path = tmp_path / "editorial_story_registry.json"
     registry = StoryRegistry(path)
     story = _minimal_story("story_000001", [_entry()])
     story.update({
         "canonical_title": "Port St. Lucie council approves a public project",
         "sources": ["https://example.com/authoritative-source"],
+        "facts": ["The council approved a public project in Port St. Lucie."],
         "timeline": [{
             "event_key": "event-1",
             "article_id": "article-1",
@@ -375,65 +342,64 @@ def test_registry_storage_projection_omits_only_recomputed_runtime_caches(tmp_pa
             "editorial_action": "publish_new",
             "canonical_article_id": "article-1",
         }],
-        "title_candidates": [{"title": "Port St. Lucie council approves a public project", "source": "https://example.com/authoritative-source"}],
+        "title_candidates": [{
+            "title": "Port St. Lucie council approves a public project",
+            "source": "https://example.com/authoritative-source",
+            "source_class": "local_news",
+            "source_trust": 90,
+            "is_custom": False,
+            "priority": 80,
+        }],
         "relationship_history": [{"relationship": "same_event", "confidence": 1.0}],
+        "lifecycle_history": [{"from": "developing", "to": "active"}],
+        "unified_incident_evidence": [_incident_evidence(1)],
         "lifecycle": {"state": "stale-cache"},
         "importance": {"score": 999, "level": "stale-cache"},
         "editorial_proximity": {"score": 999, "scope": "stale-cache"},
         "editorial_priority": 999,
         "editorial_score": 999,
         "score_breakdown": {"total": 999},
+        "title_tokens": ["stale-title-token"],
+        "fact_tokens": ["stale-fact-token"],
     })
     registry.data["stories"] = {"story_000001": story}
     registry.data["event_to_story"] = {"event-1": "story_000001"}
 
-    runtime_cache_before = {
-        field: registry.data["stories"]["story_000001"][field]
-        for field in StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
-    }
     registry.save()
-
-    # Saving must not mutate the live registry just to make the file smaller.
-    assert {
-        field: registry.data["stories"]["story_000001"][field]
-        for field in StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
-    } == runtime_cache_before
 
     payload = json.loads(path.read_text(encoding="utf-8"))
     saved_story = payload["stories"]["story_000001"]
-    assert all(
-        field not in saved_story
-        for field in StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
+    omitted = (
+        StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
+        | StoryRegistry.REBUILDABLE_STORY_STORAGE_FIELDS
+        | StoryRegistry.DIAGNOSTIC_HISTORY_STORAGE_FIELDS
     )
-    # Status is intentionally persisted because importance scoring consults the
-    # previous status before lifecycle is recomputed during load.
-    assert saved_story["status"] == "developing"
+    assert all(field not in saved_story for field in omitted)
 
-    # Authoritative identity/history/provenance must remain byte-for-byte present.
+    # Restart-authoritative identity, publication, provenance, and timeline state
+    # remains on disk byte-for-byte.
     assert saved_story["story_id"] == "story_000001"
     assert saved_story["canonical_title"] == story["canonical_title"]
     assert saved_story["sources"] == story["sources"]
     assert saved_story["timeline"] == story["timeline"]
     assert saved_story["title_candidates"] == story["title_candidates"]
-    assert saved_story["resolution_history"] == story["resolution_history"]
-    assert saved_story["relationship_history"] == story["relationship_history"]
+    assert saved_story["facts"] == story["facts"]
     assert payload["event_to_story"] == {"event-1": "story_000001"}
-    assert payload["history_compaction"]["storage_projection_version"] == 1
+    assert payload["history_compaction"]["storage_projection_version"] == 2
 
-    # A normal reload deterministically rebuilds every omitted cache.
+    # A normal reload rebuilds deterministic token caches before repair/resolution.
+    # Unified-incident evidence is intentionally lazy and rebuilds from authoritative
+    # story content when the matcher asks for it. Diagnostic histories restart empty.
     reloaded = StoryRegistry(path)
     reloaded_story = reloaded.data["stories"]["story_000001"]
-    assert all(
-        field in reloaded_story
-        for field in StoryRegistry.RECOMPUTED_STORY_STORAGE_FIELDS
-    )
-    assert reloaded_story["story_id"] == saved_story["story_id"]
-    assert reloaded_story["canonical_title"] == saved_story["canonical_title"]
-    assert reloaded_story["sources"] == saved_story["sources"]
-    assert reloaded_story["timeline"] == saved_story["timeline"]
-    assert reloaded_story["title_candidates"] == saved_story["title_candidates"]
-    assert reloaded_story["resolution_history"] == saved_story["resolution_history"]
-    assert reloaded_story["relationship_history"] == saved_story["relationship_history"]
+    assert "port" in reloaded_story["title_tokens"]
+    assert "council" in reloaded_story["title_tokens"]
+    assert "approved" in reloaded_story["fact_tokens"]
+    assert reloaded_story["resolution_history"] == []
+    assert reloaded_story["relationship_history"] == []
+    assert reloaded_story["lifecycle_history"] == []
+    assert reloaded_story["unified_incident_evidence"] == []
+    assert story_unified_evidence(reloaded_story)
 
 
 def test_registry_storage_projection_creates_headroom_without_raising_safety_ceiling(
@@ -475,3 +441,81 @@ def test_registry_storage_projection_creates_headroom_without_raising_safety_cei
     assert path.stat().st_size < ceiling
     assert payload["stories"]["story_000001"]["canonical_title"] == story["canonical_title"]
     assert payload["event_to_story"] == {"event-1": "story_000001"}
+
+
+def test_registry_storage_projection_diagnostic_growth_cannot_exhaust_ceiling(
+    tmp_path: Path, monkeypatch
+) -> None:
+    path = tmp_path / "editorial_story_registry.json"
+    registry = StoryRegistry(path)
+    story = _minimal_story("story_000001", [])
+    story["canonical_title"] = "Port St. Lucie council approves a public project"
+    story["sources"] = ["https://example.com/source"]
+    story["title_candidates"] = [{
+        "title": story["canonical_title"],
+        "source": "https://example.com/source",
+        "source_class": "local_news",
+        "source_trust": 90,
+        "is_custom": False,
+        "priority": 80,
+    }]
+    story["timeline"] = [{
+        "event_key": "event-1",
+        "article_id": "article-1",
+        "published_at": "2026-09-17T00:00:00+00:00",
+        "title": story["canonical_title"],
+        "source": "https://example.com/feed",
+        "url": "https://example.com/article-1",
+        "editorial_action": "1",
+        "canonical_article_id": "article-1",
+    }]
+    story["resolution_history"] = [
+        {
+            "event_key": f"candidate-{index}",
+            "confidence": 0.5,
+            "reason": "diagnostic " + ("x" * 4000),
+            "decision_trace": ["trace " + ("y" * 4000)],
+            "relationship": "new_story",
+        }
+        for index in range(200)
+    ]
+    story["relationship_history"] = [
+        {"event_key": f"candidate-{index}", "reason": "z" * 4000}
+        for index in range(200)
+    ]
+    story["lifecycle_history"] = [
+        {"from": "active", "to": "archived", "reason": "q" * 4000}
+        for _ in range(200)
+    ]
+    story["unified_incident_evidence"] = [_incident_evidence(i) for i in range(200)]
+    registry.data["stories"] = {"story_000001": story}
+    registry.data["event_to_story"] = {"event-1": "story_000001"}
+
+    unprojected_size = len(
+        StoryRegistry._serialize_payload(registry.data, indent=None).encode("utf-8")
+    )
+    projected_size = len(
+        StoryRegistry._serialize_payload(
+            StoryRegistry._payload_for_storage(registry.data), indent=None
+        ).encode("utf-8")
+    )
+    assert projected_size * 10 < unprojected_size
+
+    ceiling = projected_size + 32_768
+    assert ceiling < unprojected_size
+    monkeypatch.setattr(StoryRegistry, "REGISTRY_PRESSURE_BYTES", 1)
+    monkeypatch.setattr(StoryRegistry, "REGISTRY_MAX_BYTES", ceiling)
+
+    registry.save()
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    saved = payload["stories"]["story_000001"]
+    assert saved["story_id"] == "story_000001"
+    assert saved["timeline"] == story["timeline"]
+    assert saved["sources"] == story["sources"]
+    assert saved["title_candidates"] == story["title_candidates"]
+    assert "resolution_history" not in saved
+    assert "relationship_history" not in saved
+    assert "lifecycle_history" not in saved
+    assert "unified_incident_evidence" not in saved
+    assert path.stat().st_size < ceiling
