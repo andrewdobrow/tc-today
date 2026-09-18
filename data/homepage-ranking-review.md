@@ -4,40 +4,41 @@
 
 ## Hero
 
-- Current: **Vero Beach police officer on paid leave after alleged misuse of Flock system**
-- Recommended: **Vero Beach police officer on paid leave after alleged misuse of Flock system**
+- Current: **Indian River County sex sting nets 50 arrests, child-luring case highlighted**
+- Recommended: **Indian River County sex sting nets 50 arrests, child-luring case highlighted**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Fort Pierce planning board delays data center rezoning at I-95 and Midway Road | Fort Pierce planning board delays data center rezoning at I-95 and Midway Road | 59 | importance 0; freshness 99.9; urgency 7/10 |
-| 2 | Vero Beach Regional Airport adding 500-space parking lot, ending free parking | Vero Beach Regional Airport adding 500-space parking lot, ending free parking | 57 | importance 0; freshness 99.9; urgency 6/10 |
-| 3 | Florida requires parental opt-in for AI classroom tools by July 1, 2027 | Port St. Lucie police investigate death of man found inside vehicle | 56 | importance 0; freshness 90.99; urgency 4/10; validated material update |
-| 4 | Port St. Lucie police investigate death of man found inside vehicle | Florida requires parental opt-in for AI classroom tools by July 1, 2027 | 53 | importance 0; freshness 99.91; urgency 6/10 |
-| 5 | Indian River County sex sting nets 50+ arrests, child-luring case | Indian River County sex sting nets 50+ arrests, child-luring case | 51 | importance 0; freshness 88.36; urgency 2/10; validated material update |
-| 6 | Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt | Flood Advisory issued for parts of Martin County as Atlantic showers stream onshore | 45 | importance 0; freshness 89.74; urgency 2/10 |
-| 7 | Flood Advisory issued for parts of Martin County as Atlantic showers stream onshore | Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone | 45 | importance 0; freshness 89.73; urgency 2/10 |
-| 8 | Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone | Amazon to invest $200M in Port St. Lucie facility, reopen in 2028 with 1,000 jobs | 47 | importance 0; freshness 73.13; urgency 2/10; validated material update; -8 county saturation |
-| 9 | Vero Beach animal hospital manager arrested for abandoning cats after reclaiming them from Humane Society | Vero Beach animal hospital manager arrested for abandoning cats after reclaiming them from Humane Society | 45 | importance 0; freshness 88.37; urgency 2/10; -6 category saturation |
-| 10 | Travel MRI technician arrested on sexual battery charge at HCA Florida St. Lucie Hospital | Jolly proposes AI data center moratorium; Donalds warns freeze would drive investment from Florida | 34 | importance 0; freshness 58.15; urgency 2/10 |
-| 11 | Amazon to invest $200M in Port St. Lucie facility, reopen in 2028 with 1,000 jobs | South Fork High School expands co-teaching model with Martin County planning elementary rollout | 34 | importance 0; freshness 42.75; urgency 2/10 |
-| 12 | Port St. Lucie bus stop complaint prompts district route change on Paar Drive | Fort Pierce grants King's Landing fifth extension after motion to terminate fails | 43 | importance 0; freshness 53.14; urgency 2/10; validated material update; -12 county saturation |
+| 1 | Trail camera captures Florida panther mother with three cubs near Fort Myers | Port St. Lucie police investigate death of man found inside vehicle | 53 | importance 0; freshness 77.7; urgency 4/10; validated material update |
+| 2 | Port St. Lucie police investigate death of man found inside vehicle | Trail camera captures Florida panther mother with three cubs near Fort Myers | 48 | importance 0; freshness 99.89; urgency 4/10 |
+| 3 | Florida requires parental opt-in for AI classroom tools by July 1, 2027 | Fort Pierce planning board delays data center rezoning at I-95 and Midway Road | 45 | importance 0; freshness 86.6; urgency 2/10 |
+| 4 | Fort Pierce planning board delays data center rezoning at I-95 and Midway Road | Vero Beach Regional Airport adding 500-space parking lot, ending free parking | 45 | importance 0; freshness 86.61; urgency 2/10 |
+| 5 | Vero Beach Regional Airport adding 500-space parking lot, ending free parking | Vero Beach police officer on paid leave after alleged misuse of Flock system | 45 | importance 0; freshness 86.6; urgency 2/10 |
+| 6 | Vero Beach police officer on paid leave after alleged misuse of Flock system | Flood Advisory issued for parts of Martin County as Atlantic showers stream onshore | 42 | importance 0; freshness 76.44; urgency 2/10 |
+| 7 | Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt | Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone | 42 | importance 0; freshness 76.44; urgency 2/10 |
+| 8 | Flood Advisory issued for parts of Martin County as Atlantic showers stream onshore | Florida requires parental opt-in for AI classroom tools by July 1, 2027 | 41 | importance 0; freshness 86.61; urgency 2/10 |
+| 9 | Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone | Amazon to invest $200M in Port St. Lucie facility, reopen in 2028 with 1,000 jobs | 44 | importance 0; freshness 59.84; urgency 2/10; validated material update; -8 county saturation |
+| 10 | Vero Beach animal hospital manager arrested for abandoning cats after reclaiming them from Humane Society | Vero Beach animal hospital manager arrested for abandoning cats after reclaiming them from Humane Society | 42 | importance 0; freshness 75.07; urgency 2/10; -6 category saturation |
+| 11 | Travel MRI technician arrested on sexual battery charge at HCA Florida St. Lucie Hospital | South Fork High School expands co-teaching model with Martin County planning elementary rollout | 31 | importance 0; freshness 29.46; urgency 2/10 |
+| 12 | Amazon to invest $200M in Port St. Lucie facility, reopen in 2028 with 1,000 jobs | Travel MRI technician arrested on sexual battery charge at HCA Florida St. Lucie Hospital | 42 | importance 0; freshness 75.06; urgency 2/10; -12 county saturation |
 
 ## Recommended moves
 
-- **South Fork High School expands co-teaching model with Martin County planning elementary rollout**: 44 → 11 — importance 0; freshness 42.75; urgency 2/10
-- **Jolly proposes AI data center moratorium; Donalds warns freeze would drive investment from Florida**: 38 → 10 — importance 0; freshness 58.15; urgency 2/10
-- **Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt**: 6 → 13 — importance 0; freshness 58.14; urgency 4/10
-- **Travel MRI technician arrested on sexual battery charge at HCA Florida St. Lucie Hospital**: 10 → 14 — importance 0; freshness 88.35; urgency 2/10
-- **Fort Pierce grants King's Landing fifth extension after motion to terminate fails**: 16 → 12 — importance 0; freshness 53.14; urgency 2/10; validated material update; -12 county saturation
-- **Amazon to invest $200M in Port St. Lucie facility, reopen in 2028 with 1,000 jobs**: 11 → 8 — importance 0; freshness 73.13; urgency 2/10; validated material update; -8 county saturation
-- **Port St. Lucie bus stop complaint prompts district route change on Paar Drive**: 12 → 15 — importance 0; freshness 42.76; urgency 4/10
-- **Port St. Lucie police investigate death of man found inside vehicle**: 4 → 3 — importance 0; freshness 90.99; urgency 4/10; validated material update
-- **Florida requires parental opt-in for AI classroom tools by July 1, 2027**: 3 → 4 — importance 0; freshness 99.91; urgency 6/10
-- **Flood Advisory issued for parts of Martin County as Atlantic showers stream onshore**: 7 → 6 — importance 0; freshness 89.74; urgency 2/10
-- **Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone**: 8 → 7 — importance 0; freshness 89.73; urgency 2/10
+- **South Fork High School expands co-teaching model with Martin County planning elementary rollout**: 42 → 11 — importance 0; freshness 29.46; urgency 2/10
+- **Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt**: 7 → 13 — importance 0; freshness 44.84; urgency 4/10
+- **Florida requires parental opt-in for AI classroom tools by July 1, 2027**: 3 → 8 — importance 0; freshness 86.61; urgency 2/10
+- **Amazon to invest $200M in Port St. Lucie facility, reopen in 2028 with 1,000 jobs**: 12 → 9 — importance 0; freshness 59.84; urgency 2/10; validated material update; -8 county saturation
+- **Flood Advisory issued for parts of Martin County as Atlantic showers stream onshore**: 8 → 6 — importance 0; freshness 76.44; urgency 2/10
+- **Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone**: 9 → 7 — importance 0; freshness 76.44; urgency 2/10
+- **Port St. Lucie police investigate death of man found inside vehicle**: 2 → 1 — importance 0; freshness 77.7; urgency 4/10; validated material update
+- **Trail camera captures Florida panther mother with three cubs near Fort Myers**: 1 → 2 — importance 0; freshness 99.89; urgency 4/10
+- **Fort Pierce planning board delays data center rezoning at I-95 and Midway Road**: 4 → 3 — importance 0; freshness 86.6; urgency 2/10
+- **Vero Beach Regional Airport adding 500-space parking lot, ending free parking**: 5 → 4 — importance 0; freshness 86.61; urgency 2/10
+- **Vero Beach police officer on paid leave after alleged misuse of Flock system**: 6 → 5 — importance 0; freshness 86.6; urgency 2/10
+- **Travel MRI technician arrested on sexual battery charge at HCA Florida St. Lucie Hospital**: 11 → 12 — importance 0; freshness 75.06; urgency 2/10; -12 county saturation
 
 ## Guardrails
 
