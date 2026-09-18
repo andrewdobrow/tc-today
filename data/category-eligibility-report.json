@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T15:55:49Z",
+  "generated_at": "2026-09-18T19:10:55Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 23,
-    "rejected_count": 5,
+    "assessed_count": 27,
+    "rejected_count": 4,
     "enforced_categories": [
       "business",
       "crime",
@@ -47,11 +47,11 @@
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
-            "crime_incident:shooting"
+            "crime_incident:murder"
           ],
           "local_nexus_signals": [],
-          "headline": "Sebastian officer-involved shooting under investigation",
-          "source_url": "https://www.wptv.com/news/region-indian-river-county/sebastian/sebastian-officer-involved-shooting-under-investigation"
+          "headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/florida-governor-signs-death-warrant-for-william-reaves-jr-convicted-of-killing-indian-river-county-deputy"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -60,12 +60,14 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
           "local_nexus_signals": [],
-          "headline": "Responsible Dog Ownership Day in Fort Pierce to support shelter pets and educate families",
-          "source_url": "https://www.wptv.com/shining-a-light/responsible-dog-ownership-day-in-fort-pierce-to-support-shelter-pets-and-educate-families"
+          "headline": "41-year-old man holding shotgun fatally shot by Sebastian police",
+          "source_url": "https://www.wptv.com/news/region-indian-river-county/sebastian/sebastian-officer-involved-shooting-under-investigation"
         }
       ]
     },
@@ -74,7 +76,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     },
@@ -83,9 +85,29 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 3,
+      "assessed_count": 2,
       "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:murder"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:indian river county",
+            "source_locality:vero beach"
+          ],
+          "headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/florida-governor-signs-death-warrant-for-william-reaves-jr-convicted-of-killing-indian-river-county-deputy"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -102,25 +124,8 @@
             "source_locality:indian river county",
             "source_locality:sebastian"
           ],
-          "headline": "Sebastian officer-involved shooting under investigation",
+          "headline": "41-year-old man holding shotgun fatally shot by Sebastian police",
           "source_url": "https://www.wptv.com/news/region-indian-river-county/sebastian/sebastian-officer-involved-shooting-under-investigation"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:fort pierce"
-          ],
-          "headline": "Responsible Dog Ownership Day in Fort Pierce to support shelter pets and educate families",
-          "source_url": "https://www.wptv.com/shining-a-light/responsible-dog-ownership-day-in-fort-pierce-to-support-shelter-pets-and-educate-families"
         }
       ]
     },
@@ -138,26 +143,9 @@
       "category_label": "Things To Do",
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
-      "assessed_count": 1,
-      "rejected_count": 1,
-      "rejections": [
-        {
-          "contract_version": "1.0-local-attendable-activity-focus",
-          "category_key": "things_to_do",
-          "mode": "enforce",
-          "policy": "local_attendable_activity_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_attendable_activity_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "treasure_coast_locality"
-          ],
-          "headline": "Responsible Dog Ownership Day in Fort Pierce to support shelter pets and educate families",
-          "source_url": "https://www.wptv.com/shining-a-light/responsible-dog-ownership-day-in-fort-pierce-to-support-shelter-pets-and-educate-families"
-        }
-      ]
+      "assessed_count": 0,
+      "rejected_count": 0,
+      "rejections": []
     },
     {
       "category_key": "florida",
@@ -173,7 +161,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 1,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -182,7 +170,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -191,7 +179,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 10,
       "rejected_count": 0,
       "rejections": []
     }
