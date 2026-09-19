@@ -103,7 +103,7 @@ def test_deferred_registry_save_does_not_commit_after_exception(tmp_path, monkey
     assert not registry_path.exists()
 
 
-def test_matching_registry_snapshot_still_replays_historical_journal(tmp_path, monkeypatch):
+def test_matching_registry_snapshot_still_replays_historical_journal(tmp_path, monkeypatch, capsys):
     state_path, registry_path = _saved_state(tmp_path, count=12)
     calls = []
     original_process = EditorialEngine._process
@@ -120,9 +120,14 @@ def test_matching_registry_snapshot_still_replays_historical_journal(tmp_path, m
         registry_path=registry_path,
     )
 
+    output = capsys.readouterr().out
     assert restored.state_restore_mode == "replay"
     assert len(calls) == 12
     assert len(restored._history) == 12
+    assert "Timing detail: editorial state read+parse" in output
+    assert "Timing detail: editorial history compact+validate" in output
+    assert "Timing detail: editorial history replay" in output
+    assert "Timing detail: editorial state restore total" in output
 
 
 def test_registry_fingerprint_mismatch_falls_back_to_full_replay(tmp_path, monkeypatch):

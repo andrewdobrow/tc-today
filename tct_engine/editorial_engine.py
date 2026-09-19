@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -463,6 +464,8 @@ class EditorialEngine:
         if not state_path.exists():
             return engine
 
+        _restore_started = time.perf_counter()
+        _detail_started = time.perf_counter()
         try:
             payload = json.loads(
                 state_path.read_text(encoding="utf-8")
@@ -475,6 +478,11 @@ class EditorialEngine:
             raise EditorialStateError(
                 f"Could not read editorial state: {exc}"
             ) from exc
+
+        print(
+            "  Timing detail: editorial state read+parse "
+            f"{time.perf_counter() - _detail_started:.1f}s"
+        )
 
         if not isinstance(payload, dict):
             raise EditorialStateError(
@@ -496,8 +504,14 @@ class EditorialEngine:
                 "Editorial state articles must be a list."
             )
 
+        _detail_started = time.perf_counter()
         articles, _ = cls._compact_history_records(articles)
         cls._validate_history_records(articles)
+        print(
+            "  Timing detail: editorial history compact+validate "
+            f"{time.perf_counter() - _detail_started:.1f}s "
+            f"({len(articles)} record(s))"
+        )
 
         registry_already_exists = Path(registry_path).exists()
 
@@ -507,6 +521,7 @@ class EditorialEngine:
         # unified-incident evidence that replay reconstructs in memory. Until
         # snapshot restore is proven identity-equivalent against production-shaped
         # history, skipping replay is not allowed.
+        _detail_started = time.perf_counter()
         with engine._pipeline.defer_registry_saves(
             commit=not registry_already_exists
         ):
@@ -523,11 +538,20 @@ class EditorialEngine:
                     is_custom=is_custom,
                     record_history=False,
                 )
+        print(
+            "  Timing detail: editorial history replay "
+            f"{time.perf_counter() - _detail_started:.1f}s "
+            f"({len(articles)} record(s))"
+        )
 
         # Preserve the original records exactly once. Replaying them above
         # rebuilds pipeline state but does not append them to history.
         engine._history = articles
         engine._state_restore_mode = "replay"
+        print(
+            "  Timing detail: editorial state restore total "
+            f"{time.perf_counter() - _restore_started:.1f}s (mode=replay)"
+        )
 
         return engine
 

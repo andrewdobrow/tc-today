@@ -140,3 +140,34 @@ def test_reconcile_compares_only_groups_touched_by_new_articles(monkeypatch):
 
     assert ("stable one", "stable two") not in calls
     assert len(calls) == 2
+
+
+def test_archive_identity_stage_has_diagnostic_subtimers_only():
+    source = (Path(__file__).parents[1] / "scripts" / "generate.py").read_text(encoding="utf-8")
+    required_labels = (
+        "write_archives archive load+sanitize",
+        "write_archives pre canonical cleanup",
+        "write_archives semantic archive duplicate repair",
+        "write_archives publication identity index load",
+        "write_archives archive publication identity reconcile",
+        "write_archives canonical publication ledger reconcile",
+        "write_archives publication deck assembly+coalescing",
+        "write_archives article publication loop",
+        "write_archives same-run ledger reconcile",
+        "write_archives enforce canonical redirects",
+        "write_archives final archive authority+integrity audits",
+        "write_archives post-forward semantic registry consolidation",
+        "write_archives reports+artifact writes",
+        "write_archives TOTAL",
+        "archive stage persistent identity validation+live rebind",
+        "archive stage forward-live identity+permalink validation",
+        "archive stage canonical surface+hero freshness reconciliation",
+        "archive stage final topic-category integrity",
+        "archive stage final county membership authority",
+        "archive stage final image+live-surface validations",
+    )
+    for label in required_labels:
+        assert f'_runtime_timing_detail("{label}"' in source
+
+    # Keep the original aggregate timing line so production logs remain comparable.
+    assert "Timing: archive, publication identity and permalink gates" in source

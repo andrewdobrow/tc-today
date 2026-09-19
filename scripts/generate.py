@@ -32837,9 +32837,18 @@ def _reconcile_archive_publication_identity(archive, identity_index):
     }
 
 
+def _runtime_timing_detail(label, started):
+    """Emit diagnostic timing without changing publication behavior."""
+    elapsed = time.perf_counter() - started
+    print(f"  Timing detail: {label} {elapsed:.1f}s")
+    return elapsed
+
+
 def write_archives(all_categories, top_cat):
     global CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
     global CURRENT_RUN_PREARCHIVE_PLACEMENT_SEMANTIC_REPORT
+    _write_archives_started = time.perf_counter()
+    _detail_started = time.perf_counter()
     CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
@@ -32851,6 +32860,8 @@ def write_archives(all_categories, top_cat):
     archive, _nonstory_purge_report = _purge_nonstory_archive_entries(
         archive, articles_dir, OUTPUT_DIR
     )
+    _runtime_timing_detail("write_archives archive load+sanitize", _detail_started)
+    _detail_started = time.perf_counter()
     today         = _today_eastern_iso()
     new_count     = 0
     updated_count = 0
@@ -32898,6 +32909,8 @@ def write_archives(all_categories, top_cat):
     _semantic_gate_report["summary"]["pre_generation_materiality_cache_hits"] = sum(
         1 for row in _pregen_rows if row.get("cache_hit")
     )
+    _runtime_timing_detail("write_archives semantic cache+report init", _detail_started)
+    _detail_started = time.perf_counter()
 
     # main() can perform the same late-published-skip materiality barrier before
     # write_archives() exists, when a generated/cached placement gains canonical
@@ -32942,15 +32955,21 @@ def write_archives(all_categories, top_cat):
     _repair_stale_semantic_material_update_headlines(
         archive, articles_dir, OUTPUT_DIR
     )
+    _runtime_timing_detail("write_archives custom authority+stale headline repair", _detail_started)
 
+    _detail_started = time.perf_counter()
     archive, _canonical_redirects = apply_canonical_story_cleanup(archive, articles_dir, OUTPUT_DIR)
+    _runtime_timing_detail("write_archives pre canonical cleanup", _detail_started)
 
     # Repair existing generated pages before forward publication decisions. The lead
     # repair uses only facts already present later in the same article; the permalink
     # repair is conservative and requires simultaneous jurisdiction and money drift.
+    _detail_started = time.perf_counter()
     archive, _archive_lead_framing_repair = _repair_archive_article_lead_framing(
         archive, articles_dir, OUTPUT_DIR
     )
+    _runtime_timing_detail("write_archives lead framing repair", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _claim_alignment_redirects, _claim_alignment_report = (
         _repair_archive_claim_drifted_permalinks(
             archive, articles_dir, OUTPUT_DIR
@@ -32960,6 +32979,8 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["claim_aligned_permalink_repairs"] = list(
         _claim_alignment_report.get("repaired") or []
     )
+    _runtime_timing_detail("write_archives claim-drift permalink repair", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _exact_headline_redirects, _exact_headline_repair_report = (
         _repair_exact_headline_incident_duplicates(
             archive, articles_dir, OUTPUT_DIR
@@ -32969,6 +32990,8 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["exact_headline_incident_repairs"] = (
         _exact_headline_repair_report
     )
+    _runtime_timing_detail("write_archives exact-headline duplicate repair", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _late_reprint_redirects, _late_reprint_repair_report = (
         _repair_recent_late_reprint_archive_duplicates(
             archive, OUTPUT_DIR, phase="pre_publication"
@@ -32978,6 +33001,8 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["late_reprint_identity_lock"] = (
         _late_reprint_repair_report
     )
+    _runtime_timing_detail("write_archives recent late-reprint repair", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _semantic_archive_redirects, _semantic_archive_repair_report = (
         _repair_recent_semantic_archive_duplicates(
             archive,
@@ -32991,6 +33016,8 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["semantic_archive_repairs"] = (
         _semantic_archive_repair_report
     )
+    _runtime_timing_detail("write_archives semantic archive duplicate repair", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _martin_cocaine_redirects, _martin_cocaine_repair = (
         _repair_verified_martin_cocaine_operation_duplicate(
             archive, _semantic_gate_report
@@ -33005,6 +33032,8 @@ def write_archives(all_categories, top_cat):
             "  Verified production duplicate repaired: Operation Beneath the Surface "
             f"{_martin_cocaine_repair.get('repaired_count', 0)} later URL(s) -> Aug. 14 canonical"
         )
+    _runtime_timing_detail("write_archives fixed-regression duplicate repair", _detail_started)
+    _detail_started = time.perf_counter()
     _semantic_registry_consolidation = (
         _apply_semantic_duplicate_registry_consolidation(
             archive,
@@ -33024,11 +33053,15 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["semantic_registry_consolidation"] = copy.deepcopy(
         _semantic_registry_consolidation
     )
+    _runtime_timing_detail("write_archives semantic registry consolidation", _detail_started)
 
     # Bridge the persistent editorial registry into the permalink writer. Raw source
     # articles may be rewritten into very different TCT headlines; source-backed
     # story identity prevents those rewrites from becoming parallel public URLs.
+    _detail_started = time.perf_counter()
     _publication_identity = _load_publication_identity_index()
+    _runtime_timing_detail("write_archives publication identity index load", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _quarantined_story_id_revocations = (
         _revoke_quarantined_archive_story_ids(archive, _publication_identity)
     )
@@ -33038,16 +33071,22 @@ def write_archives(all_categories, top_cat):
     archive, _archive_identity_backfill = _backfill_archive_editorial_story_ids(
         archive, _publication_identity, OUTPUT_DIR
     )
+    _runtime_timing_detail("write_archives quarantine revoke+identity backfill", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _publication_redirects, _publication_report = (
         _reconcile_archive_publication_identity(archive, _publication_identity)
     )
     _canonical_redirects.extend(_publication_redirects)
+    _runtime_timing_detail("write_archives archive publication identity reconcile", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _ledger_redirects, _publication_ledger, _publication_ledger_report = (
         _reconcile_canonical_publication_ledger(
             archive, _publication_identity, OUTPUT_DIR
         )
     )
     _canonical_redirects.extend(_ledger_redirects)
+    _runtime_timing_detail("write_archives canonical publication ledger reconcile", _detail_started)
+    _detail_started = time.perf_counter()
     _forward_identity_report["canonical_publication_ledger"] = {
         "version": CANONICAL_PUBLICATION_LEDGER_VERSION,
         "groups_collapsed": _publication_ledger_report.get("groups_collapsed", 0),
@@ -33139,7 +33178,9 @@ def write_archives(all_categories, top_cat):
             _entry[2], _entry[0], _memberships_by_slug.get(_coalesce_key, set())
         )
     all_articles = list(_best_by_slug.values())
+    _runtime_timing_detail("write_archives publication deck assembly+coalescing", _detail_started)
 
+    _detail_started = time.perf_counter()
     for cat_key, cat_label, hero in all_articles:
         _apply_category_memberships(hero, cat_key)
         # Archive recovery items already have permanent article pages. They are reused
@@ -34404,6 +34445,8 @@ def write_archives(all_categories, top_cat):
                     f"{len(_direct_live_bindings)} live placement(s) to {slug}"
                 )
 
+    _runtime_timing_detail("write_archives article publication loop", _detail_started)
+    _detail_started = time.perf_counter()
     archive, _same_run_ledger_redirects, _publication_ledger, _same_run_ledger_report = (
         _reconcile_canonical_publication_ledger(
             archive, _publication_identity, OUTPUT_DIR
@@ -34414,6 +34457,8 @@ def write_archives(all_categories, top_cat):
         "same_run_groups_collapsed": _same_run_ledger_report.get("groups_collapsed", 0),
         "same_run_records_redirected": _same_run_ledger_report.get("records_redirected", 0),
     })
+    _runtime_timing_detail("write_archives same-run ledger reconcile", _detail_started)
+    _detail_started = time.perf_counter()
 
     archive, _same_run_late_reprint_redirects, _same_run_late_reprint_report = (
         _repair_recent_late_reprint_archive_duplicates(
@@ -34424,6 +34469,8 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["late_reprint_same_run_final_barrier"] = (
         _same_run_late_reprint_report
     )
+    _runtime_timing_detail("write_archives same-run late-reprint barrier", _detail_started)
+    _detail_started = time.perf_counter()
 
     # FINAL production enforcement: run canonical cleanup again after every page
     # has been considered.  The pre-write cleanup cannot see a duplicate created in
@@ -34433,6 +34480,8 @@ def write_archives(all_categories, top_cat):
         archive, articles_dir, OUTPUT_DIR
     )
     _canonical_redirects.extend(_same_run_canonical_redirects)
+    _runtime_timing_detail("write_archives final canonical cleanup", _detail_started)
+    _detail_started = time.perf_counter()
 
     # Explicit source-retirement tombstones run after normal identity cleanup so
     # confirmed stale republications cannot remain recoverable simply because they
@@ -34442,12 +34491,16 @@ def write_archives(all_categories, top_cat):
         apply_source_retirement_cleanup_to_archive(archive, articles_dir, OUTPUT_DIR)
     )
     _canonical_redirects.extend(_source_retirement_redirects)
+    _runtime_timing_detail("write_archives source-retirement cleanup", _detail_started)
+    _detail_started = time.perf_counter()
 
     # Reapply all cumulative redirects now, then build archive/RSS/sitemaps only from
     # the cleaned canonical archive.
     archive, _redirect_verification = enforce_canonical_redirects(
         archive, articles_dir, OUTPUT_DIR, current_run_redirects=_canonical_redirects
     )
+    _runtime_timing_detail("write_archives enforce canonical redirects", _detail_started)
+    _detail_started = time.perf_counter()
     # New pages are appended after the initial quarantine cleanup. A stale cached
     # editorial decision must not be able to reintroduce a quarantined story ID in
     # that interval. Revoke again at the final write barrier, then allow the normal
@@ -34473,6 +34526,8 @@ def write_archives(all_categories, top_cat):
         archive, OUTPUT_DIR
     )
     validate_archive_incident_uniqueness(archive, OUTPUT_DIR)
+    _runtime_timing_detail("write_archives final archive authority+integrity audits", _detail_started)
+    _detail_started = time.perf_counter()
 
     # Forward semantic decisions occur after the pre-publication consolidation pass.
     # Apply their story-ID aliases before reports are written so a material update
@@ -34504,6 +34559,8 @@ def write_archives(all_categories, top_cat):
     _semantic_gate_report["summary"]["registry_aliases_written"] = int(
         _semantic_registry_consolidation.get("aliases_written", 0) or 0
     )
+    _runtime_timing_detail("write_archives post-forward semantic registry consolidation", _detail_started)
+    _detail_started = time.perf_counter()
 
     recover_recent_archive_source_images(archive, articles_dir, max_age_days=3)
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
@@ -34575,6 +34632,8 @@ def write_archives(all_categories, top_cat):
         "authority violation(s)"
     )
     print(f"  Archived {new_count} new, updated {updated_count} existing ({len(archive)} total)")
+    _runtime_timing_detail("write_archives reports+artifact writes", _detail_started)
+    _runtime_timing_detail("write_archives TOTAL", _write_archives_started)
     return regression_report
 
 
@@ -38941,15 +39000,20 @@ def main():
 
     # Archive first — creates all article pages and populates archive.json so the
     # homepage grid can link to permalinks that actually exist with matching slugs.
+    _detail_started = time.perf_counter()
     _current_regression_report = write_archives(all_categories, top_cat)
+    _runtime_timing_detail("archive stage write_archives", _detail_started)
+    _detail_started = time.perf_counter()
     _validate_promoted_material_updates_committed(OUTPUT_DIR)
     apply_custom_retirements_to_archive(OUTPUT_DIR)
+    _runtime_timing_detail("archive stage promoted-update+custom-retirement gates", _detail_started)
 
     # Publication identity reconciliation can remove duplicate archive rows and turn
     # their old article files into redirects.  The initial permalink-binding pass ran
     # before that reconciliation, so category heroes/cards may still reference a slug
     # that has just been consolidated.  Reload the canonical archive and rebind every
     # existing live placement by persistent story ID before the integrity gate runs.
+    _detail_started = time.perf_counter()
     _canonical_archive = load_archive(_archive_path)
     _validate_persistent_story_identity_integrity(_canonical_archive, OUTPUT_DIR)
     _post_publication_rebound = _rebind_live_items_to_published_archive(
@@ -38963,6 +39027,8 @@ def main():
             "  Post-publication permalink binding verified "
             f"{_post_publication_rebound} canonical placement(s)"
         )
+    _runtime_timing_detail("archive stage persistent identity validation+live rebind", _detail_started)
+    _detail_started = time.perf_counter()
 
     _apply_article_image_overrides_to_categories(all_categories, top_cat)
 
@@ -38976,8 +39042,12 @@ def main():
         OUTPUT_DIR,
         current_customs=custom_articles,
     )
+    _runtime_timing_detail("archive stage custom placement+publication receipt reconciliation", _detail_started)
+    _detail_started = time.perf_counter()
     validate_forward_live_identity(all_categories, top_cat, OUTPUT_DIR)
     validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
+    _runtime_timing_detail("archive stage forward-live identity+permalink validation", _detail_started)
+    _detail_started = time.perf_counter()
     # These final-surface contracts intentionally load the persisted publication
     # identity index themselves.  The index built inside write_archives() is local
     # to that function and must never leak into main() as an undeclared variable.
@@ -38992,6 +39062,8 @@ def main():
     # Reselection can promote a card and demote the former hero. Canonicalize once
     # more so every resulting placement still points directly at its final owner.
     canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
+    _runtime_timing_detail("archive stage canonical surface+hero freshness reconciliation", _detail_started)
+    _detail_started = time.perf_counter()
 
     # Re-run enforced topic contracts after canonical rebinding. A final canonical
     # mutation may change the visible story, but it may never bypass the category
@@ -39013,6 +39085,8 @@ def main():
                     for row in _final_topic_repair_second.get("rejections", [])[:5]
                 )
             )
+    _runtime_timing_detail("archive stage final topic-category integrity", _detail_started)
+    _detail_started = time.perf_counter()
 
     # Canonical rebinding is intentionally late and can replace a live object with
     # persisted archive metadata. Re-run the county authority repair *after* that
@@ -39037,10 +39111,13 @@ def main():
                 f"{len(_final_county_repair_second['rejections'])} additional "
                 "placement(s) after recovery"
             )
+    _runtime_timing_detail("archive stage final county membership authority", _detail_started)
+    _detail_started = time.perf_counter()
 
     ensure_final_live_visual_images(all_categories, top_cat, OUTPUT_DIR)
     validate_live_county_membership_authority(all_categories, top_cat, OUTPUT_DIR)
     validate_live_category_canonical_uniqueness(all_categories, top_cat, OUTPUT_DIR)
+    _runtime_timing_detail("archive stage final image+live-surface validations", _detail_started)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
     _current_gate_passed = bool((_current_regression_report or {}).get("production_gate_passed", False))
