@@ -7,7 +7,10 @@ PARTNER_PAGE = ROOT / "partners" / "treasure-coast-community-news.html"
 def test_tccn_partner_page_is_true_marketing_landing_page():
     page = PARTNER_PAGE.read_text()
     assert 'data-partner-offer="treasure-coast-community-news"' in page
-    assert 'A special introductory offer, just for you.' in page
+    assert "We've got your first month covered." in page
+    assert 'A special introductory offer, just for you.' not in page
+    assert 'class="partner-offer-title"' in page
+    assert 'font-size: clamp(2rem, 9.2vw, 2.45rem);' in page
     assert 'Treasure Coast Community News member offer' in page
     assert 'https://www.facebook.com/groups/188814797289161/' in page
     assert '<span class="membership-price-dollar">FREE</span>' in page
