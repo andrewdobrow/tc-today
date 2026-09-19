@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-19T18:55:55Z",
+  "generated_at": "2026-09-19T21:51:03Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 2,
-    "placements_after": 2,
+    "placements_before": 6,
+    "placements_after": 6,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -51,19 +51,20 @@
   "audit": {
     "candidates_processed": 187,
     "routes": {
-      "generate_new": 67,
-      "skip": 120
+      "generate_new": 52,
+      "skip": 134,
+      "update_existing": 1
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 143,
-      "publishable": 42
+      "low_value": 132,
+      "publishable": 53
     },
     "source_classes": {
-      "aggregator": 145,
-      "local_news": 23,
-      "regional_news": 18,
-      "unknown": 1
+      "aggregator": 134,
+      "local_news": 27,
+      "regional_news": 24,
+      "unknown": 2
     },
     "rejected_count": 2,
     "rejected_examples": [
@@ -89,14 +90,27 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 47,
-      "same_event": 140
+      "new_story": 25,
+      "same_event": 162
     },
     "examples": [
       {
         "story_id": "story_013618",
-        "title": "See how empty your Orange County elementary school is - Orlando Sentinel",
-        "event_key": "unknown-event-b3af75e680",
+        "title": "See how empty your Orange County elementary school is - orlandosentinel.com",
+        "event_key": "unknown-event-54d2e65655",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_013704",
+        "title": "Fort Pierce Man Arrested With 4.5 Kilos of Fentanyl - Hoodline",
+        "event_key": "unknown-event-d8c7b54bae",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -109,24 +123,27 @@
         "story_id": "story_013619",
         "title": "Flooding swamps the Acreage as more rain threatens the area this weekend",
         "event_key": "unknown-event-c82e0974d5",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_013620",
-        "title": "As enrollment drops, OCPS ‘definitely looking’ at closing more schools - Orlando Sentinel",
-        "event_key": "unknown-event-1a8036bcea",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "As enrollment drops, OCPS ‘definitely looking’ at closing more schools - orlandosentinel.com",
+        "event_key": "unknown-event-32e17c923c",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -145,14 +162,15 @@
       },
       {
         "story_id": "story_013621",
-        "title": "Martin County governments increase property taxes slightly - Yahoo",
-        "event_key": "unknown-event-c9b5073eb9",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Martin County governments increase property taxes slightly - yahoo.com",
+        "event_key": "unknown-event-70b6dc043b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -199,14 +217,15 @@
       },
       {
         "story_id": "story_013224",
-        "title": "Martin County Varsity Football @ Dr. Joaquin Garcia - maxpreps.com",
-        "event_key": "unknown-event-80d68db2c7",
+        "title": "Martin County Varsity Football @ Dr. Joaquin Garcia - MaxPreps",
+        "event_key": "unknown-event-2972c781dd",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMi3AFBVV95cUxPTk5WWnlCY2ozMlRWTnA0NXVEcnN6RF9QVjZnc1F1MmN0dlNEV2FONHNManlCTUpxU1QyWDVBTVd0MkRfb1J3VFNMM1QxcjhCdjk0dUhCTzdzeDYyZkxDZmR4SWZpOTd1Z0FoTlVTWjJDMmRlbTFJcUN2UnBtcm1CcU9uN01jNGJlby1YYTB6LWJHY1d6TjJ3QmZsX2pHZURVUk03RzRiakdwTGFQRDJXd1Jqem9mSFI2TG94d2syRlN1ZEhQZWNXWUJhVXM2eUpvd0lsLTkxTlU1OTVk",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -254,14 +273,15 @@
       },
       {
         "story_id": "story_013404",
-        "title": "LIVE Treasure Coast high school football: Week 5 FHSAA scores - tcpalm.com",
-        "event_key": "unknown-event-61d1b8b353",
+        "title": "LIVE Treasure Coast high school football: Week 5 FHSAA scores - Treasure Coast News",
+        "event_key": "unknown-event-4d07edfd9e",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -304,19 +324,6 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_013163",
-        "title": "Pasco, Pinellas teachers set to get raises - Tampa Bay Times",
-        "event_key": "unknown-event-073836d598",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -344,9 +351,9 @@
         ]
       },
       {
-        "story_id": "story_013422",
-        "title": "Florida man faces life in 2020 fatal stabbing of Fort Pierce man - Yahoo",
-        "event_key": "unknown-event-bc0b1cc443",
+        "story_id": "story_013269",
+        "title": "DeSantis sets execution of man convicted of killing Florida sheriff’s deputy - Sun Sentinel",
+        "event_key": "unknown-event-f00460f004",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -361,8 +368,22 @@
     "decision_trace_examples": [
       {
         "story_id": "story_013618",
-        "title": "See how empty your Orange County elementary school is - Orlando Sentinel",
-        "event_key": "unknown-event-b3af75e680",
+        "title": "See how empty your Orange County elementary school is - orlandosentinel.com",
+        "event_key": "unknown-event-54d2e65655",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_013704",
+        "title": "Fort Pierce Man Arrested With 4.5 Kilos of Fentanyl - Hoodline",
+        "event_key": "unknown-event-d8c7b54bae",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -376,26 +397,29 @@
         "story_id": "story_013619",
         "title": "Flooding swamps the Acreage as more rain threatens the area this weekend",
         "event_key": "unknown-event-c82e0974d5",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_013620",
-        "title": "As enrollment drops, OCPS ‘definitely looking’ at closing more schools - Orlando Sentinel",
-        "event_key": "unknown-event-1a8036bcea",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "As enrollment drops, OCPS ‘definitely looking’ at closing more schools - orlandosentinel.com",
+        "event_key": "unknown-event-32e17c923c",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -415,15 +439,16 @@
       },
       {
         "story_id": "story_013621",
-        "title": "Martin County governments increase property taxes slightly - Yahoo",
-        "event_key": "unknown-event-c9b5073eb9",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Martin County governments increase property taxes slightly - yahoo.com",
+        "event_key": "unknown-event-70b6dc043b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -473,15 +498,16 @@
       },
       {
         "story_id": "story_013224",
-        "title": "Martin County Varsity Football @ Dr. Joaquin Garcia - maxpreps.com",
-        "event_key": "unknown-event-80d68db2c7",
+        "title": "Martin County Varsity Football @ Dr. Joaquin Garcia - MaxPreps",
+        "event_key": "unknown-event-2972c781dd",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMi3AFBVV95cUxPTk5WWnlCY2ozMlRWTnA0NXVEcnN6RF9QVjZnc1F1MmN0dlNEV2FONHNManlCTUpxU1QyWDVBTVd0MkRfb1J3VFNMM1QxcjhCdjk0dUhCTzdzeDYyZkxDZmR4SWZpOTd1Z0FoTlVTWjJDMmRlbTFJcUN2UnBtcm1CcU9uN01jNGJlby1YYTB6LWJHY1d6TjJ3QmZsX2pHZURVUk03RzRiakdwTGFQRDJXd1Jqem9mSFI2TG94d2syRlN1ZEhQZWNXWUJhVXM2eUpvd0lsLTkxTlU1OTVk",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -532,15 +558,16 @@
       },
       {
         "story_id": "story_013404",
-        "title": "LIVE Treasure Coast high school football: Week 5 FHSAA scores - tcpalm.com",
-        "event_key": "unknown-event-61d1b8b353",
+        "title": "LIVE Treasure Coast high school football: Week 5 FHSAA scores - Treasure Coast News",
+        "event_key": "unknown-event-4d07edfd9e",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -590,20 +617,6 @@
         ]
       },
       {
-        "story_id": "story_013163",
-        "title": "Pasco, Pinellas teachers set to get raises - Tampa Bay Times",
-        "event_key": "unknown-event-073836d598",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_013268",
         "title": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy",
         "event_key": "named-person-death:supreme-court",
@@ -619,9 +632,9 @@
         ]
       },
       {
-        "story_id": "story_013422",
-        "title": "Florida man faces life in 2020 fatal stabbing of Fort Pierce man - Yahoo",
-        "event_key": "unknown-event-bc0b1cc443",
+        "story_id": "story_013269",
+        "title": "DeSantis sets execution of man convicted of killing Florida sheriff’s deputy - Sun Sentinel",
+        "event_key": "unknown-event-f00460f004",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -634,9 +647,9 @@
         ]
       },
       {
-        "story_id": "story_009637",
-        "title": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WPTV",
-        "event_key": "unknown-event-2380d8520f",
+        "story_id": "story_013422",
+        "title": "Florida man faces life in 2020 fatal stabbing of Fort Pierce man - yahoo.com",
+        "event_key": "unknown-event-d9c92c34d2",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -653,54 +666,91 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
-    "high_confidence_candidate_count": 0,
+    "candidate_count": 2,
+    "high_confidence_candidate_count": 1,
     "unanchored_candidate_suppressed_count": 0,
     "current_relationships": {
-      "new_story": 1
+      "new_story": 2
     },
     "milestones": {
-      "court_action": 1
+      "arrest": 2
     },
     "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1,
+      "agency_match": 2,
+      "entity_match": 2,
+      "event_type_match": 1,
+      "identity_anchor_qualified": 2,
+      "location_match": 2,
+      "novel_milestone": 2,
       "title_continuity": 1
     },
     "examples": [
       {
-        "headline": "Execution set Oct. 20 for man convicted of killing Indian River deputy in 1986 - Sebastian Daily",
-        "event_key": "unknown-event-439d6b0a33",
-        "current_story_id": "story_013661",
+        "headline": "SWAT, negotiators respond to armed subject in Palm City - WPEC",
+        "event_key": "traffic-crash-palm-city-dd80db3320",
+        "current_story_id": "story_013708",
         "current_relationship": "new_story",
-        "candidate_story_id": "story_006502",
-        "candidate_confidence": 0.644444,
+        "candidate_story_id": "story_006623",
+        "candidate_confidence": 0.78,
         "candidate_milestones": [
-          "court_action"
+          "arrest"
         ],
         "candidate_reason_codes": [
           "novel_milestone",
           "location_match",
+          "agency_match",
+          "event_type_match",
+          "entity_match",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_006623",
+          "Novel milestones: arrest",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.00",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: True",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.78"
+        ]
+      },
+      {
+        "headline": "Port St. Lucie woman accused of elder exploitation, including draining $100K from accounts - WPBF",
+        "event_key": "unknown-event-be8ffabfc0",
+        "current_story_id": "story_013709",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_001880",
+        "candidate_confidence": 0.736364,
+        "candidate_milestones": [
+          "arrest"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
           "entity_match",
           "title_continuity",
           "identity_anchor_qualified"
         ],
         "candidate_trace": [
           "Follow-up candidate mode: observe_only",
-          "Candidate story: story_006502",
-          "Novel milestones: court_action",
+          "Candidate story: story_001880",
+          "Novel milestones: arrest",
           "Exact event-key anchor: False",
           "Facts overlap: 0.00",
-          "Title overlap: 0.44",
+          "Title overlap: 0.36",
           "Location match: True",
-          "Agency match: False",
+          "Agency match: True",
           "Event type match: False",
           "Entity match: True",
           "Agency conflict: False",
           "Event type conflict: False",
-          "Candidate confidence: 0.64"
+          "Candidate confidence: 0.74"
         ]
       }
     ],
@@ -710,9 +760,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1502,
-      "timeline_entries_examined": 4323,
-      "transitions_examined": 2637,
+      "stories_with_timelines": 1507,
+      "timeline_entries_examined": 4338,
+      "transitions_examined": 2654,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 35,
       "high_confidence_candidate_count": 13,
@@ -761,7 +811,7 @@
         },
         {
           "story_id": "story_012823",
-          "story_title": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation",
+          "story_title": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation - WPTV",
           "milestones": [
             "arrest"
           ],
@@ -1079,7 +1129,7 @@
       "incoherent_story_count": 11,
       "incoherent_stories": [
         {
-          "story_id": "story_013579",
+          "story_id": "story_013666",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "transition_count": 4,
           "blocking_reasons": {
@@ -1090,7 +1140,7 @@
               "prior_article": {
                 "article_id": "rss-0fa7f462af9493dddb4f",
                 "event_key": "unknown-event-c646e89208",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "Latest Martin County Animal Hoarding Case Sends Homeowner To Jail - 1290 WJNO",
                 "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRCNEg0ang3d1hIOFowdDFTS0xxRnRNY25zUEdHa1NUMmpXUTFHWVZqS1dNNHBxX0JuRFpOMzhzUjVOUG9ueEtkRGFCdmJCVVFwVjBaUm9TUjJYZFB0SXFYS21MUldjM3dJUWZLM0lSSHlwV2puM3VtbkRPLXR6ZEV2QnNuNWdTbUFfT1MxUHlJal84NF9XbFVWWG1GS1l0aW1WWlQ1aUx2ZWZOLTNDaE4yNmlKeko4c0hUQ2RxaU8tZGlWMkNLUFJfMA?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRCNEg0ang3d1hIOFowdDFTS0xxRnRNY25zUEdHa1NUMmpXUTFHWVZqS1dNNHBxX0JuRFpOMzhzUjVOUG9ueEtkRGFCdmJCVVFwVjBaUm9TUjJYZFB0SXFYS21MUldjM3dJUWZLM0lSSHlwV2puM3VtbkRPLXR6ZEV2QnNuNWdTbUFfT1MxUHlJal84NF9XbFVWWG1GS1l0aW1WWlQ1aUx2ZWZOLTNDaE4yNmlKeko4c0hUQ2RxaU8tZGlWMkNLUFJfMA?oc=5"
@@ -1098,7 +1148,7 @@
               "newer_article": {
                 "article_id": "rss-112863fba50d7fc38b4a",
                 "event_key": "unknown-event-51db3617a4",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "Florida woman charged with animal cruelty after nearly 100 animals rescued from home - The Independent",
                 "source": "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
                 "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQSG9FMmZna3FqaXZDVzNUQmFpVW5UNEFfMnJ3Sk8zNTk3UTVQQTdabDhWT0c0VkpLV2gtNlpCOXRHMm5aQVVvd3VuUWxiN3FNa2VQUlFqejdiLVNNcWZqakprQUtzVmhMaDN3N04yX21PaEt6Slg4NDExTVRLOVpsbTVhM2RyRFBySWgtaTE1amdzdWxXeWRoaQ?oc=5"
@@ -1115,7 +1165,7 @@
               "prior_article": {
                 "article_id": "rss-15169d540a7faeb9573f",
                 "event_key": "unknown-event-f85be253f7",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "'Worst Animal Hoarding' Case In Martin County Grows Even Larger - NewsRadio WFLA",
                 "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQNFQxOUp3Q2o4X0UzVVNMZDBVWGFCdmxsVkhaQlh3MkJsTGMzZ0pVWHo3ZkNqaVdreXB6SVNoRjZZMHpYY3dlRnB5U2lQdDlYVlZHMFJodEpraXpURUhNX3VxSldkN29XWV9BSDBia1Z6NnZmb2xpRDItaVZUd0RCUE4yTThNcDZMVE1WcVo3VnVHRTdTWlhBY0RpWXlmX0ZtTkl5VjJ2SFYwTUE0d2lGUU1pR0h0ZlhVSmY5cUhkZGR0U01LZGZaY1VfNA?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQNFQxOUp3Q2o4X0UzVVNMZDBVWGFCdmxsVkhaQlh3MkJsTGMzZ0pVWHo3ZkNqaVdreXB6SVNoRjZZMHpYY3dlRnB5U2lQdDlYVlZHMFJodEpraXpURUhNX3VxSldkN29XWV9BSDBia1Z6NnZmb2xpRDItaVZUd0RCUE4yTThNcDZMVE1WcVo3VnVHRTdTWlhBY0RpWXlmX0ZtTkl5VjJ2SFYwTUE0d2lGUU1pR0h0ZlhVSmY5cUhkZGR0U01LZGZaY1VfNA?oc=5"
@@ -1123,7 +1173,7 @@
               "newer_article": {
                 "article_id": "rss-1b2aa399ba0d0bbae1ee",
                 "event_key": "unknown-event-6131adfdb0",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
                 "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5"
@@ -1140,7 +1190,7 @@
               "prior_article": {
                 "article_id": "rss-1b2aa399ba0d0bbae1ee",
                 "event_key": "unknown-event-6131adfdb0",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
                 "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5"
@@ -1148,7 +1198,7 @@
               "newer_article": {
                 "article_id": "rss-22b61d22ed36fb88ceac",
                 "event_key": "unknown-event-e4849eae1a",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "24 dogs rescued after WPTV investigation into suspected animal hoarding at Martin County home",
                 "source": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case",
                 "url": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case"
@@ -1165,7 +1215,7 @@
               "prior_article": {
                 "article_id": "rss-f73ab80137800f8bc205",
                 "event_key": "unknown-event-2885449095",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "Florida officials rescue nearly 100 cats, dogs hoarded by postal worker - Orlando Sentinel",
                 "source": "https://news.google.com/rss/search?q=martin+county+sheriff+arrest+charged+when:2d&hl=en-US&gl=US&ceid=US:en",
                 "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPaHA0cEJ3TnM2cDhldm4zeGItVlpPY3otRmhqQVIwVFlMdDdTZ0JoS0hJUEdUQmlEVE0tNUxfVEIxakZwT29qTEx3ZUFrQ2tETE5ZNEJNcnJMSGJlcC1WalRfWmVRbXpwY2hIOFRKYm9ZYU80STlHWFhWMHd4ZHllakJ0R2k3RjRRdDAxa0t1Z3lLNkNiYmxVSnZLdWp0dTZtRDhOa3RsaXZSN3JmWHBlamNvQ0g?oc=5"
@@ -1173,7 +1223,7 @@
               "newer_article": {
                 "article_id": "rss-f9481026b2d9405ea8e9",
                 "event_key": "animal-rescue-stuart-cats",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "Cages, filth, feces: 92 cats and dogs rescued from Stuart home, 5 owners identified - WPBF",
                 "source": "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
                 "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNZHNTQkVURHo5bFFiN1FzaTNndlVNWXhDcVdMVDd1UEk5WXpRMkEtc1h1MTVXTkl4OVoxWDViRGtWbkZaSUtLc1R5Ymg1bXIwaWZPNWJuM1VOaFdDYjNOdC10MWdhajBZVnQ3WlZ4bWpMc1NKSElLeGtFRVNZVTRsdDFqSDBQYk9Y?oc=5"
@@ -1566,7 +1616,7 @@
           ]
         },
         {
-          "story_id": "story_013582",
+          "story_id": "story_013668",
           "story_title": "Palm Beach Co. commissioners approve framework for sheriff's service tax that could affect 700,000 residents",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1577,7 +1627,7 @@
               "prior_article": {
                 "article_id": "rss-59714eb64cb59f9a1b5b",
                 "event_key": "unknown-event-e525b70fdd",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "IRC District 2 Commission candidates speak out - Hometown News Treasure Coast",
                 "source": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html",
                 "url": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html"
@@ -1585,7 +1635,7 @@
               "newer_article": {
                 "article_id": "rss-e9f38931816176929d7d",
                 "event_key": "unknown-event-2ed457d20b",
-                "published_at": "2026-09-19T18:35:42.910698+00:00",
+                "published_at": "2026-09-19T21:31:46.202651+00:00",
                 "title": "Palm Beach Co. commissioners approve framework for sheriff's service tax that could affect 700,000 residents",
                 "source": "https://www.wptv.com/news/palm-beach-county/palm-beach-co-commissioners-approve-framework-for-sheriffs-service-tax-that-could-affect-700-000-residents",
                 "url": "https://www.wptv.com/news/palm-beach-county/palm-beach-co-commissioners-approve-framework-for-sheriffs-service-tax-that-could-affect-700-000-residents"
@@ -1619,9 +1669,9 @@
         "timeline_identity_unanchored": 16,
         "weak_title_continuity": 7
       },
-      "excluded_entry_count": 207,
+      "excluded_entry_count": 200,
       "exclusion_reasons": {
-        "insufficient_title_detail": 58,
+        "insufficient_title_detail": 51,
         "low_value_title": 25,
         "social_source": 125
       },
@@ -3585,7 +3635,7 @@
           ]
         },
         {
-          "story_id": "story_013582",
+          "story_id": "story_013668",
           "story_title": "Palm Beach Co. commissioners approve framework for sheriff's service tax that could affect 700,000 residents",
           "milestones": [
             "approval"
@@ -3620,7 +3670,7 @@
           "prior_article": {
             "article_id": "rss-59714eb64cb59f9a1b5b",
             "event_key": "unknown-event-e525b70fdd",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "IRC District 2 Commission candidates speak out - Hometown News Treasure Coast",
             "source": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html",
             "url": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html"
@@ -3628,14 +3678,14 @@
           "newer_article": {
             "article_id": "rss-e9f38931816176929d7d",
             "event_key": "unknown-event-2ed457d20b",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "Palm Beach Co. commissioners approve framework for sheriff's service tax that could affect 700,000 residents",
             "source": "https://www.wptv.com/news/palm-beach-county/palm-beach-co-commissioners-approve-framework-for-sheriffs-service-tax-that-could-affect-700-000-residents",
             "url": "https://www.wptv.com/news/palm-beach-county/palm-beach-co-commissioners-approve-framework-for-sheriffs-service-tax-that-could-affect-700-000-residents"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_013582",
+            "Story: story_013668",
             "Novel milestones: approval",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3716,7 +3766,7 @@
           ]
         },
         {
-          "story_id": "story_013579",
+          "story_id": "story_013666",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
             "identified"
@@ -3754,7 +3804,7 @@
           "prior_article": {
             "article_id": "rss-f73ab80137800f8bc205",
             "event_key": "unknown-event-2885449095",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "Florida officials rescue nearly 100 cats, dogs hoarded by postal worker - Orlando Sentinel",
             "source": "https://news.google.com/rss/search?q=martin+county+sheriff+arrest+charged+when:2d&hl=en-US&gl=US&ceid=US:en",
             "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPaHA0cEJ3TnM2cDhldm4zeGItVlpPY3otRmhqQVIwVFlMdDdTZ0JoS0hJUEdUQmlEVE0tNUxfVEIxakZwT29qTEx3ZUFrQ2tETE5ZNEJNcnJMSGJlcC1WalRfWmVRbXpwY2hIOFRKYm9ZYU80STlHWFhWMHd4ZHllakJ0R2k3RjRRdDAxa0t1Z3lLNkNiYmxVSnZLdWp0dTZtRDhOa3RsaXZSN3JmWHBlamNvQ0g?oc=5"
@@ -3762,14 +3812,14 @@
           "newer_article": {
             "article_id": "rss-f9481026b2d9405ea8e9",
             "event_key": "animal-rescue-stuart-cats",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "Cages, filth, feces: 92 cats and dogs rescued from Stuart home, 5 owners identified - WPBF",
             "source": "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
             "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNZHNTQkVURHo5bFFiN1FzaTNndlVNWXhDcVdMVDd1UEk5WXpRMkEtc1h1MTVXTkl4OVoxWDViRGtWbkZaSUtLc1R5Ymg1bXIwaWZPNWJuM1VOaFdDYjNOdC10MWdhajBZVnQ3WlZ4bWpMc1NKSElLeGtFRVNZVTRsdDFqSDBQYk9Y?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_013579",
+            "Story: story_013666",
             "Novel milestones: identified",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3782,7 +3832,7 @@
           ]
         },
         {
-          "story_id": "story_013579",
+          "story_id": "story_013666",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
             "investigation"
@@ -3819,7 +3869,7 @@
           "prior_article": {
             "article_id": "rss-1b2aa399ba0d0bbae1ee",
             "event_key": "unknown-event-6131adfdb0",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
             "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5",
             "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5"
@@ -3827,14 +3877,14 @@
           "newer_article": {
             "article_id": "rss-22b61d22ed36fb88ceac",
             "event_key": "unknown-event-e4849eae1a",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "24 dogs rescued after WPTV investigation into suspected animal hoarding at Martin County home",
             "source": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case",
             "url": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_013579",
+            "Story: story_013666",
             "Novel milestones: investigation",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3912,7 +3962,7 @@
           ]
         },
         {
-          "story_id": "story_013579",
+          "story_id": "story_013666",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
             "arrest"
@@ -3949,7 +3999,7 @@
           "prior_article": {
             "article_id": "rss-0fa7f462af9493dddb4f",
             "event_key": "unknown-event-c646e89208",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "Latest Martin County Animal Hoarding Case Sends Homeowner To Jail - 1290 WJNO",
             "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRCNEg0ang3d1hIOFowdDFTS0xxRnRNY25zUEdHa1NUMmpXUTFHWVZqS1dNNHBxX0JuRFpOMzhzUjVOUG9ueEtkRGFCdmJCVVFwVjBaUm9TUjJYZFB0SXFYS21MUldjM3dJUWZLM0lSSHlwV2puM3VtbkRPLXR6ZEV2QnNuNWdTbUFfT1MxUHlJal84NF9XbFVWWG1GS1l0aW1WWlQ1aUx2ZWZOLTNDaE4yNmlKeko4c0hUQ2RxaU8tZGlWMkNLUFJfMA?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRCNEg0ang3d1hIOFowdDFTS0xxRnRNY25zUEdHa1NUMmpXUTFHWVZqS1dNNHBxX0JuRFpOMzhzUjVOUG9ueEtkRGFCdmJCVVFwVjBaUm9TUjJYZFB0SXFYS21MUldjM3dJUWZLM0lSSHlwV2puM3VtbkRPLXR6ZEV2QnNuNWdTbUFfT1MxUHlJal84NF9XbFVWWG1GS1l0aW1WWlQ1aUx2ZWZOLTNDaE4yNmlKeko4c0hUQ2RxaU8tZGlWMkNLUFJfMA?oc=5"
@@ -3957,14 +4007,14 @@
           "newer_article": {
             "article_id": "rss-112863fba50d7fc38b4a",
             "event_key": "unknown-event-51db3617a4",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "Florida woman charged with animal cruelty after nearly 100 animals rescued from home - The Independent",
             "source": "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
             "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQSG9FMmZna3FqaXZDVzNUQmFpVW5UNEFfMnJ3Sk8zNTk3UTVQQTdabDhWT0c0VkpLV2gtNlpCOXRHMm5aQVVvd3VuUWxiN3FNa2VQUlFqejdiLVNNcWZqakprQUtzVmhMaDN3N04yX21PaEt6Slg4NDExTVRLOVpsbTVhM2RyRFBySWgtaTE1amdzdWxXeWRoaQ?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_013579",
+            "Story: story_013666",
             "Novel milestones: arrest",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3977,7 +4027,7 @@
           ]
         },
         {
-          "story_id": "story_013579",
+          "story_id": "story_013666",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
             "resolution"
@@ -4014,7 +4064,7 @@
           "prior_article": {
             "article_id": "rss-15169d540a7faeb9573f",
             "event_key": "unknown-event-f85be253f7",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "'Worst Animal Hoarding' Case In Martin County Grows Even Larger - NewsRadio WFLA",
             "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQNFQxOUp3Q2o4X0UzVVNMZDBVWGFCdmxsVkhaQlh3MkJsTGMzZ0pVWHo3ZkNqaVdreXB6SVNoRjZZMHpYY3dlRnB5U2lQdDlYVlZHMFJodEpraXpURUhNX3VxSldkN29XWV9BSDBia1Z6NnZmb2xpRDItaVZUd0RCUE4yTThNcDZMVE1WcVo3VnVHRTdTWlhBY0RpWXlmX0ZtTkl5VjJ2SFYwTUE0d2lGUU1pR0h0ZlhVSmY5cUhkZGR0U01LZGZaY1VfNA?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQNFQxOUp3Q2o4X0UzVVNMZDBVWGFCdmxsVkhaQlh3MkJsTGMzZ0pVWHo3ZkNqaVdreXB6SVNoRjZZMHpYY3dlRnB5U2lQdDlYVlZHMFJodEpraXpURUhNX3VxSldkN29XWV9BSDBia1Z6NnZmb2xpRDItaVZUd0RCUE4yTThNcDZMVE1WcVo3VnVHRTdTWlhBY0RpWXlmX0ZtTkl5VjJ2SFYwTUE0d2lGUU1pR0h0ZlhVSmY5cUhkZGR0U01LZGZaY1VfNA?oc=5"
@@ -4022,14 +4072,14 @@
           "newer_article": {
             "article_id": "rss-1b2aa399ba0d0bbae1ee",
             "event_key": "unknown-event-6131adfdb0",
-            "published_at": "2026-09-19T18:35:42.910698+00:00",
+            "published_at": "2026-09-19T21:31:46.202651+00:00",
             "title": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
             "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5",
             "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_013579",
+            "Story: story_013666",
             "Novel milestones: resolution",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -4051,27 +4101,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1078,
-      "treasure_coast_local": 839,
-      "treasure_coast_region": 375,
-      "unknown": 2299
+      "florida": 1066,
+      "treasure_coast_local": 841,
+      "treasure_coast_region": 374,
+      "unknown": 2284
     },
-    "average_score": 58.82
+    "average_score": 58.9
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1078,
-      "treasure_coast_local": 839,
-      "treasure_coast_region": 375,
-      "unknown": 2299
+      "florida": 1066,
+      "treasure_coast_local": 841,
+      "treasure_coast_region": 374,
+      "unknown": 2284
     },
-    "average_priority": 3.92
+    "average_priority": 3.95
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3606,
-      "developing": 302,
-      "ongoing": 677,
+      "active": 3573,
+      "developing": 297,
+      "ongoing": 689,
       "resolved": 6
     }
   },
@@ -4079,8 +4129,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 8642,
-    "active_stories_after": 8642,
+    "active_stories_before": 8687,
+    "active_stories_after": 8687,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -4105,24 +4155,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 143,
+    "incident_anchor_to_story_count": 147,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-19T18:36:47Z",
-    "quarantined_story_records_retained": 2536,
-    "active_story_count": 8711
+    "generated_at": "2026-09-19T21:32:52Z",
+    "quarantined_story_records_retained": 2556,
+    "active_story_count": 8733
   },
   "stories": {
-    "total": 4591,
+    "total": 4565,
     "importance_levels": {
       "breaking": 5,
-      "high": 106,
-      "normal": 726,
-      "low": 3754,
+      "high": 104,
+      "normal": 729,
+      "low": 3727,
       "archived": 0
     },
-    "average_importance": 9.98,
+    "average_importance": 10.03,
     "top": [
       {
         "story_id": "story_013207",
@@ -4137,7 +4187,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 20.04
+          "age_hours": 22.96
         },
         "level": "high",
         "importance_reasons": [
@@ -4180,7 +4230,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-18T22:44:41.448530+00:00",
-          "hours_since_update": 20.04,
+          "hours_since_update": 22.96,
           "event_count": 25,
           "timeline_entries": 25
         }
@@ -4198,7 +4248,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 45.22
+          "age_hours": 48.15
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4251,7 +4301,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-17T21:28:05.058852+00:00",
-          "hours_since_update": 45.22,
+          "hours_since_update": 48.15,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -4269,7 +4319,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 140.42
+          "age_hours": 143.36
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4329,7 +4379,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-13T22:16:14.414876+00:00",
-          "hours_since_update": 140.42,
+          "hours_since_update": 143.36,
           "event_count": 48,
           "timeline_entries": 35
         }
@@ -4347,7 +4397,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 39.9
+          "age_hours": 42.84
         },
         "level": "high",
         "importance_reasons": [
@@ -4390,7 +4440,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-18T02:46:44.737578+00:00",
-          "hours_since_update": 39.9,
+          "hours_since_update": 42.84,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4408,7 +4458,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 31.92
+          "age_hours": 34.86
         },
         "level": "high",
         "importance_reasons": [
@@ -4451,7 +4501,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-18T10:43:58.186547+00:00",
-          "hours_since_update": 31.92,
+          "hours_since_update": 34.86,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4469,7 +4519,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 31.96
+          "age_hours": 34.89
         },
         "level": "high",
         "importance_reasons": [
@@ -4512,7 +4562,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-18T10:43:58.186547+00:00",
-          "hours_since_update": 31.96,
+          "hours_since_update": 34.89,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4530,7 +4580,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 31.94
+          "age_hours": 34.87
         },
         "level": "high",
         "importance_reasons": [
@@ -4574,7 +4624,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-18T10:43:58.186547+00:00",
-          "hours_since_update": 31.94,
+          "hours_since_update": 34.87,
           "event_count": 10,
           "timeline_entries": 10
         }
@@ -4592,7 +4642,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 15.92
+          "age_hours": 18.85
         },
         "level": "high",
         "importance_reasons": [
@@ -4635,7 +4685,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-19T02:47:55.970905+00:00",
-          "hours_since_update": 15.92,
+          "hours_since_update": 18.85,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4653,7 +4703,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 19.96
+          "age_hours": 22.9
         },
         "level": "high",
         "importance_reasons": [
@@ -4692,7 +4742,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-18T22:44:41.448530+00:00",
-          "hours_since_update": 19.96,
+          "hours_since_update": 22.9,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4710,7 +4760,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 64.98
+          "age_hours": 67.92
         },
         "level": "high",
         "importance_reasons": [
@@ -4753,7 +4803,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-17T01:43:15.467232+00:00",
-          "hours_since_update": 64.98,
+          "hours_since_update": 67.92,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4771,7 +4821,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 31.97
+          "age_hours": 34.9
         },
         "level": "high",
         "importance_reasons": [
@@ -4815,7 +4865,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-18T10:43:58.186547+00:00",
-          "hours_since_update": 31.97,
+          "hours_since_update": 34.9,
           "event_count": 6,
           "timeline_entries": 6
         }
@@ -4833,7 +4883,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.18
+          "age_hours": 3.1
         },
         "level": "high",
         "importance_reasons": [
@@ -4887,84 +4937,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-19T18:35:42.910698+00:00",
-          "hours_since_update": 0.18,
+          "hours_since_update": 3.1,
           "event_count": 9,
           "timeline_entries": 8
         }
       },
       {
-        "story_id": "story_013577",
-        "title": "Crash blocks right lane on I-95 North in St. Lucie County near Exit 131 - cbs12.com",
-        "score": 55,
-        "editorial_priority": 62,
-        "editorial_score": 62,
-        "score_breakdown": {
-          "score": 62,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 0.11
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Stuart",
-            "Port St. Lucie",
-            "Fort Pierce",
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 9,
-        "timeline_entries": 5,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 5,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-19T18:35:42.910698+00:00",
-          "hours_since_update": 0.11,
-          "event_count": 9,
-          "timeline_entries": 5
-        }
-      },
-      {
-        "story_id": "story_013585",
+        "story_id": "story_013671",
         "title": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -5027,14 +5006,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-19T18:35:42.910698+00:00",
+          "last_updated": "2026-09-19T21:31:46.202651+00:00",
           "hours_since_update": 0.06,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_013605",
+        "story_id": "story_013688",
         "title": "Flood Advisory for Martin, Okeechobee & St. Lucie County - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -5096,14 +5075,14 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-19T18:35:42.910698+00:00",
+          "last_updated": "2026-09-19T21:31:46.202651+00:00",
           "hours_since_update": 0.11,
           "event_count": 5,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_013609",
+        "story_id": "story_013692",
         "title": "St. Lucie County deputies seek 16-year-old who has been missing for almost a month - cbs12.com",
         "score": 55,
         "editorial_priority": 62,
@@ -5163,14 +5142,85 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-19T18:35:42.910698+00:00",
+          "last_updated": "2026-09-19T21:31:46.202651+00:00",
           "hours_since_update": 0.11,
           "event_count": 10,
           "timeline_entries": 6
         }
       },
       {
-        "story_id": "story_013611",
+        "story_id": "story_013695",
+        "title": "Crash blocks right lane on I-95 North in St. Lucie County near Exit 131 - cbs12.com",
+        "score": 55,
+        "editorial_priority": 62,
+        "editorial_score": 62,
+        "score_breakdown": {
+          "score": 62,
+          "importance": 55,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 0.17
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Stuart",
+            "Port St. Lucie",
+            "Fort Pierce",
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 9,
+        "timeline_entries": 5,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 5,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-19T21:31:46.202651+00:00",
+          "hours_since_update": 0.17,
+          "event_count": 9,
+          "timeline_entries": 5
+        }
+      },
+      {
+        "story_id": "story_013696",
         "title": "Aerial video shows Riviera Beach man running red lights, fleeing deputies in Martin County - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -5230,7 +5280,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-19T18:35:42.910698+00:00",
+          "last_updated": "2026-09-19T21:31:46.202651+00:00",
           "hours_since_update": 0.11,
           "event_count": 4,
           "timeline_entries": 4
@@ -5249,7 +5299,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 530.22
+          "age_hours": 533.15
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5303,7 +5353,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 530.22,
+          "hours_since_update": 533.15,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -5321,7 +5371,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 430.68
+          "age_hours": 433.61
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5374,7 +5424,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 430.68,
+          "hours_since_update": 433.61,
           "event_count": 17,
           "timeline_entries": 17
         }
@@ -5392,7 +5442,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 15.99
+          "age_hours": 18.9
         },
         "level": "normal",
         "importance_reasons": [
@@ -5425,12 +5475,12 @@
         "event_count": 2,
         "timeline_entries": 2,
         "relationship_decisions": 0,
-        "canonical_source_candidates": 4,
+        "canonical_source_candidates": 5,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-19T02:47:55.970905+00:00",
-          "hours_since_update": 15.99,
+          "hours_since_update": 18.9,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -5440,7 +5490,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-19T18:47:49Z",
+    "generated_at": "2026-09-19T21:42:49Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5457,27 +5507,24 @@
       "statuses": {
         "cache_hit": 1,
         "category_eligibility_archive_recovery": 4,
-        "generation_failed_archive_recovery": 1,
-        "quality_gate_archive_recovery": 3
+        "generated_live": 4
       },
       "failures": {
-        "contextless_update_lead": 1,
-        "no_category_eligible_sources": 4,
-        "publication_quality_rejected": 3
+        "no_category_eligible_sources": 4
       },
-      "model_attempt_count": 5,
-      "model_elapsed_seconds": 61.134,
-      "archive_recovery_requested_count": 8,
+      "model_attempt_count": 4,
+      "model_elapsed_seconds": 51.07,
+      "archive_recovery_requested_count": 4,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 3,
+      "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "published_story_duplicate_suppression_count": 43,
-      "story_aware_update_context_count": 2,
-      "material_update_promotion_evaluation_count": 11,
+      "category_eligibility_rejection_count": 2,
+      "published_story_duplicate_suppression_count": 40,
+      "story_aware_update_context_count": 3,
+      "material_update_promotion_evaluation_count": 12,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 7,
-      "material_update_promotion_model_call_count": 4
+      "material_update_promotion_cache_hit_count": 9,
+      "material_update_promotion_model_call_count": 3
     },
     "categories": [
       {
@@ -5486,7 +5533,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 26,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 7,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5560,12 +5607,12 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Vero Beach Regional Airport adding 500-space parking lot, but free parking is going away - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-regional-airport-adding-500-space-parking-lot-but-free-parking-is-going-away",
+            "source_headline": "Vero Beach Regional Airport adding 500-space parking lot, but free parking is going away - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/17/vero-beach-regional-airport-adding-500-space-parking-lot-free-parking-is-going-away?outputType=amp",
             "editorial_story_id": "story_013007",
             "canonical_slug": "2026-09-17-vero-beach-regional-airport-adding-500-space-parking-lot-ending-free-parking",
             "canonical_headline": "Vero Beach Regional Airport adding 500-space parking lot, ending free parking",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -5687,12 +5734,12 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Vero Beach Regional Airport adding 500-space parking lot, but free parking is going away - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-regional-airport-adding-500-space-parking-lot-but-free-parking-is-going-away",
+            "source_headline": "Vero Beach Regional Airport adding 500-space parking lot, but free parking is going away - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/17/vero-beach-regional-airport-adding-500-space-parking-lot-free-parking-is-going-away?outputType=amp",
             "canonical_slug": "2026-09-17-vero-beach-regional-airport-adding-500-space-parking-lot-ending-free-parking",
             "canonical_headline": "Vero Beach Regional Airport adding 500-space parking lot, ending free parking",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5702,40 +5749,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 25.445
+        "elapsed_seconds": 19.169
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 6,
-        "selected_source_count": 2,
+        "status": "generated_live",
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 7,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.04,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: new_development_missing — Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - cbs12.com"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 20.494,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: new_development_missing — Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - cbs12.com"
+            "elapsed_seconds": 9.248,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 34.534,
-        "failure_code": "contextless_update_lead",
-        "failure_summary": "Contextless update lead for hero: new_development_missing — Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - cbs12.com",
+        "model_elapsed_seconds": 9.248,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5744,11 +5781,50 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 2,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "SWAT, negotiators respond to armed subject in Palm City - WPEC",
+            "source_url": "https://cbs12.com/news/local/swat-negotiators-respond-to-armed-subject-in-palm-city"
+          },
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Port St. Lucie woman accused of elder exploitation, including draining $100K from accounts - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-caregiver-accused-of-elder-exploitation-in-port-st-lucie/73802541"
+          }
+        ],
         "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Fort Pierce man arrested after raid of illicit drugs worth millions - WPBF",
+            "source_url": "https://www.wpbf.com/article/fort-pierce-man-arrested-after-raid-of-illicit-drugs-worth-millions/73795465",
+            "editorial_story_id": "story_013478",
+            "canonical_slug": "2026-09-18-fort-pierce-man-arrested-after-raid-seizes-fentanyl-cocaine-worth-millions",
+            "canonical_headline": "Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Two men arrested after road rage incident leads to shooting in Port St. Lucie - WPBF",
@@ -5761,7 +5837,17 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "'Road rage' leads to shooting in Port St. Lucie, police say - tcpalm.com",
+            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - WPEC",
+            "source_url": "https://cbs12.com/newsletter-daily/governor-ron-desantis-signs-death-warrant-william-reaves-who-killed-indian-river-county-deputy-richard-raczowski-1986-18th-death-warrant-year-florida-execution-stay-filed",
+            "editorial_story_id": "story_007016",
+            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "'Road rage' leads to shooting in Port St. Lucie, police say - Treasure Coast News",
             "source_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQM0FIUW54dVdaVk9UZUVtRTB5b3F2RGpjUnFCYjl0NldXX1Y0U3l4Y244d3ZGOHU5MkVhbHQ2eXMwdktnQ2g3a3JsRk16T1R6bVJLZFFmOF9lZ0VBLUpNQWRNZGN5YldwSFgxTmxxc2dtVmlfdTF6dnRpU3dyNmNFQzc5Mm5XMU9sdFlvNDZUNFhMQjRuc2FZd0Jic0xsakxOWE1YcWZRLTFyT3ZIYXEtSGJqcElfUE1MaU1WaVZuaXhQM014dVJYY2dpUDduc1lmaXhWdF9nbVAzMHNUemFudzVNWjBFZUxudWZvOEo2UQ",
             "editorial_story_id": "story_013276",
             "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
@@ -5771,37 +5857,17 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "More Than 50 Arrests Made In Human Trafficking Investigation Titled 'Operation Late Checkout' - NewsRadio WFLA",
-            "source_url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxNZ0doUnl6ZkhxY0c3RTJjYlZIMzBLbXFkcjBYSUxJUXRHM2V2SnRtMy15VE5ReXNSbVhteUFBQ1NoNlpJRVkza3FGWWtsWFVoRWhzS1NaNm9GWHBEUGdqLXZjbWtuaUdNVzh4eTNkZWxxVTJTTGk0QXlNd2RkQzVXRFJiNE8xdnY0Y2gzd1llbjJ3N1Mza2JEQUZfTllCRmZWUFZQTkpFWVRteklXQnk3a1EzN09NTWlPUXBqTFd3ZC0yTVprWlNzQ3FaV0xvbnU5RWV1X0xFS2dlem9sbWZSQTB1bDdXN2dOOVY4Y1JnVzU4ZE0",
-            "editorial_story_id": "story_012823",
-            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
-            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
-            "basis": "authorized_canonical_identity_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/florida-governor-signs-death-warrant-for-william-reaves-jr-convicted-of-killing-indian-river-county-deputy",
-            "editorial_story_id": "story_013268",
-            "canonical_slug": "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county",
-            "canonical_headline": "Execution date set for Oct. 27 for killer of Indian River County deputy",
+            "source_headline": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - WPEC",
+            "source_url": "https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
+            "editorial_story_id": "story_013409",
+            "canonical_slug": "2026-09-18-vandrell-jacobs-sentenced-to-10-years-for-vero-beach-orangewood-apartments-shoot",
+            "canonical_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "crime",
-            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - cbs12.com",
-            "source_url": "https://cbs12.com/news/local/governor-ron-desantis-signs-death-warrant-william-reaves-who-killed-indian-river-county-deputy-richard-raczowski-1986-18th-death-warrant-year-florida-execution-stay-filed",
-            "editorial_story_id": "story_007016",
-            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
-            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - cbs12.com",
+            "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-road-rage-incident-2-men-arrested-fight-escalates-shooting-shot-wrist-legs-gunfire-treasure-coast-hca-florida-lawnwood-hospital-st-lucie-county-sheriffs-office-florida-news",
             "editorial_story_id": "story_013276",
             "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
@@ -5811,7 +5877,17 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Port St. Lucie hospital MRI technician accused of sexually assaulting sedated patient - cbs12.com",
+            "source_headline": "Operation Late Checkout targets human trafficking in Indian River County - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-human-trafficking/73781669",
+            "editorial_story_id": "story_012823",
+            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Port St. Lucie hospital MRI technician accused of sexually assaulting sedated patient - WPEC",
             "source_url": "https://cbs12.com/news/crime/florida-crime-news-hospital-mri-technician-accused-of-sexually-assaulting-sedated-patient-hca-florida-st-lucie-hospital-sexual-battery-physically-helpless-incapacitated-victim",
             "editorial_story_id": "story_012902",
             "canonical_slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
@@ -5821,17 +5897,7 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Port St. Lucie MRI technician arrested for felony sexual battery of patient - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-sexual-battery-patient-mri-hospital-tecnhician/73780264",
-            "editorial_story_id": "story_012902",
-            "canonical_slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
-            "canonical_headline": "MRI tech arrested after video, forensic evidence in St. Lucie Hospital assault",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Port St. Lucie police arrest alleged drug dealer using dead man's phone - cbs12.com",
+            "source_headline": "Port St. Lucie police arrest alleged drug dealer using dead man's phone - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-alleged-drug-dealer-using-dead-mans-phone-florida-news-florida-crime-local-news-local-crime-drug-deal-gone-wrong",
             "editorial_story_id": "story_012939",
             "canonical_slug": "2026-09-17-port-st-lucie-police-arrest-fentanyl-dealer-after-texting-him-from-overdose-vict",
@@ -5843,34 +5909,64 @@
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - cbs12.com",
-            "source_url": "https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-09-18-vandrell-jacobs-sentenced-to-10-years-for-vero-beach-orangewood-apartments-shoot",
-            "canonical_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
-            "basis": "exact_source_url",
+            "source_headline": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
+            "basis": "exact_structured_incident_key",
             "identity_keys": [
-              "story:story_013409",
-              "source:https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs"
+              "incident:law-enforcement-operation:late-checkout",
+              "story:story_012823",
+              "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation"
             ],
             "match_confidence": 0.99,
             "evidence_dimensions": [
-              "story",
-              "source"
+              "incident",
+              "story"
             ],
             "decision_trace": [
-              "deterministic_identity_keys=story:story_013409,source:https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
+              "deterministic_identity_keys=incident:law-enforcement-operation:late-checkout,story:story_012823",
               "write_authorized=True"
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 3,
+        "material_update_promotion_evaluation_count": 4,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Fort Pierce man arrested after raid of illicit drugs worth millions - WPBF",
+            "source_url": "https://www.wpbf.com/article/fort-pierce-man-arrested-after-raid-of-illicit-drugs-worth-millions/73795465",
+            "canonical_slug": "2026-09-18-fort-pierce-man-arrested-after-raid-seizes-fentanyl-cocaine-worth-millions",
+            "canonical_headline": "Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 1.0,
+            "shared_anchors": [
+              "Tony Saunders, 48-year-old suspect",
+              "Friday raid at 3100 block of S. 24th Street in Fort Pierce",
+              "St. Lucie County Sheriff's Office and U.S. Marshals Service",
+              "4.5 kilograms of fentanyl seized",
+              "303 grams of cocaine seized",
+              "Exact same source URL (https://www.wpbf.com/article/fort-pierce-man-arrested-after-raid-of-illicit-drugs-worth-millions/73795465)"
+            ],
+            "novel_facts": [],
+            "reason": "This is the exact same article from the same source URL, republished one day later (2026-09-19 vs 2026-09-18). The incoming article contains identical information about the same raid, same suspect, same location, same drug quantities seized. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match'. There are no material updates - no new charges, no court proceedings, no additional arrests, no new findings. This is simply a republication of the original story.",
+            "validation_errors": []
+          },
           {
             "category_key": "crime",
             "source_headline": "Two men arrested after road rage incident leads to shooting in Port St. Lucie - WPBF",
@@ -5882,8 +5978,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -5909,53 +6005,8 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "'Road rage' leads to shooting in Port St. Lucie, police say - tcpalm.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQM0FIUW54dVdaVk9UZUVtRTB5b3F2RGpjUnFCYjl0NldXX1Y0U3l4Y244d3ZGOHU5MkVhbHQ2eXMwdktnQ2g3a3JsRk16T1R6bVJLZFFmOF9lZ0VBLUpNQWRNZGN5YldwSFgxTmxxc2dtVmlfdTF6dnRpU3dyNmNFQzc5Mm5XMU9sdFlvNDZUNFhMQjRuc2FZd0Jic0xsakxOWE1YcWZRLTFyT3ZIYXEtSGJqcElfUE1MaU1WaVZuaXhQM014dVJYY2dpUDduc1lmaXhWdF9nbVAzMHNUemFudzVNWjBFZUxudWZvOEo2UQ",
-            "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-            "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "More Than 50 Arrests Made In Human Trafficking Investigation Titled 'Operation Late Checkout' - NewsRadio WFLA",
-            "source_url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxNZ0doUnl6ZkhxY0c3RTJjYlZIMzBLbXFkcjBYSUxJUXRHM2V2SnRtMy15VE5ReXNSbVhteUFBQ1NoNlpJRVkza3FGWWtsWFVoRWhzS1NaNm9GWHBEUGdqLXZjbWtuaUdNVzh4eTNkZWxxVTJTTGk0QXlNd2RkQzVXRFJiNE8xdnY0Y2gzd1llbjJ3N1Mza2JEQUZfTllCRmZWUFZQTkpFWVRteklXQnk3a1EzN09NTWlPUXBqTFd3ZC0yTVprWlNzQ3FaV0xvbnU5RWV1X0xFS2dlem9sbWZSQTB1bDdXN2dOOVY4Y1JnVzU4ZE0",
-            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
-            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/florida-governor-signs-death-warrant-for-william-reaves-jr-convicted-of-killing-indian-river-county-deputy",
-            "canonical_slug": "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county",
-            "canonical_headline": "Execution date set for Oct. 27 for killer of Indian River County deputy",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - cbs12.com",
-            "source_url": "https://cbs12.com/news/local/governor-ron-desantis-signs-death-warrant-william-reaves-who-killed-indian-river-county-deputy-richard-raczowski-1986-18th-death-warrant-year-florida-execution-stay-filed",
+            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - WPEC",
+            "source_url": "https://cbs12.com/newsletter-daily/governor-ron-desantis-signs-death-warrant-william-reaves-who-killed-indian-river-county-deputy-richard-raczowski-1986-18th-death-warrant-year-florida-execution-stay-filed",
             "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
             "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
             "canonical_is_custom": false,
@@ -5970,16 +6021,17 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "Florida executions",
               "Gov. Ron DeSantis signing death warrants",
-              "Florida State Prison"
+              "Florida State Prison executions",
+              "Florida's execution activity in 2026"
             ],
             "novel_facts": [
-              "William Reaves death warrant signed September 18, 2026",
+              "William Reaves death warrant signed September 19, 2026",
               "Reaves convicted of killing Deputy Richard Raczkowski in 1986",
-              "Execution scheduled for October 2026",
-              "18th death warrant signed by DeSantis in 2026",
-              "Indian River County case"
+              "Execution scheduled for October at Florida State Prison",
+              "Indian River County Sheriff's deputy killed outside Zippy Mart near Vero Beach",
+              "Incident occurred September 23, 1986",
+              "This is DeSantis's 18th death warrant of the year"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -5988,7 +6040,37 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - cbs12.com",
+            "source_headline": "'Road rage' leads to shooting in Port St. Lucie, police say - Treasure Coast News",
+            "source_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQM0FIUW54dVdaVk9UZUVtRTB5b3F2RGpjUnFCYjl0NldXX1Y0U3l4Y244d3ZGOHU5MkVhbHQ2eXMwdktnQ2g3a3JsRk16T1R6bVJLZFFmOF9lZ0VBLUpNQWRNZGN5YldwSFgxTmxxc2dtVmlfdTF6dnRpU3dyNmNFQzc5Mm5XMU9sdFlvNDZUNFhMQjRuc2FZd0Jic0xsakxOWE1YcWZRLTFyT3ZIYXEtSGJqcElfUE1MaU1WaVZuaXhQM014dVJYY2dpUDduc1lmaXhWdF9nbVAzMHNUemFudzVNWjBFZUxudWZvOEo2UQ",
+            "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
+            "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - WPEC",
+            "source_url": "https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
+            "canonical_slug": "2026-09-18-vandrell-jacobs-sentenced-to-10-years-for-vero-beach-orangewood-apartments-shoot",
+            "canonical_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-road-rage-incident-2-men-arrested-fight-escalates-shooting-shot-wrist-legs-gunfire-treasure-coast-hca-florida-lawnwood-hospital-st-lucie-county-sheriffs-office-florida-news",
             "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
             "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
@@ -6003,7 +6085,22 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Port St. Lucie hospital MRI technician accused of sexually assaulting sedated patient - cbs12.com",
+            "source_headline": "Operation Late Checkout targets human trafficking in Indian River County - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-human-trafficking/73781669",
+            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:exact_source_url",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Port St. Lucie hospital MRI technician accused of sexually assaulting sedated patient - WPEC",
             "source_url": "https://cbs12.com/news/crime/florida-crime-news-hospital-mri-technician-accused-of-sexually-assaulting-sedated-patient-hca-florida-st-lucie-hospital-sexual-battery-physically-helpless-incapacitated-victim",
             "canonical_slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
             "canonical_headline": "MRI tech arrested after video, forensic evidence in St. Lucie Hospital assault",
@@ -6018,22 +6115,7 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Port St. Lucie MRI technician arrested for felony sexual battery of patient - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-sexual-battery-patient-mri-hospital-tecnhician/73780264",
-            "canonical_slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
-            "canonical_headline": "MRI tech arrested after video, forensic evidence in St. Lucie Hospital assault",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Port St. Lucie police arrest alleged drug dealer using dead man's phone - cbs12.com",
+            "source_headline": "Port St. Lucie police arrest alleged drug dealer using dead man's phone - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-alleged-drug-dealer-using-dead-mans-phone-florida-news-florida-crime-local-news-local-crime-drug-deal-gone-wrong",
             "canonical_slug": "2026-09-17-port-st-lucie-police-arrest-fentanyl-dealer-after-texting-him-from-overdose-vict",
             "canonical_headline": "Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone",
@@ -6049,31 +6131,32 @@
             "semantic_action": "duplicate_use_existing_canonical",
             "confidence": 1.0,
             "shared_anchors": [
-              "Danilo Jaramillo, 43-year-old arrested for fentanyl trafficking",
-              "Victim Miqueias Oliveira Silva found dead at 700 SE Collins Lane on September 13th",
-              "Police used dead victim's phone to text dealer",
-              "Black Kia Telluride vehicle",
-              "Search at SW Longfellow Road home",
-              "$17,715 in cash seized",
-              "Three firearms found (Smith & Wesson .40 caliber, Ruger LC9, AR-15)",
-              "Same source URL: cbs12.com article"
+              "Danilo Jaramillo, 43, arrested on fentanyl trafficking charges",
+              "Port St. Lucie police used dead overdose victim's phone to arrange drug buy",
+              "Victim Miqueias Oliveira Silva died at 700 SE Collins Lane on September 13th",
+              "Search at Jaramillo's home on SW Longfellow Road",
+              "Three firearms, drugs, and $17,715 in cash found",
+              "Jaramillo drove black Kia Telluride",
+              "Same source URL: cbs12.com"
             ],
             "novel_facts": [],
-            "reason": "This is the exact same article as the existing canonical. The source URLs are identical, and all key facts match perfectly: same suspect (Danilo Jaramillo, 43), same victim (Miqueias Oliveira Silva, 34), same date (September 13th overdose), same addresses (700 SE Collins Lane and SW Longfellow Road), same investigative method (police texting from victim's phone), same seizure amounts ($17,715 cash, three specific firearms), and same charges (fentanyl trafficking). The retrieval evidence confirms this is an exact source match with 'persistent_story_id_match: true'. No new information is present.",
+            "reason": "This is the exact same article from the same source (cbs12.com) covering the same event. The incoming article is actually the full-text version of the canonical candidate. Both describe the identical investigation: Port St. Lucie police finding Miqueias Oliveira Silva dead from overdose on Sept 13, using his phone to text dealer Danilo Jaramillo, arresting him, and finding firearms and $17,715 cash at his SW Longfellow Road home. The incoming article contains no new developments, only the complete original article text that was already published and canonicalized. This is a clear duplicate with no material update.",
             "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 73.336
+        "live_hero_headline": "Indian River County sheriff announces 50+ arrests in Operation Late Checkout",
+        "generated_card_count": 0,
+        "elapsed_seconds": 44.772
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 19,
         "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -6094,7 +6177,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -6135,14 +6218,49 @@
             "canonical_headline": "Vero Beach Regional Airport adding 500-space parking lot, ending free parking",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "editorial_story_id": "story_006022",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
+            "basis": "exact_structured_incident_key",
+            "identity_keys": [
+              "incident:law-enforcement-operation:late-checkout",
+              "story:story_012823",
+              "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "incident",
+              "story"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=incident:law-enforcement-operation:late-checkout,story:story_012823",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
@@ -6203,10 +6321,46 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Martin County approves limited-industrial zoning in Hobe Sound despite some data center concerns",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-limited-industrial-zoning-in-hobe-sound-despite-some-data-center-concerns",
+            "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+            "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.92,
+            "shared_anchors": [
+              "Martin County Commission",
+              "data center concerns raised by residents",
+              "both occurred in 2026"
+            ],
+            "novel_facts": [
+              "Specific rezoning decision on Southeast Powerline Avenue property in Hobe Sound",
+              "3-2 vote approving limited-industrial zoning",
+              "Property owner Bob Reins represented by Gunster law firm",
+              "Commissioner Blake Capps voted against citing data center concerns",
+              "Specific residents named: Steve Addison, Kim Call, Patrick McDonough",
+              "Compromise down from general industrial to limited-industrial",
+              "September 17 commission meeting date"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 19.906
+        "new_publication_stale_rejected_count": 3,
+        "elapsed_seconds": 23.306
       },
       {
         "category_key": "sports",
@@ -6214,7 +6368,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 2,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6244,7 +6398,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 30.236
+        "elapsed_seconds": 15.771
       },
       {
         "category_key": "things_to_do",
@@ -6309,7 +6463,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.972
+        "elapsed_seconds": 16.58
       },
       {
         "category_key": "florida",
@@ -6348,30 +6502,30 @@
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Amendment 3 support at 45% in new poll, below threshold needed to pass",
-        "elapsed_seconds": 34.756
+        "elapsed_seconds": 15.168
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "quality_gate_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 28,
         "fresh_candidate_count": 27,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "publishable_source_count": 3,
+        "selected_source_count": 3,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 7.545,
+            "elapsed_seconds": 11.371,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 7.545,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 11.371,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6380,7 +6534,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 1,
@@ -6437,30 +6591,32 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 34.859
+        "live_hero_headline": "SWAT team safely resolves armed barricade on Southwest Bessey Creek Trail in Palm City",
+        "generated_card_count": 0,
+        "elapsed_seconds": 34.892
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "quality_gate_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 17,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.233,
+            "elapsed_seconds": 14.793,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 6.233,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 14.793,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6469,10 +6625,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 13,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -6506,17 +6662,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "'Road rage' leads to shooting in Port St. Lucie, police say - tcpalm.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQM0FIUW54dVdaVk9UZUVtRTB5b3F2RGpjUnFCYjl0NldXX1Y0U3l4Y244d3ZGOHU5MkVhbHQ2eXMwdktnQ2g3a3JsRk16T1R6bVJLZFFmOF9lZ0VBLUpNQWRNZGN5YldwSFgxTmxxc2dtVmlfdTF6dnRpU3dyNmNFQzc5Mm5XMU9sdFlvNDZUNFhMQjRuc2FZd0Jic0xsakxOWE1YcWZRLTFyT3ZIYXEtSGJqcElfUE1MaU1WaVZuaXhQM014dVJYY2dpUDduc1lmaXhWdF9nbVAzMHNUemFudzVNWjBFZUxudWZvOEo2UQ",
-            "editorial_story_id": "story_013276",
-            "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-            "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - cbs12.com",
+            "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-road-rage-incident-2-men-arrested-fight-escalates-shooting-shot-wrist-legs-gunfire-treasure-coast-hca-florida-lawnwood-hospital-st-lucie-county-sheriffs-office-florida-news",
             "editorial_story_id": "story_013276",
             "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
@@ -6556,7 +6702,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie hospital MRI technician accused of sexually assaulting sedated patient - cbs12.com",
+            "source_headline": "Port St. Lucie hospital MRI technician accused of sexually assaulting sedated patient - WPEC",
             "source_url": "https://cbs12.com/news/crime/florida-crime-news-hospital-mri-technician-accused-of-sexually-assaulting-sedated-patient-hca-florida-st-lucie-hospital-sexual-battery-physically-helpless-incapacitated-victim",
             "editorial_story_id": "story_012902",
             "canonical_slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
@@ -6566,27 +6712,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie MRI technician arrested for felony sexual battery of patient - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-sexual-battery-patient-mri-hospital-tecnhician/73780264",
-            "editorial_story_id": "story_012902",
-            "canonical_slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
-            "canonical_headline": "MRI tech arrested after video, forensic evidence in St. Lucie Hospital assault",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie police arrest alleged drug dealer using dead man's phone - cbs12.com",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-alleged-drug-dealer-using-dead-mans-phone-florida-news-florida-crime-local-news-local-crime-drug-deal-gone-wrong",
-            "editorial_story_id": "story_012939",
-            "canonical_slug": "2026-09-17-port-st-lucie-police-arrest-fentanyl-dealer-after-texting-him-from-overdose-vict",
-            "canonical_headline": "Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Amazon closes Port St. Lucie warehouse for major renovation, hundreds impacted by layoffs - cbs12.com",
+            "source_headline": "Amazon closes Port St. Lucie warehouse for major renovation, hundreds impacted by layoffs - WPEC",
             "source_url": "https://cbs12.com/news/local/amazon-closes-port-st-lucie-fulfillment-center-today-hundreds-impacted-by-layoffs",
             "editorial_story_id": "story_012184",
             "canonical_slug": "2026-09-15-amazon-to-lay-off-nearly-500-workers-at-port-st-lucie-warehouse-sept-17",
@@ -6596,7 +6722,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - cbs12.com",
+            "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - WPEC",
             "source_url": "https://cbs12.com/news/local/st-lucie-county-finds-14-unpermitted-license-plate-readers-st-lucie-county-flock-cameras-mystery-cameras-flock-camera-removal-st-lucie-county-commission-florida-news",
             "editorial_story_id": "story_012266",
             "canonical_slug": "2026-09-15-st-lucie-county-sends-30-day-removal-notices-to-50-55-license-plate-camera-permi",
@@ -6607,10 +6733,10 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 3,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
@@ -6623,8 +6749,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -6694,22 +6820,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "'Road rage' leads to shooting in Port St. Lucie, police say - tcpalm.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQM0FIUW54dVdaVk9UZUVtRTB5b3F2RGpjUnFCYjl0NldXX1Y0U3l4Y244d3ZGOHU5MkVhbHQ2eXMwdktnQ2g3a3JsRk16T1R6bVJLZFFmOF9lZ0VBLUpNQWRNZGN5YldwSFgxTmxxc2dtVmlfdTF6dnRpU3dyNmNFQzc5Mm5XMU9sdFlvNDZUNFhMQjRuc2FZd0Jic0xsakxOWE1YcWZRLTFyT3ZIYXEtSGJqcElfUE1MaU1WaVZuaXhQM014dVJYY2dpUDduc1lmaXhWdF9nbVAzMHNUemFudzVNWjBFZUxudWZvOEo2UQ",
-            "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-            "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - cbs12.com",
+            "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-road-rage-incident-2-men-arrested-fight-escalates-shooting-shot-wrist-legs-gunfire-treasure-coast-hca-florida-lawnwood-hospital-st-lucie-county-sheriffs-office-florida-news",
             "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
             "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
@@ -6769,7 +6880,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie hospital MRI technician accused of sexually assaulting sedated patient - cbs12.com",
+            "source_headline": "Port St. Lucie hospital MRI technician accused of sexually assaulting sedated patient - WPEC",
             "source_url": "https://cbs12.com/news/crime/florida-crime-news-hospital-mri-technician-accused-of-sexually-assaulting-sedated-patient-hca-florida-st-lucie-hospital-sexual-battery-physically-helpless-incapacitated-victim",
             "canonical_slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
             "canonical_headline": "MRI tech arrested after video, forensic evidence in St. Lucie Hospital assault",
@@ -6784,53 +6895,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie MRI technician arrested for felony sexual battery of patient - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-sexual-battery-patient-mri-hospital-tecnhician/73780264",
-            "canonical_slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
-            "canonical_headline": "MRI tech arrested after video, forensic evidence in St. Lucie Hospital assault",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie police arrest alleged drug dealer using dead man's phone - cbs12.com",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-alleged-drug-dealer-using-dead-mans-phone-florida-news-florida-crime-local-news-local-crime-drug-deal-gone-wrong",
-            "canonical_slug": "2026-09-17-port-st-lucie-police-arrest-fentanyl-dealer-after-texting-him-from-overdose-vict",
-            "canonical_headline": "Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 1.0,
-            "shared_anchors": [
-              "Danilo Jaramillo, 43-year-old arrested for fentanyl trafficking",
-              "Victim Miqueias Oliveira Silva found dead at 700 SE Collins Lane on September 13th",
-              "Police used dead victim's phone to text dealer",
-              "Black Kia Telluride vehicle",
-              "Search at SW Longfellow Road home",
-              "$17,715 in cash seized",
-              "Three firearms found (Smith & Wesson .40 caliber, Ruger LC9, AR-15)",
-              "Same source URL: cbs12.com article"
-            ],
-            "novel_facts": [],
-            "reason": "This is the exact same article as the existing canonical. The source URLs are identical, and all key facts match perfectly: same suspect (Danilo Jaramillo, 43), same victim (Miqueias Oliveira Silva, 34), same date (September 13th overdose), same addresses (700 SE Collins Lane and SW Longfellow Road), same investigative method (police texting from victim's phone), same seizure amounts ($17,715 cash, three specific firearms), and same charges (fentanyl trafficking). The retrieval evidence confirms this is an exact source match with 'persistent_story_id_match: true'. No new information is present.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Amazon closes Port St. Lucie warehouse for major renovation, hundreds impacted by layoffs - cbs12.com",
+            "source_headline": "Amazon closes Port St. Lucie warehouse for major renovation, hundreds impacted by layoffs - WPEC",
             "source_url": "https://cbs12.com/news/local/amazon-closes-port-st-lucie-fulfillment-center-today-hundreds-impacted-by-layoffs",
             "canonical_slug": "2026-09-15-amazon-to-lay-off-nearly-500-workers-at-port-st-lucie-warehouse-sept-17",
             "canonical_headline": "Amazon to invest $200M in Port St. Lucie facility, reopen in 2028 with 1,000 jobs",
@@ -6845,7 +6910,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - cbs12.com",
+            "source_headline": "St. Lucie County finds 14 unpermitted license plate readers, says there could be more - WPEC",
             "source_url": "https://cbs12.com/news/local/st-lucie-county-finds-14-unpermitted-license-plate-readers-st-lucie-county-flock-cameras-mystery-cameras-flock-camera-removal-st-lucie-county-commission-florida-news",
             "canonical_slug": "2026-09-15-st-lucie-county-sends-30-day-removal-notices-to-50-55-license-plate-camera-permi",
             "canonical_headline": "St. Lucie County finds 14 unpermitted license plate readers during sweep, with more checks ahead",
@@ -6859,79 +6924,39 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 0,
+        "new_publication_stale_rejected_count": 2,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 28.804
+        "live_hero_headline": "Port St. Lucie woman arrested for draining $100K from 85-year-old's accounts",
+        "generated_card_count": 0,
+        "elapsed_seconds": 29.312
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "quality_gate_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 6,
         "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 12.822,
+            "elapsed_seconds": 15.658,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 12.822,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 15.658,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 39,
-            "baseline_anchor": "shooting",
-            "baseline_present": true,
-            "baseline_anchor_present": true,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "10",
-              "apartments",
-              "beach",
-              "jacobs",
-              "orangewood",
-              "sentenced",
-              "shooting",
-              "vandrell",
-              "vero",
-              "years"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
-            "novelty_anchor": "continuing_status",
-            "novelty_present": false,
-            "novelty_token_hits": [
-              "2024",
-              "high",
-              "prison",
-              "speed"
-            ],
-            "semantic_novel_fact_hits": [],
-            "semantic_novel_fact_token_count": 0,
-            "missing": [
-              "new_development_missing"
-            ],
-            "source_title": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - cbs12.com",
-            "headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting"
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
@@ -6939,7 +6964,7 @@
         "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -6963,7 +6988,17 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Sebastian Police identify man killed in officer-involved shooting; FDLE investigating - cbs12.com",
+            "source_headline": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - WPEC",
+            "source_url": "https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
+            "editorial_story_id": "story_013409",
+            "canonical_slug": "2026-09-18-vandrell-jacobs-sentenced-to-10-years-for-vero-beach-orangewood-apartments-shoot",
+            "canonical_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Sebastian Police identify man killed in officer-involved shooting; FDLE investigating - WPEC",
             "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOTzZqd2kxaVZfTkVmUlByQ0c4aThOaHMxX1dVZ3Bpdjd3clRKeUZqZU5naC1rWUhsNzNKX0JkZmhDS1FlbzV6TXhIRmVpQ3hSbUFJZGdCSFNuSWVpZGVQMUpKVU5ieU5LRjk1dnBhVVpBT243WllxSV9lZUNwa0x0djl2d3F3ZGktTEE0WXJiak5oR3NOSElFWHZ6OA",
             "editorial_story_id": "story_013207",
             "canonical_slug": "2026-09-18-two-sebastian-officers-on-paid-leave-after-shooting-thursday-night-on-joy-haven",
@@ -6973,27 +7008,17 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/florida-governor-signs-death-warrant-for-william-reaves-jr-convicted-of-killing-indian-river-county-deputy",
+            "source_headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/18/florida-governor-signs-death-warrant-william-reaves-jr-convicted-killing-indian-river-county-deputy",
             "editorial_story_id": "story_013268",
             "canonical_slug": "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county",
             "canonical_headline": "Execution date set for Oct. 27 for killer of Indian River County deputy",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/florida-governor-signs-death-warrant-for-william-reaves-jr-convicted-of-killing-indian-river-county-deputy",
-            "editorial_story_id": "story_013268",
-            "canonical_slug": "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county",
-            "canonical_headline": "Execution date set for Oct. 27 for killer of Indian River County deputy",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - cbs12.com",
+            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - WPEC",
             "source_url": "https://cbs12.com/news/local/governor-ron-desantis-signs-death-warrant-william-reaves-who-killed-indian-river-county-deputy-richard-raczowski-1986-18th-death-warrant-year-florida-execution-stay-filed",
             "editorial_story_id": "story_007016",
             "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
@@ -7020,38 +7045,29 @@
             "canonical_headline": "Vero Beach police officer on paid leave after alleged misuse of Flock system",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Operation Late Checkout: 50+ arrests in Indian River County - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQM1hSUV9LSEZoNVR1eVFRSjJCakRyR1FBbDJpSmFYamZpMW0yQi1LNzM0WEZ0WUVVeURwaHB1Ym9VaDNoMmdKOE9IbDhENG5NX2lKTk05UFQyakZ5REpJOXNLc09QTkxLVUVPYXMxdWptRTluY0RUODU2Sm1tN2E0ZDI3eEx1dktCZXpoZVJjNS05YWsyWnZVLWRadU9wTWFCZ2wxaV92ZGNpbjds",
-            "editorial_story_id": "story_012823",
-            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
-            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
-            "basis": "authorized_canonical_identity_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - cbs12.com",
-            "source_url": "https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-09-18-vandrell-jacobs-sentenced-to-10-years-for-vero-beach-orangewood-apartments-shoot",
-            "canonical_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
-            "basis": "exact_source_url",
+            "source_headline": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
+            "basis": "exact_structured_incident_key",
             "identity_keys": [
-              "story:story_013409",
-              "source:https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs"
+              "incident:law-enforcement-operation:late-checkout",
+              "story:story_012823",
+              "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation"
             ],
             "match_confidence": 0.99,
             "evidence_dimensions": [
-              "story",
-              "source"
+              "incident",
+              "story"
             ],
             "decision_trace": [
-              "deterministic_identity_keys=story:story_013409,source:https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
+              "deterministic_identity_keys=incident:law-enforcement-operation:late-checkout,story:story_012823",
               "write_authorized=True"
             ],
             "relationship": "same_event_verified",
@@ -7116,7 +7132,22 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Sebastian Police identify man killed in officer-involved shooting; FDLE investigating - cbs12.com",
+            "source_headline": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - WPEC",
+            "source_url": "https://cbs12.com/news/crime/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
+            "canonical_slug": "2026-09-18-vandrell-jacobs-sentenced-to-10-years-for-vero-beach-orangewood-apartments-shoot",
+            "canonical_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Sebastian Police identify man killed in officer-involved shooting; FDLE investigating - WPEC",
             "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOTzZqd2kxaVZfTkVmUlByQ0c4aThOaHMxX1dVZ3Bpdjd3clRKeUZqZU5naC1rWUhsNzNKX0JkZmhDS1FlbzV6TXhIRmVpQ3hSbUFJZGdCSFNuSWVpZGVQMUpKVU5ieU5LRjk1dnBhVVpBT243WllxSV9lZUNwa0x0djl2d3F3ZGktTEE0WXJiak5oR3NOSElFWHZ6OA",
             "canonical_slug": "2026-09-18-two-sebastian-officers-on-paid-leave-after-shooting-thursday-night-on-joy-haven",
             "canonical_headline": "Two Sebastian officers on paid leave after shooting Thursday night on Joy Haven Drive",
@@ -7131,12 +7162,12 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/florida-governor-signs-death-warrant-for-william-reaves-jr-convicted-of-killing-indian-river-county-deputy",
+            "source_headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy - WFLX",
+            "source_url": "https://www.wflx.com/2026/09/18/florida-governor-signs-death-warrant-william-reaves-jr-convicted-killing-indian-river-county-deputy",
             "canonical_slug": "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county",
             "canonical_headline": "Execution date set for Oct. 27 for killer of Indian River County deputy",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -7146,22 +7177,7 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Florida governor signs death warrant for William Reaves Jr., convicted of killing Indian River County deputy",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/florida-governor-signs-death-warrant-for-william-reaves-jr-convicted-of-killing-indian-river-county-deputy",
-            "canonical_slug": "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county",
-            "canonical_headline": "Execution date set for Oct. 27 for killer of Indian River County deputy",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - cbs12.com",
+            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - WPEC",
             "source_url": "https://cbs12.com/news/local/governor-ron-desantis-signs-death-warrant-william-reaves-who-killed-indian-river-county-deputy-richard-raczowski-1986-18th-death-warrant-year-florida-execution-stay-filed",
             "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
             "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
@@ -7177,16 +7193,17 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "Florida State Prison executions",
-              "Governor Ron DeSantis signing death warrants",
+              "Florida State Prison",
+              "Gov. Ron DeSantis signing death warrants",
               "2026 execution schedule"
             ],
             "novel_facts": [
-              "Death warrant signed for William Reaves",
-              "Execution scheduled for October 2026",
+              "William Reaves death warrant signed September 18, 2026",
               "Reaves convicted of killing Deputy Richard Raczkowski in 1986",
-              "Indian River County Sheriff's deputy killed outside Zippy Mart convenience store",
-              "This is DeSantis's 18th death warrant of the year"
+              "Execution scheduled for October",
+              "18th death warrant of the year",
+              "Curtis Wilkie Beasley scheduled Sept. 29",
+              "William Lee Thompson scheduled Oct. 13"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -7200,7 +7217,7 @@
             "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
             "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
             "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:exact_source_url",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -7222,27 +7239,14 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Operation Late Checkout: 50+ arrests in Indian River County - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQM1hSUV9LSEZoNVR1eVFRSjJCakRyR1FBbDJpSmFYamZpMW0yQi1LNzM0WEZ0WUVVeURwaHB1Ym9VaDNoMmdKOE9IbDhENG5NX2lKTk05UFQyakZ5REpJOXNLc09QTkxLVUVPYXMxdWptRTluY0RUODU2Sm1tN2E0ZDI3eEx1dktCZXpoZVJjNS05YWsyWnZVLWRadU9wTWFCZ2wxaV92ZGNpbjds",
-            "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
-            "canonical_headline": "Indian River County sex sting nets 50 arrests, child-luring case highlighted",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 45.793
+        "live_hero_headline": "Indian River County human trafficking operation yields 60+ contacts, 50+ arrests",
+        "generated_card_count": 0,
+        "elapsed_seconds": 41.782
       }
     ]
   }
