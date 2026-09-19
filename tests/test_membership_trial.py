@@ -6,8 +6,12 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_checkout_applies_one_dollar_intro_coupon_only_to_monthly():
     checkout = (ROOT / "supabase/functions/create-checkout/index.ts").read_text()
     assert "const MONTHLY_INTRO_COUPON = Deno.env.get('STRIPE_MONTHLY_INTRO_COUPON') ?? 'z039dZCN'" in checkout
-    assert "discounts: plan === 'monthly' ? [{ coupon: MONTHLY_INTRO_COUPON }] : undefined" in checkout
-    assert "introductory_offer: plan === 'monthly' ? 'first_month_1_usd' : 'none'" in checkout
+    assert "const discounts = partnerCoupon" in checkout
+    assert "plan === 'monthly'" in checkout
+    assert "? [{ coupon: MONTHLY_INTRO_COUPON }]" in checkout
+    assert "const partnerCoupon = partnerOffer && plan === 'monthly' ? partnerOffer.coupon : ''" in checkout
+    assert "? 'partner_free_first_month'" in checkout
+    assert "? 'first_month_1_usd'" in checkout
     assert "payment_method_collection: 'always'" in checkout
     assert "trial_period_days" not in checkout
     assert "TRIAL_DAYS" not in checkout
@@ -25,6 +29,7 @@ def test_checkout_completion_keeps_backward_compatibility_for_old_trial_sessions
     assert "'no_payment_required'" in complete
     assert "syncSubscription(subscription" in complete
     assert "plan: String(session.metadata?.plan || '')" in complete
+    assert "introductory_offer: String(session.metadata?.introductory_offer || '')" in complete
 
 
 def test_paywall_discloses_one_dollar_intro_and_renewal_price():

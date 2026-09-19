@@ -123,8 +123,11 @@ async function startCheckout(button){
   const message = qs('[data-membership-message]') || qs('.membership-message', button.closest('.tct-paywall') || document)
   button.disabled = true
   setMessage(message, 'Opening secure Stripe checkout…')
+  const partner = String(button.dataset.partnerOffer || document.body?.dataset?.partnerOffer || '').trim()
+  const checkoutBody = { plan, return_path: returnPathFor(button) }
+  if (partner) checkoutBody.partner = partner
   const { data, error } = await supabase.functions.invoke('create-checkout', {
-    body: { plan, return_path: returnPathFor(button) },
+    body: checkoutBody,
   })
   button.disabled = false
   if (error || !data?.url) {
@@ -251,11 +254,13 @@ async function finishCheckout(){
     setMessage(message, `Your payment succeeded, but automatic sign-in setup needs another try. ${data?.error || error?.message || ''}`.trim(), true)
     return
   }
-  const planMessage = data.plan === 'monthly'
-    ? 'Your $1 first month is active.'
-    : data.plan === 'annual'
-      ? 'Your annual membership is active.'
-      : 'Your membership is active.'
+  const planMessage = data.introductory_offer === 'partner_free_first_month'
+    ? 'Your free first month is active.'
+    : data.plan === 'monthly'
+      ? 'Your $1 first month is active.'
+      : data.plan === 'annual'
+        ? 'Your annual membership is active.'
+        : 'Your membership is active.'
   setMessage(message, `${planMessage} We sent a secure sign-in link to ${data.email}. Open it to activate unlimited access on this device.`)
 }
 

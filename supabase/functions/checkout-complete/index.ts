@@ -66,7 +66,15 @@ export default {
         linkSent = true
       }
 
-      return Response.json({ complete: true, link_sent: linkSent, email: maskedEmail(normalizedEmail), plan: String(session.metadata?.plan || '') })
+      return Response.json({
+        complete: true,
+        link_sent: linkSent,
+        email: maskedEmail(normalizedEmail),
+        plan: String(session.metadata?.plan || ''),
+        introductory_offer: String(session.metadata?.introductory_offer || ''),
+        partner: String(session.metadata?.partner || ''),
+        partner_name: String(session.metadata?.partner_name || ''),
+      })
     } catch (error) {
       console.error('checkout-complete failed', error)
       return Response.json({ error: 'Unable to finish membership setup.' }, { status: 500 })
