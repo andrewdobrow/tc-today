@@ -215,6 +215,15 @@ def test_mobile_article_breadcrumb_and_byline_are_compact():
     assert "content: none !important;" in css
 
 
+def test_article_partner_card_is_constrained_and_mobile_safe():
+    css = (Path(__file__).resolve().parents[1] / "style.css").read_text(encoding="utf-8")
+    assert ".community-partner-card{" in css
+    assert ".community-partner-link{display:block;width:100%;max-width:190px;margin:0 auto" in css
+    assert ".community-partner-logo{display:block;width:100%;max-width:190px;height:auto;aspect-ratio:1/1;object-fit:contain" in css
+    assert "@media(max-width:900px){.community-partner-card{width:100%;max-width:420px;margin:0 auto" in css
+    assert ".community-partner-link,.community-partner-logo{max-width:180px}" in css
+
+
 def test_article_enhancement_handles_legacy_shell_and_adds_schema(tmp_path, monkeypatch):
     _setup_root(tmp_path, monkeypatch)
     rows=_archive_rows()
@@ -228,6 +237,11 @@ def test_article_enhancement_handles_legacy_shell_and_adds_schema(tmp_path, monk
     assert 'data-tct-most-read' in page
     assert 'google-add-preferred-source-btn' in page
     assert 'https://news.google.com/swg/js/v1/publisher.js' in page
+    assert 'Visit Our Partner' in page
+    assert 'class="community-partner-card"' in page
+    assert 'href="https://www.facebook.com/groups/188814797289161"' in page
+    assert 'src="/images/tccn-circle.png"' in page
+    assert page.index('google-add-preferred-source-btn') < page.index('community-partner-card')
     assert '"@type":"NewsArticle"' in page
     assert '"@type":"Person","name":"Andrew Dobrow"' in page
 

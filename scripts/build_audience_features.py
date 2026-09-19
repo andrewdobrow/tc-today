@@ -29,7 +29,10 @@ SITE_URL = "https://treasurecoast.today"
 NEWSLETTER_URL = "https://treasure-coast-today.kit.com/cb848255f8"
 PREFERRED_SOURCE_URL = "https://www.google.com/preferences/source?q=treasurecoast.today"
 PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
-ASSET_VERSION = "1.13.9.10"
+COMMUNITY_PARTNER_URL = "https://www.facebook.com/groups/188814797289161"
+COMMUNITY_PARTNER_IMAGE = "/images/tccn-circle.png"
+COMMUNITY_PARTNER_NAME = "Treasure Coast Community News"
+ASSET_VERSION = "1.13.9.43"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
@@ -494,6 +497,23 @@ def _preferred_source_module(compact: bool = True) -> str:
     return f'''{PREFERRED_MARKER_START}<section class="{cls}" aria-label="Follow Treasure Coast Today in Google"><span class="preferred-source-kicker">Google News</span><h2>See more TCT in Google</h2><p>Choose Treasure Coast Today as a preferred source for local coverage.</p><div google-add-preferred-source-btn data-lang="en"></div><a class="preferred-source-fallback" href="{PREFERRED_SOURCE_URL}" target="_blank" rel="noopener">Manage preferred sources →</a></section>{PREFERRED_MARKER_END}'''
 
 
+def _community_partner_module() -> str:
+    """Article-sidebar community partner card.
+
+    Keep this deliberately presentation-only: the image is constrained by site CSS,
+    the entire logo is the external link target, and the module follows the Google
+    Preferred Sources card on both desktop and stacked mobile article layouts.
+    """
+    return (
+        '<section class="community-partner-card" aria-label="Visit our partner, Treasure Coast Community News">'
+        '<h2>Visit Our Partner</h2>'
+        f'<a class="community-partner-link" href="{COMMUNITY_PARTNER_URL}" target="_blank" rel="noopener noreferrer" '
+        f'aria-label="Visit {COMMUNITY_PARTNER_NAME} on Facebook">'
+        f'<img class="community-partner-logo" src="{COMMUNITY_PARTNER_IMAGE}" alt="{COMMUNITY_PARTNER_NAME}" loading="lazy">'
+        '</a></section>'
+    )
+
+
 def _most_read_module(compact: bool = True) -> str:
     cls = "most-read-module most-read-module--compact" if compact else "most-read-module"
     return f'<section class="{cls}" data-tct-most-read hidden><div class="most-read-head"><span>Trending</span><h2>Most Read</h2></div><ol data-tct-most-read-list></ol><p class="most-read-window">Most-read TCT stories over the past 24 hours.</p></section>'
@@ -646,7 +666,7 @@ def enhance_articles(archive: list[dict]) -> dict:
                 text = text[:close.start()] + breadcrumb_json + "\n" + text[close.start():]
         text = _ensure_newsarticle_schema(text, entry)
         title, related = _related_entries(entry, candidates)
-        side = '<aside class="article-side-rail">' + _render_related_section(title, related) + _most_read_module(True) + _preferred_source_module(True) + '</aside>'
+        side = '<aside class="article-side-rail">' + _render_related_section(title, related) + _most_read_module(True) + _preferred_source_module(True) + _community_partner_module() + '</aside>'
         text, side_replacements = re.subn(r'<aside\s+class=["\']article-side-rail["\']>.*?</aside>', side, text, count=1, flags=re.I | re.S)
         if side_replacements == 0:
             # Earliest retained article shells predate the editorial two-column rail.
@@ -659,7 +679,7 @@ def enhance_articles(archive: list[dict]) -> dict:
                 + re.escape(PREFERRED_MARKER_END) + r'\s*</div>(?!<!-- TCT_LEGACY_RECIRC_END -->)',
                 '', text, flags=re.I | re.S,
             )
-            legacy_module = LEGACY_RECIRC_START + '<div class="legacy-article-recirculation">' + _render_related_section(title, related) + _most_read_module(True) + _preferred_source_module(True) + '</div>' + LEGACY_RECIRC_END
+            legacy_module = LEGACY_RECIRC_START + '<div class="legacy-article-recirculation">' + _render_related_section(title, related) + _most_read_module(True) + _preferred_source_module(True) + _community_partner_module() + '</div>' + LEGACY_RECIRC_END
             if LEGACY_RECIRC_START in text:
                 text = _replace_marker(text, LEGACY_RECIRC_START, LEGACY_RECIRC_END, legacy_module)
             else:
@@ -1636,6 +1656,7 @@ def validate_features(archive: list[dict]) -> dict:
         if "article-headline" not in text: continue
         if BREADCRUMB_MARKER_START not in text or "data-tct-breadcrumb-jsonld" not in text: failures.append(f"breadcrumb {p.name}")
         if PREFERRED_SOURCE_SCRIPT not in text or "google-add-preferred-source-btn" not in text: failures.append(f"preferred source {p.name}")
+        if "community-partner-card" not in text or COMMUNITY_PARTNER_URL not in text or COMMUNITY_PARTNER_IMAGE not in text: failures.append(f"community partner {p.name}")
         if "data-tct-most-read" not in text: failures.append(f"most read slot {p.name}")
     if failures:
         raise RuntimeError("Audience/SEO feature contract FAILED: " + "; ".join(failures[:20]))
