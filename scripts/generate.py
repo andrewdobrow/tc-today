@@ -23186,6 +23186,11 @@ _ARTICLE_POST_NEWSLETTER_SLOT_RE = re.compile(
     r'[^>]*>.*?</aside>',
     re.I | re.S,
 )
+_ARTICLE_NEWSLETTER_ARTICLE_SLOT_RE = re.compile(
+    r'\s*<aside\b(?=[^>]*class=["\'][^"\']*\bnewsletter-inline-slot--article\b[^"\']*["\'])'
+    r'[^>]*>.*?</aside>',
+    re.I | re.S,
+)
 
 
 def _is_article_redirect_stub(page_html):
@@ -23233,6 +23238,12 @@ def _normalize_article_newsletter_delivery_sitewide(root):
 
     Canonical redirect tombstones under ``articles/`` are deliberately skipped:
     they are navigation artifacts, not readable article pages.
+
+    Retained articles can carry older shell variants. When one already has the
+    canonical article newsletter slot, preserve that known-good location as a
+    fail-safe while normalizing its markup. This prevents a harmless legacy class
+    or attribute difference in the share/event boundary from blocking the entire
+    production deployment.
     """
     root = Path(root)
     articles_dir = root / "articles"
@@ -23242,46 +23253,93 @@ def _normalize_article_newsletter_delivery_sitewide(root):
         return {"scanned": 0, "updated": 0}
 
     desired_slot = _newsletter_inline_embed("article").strip()
+    slot_marker = "<!-- TCT_ARTICLE_NEWSLETTER_SLOT -->"
+    boundary_patterns = (
+        r'<aside\b[^>]*class=["\'][^"\']*\bevent-link-box\b[^"\']*["\'][^>]*>',
+        r'<div\b[^>]*class=["\'][^"\']*\barticle-share\b[^"\']*["\'][^>]*>',
+        r'<hr\b[^>]*class=["\'][^"\']*\barticle-divider\b[^"\']*["\'][^>]*>',
+        r'<p\b[^>]*class=["\'][^"\']*\barticle-more\b[^"\']*["\'][^>]*>',
+    )
+    article_body_re = re.compile(
+        r'<div\b[^>]*class=["\'][^"\']*\barticle-body\b[^"\']*["\'][^>]*>',
+        re.I,
+    )
+
     for path in sorted(articles_dir.glob("*.html")):
         scanned += 1
         original = path.read_text(encoding="utf-8", errors="ignore")
         if _is_article_redirect_stub(original):
             continue
-        normalized = _ARTICLE_POST_NEWSLETTER_SLOT_RE.sub("", original)
 
-        # Insert directly after article-body, before an optional event-link box
-        # and always before Share. This works for normal, short-public, retained,
-        # and subsequently paywalled article shells.
-        boundary = None
-        for pattern in (
-            r'<aside class="event-link-box"',
-            r'<div class="article-share">',
-            r'<hr class="article-divider"',
-            r'<p class="article-more"',
-        ):
-            boundary = re.search(pattern, normalized, re.I)
-            if boundary:
-                break
-        if not boundary or '<div class="article-body' not in normalized:
-            failures.append(str(path.relative_to(root)))
+        # Preserve the position of an existing canonical article slot before
+        # stripping all article/paywall newsletter variants. This is only a
+        # fallback; current shells are still normalized to the standard boundary.
+        working, preserved_count = _ARTICLE_NEWSLETTER_ARTICLE_SLOT_RE.subn(
+            slot_marker, original, count=1
+        )
+        working = _ARTICLE_POST_NEWSLETTER_SLOT_RE.sub("", working)
+
+        if not article_body_re.search(working):
+            failures.append(f"{path.relative_to(root)} [article body missing]")
             continue
 
-        normalized = (
-            normalized[:boundary.start()]
-            + desired_slot
-            + "\n          "
-            + normalized[boundary.start():]
-        )
+        boundary = None
+        for pattern in boundary_patterns:
+            boundary = re.search(pattern, working, re.I)
+            if boundary:
+                break
+
+        if boundary:
+            # Prefer the current canonical position immediately before the first
+            # event/share/divider boundary, even when a retained slot existed.
+            if preserved_count:
+                working = working.replace(slot_marker, "", 1)
+                boundary = None
+                for pattern in boundary_patterns:
+                    boundary = re.search(pattern, working, re.I)
+                    if boundary:
+                        break
+            if boundary:
+                normalized = (
+                    working[:boundary.start()]
+                    + desired_slot
+                    + "\n          "
+                    + working[boundary.start():]
+                )
+            else:
+                normalized = working
+        elif preserved_count and slot_marker in working:
+            # A retained page may use a legacy share/event shell that is still
+            # perfectly readable. Keep the existing newsletter location rather
+            # than failing the whole site merely because the boundary markup
+            # differs from today's renderer.
+            normalized = working.replace(slot_marker, desired_slot, 1)
+        else:
+            failures.append(f"{path.relative_to(root)} [newsletter insertion boundary missing]")
+            continue
+
         if normalized != original:
             path.write_text(normalized, encoding="utf-8")
             updated += 1
 
         final = normalized
-        article_slots = len(re.findall(r"newsletter-inline-slot--article", final, re.I))
-        kit_uids = len(re.findall(r'data-uid=["\']30e15672d3["\']', final, re.I))
+        article_slots = list(_ARTICLE_NEWSLETTER_ARTICLE_SLOT_RE.finditer(final))
         obsolete_paywall_slots = len(re.findall(r"data-tct-paywall-newsletter", final, re.I))
-        if article_slots != 1 or kit_uids != 1 or obsolete_paywall_slots:
-            failures.append(str(path.relative_to(root)))
+        if len(article_slots) != 1 or obsolete_paywall_slots:
+            failures.append(f"{path.relative_to(root)} [newsletter slot count invalid]")
+            continue
+
+        # Validate the requested Kit embed inside the canonical article slot, not
+        # globally across the page. A separate legitimate Kit surface elsewhere
+        # must never make an otherwise-correct article fail deployment.
+        article_slot_html = article_slots[0].group(0)
+        kit_uids = len(re.findall(r'data-uid=["\']30e15672d3["\']', article_slot_html, re.I))
+        kit_srcs = len(re.findall(
+            r'https://treasure-coast-today\.kit\.com/30e15672d3/index\.js',
+            article_slot_html, re.I
+        ))
+        if kit_uids != 1 or kit_srcs != 1:
+            failures.append(f"{path.relative_to(root)} [article Kit embed invalid]")
 
     if failures:
         raise RuntimeError(
