@@ -12,23 +12,19 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | SUV crashes into Bikes Plus in Jensen Beach, damaging inventory and storefront | SUV crashes into Bikes Plus in Jensen Beach, damaging inventory and storefront | 46 | importance 0; freshness 75.71; urgency 4/10 |
-| 2 | Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting | Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting | 48 | position locked: identity_conflict |
-| 3 | Port St. Lucie woman arrested for draining $100K from 85-year-old's accounts | Port St. Lucie woman arrested for draining $100K from 85-year-old's accounts | 39 | importance 0; freshness 65.17; urgency 2/10 |
-| 4 | Execution date set for Oct. 27 for killer of Indian River County deputy | Execution date set for Oct. 27 for killer of Indian River County deputy | 39 | importance 0; freshness 35.76; urgency 2/10; validated material update |
-| 5 | Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie | Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie | 38 | importance 0; freshness 34.03; urgency 2/10; validated material update |
-| 6 | Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions | Martin County issues blue-green algae alert for Lake Okeechobee at J&S Fish Camp after toxins detected | 35 | importance 0; freshness 23.88; urgency 2/10; validated material update |
-| 7 | Martin County issues blue-green algae alert for Lake Okeechobee at J&S Fish Camp after toxins detected | Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions | 32 | importance 0; freshness 32.31; urgency 2/10 |
-| 8 | Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting | Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting | 30 | importance 0; freshness 27.21; urgency 2/10 |
-| 9 | Treasure Coast traffic report: I-95 ramp closures, roadwork planned Sept. 18-25 | Martin County High School receives third bomb threat in eight days | 29 | importance 0; freshness 20.97; urgency 2/10; -6 category saturation |
-| 10 | Martin County High School receives third bomb threat in eight days | Treasure Coast traffic report: I-95 ramp closures, roadwork planned Sept. 18-25 | 25 | importance 0; freshness 20.97; urgency 2/10; -12 category saturation; -4 county saturation |
+| 1 | Police investigate at Port St. Lucie Pollo Tropical, subject taken into custody | Police investigate at Port St. Lucie Pollo Tropical, subject taken into custody | 59 | importance 0; freshness 99.97; urgency 7/10 |
+| 2 | SUV crashes into Bikes Plus in Jensen Beach, damaging inventory and storefront | SUV crashes into Bikes Plus in Jensen Beach, damaging inventory and storefront | 45 | importance 0; freshness 71.82; urgency 4/10 |
+| 3 | Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting | Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting | 47 | position locked: identity_conflict |
+| 4 | Port St. Lucie woman arrested for draining $100K from 85-year-old's accounts | Port St. Lucie woman arrested for draining $100K from 85-year-old's accounts | 38 | importance 0; freshness 61.28; urgency 2/10 |
+| 5 | Execution date set for Oct. 27 for killer of Indian River County deputy | Execution date set for Oct. 27 for killer of Indian River County deputy | 38 | importance 0; freshness 31.87; urgency 2/10; validated material update |
+| 6 | Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie | Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie | 37 | importance 0; freshness 30.14; urgency 2/10; validated material update |
+| 7 | Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions | Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting | 29 | importance 0; freshness 23.33; urgency 2/10 |
+| 8 | Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting | Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions | 31 | importance 0; freshness 28.42; urgency 2/10; -4 county saturation |
 
 ## Recommended moves
 
-- **Martin County issues blue-green algae alert for Lake Okeechobee at J&S Fish Camp after toxins detected**: 7 → 6 — importance 0; freshness 23.88; urgency 2/10; validated material update
-- **Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions**: 6 → 7 — importance 0; freshness 32.31; urgency 2/10
-- **Martin County High School receives third bomb threat in eight days**: 10 → 9 — importance 0; freshness 20.97; urgency 2/10; -6 category saturation
-- **Treasure Coast traffic report: I-95 ramp closures, roadwork planned Sept. 18-25**: 9 → 10 — importance 0; freshness 20.97; urgency 2/10; -12 category saturation; -4 county saturation
+- **Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions**: 7 → 8 — importance 0; freshness 28.42; urgency 2/10; -4 county saturation
+- **Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting**: 8 → 7 — importance 0; freshness 23.33; urgency 2/10
 
 ## Guardrails
 
