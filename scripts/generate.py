@@ -36,6 +36,7 @@ from scripts.compact_editorial_audit import compact_editorial_audit_log
 from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_client
 from tct_engine.model_bakeoff import write_bakeoff_artifacts
 from tct_engine.assignment_editor_shadow import normalize_assignment_plan, write_assignment_editor_artifacts
+from tct_engine.article_prose_policy import sanitize_article_text, sanitize_article_body_html
 
 # Editorial engine integration. Import failures remain fail-open. Production
 # behavior changes only through the separately gated v1.9 activation controller.
@@ -6929,6 +6930,9 @@ LOCAL_SYSTEM_PROMPT = (
     "Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere. "
     "Always preserve proper nouns exactly as they appear in the source. "
     "Never fabricate names, numbers, dates, or quotes not in the source. "
+    "Never name or credit another news outlet in published article prose and never narrate another outlet's reporting process. "
+    "If source material says someone told, spoke to, or declined to speak to another outlet, restate only the underlying confirmed fact without the outlet name when possible; otherwise omit the sentence. "
+    "Only mention a media organization when that organization itself is genuinely the subject of the story. "
     "Never write absence phrases like 'no further details available' or 'details were not disclosed'. "
     "CRITICAL: Never reference your own information, input, or what you were or were not given. Never write "
     "phrases like 'the available information', 'the source does not specify', 'was not detailed', 'not provided', "
@@ -6947,6 +6951,9 @@ FLORIDA_SYSTEM_PROMPT = (
     "Write in plain direct English. No em dashes. No fluff. No absence language. "
     "Every sentence must be a confirmed fact from the provided source material. "
     "Never fabricate names, numbers, dates, or quotes not in the source. "
+    "Never name or credit another news outlet in published article prose and never narrate another outlet's reporting process. "
+    "If source material says someone told, spoke to, or declined to speak to another outlet, restate only the underlying confirmed fact without the outlet name when possible; otherwise omit the sentence. "
+    "Only mention a media organization when that organization itself is genuinely the subject of the story. "
     "Write around missing details — do not reference their absence. "
     "CRITICAL: Never reference your own information, input, or what you were or were not given. Never write "
     "phrases like 'the available information', 'the source does not specify', 'was not detailed', 'not provided', "
@@ -6960,8 +6967,8 @@ FLORIDA_SYSTEM_PROMPT = (
 
 
 
-def strip_absence_language(text):
-    """Remove sentences containing absence/uncertainty language from article text."""
+def strip_absence_language(text, source_url="", source_headline=""):
+    """Remove absence language and source-outlet reporting-process prose."""
     if not text:
         return text
     absence_patterns = [
@@ -6989,8 +6996,59 @@ def strip_absence_language(text):
         s_lower = s.lower()
         if not any(p in s_lower for p in absence_patterns):
             cleaned.append(s)
-    result = ".".join(cleaned)
-    return result.replace("<<PARA>>", "\n\n").strip()
+    result = ".".join(cleaned).replace("<<PARA>>", "\n\n").strip()
+    return sanitize_article_text(
+        result, source_url=source_url, source_headline=source_headline
+    )
+
+
+_ARTICLE_BODY_PROSE_RE = re.compile(
+    r'(\<div class="article-body(?:\s+[^"]*)?"[^>]*>)(.*?)(</div>)',
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def _normalize_article_prose_policy_sitewide(output_root=None):
+    """Repair retained generated article previews/full bodies to current prose policy.
+
+    Protected remainders are sanitized again during membership rehydration in
+    ``prepare_membership_paywall.py`` so the secure article store converges too.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    archive = load_archive(root / "archive.json")
+    by_slug = {
+        str(row.get("slug") or "").strip(): row
+        for row in archive
+        if isinstance(row, dict) and str(row.get("slug") or "").strip()
+    }
+    scanned = updated = paragraphs_removed_or_rewritten = 0
+    for path in sorted((root / "articles").glob("*.html")):
+        row = by_slug.get(path.stem)
+        if not row or row.get("is_custom") or row.get("authoritative_custom"):
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if 'http-equiv="refresh"' in text or "window.location.replace" in text:
+            continue
+        match = _ARTICLE_BODY_PROSE_RE.search(text)
+        if not match:
+            continue
+        scanned += 1
+        cleaned_html, changed = sanitize_article_body_html(
+            match.group(2),
+            source_url=str(row.get("latest_source_url") or row.get("source_url") or ""),
+            source_headline=str(row.get("latest_source_headline") or row.get("source_headline") or row.get("headline") or ""),
+        )
+        if not changed:
+            continue
+        text = text[:match.start(2)] + cleaned_html + text[match.end(2):]
+        path.write_text(text, encoding="utf-8")
+        updated += 1
+        paragraphs_removed_or_rewritten += changed
+    return {
+        "scanned": scanned,
+        "updated": updated,
+        "paragraphs_changed": paragraphs_removed_or_rewritten,
+    }
 
 
 # Follow-up and update stories require a self-contained lead. The model is told
@@ -8494,13 +8552,21 @@ Return ONLY valid JSON:
         return item
 
     data["hero"] = attach_source(data.get("hero"), headlines)
-    data["hero"]["body"] = strip_absence_language(strip_markdown(data["hero"].get("body", ""), data["hero"].get("headline", "")))
+    data["hero"]["body"] = strip_absence_language(
+        strip_markdown(data["hero"].get("body", ""), data["hero"].get("headline", "")),
+        source_url=data["hero"].get("link", ""),
+        source_headline=data["hero"].get("source_title", ""),
+    )
     normalized_cards = []
     for card in data.get("cards", []) or []:
         card = attach_source(card, headlines)
         if not card:
             continue
-        card["body"] = strip_absence_language(strip_markdown(card.get("body", ""), card.get("headline", "")))
+        card["body"] = strip_absence_language(
+            strip_markdown(card.get("body", ""), card.get("headline", "")),
+            source_url=card.get("link", ""),
+            source_headline=card.get("source_title", ""),
+        )
         normalized_cards.append(card)
     data["cards"] = normalized_cards
 
@@ -9695,6 +9761,8 @@ def enhance_card(card, content_bank, headlines):
             f"Write {target}. Use only confirmed facts from the source. "
             "Include concrete names, places, agencies, dates, numbers, votes, charges, locations, schools, roads, or businesses when present. "
             "Do not write generic background, typical patterns, community-impact filler, or advice unless explicitly stated in the source. "
+            "Do not name or credit the source news outlet, and do not include its interview, outreach, or no-comment process. "
+            "If the source says someone told or declined to speak to the outlet, use only the underlying confirmed fact when possible and otherwise omit it. "
             f"If the source lacks enough facts, write less and stop.{update_lead_instruction} "
             "No em dashes. Return only the rewritten body."
         )
@@ -9706,7 +9774,11 @@ def enhance_card(card, content_bank, headlines):
         enhanced = resp.content[0].text.strip()
         explanation_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
         if enhanced and not any(s in enhanced.lower()[:150] for s in explanation_signals):
-            candidate_body = strip_absence_language(strip_markdown(enhanced, headline))
+            candidate_body = strip_absence_language(
+                strip_markdown(enhanced, headline),
+                source_url=source.get("link", "") or source.get("source_url", ""),
+                source_headline=source.get("title", "") or source.get("source_title", ""),
+            )
             candidate = dict(card)
             candidate["body"] = candidate_body
             candidate["source_word_count"] = word_count
@@ -9745,6 +9817,8 @@ def enhance_hero_article(hero, full_text):
         "Otherwise, rewrite your article using confirmed facts from the source. "
         "Write in your own words — paraphrase everything except direct quotes from named individuals. "
         "Do not invent details not in the source. Do not comment on absent information. "
+        "Do not name or credit the source news outlet, and do not include its interview, outreach, or no-comment process. "
+        "If the source says someone told or declined to speak to the outlet, use only the underlying confirmed fact when possible and otherwise omit it. "
         "Do not copy newsletter openers like 'Good morning'. "
         f"Keep it 380-480 words in four paragraphs. Include the concrete facts from the source.{update_lead_instruction} "
         "Plain direct English. No em dashes."
@@ -9759,7 +9833,11 @@ def enhance_hero_article(hero, full_text):
         # Detect if Claude returned an explanation instead of an article
         explanation_signals = ["i cannot rewrite", "source material", "does not match", "i must return", "cannot proceed"]
         if enhanced and not any(s in enhanced.lower()[:200] for s in explanation_signals):
-            candidate_body = strip_markdown(enhanced, hero.get("headline", ""))
+            candidate_body = strip_absence_language(
+                strip_markdown(enhanced, hero.get("headline", "")),
+                source_url=hero.get("link", "") or hero.get("source_url", ""),
+                source_headline=hero.get("source_title", "") or hero.get("source_headline", ""),
+            )
             candidate = dict(hero)
             candidate["body"] = candidate_body
             if _publishable_article(candidate, hero=True):
@@ -20559,7 +20637,43 @@ def _named_missing_person_authority_alias_fallback(candidate, authority_anchor):
     return subject
 
 
-def _durable_custom_missing_person_identity_match(candidate, authority):
+def _durable_custom_missing_person_evidence(item):
+    """Build the per-entry missing-person evidence used by custom identity matching.
+
+    The evidence is a pure function of one article-like record.  Keeping it separate
+    allows exhaustive custom-authority comparison to compute it once per archive row
+    instead of once per candidate/custom pair.
+    """
+    try:
+        from tct_engine.unified_incident_identity import build_unified_incident_evidence
+    except Exception:
+        return None
+
+    def _published_iso(value):
+        for key in (
+            "source_published", "published_raw", "published",
+            "first_published", "date", "lastmod",
+        ):
+            parsed = _parse_any_datetime(value.get(key))
+            if parsed is not None:
+                return parsed.astimezone(timezone.utc).isoformat()
+        return ""
+
+    text = _cross_source_text(item)
+    return build_unified_incident_evidence(
+        title=str(item.get("headline") or item.get("title") or ""),
+        body=text,
+        locations=tuple(sorted(_audit_locations(text))),
+        agencies=tuple(sorted(_cross_source_agencies(item))),
+        published_at=_published_iso(item),
+        source_url=str(
+            item.get("source_url") or item.get("original_url")
+            or item.get("link") or ""
+        ),
+    )
+
+
+def _durable_custom_missing_person_identity_match(candidate, authority, *, precomputed=None):
     """Return a narrow durable identity for named missing-person custom coverage.
 
     Missing-person alerts routinely drift from an initial sheriff/Facebook wording to
@@ -20568,14 +20682,26 @@ def _durable_custom_missing_person_identity_match(candidate, authority):
     same missing-person event family, an exact shared participant name, and the
     existing conservative unified-incident confidence threshold.  It therefore does
     not merge two unnamed alerts in the same city or two different people.
+
+    ``precomputed`` may supply the exact same entry-local anchors/evidence so callers
+    doing an exhaustive matrix comparison can reuse them.  It does not alter any
+    threshold, candidate, or write-authority decision.
     """
     if not isinstance(candidate, dict) or not isinstance(authority, dict):
         return False, ""
     if not (authority.get("is_custom") or authority.get("authoritative_custom")):
         return False, ""
 
-    candidate_anchor = _durable_incident_anchor(candidate)
-    authority_anchor = _durable_incident_anchor(authority, include_archive_body=True)
+    precomputed = precomputed if isinstance(precomputed, dict) else {}
+    if "candidate_missing_anchor" in precomputed:
+        candidate_anchor = precomputed.get("candidate_missing_anchor") or ""
+    else:
+        candidate_anchor = _durable_incident_anchor(candidate)
+    if "authority_missing_anchor" in precomputed:
+        authority_anchor = precomputed.get("authority_missing_anchor") or ""
+    else:
+        authority_anchor = _durable_incident_anchor(authority, include_archive_body=True)
+
     if (
         candidate_anchor
         and candidate_anchor == authority_anchor
@@ -20597,39 +20723,20 @@ def _durable_custom_missing_person_identity_match(candidate, authority):
         return True, f"missing-person|{authority_subject}"
 
     try:
-        from tct_engine.unified_incident_identity import (
-            build_unified_incident_evidence,
-            compare_unified_incident_evidence,
-        )
+        from tct_engine.unified_incident_identity import compare_unified_incident_evidence
     except Exception:
         return False, ""
 
-    def _published_iso(item):
-        for key in (
-            "source_published", "published_raw", "published",
-            "first_published", "date", "lastmod",
-        ):
-            parsed = _parse_any_datetime(item.get(key))
-            if parsed is not None:
-                return parsed.astimezone(timezone.utc).isoformat()
-        return ""
-
-    def _evidence(item):
-        text = _cross_source_text(item)
-        return build_unified_incident_evidence(
-            title=str(item.get("headline") or item.get("title") or ""),
-            body=text,
-            locations=tuple(sorted(_audit_locations(text))),
-            agencies=tuple(sorted(_cross_source_agencies(item))),
-            published_at=_published_iso(item),
-            source_url=str(
-                item.get("source_url") or item.get("original_url")
-                or item.get("link") or ""
-            ),
-        )
-
-    incoming = _evidence(candidate)
-    canonical = _evidence(authority)
+    if "candidate_missing_evidence" in precomputed:
+        incoming = precomputed.get("candidate_missing_evidence")
+    else:
+        incoming = _durable_custom_missing_person_evidence(candidate)
+    if "authority_missing_evidence" in precomputed:
+        canonical = precomputed.get("authority_missing_evidence")
+    else:
+        canonical = _durable_custom_missing_person_evidence(authority)
+    if incoming is None or canonical is None:
+        return False, ""
     if incoming.family != "missing_person" or canonical.family != "missing_person":
         return False, ""
 
@@ -20709,20 +20816,22 @@ def _durable_custom_local_alpr_policy_identity_match(candidate, authority):
     return True, f"local-alpr-policy|st-lucie|{authority_date.isoformat()}"
 
 
-def _durable_custom_identity_match(candidate, authority):
+def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     """Return a deterministic cross-origin match for archived custom authority.
 
     Named missing-person incidents, short-lived local ALPR policy episodes and
     recurring sports awards have durable identity contracts because each can arrive
     later under materially different publisher wording. These contracts are
     intentionally narrow and require concrete event evidence rather than generic
-    topic similarity.
+    topic similarity. Optional entry-local precomputation is an evaluation cache only;
+    it does not change the identity contract.
     """
     if not isinstance(candidate, dict) or not isinstance(authority, dict):
         return False, ""
     if not (authority.get("is_custom") or authority.get("authoritative_custom")):
         return False, ""
 
+    precomputed = precomputed if isinstance(precomputed, dict) else {}
     alpr_match, alpr_key = _durable_custom_local_alpr_policy_identity_match(
         candidate, authority
     )
@@ -20730,13 +20839,21 @@ def _durable_custom_identity_match(candidate, authority):
         return True, alpr_key
 
     missing_match, missing_key = _durable_custom_missing_person_identity_match(
-        candidate, authority
+        candidate, authority, precomputed=precomputed
     )
     if missing_match:
         return True, missing_key
 
-    left = _sports_award_identity(candidate)
-    right = _sports_award_identity(authority)
+    left = (
+        precomputed.get("candidate_sports_award")
+        if "candidate_sports_award" in precomputed
+        else _sports_award_identity(candidate)
+    )
+    right = (
+        precomputed.get("authority_sports_award")
+        if "authority_sports_award" in precomputed
+        else _sports_award_identity(authority)
+    )
     if not left or not right:
         return False, ""
     if left["team"] != right["team"] or left["award"] != right["award"]:
@@ -30314,27 +30431,63 @@ def _upsert_canonical_redirect(redirects, record):
     redirects.append(record)
 
 
-def _strict_custom_duplicate_pair(candidate, canonical):
+def _strict_custom_duplicate_pair(
+    candidate,
+    canonical,
+    *,
+    candidate_audit=None,
+    canonical_audit=None,
+    candidate_features=None,
+    canonical_features=None,
+    candidate_known_event=None,
+    canonical_known_event=None,
+    durable_precomputed=None,
+):
+    """Evaluate one archive/custom pair without changing the identity contract.
+
+    ``apply_canonical_story_cleanup`` compares every archived article with every
+    authoritative custom article.  The old implementation rebuilt the same normalized
+    audit payload and source-fact feature bundle for each pair, turning roughly N×M
+    comparisons into N×M expensive feature extractions.  Optional precomputed values
+    let the caller build those immutable per-entry facts once while preserving the
+    exact same pairwise decision logic and write-authority boundary.
+    """
     if not candidate or not canonical or candidate.get("slug") == canonical.get("slug"):
         return False, 0
     if candidate.get("is_custom") or candidate.get("authoritative_custom"):
         return False, 0
     if not (canonical.get("is_custom") or canonical.get("authoritative_custom")):
         return False, 0
-    durable_match, durable_key = _durable_custom_identity_match(candidate, canonical)
+    durable_match, durable_key = _durable_custom_identity_match(
+        candidate, canonical, precomputed=durable_precomputed
+    )
     if durable_match:
         candidate["durable_custom_identity_key"] = durable_key
         return True, 100
-    a = _event_audit_item(candidate, "archive")
-    b = _event_audit_item(canonical, "archive")
+    a = candidate_audit if isinstance(candidate_audit, dict) else _event_audit_item(candidate, "archive")
+    b = canonical_audit if isinstance(canonical_audit, dict) else _event_audit_item(canonical, "archive")
     # Narrow deterministic known-event contracts remain conclusive. Every other
     # custom/archive consolidation must cross the same source-fact authority boundary
     # used by forward publication; fuzzy topic confidence cannot own a redirect.
-    known_a = _known_event_key(_story_text(a))
-    known_b = _known_event_key(_story_text(b))
+    known_a = (
+        candidate_known_event
+        if candidate_known_event is not None
+        else _known_event_key(_story_text(a))
+    )
+    known_b = (
+        canonical_known_event
+        if canonical_known_event is not None
+        else _known_event_key(_story_text(b))
+    )
     if known_a and known_a == known_b:
         return True, 100
-    evidence = _cross_source_same_event_evidence(a, b, allow_custom=True)
+    evidence = _cross_source_same_event_evidence(
+        a,
+        b,
+        left_features=candidate_features,
+        right_features=canonical_features,
+        allow_custom=True,
+    )
     if not evidence.get("write_authorized"):
         return False, 0
     confidence = int(round(float(evidence.get("confidence") or 0.0) * 100))
@@ -30352,13 +30505,86 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
     redirects = []
     removed_slugs = set()
 
+    # The custom-authority pass is intentionally exhaustive, but its source-fact
+    # extraction is entry-local rather than pair-local. Build exactly the same audit
+    # payload/features once per archive row, then reuse them for every custom comparison.
+    # This changes no candidate set, threshold, authority rule or redirect decision.
+    _custom_audit_cache = {}
+    _custom_feature_cache = {}
+    _custom_known_event_cache = {}
+    _custom_missing_evidence_cache = {}
+    _custom_sports_award_cache = {}
+    _custom_candidate_anchor_cache = {}
+    _custom_authority_anchor_cache = {}
+
+    def _custom_identity_inputs(entry, *, authority=False):
+        cache_key = id(entry)
+        audit = _custom_audit_cache.get(cache_key)
+        if audit is None:
+            audit = _event_audit_item(entry, "archive")
+            _custom_audit_cache[cache_key] = audit
+            _custom_feature_cache[cache_key] = _cross_source_feature_bundle(audit)
+            _custom_known_event_cache[cache_key] = _known_event_key(_story_text(audit))
+            _custom_missing_evidence_cache[cache_key] = (
+                _durable_custom_missing_person_evidence(entry)
+            )
+            _custom_sports_award_cache[cache_key] = _sports_award_identity(entry)
+        if authority:
+            if cache_key not in _custom_authority_anchor_cache:
+                _custom_authority_anchor_cache[cache_key] = _durable_incident_anchor(
+                    entry, include_archive_body=True
+                )
+        else:
+            if cache_key not in _custom_candidate_anchor_cache:
+                _custom_candidate_anchor_cache[cache_key] = _durable_incident_anchor(entry)
+        return {
+            "audit": audit,
+            "features": _custom_feature_cache[cache_key],
+            "known_event": _custom_known_event_cache[cache_key],
+            "missing_evidence": _custom_missing_evidence_cache[cache_key],
+            "sports_award": _custom_sports_award_cache[cache_key],
+            "missing_anchor": (
+                _custom_authority_anchor_cache[cache_key]
+                if authority
+                else _custom_candidate_anchor_cache[cache_key]
+            ),
+        }
+
+    # Prime custom rows once because every non-custom archive candidate may compare
+    # against all of them. Candidate rows are populated lazily below.
+    for canonical in customs:
+        _custom_identity_inputs(canonical, authority=True)
+
     for candidate in archive:
         if not candidate.get("slug") or candidate.get("slug") in removed_slugs:
             continue
+        # Custom rows can never be duplicate candidates in this pass; they are the
+        # authority side of the matrix. Skip their candidate-side feature preparation.
+        if candidate.get("is_custom") or candidate.get("authoritative_custom"):
+            continue
         best = None
         best_confidence = 0
+        candidate_inputs = _custom_identity_inputs(candidate, authority=False)
         for canonical in customs:
-            ok, confidence = _strict_custom_duplicate_pair(candidate, canonical)
+            canonical_inputs = _custom_identity_inputs(canonical, authority=True)
+            ok, confidence = _strict_custom_duplicate_pair(
+                candidate,
+                canonical,
+                candidate_audit=candidate_inputs["audit"],
+                canonical_audit=canonical_inputs["audit"],
+                candidate_features=candidate_inputs["features"],
+                canonical_features=canonical_inputs["features"],
+                candidate_known_event=candidate_inputs["known_event"],
+                canonical_known_event=canonical_inputs["known_event"],
+                durable_precomputed={
+                    "candidate_missing_anchor": candidate_inputs["missing_anchor"],
+                    "authority_missing_anchor": canonical_inputs["missing_anchor"],
+                    "candidate_missing_evidence": candidate_inputs["missing_evidence"],
+                    "authority_missing_evidence": canonical_inputs["missing_evidence"],
+                    "candidate_sports_award": candidate_inputs["sports_award"],
+                    "authority_sports_award": canonical_inputs["sports_award"],
+                },
+            )
             if ok and (confidence, _canonical_candidate_score(canonical)) > (best_confidence, _canonical_candidate_score(best or {})):
                 best = canonical
                 best_confidence = confidence
@@ -39150,6 +39376,13 @@ def main():
     # presentation contract is not present. This prevents another apparently random
     # mix of old and new article shells from reaching production.
     _repair_article_shells(OUTPUT_DIR)
+    _article_prose_policy = _normalize_article_prose_policy_sitewide(OUTPUT_DIR)
+    print(
+        "  Article prose policy contract PASSED: "
+        f"{_article_prose_policy['scanned']} generated article page(s) verified; "
+        f"{_article_prose_policy['updated']} page(s), "
+        f"{_article_prose_policy['paragraphs_changed']} paragraph(s) normalized"
+    )
     if MEMBERSHIP_UI_ENABLED:
         _membership_banner_cleanup = _remove_membership_launch_article_support_banners(OUTPUT_DIR)
         if _membership_banner_cleanup.get("removed"):

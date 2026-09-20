@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from tct_engine.article_prose_policy import sanitize_article_body_html
+
 from tct_engine.membership_paywall import (
     FULL_BODY_MARKER,
     add_paywall_schema,
@@ -92,6 +94,31 @@ def _load_snapshot() -> dict[str, str]:
     return result
 
 
+def _load_article_source_context() -> dict[str, dict[str, object]]:
+    """Load source provenance needed only to remove reader-facing outlet boilerplate."""
+    path = ROOT / "archive.json"
+    if not path.is_file():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    rows = payload if isinstance(payload, list) else payload.get("articles", []) if isinstance(payload, dict) else []
+    result: dict[str, dict[str, object]] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        slug = str(row.get("slug") or "").strip()
+        if not slug:
+            continue
+        result[slug] = {
+            "source_url": str(row.get("latest_source_url") or row.get("source_url") or ""),
+            "source_headline": str(row.get("latest_source_headline") or row.get("source_headline") or row.get("headline") or ""),
+            "is_custom": bool(row.get("is_custom") or row.get("authoritative_custom")),
+        }
+    return result
+
+
 def _rehydrate_legacy_body(preview_html: str, protected_body: str) -> str:
     """Reconstruct full article HTML from either current or legacy protected rows."""
     protected_body = str(protected_body or "")
@@ -142,9 +169,10 @@ def main() -> None:
         raise RuntimeError("Protected-content export must be outside the public repository")
 
     snapshot = _load_snapshot()
+    source_context = _load_article_source_context()
     snapshot_expected = bool(os.getenv("TCT_PROTECTED_SNAPSHOT_PATH", "").strip())
     protected: list[dict[str, str]] = []
-    rewritten = short = already = rehydrated = 0
+    rewritten = short = already = rehydrated = prose_repaired = 0
     for path in sorted(ARTICLES.glob("*.html")):
         text = path.read_text(encoding="utf-8", errors="ignore")
         original_text = text
@@ -176,6 +204,17 @@ def main() -> None:
         if not body_match:
             continue
         body_html = body_match.group(1)
+        context = source_context.get(slug, {})
+        if not context.get("is_custom"):
+            cleaned_body_html, changed_paragraphs = sanitize_article_body_html(
+                body_html,
+                source_url=str(context.get("source_url") or ""),
+                source_headline=str(context.get("source_headline") or ""),
+            )
+            if changed_paragraphs:
+                text = text[:body_match.start(1)] + cleaned_body_html + text[body_match.end(1):]
+                body_html = cleaned_body_html
+                prose_repaired += changed_paragraphs
         split = split_article_body(body_html)
         if not split:
             short += 1
@@ -209,7 +248,8 @@ def main() -> None:
     export_path.write_text(json.dumps({"articles": protected}, ensure_ascii=False), encoding="utf-8")
     print(
         f"Membership paywall prepared: {rewritten} protected, {rehydrated} legacy/current pages rehydrated, "
-        f"{short} too short, {already} already protected without snapshot"
+        f"{short} too short, {already} already protected without snapshot, "
+        f"{prose_repaired} prohibited reporting-process paragraph(s) normalized"
     )
     print(f"Protected export written outside repo: {export_path}")
 
