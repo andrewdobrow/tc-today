@@ -273,10 +273,10 @@
           <h2 id="membership-stories-title">Don’t miss stories like these.</h2>
           <p>Your membership gives you full access to the reporting readers are following across the Treasure Coast right now.</p>
         </div>
-        <a href="/" class="membership-story-all">See all top news →</a>
+        <a href="/" class="membership-story-all">See all Top Stories →</a>
       </div>
       <div class="membership-story-grid" data-membership-top-stories aria-live="polite">
-        <div class="membership-story-loading">Loading current top stories…</div>
+        <div class="membership-story-loading">Loading top stories…</div>
       </div>
     </section>
 
@@ -329,7 +329,6 @@
     const container = document.querySelector('[data-membership-top-stories]');
     if (!container) return;
 
-    const normalize = value => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     const make = (tag, className, text) => {
       const node = document.createElement(tag);
       if (className) node.className = className;
@@ -337,33 +336,52 @@
       return node;
     };
 
-    Promise.all([
-      fetch('/data.json', {cache:'no-store'}).then(r => { if (!r.ok) throw new Error('data'); return r.json(); }),
-      fetch('/archive.json', {cache:'no-store'}).then(r => { if (!r.ok) throw new Error('archive'); return r.json(); })
-    ]).then(([data, archive]) => {
-      const front = data && data.front_page ? data.front_page : {};
-      const sourceStories = [front.hero].concat(Array.isArray(front.cards) ? front.cards : []).filter(Boolean);
-      const unique = [];
-      const seen = new Set();
-      for (const story of sourceStories) {
-        const key = normalize(story.headline);
-        if (!key || seen.has(key)) continue;
-        seen.add(key);
-        unique.push(story);
-        if (unique.length === 4) break;
-      }
+    const categoryLabels = {
+      local_gov: 'Local Government',
+      crime: 'Crime & Safety',
+      business: 'Business & Development',
+      sports: 'Sports',
+      things_to_do: 'Things To Do',
+      florida: 'Florida',
+      martin: 'Martin County',
+      st_lucie: 'St. Lucie County',
+      indian_river: 'Indian River County'
+    };
 
-      const archiveByHeadline = new Map();
-      (Array.isArray(archive) ? archive : []).forEach(item => {
-        const key = normalize(item && item.headline);
-        if (key && !archiveByHeadline.has(key)) archiveByHeadline.set(key, item);
+    const selectRankedTopStories = (ranking, archive) => {
+      const ranked = Array.isArray(ranking && ranking.selected) ? ranking.selected.slice(0, 4) : [];
+      const archiveRows = Array.isArray(archive) ? archive : [];
+      const archiveBySlug = new Map();
+      archiveRows.forEach(story => {
+        if (!story) return;
+        const slug = story.canonical_slug || story.slug;
+        if (slug && !archiveBySlug.has(slug)) archiveBySlug.set(slug, story);
+        if (story.slug && !archiveBySlug.has(story.slug)) archiveBySlug.set(story.slug, story);
       });
+
+      return ranked
+        .filter(story => story && story.slug && story.headline)
+        .map(story => {
+          const archived = archiveBySlug.get(story.slug) || {};
+          return Object.assign({}, archived, story, {
+            slug: story.slug,
+            category_label: archived.category_label || archived.cat_label || categoryLabels[story.category_key] || 'Top News'
+          });
+        });
+    };
+
+    Promise.all([
+      fetch('/data/top-stories-ranking-report.json', {cache:'no-store'})
+        .then(r => { if (!r.ok) throw new Error('top-stories'); return r.json(); }),
+      fetch('/archive.json', {cache:'no-store'})
+        .then(r => { if (!r.ok) throw new Error('archive'); return r.json(); })
+    ]).then(([ranking, archive]) => {
+      const unique = selectRankedTopStories(ranking, archive);
 
       container.textContent = '';
       unique.forEach((story, index) => {
-        const archived = archiveByHeadline.get(normalize(story.headline));
-        const slug = archived && (archived.canonical_slug || archived.slug);
-        const href = slug ? '/articles/' + slug + '.html' : '/';
+        const slug = story.slug;
+        const href = '/articles/' + slug + '.html';
         const card = make('article', 'membership-story-card' + (index === 0 ? ' featured' : ''));
         const link = make('a', 'membership-story-card-link');
         link.href = href;
@@ -382,7 +400,7 @@
         }
 
         const copy = make('div', 'membership-story-copy');
-        copy.appendChild(make('span', 'membership-story-category', story.cat_label || (archived && archived.category_label) || 'Top News'));
+        copy.appendChild(make('span', 'membership-story-category', story.category_label || 'Top News'));
         copy.appendChild(make('h3', '', story.headline || 'Treasure Coast Today'));
         if (story.teaser) copy.appendChild(make('p', '', story.teaser));
         copy.appendChild(make('span', 'membership-story-read', 'Read story →'));
@@ -406,7 +424,7 @@
   })();
   </script>
   <script src="/membership-config.js"></script>
-  <script type="module" src="/membership.js?v=1.13.9.36"></script>
+  <script type="module" src="/membership.js?v=1.13.9.38"></script>
   <script src="/main.js?v=1.13.9.43"></script>
 </body>
 </html>

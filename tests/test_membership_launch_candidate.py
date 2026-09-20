@@ -77,13 +77,15 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
     assert "Don’t miss stories like these." in page
     assert "data-membership-top-stories" in page
     assert "archive.json" in page
-    assert "front.hero" in page
-    assert "front.cards" in page
+    assert "top-stories-ranking-report.json" in page
+    assert "ranking.selected.slice(0, 4)" in page
+    assert "front.hero" not in page
+    assert "front.cards" not in page
     assert "membership-story-card" in page
     assert "membership-landing-value-grid" in page
     assert "membership-faq-grid" in page
     assert '/membership.css?v=1.13.9.36' in page
-    assert '/membership.js?v=1.13.9.36' in page
+    assert '/membership.js?v=1.13.9.38' in page
     assert "Create account" not in page
     assert 'type="password"' not in page
     assert "Limited time &middot; $1 first month" in page
