@@ -197,6 +197,7 @@ def add_paywall_schema(page_html: str) -> str:
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
 MEMBERSHIP_ASSET_VERSION = "1.13.9.36"
+MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.38"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'
@@ -220,7 +221,7 @@ MEMBER_PREPAINT_SCRIPT = (
 
 def inject_membership_assets(page_html: str, slug: str) -> str:
     css_href = f"/membership.css?v={MEMBERSHIP_ASSET_VERSION}"
-    js_src = f"/membership.js?v={MEMBERSHIP_ASSET_VERSION}"
+    js_src = f"/membership.js?v={MEMBERSHIP_JS_ASSET_VERSION}"
 
     # Run the visual member hint before first paint. This only suppresses the
     # sales treatment while entitlement is rechecked; protected article text is

@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from tct_engine.membership_paywall import inject_membership_assets
+
 ROOT = Path(__file__).resolve().parents[1]
 PARTNER_PAGE = ROOT / "partners" / "treasure-coast-community-news.html"
 
@@ -62,3 +64,11 @@ def test_partner_success_and_cancel_return_to_partner_landing_page():
     assert "const TCCN_LANDING_PATH = '/partners/treasure-coast-community-news.html'" in checkout
     assert "success_url: `${siteUrl}${checkoutPath}?checkout=success" in checkout
     assert "cancel_url: `${siteUrl}${checkoutPath}?checkout=cancelled" in checkout
+
+
+def test_tccn_partner_page_survives_membership_asset_normalization():
+    page = PARTNER_PAGE.read_text()
+    normalized = inject_membership_assets(page, "")
+    assert '/membership.css?v=1.13.9.36' in normalized
+    assert '/membership.js?v=1.13.9.38' in normalized
+    assert '/membership.js?v=1.13.9.36' not in normalized
