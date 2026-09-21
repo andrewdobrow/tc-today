@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-21T01:58:14Z",
+  "generated_at": "2026-09-21T10:54:00Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,43 +15,49 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
-      "category_eligibility_archive_recovery": 6,
-      "generated_live": 2
+      "category_eligibility_archive_recovery": 5,
+      "generated_live": 4
     },
     "failures": {
-      "no_category_eligible_sources": 6
+      "no_category_eligible_sources": 5
     },
-    "model_attempt_count": 2,
-    "model_elapsed_seconds": 30.611,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 89.564,
+    "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 34,
-    "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 14,
+    "article_framing_rejection_count": 1,
+    "category_eligibility_rejection_count": 10,
+    "published_story_duplicate_suppression_count": 29,
+    "story_aware_update_context_count": 3,
+    "material_update_promotion_evaluation_count": 9,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 12,
+    "material_update_promotion_cache_hit_count": 7,
     "material_update_promotion_model_call_count": 2
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 8,
-      "selected_source_count": 0,
+      "publishable_source_count": 10,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 14.111,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 14.111,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -60,9 +66,39 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "‘You Are Not Alone’: PSL woman turns grief into community for others",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/you-are-not-alone-psl-woman-turns-grief-into-community-for-others"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:deputies say"
+          ],
+          "local_nexus_signals": [],
+          "headline": "MCSO: Palm City man fired gun while under the influence of alcohol before SWAT standoff - cw34.com",
+          "source_url": "https://cw34.com/news/local/mcso-palm-city-man-fired-gun-while-under-the-influence-of-alcohol-before-swat-standoff-barricade-martin-county-sept-20-2026"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -127,8 +163,47 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Causeway Cove project fight escalates: Can Fort Pierce push back against state law? - WPEC",
+          "source_url": "https://cbs12.com/news/local/causeway-cove-project-fight-escalates-can-fort-pierce-push-back-against-state-law-florida-live-local-act-treasure-coast-qualifying-seaway-drive-affordable-housing-law",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-11-fort-pierce-has-no-legal-options-to-block-causeway-cove-development-on-south-hut",
+          "canonical_headline": "Fort Pierce has no legal options to block Causeway Cove development on South Hutchinson Island",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_014182"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=41",
+            "shared_locality=['fort-pierce']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['seaway-drive']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['causeway', 'cove']",
+            "shared_distinctive_token_count=52",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
@@ -215,16 +290,20 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.224
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Fort Pierce votes to explore outside counsel to challenge Causeway Cove under Live Local Act",
+      "generated_card_count": 0,
+      "elapsed_seconds": 38.403
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 11,
-      "selected_source_count": 3,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 9,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -232,11 +311,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.254,
+          "elapsed_seconds": 13.598,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 15.254,
+      "model_elapsed_seconds": 13.598,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -247,9 +326,23 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "‘You Are Not Alone’: PSL woman turns grief into community for others",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/you-are-not-alone-psl-woman-turns-grief-into-community-for-others"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -275,11 +368,11 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Martin County SWAT resolves armed barricade standoff at Palm City home - WFLX",
+          "headline": "Martin County SWAT resolves armed barricade standoff at Palm City home - wflx.com",
           "source_url": "https://www.wflx.com/2026/09/20/martin-county-swat-resolves-armed-barricade-standoff-palm-city-home/?outputType=amp"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -303,40 +396,20 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie woman accused of elder exploitation, including draining $100K from accounts - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-caregiver-accused-of-elder-exploitation-in-port-st-lucie/73802541",
-          "editorial_story_id": "story_013709",
-          "canonical_slug": "2026-09-19-port-st-lucie-woman-arrested-for-draining-100k-from-85-year-olds-accounts",
-          "canonical_headline": "Port St. Lucie woman arrested for draining $100K from 85-year-old's accounts",
+          "source_headline": "Heavy police presence surrounds Port St. Lucie Pollo Tropical as police investigate - WPEC",
+          "source_url": "https://cbs12.com/news/local/heavy-police-presence-surrounds-port-st-lucie-pollo-tropical-as-police-investigate-port-st-lucie-pslpd-port-st-lucie-police-department-pollo-tropical-st-lucie-west-nw-st-lucie-west-boulevard-police-investigation-police-presence",
+          "editorial_story_id": "story_013919",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Police investigate at Port St. Lucie Pollo Tropical, subject taken into custody",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fort Pierce man arrested after raid of illicit drugs worth millions - WPBF",
-          "source_url": "https://www.wpbf.com/article/fort-pierce-man-arrested-after-raid-of-illicit-drugs-worth-millions/73795465",
-          "editorial_story_id": "story_013478",
-          "canonical_slug": "2026-09-18-fort-pierce-man-arrested-after-raid-seizes-fentanyl-cocaine-worth-millions",
-          "canonical_headline": "Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Two men arrested after road rage incident leads to shooting in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-road-rage-shooting-arrests/73789918",
-          "editorial_story_id": "story_013276",
-          "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-          "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -395,10 +468,10 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie woman accused of elder exploitation, including draining $100K from accounts - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-caregiver-accused-of-elder-exploitation-in-port-st-lucie/73802541",
-          "canonical_slug": "2026-09-19-port-st-lucie-woman-arrested-for-draining-100k-from-85-year-olds-accounts",
-          "canonical_headline": "Port St. Lucie woman arrested for draining $100K from 85-year-old's accounts",
+          "source_headline": "Heavy police presence surrounds Port St. Lucie Pollo Tropical as police investigate - WPEC",
+          "source_url": "https://cbs12.com/news/local/heavy-police-presence-surrounds-port-st-lucie-pollo-tropical-as-police-investigate-port-st-lucie-pslpd-port-st-lucie-police-department-pollo-tropical-st-lucie-west-nw-st-lucie-west-boulevard-police-investigation-police-presence",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Police investigate at Port St. Lucie Pollo Tropical, subject taken into custody",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -407,87 +480,22 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fort Pierce man arrested after raid of illicit drugs worth millions - WPBF",
-          "source_url": "https://www.wpbf.com/article/fort-pierce-man-arrested-after-raid-of-illicit-drugs-worth-millions/73795465",
-          "canonical_slug": "2026-09-18-fort-pierce-man-arrested-after-raid-seizes-fentanyl-cocaine-worth-millions",
-          "canonical_headline": "Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
-          "shared_anchors": [
-            "Tony Saunders, 48-year-old suspect",
-            "Friday raid at 3100 block of S. 24th Street in Fort Pierce",
-            "St. Lucie County Sheriff's Office and U.S. Marshals Service",
-            "4.5 kilograms of fentanyl seized",
-            "303 grams of cocaine seized",
-            "Exact same source URL (https://www.wpbf.com/article/fort-pierce-man-arrested-after-raid-of-illicit-drugs-worth-millions/73795465)"
-          ],
-          "novel_facts": [],
-          "reason": "This is the exact same article from the same source URL, republished one day later (2026-09-19 vs 2026-09-18). The incoming article contains identical information about the same raid, same suspect, same location, same drug quantities seized. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match'. There are no material updates - no new charges, no court proceedings, no additional arrests, no new findings. This is simply a republication of the original story.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Two men arrested after road rage incident leads to shooting in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-road-rage-shooting-arrests/73789918",
-          "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-          "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Same two individuals: Tylon Kukielka, 57, and Dean Plotts, 41",
-            "Same location: SW California Boulevard and SW Brevity Terrace, Port St. Lucie",
-            "Same incident: road rage shooting on Sept. 17, 2026 (Thursday evening)",
-            "Same charges: Kukielka charged with attempted homicide, Plotts charged with burglary with assault or battery",
-            "Same injuries: Plotts shot in wrist and legs",
-            "Same hospital: HCA Florida Lawnwood Hospital"
-          ],
-          "novel_facts": [
-            "Specific time of incident: 6:30 p.m.",
-            "Additional context that incident started as misunderstanding with one driver thinking he was being followed",
-            "Detail that Kukielka was traveling with girlfriend after visiting restaurant",
-            "Mention of SW Crosstown Parkway as where vehicles first crossed paths",
-            "Detail that St. Lucie County Sheriff's deputy was traveling in area and observed incident",
-            "Evidence details: shell casings, surveillance video, dash cam footage collected"
-          ],
-          "reason": "This is the same road rage shooting incident involving the same two named individuals (Kukielka and Plotts) at the same location on the same date with the same charges. The incoming article adds contextual details about how the incident unfolded and evidence collection, but does not contain any material new update such as new charges, court proceedings, victim status changes, or investigative findings. These are routine scene details and background explanations that do not warrant a new URL.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "SWAT standoff in Palm City ends with arrest after shots fired on Bessey Creek Trail",
+      "live_hero_headline": "Darrel Levon Abbey arrested after SWAT standoff at Palm City home",
       "generated_card_count": 0,
-      "elapsed_seconds": 42.809
+      "elapsed_seconds": 32.518
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 8,
+      "fresh_candidate_count": 16,
+      "publishable_source_count": 9,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -504,9 +512,26 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:port st lucie"
+          ],
+          "headline": "‘You Are Not Alone’: PSL woman turns grief into community for others",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/you-are-not-alone-psl-woman-turns-grief-into-community-for-others"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -545,7 +570,7 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/jupiter-tequesta-juno-beach/coast-guard-suspends-search-for-missing-paddleboarder-off-jupiter-inlet"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -615,6 +640,16 @@
           "canonical_slug": "2026-09-16-port-st-lucie-bus-stop-complaint-prompts-district-route-change-on-paar-drive",
           "canonical_headline": "Port St. Lucie bus stop complaint prompts district route change on Paar Drive",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Fort Pierce commissioners give Kings Landing developers 6 months to find $15 million for hotel",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-commissioners-give-kings-landing-developers-6-months-to-find-15-million-for-hotel",
+          "editorial_story_id": "story_011993",
+          "canonical_slug": "2026-09-15-fort-pierce-commission-votes-3-2-to-give-kings-landing-developer-six-more-months",
+          "canonical_headline": "Fort Pierce grants King's Landing fifth extension after motion to terminate fails",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -716,20 +751,19 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.9,
+          "confidence": 0.92,
           "shared_anchors": [
             "Martin County Commission",
-            "data center concerns from residents",
-            "same general timeframe (both 2026)"
+            "data center concerns mentioned in both",
+            "both involved commission meetings and votes"
           ],
           "novel_facts": [
-            "3-2 vote on September 17, 2026 to rezone specific property",
-            "Property located on Southeast Powerline Avenue in Hobe Sound",
-            "Rezoning from general industrial to limited-industrial",
-            "Property owner Bob Reins/Gunster law firm agreed to compromise",
+            "Specific rezoning vote on property along Southeast Powerline Avenue in Hobe Sound",
+            "3-2 vote on rezoning from general industrial to limited-industrial",
+            "Property owner Bob Reins/Gunster law firm accepted compromise",
             "Commissioner Blake Capps voted against citing data center concerns",
-            "Specific residents named: Steve Addison, Kim Call, Patrick McDonough",
-            "Any proposal over 100,000 square feet requires board approval"
+            "Specific residents Steve Addison, Kim Call, Patrick McDonough spoke",
+            "September 17, 2026 commission meeting"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -750,10 +784,25 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Fort Pierce commissioners give Kings Landing developers 6 months to find $15 million for hotel",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-commissioners-give-kings-landing-developers-6-months-to-find-15-million-for-hotel",
+          "canonical_slug": "2026-09-15-fort-pierce-commission-votes-3-2-to-give-kings-landing-developer-six-more-months",
+          "canonical_headline": "Fort Pierce grants King's Landing fifth extension after motion to terminate fails",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 5,
-      "elapsed_seconds": 27.079
+      "elapsed_seconds": 22.316
     },
     {
       "category_key": "sports",
@@ -761,7 +810,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 2,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -790,8 +839,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 7,
-      "elapsed_seconds": 10.391
+      "new_publication_stale_rejected_count": 16,
+      "elapsed_seconds": 9.525
     },
     {
       "category_key": "things_to_do",
@@ -856,7 +905,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.498
+      "elapsed_seconds": 7.794
     },
     {
       "category_key": "florida",
@@ -864,7 +913,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -881,29 +930,68 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
       "published_story_duplicate_suppressions": [],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Causeway Cove project fight escalates: Can Fort Pierce push back against state law? - WPEC",
+          "source_url": "https://cbs12.com/news/local/causeway-cove-project-fight-escalates-can-fort-pierce-push-back-against-state-law-florida-live-local-act-treasure-coast-qualifying-seaway-drive-affordable-housing-law",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-11-fort-pierce-has-no-legal-options-to-block-causeway-cove-development-on-south-hut",
+          "canonical_headline": "Fort Pierce has no legal options to block Causeway Cove development on South Hutchinson Island",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_003336"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=41",
+            "shared_locality=['fort-pierce']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['seaway-drive']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['causeway', 'cove']",
+            "shared_distinctive_token_count=52",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 22.523
+      "elapsed_seconds": 23.942
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 6,
-      "selected_source_count": 5,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 5,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -911,11 +999,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.357,
+          "elapsed_seconds": 20.9,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 15.357,
+      "model_elapsed_seconds": 20.9,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -926,10 +1014,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -938,16 +1026,6 @@
           "editorial_story_id": "story_013913",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Hobe Sound community raises funds for man whose fiancée died in Monday house fire",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
-          "editorial_story_id": "story_009637",
-          "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
-          "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -984,9 +1062,9 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
@@ -1007,56 +1085,20 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "Hobe Sound location",
-            "house fire"
+            "Both fires in Hobe Sound"
           ],
           "novel_facts": [
-            "Golf cart fire on Saturday night September 20, 2026",
-            "Fire occurred just after 7 p.m. near 8100 block of Southeast Eagle Avenue",
-            "Fire started in golf cart and spread to garage, porch and side of home",
+            "Golf cart fire on Saturday night near 8100 block of Southeast Eagle Avenue",
+            "Fire started just after 7 p.m.",
+            "Fire spread from golf cart to garage, porch and side of home",
             "One patient with minor injuries and smoke inhalation refused transport",
             "Missing cat found safe inside house",
-            "State Fire Marshal investigating",
-            "Residents able to return home"
+            "State Fire Marshal investigating"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Former NYPD officer who worked Ground Zero now leads Martin County school safety - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/former-nypd-officer-who-worked-ground-zero-now-leads-martin-county-school-safety",
-          "canonical_slug": "2026-09-08-former-nypd-officer-who-worked-ground-zero-leads-martin-county-school-security",
-          "canonical_headline": "Former NYPD Ground Zero responder Frank Frangella leads Martin County school safety",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Frank Frangella",
-            "Former NYPD officer who worked Ground Zero",
-            "Martin County School District Director of Safety & Security",
-            "September 11 attacks response",
-            "Office with photos, statues and mementos from 9/11"
-          ],
-          "novel_facts": [
-            "Specific details about the day (wife waking him, weather description, Staten Island triage, boat to Ground Zero)",
-            "Quote about washing machine becoming shrine",
-            "Story about little girl asking for hug",
-            "Statement he has never visited 9/11 Memorial",
-            "25th anniversary framing vs unspecified timing"
-          ],
-          "reason": "Both articles profile the exact same person (Frank Frangella) in the exact same role (Martin County school safety director) about the exact same biographical fact (his NYPD Ground Zero response). The incoming article provides more extensive detail and quotes, but this is typical anniversary/feature expansion rather than a material development. No new event has occurred - no policy change, incident, investigation, or accountability question. This is the same human interest profile with fuller background detail, likely timed to the 25th anniversary. The additional color and quotes do not constitute a material update requiring a new URL.",
-          "validation_errors": []
         },
         {
           "category_key": "martin",
@@ -1107,34 +1149,134 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Palm City SWAT standoff ends with arrest after man barricades in guest house",
+      "live_hero_headline": "Palm City man surrenders after hours-long SWAT standoff on SW Bessey Creek Trail",
       "generated_card_count": 0,
-      "elapsed_seconds": 54.763
+      "elapsed_seconds": 50.942
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "cache_hit",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
-      "cache_hit": true,
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 3,
+      "selected_source_count": 2,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 40.955,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 40.955,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Port St. Lucie widow creates Chris's Place grief support community",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Port St. Lucie widow creates Chris's Place grief support community",
+            "lead": "Stacey Comer is creating Chris's Place, a free, in-person grief support community on the Treasure Coast, after her husband Chris died in 2018 following complications from a kidney transplant.",
+            "lead_word_count": 31,
+            "headline_overlap_ratio": 0.5,
+            "new_context_token_count": 16,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "surname_first_reference": {
+              "required": true,
+              "passed": true,
+              "missing": [],
+              "candidates": [
+                {
+                  "full": "You Are Not Alone",
+                  "first": "You",
+                  "last": "Alone"
+                }
+              ]
+            },
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Port St. Lucie widow creates Chris's Place grief support community",
+            "lead": "Stacey Comer is creating Chris's Place, a free, in-person grief support community on the Treasure Coast, after her husband Chris died in 2018 following complications from a kidney transplant.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "port_st_lucie"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "port_st_lucie"
+            ],
+            "headline_judge_claims": [],
+            "lead_judge_claims": [],
+            "missing_judge_claims": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Port St. Lucie widow creates Chris's Place grief support community",
+            "generated_lead": "Stacey Comer is creating Chris's Place, a free, in-person grief support community on the Treasure Coast, after her husband Chris died in 2018 following complications from a kidney transplant.",
+            "source_title": "‘You Are Not Alone’: PSL woman turns grief into community for others",
+            "source_lead": "Losing someone you love can change everything.For Stacey Comer, that loss came in 2018 when her husband, Chris, died following complications from a kidney transplant.WATCH ‘You Are Not Alone’: PSL woman turns grief into community for othersAs she learned to navigate life without him, Comer also began to notice there wasn't one central place on the Treasure Coast where people experiencing grief could go to find support, resources and connection.She started asking herself a simple question: “Why isn't there an",
+            "title_similarity": {
+              "score": 0.4132,
+              "overlap": 0.2222,
+              "jaccard": 0.1176,
+              "sorted_sequence": 0.4696,
+              "ordered_sequence": 0.4696,
+              "shared_token_count": 2.0
+            },
+            "lead_token_overlap": 0.81,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "official_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 9,
@@ -1146,6 +1288,16 @@
           "editorial_story_id": "story_012823",
           "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
           "canonical_headline": "Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie police investigating incident at Pollo Tropical - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-investigating-incident-at-pollo-tropical/73804293",
+          "editorial_story_id": "story_013919",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Police investigate at Port St. Lucie Pollo Tropical, subject taken into custody",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1191,16 +1343,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "'Just heard like two big pop pops': Two men arrested after road rage shooting in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-road-rage-shooting-gun-altercation/73793809",
-          "editorial_story_id": "story_013276",
-          "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-          "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-road-rage-incident-2-men-arrested-fight-escalates-shooting-shot-wrist-legs-gunfire-treasure-coast-hca-florida-lawnwood-hospital-st-lucie-county-sheriffs-office-florida-news",
           "editorial_story_id": "story_013276",
@@ -1230,8 +1372,47 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Causeway Cove project fight escalates: Can Fort Pierce push back against state law? - WPEC",
+          "source_url": "https://cbs12.com/news/local/causeway-cove-project-fight-escalates-can-fort-pierce-push-back-against-state-law-florida-live-local-act-treasure-coast-qualifying-seaway-drive-affordable-housing-law",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-11-fort-pierce-has-no-legal-options-to-block-causeway-cove-development-on-south-hut",
+          "canonical_headline": "Fort Pierce has no legal options to block Causeway Cove development on South Hutchinson Island",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_003336"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=41",
+            "shared_locality=['fort-pierce']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['seaway-drive']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['causeway', 'cove']",
+            "shared_distinctive_token_count=52",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 3,
@@ -1275,6 +1456,21 @@
           ],
           "reason": "Both articles cover the exact same Operation Late Checkout announcement by Sheriff Eric Flowers on Thursday, reporting the same core facts: 50+ arrests, 60+ contacts, operation began Sept. 13, targeting human trafficking and illegal sexual activity in Indian River County. The incoming article adds operational details (participating agencies, victim advocate involvement, specific case examples, hotline number) but these are elaborations from the same press conference, not material developments that change what readers need to know. The canonical already established the core news: the operation occurred and resulted in 50+ arrests. Additional detail about which agencies participated or procedural aspects should update the existing story rather than create a new URL.",
           "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie police investigating incident at Pollo Tropical - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-investigating-incident-at-pollo-tropical/73804293",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Police investigate at Port St. Lucie Pollo Tropical, subject taken into custody",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -1373,21 +1569,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "'Just heard like two big pop pops': Two men arrested after road rage shooting in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-road-rage-shooting-gun-altercation/73793809",
-          "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-          "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Port St. Lucie road rage fight ends in shooting, 2 men arrested, police say - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-road-rage-incident-2-men-arrested-fight-escalates-shooting-shot-wrist-legs-gunfire-treasure-coast-hca-florida-lawnwood-hospital-st-lucie-county-sheriffs-office-florida-news",
           "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
@@ -1432,17 +1613,20 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 2,
-      "live_hero_headline": "Police investigate incident at Pollo Tropical in Port St. Lucie near I-95, Florida's Turnpike",
-      "elapsed_seconds": 14.701
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Fort Pierce commissioners vote to explore hiring outside counsel to challenge Causeway Cove development",
+      "generated_card_count": 0,
+      "elapsed_seconds": 53.994
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 27,
+      "fetched_candidate_count": 24,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 7,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1459,10 +1643,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1473,43 +1657,13 @@
           "canonical_headline": "Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Two men arrested after road rage incident leads to shooting in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-road-rage-shooting-arrests/73789918",
-          "editorial_story_id": "story_013276",
-          "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-          "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - cw34.com",
-          "source_url": "https://cw34.com/news/local/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
-          "editorial_story_id": "story_013409",
-          "canonical_slug": "2026-09-18-vandrell-jacobs-sentenced-to-10-years-for-vero-beach-orangewood-apartments-shoot",
-          "canonical_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Execution date set for man who killed Indian River County deputy in 1986 - WPBF",
-          "source_url": "https://www.wpbf.com/article/execution-date-set-for-man-who-killed-indian-river-county-deputy-in-1986/73796914",
-          "editorial_story_id": "story_013268",
-          "canonical_slug": "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county",
-          "canonical_headline": "Execution date set for Oct. 27 for killer of Indian River County deputy",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -1550,94 +1704,10 @@
           ],
           "reason": "Both articles cover the exact same Operation Late Checkout announcement by Sheriff Eric Flowers on Thursday, reporting the same core facts: 50+ arrests, 60+ contacts, operation began Sept. 13, targeting human trafficking and illegal sexual activity in Indian River County. The incoming article adds operational details (participating agencies, victim advocate involvement, specific case examples, hotline number) but these are elaborations from the same press conference, not material developments that change what readers need to know. The canonical already established the core news: the operation occurred and resulted in 50+ arrests. Additional detail about which agencies participated or procedural aspects should update the existing story rather than create a new URL.",
           "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Two men arrested after road rage incident leads to shooting in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-road-rage-shooting-arrests/73789918",
-          "canonical_slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-          "canonical_headline": "Two men charged after road rage shooting on SW Brevity Terrace in Port St. Lucie",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Same two individuals: Tylon Kukielka, 57, and Dean Plotts, 41",
-            "Same location: SW California Boulevard and SW Brevity Terrace, Port St. Lucie",
-            "Same incident: road rage shooting on Sept. 17, 2026 (Thursday evening)",
-            "Same charges: Kukielka charged with attempted homicide, Plotts charged with burglary with assault or battery",
-            "Same injuries: Plotts shot in wrist and legs",
-            "Same hospital: HCA Florida Lawnwood Hospital"
-          ],
-          "novel_facts": [
-            "Specific time of incident: 6:30 p.m.",
-            "Additional context that incident started as misunderstanding with one driver thinking he was being followed",
-            "Detail that Kukielka was traveling with girlfriend after visiting restaurant",
-            "Mention of SW Crosstown Parkway as where vehicles first crossed paths",
-            "Detail that St. Lucie County Sheriff's deputy was traveling in area and observed incident",
-            "Evidence details: shell casings, surveillance video, dash cam footage collected"
-          ],
-          "reason": "This is the same road rage shooting incident involving the same two named individuals (Kukielka and Plotts) at the same location on the same date with the same charges. The incoming article adds contextual details about how the incident unfolded and evidence collection, but does not contain any material new update such as new charges, court proceedings, victim status changes, or investigative findings. These are routine scene details and background explanations that do not warrant a new URL.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Man gets 10-year prison term after 2024 Vero Beach shooting and high-speed escape - cw34.com",
-          "source_url": "https://cw34.com/news/local/man-gets-10-year-prison-term-after-2024-vero-beach-shooting-and-high-speed-escape-florida-news-florida-crime-local-crime-bust-ten-year-prison-behind-bars-vandrell-jacobs",
-          "canonical_slug": "2026-09-18-vandrell-jacobs-sentenced-to-10-years-for-vero-beach-orangewood-apartments-shoot",
-          "canonical_headline": "Vandrell Jacobs sentenced to 10 years for Vero Beach Orangewood Apartments shooting",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
-          "shared_anchors": [
-            "Vandrell Jacobs, 25",
-            "10-year prison sentence",
-            "January 2024 shooting at Orangewood Apartments in Vero Beach",
-            "Arrested Jan. 29, 2024",
-            "Shooting occurred Jan. 28, 2024",
-            "Five bullets struck apartment occupied by family",
-            "Red Mercedes fleeing scene",
-            "High-speed pursuit by deputies",
-            "Indian River County Sheriff's Office",
-            "Charges: shooting into dwelling and fleeing police with disregard for safety"
-          ],
-          "novel_facts": [],
-          "reason": "Both articles report the exact same sentencing: Vandrell Jacobs receiving a 10-year prison term for the January 2024 Orangewood Apartments shooting in Vero Beach. All key facts match precisely - the defendant's name and age, sentence length, incident date, location, vehicle description, arrest date, and charges. The incoming article contains no new material facts beyond what is already covered in the existing canonical. This is the same story from a different outlet (cw34.com vs. cbs12.com) with identical information, just reworded.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Execution date set for man who killed Indian River County deputy in 1986 - WPBF",
-          "source_url": "https://www.wpbf.com/article/execution-date-set-for-man-who-killed-indian-river-county-deputy-in-1986/73796914",
-          "canonical_slug": "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county",
-          "canonical_headline": "Execution date set for Oct. 27 for killer of Indian River County deputy",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.413
+      "elapsed_seconds": 21.625
     }
   ]
 }
