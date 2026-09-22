@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T16:02:38Z",
+  "generated_at": "2026-09-22T18:56:58Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 38,
-    "rejected_count": 11,
+    "assessed_count": 28,
+    "rejected_count": 6,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,8 +34,8 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 4,
-      "rejected_count": 4,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -47,11 +47,11 @@
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
-            "crime_incident:victim"
+            "crime_incident:arrested"
           ],
           "local_nexus_signals": [],
-          "headline": "X-ray technician accused of sexually assaulting patient during MRI at HCA St. Lucie Hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/x-ray-technician-accused-of-sexually-assaulting-patient-during-mri-at-hca-st-lucie-hospital"
+          "headline": "'CLOSURE': Brother of slain Indian River County deputy reacts to killer’s death warrant",
+          "source_url": "https://www.wptv.com/wptv-investigates/closure-brother-of-slain-indian-river-county-deputy-reacts-to-killers-death-warrant"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -60,12 +60,14 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
           "local_nexus_signals": [],
-          "headline": "Port St. Lucie veterans home raises money for WiFi, Medal of Honor Museum trip",
-          "source_url": "https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip"
+          "headline": "Another Martin County High School threat sparks investigation, student arrested - cw34.com",
+          "source_url": "https://cw34.com/news/local/another-martin-county-high-school-threat-sparks-investigation-ends-with-arrest-school-safety-florida-school-threat-florida-crime-martin-county-crime-stuart-florida-martin-county-florida-fortifyfl"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -80,20 +82,6 @@
           "local_nexus_signals": [],
           "headline": "Former Carefree and JetRide boat club employees describe working conditions before closures",
           "source_url": "https://www.wptv.com/news/treasure-coast/former-carefree-and-jetride-boat-club-employees-describe-working-conditions-before-closures"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Mel Fisher's grandson carries on legendary treasure hunting legacy off Florida's coast",
-          "source_url": "https://www.wptv.com/finding-florida/mel-fishers-grandson-carries-on-legendary-treasure-hunting-legacy-off-floridas-coast"
         }
       ]
     },
@@ -102,46 +90,17 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 5,
-      "rejected_count": 2,
-      "rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Port St. Lucie veterans home raises money for WiFi, Medal of Honor Museum trip",
-          "source_url": "https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Former Carefree and JetRide boat club employees describe working conditions before closures",
-          "source_url": "https://www.wptv.com/news/treasure-coast/former-carefree-and-jetride-boat-club-employees-describe-working-conditions-before-closures"
-        }
-      ]
+      "assessed_count": 4,
+      "rejected_count": 0,
+      "rejections": []
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 5,
-      "rejected_count": 5,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -150,31 +109,19 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:port st lucie"
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [
+            "business_opening_closure_expansion:closure"
           ],
-          "headline": "X-ray technician accused of sexually assaulting patient during MRI at HCA St. Lucie Hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/x-ray-technician-accused-of-sexually-assaulting-patient-during-mri-at-hca-st-lucie-hospital"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:port st lucie"
+          "competing_signals": [
+            "crime_public_safety:arrested"
           ],
-          "headline": "Port St. Lucie veterans home raises money for WiFi, Medal of Honor Museum trip",
-          "source_url": "https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip"
+          "local_nexus_signals": [
+            "source_locality:indian river county",
+            "source_locality:fort pierce"
+          ],
+          "headline": "'CLOSURE': Brother of slain Indian River County deputy reacts to killer’s death warrant",
+          "source_url": "https://www.wptv.com/wptv-investigates/closure-brother-of-slain-indian-river-county-deputy-reacts-to-killers-death-warrant"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -210,23 +157,6 @@
           ],
           "headline": "Mel Fisher's grandson carries on legendary treasure hunting legacy off Florida's coast",
           "source_url": "https://www.wptv.com/finding-florida/mel-fishers-grandson-carries-on-legendary-treasure-hunting-legacy-off-floridas-coast"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:martin county",
-            "source_locality:indiantown"
-          ],
-          "headline": "Lanes reopen after vehicle fire on I-95 South in Martin County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/vehicle-fire-shuts-down-i-95-south-lanes-in-martin-county"
         }
       ]
     },
@@ -244,7 +174,7 @@
       "category_label": "Things To Do",
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
-      "assessed_count": 1,
+      "assessed_count": 0,
       "rejected_count": 0,
       "rejections": []
     },
@@ -253,7 +183,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 1,
+      "assessed_count": 0,
       "rejected_count": 0,
       "rejections": []
     },
@@ -262,7 +192,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 6,
+      "assessed_count": 7,
       "rejected_count": 0,
       "rejections": []
     },
@@ -271,7 +201,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 5,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -280,7 +210,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 11,
+      "assessed_count": 8,
       "rejected_count": 0,
       "rejections": []
     }
