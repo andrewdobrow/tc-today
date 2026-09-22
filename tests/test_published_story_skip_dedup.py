@@ -1575,6 +1575,118 @@ def test_material_update_publication_invariant_fails_when_headline_stays_stale(t
     assert report["stale_headlines"][0]["canonical_slug"] == canonical["slug"]
 
 
+def test_material_update_publication_invariant_allows_subsequent_update_to_keep_already_advanced_headline(tmp_path):
+    g = _load_generate()
+    slug = "2026-09-18-desantis-sets-oct-20-execution-for-william-reaves-jr-in-1986-indian-river-county"
+    origin = "DeSantis sets Oct. 20 execution for William Reaves Jr. in 1986 Indian River County case"
+    advanced = "Execution date set for Oct. 27 for killer of Indian River County deputy"
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
+        slug: {
+            "canonical_slug": slug,
+            "canonical_headline": advanced,
+            "canonical_permalink_origin_headline": origin,
+            "canonical_meaningful_update_validated": True,
+            "canonical_meaningful_update_basis": "semantic_material_update_gate",
+            "selected_headlines": [advanced],
+            "source_headlines": [advanced],
+            "source_urls": ["https://example.com/newer-reaves-update"],
+            "novel_facts": ["The state released additional execution-protocol details."],
+            "max_confidence": 0.98,
+        }
+    }
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "semantic-publication-gate.json").write_text(
+        json.dumps({"material_updates": [{
+            "target_slug": slug,
+            "updated_headline": advanced,
+        }]}),
+        encoding="utf-8",
+    )
+
+    report = g._validate_promoted_material_updates_committed(tmp_path)
+
+    assert report["passed"] is True
+    assert report["stale_headline_count"] == 0
+    assert report["retained_advanced_headline_count"] == 1
+    assert report["retained_advanced_headlines"][0]["canonical_slug"] == slug
+
+
+def test_material_update_publication_invariant_still_fails_first_update_with_unchanged_headline(tmp_path):
+    g = _load_generate()
+    slug = "2026-09-01-example-first-material-update"
+    headline = "Sheriff searches for missing visitor"
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
+        slug: {
+            "canonical_slug": slug,
+            "canonical_headline": headline,
+            "canonical_permalink_origin_headline": headline,
+            "canonical_meaningful_update_validated": False,
+            "selected_headlines": [headline],
+            "source_headlines": ["Body found during search for missing visitor"],
+            "source_urls": ["https://example.com/body-found"],
+            "novel_facts": ["A body was found during the search."],
+            "max_confidence": 0.99,
+        }
+    }
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "semantic-publication-gate.json").write_text(
+        json.dumps({"material_updates": [{
+            "target_slug": slug,
+            "updated_headline": headline,
+        }]}),
+        encoding="utf-8",
+    )
+
+    import pytest
+    with pytest.raises(RuntimeError, match="MATERIAL UPDATE HEADLINE INVARIANT FAILED"):
+        g._validate_promoted_material_updates_committed(tmp_path)
+
+    report = json.loads((data_dir / "material-update-publication-invariant.json").read_text())
+    assert report["stale_headline_count"] == 1
+    assert report["stale_headlines"][0]["reason"] == "first_material_update_headline_did_not_advance"
+
+
+def test_material_update_publication_invariant_still_fails_when_selected_progression_is_lost_after_prior_update(tmp_path):
+    g = _load_generate()
+    slug = "2026-09-18-example-subsequent-material-update"
+    origin = "Execution scheduled for Oct. 20"
+    current = "Execution rescheduled for Oct. 27"
+    selected = "Court filing adds new challenge ahead of Oct. 27 execution"
+    g.CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS = {
+        slug: {
+            "canonical_slug": slug,
+            "canonical_headline": current,
+            "canonical_permalink_origin_headline": origin,
+            "canonical_meaningful_update_validated": True,
+            "canonical_meaningful_update_basis": "semantic_material_update_gate",
+            "selected_headlines": [selected],
+            "source_headlines": [selected],
+            "source_urls": ["https://example.com/court-filing"],
+            "novel_facts": ["A new court filing challenged the execution."],
+            "max_confidence": 0.99,
+        }
+    }
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "semantic-publication-gate.json").write_text(
+        json.dumps({"material_updates": [{
+            "target_slug": slug,
+            "updated_headline": current,
+        }]}),
+        encoding="utf-8",
+    )
+
+    import pytest
+    with pytest.raises(RuntimeError, match="MATERIAL UPDATE HEADLINE INVARIANT FAILED"):
+        g._validate_promoted_material_updates_committed(tmp_path)
+
+    report = json.loads((data_dir / "material-update-publication-invariant.json").read_text())
+    assert report["stale_headline_count"] == 1
+    assert report["stale_headlines"][0]["reason"] == "selected_headline_progression_was_lost"
+
+
 def test_debevec_contextless_generated_hero_is_not_deleted_before_recomposition(monkeypatch):
     """Production regression: 2026-09-01 body-recovery copy must survive prose guards."""
     g = _load_generate()

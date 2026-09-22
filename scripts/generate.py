@@ -30172,6 +30172,15 @@ def _attach_canonical_update_context(item, canonical, basis=""):
     item["_canonical_context_first_published"] = str(
         canonical.get("first_published") or canonical.get("date") or ""
     )
+    item["_canonical_context_permalink_origin_headline"] = str(
+        canonical.get("permalink_origin_headline") or canonical_headline
+    ).strip()
+    item["_canonical_context_meaningful_update_validated"] = bool(
+        canonical.get("meaningful_update_validated")
+    )
+    item["_canonical_context_meaningful_update_basis"] = str(
+        canonical.get("meaningful_update_basis") or ""
+    ).strip()
     item["_canonical_context_basis"] = str(basis or "canonical_publication_ledger")
     item["_story_aware_update_context"] = True
     return True
@@ -35895,7 +35904,11 @@ def _clear_quarantined_identity_fields(entry):
         "_cross_source_identity_match", "_canonical_identity_candidate",
         "_incoming_fragmented_story_id", "_canonical_context_slug",
         "_canonical_context_headline", "_canonical_context_body",
-        "_canonical_context_first_published", "_canonical_context_basis",
+        "_canonical_context_first_published",
+        "_canonical_context_permalink_origin_headline",
+        "_canonical_context_meaningful_update_validated",
+        "_canonical_context_meaningful_update_basis",
+        "_canonical_context_basis",
         "_story_aware_update_context", "_publication_route_repaired",
         "_semantic_material_update", "_semantic_material_update_decision",
         "_pre_generation_material_update_promotion",
@@ -36411,6 +36424,9 @@ def _promote_published_skip_material_updates(
                         "canonical_context_headline": str(item.get("_canonical_context_headline") or ""),
                         "canonical_context_body": str(item.get("_canonical_context_body") or ""),
                         "canonical_context_first_published": str(item.get("_canonical_context_first_published") or ""),
+                        "canonical_context_permalink_origin_headline": str(item.get("_canonical_context_permalink_origin_headline") or ""),
+                        "canonical_context_meaningful_update_validated": bool(item.get("_canonical_context_meaningful_update_validated")),
+                        "canonical_context_meaningful_update_basis": str(item.get("_canonical_context_meaningful_update_basis") or ""),
                         "canonical_context_basis": str(item.get("_canonical_context_basis") or basis),
                     })
                 row["promoted"] = True
@@ -36512,6 +36528,15 @@ def _remember_selected_material_update_target(item, selection_surface=""):
     row = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS.setdefault(slug, {
         "canonical_slug": slug,
         "canonical_headline": str(item.get("_canonical_context_headline") or "").strip(),
+        "canonical_permalink_origin_headline": str(
+            item.get("_canonical_context_permalink_origin_headline") or ""
+        ).strip(),
+        "canonical_meaningful_update_validated": bool(
+            item.get("_canonical_context_meaningful_update_validated")
+        ),
+        "canonical_meaningful_update_basis": str(
+            item.get("_canonical_context_meaningful_update_basis") or ""
+        ).strip(),
         "selected_headlines": [],
         "source_headlines": [],
         "source_urls": [],
@@ -36528,6 +36553,18 @@ def _remember_selected_material_update_target(item, selection_surface=""):
     row.setdefault("novel_facts", list(decision.get("novel_facts") or []))
     if not row.get("canonical_headline"):
         row["canonical_headline"] = str(item.get("_canonical_context_headline") or "").strip()
+    if not row.get("canonical_permalink_origin_headline"):
+        row["canonical_permalink_origin_headline"] = str(
+            item.get("_canonical_context_permalink_origin_headline") or ""
+        ).strip()
+    row["canonical_meaningful_update_validated"] = bool(
+        row.get("canonical_meaningful_update_validated")
+        or item.get("_canonical_context_meaningful_update_validated")
+    )
+    if not row.get("canonical_meaningful_update_basis"):
+        row["canonical_meaningful_update_basis"] = str(
+            item.get("_canonical_context_meaningful_update_basis") or ""
+        ).strip()
     selected_headline = str(item.get("headline") or "").strip()
     if selected_headline and selected_headline not in row["selected_headlines"]:
         row["selected_headlines"].append(selected_headline)
@@ -36676,8 +36713,11 @@ def _carry_pre_generation_material_update_authority(item, source):
         "_canonical_write_authorization", "canonical_slug",
         "canonical_publication_id", "_canonical_context_slug",
         "_canonical_context_headline", "_canonical_context_body",
-        "_canonical_context_first_published", "_canonical_context_basis",
-        "_story_aware_update_context",
+        "_canonical_context_first_published",
+        "_canonical_context_permalink_origin_headline",
+        "_canonical_context_meaningful_update_validated",
+        "_canonical_context_meaningful_update_basis",
+        "_canonical_context_basis", "_story_aware_update_context",
     ):
         value = source.get(key)
         if value not in (None, "", [], {}):
@@ -37145,6 +37185,9 @@ def _stamp_current_run_story_ids(data, headlines):
             "_canonical_identity_candidate", "_incoming_fragmented_story_id",
             "_canonical_context_slug", "_canonical_context_headline",
             "_canonical_context_body", "_canonical_context_first_published",
+            "_canonical_context_permalink_origin_headline",
+            "_canonical_context_meaningful_update_validated",
+            "_canonical_context_meaningful_update_basis",
             "_canonical_context_basis", "_story_aware_update_context",
             "_publication_route_repaired", "canonical_slug",
             "canonical_publication_id", "_source_candidate_publishable_verified",
@@ -37232,6 +37275,9 @@ def _stamp_current_run_story_ids(data, headlines):
                 ("_canonical_context_headline", "canonical_context_headline", "_canonical_context_headline"),
                 ("_canonical_context_body", "canonical_context_body", "_canonical_context_body"),
                 ("_canonical_context_first_published", "canonical_context_first_published", "_canonical_context_first_published"),
+                ("_canonical_context_permalink_origin_headline", "canonical_context_permalink_origin_headline", "_canonical_context_permalink_origin_headline"),
+                ("_canonical_context_meaningful_update_validated", "canonical_context_meaningful_update_validated", "_canonical_context_meaningful_update_validated"),
+                ("_canonical_context_meaningful_update_basis", "canonical_context_meaningful_update_basis", "_canonical_context_meaningful_update_basis"),
                 ("_canonical_context_basis", "canonical_context_basis", "_canonical_context_basis"),
             ):
                 value = identity.get(identity_key) or (source or {}).get(source_key)
@@ -37314,6 +37360,9 @@ def _stamp_known_current_run_identity(entry):
             ("_canonical_context_headline", "canonical_context_headline"),
             ("_canonical_context_body", "canonical_context_body"),
             ("_canonical_context_first_published", "canonical_context_first_published"),
+            ("_canonical_context_permalink_origin_headline", "canonical_context_permalink_origin_headline"),
+            ("_canonical_context_meaningful_update_validated", "canonical_context_meaningful_update_validated"),
+            ("_canonical_context_meaningful_update_basis", "canonical_context_meaningful_update_basis"),
             ("_canonical_context_basis", "canonical_context_basis"),
         ):
             value = identity.get(identity_key)
@@ -37912,22 +37961,76 @@ def _validate_promoted_material_updates_committed(output_root=None):
     applied = set(applied_rows)
     missing = sorted(set(expected) - applied)
     stale_headlines = []
+    retained_advanced_headlines = []
     for slug in sorted(set(expected) & applied):
         expected_row = expected.get(slug) or {}
         applied_row = applied_rows.get(slug) or {}
         canonical_headline = str(expected_row.get("canonical_headline") or "").strip()
         updated_headline = str(applied_row.get("updated_headline") or "").strip()
-        if canonical_headline and (
-            not updated_headline
-            or _normalized_generated_headline_key(updated_headline)
-            == _normalized_generated_headline_key(canonical_headline)
-        ):
+        origin_headline = str(
+            expected_row.get("canonical_permalink_origin_headline") or ""
+        ).strip()
+        selected_headlines = [
+            str(value or "").strip()
+            for value in (expected_row.get("selected_headlines") or [])
+            if str(value or "").strip()
+        ]
+        canonical_key = _normalized_generated_headline_key(canonical_headline)
+        updated_key = _normalized_generated_headline_key(updated_headline)
+        origin_key = _normalized_generated_headline_key(origin_headline)
+        selected_progressions = [
+            value for value in selected_headlines
+            if _normalized_generated_headline_key(value)
+            and _normalized_generated_headline_key(value) != canonical_key
+        ]
+        canonical_already_advanced = bool(
+            canonical_headline
+            and origin_headline
+            and canonical_key
+            and origin_key
+            and canonical_key != origin_key
+            and expected_row.get("canonical_meaningful_update_validated")
+        )
+
+        stale_reason = ""
+        if canonical_headline and not updated_headline:
+            stale_reason = "material_update_committed_without_visible_headline"
+        elif canonical_headline and updated_key == canonical_key:
+            if selected_progressions:
+                # The accepted writer explicitly advanced the headline, so a downstream
+                # transaction that restores the pre-update title is still a hard failure.
+                stale_reason = "selected_headline_progression_was_lost"
+            elif not canonical_already_advanced:
+                # Preserve the original Debevec-class protection: the first material
+                # update cannot silently keep the permalink-origin headline unchanged.
+                stale_reason = "first_material_update_headline_did_not_advance"
+            else:
+                # Subsequent material updates can legitimately add body-level facts while
+                # retaining an already-evolved headline. Requiring a fresh H1 for every
+                # later update creates artificial headline churn and produced the Sep. 22
+                # execution-story false failure. The accepted writer and committed copy
+                # must both have intentionally retained the same already-advanced title.
+                retained_advanced_headlines.append({
+                    "canonical_slug": slug,
+                    "permalink_origin_headline": origin_headline,
+                    "canonical_headline": canonical_headline,
+                    "updated_headline": updated_headline,
+                    "selected_headlines": selected_headlines,
+                    "meaningful_update_basis": str(
+                        expected_row.get("canonical_meaningful_update_basis") or ""
+                    ),
+                    "reason": "subsequent_material_update_retained_already_advanced_headline",
+                })
+
+        if stale_reason:
             stale_headlines.append({
                 "canonical_slug": slug,
                 "canonical_headline": canonical_headline,
                 "updated_headline": updated_headline,
-                "selected_headlines": list(expected_row.get("selected_headlines") or []),
-                "reason": "material_update_headline_did_not_advance",
+                "selected_headlines": selected_headlines,
+                "permalink_origin_headline": origin_headline,
+                "canonical_already_advanced": canonical_already_advanced,
+                "reason": stale_reason,
             })
     report = {
         "schema_version": 3,
@@ -37940,6 +38043,8 @@ def _validate_promoted_material_updates_committed(output_root=None):
         "applied_canonical_count": len(set(expected) & applied),
         "missing_canonical_count": len(missing),
         "stale_headline_count": len(stale_headlines),
+        "retained_advanced_headline_count": len(retained_advanced_headlines),
+        "retained_advanced_headlines": retained_advanced_headlines,
         "expected": [copy.deepcopy(expected[slug]) for slug in sorted(expected)],
         "waived": fully_waived,
         "partial_waivers": partial_waivers,
