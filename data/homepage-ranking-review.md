@@ -4,36 +4,37 @@
 
 ## Hero
 
-- Current: **Fort Pierce home with woman, 4 children struck by gunfire on Avenue L**
-- Recommended: **Fort Pierce home with woman, 4 children struck by gunfire on Avenue L**
+- Current: **Palm City man charged with felony, faces $12,500 bond after SWAT standoff**
+- Recommended: **Palm City man charged with felony, faces $12,500 bond after SWAT standoff**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Sheriff confirms former Fox News producer Jennifer Eckhart died by suicide in Hobe Sound | Sheriff confirms former Fox News producer Jennifer Eckhart died by suicide in Hobe Sound | 61 | importance 0; freshness 99.97; urgency 8/10 |
-| 2 | Jolly refuses to debate Donalds, setting up Florida's first debate-free governor's race in 50 years | Jolly refuses to debate Donalds, setting up Florida's first debate-free governor's race in 50 years | 53 | importance 0; freshness 99.97; urgency 6/10 |
-| 3 | Charter bus fire closed I-95 southbound lanes in Hobe Sound; driver escaped unharmed | Man shot at Port St. Lucie Pollo Tropical to be booked after medical release | 53 | importance 0; freshness 96.71; urgency 2/10; validated material update |
-| 4 | Molly's House open house Monday marks 30 years helping Treasure Coast families | Arrest report details threats, gunfire that led to Palm City SWAT standoff | 52 | importance 0; freshness 93.32; urgency 2/10; validated material update |
-| 5 | Port St. Lucie opens third annual Halloween house decorating contest | Charter bus fire closed I-95 southbound lanes in Hobe Sound; driver escaped unharmed | 51 | importance 0; freshness 93.33; urgency 4/10; -4 county saturation |
-| 6 | Man shot at Port St. Lucie Pollo Tropical to be booked after medical release | Port St. Lucie advances $2.2 billion 2050 Mobility Plan with phased fee hikes | 47 | importance 0; freshness 96.7; urgency 2/10 |
-| 7 | Arrest report details threats, gunfire that led to Palm City SWAT standoff | Port St. Lucie opens third annual Halloween house decorating contest | 46 | importance 0; freshness 95.89; urgency 3/10 |
-| 8 | Port St. Lucie advances $2.2 billion 2050 Mobility Plan with phased fee hikes | Port St. Lucie woman launches Chris's Place, free grief support community | 45 | importance 0; freshness 88.32; urgency 2/10 |
-| 9 | Port St. Lucie launches free Lunch and Learn series on utilities and storm readiness | Port St. Lucie launches free Lunch and Learn series on utilities and storm readiness | 43 | importance 0; freshness 94.45; urgency 2/10 |
-| 10 | Air Force confirms missing Eglin AFB attack drone recovered by Pensacola fishing charter | Air Force confirms missing Eglin AFB attack drone recovered by Pensacola fishing charter | 41 | importance 0; freshness 88.32; urgency 2/10 |
-| 11 | Port St. Lucie woman launches Chris's Place, free grief support community | Molly's House open house Monday marks 30 years helping Treasure Coast families | 51 | importance 0; freshness 93.32; urgency 4/10; -12 county saturation |
-| 12 | Fort Pierce votes to explore outside counsel to challenge Causeway Cove under Live Local Act | Fort Pierce votes to explore outside counsel to challenge Causeway Cove under Live Local Act | 49 | position locked: identity_conflict |
+| 1 | Fort Pierce home with woman, 4 children struck by gunfire on Avenue L | Man shot at Port St. Lucie Pollo Tropical to be booked after medical release | 52 | importance 0; freshness 91.55; urgency 2/10; validated material update |
+| 2 | Charter bus fire closed I-95 southbound lanes in Hobe Sound; driver escaped unharmed | Fort Pierce home with woman, 4 children struck by gunfire on Avenue L | 51 | importance 0; freshness 94.8; urgency 4/10 |
+| 3 | Molly's House open house Monday marks 30 years helping Treasure Coast families | Molly's House open house Monday marks 30 years helping Treasure Coast families | 50 | importance 0; freshness 88.16; urgency 4/10 |
+| 4 | Port St. Lucie opens third annual Halloween house decorating contest | Charter bus fire closed I-95 southbound lanes in Hobe Sound; driver escaped unharmed | 49 | importance 0; freshness 88.17; urgency 4/10 |
+| 5 | Man shot at Port St. Lucie Pollo Tropical to be booked after medical release | Port St. Lucie advances $2.2 billion 2050 Mobility Plan with phased fee hikes | 46 | importance 0; freshness 91.54; urgency 2/10 |
+| 6 | Sheriff confirms former Fox News producer Jennifer Eckhart died by suicide in Hobe Sound | Port St. Lucie opens third annual Halloween house decorating contest | 44 | importance 0; freshness 90.73; urgency 3/10 |
+| 7 | Jolly refuses to debate Donalds, setting up Florida's first debate-free governor's race in 50 years | Jolly refuses to debate Donalds, setting up Florida's first debate-free governor's race in 50 years | 43 | importance 0; freshness 94.81; urgency 2/10 |
+| 8 | Port St. Lucie advances $2.2 billion 2050 Mobility Plan with phased fee hikes | Port St. Lucie launches free Lunch and Learn series on utilities and storm readiness | 42 | importance 0; freshness 89.29; urgency 2/10 |
+| 9 | Port St. Lucie launches free Lunch and Learn series on utilities and storm readiness | Port St. Lucie woman launches Chris's Place, free grief support community | 44 | importance 0; freshness 83.16; urgency 2/10; -4 county saturation |
+| 10 | Air Force confirms missing Eglin AFB attack drone recovered by Pensacola fishing charter | Air Force confirms missing Eglin AFB attack drone recovered by Pensacola fishing charter | 40 | importance 0; freshness 83.16; urgency 2/10 |
+| 11 | Port St. Lucie woman launches Chris's Place, free grief support community | Sheriff confirms former Fox News producer Jennifer Eckhart died by suicide in Hobe Sound | 47 | importance 0; freshness 94.81; urgency 2/10; -8 county saturation |
+| 12 | Fort Pierce votes to explore outside counsel to challenge Causeway Cove under Live Local Act | Fort Pierce votes to explore outside counsel to challenge Causeway Cove under Live Local Act | 48 | position locked: identity_conflict |
 
 ## Recommended moves
 
-- **Molly's House open house Monday marks 30 years helping Treasure Coast families**: 4 → 11 — importance 0; freshness 93.32; urgency 4/10; -12 county saturation
-- **Man shot at Port St. Lucie Pollo Tropical to be booked after medical release**: 6 → 3 — importance 0; freshness 96.71; urgency 2/10; validated material update
-- **Arrest report details threats, gunfire that led to Palm City SWAT standoff**: 7 → 4 — importance 0; freshness 93.32; urgency 2/10; validated material update
-- **Port St. Lucie woman launches Chris's Place, free grief support community**: 11 → 8 — importance 0; freshness 88.32; urgency 2/10
-- **Charter bus fire closed I-95 southbound lanes in Hobe Sound; driver escaped unharmed**: 3 → 5 — importance 0; freshness 93.33; urgency 4/10; -4 county saturation
-- **Port St. Lucie advances $2.2 billion 2050 Mobility Plan with phased fee hikes**: 8 → 6 — importance 0; freshness 96.7; urgency 2/10
-- **Port St. Lucie opens third annual Halloween house decorating contest**: 5 → 7 — importance 0; freshness 95.89; urgency 3/10
+- **Sheriff confirms former Fox News producer Jennifer Eckhart died by suicide in Hobe Sound**: 6 → 11 — importance 0; freshness 94.81; urgency 2/10; -8 county saturation
+- **Man shot at Port St. Lucie Pollo Tropical to be booked after medical release**: 5 → 1 — importance 0; freshness 91.55; urgency 2/10; validated material update
+- **Port St. Lucie advances $2.2 billion 2050 Mobility Plan with phased fee hikes**: 8 → 5 — importance 0; freshness 91.54; urgency 2/10
+- **Charter bus fire closed I-95 southbound lanes in Hobe Sound; driver escaped unharmed**: 2 → 4 — importance 0; freshness 88.17; urgency 4/10
+- **Port St. Lucie opens third annual Halloween house decorating contest**: 4 → 6 — importance 0; freshness 90.73; urgency 3/10
+- **Port St. Lucie woman launches Chris's Place, free grief support community**: 11 → 9 — importance 0; freshness 83.16; urgency 2/10; -4 county saturation
+- **Fort Pierce home with woman, 4 children struck by gunfire on Avenue L**: 1 → 2 — importance 0; freshness 94.8; urgency 4/10
+- **Port St. Lucie launches free Lunch and Learn series on utilities and storm readiness**: 9 → 8 — importance 0; freshness 89.29; urgency 2/10
 
 ## Guardrails
 
