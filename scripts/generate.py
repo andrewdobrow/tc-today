@@ -25236,7 +25236,11 @@ def _publication_copy_rank(entry):
     Current manual queue payloads remain the highest editorial authority. A validated,
     target-bound material-update copy outranks ordinary hero/image/length preferences so
     a visually stronger stale clone cannot erase the only copy authorized to refresh the
-    canonical. Durable custom provenance still outranks ordinary generated copy, but it
+    canonical. When multiple generated copies are independently bound to the SAME
+    canonical material update, prefer the copy whose visible headline actually advances
+    beyond the pre-update canonical headline. This prevents a later category clone from
+    rolling the canonical H1 back after another selected copy already expressed the new
+    development. Durable custom provenance still outranks ordinary generated copy, but it
     is distinct from a current manual submission.
     """
     _ck, _cl, item = entry
@@ -25244,12 +25248,23 @@ def _publication_copy_rank(entry):
     current_manual_custom = 1 if _is_current_manual_custom_submission(item) else 0
     active_custom_payload = 1 if is_custom and not item.get("_archive_only") else 0
     material_update = 1 if _has_self_consistent_pre_generation_material_update_authority(item) else 0
+    canonical_headline_key = _normalized_generated_headline_key(
+        item.get("_canonical_context_headline") or ""
+    )
+    candidate_headline_key = _normalized_generated_headline_key(item.get("headline") or "")
+    material_update_headline_progression = 1 if (
+        material_update
+        and canonical_headline_key
+        and candidate_headline_key
+        and candidate_headline_key != canonical_headline_key
+    ) else 0
     has_real_img = 1 if (item.get("image_url") and not item.get("image_from_google")) else 0
     is_hero_copy = 1 if item.get("_is_hero_copy") else 0
     body_words = _word_count(item.get("body", ""))
     return (
         current_manual_custom,
         material_update,
+        material_update_headline_progression,
         is_custom,
         active_custom_payload,
         has_real_img,
@@ -25260,7 +25275,7 @@ def _publication_copy_rank(entry):
 
 
 def _publication_coalesce_key(item, identity_index=None):
-    """Use durable custom publication identity and persistent generated-story IDs."""
+    """Use one canonical transaction key for every copy bound to the same update target."""
     if not isinstance(item, dict):
         return ""
     if item.get("is_custom") or item.get("authoritative_custom"):
@@ -25272,6 +25287,17 @@ def _publication_coalesce_key(item, identity_index=None):
             "custom-headline:" + hashlib.sha256(headline.encode("utf-8")).hexdigest()
             if headline else ""
         )
+    # A selected material update is already write-authoritatively bound to one
+    # canonical permalink. Incoming/category clones can still carry different
+    # registry story IDs or incident anchors, so those identities must not split one
+    # canonical update into multiple publication transactions. Coalesce by the exact
+    # authorized target before considering presentation/incoming identity.
+    if _has_self_consistent_pre_generation_material_update_authority(item):
+        target_slug = str(
+            item.get("_pre_generation_material_update_canonical_slug") or ""
+        ).strip()
+        if target_slug:
+            return f"canonical-material-update:{target_slug}"
     incident_anchor = _durable_incident_anchor(item)
     if incident_anchor:
         return f"incident-anchor:{incident_anchor}"

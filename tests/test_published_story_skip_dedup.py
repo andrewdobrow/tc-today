@@ -1880,6 +1880,56 @@ def test_validated_material_update_outranks_ordinary_hero_during_publication_coa
     assert update_rank > ordinary_rank
 
 
+def test_same_canonical_material_update_copies_coalesce_by_authorized_target_and_prefer_headline_progression():
+    """Sep. 22 production regression: two category clones must be one canonical write.
+
+    Crime & Safety and Indian River County can independently select the same validated
+    material update while carrying different incoming story identities. The publication
+    deck must coalesce them by the already-authorized canonical target, and if one copy
+    advances the visible headline while another retains the prior H1, the progressed
+    headline wins the single transaction.
+    """
+    g = _load_generate()
+    canonical, source = _authorized_debevec_body_source(g)
+
+    progressed = {
+        "headline": "Body found during search for Michael Debevec in Martin County",
+        "body": "material update with the new development " * 90,
+        "source_url": source["source_url"],
+        "source_headline": source["title"],
+        "source_published": source["published"],
+        "image_url": "/images/martin.png",
+        "_is_hero_copy": True,
+    }
+    retained = {
+        "headline": canonical["headline"],
+        "body": "material update retaining the previous headline " * 110,
+        "source_url": source["source_url"],
+        "source_headline": source["title"],
+        "source_published": source["published"],
+        "image_url": "/images/martin.png",
+        "_is_hero_copy": True,
+    }
+    assert g._carry_pre_generation_material_update_authority(progressed, source) is True
+    assert g._carry_pre_generation_material_update_authority(retained, source) is True
+
+    # Simulate category clones that acquired different incoming registry IDs even
+    # though their target-bound authorization names the same canonical permalink.
+    progressed["editorial_story_id"] = "story_incoming_crime_clone"
+    progressed["_editorial_story_id"] = "story_incoming_crime_clone"
+    retained["editorial_story_id"] = "story_incoming_county_clone"
+    retained["_editorial_story_id"] = "story_incoming_county_clone"
+
+    progressed_key = g._publication_coalesce_key(progressed, identity_index=None)
+    retained_key = g._publication_coalesce_key(retained, identity_index=None)
+    expected_key = f"canonical-material-update:{canonical['slug']}"
+    assert progressed_key == expected_key
+    assert retained_key == expected_key
+    assert g._publication_copy_rank(("crime", "Crime & Safety", progressed)) > g._publication_copy_rank(
+        ("indian_river", "Indian River County", retained)
+    )
+
+
 def test_martin_motorcycle_update_receipt_survives_coalescing_and_commit_queue():
     """2026-09-02 production regression for the false terminal invariant failure."""
     g = _load_generate()
