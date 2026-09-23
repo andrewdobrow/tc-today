@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **Port St. Lucie council approves first reading of $2.2B mobility plan with $1.7B gap**
-- Recommended: **Port St. Lucie council approves first reading of $2.2B mobility plan with $1.7B gap**
+- Current: **No charges in Indiantown bus stop gun incident; two teens dispute sheriff's account**
+- Recommended: **No charges in Indiantown bus stop gun incident; two teens dispute sheriff's account**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County on I-95 | Martin County High student Noah Taylor charged with felony for bomb threat | 63 | importance 0; freshness 91.85; urgency 7/10; validated material update |
-| 2 | Martin County High student Noah Taylor charged with felony for bomb threat | Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County on I-95 | 61 | importance 0; freshness 99.96; urgency 8/10 |
-| 3 | Fort Pierce police link three Avenue L shootings, identify suspects | Fort Pierce police link three Avenue L shootings, identify suspects | 61 | importance 0; freshness 91.83; urgency 6/10; validated material update |
-| 4 | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | 48 | importance 0; freshness 76.95; urgency 2/10; validated material update |
-| 5 | Indian River County deputy, K9 Penny help rescue missing Gadsden County woman | Indian River County deputy, K9 Penny help rescue missing Gadsden County woman | 46 | importance 0; freshness 91.86; urgency 2/10 |
-| 6 | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | Martin County High School sophomore arrested for hoax bomb threat | 46 | importance 0; freshness 68.44; urgency 2/10; validated material update |
-| 7 | More than 1,000 volunteers turn out for Martin County beach cleanup | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | 45 | importance 0; freshness 76.95; urgency 5/10 |
-| 8 | Card skimmer discovered on 7-Eleven gas pump in Fort Pierce prompts investigation | More than 1,000 volunteers turn out for Martin County beach cleanup | 42 | importance 0; freshness 76.95; urgency 2/10 |
-| 9 | Martin County High School sophomore arrested for hoax bomb threat | Vero Beach man arrested with loaded pistol, illegal Glock switch after traffic stop | 40 | importance 0; freshness 68.46; urgency 2/10 |
-| 10 | Grant-Valkaria MRI tech told sedated patient 'nobody can see,' police report details | Sheriff confirms former Fox News producer Jennifer Eckhart died by suicide in Hobe Sound | 42 | importance 0; freshness 51.79; urgency 2/10; validated material update; -4 county saturation |
-| 11 | Vero Beach man arrested with loaded pistol, illegal Glock switch after traffic stop | National Democrats spend nearly $8M in Florida as seven races shift their way | 36 | importance 0; freshness 68.45; urgency 2/10 |
-| 12 | National Democrats spend nearly $8M in Florida as seven races shift their way | Man shot at Port St. Lucie Pollo Tropical to be booked after medical release | 41 | importance 0; freshness 28.37; urgency 4/10; validated material update; -6 category saturation |
+| 1 | Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County on I-95 | Fort Pierce police link three Avenue L shootings, identify suspects | 59 | importance 0; freshness 86.62; urgency 6/10; validated material update |
+| 2 | Fort Pierce police link three Avenue L shootings, identify suspects | Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County on I-95 | 58 | importance 0; freshness 94.75; urgency 7/10 |
+| 3 | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth | 53 | importance 0; freshness 94.74; urgency 2/10; validated material update |
+| 4 | Card skimmer discovered on 7-Eleven gas pump in Fort Pierce prompts investigation | Martin County High student Noah Taylor charged with felony for bomb threat | 51 | importance 0; freshness 86.64; urgency 2/10; validated material update |
+| 5 | Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | 47 | importance 0; freshness 71.73; urgency 2/10; validated material update |
+| 6 | Martin County High student Noah Taylor charged with felony for bomb threat | Indian River County deputy, K9 Penny help rescue missing Gadsden County woman | 45 | importance 0; freshness 86.64; urgency 2/10 |
+| 7 | Indian River County deputy, K9 Penny help rescue missing Gadsden County woman | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | 44 | importance 0; freshness 71.73; urgency 5/10 |
+| 8 | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | Palm City man charged with felony, faces $12,500 bond after SWAT standoff | 42 | importance 0; freshness 31.55; urgency 4/10; validated material update |
+| 9 | More than 1,000 volunteers turn out for Martin County beach cleanup | Man shot at Port St. Lucie Pollo Tropical to be booked after medical release | 40 | importance 0; freshness 23.15; urgency 4/10; validated material update |
+| 10 | Palm City man charged with felony, faces $12,500 bond after SWAT standoff | Vero Beach man arrested with loaded pistol, illegal Glock switch after traffic stop | 39 | importance 0; freshness 63.24; urgency 2/10 |
+| 11 | Martin County High School sophomore arrested for hoax bomb threat | National Democrats spend nearly $8M in Florida as seven races shift their way | 35 | importance 0; freshness 63.23; urgency 2/10 |
+| 12 | Grant-Valkaria MRI tech told sedated patient 'nobody can see,' police report details | More than 1,000 volunteers turn out for Martin County beach cleanup | 41 | importance 0; freshness 71.73; urgency 2/10; -8 county saturation |
 
 ## Recommended moves
 
-- **Sheriff confirms former Fox News producer Jennifer Eckhart died by suicide in Hobe Sound**: 45 → 10 — importance 0; freshness 51.79; urgency 2/10; validated material update; -4 county saturation
-- **Card skimmer discovered on 7-Eleven gas pump in Fort Pierce prompts investigation**: 8 → 13 — importance 0; freshness 76.95; urgency 2/10
-- **Grant-Valkaria MRI tech told sedated patient 'nobody can see,' police report details**: 10 → 14 — importance 0; freshness 65.01; urgency 2/10; validated material update
-- **Martin County High School sophomore arrested for hoax bomb threat**: 9 → 6 — importance 0; freshness 68.44; urgency 2/10; validated material update
-- **Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27**: 4 → 7 — importance 0; freshness 76.95; urgency 5/10
-- **Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer**: 6 → 4 — importance 0; freshness 76.95; urgency 2/10; validated material update
-- **Vero Beach man arrested with loaded pistol, illegal Glock switch after traffic stop**: 11 → 9 — importance 0; freshness 68.46; urgency 2/10
-- **Martin County High student Noah Taylor charged with felony for bomb threat**: 2 → 1 — importance 0; freshness 91.85; urgency 7/10; validated material update
-- **Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County on I-95**: 1 → 2 — importance 0; freshness 99.96; urgency 8/10
-- **More than 1,000 volunteers turn out for Martin County beach cleanup**: 7 → 8 — importance 0; freshness 76.95; urgency 2/10
-- **Man shot at Port St. Lucie Pollo Tropical to be booked after medical release**: 13 → 12 — importance 0; freshness 28.37; urgency 4/10; validated material update; -6 category saturation
-- **National Democrats spend nearly $8M in Florida as seven races shift their way**: 12 → 11 — importance 0; freshness 68.45; urgency 2/10
+- **Vero Beach man arrested with loaded pistol, illegal Glock switch after traffic stop**: 48 → 10 — importance 0; freshness 63.24; urgency 2/10
+- **National Democrats spend nearly $8M in Florida as seven races shift their way**: 41 → 11 — importance 0; freshness 63.23; urgency 2/10
+- **Card skimmer discovered on 7-Eleven gas pump in Fort Pierce prompts investigation**: 4 → 13 — importance 0; freshness 71.73; urgency 4/10
+- **Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27**: 3 → 7 — importance 0; freshness 71.73; urgency 5/10
+- **Man shot at Port St. Lucie Pollo Tropical to be booked after medical release**: 13 → 9 — importance 0; freshness 23.15; urgency 4/10; validated material update
+- **Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer**: 8 → 5 — importance 0; freshness 71.73; urgency 2/10; validated material update
+- **Martin County High School sophomore arrested for hoax bomb threat**: 11 → 14 — importance 0; freshness 63.23; urgency 2/10; validated material update
+- **Grant-Valkaria MRI tech told sedated patient 'nobody can see,' police report details**: 12 → 15 — importance 0; freshness 59.79; urgency 2/10; validated material update
+- **More than 1,000 volunteers turn out for Martin County beach cleanup**: 9 → 12 — importance 0; freshness 71.73; urgency 2/10; -8 county saturation
+- **Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth**: 5 → 3 — importance 0; freshness 94.74; urgency 2/10; validated material update
+- **Martin County High student Noah Taylor charged with felony for bomb threat**: 6 → 4 — importance 0; freshness 86.64; urgency 2/10; validated material update
+- **Palm City man charged with felony, faces $12,500 bond after SWAT standoff**: 10 → 8 — importance 0; freshness 31.55; urgency 4/10; validated material update
 
 ## Guardrails
 
