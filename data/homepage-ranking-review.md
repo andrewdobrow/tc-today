@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **Fort Pierce police link three Avenue L shootings, identify suspects**
-- Recommended: **Fort Pierce police link three Avenue L shootings, identify suspects**
-- Recommendation: KEEP (not enforced)
+- Current: **Officers unfamiliar with skimmers check all pumps at Fort Pierce 7-Eleven**
+- Recommended: **Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County**
+- Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Byron Donalds holds Martin County roundtable on insurance costs, property taxes | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | 60 | importance 0; freshness 99.95; urgency 5/10; validated material update |
-| 2 | Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table | Byron Donalds holds Martin County roundtable on insurance costs, property taxes | 59 | importance 0; freshness 99.94; urgency 7/10 |
-| 3 | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table | 53 | importance 0; freshness 99.95; urgency 6/10 |
-| 4 | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | Officers unfamiliar with skimmers check all pumps at Fort Pierce 7-Eleven | 52 | importance 0; freshness 91.67; urgency 2/10; validated material update |
-| 5 | Officers unfamiliar with skimmers check all pumps at Fort Pierce 7-Eleven | Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth | 50 | importance 0; freshness 83.13; urgency 2/10; validated material update |
-| 6 | Florida renter costs could jump hundreds annually under Amendment 3, report finds | Martin County High student Noah Taylor charged with felony for bomb threat | 48 | importance 0; freshness 75.03; urgency 2/10; validated material update |
-| 7 | Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth | Indian River County deputy, K9 Penny help rescue missing Gadsden County woman | 42 | importance 0; freshness 75.03; urgency 2/10 |
-| 8 | No charges in Indiantown bus stop gun incident; two teens dispute sheriff's account | No charges in Indiantown bus stop gun incident; two teens dispute sheriff's account | 45 | importance 0; freshness 88.32; urgency 2/10; -4 county saturation |
-| 9 | Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County on I-95 | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | 41 | importance 0; freshness 60.12; urgency 5/10 |
-| 10 | Martin County High student Noah Taylor charged with felony for bomb threat | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | 44 | importance 0; freshness 60.12; urgency 2/10; validated material update; -6 category saturation |
-| 11 | Port St. Lucie veterans home raises funds for WiFi, Medal of Honor Museum trip | Vero Beach man arrested with loaded pistol, illegal Glock switch after traffic stop | 36 | importance 0; freshness 51.63; urgency 2/10 |
-| 12 | Indian River County deputy, K9 Penny help rescue missing Gadsden County woman | Martin County High School sophomore arrested for hoax bomb threat | 42 | importance 0; freshness 51.62; urgency 2/10; validated material update; -8 county saturation |
+| 1 | Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County | Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County | 65 | importance 0; freshness 99.95; urgency 7/10; validated material update |
+| 2 | Fort Pierce police link three Avenue L shootings, identify suspects | Fort Pierce police link three Avenue L shootings, identify suspects | 53 | importance 0; freshness 59.98; urgency 6/10; validated material update |
+| 3 | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth | 46 | importance 0; freshness 68.1; urgency 2/10; validated material update |
+| 4 | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | Byron Donalds holds Martin County roundtable on insurance costs, property taxes | 44 | importance 0; freshness 84.91; urgency 2/10 |
+| 5 | Byron Donalds holds Martin County roundtable on insurance costs, property taxes | Martin County High student Noah Taylor charged with felony for bomb threat | 44 | importance 0; freshness 60.0; urgency 2/10; validated material update |
+| 6 | Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | 41 | importance 0; freshness 45.09; urgency 2/10; validated material update |
+| 7 | Florida renter costs could jump hundreds annually under Amendment 3, report finds | Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table | 40 | importance 0; freshness 84.92; urgency 2/10 |
+| 8 | More than 1,000 volunteers turn out for Martin County beach cleanup | Indian River County deputy, K9 Penny help rescue missing Gadsden County woman | 38 | importance 0; freshness 60.0; urgency 2/10 |
+| 9 | Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | 38 | importance 0; freshness 45.09; urgency 5/10 |
+| 10 | No charges in Indiantown bus stop gun incident; two teens dispute sheriff's account | More than 1,000 volunteers turn out for Martin County beach cleanup | 39 | importance 0; freshness 45.09; urgency 4/10; -4 county saturation |
+| 11 | Martin County High student Noah Taylor charged with felony for bomb threat | Florida renter costs could jump hundreds annually under Amendment 3, report finds | 39 | importance 0; freshness 79.97; urgency 2/10; -6 category saturation |
+| 12 | Port St. Lucie veterans home raises funds for WiFi, Medal of Honor Museum trip | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | 50 | importance 0; freshness 84.92; urgency 2/10; validated material update; -6 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Vero Beach man arrested with loaded pistol, illegal Glock switch after traffic stop**: 49 → 11 — importance 0; freshness 51.63; urgency 2/10
-- **Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer**: 44 → 10 — importance 0; freshness 60.12; urgency 2/10; validated material update; -6 category saturation
-- **Martin County High School sophomore arrested for hoax bomb threat**: 22 → 12 — importance 0; freshness 51.62; urgency 2/10; validated material update; -8 county saturation
-- **Florida renter costs could jump hundreds annually under Amendment 3, report finds**: 6 → 13 — importance 0; freshness 95.0; urgency 2/10
-- **Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County on I-95**: 9 → 14 — importance 0; freshness 83.14; urgency 2/10
-- **Indian River County deputy, K9 Penny help rescue missing Gadsden County woman**: 12 → 7 — importance 0; freshness 75.03; urgency 2/10
-- **Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27**: 4 → 9 — importance 0; freshness 60.12; urgency 5/10
-- **Martin County High student Noah Taylor charged with felony for bomb threat**: 10 → 6 — importance 0; freshness 75.03; urgency 2/10; validated material update
-- **Port St. Lucie veterans home raises funds for WiFi, Medal of Honor Museum trip**: 11 → 15 — importance 0; freshness 43.35; urgency 4/10
-- **Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute**: 3 → 1 — importance 0; freshness 99.95; urgency 5/10; validated material update
-- **Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth**: 7 → 5 — importance 0; freshness 83.13; urgency 2/10; validated material update
-- **Byron Donalds holds Martin County roundtable on insurance costs, property taxes**: 1 → 2 — importance 0; freshness 99.94; urgency 7/10
+- **Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer**: 31 → 6 — importance 0; freshness 45.09; urgency 2/10; validated material update
+- **Indian River County deputy, K9 Penny help rescue missing Gadsden County woman**: 23 → 8 — importance 0; freshness 60.0; urgency 2/10
+- **Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute**: 4 → 12 — importance 0; freshness 84.92; urgency 2/10; validated material update; -6 category saturation; -12 county saturation
+- **Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth**: 9 → 3 — importance 0; freshness 68.1; urgency 2/10; validated material update
+- **Martin County High student Noah Taylor charged with felony for bomb threat**: 11 → 5 — importance 0; freshness 60.0; urgency 2/10; validated material update
+- **Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27**: 3 → 9 — importance 0; freshness 45.09; urgency 5/10
+- **Florida renter costs could jump hundreds annually under Amendment 3, report finds**: 7 → 11 — importance 0; freshness 79.97; urgency 2/10; -6 category saturation
+- **No charges in Indiantown bus stop gun incident; two teens dispute sheriff's account**: 10 → 13 — importance 0; freshness 73.29; urgency 2/10
+- **More than 1,000 volunteers turn out for Martin County beach cleanup**: 8 → 10 — importance 0; freshness 45.09; urgency 4/10; -4 county saturation
+- **Port St. Lucie veterans home raises funds for WiFi, Medal of Honor Museum trip**: 12 → 14 — importance 0; freshness 28.32; urgency 4/10
+- **Byron Donalds holds Martin County roundtable on insurance costs, property taxes**: 5 → 4 — importance 0; freshness 84.91; urgency 2/10
+- **Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table**: 6 → 7 — importance 0; freshness 84.92; urgency 2/10
 
 ## Guardrails
 

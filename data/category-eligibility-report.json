@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T02:00:07Z",
+  "generated_at": "2026-09-24T11:01:52Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 30,
-    "rejected_count": 6,
+    "assessed_count": 31,
+    "rejected_count": 10,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,9 +34,39 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 3,
-      "rejected_count": 3,
+      "assessed_count": 6,
+      "rejected_count": 6,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
+          "source_url": "https://cbs12.com/news/instagram/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Martin County Fire Rescue responds to fire at Wendy’s on Jensen Beach Boulevard - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/martin-county-fire-rescue-responds-to-fire-at-wendys-on-jensen-beach-boulevard-florida-news-local-news-florida-fire-local-fire"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -72,14 +102,28 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Father pulls gun on teens at Indiantown bus stop, NAACP calls for action - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-indiantown-bus-stop-gun-naacp/73843149"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
             "crime_incident:arrested"
           ],
           "local_nexus_signals": [],
-          "headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
-          "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news"
+          "headline": "Martin County student thought bomb threat couldn’t be traced, investigators say - cw34.com",
+          "source_url": "https://cw34.com/news/local/another-martin-county-high-school-threat-sparks-investigation-ends-with-arrest-school-safety-florida-school-threat-florida-crime-martin-county-crime-stuart-florida-martin-county-florida-fortifyfl?teaserSource=trending"
         }
       ]
     },
@@ -126,9 +170,29 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 1,
+      "assessed_count": 3,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:st lucie county",
+            "source_locality:port st lucie"
+          ],
+          "headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-county"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -171,7 +235,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 4,
+      "assessed_count": 2,
       "rejected_count": 0,
       "rejections": []
     },
@@ -180,7 +244,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -189,7 +253,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 6,
+      "assessed_count": 8,
       "rejected_count": 0,
       "rejections": []
     },
@@ -198,7 +262,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 5,
       "rejected_count": 0,
       "rejections": []
     }
