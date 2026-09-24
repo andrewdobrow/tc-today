@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011**
-- Recommended: **Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011**
+- Current: **Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash**
+- Recommended: **Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County | Port St. Lucie man arrested under hotel bed faces meth, child neglect charges | 60 | importance 0; freshness 99.94; urgency 5/10; validated material update |
-| 2 | Port St. Lucie man arrested under hotel bed faces meth, child neglect charges | Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County | 59 | importance 0; freshness 83.3; urgency 6/10; validated material update |
-| 3 | Fort Pierce police link three Avenue L shootings, identify suspects | Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say | 52 | importance 0; freshness 91.66; urgency 2/10; validated material update |
-| 4 | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | 17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post | 47 | importance 0; freshness 96.61; urgency 2/10 |
-| 5 | Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say | Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor | 46 | importance 0; freshness 91.66; urgency 2/10 |
-| 6 | 17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post | Treasure Coast voters face local ballot questions Nov. 3 on taxes, services, land | 42 | importance 0; freshness 91.66; urgency 2/10 |
-| 7 | Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor | Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth | 42 | importance 0; freshness 51.45; urgency 2/10; validated material update |
-| 8 | Treasure Coast voters face local ballot questions Nov. 3 on taxes, services, land | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | 37 | importance 0; freshness 28.44; urgency 2/10; validated material update |
-| 9 | Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site | Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table | 36 | importance 0; freshness 68.27; urgency 2/10 |
-| 10 | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | Martin County High student Noah Taylor charged with felony for bomb threat | 40 | importance 0; freshness 43.34; urgency 2/10; validated material update; -6 category saturation |
-| 11 | Byron Donalds holds Martin County roundtable on insurance costs, property taxes | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | 34 | importance 0; freshness 28.44; urgency 5/10 |
-| 12 | Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | 50 | importance 0; freshness 68.27; urgency 4/10; validated material update; -6 category saturation; -12 county saturation |
+| 1 | Amendment 3 could force Florida to itemize tax bills by service | Martin County first responders rescue man from St. Lucie River after jump from West Bridge | 57 | importance 0; freshness 99.94; urgency 6/10 |
+| 2 | Martin County first responders rescue man from St. Lucie River after jump from West Bridge | Fort Pierce community rallies for brothers killed in Georgia shooting; suspect charged | 57 | importance 0; freshness 99.93; urgency 6/10 |
+| 3 | Fort Pierce community rallies for brothers killed in Georgia shooting; suspect charged | Amendment 3 could force Florida to itemize tax bills by service | 55 | importance 0; freshness 99.94; urgency 7/10 |
+| 4 | Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program | Port St. Lucie man arrested under hotel bed faces meth, child neglect charges | 53 | importance 0; freshness 96.58; urgency 2/10; validated material update |
+| 5 | Fort Pierce police link three Avenue L shootings, identify suspects | Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program | 52 | importance 0; freshness 99.95; urgency 4/10 |
+| 6 | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011 | 47 | importance 0; freshness 96.58; urgency 2/10 |
+| 7 | Port St. Lucie man arrested under hotel bed faces meth, child neglect charges | 17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post | 46 | importance 0; freshness 93.24; urgency 2/10 |
+| 8 | Officers unfamiliar with skimmers check all pumps at Fort Pierce 7-Eleven | Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say | 51 | importance 0; freshness 88.3; urgency 2/10; validated material update; -6 category saturation |
+| 9 | Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011 | Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth | 42 | importance 0; freshness 48.09; urgency 2/10; validated material update |
+| 10 | Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | 36 | importance 0; freshness 25.08; urgency 2/10; validated material update |
+| 11 | 17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post | Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor | 45 | importance 0; freshness 88.3; urgency 2/10; -12 category saturation |
+| 12 | Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor | Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27 | 33 | importance 0; freshness 25.07; urgency 5/10 |
 
 ## Recommended moves
 
-- **Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer**: 48 → 8 — importance 0; freshness 28.44; urgency 2/10; validated material update
-- **Martin County High student Noah Taylor charged with felony for bomb threat**: 29 → 10 — importance 0; freshness 43.34; urgency 2/10; validated material update; -6 category saturation
-- **Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth**: 24 → 7 — importance 0; freshness 51.45; urgency 2/10; validated material update
-- **Fort Pierce police link three Avenue L shootings, identify suspects**: 3 → 13 — importance 0; freshness 43.33; urgency 6/10; validated material update
-- **Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute**: 4 → 12 — importance 0; freshness 68.27; urgency 4/10; validated material update; -6 category saturation; -12 county saturation
-- **Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site**: 9 → 14 — importance 0; freshness 91.65; urgency 2/10
-- **Byron Donalds holds Martin County roundtable on insurance costs, property taxes**: 11 → 15 — importance 0; freshness 68.26; urgency 2/10
-- **Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table**: 12 → 9 — importance 0; freshness 68.27; urgency 2/10
-- **Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say**: 5 → 3 — importance 0; freshness 91.66; urgency 2/10; validated material update
-- **17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post**: 6 → 4 — importance 0; freshness 96.61; urgency 2/10
-- **Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor**: 7 → 5 — importance 0; freshness 91.66; urgency 2/10
-- **Treasure Coast voters face local ballot questions Nov. 3 on taxes, services, land**: 8 → 6 — importance 0; freshness 91.66; urgency 2/10
+- **Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer**: 52 → 10 — importance 0; freshness 25.08; urgency 2/10; validated material update
+- **Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth**: 25 → 9 — importance 0; freshness 48.09; urgency 2/10; validated material update
+- **Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute**: 6 → 14 — importance 0; freshness 64.9; urgency 4/10; validated material update
+- **Fort Pierce police link three Avenue L shootings, identify suspects**: 5 → 13 — importance 0; freshness 39.96; urgency 6/10; validated material update
+- **Officers unfamiliar with skimmers check all pumps at Fort Pierce 7-Eleven**: 8 → 15 — importance 0; freshness 56.63; urgency 4/10; validated material update
+- **17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post**: 11 → 7 — importance 0; freshness 93.24; urgency 2/10
+- **Port St. Lucie man arrested under hotel bed faces meth, child neglect charges**: 7 → 4 — importance 0; freshness 96.58; urgency 2/10; validated material update
+- **Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011**: 9 → 6 — importance 0; freshness 96.58; urgency 2/10
+- **Amendment 3 could force Florida to itemize tax bills by service**: 1 → 3 — importance 0; freshness 99.94; urgency 7/10
+- **Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say**: 10 → 8 — importance 0; freshness 88.3; urgency 2/10; validated material update; -6 category saturation
+- **Martin County first responders rescue man from St. Lucie River after jump from West Bridge**: 2 → 1 — importance 0; freshness 99.94; urgency 6/10
+- **Fort Pierce community rallies for brothers killed in Georgia shooting; suspect charged**: 3 → 2 — importance 0; freshness 99.93; urgency 6/10
 
 ## Guardrails
 
