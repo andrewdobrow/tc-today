@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-25T19:05:11Z",
+  "generated_at": "2026-09-25T21:03:20Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 1,
     "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 3,
-    "placements_after": 2,
+    "placements_before": 5,
+    "placements_after": 4,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -105,27 +105,26 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 181,
+    "candidates_processed": 177,
     "routes": {
-      "generate_new": 59,
-      "skip": 121,
-      "update_existing": 1
+      "generate_new": 26,
+      "skip": 151
     },
     "eligibility": {
       "listing": 1,
       "low_value": 130,
-      "publishable": 50
+      "publishable": 46
     },
     "source_classes": {
       "aggregator": 131,
-      "local_news": 30,
-      "regional_news": 17,
+      "local_news": 31,
+      "regional_news": 12,
       "unknown": 3
     },
     "rejected_count": 1,
     "rejected_examples": [
       {
-        "headline": "974 SE Brookedge Ave, Port Saint Lucie, FL 34983 - Realtor.com",
+        "headline": "974 SE Brookedge Ave, Port Saint Lucie, FL 34983 - realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPWWQ0U19pMWZCQU15N3ZvWmJwYUJ3N2xZcms5UDczX0lWY2IzTklNaGxHM0lzd24xaU4wRjE2WWYwOURPR0xLWjFaN0w4THBKV184REd2MGpJT1pnM0RwQ2RJVzhmSFRNRTZUcmYtaF9zUEFoQmpIaXBTZTlGbldVZlhmYlI3YXQ0ZVQ3OWREcDgyOXN3SXBYTllUWFY?oc=5",
         "status": "listing",
         "reasons": [
@@ -137,12 +136,24 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 27,
-      "same_event": 154
+      "new_story": 16,
+      "same_event": 161
     },
     "examples": [
       {
-        "story_id": "story_016210",
+        "story_id": "story_016306",
+        "title": "Toddler graduates from swim school months after nearly drowning at Easter family gathering",
+        "event_key": "unknown-event-1d6cc8cec8",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_016272",
         "title": "Animal hoarding cases on the Treasure Coast raise questions about prevention efforts",
         "event_key": "animal-rescue-palm-city-cats",
         "relationship": "same_event",
@@ -159,30 +170,34 @@
         "story_id": "story_016244",
         "title": "Vero Beach Doubling Fines For Parking Longer Than The City Allows - WIOD",
         "event_key": "unknown-event-c9b93fb8f0",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_016245",
         "title": "Okeechobee Music & Arts Festival goes on hiatus again citing rising costs, difficult industry conditions",
         "event_key": "unknown-event-cd8319507b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_016246",
-        "title": "Palm Beach County commissioners unanimously approve moratorium - WFLX",
-        "event_key": "unknown-event-00bde24b53",
+        "story_id": "story_016307",
+        "title": "Vero Beach doubles most parking fines starting Oct. 1 - WFLX",
+        "event_key": "unknown-event-71a5c988e2",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -195,12 +210,14 @@
         "story_id": "story_016247",
         "title": "2 arrested in 2019 Riviera Beach homicide after cold case review by North Palm Beach police",
         "event_key": "unknown-event-d1dd5e6f95",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -209,10 +226,11 @@
         "event_key": "unknown-event-07af1afcb8",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -278,23 +296,25 @@
         "event_key": "unknown-event-5ecdd93bf1",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_016048",
-        "title": "Midseason Football Report: Area's top players, teams, storylines and games - tcpalm.com",
-        "event_key": "unknown-event-772ad7aec2",
+        "title": "Midseason Football Report: Area's top players, teams, storylines and games - Treasure Coast News",
+        "event_key": "unknown-event-8729aaf92a",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -304,23 +324,25 @@
         "event_key": "unknown-event-9c0c6ebba9",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_016070",
-        "title": "Florida city has fastest population growth in U.S. five years in a row - tcpalm.com",
-        "event_key": "unknown-event-5c7ca7538d",
+        "title": "Florida city has fastest population growth in U.S. five years in a row - Treasure Coast News",
+        "event_key": "unknown-event-f7cc6f3d48",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -353,6 +375,20 @@
         ]
       },
       {
+        "story_id": "story_015732",
+        "title": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
+        "event_key": "unknown-event-3e22631259",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_015609",
         "title": "'Scared to go to school': Palm Beach County sees big drop in non-US born students - cw34.com",
         "event_key": "unknown-event-4ca11ba858",
@@ -370,34 +406,6 @@
         "story_id": "story_015995",
         "title": "State Road 70 intersection raises safety concerns in Okeechobee County; residents demand traffic light",
         "event_key": "unknown-event-c1f3e4f9e0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_015935",
-        "title": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
-        "event_key": "fire-3810810582-3810810582",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_015937",
-        "title": "Florida candidates clash over data centers as poll finds local opposition",
-        "event_key": "unknown-event-cfc6b8cf9c",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -411,7 +419,20 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_016210",
+        "story_id": "story_016306",
+        "title": "Toddler graduates from swim school months after nearly drowning at Easter family gathering",
+        "event_key": "unknown-event-1d6cc8cec8",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_016272",
         "title": "Animal hoarding cases on the Treasure Coast raise questions about prevention efforts",
         "event_key": "animal-rescue-palm-city-cats",
         "relationship": "same_event",
@@ -429,32 +450,36 @@
         "story_id": "story_016244",
         "title": "Vero Beach Doubling Fines For Parking Longer Than The City Allows - WIOD",
         "event_key": "unknown-event-c9b93fb8f0",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_016245",
         "title": "Okeechobee Music & Arts Festival goes on hiatus again citing rising costs, difficult industry conditions",
         "event_key": "unknown-event-cd8319507b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_016246",
-        "title": "Palm Beach County commissioners unanimously approve moratorium - WFLX",
-        "event_key": "unknown-event-00bde24b53",
+        "story_id": "story_016307",
+        "title": "Vero Beach doubles most parking fines starting Oct. 1 - WFLX",
+        "event_key": "unknown-event-71a5c988e2",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -468,13 +493,15 @@
         "story_id": "story_016247",
         "title": "2 arrested in 2019 Riviera Beach homicide after cold case review by North Palm Beach police",
         "event_key": "unknown-event-d1dd5e6f95",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -484,10 +511,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -558,24 +586,26 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_016048",
-        "title": "Midseason Football Report: Area's top players, teams, storylines and games - tcpalm.com",
-        "event_key": "unknown-event-772ad7aec2",
+        "title": "Midseason Football Report: Area's top players, teams, storylines and games - Treasure Coast News",
+        "event_key": "unknown-event-8729aaf92a",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -586,24 +616,26 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_016070",
-        "title": "Florida city has fastest population growth in U.S. five years in a row - tcpalm.com",
-        "event_key": "unknown-event-5c7ca7538d",
+        "title": "Florida city has fastest population growth in U.S. five years in a row - Treasure Coast News",
+        "event_key": "unknown-event-f7cc6f3d48",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -638,6 +670,21 @@
         ]
       },
       {
+        "story_id": "story_015732",
+        "title": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
+        "event_key": "unknown-event-3e22631259",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_015609",
         "title": "'Scared to go to school': Palm Beach County sees big drop in non-US born students - cw34.com",
         "event_key": "unknown-event-4ca11ba858",
@@ -656,36 +703,6 @@
         "story_id": "story_015995",
         "title": "State Road 70 intersection raises safety concerns in Okeechobee County; residents demand traffic light",
         "event_key": "unknown-event-c1f3e4f9e0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_015935",
-        "title": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
-        "event_key": "fire-3810810582-3810810582",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_015937",
-        "title": "Florida candidates clash over data centers as poll finds local opposition",
-        "event_key": "unknown-event-cfc6b8cf9c",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -715,9 +732,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1756,
-      "timeline_entries_examined": 5081,
-      "transitions_examined": 3111,
+      "stories_with_timelines": 1746,
+      "timeline_entries_examined": 5039,
+      "transitions_examined": 3079,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 37,
       "high_confidence_candidate_count": 14,
@@ -1084,7 +1101,7 @@
       "incoherent_story_count": 12,
       "incoherent_stories": [
         {
-          "story_id": "story_016210",
+          "story_id": "story_016272",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "transition_count": 4,
           "blocking_reasons": {
@@ -1095,7 +1112,7 @@
               "prior_article": {
                 "article_id": "rss-0fa7f462af9493dddb4f",
                 "event_key": "unknown-event-c646e89208",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "Latest Martin County Animal Hoarding Case Sends Homeowner To Jail - 1290 WJNO",
                 "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRCNEg0ang3d1hIOFowdDFTS0xxRnRNY25zUEdHa1NUMmpXUTFHWVZqS1dNNHBxX0JuRFpOMzhzUjVOUG9ueEtkRGFCdmJCVVFwVjBaUm9TUjJYZFB0SXFYS21MUldjM3dJUWZLM0lSSHlwV2puM3VtbkRPLXR6ZEV2QnNuNWdTbUFfT1MxUHlJal84NF9XbFVWWG1GS1l0aW1WWlQ1aUx2ZWZOLTNDaE4yNmlKeko4c0hUQ2RxaU8tZGlWMkNLUFJfMA?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRCNEg0ang3d1hIOFowdDFTS0xxRnRNY25zUEdHa1NUMmpXUTFHWVZqS1dNNHBxX0JuRFpOMzhzUjVOUG9ueEtkRGFCdmJCVVFwVjBaUm9TUjJYZFB0SXFYS21MUldjM3dJUWZLM0lSSHlwV2puM3VtbkRPLXR6ZEV2QnNuNWdTbUFfT1MxUHlJal84NF9XbFVWWG1GS1l0aW1WWlQ1aUx2ZWZOLTNDaE4yNmlKeko4c0hUQ2RxaU8tZGlWMkNLUFJfMA?oc=5"
@@ -1103,7 +1120,7 @@
               "newer_article": {
                 "article_id": "rss-112863fba50d7fc38b4a",
                 "event_key": "unknown-event-51db3617a4",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "Florida woman charged with animal cruelty after nearly 100 animals rescued from home - The Independent",
                 "source": "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
                 "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQSG9FMmZna3FqaXZDVzNUQmFpVW5UNEFfMnJ3Sk8zNTk3UTVQQTdabDhWT0c0VkpLV2gtNlpCOXRHMm5aQVVvd3VuUWxiN3FNa2VQUlFqejdiLVNNcWZqakprQUtzVmhMaDN3N04yX21PaEt6Slg4NDExTVRLOVpsbTVhM2RyRFBySWgtaTE1amdzdWxXeWRoaQ?oc=5"
@@ -1120,7 +1137,7 @@
               "prior_article": {
                 "article_id": "rss-15169d540a7faeb9573f",
                 "event_key": "unknown-event-f85be253f7",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "'Worst Animal Hoarding' Case In Martin County Grows Even Larger - NewsRadio WFLA",
                 "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQNFQxOUp3Q2o4X0UzVVNMZDBVWGFCdmxsVkhaQlh3MkJsTGMzZ0pVWHo3ZkNqaVdreXB6SVNoRjZZMHpYY3dlRnB5U2lQdDlYVlZHMFJodEpraXpURUhNX3VxSldkN29XWV9BSDBia1Z6NnZmb2xpRDItaVZUd0RCUE4yTThNcDZMVE1WcVo3VnVHRTdTWlhBY0RpWXlmX0ZtTkl5VjJ2SFYwTUE0d2lGUU1pR0h0ZlhVSmY5cUhkZGR0U01LZGZaY1VfNA?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQNFQxOUp3Q2o4X0UzVVNMZDBVWGFCdmxsVkhaQlh3MkJsTGMzZ0pVWHo3ZkNqaVdreXB6SVNoRjZZMHpYY3dlRnB5U2lQdDlYVlZHMFJodEpraXpURUhNX3VxSldkN29XWV9BSDBia1Z6NnZmb2xpRDItaVZUd0RCUE4yTThNcDZMVE1WcVo3VnVHRTdTWlhBY0RpWXlmX0ZtTkl5VjJ2SFYwTUE0d2lGUU1pR0h0ZlhVSmY5cUhkZGR0U01LZGZaY1VfNA?oc=5"
@@ -1128,7 +1145,7 @@
               "newer_article": {
                 "article_id": "rss-1b2aa399ba0d0bbae1ee",
                 "event_key": "unknown-event-6131adfdb0",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
                 "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5"
@@ -1145,7 +1162,7 @@
               "prior_article": {
                 "article_id": "rss-1b2aa399ba0d0bbae1ee",
                 "event_key": "unknown-event-6131adfdb0",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
                 "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5",
                 "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5"
@@ -1153,7 +1170,7 @@
               "newer_article": {
                 "article_id": "rss-22b61d22ed36fb88ceac",
                 "event_key": "unknown-event-e4849eae1a",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "24 dogs rescued after WPTV investigation into suspected animal hoarding at Martin County home",
                 "source": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case",
                 "url": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case"
@@ -1170,7 +1187,7 @@
               "prior_article": {
                 "article_id": "rss-f73ab80137800f8bc205",
                 "event_key": "unknown-event-2885449095",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "Florida officials rescue nearly 100 cats, dogs hoarded by postal worker - Orlando Sentinel",
                 "source": "https://news.google.com/rss/search?q=martin+county+sheriff+arrest+charged+when:2d&hl=en-US&gl=US&ceid=US:en",
                 "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPaHA0cEJ3TnM2cDhldm4zeGItVlpPY3otRmhqQVIwVFlMdDdTZ0JoS0hJUEdUQmlEVE0tNUxfVEIxakZwT29qTEx3ZUFrQ2tETE5ZNEJNcnJMSGJlcC1WalRfWmVRbXpwY2hIOFRKYm9ZYU80STlHWFhWMHd4ZHllakJ0R2k3RjRRdDAxa0t1Z3lLNkNiYmxVSnZLdWp0dTZtRDhOa3RsaXZSN3JmWHBlamNvQ0g?oc=5"
@@ -1178,7 +1195,7 @@
               "newer_article": {
                 "article_id": "rss-f9481026b2d9405ea8e9",
                 "event_key": "animal-rescue-stuart-cats",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "Cages, filth, feces: 92 cats and dogs rescued from Stuart home, 5 owners identified - WPBF",
                 "source": "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
                 "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNZHNTQkVURHo5bFFiN1FzaTNndlVNWXhDcVdMVDd1UEk5WXpRMkEtc1h1MTVXTkl4OVoxWDViRGtWbkZaSUtLc1R5Ymg1bXIwaWZPNWJuM1VOaFdDYjNOdC10MWdhajBZVnQ3WlZ4bWpMc1NKSElLeGtFRVNZVTRsdDFqSDBQYk9Y?oc=5"
@@ -1572,7 +1589,7 @@
         },
         {
           "story_id": "story_013919",
-          "story_title": "Man charged after confrontation leads to shooting at Port St. Lucie Pollo Tropical - wptv.com",
+          "story_title": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie - WPTV",
           "transition_count": 1,
           "blocking_reasons": {
             "timeline_identity_unanchored": 1
@@ -1608,7 +1625,7 @@
           ]
         },
         {
-          "story_id": "story_016212",
+          "story_id": "story_016275",
           "story_title": "Palm Beach Co. commissioners approve framework for sheriff's service tax that could affect 700,000 residents",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1619,7 +1636,7 @@
               "prior_article": {
                 "article_id": "rss-59714eb64cb59f9a1b5b",
                 "event_key": "unknown-event-e525b70fdd",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "IRC District 2 Commission candidates speak out - Hometown News Treasure Coast",
                 "source": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html",
                 "url": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html"
@@ -1627,7 +1644,7 @@
               "newer_article": {
                 "article_id": "rss-e9f38931816176929d7d",
                 "event_key": "unknown-event-2ed457d20b",
-                "published_at": "2026-09-25T18:46:30.553853+00:00",
+                "published_at": "2026-09-25T20:45:57.932325+00:00",
                 "title": "Palm Beach Co. commissioners approve framework for sheriff's service tax that could affect 700,000 residents",
                 "source": "https://www.wptv.com/news/palm-beach-county/palm-beach-co-commissioners-approve-framework-for-sheriffs-service-tax-that-could-affect-700-000-residents",
                 "url": "https://www.wptv.com/news/palm-beach-county/palm-beach-co-commissioners-approve-framework-for-sheriffs-service-tax-that-could-affect-700-000-residents"
@@ -1661,11 +1678,11 @@
         "timeline_identity_unanchored": 17,
         "weak_title_continuity": 7
       },
-      "excluded_entry_count": 244,
+      "excluded_entry_count": 243,
       "exclusion_reasons": {
         "insufficient_title_detail": 71,
         "low_value_title": 27,
-        "social_source": 147
+        "social_source": 146
       },
       "examples": [
         {
@@ -3706,7 +3723,7 @@
         },
         {
           "story_id": "story_013919",
-          "story_title": "Man charged after confrontation leads to shooting at Port St. Lucie Pollo Tropical - wptv.com",
+          "story_title": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie - WPTV",
           "milestones": [
             "arrest"
           ],
@@ -3746,7 +3763,7 @@
             "timeline_incoherent"
           ],
           "prior_title_overlap": 0.444444,
-          "canonical_title_overlap": 1.0,
+          "canonical_title_overlap": 0.555556,
           "prior_article": {
             "article_id": "rss-ddddd77258ad8839e4f0",
             "event_key": "unknown-event-95db091f15",
@@ -3770,7 +3787,7 @@
             "Identity anchor qualified: False",
             "Identity anchor codes: moderate_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_missing",
             "Prior title overlap: 0.44",
-            "Canonical title overlap (context only): 1.00",
+            "Canonical title overlap (context only): 0.56",
             "Same timestamp: False",
             "Blocking conflicts: timeline_identity_unanchored",
             "Candidate confidence: 0.74",
@@ -3778,7 +3795,7 @@
           ]
         },
         {
-          "story_id": "story_016212",
+          "story_id": "story_016275",
           "story_title": "Palm Beach Co. commissioners approve framework for sheriff's service tax that could affect 700,000 residents",
           "milestones": [
             "approval"
@@ -3813,7 +3830,7 @@
           "prior_article": {
             "article_id": "rss-59714eb64cb59f9a1b5b",
             "event_key": "unknown-event-e525b70fdd",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "IRC District 2 Commission candidates speak out - Hometown News Treasure Coast",
             "source": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html",
             "url": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html"
@@ -3821,14 +3838,14 @@
           "newer_article": {
             "article_id": "rss-e9f38931816176929d7d",
             "event_key": "unknown-event-2ed457d20b",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "Palm Beach Co. commissioners approve framework for sheriff's service tax that could affect 700,000 residents",
             "source": "https://www.wptv.com/news/palm-beach-county/palm-beach-co-commissioners-approve-framework-for-sheriffs-service-tax-that-could-affect-700-000-residents",
             "url": "https://www.wptv.com/news/palm-beach-county/palm-beach-co-commissioners-approve-framework-for-sheriffs-service-tax-that-could-affect-700-000-residents"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_016212",
+            "Story: story_016275",
             "Novel milestones: approval",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3909,7 +3926,7 @@
           ]
         },
         {
-          "story_id": "story_016210",
+          "story_id": "story_016272",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
             "identified"
@@ -3947,7 +3964,7 @@
           "prior_article": {
             "article_id": "rss-f73ab80137800f8bc205",
             "event_key": "unknown-event-2885449095",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "Florida officials rescue nearly 100 cats, dogs hoarded by postal worker - Orlando Sentinel",
             "source": "https://news.google.com/rss/search?q=martin+county+sheriff+arrest+charged+when:2d&hl=en-US&gl=US&ceid=US:en",
             "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPaHA0cEJ3TnM2cDhldm4zeGItVlpPY3otRmhqQVIwVFlMdDdTZ0JoS0hJUEdUQmlEVE0tNUxfVEIxakZwT29qTEx3ZUFrQ2tETE5ZNEJNcnJMSGJlcC1WalRfWmVRbXpwY2hIOFRKYm9ZYU80STlHWFhWMHd4ZHllakJ0R2k3RjRRdDAxa0t1Z3lLNkNiYmxVSnZLdWp0dTZtRDhOa3RsaXZSN3JmWHBlamNvQ0g?oc=5"
@@ -3955,14 +3972,14 @@
           "newer_article": {
             "article_id": "rss-f9481026b2d9405ea8e9",
             "event_key": "animal-rescue-stuart-cats",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "Cages, filth, feces: 92 cats and dogs rescued from Stuart home, 5 owners identified - WPBF",
             "source": "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
             "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNZHNTQkVURHo5bFFiN1FzaTNndlVNWXhDcVdMVDd1UEk5WXpRMkEtc1h1MTVXTkl4OVoxWDViRGtWbkZaSUtLc1R5Ymg1bXIwaWZPNWJuM1VOaFdDYjNOdC10MWdhajBZVnQ3WlZ4bWpMc1NKSElLeGtFRVNZVTRsdDFqSDBQYk9Y?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_016210",
+            "Story: story_016272",
             "Novel milestones: identified",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3975,7 +3992,7 @@
           ]
         },
         {
-          "story_id": "story_016210",
+          "story_id": "story_016272",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
             "investigation"
@@ -4012,7 +4029,7 @@
           "prior_article": {
             "article_id": "rss-1b2aa399ba0d0bbae1ee",
             "event_key": "unknown-event-6131adfdb0",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
             "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5",
             "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5"
@@ -4020,14 +4037,14 @@
           "newer_article": {
             "article_id": "rss-22b61d22ed36fb88ceac",
             "event_key": "unknown-event-e4849eae1a",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "24 dogs rescued after WPTV investigation into suspected animal hoarding at Martin County home",
             "source": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case",
             "url": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_016210",
+            "Story: story_016272",
             "Novel milestones: investigation",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -4105,7 +4122,7 @@
           ]
         },
         {
-          "story_id": "story_016210",
+          "story_id": "story_016272",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
             "arrest"
@@ -4142,7 +4159,7 @@
           "prior_article": {
             "article_id": "rss-0fa7f462af9493dddb4f",
             "event_key": "unknown-event-c646e89208",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "Latest Martin County Animal Hoarding Case Sends Homeowner To Jail - 1290 WJNO",
             "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRCNEg0ang3d1hIOFowdDFTS0xxRnRNY25zUEdHa1NUMmpXUTFHWVZqS1dNNHBxX0JuRFpOMzhzUjVOUG9ueEtkRGFCdmJCVVFwVjBaUm9TUjJYZFB0SXFYS21MUldjM3dJUWZLM0lSSHlwV2puM3VtbkRPLXR6ZEV2QnNuNWdTbUFfT1MxUHlJal84NF9XbFVWWG1GS1l0aW1WWlQ1aUx2ZWZOLTNDaE4yNmlKeko4c0hUQ2RxaU8tZGlWMkNLUFJfMA?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQZXRCNEg0ang3d1hIOFowdDFTS0xxRnRNY25zUEdHa1NUMmpXUTFHWVZqS1dNNHBxX0JuRFpOMzhzUjVOUG9ueEtkRGFCdmJCVVFwVjBaUm9TUjJYZFB0SXFYS21MUldjM3dJUWZLM0lSSHlwV2puM3VtbkRPLXR6ZEV2QnNuNWdTbUFfT1MxUHlJal84NF9XbFVWWG1GS1l0aW1WWlQ1aUx2ZWZOLTNDaE4yNmlKeko4c0hUQ2RxaU8tZGlWMkNLUFJfMA?oc=5"
@@ -4150,14 +4167,14 @@
           "newer_article": {
             "article_id": "rss-112863fba50d7fc38b4a",
             "event_key": "unknown-event-51db3617a4",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "Florida woman charged with animal cruelty after nearly 100 animals rescued from home - The Independent",
             "source": "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
             "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQSG9FMmZna3FqaXZDVzNUQmFpVW5UNEFfMnJ3Sk8zNTk3UTVQQTdabDhWT0c0VkpLV2gtNlpCOXRHMm5aQVVvd3VuUWxiN3FNa2VQUlFqejdiLVNNcWZqakprQUtzVmhMaDN3N04yX21PaEt6Slg4NDExTVRLOVpsbTVhM2RyRFBySWgtaTE1amdzdWxXeWRoaQ?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_016210",
+            "Story: story_016272",
             "Novel milestones: arrest",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -4170,7 +4187,7 @@
           ]
         },
         {
-          "story_id": "story_016210",
+          "story_id": "story_016272",
           "story_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
           "milestones": [
             "resolution"
@@ -4207,7 +4224,7 @@
           "prior_article": {
             "article_id": "rss-15169d540a7faeb9573f",
             "event_key": "unknown-event-f85be253f7",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "'Worst Animal Hoarding' Case In Martin County Grows Even Larger - NewsRadio WFLA",
             "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQNFQxOUp3Q2o4X0UzVVNMZDBVWGFCdmxsVkhaQlh3MkJsTGMzZ0pVWHo3ZkNqaVdreXB6SVNoRjZZMHpYY3dlRnB5U2lQdDlYVlZHMFJodEpraXpURUhNX3VxSldkN29XWV9BSDBia1Z6NnZmb2xpRDItaVZUd0RCUE4yTThNcDZMVE1WcVo3VnVHRTdTWlhBY0RpWXlmX0ZtTkl5VjJ2SFYwTUE0d2lGUU1pR0h0ZlhVSmY5cUhkZGR0U01LZGZaY1VfNA?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQNFQxOUp3Q2o4X0UzVVNMZDBVWGFCdmxsVkhaQlh3MkJsTGMzZ0pVWHo3ZkNqaVdreXB6SVNoRjZZMHpYY3dlRnB5U2lQdDlYVlZHMFJodEpraXpURUhNX3VxSldkN29XWV9BSDBia1Z6NnZmb2xpRDItaVZUd0RCUE4yTThNcDZMVE1WcVo3VnVHRTdTWlhBY0RpWXlmX0ZtTkl5VjJ2SFYwTUE0d2lGUU1pR0h0ZlhVSmY5cUhkZGR0U01LZGZaY1VfNA?oc=5"
@@ -4215,14 +4232,14 @@
           "newer_article": {
             "article_id": "rss-1b2aa399ba0d0bbae1ee",
             "event_key": "unknown-event-6131adfdb0",
-            "published_at": "2026-09-25T18:46:30.553853+00:00",
+            "published_at": "2026-09-25T20:45:57.932325+00:00",
             "title": "Bomb threat that prompted Martin County High School evacuation, search cleared - WPEC",
             "source": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5",
             "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNbUVrcUJfX3FoSkhYeXJ1dkQtWElmb1o4UF83Vnc2VWgwWUh5MEY5Z2pmaHdYVk1EVmp5a3BYSWtmN2NkWklGdUluRTdEdzJrdGpyOV84VHRkdGRZRmdqMWV1SmN3RnBkdlNGdGxCNzZjUXE4VTFGWWE3T2h5ajNGOHpGcXNETTVPREdLcWlXU2Izd1lHcG9JS0lzVzNWVzQ4S2FIRHRzT0hxcGFRNFFsTDZ1Qjh5VjBMcF9qTmlXMnh2M1JfNC1CUzEzakRmc19UQ01DbG9EYzJNenFVR2dEMFlpWVNVU19jTmFzQkxBSTFtNlVMWkdnX2Q1bkRMUmdFYjdkZkFDVnZiMF9uWEgtaEx5ZWhfRDNIUVFOYWFSUVJpRERoUFE?oc=5"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_016210",
+            "Story: story_016272",
             "Novel milestones: resolution",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -4244,27 +4261,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1108,
-      "treasure_coast_local": 855,
-      "treasure_coast_region": 377,
-      "unknown": 2316
+      "florida": 1086,
+      "treasure_coast_local": 838,
+      "treasure_coast_region": 372,
+      "unknown": 2298
     },
-    "average_score": 58.93
+    "average_score": 58.81
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1108,
-      "treasure_coast_local": 855,
-      "treasure_coast_region": 377,
-      "unknown": 2316
+      "florida": 1086,
+      "treasure_coast_local": 838,
+      "treasure_coast_region": 372,
+      "unknown": 2298
     },
-    "average_priority": 3.98
+    "average_priority": 3.94
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3708,
+      "active": 3673,
       "developing": 250,
-      "ongoing": 692,
+      "ongoing": 665,
       "resolved": 6
     }
   },
@@ -4272,8 +4289,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 9571,
-    "active_stories_after": 9571,
+    "active_stories_before": 9596,
+    "active_stories_after": 9596,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -4302,20 +4319,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-09-25T18:48:03Z",
-    "quarantined_story_records_retained": 3420,
-    "active_story_count": 9614
+    "generated_at": "2026-09-25T20:47:32Z",
+    "quarantined_story_records_retained": 3443,
+    "active_story_count": 9627
   },
   "stories": {
-    "total": 4656,
+    "total": 4594,
     "importance_levels": {
       "breaking": 5,
-      "high": 105,
-      "normal": 732,
-      "low": 3814,
+      "high": 99,
+      "normal": 722,
+      "low": 3768,
       "archived": 0
     },
-    "average_importance": 10.38,
+    "average_importance": 10.36,
     "top": [
       {
         "story_id": "story_015954",
@@ -4330,7 +4347,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 17.27
+          "age_hours": 19.24
         },
         "level": "high",
         "importance_reasons": [
@@ -4373,82 +4390,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-25T01:44:33.584920+00:00",
-          "hours_since_update": 17.27,
+          "hours_since_update": 19.24,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_016130",
-        "title": "Coast Guard identifies missing paddleboarder as Matt Pawlowski in search off Jupiter",
-        "score": 55,
-        "editorial_priority": 62,
-        "editorial_score": 62,
-        "score_breakdown": {
-          "score": 62,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 3.2
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County",
-            "Indian River County",
-            "Martin County"
-          ],
-          "places": [
-            "Port St. Lucie",
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 17,
-        "timeline_entries": 14,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 14,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-25T15:43:43.487414+00:00",
-          "hours_since_update": 3.2,
-          "event_count": 17,
-          "timeline_entries": 14
-        }
-      },
-      {
-        "story_id": "story_016215",
+        "story_id": "story_016278",
         "title": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -4511,144 +4459,10 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-25T18:46:30.553853+00:00",
+          "last_updated": "2026-09-25T20:45:57.932325+00:00",
           "hours_since_update": 0.08,
           "event_count": 3,
           "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_016235",
-        "title": "St. Lucie County deputies seek 16-year-old who has been missing for almost a month - cbs12.com",
-        "score": 55,
-        "editorial_priority": 62,
-        "editorial_score": 62,
-        "score_breakdown": {
-          "score": 62,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 0.15
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 10,
-        "timeline_entries": 6,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 6,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-25T18:46:30.553853+00:00",
-          "hours_since_update": 0.15,
-          "event_count": 10,
-          "timeline_entries": 6
-        }
-      },
-      {
-        "story_id": "story_016236",
-        "title": "Aerial video shows Riviera Beach man running red lights, fleeing deputies in Martin County - WPEC",
-        "score": 55,
-        "editorial_priority": 62,
-        "editorial_score": 62,
-        "score_breakdown": {
-          "score": 62,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 0.15
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "Indian River County"
-          ],
-          "places": [
-            "Stuart"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 4,
-        "timeline_entries": 4,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-25T18:46:30.553853+00:00",
-          "hours_since_update": 0.15,
-          "event_count": 4,
-          "timeline_entries": 4
         }
       },
       {
@@ -4664,7 +4478,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 164.18
+          "age_hours": 166.18
         },
         "level": "high",
         "importance_reasons": [
@@ -4707,7 +4521,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-18T22:44:41.448530+00:00",
-          "hours_since_update": 164.18,
+          "hours_since_update": 166.18,
           "event_count": 25,
           "timeline_entries": 25
         }
@@ -4725,7 +4539,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 54.16
+          "age_hours": 56.15
         },
         "level": "high",
         "importance_reasons": [
@@ -4764,7 +4578,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-23T12:46:17.749679+00:00",
-          "hours_since_update": 54.16,
+          "hours_since_update": 56.15,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4782,7 +4596,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 27.16
+          "age_hours": 29.15
         },
         "level": "high",
         "importance_reasons": [
@@ -4821,7 +4635,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-24T15:46:17.405080+00:00",
-          "hours_since_update": 27.16,
+          "hours_since_update": 29.15,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4839,7 +4653,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 674.43
+          "age_hours": 676.43
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4893,7 +4707,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 674.43,
+          "hours_since_update": 676.43,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -4911,7 +4725,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 574.89
+          "age_hours": 576.89
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4964,7 +4778,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-01T19:59:54.222587+00:00",
-          "hours_since_update": 574.89,
+          "hours_since_update": 576.89,
           "event_count": 17,
           "timeline_entries": 17
         }
@@ -4982,7 +4796,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 284.64
+          "age_hours": 286.64
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5042,7 +4856,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-13T22:16:14.414876+00:00",
-          "hours_since_update": 284.64,
+          "hours_since_update": 286.64,
           "event_count": 48,
           "timeline_entries": 35
         }
@@ -5060,7 +4874,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 432.22
+          "age_hours": 434.21
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5106,7 +4920,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-07T18:40:23.494881+00:00",
-          "hours_since_update": 432.22,
+          "hours_since_update": 434.21,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -5124,7 +4938,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 160.13
+          "age_hours": 162.12
         },
         "level": "high",
         "importance_reasons": [
@@ -5167,7 +4981,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-19T02:47:55.970905+00:00",
-          "hours_since_update": 160.13,
+          "hours_since_update": 162.12,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -5185,7 +4999,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 41.15
+          "age_hours": 43.15
         },
         "level": "high",
         "importance_reasons": [
@@ -5234,13 +5048,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-24T01:45:43.931176+00:00",
-          "hours_since_update": 41.15,
+          "hours_since_update": 43.15,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_016225",
+        "story_id": "story_016288",
         "title": "Port St. Lucie police search for endangered man last seen at Jimmy John's in Fort Pierce - WPEC",
         "score": 45,
         "editorial_priority": 50,
@@ -5299,7 +5113,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-09-25T18:46:30.553853+00:00",
+          "last_updated": "2026-09-25T20:45:57.932325+00:00",
           "hours_since_update": 0.13,
           "event_count": 7,
           "timeline_entries": 4
@@ -5318,7 +5132,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 189.43
+          "age_hours": 191.43
         },
         "level": "breaking",
         "importance_reasons": [
@@ -5371,7 +5185,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-17T21:28:05.058852+00:00",
-          "hours_since_update": 189.43,
+          "hours_since_update": 191.43,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -5389,7 +5203,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 164.18
+          "age_hours": 166.18
         },
         "level": "high",
         "importance_reasons": [
@@ -5428,7 +5242,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-18T22:44:41.448530+00:00",
-          "hours_since_update": 164.18,
+          "hours_since_update": 166.18,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -5446,7 +5260,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 48.17
+          "age_hours": 50.16
         },
         "level": "normal",
         "importance_reasons": [
@@ -5485,7 +5299,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-23T18:45:55.818018+00:00",
-          "hours_since_update": 48.17,
+          "hours_since_update": 50.16,
           "event_count": 6,
           "timeline_entries": 6
         }
@@ -5503,7 +5317,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 46.17
+          "age_hours": 48.16
         },
         "level": "normal",
         "importance_reasons": [
@@ -5543,7 +5357,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-23T20:45:36.871930+00:00",
-          "hours_since_update": 46.17,
+          "hours_since_update": 48.16,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -5561,7 +5375,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 32.25
+          "age_hours": 34.22
         },
         "level": "normal",
         "importance_reasons": [
@@ -5599,9 +5413,194 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-24T10:45:42.370464+00:00",
-          "hours_since_update": 32.25,
+          "hours_since_update": 34.22,
           "event_count": 3,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_016009",
+        "title": "Crews remain on scene as large barn fire burns at Indiantown ranch - WPEC",
+        "score": 45,
+        "editorial_priority": 48,
+        "editorial_score": 48,
+        "score_breakdown": {
+          "score": 48,
+          "importance": 45,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 10.19
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County",
+            "Martin County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-09-25T10:44:07.034459+00:00",
+          "hours_since_update": 10.19,
+          "event_count": 3,
+          "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_002912",
+        "title": "Woman found shot in Vero Beach roadway dies; IRCSO investigating as homicide, searching for person of interest",
+        "score": 75,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 434.22
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach",
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 42,
+        "timeline_entries": 38,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 40,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-09-07T18:40:23.494881+00:00",
+          "hours_since_update": 434.22,
+          "event_count": 42,
+          "timeline_entries": 38
+        }
+      },
+      {
+        "story_id": "story_007016",
+        "title": "Gov. Ron DeSantis orders flags to half-staff following Dolly Parton's death",
+        "score": 75,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 601.01
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 6,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-08-31T19:55:07.482601+00:00",
+          "hours_since_update": 601.01,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       }
     ]
@@ -5609,7 +5608,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-25T19:01:08Z",
+    "generated_at": "2026-09-25T20:59:23Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5624,43 +5623,51 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 5,
+        "cache_hit": 2,
+        "category_eligibility_archive_recovery": 4,
         "generated_live": 2,
-        "no_publishable_sources": 2
+        "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 4
       },
       "model_attempt_count": 2,
-      "model_elapsed_seconds": 44.48,
-      "archive_recovery_requested_count": 7,
-      "sports_expired_event_preview_count": 1,
+      "model_elapsed_seconds": 28.237,
+      "archive_recovery_requested_count": 5,
+      "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 7,
-      "published_story_duplicate_suppression_count": 42,
-      "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 4,
+      "category_eligibility_rejection_count": 5,
+      "published_story_duplicate_suppression_count": 35,
+      "story_aware_update_context_count": 2,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 2
+      "material_update_promotion_model_call_count": 1
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 10,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 11,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Local Government category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 12.63,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 12.63,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5670,7 +5677,7 @@
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
         "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-local-government-central-action",
@@ -5701,23 +5708,9 @@
             "local_nexus_signals": [],
             "headline": "Martin County barn fire destroys building, 6 vehicles; 1 firefighter taken to hospital",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-barn-fire-destroys-building-6-vehicles-1-firefighter-taken-to-hospital"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "‘Is this going to be the real one?’ Martin County families react after fourth bomb threat - WPEC",
-            "source_url": "https://cbs12.com/news/local/is-this-going-to-be-the-real-one-martin-county-families-react-after-fourth-bomb-threatmartin-county-high-school-bomb-threat-school-bomb-threat-martin-county-bomb-threat-martin-county-high-school-threat-stuart-florida-martin-county-florida-noah-tay?teaserSource=trending"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -5727,16 +5720,6 @@
             "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
             "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
-            "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
-            "editorial_story_id": "story_015732",
-            "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
-            "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5770,28 +5753,54 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
-        "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
+            "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
+            "publisher": "cw34.com",
+            "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
+            "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
+            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+            "identity_keys": [
+              "story:story_015732",
+              "source:https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_precise_location",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=1",
+              "shared_locality=['martin-county', 'palm-beach-county', 'stuart']",
+              "shared_event_families=['public-policy']",
+              "shared_named_people=[]",
+              "shared_precise_locations=['north-river-shores-boulevard']",
+              "shared_agencies=[]",
+              "shared_subject_phrases=['bond-trash-pickup', 'bond-trash-pickup-question', 'facing-palm-voter', 'facing-palm-voter-cw34', 'palm-voter-cw34', 'palm-voter-cw34-com', 'park-bond-trash', 'park-bond-trash-pickup', 'pickup-question-facing', 'pickup-question-facing-palm', 'question-facing-palm', 'question-facing-palm-voter', 'trash-pickup-question', 'trash-pickup-question-facing', 'voter-cw34-com']",
+              "shared_headline_topic_core=['bond', 'com', 'cw34', 'facing', 'palm', 'park', 'pickup', 'question', 'trash', 'voter']",
+              "shared_distinctive_token_count=174",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "local_gov",
-            "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
-            "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
-            "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
-            "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "local_gov",
             "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
@@ -5800,6 +5809,42 @@
             "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": true,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "update_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "update_existing_canonical",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Nov. 3 election date",
+              "Martin County Stuart voters ballfield question",
+              "Stuart 1.97-acre U.S. 1 parcel opposite North River Shores Boulevard",
+              "St. Lucie half-cent infrastructure sales surtax extension",
+              "St. Lucie twice-a-week trash pickup straw poll ($131/year estimate)",
+              "St. Lucie County Mosquito Control District expansion (95,000 acres)"
+            ],
+            "novel_facts": [
+              "Three Palm Beach County questions: $280 million parks bonds, $175 million library bonds, and 1-mill school levy continuation",
+              "Palm Beach County parks bonds would fund modernizing parks, recreation facilities, botanical gardens, sports complexes, beach access",
+              "Library bonds would be repaid over 20 years through property taxes",
+              "School levy would run July 1, 2027 through June 30, 2031 for safety, mental health, arts/music teachers",
+              "St. Lucie surtax would extend for 10 years from Jan 2028",
+              "Confirms Indian River and Okeechobee counties have no local ballot questions"
+            ],
+            "reason": "Same event: both articles cover the Nov. 3, 2026 local ballot questions with identical Martin County (Stuart ballfields, U.S. 1 parcel) and St. Lucie County (surtax, trash, mosquito) measures. Material update: incoming adds three significant Palm Beach County funding questions totaling $455M+ in bonds plus school levy that were not in the original candidate, substantially expanding the scope of what voters will decide. This is material information that changes what Palm Beach County readers need to know about their Nov. 3 ballot.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
+            "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
+            "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
+            "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5853,29 +5898,26 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 35.904
+        "new_publication_stale_rejected_count": 1,
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
+        "generated_card_count": 0,
+        "elapsed_seconds": 43.186
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
-        "fetched_candidate_count": 28,
+        "status": "cache_hit",
+        "fetched_candidate_count": 27,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 11,
+        "publishable_source_count": 8,
         "selected_source_count": 2,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 29.623,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 29.623,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5886,25 +5928,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 1,
-        "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-primary-crime-safety-focus",
-            "category_key": "crime",
-            "mode": "enforce",
-            "policy": "primary_crime_safety_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_crime_safety_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "‘Is this going to be the real one?’ Martin County families react after fourth bomb threat - WPEC",
-            "source_url": "https://cbs12.com/news/local/is-this-going-to-be-the-real-one-martin-county-families-react-after-fourth-bomb-threatmartin-county-high-school-bomb-threat-school-bomb-threat-martin-county-bomb-threat-martin-county-high-school-threat-stuart-florida-martin-county-florida-noah-tay"
-          }
-        ],
-        "published_story_duplicate_suppression_count": 5,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 0,
+        "category_eligibility_rejections": [],
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -5928,16 +5955,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Sebastian River High School gets new play clocks after 17 local businesses raise more than $10,000",
-            "source_url": "https://www.wptv.com/sports/local-sports/high-school/sebastian-river-high-school-gets-new-play-clocks-after-17-local-businesses-raise-more-than-10-000",
-            "editorial_story_id": "story_015803",
-            "canonical_slug": "2026-09-24-17-businesses-raise-over-10000-for-sebastian-river-high-play-clocks-after-coachs",
-            "canonical_headline": "17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
             "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
             "editorial_story_id": "story_015258",
@@ -5948,12 +5965,12 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/23/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-st-lucie-county",
+            "source_headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-county",
             "editorial_story_id": "story_015258",
             "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
             "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -5996,21 +6013,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Sebastian River High School gets new play clocks after 17 local businesses raise more than $10,000",
-            "source_url": "https://www.wptv.com/sports/local-sports/high-school/sebastian-river-high-school-gets-new-play-clocks-after-17-local-businesses-raise-more-than-10-000",
-            "canonical_slug": "2026-09-24-17-businesses-raise-over-10000-for-sebastian-river-high-play-clocks-after-coachs",
-            "canonical_headline": "17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
             "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
             "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
@@ -6026,12 +6028,12 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County - WFLX",
-            "source_url": "https://www.wflx.com/2026/09/23/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-st-lucie-county",
+            "source_headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-county",
             "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
             "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6041,19 +6043,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Three major animal hoarding rescues in weeks expose legal limits on prevention",
-        "generated_card_count": 1,
-        "elapsed_seconds": 62.926
+        "elapsed_seconds": 35.973
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 17,
-        "publishable_source_count": 10,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 11,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6114,7 +6113,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-barn-fire-destroys-building-6-vehicles-1-firefighter-taken-to-hospital"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -6148,16 +6147,6 @@
           },
           {
             "category_key": "business",
-            "source_headline": "Brightline expected to file for bankruptcy despite growing ridership - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOUUVZY29SM0VXQ2NxZ05QQ3JLdzVMQk5YOFhRcWswS3ZfeGk5Rk1rR1JUdlRqbG54ajBBUlhVNE5EZEZZaC1oTkhPOFpqQmlubzMwNGw0aHBkY2ExRm1JSTY3ZElaVmNfb1pzQjkyRWNPdVJoS19MTXVqX1B6b3NHYTZFQnhsOGZtNDFKRF9vZGJtSXZ5OGZGRElZZjhGaGMwRjh3eFJmQURBQQ",
-            "editorial_story_id": "story_015798",
-            "canonical_slug": "2026-09-24-brightline-expected-to-file-bankruptcy-casting-doubt-on-stuart-station",
-            "canonical_headline": "Brightline expected to file bankruptcy, casting doubt on Stuart station",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
             "source_headline": "Brightline expected to file for bankruptcy despite growing ridership",
             "source_url": "https://www.wptv.com/lifestyle/travel/brightline-expected-to-file-for-bankruptcy-despite-growing-ridership",
             "editorial_story_id": "story_015798",
@@ -6168,22 +6157,22 @@
           },
           {
             "category_key": "business",
+            "source_headline": "Brightline expected to file for bankruptcy despite growing ridership - WPTV",
+            "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOUUVZY29SM0VXQ2NxZ05QQ3JLdzVMQk5YOFhRcWswS3ZfeGk5Rk1rR1JUdlRqbG54ajBBUlhVNE5EZEZZaC1oTkhPOFpqQmlubzMwNGw0aHBkY2ExRm1JSTY3ZElaVmNfb1pzQjkyRWNPdVJoS19MTXVqX1B6b3NHYTZFQnhsOGZtNDFKRF9vZGJtSXZ5OGZGRElZZjhGaGMwRjh3eFJmQURBQQ",
+            "editorial_story_id": "story_015798",
+            "canonical_slug": "2026-09-24-brightline-expected-to-file-bankruptcy-casting-doubt-on-stuart-station",
+            "canonical_headline": "Brightline expected to file bankruptcy, casting doubt on Stuart station",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
             "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight",
             "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
             "editorial_story_id": "story_015734",
             "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
             "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-            "editorial_story_id": "story_013919",
-            "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-            "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6241,13 +6230,13 @@
           },
           {
             "category_key": "business",
-            "source_headline": "Brightline expected to file for bankruptcy despite growing ridership - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOUUVZY29SM0VXQ2NxZ05QQ3JLdzVMQk5YOFhRcWswS3ZfeGk5Rk1rR1JUdlRqbG54ajBBUlhVNE5EZEZZaC1oTkhPOFpqQmlubzMwNGw0aHBkY2ExRm1JSTY3ZElaVmNfb1pzQjkyRWNPdVJoS19MTXVqX1B6b3NHYTZFQnhsOGZtNDFKRF9vZGJtSXZ5OGZGRElZZjhGaGMwRjh3eFJmQURBQQ",
+            "source_headline": "Brightline expected to file for bankruptcy despite growing ridership",
+            "source_url": "https://www.wptv.com/lifestyle/travel/brightline-expected-to-file-for-bankruptcy-despite-growing-ridership",
             "canonical_slug": "2026-09-24-brightline-expected-to-file-bankruptcy-casting-doubt-on-stuart-station",
             "canonical_headline": "Brightline expected to file bankruptcy, casting doubt on Stuart station",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6256,13 +6245,13 @@
           },
           {
             "category_key": "business",
-            "source_headline": "Brightline expected to file for bankruptcy despite growing ridership",
-            "source_url": "https://www.wptv.com/lifestyle/travel/brightline-expected-to-file-for-bankruptcy-despite-growing-ridership",
+            "source_headline": "Brightline expected to file for bankruptcy despite growing ridership - WPTV",
+            "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOUUVZY29SM0VXQ2NxZ05QQ3JLdzVMQk5YOFhRcWswS3ZfeGk5Rk1rR1JUdlRqbG54ajBBUlhVNE5EZEZZaC1oTkhPOFpqQmlubzMwNGw0aHBkY2ExRm1JSTY3ZElaVmNfb1pzQjkyRWNPdVJoS19MTXVqX1B6b3NHYTZFQnhsOGZtNDFKRF9vZGJtSXZ5OGZGRElZZjhGaGMwRjh3eFJmQURBQQ",
             "canonical_slug": "2026-09-24-brightline-expected-to-file-bankruptcy-casting-doubt-on-stuart-station",
             "canonical_headline": "Brightline expected to file bankruptcy, casting doubt on Stuart station",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6283,25 +6272,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-            "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-            "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.104
+        "elapsed_seconds": 21.477
       },
       {
         "category_key": "sports",
@@ -6309,7 +6283,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 7,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6318,19 +6292,8 @@
         "model_elapsed_seconds": 0.0,
         "failure_code": "no_category_eligible_sources",
         "failure_summary": "No source passed Sports category eligibility contract",
-        "sports_expired_event_preview_count": 1,
-        "sports_expired_event_previews": [
-          {
-            "headline": "Ex-NFL star Antonio Brown to accept plea deal on attempted murder charge",
-            "source_url": "https://www.wptv.com/sports/ex-nfl-star-antonio-brown-to-accept-plea-deal-on-attempted-murder-charge",
-            "published": "Wed, 23 Sep 2026 19:18:41 GMT",
-            "reason": "sports_event_window_expired",
-            "event_end_date": "2025-05-16",
-            "event_dates": [
-              "2025-05-16"
-            ]
-          }
-        ],
+        "sports_expired_event_preview_count": 0,
+        "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
         "article_framing_rejection_count": 0,
@@ -6376,14 +6339,14 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.839
+        "new_publication_stale_rejected_count": 2,
+        "elapsed_seconds": 13.444
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
+        "fetched_candidate_count": 24,
         "fresh_candidate_count": 21,
         "publishable_source_count": 4,
         "selected_source_count": 0,
@@ -6422,7 +6385,7 @@
             "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control"
           }
         ],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "things_to_do",
@@ -6452,16 +6415,6 @@
             "canonical_slug": "2026-09-21-mollys-house-open-house-monday-marks-30-years-helping-treasure-coast-families",
             "canonical_headline": "Molly's House open house Monday marks 30 years helping Treasure Coast families",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "things_to_do",
-            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/governor-ron-desantis-signs-death-warrant-william-reaves-who-killed-indian-river-county-deputy-richard-raczowski-1986-18th-death-warrant-year-florida-execution-stay-filed",
-            "editorial_story_id": "story_007016",
-            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
-            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6508,10 +6461,10 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 3,
-        "material_update_promotion_count": 1,
-        "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_count": 0,
+        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "things_to_do",
@@ -6532,53 +6485,17 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Bacon BBQ Festival Sept 26-27 at MIDFLORIDA Event Center in Port St. Lucie",
-              "Outrun Hunger 5K Saturday 7:30am at 7715 Forest Hill Blvd",
-              "Asian Food Festival at 100 N. Clematis St.",
-              "Craft Festival Sept 26-27 on NE Fourth Avenue in Delray Beach",
-              "9th Annual DAStoberfest Sunday 4pm in Jupiter",
-              "Art After Dark Friday 5:30-10pm at 1450 S. Dixie Highway"
+              "Bacon BBQ Festival Sept. 26-27 at MIDFLORIDA Event Center in Port St. Lucie",
+              "Outrun Hunger 5K on Saturday at 7715 Forest Hill Blvd, West Palm Beach",
+              "Asian Food Festival at 100 N. Clematis St., West Palm Beach",
+              "Craft Festival Sept. 26-27 on NE Fourth Avenue in Delray Beach",
+              "9th Annual DAStoberfest on Sunday at DAS Beer Garden in Jupiter",
+              "Art After Dark Friday at 1450 S. Dixie Highway, West Palm Beach"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
               "known_canonical_identity_conflict"
             ]
-          },
-          {
-            "category_key": "things_to_do",
-            "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
-            "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
-            "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
-            "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": true,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "update_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "update_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Nov. 3 election date",
-              "Martin County Stuart voters ballfield question",
-              "Stuart 1.97-acre U.S. 1 parcel opposite North River Shores Boulevard",
-              "St. Lucie half-cent infrastructure sales surtax extension",
-              "St. Lucie twice-a-week trash pickup straw poll ($131/year estimate)",
-              "St. Lucie County Mosquito Control District expansion (95,000 acres)"
-            ],
-            "novel_facts": [
-              "Three Palm Beach County questions: $280 million parks bonds, $175 million library bonds, and 1-mill school levy continuation",
-              "Palm Beach County parks bonds would fund modernizing parks, recreation facilities, botanical gardens, sports complexes, beach access",
-              "Library bonds would be repaid over 20 years through property taxes",
-              "School levy would run July 1, 2027 through June 30, 2031 for safety, mental health, arts/music teachers",
-              "St. Lucie surtax would extend for 10 years from Jan 2028",
-              "Confirms Indian River and Okeechobee counties have no local ballot questions"
-            ],
-            "reason": "Same event: both articles cover the Nov. 3, 2026 local ballot questions with identical Martin County (Stuart ballfields, U.S. 1 parcel) and St. Lucie County (surtax, trash, mosquito) measures. Material update: incoming adds three significant Palm Beach County funding questions totaling $455M+ in bonds plus school levy that were not in the original candidate, substantially expanding the scope of what voters will decide. This is material information that changes what Palm Beach County readers need to know about their Nov. 3 ballot.",
-            "validation_errors": []
           },
           {
             "category_key": "things_to_do",
@@ -6609,50 +6526,17 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "things_to_do",
-            "source_headline": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/governor-ron-desantis-signs-death-warrant-william-reaves-who-killed-indian-river-county-deputy-richard-raczowski-1986-18th-death-warrant-year-florida-execution-stay-filed",
-            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
-            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Both involve Florida death warrants signed by Gov. DeSantis",
-              "Both executions at Florida State Prison"
-            ],
-            "novel_facts": [
-              "Death warrant signed for William Reaves for 1986 killing of Deputy Richard Raczkowski",
-              "Reaves execution scheduled for October",
-              "This is DeSantis's 18th death warrant of 2026",
-              "Specific details of the 1986 Indian River County deputy shooting",
-              "Stay motion filed referencing William Lee Thompson case"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 29.146
+        "elapsed_seconds": 23.009
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
         "status": "no_publishable_sources",
         "fetched_candidate_count": 26,
-        "fresh_candidate_count": 24,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 0,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -6673,8 +6557,18 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "florida",
+            "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
+            "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
+            "editorial_story_id": "story_015935",
+            "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
+            "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "florida",
             "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - WPEC",
@@ -6705,6 +6599,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "florida",
+            "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
+            "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
+            "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
+            "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "florida",
             "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - WPEC",
             "source_url": "https://cbs12.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
             "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
@@ -6735,28 +6644,21 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 24.779
+        "elapsed_seconds": 16.603
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 27,
-        "publishable_source_count": 3,
+        "status": "cache_hit",
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 25,
+        "publishable_source_count": 2,
         "selected_source_count": 2,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.857,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 14.857,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6767,7 +6669,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 3,
@@ -6857,25 +6759,29 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Barn fire near Indiantown destroys building, 6 vehicles; firefighter hospitalized",
-        "generated_card_count": 0,
-        "elapsed_seconds": 46.984
+        "elapsed_seconds": 23.172
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 15.607,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 15.607,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6886,10 +6792,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 12,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -6913,42 +6819,12 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
-            "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
-            "editorial_story_id": "story_015821",
-            "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
-            "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight - WPTV",
             "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
             "editorial_story_id": "story_015734",
             "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
             "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-            "editorial_story_id": "story_013919",
-            "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-            "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-            "editorial_story_id": "story_013919",
-            "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-            "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -7071,21 +6947,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
-            "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
-            "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
-            "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight - WPTV",
             "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
             "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
@@ -7093,36 +6954,6 @@
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-            "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-            "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-            "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-            "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -7221,15 +7052,19 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 23.603
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Parking dispute led to Pollo Tropical shooting in Port St. Lucie, witnesses say",
+        "generated_card_count": 0,
+        "elapsed_seconds": 29.893
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 7,
+        "fresh_candidate_count": 25,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -7246,21 +7081,11 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "indian_river",
-            "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
-            "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
-            "editorial_story_id": "story_015935",
-            "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
-            "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "indian_river",
             "source_headline": "Vero Beach doubles most parking fines starting Oct. 1, first rate hike since 2011 - WPTV",
@@ -7289,21 +7114,6 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "indian_river",
-            "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
-            "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
-            "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
-            "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "indian_river",
             "source_headline": "Vero Beach doubles most parking fines starting Oct. 1, first rate hike since 2011 - WPTV",
@@ -7336,7 +7146,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 23.043
+        "elapsed_seconds": 14.176
       }
     ]
   }
