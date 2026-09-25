@@ -61,6 +61,75 @@ _OUTREACH_ABSENCE_RE = re.compile(
 _TAG_RE = re.compile(r"<[^>]+>")
 _P_RE = re.compile(r"<p\b([^>]*)>(.*?)</p>", re.IGNORECASE | re.DOTALL)
 
+
+def _scan_direct_double_quote_state(text: str, quote_style: str | None) -> str | None:
+    """Track whether reader-facing prose leaves a direct double quote open.
+
+    Curly quotes carry explicit open/close direction. Straight double quotes are
+    toggled only when the active quote is also straight, so a stray straight
+    quote inside a curly quotation cannot accidentally close it. Apostrophes and
+    single quotation marks are intentionally irrelevant.
+    """
+    state = quote_style
+    for char in str(text or ""):
+        if char == "“":
+            if state is None:
+                state = "curly"
+            # A curly opening mark while a curly quotation is already open can
+            # only be a continuation/nested marker; it does not close the quote.
+        elif char == "”":
+            if state == "curly":
+                state = None
+        elif char == '"':
+            if state is None:
+                state = "straight"
+            elif state == "straight":
+                state = None
+    return state
+
+
+def repair_multparagraph_quote_continuations(body_html: str) -> tuple[str, int]:
+    """Restore journalistic opening marks on continued paragraph quotations.
+
+    A quotation that remains open at the end of one paragraph stays semantically
+    open across the paragraph break. The next paragraph therefore receives a new
+    opening mark for typography, but that continuation mark must *not* toggle the
+    underlying quote state. Only an actual closing mark in the continuation text
+    closes the quotation.
+
+    Returns ``(html, changed_paragraph_count)``.
+    """
+    raw = str(body_html or "")
+    if not raw:
+        return raw, 0
+
+    quote_style: str | None = None
+    changed = 0
+
+    def repl(match: re.Match[str]) -> str:
+        nonlocal quote_style, changed
+        attrs = match.group(1) or ""
+        inner = match.group(2) or ""
+        plain = _plain(inner)
+        if not plain:
+            return match.group(0)
+
+        scan_text = plain
+        if quote_style is not None:
+            expected = "“" if quote_style == "curly" else '"'
+            # A leading opener on a continuation paragraph is typographic only;
+            # skip it when updating semantic quote state.
+            if scan_text.startswith(expected):
+                scan_text = scan_text[1:]
+            else:
+                inner = html.escape(expected) + inner
+                changed += 1
+
+        quote_style = _scan_direct_double_quote_state(scan_text, quote_style)
+        return f"<p{attrs}>{inner}</p>"
+
+    return _P_RE.sub(repl, raw), changed
+
 # Protect common abbreviations before sentence splitting. The guard only needs
 # editorially safe sentence boundaries; it is not intended as a general NLP parser.
 _ABBREVIATION_RE = re.compile(
@@ -220,4 +289,6 @@ def sanitize_article_body_html(
             return ""
         return f"<p{attrs}>{html.escape(cleaned)}</p>"
 
-    return _P_RE.sub(repl, raw), changed
+    sanitized = _P_RE.sub(repl, raw)
+    repaired, quote_changed = repair_multparagraph_quote_continuations(sanitized)
+    return repaired, changed + quote_changed

@@ -11377,6 +11377,7 @@ Writing rules:
 - Every specific fact, name, number, quote, allegation, chronology, and causal claim must be supported by the source text or prior canonical context supplied above.
 - Preserve proper nouns accurately. Attribute allegations and official characterizations.
 - If this is an update, the opening must identify the new development and enough prior context to stand alone; do not open only with a quote, scene, reaction, or investigative procedure.
+- When a direct quotation spans multiple paragraphs, every continuation paragraph must begin with a new opening quotation mark. Do not close intermediate paragraphs; close the quotation only at the end of the final quoted paragraph.
 - Avoid generic filler and unsupported "what happens next" language.
 - {length_rule}
 - The source_index, urgency_score, and published value are fixed editorial metadata. Echo them exactly.
