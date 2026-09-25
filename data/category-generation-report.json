@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-25T20:59:23Z",
+  "generated_at": "2026-09-25T23:00:21Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,25 +15,23 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 2,
-      "category_eligibility_archive_recovery": 4,
-      "generated_live": 2,
-      "no_publishable_sources": 1
+      "category_eligibility_archive_recovery": 5,
+      "generated_live": 4
     },
     "failures": {
-      "no_category_eligible_sources": 4
+      "no_category_eligible_sources": 5
     },
-    "model_attempt_count": 2,
-    "model_elapsed_seconds": 28.237,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 82.526,
     "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 1,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 5,
     "published_story_duplicate_suppression_count": 35,
     "story_aware_update_context_count": 2,
     "material_update_promotion_evaluation_count": 3,
-    "material_update_promotion_count": 1,
+    "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 2,
     "material_update_promotion_model_call_count": 1
   },
@@ -41,25 +39,18 @@
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 11,
-      "selected_source_count": 1,
+      "status": "category_eligibility_archive_recovery",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 12,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.63,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 12.63,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Local Government category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -69,7 +60,7 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
       "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -100,10 +91,34 @@
           "local_nexus_signals": [],
           "headline": "Martin County barn fire destroys building, 6 vehicles; 1 firefighter taken to hospital",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-barn-fire-destroys-building-6-vehicles-1-firefighter-taken-to-hospital"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Vehicle fire shuts down southbound Florida's Turnpike in Martin County Thursday morning - cw34.com",
+          "source_url": "https://cw34.com/news/local/vehicle-fire-shuts-down-southbound-floridas-turnpike-in-martin-county-traffic-alert-mile-markers-128-126-morning-delays-florida-news"
         }
       ],
       "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
+          "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
+          "editorial_story_id": "story_015732",
+          "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
+          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
@@ -133,64 +148,13 @@
           "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Martin County Fire Rescue responds to fire at Wendy’s on Jensen Beach Boulevard - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/martin-county-fire-rescue-responds-to-fire-at-wendys-on-jensen-beach-boulevard-florida-news-local-news-florida-fire-local-fire",
-          "editorial_story_id": "story_015504",
-          "canonical_slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
-          "canonical_headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
-          "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
-          "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_015732",
-            "source:https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'palm-beach-county', 'stuart']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['north-river-shores-boulevard']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['bond-trash-pickup', 'bond-trash-pickup-question', 'facing-palm-voter', 'facing-palm-voter-cw34', 'palm-voter-cw34', 'palm-voter-cw34-com', 'park-bond-trash', 'park-bond-trash-pickup', 'pickup-question-facing', 'pickup-question-facing-palm', 'question-facing-palm', 'question-facing-palm-voter', 'trash-pickup-question', 'trash-pickup-question-facing', 'voter-cw34-com']",
-            "shared_headline_topic_core=['bond', 'com', 'cw34', 'facing', 'palm', 'park', 'pickup', 'question', 'trash', 'voter']",
-            "shared_distinctive_token_count=174",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -198,36 +162,15 @@
           "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
           "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
           "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
-          "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
+          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": true,
-          "cache_hit": true,
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
           "model_call": false,
-          "action": "update_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "update_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Nov. 3 election date",
-            "Martin County Stuart voters ballfield question",
-            "Stuart 1.97-acre U.S. 1 parcel opposite North River Shores Boulevard",
-            "St. Lucie half-cent infrastructure sales surtax extension",
-            "St. Lucie twice-a-week trash pickup straw poll ($131/year estimate)",
-            "St. Lucie County Mosquito Control District expansion (95,000 acres)"
-          ],
-          "novel_facts": [
-            "Three Palm Beach County questions: $280 million parks bonds, $175 million library bonds, and 1-mill school levy continuation",
-            "Palm Beach County parks bonds would fund modernizing parks, recreation facilities, botanical gardens, sports complexes, beach access",
-            "Library bonds would be repaid over 20 years through property taxes",
-            "School levy would run July 1, 2027 through June 30, 2031 for safety, mental health, arts/music teachers",
-            "St. Lucie surtax would extend for 10 years from Jan 2028",
-            "Confirms Indian River and Okeechobee counties have no local ballot questions"
-          ],
-          "reason": "Same event: both articles cover the Nov. 3, 2026 local ballot questions with identical Martin County (Stuart ballfields, U.S. 1 parcel) and St. Lucie County (surtax, trash, mosquito) measures. Material update: incoming adds three significant Palm Beach County funding questions totaling $455M+ in bonds plus school levy that were not in the original candidate, substantially expanding the scope of what voters will decide. This is material information that changes what Palm Beach County readers need to know about their Nov. 3 ballot.",
-          "validation_errors": []
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "local_gov",
@@ -273,58 +216,92 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Martin County Fire Rescue responds to fire at Wendy’s on Jensen Beach Boulevard - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/martin-county-fire-rescue-responds-to-fire-at-wendys-on-jensen-beach-boulevard-florida-news-local-news-florida-fire-local-fire",
-          "canonical_slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
-          "canonical_headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
-      "generated_card_count": 0,
-      "elapsed_seconds": 43.186
+      "elapsed_seconds": 30.025
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "cache_hit",
-      "fetched_candidate_count": 27,
+      "status": "generated_live",
+      "fetched_candidate_count": 29,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 8,
-      "selected_source_count": 2,
-      "cache_hit": true,
+      "publishable_source_count": 10,
+      "selected_source_count": 3,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 32.416,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 32.416,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 44,
+          "baseline_anchor": "abuse_or_neglect",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "arrested",
+            "hotel",
+            "lucie",
+            "port"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "found",
+            "hiding",
+            "police",
+            "wanted"
+          ],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "original_event_context_missing"
+          ],
+          "source_title": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - cw34.com",
+          "headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County first responders rescue man after jump into St. Lucie River - WPBF",
+          "source_url": "https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113",
+          "editorial_story_id": "story_015942",
+          "canonical_slug": "2026-09-24-martin-county-first-responders-rescue-man-from-st-lucie-river-after-jump-from-we",
+          "canonical_headline": "Martin County first responders rescue man from St. Lucie River after jump from West Bridge",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
@@ -342,6 +319,16 @@
           "editorial_story_id": "story_015870",
           "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
           "canonical_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
+          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
+          "editorial_story_id": "story_015821",
+          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
+          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -366,13 +353,90 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - cw34.com",
+          "source_url": "https://cw34.com/news/local/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
+          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
+          "basis": "event-identity-authority:participant_plus_precise_location",
+          "identity_keys": [
+            "story:story_015821",
+            "source:https://cw34.com/news/local/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['martin-county', 'port-st-lucie', 'st-lucie']",
+            "shared_event_families=['drug-case']",
+            "shared_named_people=['kenneth robert ferow', 'traffic stop ferow']",
+            "shared_precise_locations=['hotel-on-village-parkway', 'village-parkway']",
+            "shared_agencies=['port-st-lucie-police']",
+            "shared_subject_phrases=['bed-hotel-say', 'found-hiding-under', 'found-hiding-under-bed', 'hiding-under-bed', 'hiding-under-bed-hotel', 'under-bed-hotel', 'under-bed-hotel-say', 'want-found-hiding', 'want-found-hiding-under']",
+            "shared_headline_topic_core=['bed', 'found', 'hiding', 'hotel', 'say', 'under', 'want']",
+            "shared_distinctive_token_count=87",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County first responders rescue man after jump into St. Lucie River - WPBF",
+          "source_url": "https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113",
+          "canonical_slug": "2026-09-24-martin-county-first-responders-rescue-man-from-st-lucie-river-after-jump-from-we",
+          "canonical_headline": "Martin County first responders rescue man from St. Lucie River after jump from West Bridge",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Jump from West Bridge into St. Lucie River",
+            "10:18 p.m. Wednesday near Southwest Martin Downs Boulevard",
+            "Martin County Fire Rescue, Martin County Sheriff's Office, and Stuart Police Department response",
+            "Man suffering mental health crisis/attempted suicide",
+            "Same source URL (https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113)",
+            "Rescue involving boats and LifeStar helicopter transport"
+          ],
+          "novel_facts": [
+            "Additional detail about low tide water",
+            "Man was conscious and breathing when paramedics assisted",
+            "Transported to hospital with traumatic injuries",
+            "Helpline contact information (211)"
+          ],
+          "reason": "This is the exact same incident - identical source URL, same time (10:18 p.m. Wednesday), same location (West Bridge/Southwest Martin Downs Boulevard), same agencies, same rescue operation. The incoming article contains only routine scene details (low tide, conscious and breathing, traumatic injuries classification) and helpline resources. These are not material updates that change what readers need to know about the event outcome. The canonical already covers the core facts of the rescue.",
+          "validation_errors": []
+        },
         {
           "category_key": "crime",
           "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
@@ -394,6 +458,21 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-doubles-parking-fines-starting-oct-1-first-rate-hike-since-2011",
           "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
           "canonical_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
+          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
+          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
+          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -435,16 +514,19 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Three major animal hoarding rescues in weeks expose legal limits on prevention",
-      "elapsed_seconds": 35.973
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Martin County hoarding rescues raise questions about prevention limits",
+      "generated_card_count": 1,
+      "elapsed_seconds": 60.675
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 18,
-      "publishable_source_count": 11,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -505,7 +587,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-barn-fire-destroys-building-6-vehicles-1-firefighter-taken-to-hospital"
         }
       ],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -555,16 +637,6 @@
           "canonical_slug": "2026-09-24-brightline-expected-to-file-bankruptcy-casting-doubt-on-stuart-station",
           "canonical_headline": "Brightline expected to file bankruptcy, casting doubt on Stuart station",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight",
-          "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
-          "editorial_story_id": "story_015734",
-          "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
-          "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -649,25 +721,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight",
-          "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
-          "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
-          "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.477
+      "elapsed_seconds": 17.902
     },
     {
       "category_key": "sports",
@@ -675,7 +732,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 6,
+      "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -732,15 +789,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 13.444
+      "elapsed_seconds": 16.056
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 4,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -757,27 +814,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "local_attendable_activity_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
-      "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-attendable-activity-focus",
-          "category_key": "things_to_do",
-          "mode": "enforce",
-          "policy": "local_attendable_activity_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_attendable_activity_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "treasure_coast_locality"
-          ],
-          "headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
-          "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control"
-        }
-      ],
-      "published_story_duplicate_suppression_count": 3,
+      "category_eligibility_assessed_count": 0,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
@@ -786,6 +826,16 @@
           "editorial_story_id": "story_000091",
           "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
           "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "things_to_do",
+          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
+          "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
+          "editorial_story_id": "story_015732",
+          "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
+          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -810,49 +860,8 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
-          "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
-          "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_015732",
-            "source:https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'palm-beach-county', 'stuart']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['north-river-shores-boulevard']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['bond-trash-pickup', 'bond-trash-pickup-question', 'facing-palm-voter', 'facing-palm-voter-cw34', 'palm-voter-cw34', 'palm-voter-cw34-com', 'park-bond-trash', 'park-bond-trash-pickup', 'pickup-question-facing', 'pickup-question-facing-palm', 'question-facing-palm', 'question-facing-palm-voter', 'trash-pickup-question', 'trash-pickup-question-facing', 'voter-cw34-com']",
-            "shared_headline_topic_core=['bond', 'com', 'cw34', 'facing', 'palm', 'park', 'pickup', 'question', 'trash', 'voter']",
-            "shared_distinctive_token_count=174",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -877,17 +886,32 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Bacon BBQ Festival Sept. 26-27 at MIDFLORIDA Event Center in Port St. Lucie",
-            "Outrun Hunger 5K on Saturday at 7715 Forest Hill Blvd, West Palm Beach",
-            "Asian Food Festival at 100 N. Clematis St., West Palm Beach",
-            "Craft Festival Sept. 26-27 on NE Fourth Avenue in Delray Beach",
-            "9th Annual DAStoberfest on Sunday at DAS Beer Garden in Jupiter",
-            "Art After Dark Friday at 1450 S. Dixie Highway, West Palm Beach"
+            "Bacon BBQ Festival Sept 26-27 at MIDFLORIDA Event Center Port St. Lucie",
+            "Outrun Hunger 5K Saturday 7:30am at 7715 Forest Hill Blvd West Palm Beach",
+            "Asian Food Festival at 100 N. Clematis St. West Palm Beach",
+            "Craft Festival Saturday-Sunday at 401 East Atlantic Ave Delray Beach",
+            "9th Annual DAStoberfest Sunday 4pm at 1203 Town Center Drive Jupiter",
+            "Art After Dark Friday 5:30-10pm at 1450 S. Dixie Highway West Palm Beach"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
+        },
+        {
+          "category_key": "things_to_do",
+          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
+          "source_url": "https://cw34.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
+          "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
+          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "things_to_do",
@@ -921,21 +945,28 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.009
+      "elapsed_seconds": 19.537
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "generated_live",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 12.783,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 12.783,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -946,28 +977,18 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
-          "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
-          "editorial_story_id": "story_015935",
-          "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
-          "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "florida",
           "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - WPEC",
           "source_url": "https://cbs12.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
           "editorial_story_id": "story_015732",
           "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
-          "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
+          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -989,27 +1010,12 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
-          "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
-          "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
-          "canonical_headline": "Amendment 3 could force Florida to itemize tax bills by service",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "florida",
           "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - WPEC",
           "source_url": "https://cbs12.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
           "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
-          "canonical_headline": "Martin, St. Lucie voters to decide local ballot questions Nov. 3 on land, taxes, trash",
+          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1036,132 +1042,20 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.603
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Brightline files for bankruptcy, secures $490 million investment to keep South Florida-Orlando trains running",
+      "generated_card_count": 0,
+      "elapsed_seconds": 27.051
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "cache_hit",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
-      "cache_hit": true,
-      "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - WPEC",
-          "source_url": "https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
-          "editorial_story_id": "story_015555",
-          "canonical_slug": "2026-09-23-byron-donalds-holds-martin-county-roundtable-on-insurance-costs-property-taxes",
-          "canonical_headline": "Byron Donalds holds Martin County roundtable on insurance costs, property taxes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County Fire Rescue responds to fire at Wendy’s on Jensen Beach Boulevard - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/martin-county-fire-rescue-responds-to-fire-at-wendys-on-jensen-beach-boulevard-florida-news-local-news-florida-fire-local-fire",
-          "editorial_story_id": "story_015504",
-          "canonical_slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
-          "canonical_headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County Fire Rescue responds to fire at Wendy’s on Jensen Beach Boulevard - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-fire-rescue-responds-to-fire-at-wendys-on-jensen-beach-boulevard-florida-news-local-news-florida-fire-local-fire",
-          "editorial_story_id": "story_015504",
-          "canonical_slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
-          "canonical_headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - WPEC",
-          "source_url": "https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
-          "canonical_slug": "2026-09-23-byron-donalds-holds-martin-county-roundtable-on-insurance-costs-property-taxes",
-          "canonical_headline": "Byron Donalds holds Martin County roundtable on insurance costs, property taxes",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County Fire Rescue responds to fire at Wendy’s on Jensen Beach Boulevard - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/martin-county-fire-rescue-responds-to-fire-at-wendys-on-jensen-beach-boulevard-florida-news-local-news-florida-fire-local-fire",
-          "canonical_slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
-          "canonical_headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County Fire Rescue responds to fire at Wendy’s on Jensen Beach Boulevard - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-fire-rescue-responds-to-fire-at-wendys-on-jensen-beach-boulevard-florida-news-local-news-florida-fire-local-fire",
-          "canonical_slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
-          "canonical_headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
-      "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Barn fire near Indiantown destroys building, 6 vehicles; firefighter hospitalized",
-      "elapsed_seconds": 23.172
-    },
-    {
-      "category_key": "st_lucie",
-      "category_label": "St. Lucie County",
       "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1169,11 +1063,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.607,
+          "elapsed_seconds": 14.73,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 15.607,
+      "model_elapsed_seconds": 14.73,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1184,10 +1078,86 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - WPEC",
+          "source_url": "https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
+          "editorial_story_id": "story_015555",
+          "canonical_slug": "2026-09-23-byron-donalds-holds-martin-county-roundtable-on-insurance-costs-property-taxes",
+          "canonical_headline": "Byron Donalds holds Martin County roundtable on insurance costs, property taxes",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - WPEC",
+          "source_url": "https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
+          "canonical_slug": "2026-09-23-byron-donalds-holds-martin-county-roundtable-on-insurance-costs-property-taxes",
+          "canonical_headline": "Byron Donalds holds Martin County roundtable on insurance costs, property taxes",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
+      "generated_card_count": 1,
+      "elapsed_seconds": 35.964
+    },
+    {
+      "category_key": "st_lucie",
+      "category_label": "St. Lucie County",
+      "status": "generated_live",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 22.597,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 22.597,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1211,12 +1181,32 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
-          "editorial_story_id": "story_015734",
-          "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
-          "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
+          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
+          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
+          "editorial_story_id": "story_015821",
+          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
+          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
+          "editorial_story_id": "story_013919",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
+          "editorial_story_id": "story_013919",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1236,16 +1226,6 @@
           "editorial_story_id": "story_015258",
           "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
           "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie HOA tells residents to replace dead trees, homeowners push back - WPEC",
-          "source_url": "https://cbs12.com/news/local/cadence-at-tradition-hoa-letter-residents-replace-dead-trees-easement-demand-property-owners-hoa-cold-snap-timing-campbell-property-management-escalation",
-          "editorial_story_id": "story_015415",
-          "canonical_slug": "2026-09-23-port-st-lucie-hoa-gives-cadence-at-tradition-homeowners-sept-30-deadline-to-repl",
-          "canonical_headline": "Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1280,8 +1260,32 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
+          "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_015734",
+            "source:https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_015734,source:https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
@@ -1339,13 +1343,43 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
-          "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
-          "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
+          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
+          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
+          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
+          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1373,21 +1407,6 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-county",
           "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
           "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie HOA tells residents to replace dead trees, homeowners push back - WPEC",
-          "source_url": "https://cbs12.com/news/local/cadence-at-tradition-hoa-letter-residents-replace-dead-trees-easement-demand-property-owners-hoa-cold-snap-timing-campbell-property-management-escalation",
-          "canonical_slug": "2026-09-23-port-st-lucie-hoa-gives-cadence-at-tradition-homeowners-sept-30-deadline-to-repl",
-          "canonical_headline": "Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1446,9 +1465,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Parking dispute led to Pollo Tropical shooting in Port St. Lucie, witnesses say",
+      "live_hero_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
       "generated_card_count": 0,
-      "elapsed_seconds": 29.893
+      "elapsed_seconds": 40.015
     },
     {
       "category_key": "indian_river",
@@ -1456,7 +1475,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 27,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 6,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1473,7 +1492,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
@@ -1538,7 +1557,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.176
+      "elapsed_seconds": 12.649
     }
   ]
 }
