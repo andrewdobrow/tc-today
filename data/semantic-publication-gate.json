@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-25T10:55:17.562297+00:00",
+  "generated_at": "2026-09-25T12:58:35.819072+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -85,8 +85,8 @@
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 2,
     "pre_generation_materiality_holds": 1,
-    "pre_generation_materiality_model_calls": 3,
-    "pre_generation_materiality_cache_hits": 0,
+    "pre_generation_materiality_model_calls": 1,
+    "pre_generation_materiality_cache_hits": 2,
     "terminal_permalink_evaluations": 1,
     "terminal_permalink_candidate_pairs": 12,
     "terminal_permalink_model_calls": 0,
@@ -114,8 +114,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -153,18 +153,19 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 0.98,
       "shared_anchors": [
-        "Both involve Florida executions",
-        "Both involve Governor DeSantis signing death warrants",
-        "Both involve Florida State Prison"
+        "Florida State Prison",
+        "Governor Ron DeSantis signing death warrants",
+        "2026 execution schedule"
       ],
       "novel_facts": [
-        "Death warrant signed for William Reaves for 1986 killing of Deputy Richard Raczkowski",
-        "Scheduled execution date in October",
-        "18th death warrant of the year",
-        "Motion for stay filed by counsel Brittany Lacy",
-        "Sheriff Eric Flowers pushing for execution"
+        "Death warrant signed for William Reaves specifically",
+        "Reaves convicted of killing Deputy Richard Raczkowski in 1986",
+        "Execution scheduled for October at Florida State Prison",
+        "Indian River County Sheriff Eric Flowers pushing for execution",
+        "Stay motion filed by counsel Brittney Lacy",
+        "Reaves shot deputy four times in back outside Zippy Mart near Vero Beach on September 23, 1986"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -182,8 +183,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -1605,27 +1606,17 @@
       "resolution_decision": {
         "status": "invalid_model_response",
         "action": "hold",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-09-16-jolly-proposes-ai-data-center-moratorium-donalds-warns-freeze-would-drive-invest",
-        "same_real_world_event": true,
-        "material_new_update": true,
+        "recommended_action": "update_",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.62,
-        "shared_anchors": [
-          "Jolly's one-year data center moratorium pledge",
-          "Donalds' warning that a freeze would drive investment away",
-          "Same quotes from Jolly and Donalds carried forward from the Sept. 16 story",
-          "Florida 2026 governor race data center policy clash"
-        ],
-        "novel_facts": [
-          "New Stetson University poll: 54% of Florida adults oppose local data centers vs 27% support",
-          "Likely-voter horse race numbers: Donalds 51-Jolly 39; Moody 51-Nixon 40",
-          "Expansion to Senate race with Nixon's Fort Meade visit and Moody's local-control comments",
-          "Democratic legislative candidate Lamondin linking issue to affordability agenda"
-        ],
-        "reason": "The core event anchor—Jolly's moratorium pledge versus Donalds' investment-freeze warning—is identical to the Sept. 16 canonical story and is repeated verbatim in this piece. The new poll numbers and the addition of the Senate race dimension are developments within the same ongoing 'data centers as campaign wedge issue' storyline rather than a distinct newsworthy event, so this is best treated as a substantive update to that existing canonical rather than a new story.",
+        "confidence": 0.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "",
         "validation_errors": [
-          "same_event_confidence_below_threshold"
+          "unknown_recommended_action"
         ],
         "consistency_repairs": [],
         "resolution_pass": true
