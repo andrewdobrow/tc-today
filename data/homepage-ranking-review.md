@@ -4,40 +4,40 @@
 
 ## Hero
 
-- Current: **South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes**
-- Recommended: **South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes**
+- Current: **Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3**
+- Recommended: **Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3 | Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3 | 53 | importance 0; freshness 96.58; urgency 2/10; validated material update |
-| 2 | Fort Pierce brothers killed in Georgia shooting; 18-year-old arrested after altercation | Fort Pierce brothers killed in Georgia shooting; 18-year-old arrested after altercation | 45 | importance 0; freshness 64.85; urgency 2/10; validated material update |
-| 3 | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | Port St. Lucie man arrested under hotel bed faces meth, child neglect charges | 43 | importance 0; freshness 56.63; urgency 2/10; validated material update |
-| 4 | Large barn fire at Indiantown ranch closes roads, prompts horse evacuations | Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011 | 38 | importance 0; freshness 56.63; urgency 2/10 |
-| 5 | Port St. Lucie man arrested under hotel bed faces meth, child neglect charges | Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say | 42 | importance 0; freshness 48.34; urgency 2/10; validated material update; -6 category saturation |
-| 6 | Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program | Amendment 3 could force Florida to itemize tax bills by service | 34 | importance 0; freshness 59.99; urgency 2/10 |
-| 7 | Amendment 3 could force Florida to itemize tax bills by service | Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute | 40 | importance 0; freshness 24.95; urgency 4/10; validated material update; -8 county saturation |
-| 8 | Martin County first responders rescue man from St. Lucie River after jump from West Bridge | Large barn fire at Indiantown ranch closes roads, prompts horse evacuations | 39 | importance 0; freshness 64.86; urgency 2/10; -12 category saturation |
-| 9 | Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011 | Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program | 38 | importance 0; freshness 60.0; urgency 2/10; -12 county saturation |
-| 10 | Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say | Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table | 26 | importance 0; freshness 24.95; urgency 2/10 |
-| 11 | Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor | Florida renter costs could jump hundreds annually under Amendment 3, report finds | 25 | importance 0; freshness 20.0; urgency 2/10; -6 category saturation |
-| 12 | Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site | Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site | 36 | importance 0; freshness 48.34; urgency 2/10; -6 category saturation; -12 county saturation |
+| 1 | Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County | South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes | 47 | importance 0; freshness 94.93; urgency 2/10 |
+| 2 | South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes | Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County | 47 | importance 0; freshness 34.97; urgency 6/10; validated material update |
+| 3 | Fort Pierce brothers killed in Georgia shooting; 18-year-old arrested after altercation | Fort Pierce brothers killed in Georgia shooting; 18-year-old arrested after altercation | 44 | importance 0; freshness 59.83; urgency 2/10; validated material update |
+| 4 | Large barn fire at Indiantown ranch closes roads, prompts horse evacuations | Port St. Lucie man arrested under hotel bed faces meth, child neglect charges | 42 | importance 0; freshness 51.62; urgency 2/10; validated material update |
+| 5 | Port St. Lucie man arrested under hotel bed faces meth, child neglect charges | Large barn fire at Indiantown ranch closes roads, prompts horse evacuations | 38 | importance 0; freshness 59.85; urgency 2/10 |
+| 6 | Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program | Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011 | 36 | importance 0; freshness 51.62; urgency 2/10 |
+| 7 | Amendment 3 could force Florida to itemize tax bills by service | Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say | 40 | importance 0; freshness 43.33; urgency 2/10; validated material update; -6 category saturation |
+| 8 | Martin County first responders rescue man from St. Lucie River after jump from West Bridge | Amendment 3 could force Florida to itemize tax bills by service | 33 | importance 0; freshness 54.97; urgency 2/10 |
+| 9 | Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011 | Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program | 37 | importance 0; freshness 54.98; urgency 2/10; -12 county saturation |
+| 10 | Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say | Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor | 34 | importance 0; freshness 43.33; urgency 2/10; -12 category saturation |
+| 11 | Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor | Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site | 34 | importance 0; freshness 43.32; urgency 2/10; -6 category saturation; -12 county saturation |
+| 12 | Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site | Martin County first responders rescue man from St. Lucie River after jump from West Bridge | 37 | importance 0; freshness 54.97; urgency 2/10; -18 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table**: 47 → 10 — importance 0; freshness 24.95; urgency 2/10
-- **Florida renter costs could jump hundreds annually under Amendment 3, report finds**: 45 → 11 — importance 0; freshness 20.0; urgency 2/10; -6 category saturation
-- **Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say**: 10 → 5 — importance 0; freshness 48.34; urgency 2/10; validated material update; -6 category saturation
-- **Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011**: 9 → 4 — importance 0; freshness 56.63; urgency 2/10
-- **Martin County first responders rescue man from St. Lucie River after jump from West Bridge**: 8 → 13 — importance 0; freshness 59.98; urgency 2/10
-- **Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute**: 3 → 7 — importance 0; freshness 24.95; urgency 4/10; validated material update; -8 county saturation
-- **Large barn fire at Indiantown ranch closes roads, prompts horse evacuations**: 4 → 8 — importance 0; freshness 64.86; urgency 2/10; -12 category saturation
-- **Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program**: 6 → 9 — importance 0; freshness 60.0; urgency 2/10; -12 county saturation
-- **Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor**: 11 → 14 — importance 0; freshness 48.34; urgency 2/10
-- **Port St. Lucie man arrested under hotel bed faces meth, child neglect charges**: 5 → 3 — importance 0; freshness 56.63; urgency 2/10; validated material update
-- **Amendment 3 could force Florida to itemize tax bills by service**: 7 → 6 — importance 0; freshness 59.99; urgency 2/10
+- **Martin County first responders rescue man from St. Lucie River after jump from West Bridge**: 8 → 12 — importance 0; freshness 54.97; urgency 2/10; -18 category saturation; -12 county saturation
+- **Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say**: 10 → 7 — importance 0; freshness 43.33; urgency 2/10; validated material update; -6 category saturation
+- **Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program**: 6 → 9 — importance 0; freshness 54.98; urgency 2/10; -12 county saturation
+- **Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011**: 9 → 6 — importance 0; freshness 51.62; urgency 2/10
+- **South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes**: 2 → 1 — importance 0; freshness 94.93; urgency 2/10
+- **Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County**: 1 → 2 — importance 0; freshness 34.97; urgency 6/10; validated material update
+- **Port St. Lucie man arrested under hotel bed faces meth, child neglect charges**: 5 → 4 — importance 0; freshness 51.62; urgency 2/10; validated material update
+- **Large barn fire at Indiantown ranch closes roads, prompts horse evacuations**: 4 → 5 — importance 0; freshness 59.85; urgency 2/10
+- **Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor**: 11 → 10 — importance 0; freshness 43.33; urgency 2/10; -12 category saturation
+- **Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site**: 12 → 11 — importance 0; freshness 43.32; urgency 2/10; -6 category saturation; -12 county saturation
+- **Amendment 3 could force Florida to itemize tax bills by service**: 7 → 8 — importance 0; freshness 54.97; urgency 2/10
 
 ## Guardrails
 

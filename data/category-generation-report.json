@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-25T23:00:21Z",
+  "generated_at": "2026-09-26T02:00:44Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,21 +15,22 @@
   "summary": {
     "category_count": 9,
     "statuses": {
+      "cache_hit": 1,
       "category_eligibility_archive_recovery": 5,
-      "generated_live": 4
+      "generated_live": 3
     },
     "failures": {
       "no_category_eligible_sources": 5
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 82.526,
+    "model_attempt_count": 3,
+    "model_elapsed_seconds": 78.762,
     "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 1,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 35,
-    "story_aware_update_context_count": 2,
+    "contextual_update_lead_rejection_count": 0,
+    "article_framing_rejection_count": 1,
+    "category_eligibility_rejection_count": 6,
+    "published_story_duplicate_suppression_count": 27,
+    "story_aware_update_context_count": 4,
     "material_update_promotion_evaluation_count": 3,
     "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 2,
@@ -41,7 +42,7 @@
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -59,8 +60,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -105,9 +106,25 @@
           "local_nexus_signals": [],
           "headline": "Vehicle fire shuts down southbound Florida's Turnpike in Martin County Thursday morning - cw34.com",
           "source_url": "https://cw34.com/news/local/vehicle-fire-shuts-down-southbound-floridas-turnpike-in-martin-county-traffic-alert-mile-markers-128-126-morning-delays-florida-news"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cbs12.com",
+          "source_url": "https://cbs12.com/news/instagram/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -137,16 +154,6 @@
           "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
           "canonical_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
-          "source_url": "https://cbs12.com/news/instagram/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "editorial_story_id": "story_015258",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -201,34 +208,19 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
-          "source_url": "https://cbs12.com/news/instagram/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 30.025
+      "elapsed_seconds": 30.098
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
+      "fetched_candidate_count": 27,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 10,
-      "selected_source_count": 3,
+      "publishable_source_count": 11,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -236,61 +228,112 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 32.416,
+          "elapsed_seconds": 41.39,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 32.416,
+      "model_elapsed_seconds": 41.39,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "story_form": "update",
-          "lead_word_count": 44,
-          "baseline_anchor": "abuse_or_neglect",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "arrested",
-            "hotel",
-            "lucie",
-            "port"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "found",
-            "hiding",
-            "police",
-            "wanted"
-          ],
-          "semantic_novel_fact_hits": [],
-          "semantic_novel_fact_token_count": 0,
+          "headline": "Barn fire near Indiantown destroys building, 6 vehicles; firefighter hospitalized",
           "missing": [
-            "original_event_context_missing"
+            "headline_jurisdiction_missing_from_lead"
           ],
-          "source_title": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - cw34.com",
-          "headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges"
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Barn fire near Indiantown destroys building, 6 vehicles; firefighter hospitalized",
+            "lead": "The fire occurred on a ranch in the 13000 block of Southwest Allapattah Road at about 5:30 p.m. Large flames and black smoke could be seen for miles. No horses or residents were injured. One firefighter was taken to the hospital with minor overexertion symptoms but was released Friday morning.",
+            "lead_word_count": 52,
+            "headline_overlap_ratio": 0.222,
+            "new_context_token_count": 30,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "surname_first_reference": {
+              "required": false,
+              "passed": true,
+              "missing": [],
+              "candidates": []
+            },
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Barn fire near Indiantown destroys building, 6 vehicles; firefighter hospitalized",
+            "lead": "The fire occurred on a ranch in the 13000 block of Southwest Allapattah Road at about 5:30 p.m. Large flames and black smoke could be seen for miles. No horses or residents were injured. One firefighter was taken to the hospital with minor overexertion symptoms but was released Friday morning.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "indian_town"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "indian_town"
+            ],
+            "headline_judge_claims": [],
+            "lead_judge_claims": [],
+            "missing_judge_claims": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Barn fire near Indiantown destroys building, 6 vehicles; firefighter hospitalized",
+            "generated_lead": "The fire occurred on a ranch in the 13000 block of Southwest Allapattah Road at about 5:30 p.m. Large flames and black smoke could be seen for miles.",
+            "source_title": "Martin County barn fire destroys building, 6 vehicles; 1 firefighter taken to hospital",
+            "source_lead": "A barn that caught fire in Martin County on Thursday caused large flames and sent black smoke into the air that could be seen for miles. The fire occurred on a ranch in the 13000 block of Southwest Allapattah Road near Indiantown at about 5:30 p.m., according to a social media post by Martin County Fire Rescue.",
+            "title_similarity": {
+              "score": 0.7041,
+              "overlap": 0.7778,
+              "jaccard": 0.5,
+              "sorted_sequence": 0.8258,
+              "ordered_sequence": 0.7613,
+              "shared_token_count": 7.0
+            },
+            "lead_token_overlap": 1.0,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "official_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
         }
       ],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -299,6 +342,16 @@
           "editorial_story_id": "story_015942",
           "canonical_slug": "2026-09-24-martin-county-first-responders-rescue-man-from-st-lucie-river-after-jump-from-we",
           "canonical_headline": "Martin County first responders rescue man from St. Lucie River after jump from West Bridge",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372",
+          "editorial_story_id": "story_015954",
+          "canonical_slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
+          "canonical_headline": "Fort Pierce brothers killed in Georgia shooting; 18-year-old arrested after altercation",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -321,77 +374,28 @@
           "canonical_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
-          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
-          "editorial_story_id": "story_015821",
-          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
-          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
-          "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "editorial_story_id": "story_015258",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-county",
-          "editorial_story_id": "story_015258",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - cw34.com",
-          "source_url": "https://cw34.com/news/local/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
-          "publisher": "cw34.com",
+          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - cbs12.com",
+          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
+          "publisher": "cbs12.com",
           "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
           "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
-          "basis": "event-identity-authority:participant_plus_precise_location",
+          "basis": "exact_source_url",
           "identity_keys": [
             "story:story_015821",
-            "source:https://cw34.com/news/local/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say"
+            "source:https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say"
           ],
-          "match_confidence": 0.95,
+          "match_confidence": 0.99,
           "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
+            "story",
+            "source"
           ],
           "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county', 'port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['kenneth robert ferow', 'traffic stop ferow']",
-            "shared_precise_locations=['hotel-on-village-parkway', 'village-parkway']",
-            "shared_agencies=['port-st-lucie-police']",
-            "shared_subject_phrases=['bed-hotel-say', 'found-hiding-under', 'found-hiding-under-bed', 'hiding-under-bed', 'hiding-under-bed-hotel', 'under-bed-hotel', 'under-bed-hotel-say', 'want-found-hiding', 'want-found-hiding-under']",
-            "shared_headline_topic_core=['bed', 'found', 'hiding', 'hotel', 'say', 'under', 'want']",
-            "shared_distinctive_token_count=87",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
+            "deterministic_identity_keys=story:story_015821,source:https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -439,6 +443,21 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372",
+          "canonical_slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
+          "canonical_headline": "Fort Pierce brothers killed in Georgia shooting; 18-year-old arrested after altercation",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Amendment 3 could change how Floridians are billed for local services, former state senator says",
           "source_url": "https://www.wptv.com/money/real-estate-news/amendment-3-could-change-how-floridians-are-billed-for-local-services-former-state-senator-says",
           "canonical_slug": "2026-09-24-amendment-3-could-force-florida-to-itemize-tax-bills-by-service",
@@ -466,59 +485,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
-          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
-          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
-          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
-          "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-county",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County hoarding rescues raise questions about prevention limits",
-      "generated_card_count": 1,
-      "elapsed_seconds": 60.675
+      "live_hero_headline": "Two major Martin County animal hoarding rescues prompt scrutiny of prevention gaps",
+      "generated_card_count": 2,
+      "elapsed_seconds": 70.249
     },
     {
       "category_key": "business",
@@ -724,7 +698,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.902
+      "elapsed_seconds": 17.178
     },
     {
       "category_key": "sports",
@@ -788,15 +762,15 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 16.056
+      "new_publication_stale_rejected_count": 4,
+      "elapsed_seconds": 25.882
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -817,7 +791,7 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
@@ -848,16 +822,6 @@
           "canonical_headline": "Port St. Lucie veterans home raises funds for WiFi, Medal of Honor Museum trip",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "things_to_do",
-          "source_headline": "Molly's House marks 30 years of helping Treasure Coast families during medical treatment",
-          "source_url": "https://www.wptv.com/shining-a-light/mollys-house-marks-30-years-of-helping-treasure-coast-families-during-medical-treatment",
-          "editorial_story_id": "story_014363",
-          "canonical_slug": "2026-09-21-mollys-house-open-house-monday-marks-30-years-helping-treasure-coast-families",
-          "canonical_headline": "Molly's House open house Monday marks 30 years helping Treasure Coast families",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -886,12 +850,12 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Bacon BBQ Festival Sept 26-27 at MIDFLORIDA Event Center Port St. Lucie",
-            "Outrun Hunger 5K Saturday 7:30am at 7715 Forest Hill Blvd West Palm Beach",
-            "Asian Food Festival at 100 N. Clematis St. West Palm Beach",
-            "Craft Festival Saturday-Sunday at 401 East Atlantic Ave Delray Beach",
-            "9th Annual DAStoberfest Sunday 4pm at 1203 Town Center Drive Jupiter",
-            "Art After Dark Friday 5:30-10pm at 1450 S. Dixie Highway West Palm Beach"
+            "Bacon BBQ Festival at MIDFLORIDA Event Center Sept. 26-27",
+            "Outrun Hunger 5K on Saturday 7:30 a.m. at 7715 Forest Hill Blvd",
+            "Asian Food Festival at 100 N. Clematis St.",
+            "Craft Festival in Delray Beach on NE Fourth Avenue",
+            "9th Annual DAStoberfest on Sunday at DAS Beer Garden Jupiter",
+            "Art After Dark Friday performances at 1450 S. Dixie Highway"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -927,46 +891,24 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "things_to_do",
-          "source_headline": "Molly's House marks 30 years of helping Treasure Coast families during medical treatment",
-          "source_url": "https://www.wptv.com/shining-a-light/mollys-house-marks-30-years-of-helping-treasure-coast-families-during-medical-treatment",
-          "canonical_slug": "2026-09-21-mollys-house-open-house-monday-marks-30-years-helping-treasure-coast-families",
-          "canonical_headline": "Molly's House open house Monday marks 30 years helping Treasure Coast families",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.537
+      "elapsed_seconds": 23.375
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 2,
       "selected_source_count": 1,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.783,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 12.783,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -977,85 +919,77 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
-      "published_story_duplicate_suppressions": [
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
         {
-          "category_key": "florida",
-          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - WPEC",
+          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cbs12.com",
           "source_url": "https://cbs12.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
-          "editorial_story_id": "story_015732",
+          "publisher": "cbs12.com",
           "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
           "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_015732",
+            "source:https://cbs12.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_015732,source:https://cbs12.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "category_key": "florida",
-          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - WPEC",
+          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - cbs12.com",
           "source_url": "https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
-          "editorial_story_id": "story_015555",
+          "publisher": "cbs12.com",
           "canonical_slug": "2026-09-23-byron-donalds-holds-martin-county-roundtable-on-insurance-costs-property-taxes",
           "canonical_headline": "Byron Donalds holds Martin County roundtable on insurance costs, property taxes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_015555",
+            "source:https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_015555,source:https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - WPEC",
-          "source_url": "https://cbs12.com/news/local/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
-          "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
-          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - WPEC",
-          "source_url": "https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
-          "canonical_slug": "2026-09-23-byron-donalds-holds-martin-county-roundtable-on-insurance-costs-property-taxes",
-          "canonical_headline": "Byron Donalds holds Martin County roundtable on insurance costs, property taxes",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
-      "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
+      "material_update_promotion_decisions": [],
+      "new_publication_stale_rejected_count": 1,
       "live_hero_headline": "Brightline files for bankruptcy, secures $490 million investment to keep South Florida-Orlando trains running",
-      "generated_card_count": 0,
-      "elapsed_seconds": 27.051
+      "elapsed_seconds": 18.2
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1063,11 +997,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.73,
+          "elapsed_seconds": 9.509,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 14.73,
+      "model_elapsed_seconds": 9.509,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1078,18 +1012,18 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - WPEC",
-          "source_url": "https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
-          "editorial_story_id": "story_015555",
-          "canonical_slug": "2026-09-23-byron-donalds-holds-martin-county-roundtable-on-insurance-costs-property-taxes",
-          "canonical_headline": "Byron Donalds holds Martin County roundtable on insurance costs, property taxes",
+          "source_headline": "Amendment 3 sparks concerns over water quality funding in Martin County - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223",
+          "editorial_story_id": "story_016373",
+          "canonical_slug": "2026-09-25-south-florida-water-management-district-could-lose-98-million-annually-by-2030-i",
+          "canonical_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1103,10 +1037,10 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
-          "source_headline": "Gubernatorial Candidate Byron Donalds talks costs, insurance at Martin County roundtable - WPEC",
-          "source_url": "https://cbs12.com/news/local/gubernatorial-candidate-byron-donalds-talks-costs-insurance-at-martin-county-roundtable-gop-trump-republican-amendment-3-property-homestead-9-23-26",
-          "canonical_slug": "2026-09-23-byron-donalds-holds-martin-county-roundtable-on-insurance-costs-property-taxes",
-          "canonical_headline": "Byron Donalds holds Martin County roundtable on insurance costs, property taxes",
+          "source_headline": "Amendment 3 sparks concerns over water quality funding in Martin County - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223",
+          "canonical_slug": "2026-09-25-south-florida-water-management-district-could-lose-98-million-annually-by-2030-i",
+          "canonical_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1120,18 +1054,18 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
-      "generated_card_count": 1,
-      "elapsed_seconds": 35.964
+      "live_hero_headline": "Indiantown-area barn fire destroys building, 6 vehicles; firefighter hospitalized",
+      "generated_card_count": 0,
+      "elapsed_seconds": 32.462
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1139,11 +1073,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 22.597,
+          "elapsed_seconds": 27.863,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 22.597,
+      "model_elapsed_seconds": 27.863,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1154,10 +1088,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1181,22 +1115,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
-          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
-          "editorial_story_id": "story_015821",
-          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
-          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
+          "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
+          "editorial_story_id": "story_015734",
+          "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
+          "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-          "editorial_story_id": "story_013919",
-          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1211,11 +1135,11 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
-          "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "editorial_story_id": "story_015258",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
+          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
+          "editorial_story_id": "story_013919",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1227,16 +1151,6 @@
           "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
           "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "editorial_story_id": "story_015258",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1263,15 +1177,15 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
-          "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
+          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - cbs12.com",
+          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
+          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
           "basis": "exact_source_url",
           "identity_keys": [
-            "story:story_015734",
-            "source:https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight"
+            "story:story_015821",
+            "source:https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
@@ -1279,7 +1193,7 @@
             "source"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_015734,source:https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
+            "deterministic_identity_keys=story:story_015821,source:https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1343,28 +1257,13 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Wanted man found hiding under bed at Port St. Lucie hotel, police say - WPEC",
-          "source_url": "https://cbs12.com/news/crime/wanted-man-found-hiding-under-bed-at-port-st-lucie-hotel-police-say",
-          "canonical_slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
-          "canonical_headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
+          "source_headline": "'That's going to scare everybody': New contamination findings raise questions in Fort Pierce waterfront fight - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/thats-going-to-scare-everybody-new-contamination-findings-raise-questions-in-fort-pierce-waterfront-fight",
+          "canonical_slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
+          "canonical_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1388,10 +1287,10 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
-          "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
+          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
+          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -1409,21 +1308,6 @@
           "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1465,9 +1349,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
-      "generated_card_count": 0,
-      "elapsed_seconds": 40.015
+      "live_hero_headline": "Stolen Broward deputy patrol car tracked to I-95 in St. Lucie County, woman arrested",
+      "generated_card_count": 1,
+      "elapsed_seconds": 41.586
     },
     {
       "category_key": "indian_river",
@@ -1557,7 +1441,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.649
+      "elapsed_seconds": 15.814
     }
   ]
 }
