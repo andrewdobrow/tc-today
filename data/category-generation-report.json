@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-26T15:52:34Z",
+  "generated_at": "2026-09-26T19:02:00Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,42 +16,52 @@
     "category_count": 9,
     "statuses": {
       "cache_hit": 2,
-      "category_eligibility_archive_recovery": 5,
-      "generated_live": 2
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 1,
+      "generation_failed_archive_recovery": 2
     },
     "failures": {
-      "no_category_eligible_sources": 5
+      "article_framing_integrity": 1,
+      "contextless_update_lead": 1,
+      "no_category_eligible_sources": 4
     },
-    "model_attempt_count": 2,
-    "model_elapsed_seconds": 36.486,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 120.043,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 1,
+    "contextual_update_lead_rejection_count": 2,
+    "article_framing_rejection_count": 2,
     "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 22,
-    "story_aware_update_context_count": 1,
-    "material_update_promotion_evaluation_count": 8,
-    "material_update_promotion_count": 1,
-    "material_update_promotion_cache_hit_count": 6,
+    "published_story_duplicate_suppression_count": 21,
+    "story_aware_update_context_count": 4,
+    "material_update_promotion_evaluation_count": 5,
+    "material_update_promotion_count": 0,
+    "material_update_promotion_cache_hit_count": 3,
     "material_update_promotion_model_call_count": 2
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 27,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 13,
-      "selected_source_count": 0,
+      "publishable_source_count": 16,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 19.603,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 19.603,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -60,7 +70,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
@@ -131,8 +141,32 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Amendment 3 sparks concerns over water quality funding in Martin County - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223",
+          "publisher": "www.wpbf.com",
+          "canonical_slug": "2026-09-25-south-florida-water-management-district-could-lose-98-million-annually-by-2030-i",
+          "canonical_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_016373",
+            "source:https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_016373,source:https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -170,15 +204,19 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.194
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "South Florida Water Management District could lose $98 million annually by 2030 under Amendment 3",
+      "generated_card_count": 0,
+      "elapsed_seconds": 58.54
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "cache_hit",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 11,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 12,
       "selected_source_count": 2,
       "cache_hit": true,
       "archive_recovery_requested": false,
@@ -209,20 +247,40 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Firefighters battle pole barn fire in Martin County - WPBF",
+          "headline": "Firefighters battle pole barn fire in Martin County - wpbf.com",
           "source_url": "https://www.wpbf.com/article/firefighters-battle-pole-barn-fire-indiantown-martin-county/73877178"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Martin County first responders rescue man after jump into St. Lucie River - WPBF",
+          "source_headline": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372",
+          "editorial_story_id": "story_015954",
+          "canonical_slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
+          "canonical_headline": "Fort Pierce community raising funds to bring home 2 brothers killed in Georgia",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County first responders rescue man after jump into St. Lucie River - wpbf.com",
           "source_url": "https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113",
           "editorial_story_id": "story_015942",
           "canonical_slug": "2026-09-24-martin-county-first-responders-rescue-man-from-st-lucie-river-after-jump-from-we",
           "canonical_headline": "Martin County first responders rescue man from St. Lucie River after jump from West Bridge",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - WPEC",
+          "source_url": "https://cbs12.com/news/election/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
+          "editorial_story_id": "story_015732",
+          "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
+          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -240,12 +298,27 @@
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "Martin County first responders rescue man after jump into St. Lucie River - WPBF",
+          "source_headline": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372",
+          "canonical_slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
+          "canonical_headline": "Fort Pierce community raising funds to bring home 2 brothers killed in Georgia",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County first responders rescue man after jump into St. Lucie River - wpbf.com",
           "source_url": "https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113",
           "canonical_slug": "2026-09-24-martin-county-first-responders-rescue-man-from-st-lucie-river-after-jump-from-we",
           "canonical_headline": "Martin County first responders rescue man from St. Lucie River after jump from West Bridge",
@@ -254,28 +327,39 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
+          "confidence": 0.99,
           "shared_anchors": [
-            "Jump from West Bridge into St. Lucie River",
-            "10:18 p.m. Wednesday near Southwest Martin Downs Boulevard",
-            "Martin County Fire Rescue, Martin County Sheriff's Office, and Stuart Police Department response",
-            "Man suffering mental health crisis/attempted suicide",
-            "Same source URL (https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113)",
-            "Rescue involving boats and LifeStar helicopter transport"
+            "Same source URL (wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113)",
+            "Same timestamp: 10:18 p.m. Wednesday near Southwest Martin Downs Boulevard",
+            "Same location: West Bridge into St. Lucie River",
+            "Same agencies: Martin County Fire Rescue, Martin County Sheriff's Office, Stuart Police Department",
+            "Same incident: man jumped from bridge during mental health crisis",
+            "Same rescue method: Sheriff's Office boat located man and transported to boat ramp",
+            "Same outcome: LifeStar helicopter transported man with traumatic injuries"
           ],
-          "novel_facts": [
-            "Additional detail about low tide water",
-            "Man was conscious and breathing when paramedics assisted",
-            "Transported to hospital with traumatic injuries",
-            "Helpline contact information (211)"
-          ],
-          "reason": "This is the exact same incident - identical source URL, same time (10:18 p.m. Wednesday), same location (West Bridge/Southwest Martin Downs Boulevard), same agencies, same rescue operation. The incoming article contains only routine scene details (low tide, conscious and breathing, traumatic injuries classification) and helpline resources. These are not material updates that change what readers need to know about the event outcome. The canonical already covers the core facts of the rescue.",
+          "novel_facts": [],
+          "reason": "This is the exact same article from the same source URL. The incoming article is dated Sept. 25 but describes events from Wednesday Sept. 24 (published Thursday Sept. 24 according to the body text). The canonical was published Sept. 24. All core facts are identical: timing, location, agencies involved, rescue details, and patient outcome. No new developments, arrests, charges, medical updates, or other material information. This is a duplicate republication of the same coverage.",
           "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - WPEC",
+          "source_url": "https://cbs12.com/news/election/november-3-election-local-ballot-issues-from-parks-bonds-to-trash-pickup-local-questions-facing-palm-beach-treasure-coast-voters-palm-beach-county-bonds-1-mill-property-tax-schools-martin-county-ballparks-st-lucie-half-cent-tax-mosquito-control",
+          "canonical_slug": "2026-09-24-treasure-coast-voters-face-local-ballot-questions-nov-3-on-taxes-services-land",
+          "canonical_headline": "Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "crime",
@@ -318,7 +402,7 @@
       ],
       "new_publication_stale_rejected_count": 0,
       "live_hero_headline": "Three severe hoarding cases in Martin and Palm Beach counties this summer spark debate over prevention",
-      "elapsed_seconds": 15.96
+      "elapsed_seconds": 32.594
     },
     {
       "category_key": "business",
@@ -474,7 +558,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.552
+      "elapsed_seconds": 17.344
     },
     {
       "category_key": "sports",
@@ -512,23 +596,40 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.565
+      "elapsed_seconds": 16.689
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 4,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Things To Do category eligibility contract",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 16.047,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 16.566,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com"
+        }
+      ],
+      "model_elapsed_seconds": 32.614,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: new_development_missing — Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -537,21 +638,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "local_attendable_activity_required",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "things_to_do",
-          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318",
-          "editorial_story_id": "story_000091",
-          "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
-          "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "things_to_do",
           "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
@@ -563,44 +654,36 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318",
+          "publisher": "www.wpbf.com",
+          "canonical_slug": "2026-09-25-bacon-and-bbq-festival-at-midflorida-event-center-tops-weekend-events",
+          "canonical_headline": "Bacon and BBQ Festival at MIDFLORIDA Event Center tops weekend events",
+          "basis": "event-identity-authority:exact_source_url",
+          "identity_keys": [
+            "story:story_000091",
+            "source:https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318"
+          ],
+          "match_confidence": 1.0,
+          "evidence_dimensions": [
+            "source_url"
+          ],
+          "decision_trace": [
+            "exact_source_url=True",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "things_to_do",
-          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318",
-          "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
-          "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.95,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Bacon BBQ Festival Sept. 26-27 at MIDFLORIDA Event Center in Port St. Lucie",
-            "Outrun Hunger 5K Saturday 7:30 a.m. at 7715 Forest Hill Blvd., West Palm Beach",
-            "Asian Food Festival at 100 N. Clematis St., West Palm Beach",
-            "Craft Festival on NE Fourth Avenue in Delray Beach",
-            "9th Annual DAStoberfest Sunday 4 p.m. at 1203 Town Center Drive, Jupiter",
-            "Art After Dark Friday 5:30-10 p.m. at 1450 S. Dixie Highway, West Palm Beach"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
         {
           "category_key": "things_to_do",
           "source_headline": "From parks bonds to trash pickup: Local questions facing Palm Beach, Treasure Coast voters - cw34.com",
@@ -618,7 +701,9 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 18.031
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 51.394
     },
     {
       "category_key": "florida",
@@ -709,237 +794,104 @@
       ],
       "new_publication_stale_rejected_count": 0,
       "live_hero_headline": "Brightline files for bankruptcy, secures $490 million investment to keep South Florida-Orlando trains running",
-      "elapsed_seconds": 11.723
+      "elapsed_seconds": 17.992
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "fresh_candidate_count": 28,
+      "publishable_source_count": 4,
+      "selected_source_count": 4,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 21.071,
-          "result": "success"
+          "elapsed_seconds": 37.359,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Water district faces $98M loss by 2030 under Amendment 3"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 30.467,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Martin County officials warn Amendment 3 could cost South Florida Water Management District $98M annually"
         }
       ],
-      "model_elapsed_seconds": 21.071,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 67.826,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Martin County officials warn Amendment 3 could cost South Florida Water Management District $98M annually",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Vehicle fire shuts down southbound Florida's Turnpike in Martin County",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Vehicle fire shuts down southbound Florida's Turnpike in Martin County",
-            "lead": "The vehicle fire was reported on Florida's Turnpike South between mile markers 128 and 126. Photos on Florida 511 showed a fire engine at the scene as cars squeezed by through the shoulder of the road.",
-            "lead_word_count": 37,
-            "headline_overlap_ratio": 0.444,
-            "new_context_token_count": 17,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "surname_first_reference": {
-              "required": false,
-              "passed": true,
-              "missing": [],
-              "candidates": []
-            },
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Vehicle fire shuts down southbound Florida's Turnpike in Martin County",
-            "lead": "The vehicle fire was reported on Florida's Turnpike South between mile markers 128 and 126. Photos on Florida 511 showed a fire engine at the scene as cars squeezed by through the shoulder of the road.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "martin_county"
-            ],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [
-              "martin_county"
-            ],
-            "headline_judge_claims": [],
-            "lead_judge_claims": [],
-            "missing_judge_claims": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Vehicle fire shuts down southbound Florida's Turnpike in Martin County",
-            "generated_lead": "The vehicle fire was reported on Florida's Turnpike South between mile markers 128 and 126. Photos on Florida 511 showed a fire engine at the scene as cars squeezed by through the shoulder of the road.",
-            "source_title": "Vehicle fire shuts down southbound Florida's Turnpike in Martin County Thursday morning - WPEC",
-            "source_lead": "Now 85 ° Sat 84 ° Sun 84 ° Watch Vehicle fire shuts down southbound Florida s Turnpike in Martin County Thursday morning by Gershon Harrell 4 VIEW ALL PHOTOS A vehicle fire has blocked all southbound lanes of Florida s Turnpike in Martin County on Thursday morning. The vehicle fire was reported on Florida s Turnpike South between mile markers 128 and 126.",
-            "title_similarity": {
-              "score": 0.8961,
-              "overlap": 1.0,
-              "jaccard": 0.75,
-              "sorted_sequence": 0.8553,
-              "ordered_sequence": 0.8553,
-              "shared_token_count": 9.0
-            },
-            "lead_token_overlap": 0.571,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          },
-          "official_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
-      "published_story_duplicate_suppressions": [
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
         {
-          "category_key": "martin",
-          "source_headline": "Amendment 3 sparks concerns over water quality funding in Martin County - WPBF",
+          "source_headline": "Amendment 3 sparks concerns over water quality funding in Martin County - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223",
-          "editorial_story_id": "story_016373",
+          "publisher": "www.wpbf.com",
           "canonical_slug": "2026-09-25-south-florida-water-management-district-could-lose-98-million-annually-by-2030-i",
           "canonical_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County first responders rescue man after jump into St. Lucie River - WPBF",
-          "source_url": "https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113",
-          "editorial_story_id": "story_015942",
-          "canonical_slug": "2026-09-24-martin-county-first-responders-rescue-man-from-st-lucie-river-after-jump-from-we",
-          "canonical_headline": "Martin County first responders rescue man from St. Lucie River after jump from West Bridge",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_016373",
+            "source:https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_016373,source:https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Amendment 3 sparks concerns over water quality funding in Martin County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-martin-county-amendment-3-water-quality-funding/73893223",
-          "canonical_slug": "2026-09-25-south-florida-water-management-district-could-lose-98-million-annually-by-2030-i",
-          "canonical_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County first responders rescue man after jump into St. Lucie River - WPBF",
-          "source_url": "https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113",
-          "canonical_slug": "2026-09-24-martin-county-first-responders-rescue-man-from-st-lucie-river-after-jump-from-we",
-          "canonical_headline": "Martin County first responders rescue man from St. Lucie River after jump from West Bridge",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
-          "shared_anchors": [
-            "Jump from West Bridge into St. Lucie River",
-            "10:18 p.m. Wednesday near Southwest Martin Downs Boulevard",
-            "Martin County Fire Rescue, Martin County Sheriff's Office, and Stuart Police Department response",
-            "Man suffering mental health crisis/attempted suicide",
-            "Same source URL (https://www.wpbf.com/article/martin-county-first-responders-rescue-man-after-jump-into-st-lucie-river/73876113)",
-            "Rescue involving boats and LifeStar helicopter transport"
-          ],
-          "novel_facts": [
-            "Additional detail about low tide water",
-            "Man was conscious and breathing when paramedics assisted",
-            "Transported to hospital with traumatic injuries",
-            "Helpline contact information (211)"
-          ],
-          "reason": "This is the exact same incident - identical source URL, same time (10:18 p.m. Wednesday), same location (West Bridge/Southwest Martin Downs Boulevard), same agencies, same rescue operation. The incoming article contains only routine scene details (low tide, conscious and breathing, traumatic injuries classification) and helpline resources. These are not material updates that change what readers need to know about the event outcome. The canonical already covers the core facts of the rescue.",
-          "validation_errors": []
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indiantown ranch barn fire destroys building, 6 vehicles; firefighter released",
-      "generated_card_count": 0,
-      "elapsed_seconds": 40.302
+      "elapsed_seconds": 97.509
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.415,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 15.415,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed St. Lucie County category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -951,11 +903,21 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "'Parents are having a hard time': Catholic school in Fort Pierce launches new educational program - WPBF",
+          "source_headline": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372",
+          "editorial_story_id": "story_015954",
+          "canonical_slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
+          "canonical_headline": "Fort Pierce community raising funds to bring home 2 brothers killed in Georgia",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "'Parents are having a hard time': Catholic school in Fort Pierce launches new educational program - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-catholic-school-star-students-learning/73868842",
           "editorial_story_id": "story_015955",
           "canonical_slug": "2026-09-24-anastasia-catholic-school-in-fort-pierce-launches-dioceses-first-full-special-ne",
@@ -1005,7 +967,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Man shot outside Port St. Lucie Pollo Tropical now faces charges, police say - WPBF",
+          "source_headline": "Man shot outside Port St. Lucie Pollo Tropical now faces charges, police say - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-man-charged-shooting-port-st-lucie-pollo-tropical/73822854",
           "editorial_story_id": "story_013919",
           "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
@@ -1027,74 +989,51 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318",
           "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
-          "canonical_headline": "Fort Pierce brothers killed in Georgia shooting; 18-year-old arrested after altercation",
-          "basis": "exact_source_url",
+          "canonical_slug": "2026-09-25-bacon-and-bbq-festival-at-midflorida-event-center-tops-weekend-events",
+          "canonical_headline": "Bacon and BBQ Festival at MIDFLORIDA Event Center tops weekend events",
+          "basis": "event-identity-authority:exact_source_url",
           "identity_keys": [
-            "story:story_015954",
-            "source:https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372"
+            "story:story_000091",
+            "source:https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318"
           ],
-          "match_confidence": 0.99,
+          "match_confidence": 1.0,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "source_url"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_015954,source:https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372",
+            "exact_source_url=True",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 4,
-      "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - WPBF",
+          "source_headline": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-fort-pierce-brothers-killed-georgia-shooting/73875372",
           "canonical_slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
-          "canonical_headline": "Fort Pierce brothers killed in Georgia shooting; 18-year-old arrested after altercation",
+          "canonical_headline": "Fort Pierce community raising funds to bring home 2 brothers killed in Georgia",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": true,
-          "cache_hit": true,
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
           "model_call": false,
-          "action": "update_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "update_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "11-year-old Jamarion Rolle and 12-year-old Ja'khi Clark killed",
-            "Shooting Sunday at DeKalb County, Georgia apartment complex",
-            "18-year-old Julian Ellis arrested",
-            "Brothers from Fort Pierce",
-            "DeKalb County police Chief Gregory Padrick announcement",
-            "Same source URL (wpbf.com)"
-          ],
-          "novel_facts": [
-            "Shooting stemmed from altercation during backyard football game days earlier",
-            "Two women were also shot and survived; one underwent surgery Thursday",
-            "Boys were straight-A students",
-            "Boys loved Roblox and being with siblings",
-            "Suspect and others showed up trying to fight the boys before shots fired",
-            "DeKalb County CEO Lorraine Cochran-Johnson quoted",
-            "GoFundMe specifically mentioned as raising money"
-          ],
-          "reason": "Same shooting incident with identical victims, suspect, location, and date. Incoming article adds material updates including the motive (football game altercation), additional victims (two women shot, one had surgery), and substantial new details about the circumstances (suspect came to apartment to fight boys). These are substantive factual developments that materially expand understanding of the incident and should update the existing canonical rather than create a duplicate.",
-          "validation_errors": []
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "'Parents are having a hard time': Catholic school in Fort Pierce launches new educational program - WPBF",
+          "source_headline": "'Parents are having a hard time': Catholic school in Fort Pierce launches new educational program - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-catholic-school-star-students-learning/73868842",
           "canonical_slug": "2026-09-24-anastasia-catholic-school-in-fort-pierce-launches-dioceses-first-full-special-ne",
           "canonical_headline": "Anastasia Catholic School in Fort Pierce launches diocese's first full special-needs program",
@@ -1103,8 +1042,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1114,17 +1053,18 @@
             "Morning Star program",
             "Thursday morning ribbon-cutting ceremony",
             "First program in Diocese of Palm Beach for special needs",
-            "Pilot began in August with seven students",
             "Bishop Manuel de Jesus Rodriguez attended",
+            "Started as pilot in August with seven students",
+            "Rev. Principal Kevin Hoeffner",
             "Same source URL: https://www.wpbf.com/article/florida-catholic-school-star-students-learning/73868842"
           ],
           "novel_facts": [
-            "Additional quotes from Rev. Principal Kevin Hoeffner about 20 years at school",
-            "More details about program features (sensory-friendly classrooms, modified curriculum)",
-            "Mention of school's 100 years of Catholic education milestone",
-            "Quote from George (context unclear)"
+            "Additional quotes from Rodriguez and Hoeffner",
+            "More detail about program features (sensory-friendly classrooms, modified curriculum)",
+            "Mention of school's 100 years of Catholic education",
+            "Quote from 'George' (appears to be additional source)"
           ],
-          "reason": "The incoming article is the exact same source article (identical URL) covering the same ribbon-cutting event on Thursday morning for the Morning Star program launch. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match'. The incoming version contains additional background details, quotes, and context about the 100-year milestone, but these are routine scene detail and background explanation, not material updates like an arrest, ruling, or development that changes what readers need to know. This is simply a fuller version of the same story about the same event.",
+          "reason": "This is the exact same source article (identical URL) covering the same ribbon-cutting ceremony event. The incoming article dated 2026-09-25 appears to be a slightly expanded version of the canonical dated 2026-09-24, but contains no material new developments - just additional background quotes, program details, and color that should have been in the original story. No arrests, rulings, new findings, or consequential developments occurred. The retrieval evidence confirms this is a persistent story ID match and exact source match.",
           "validation_errors": []
         },
         {
@@ -1138,8 +1078,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1227,7 +1167,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Man shot outside Port St. Lucie Pollo Tropical now faces charges, police say - WPBF",
+          "source_headline": "Man shot outside Port St. Lucie Pollo Tropical now faces charges, police say - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-man-charged-shooting-port-st-lucie-pollo-tropical/73822854",
           "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
           "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
@@ -1257,19 +1197,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce community raising funds to bring home 2 brothers killed in Georgia",
-      "generated_card_count": 0,
-      "elapsed_seconds": 37.145
+      "elapsed_seconds": 25.242
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 27,
+      "fetched_candidate_count": 26,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 6,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1286,10 +1222,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1298,16 +1234,6 @@
           "editorial_story_id": "story_015870",
           "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
           "canonical_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Sebastian River High School gets new play clocks after 17 local businesses raise more than $10,000 - WPTV",
-          "source_url": "https://www.wptv.com/sports/local-sports/high-school/sebastian-river-high-school-gets-new-play-clocks-after-17-local-businesses-raise-more-than-10-000",
-          "editorial_story_id": "story_015803",
-          "canonical_slug": "2026-09-24-17-businesses-raise-over-10000-for-sebastian-river-high-play-clocks-after-coachs",
-          "canonical_headline": "17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1333,25 +1259,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Sebastian River High School gets new play clocks after 17 local businesses raise more than $10,000 - WPTV",
-          "source_url": "https://www.wptv.com/sports/local-sports/high-school/sebastian-river-high-school-gets-new-play-clocks-after-17-local-businesses-raise-more-than-10-000",
-          "canonical_slug": "2026-09-24-17-businesses-raise-over-10000-for-sebastian-river-high-play-clocks-after-coachs",
-          "canonical_headline": "17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.637
+      "elapsed_seconds": 18.813
     }
   ]
 }
