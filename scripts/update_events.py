@@ -27,6 +27,7 @@ from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_PATH = ROOT / "data" / "events-sources.json"
+MANUAL_EVENTS_PATH = ROOT / "data" / "events-manual.json"
 CACHE_PATH = ROOT / "data" / "events-source-cache.json"
 EVENTS_PATH = ROOT / "data" / "events.json"
 STATUS_PATH = ROOT / "data" / "events-source-status.json"
@@ -1481,6 +1482,50 @@ def _fetch_source(session: requests.Session, source: dict[str, Any], window: Win
     return finish(events)
 
 
+def _manual_submitted_events(path: Path, window: Window) -> list[dict[str, Any]]:
+    """Load durable organizer-submitted events that are not tied to a scraped calendar.
+
+    ``data/events.json`` is generated on every refresh, so guaranteed/manual listings must
+    live in a separate authoritative input file and be merged into the normal pipeline.
+    Rows still pass the same date, county, category, URL and deduplication normalization
+    as scraped events.
+    """
+    payload = _load_json(path, {"schema_version": SCHEMA_VERSION, "events": []})
+    if payload.get("schema_version") != SCHEMA_VERSION or not isinstance(payload.get("events"), list):
+        raise RuntimeError("events-manual.json is invalid")
+
+    events: list[dict[str, Any]] = []
+    for index, raw in enumerate(payload["events"], start=1):
+        if not isinstance(raw, dict):
+            raise RuntimeError(f"events-manual.json row {index} must be an object")
+        organizer = _clean(raw.get("organizer_name"))
+        source_name = _clean(raw.get("source_name")) or organizer or "Submitted event"
+        source_url = _clean(raw.get("source_url")) or _clean(raw.get("event_url"))
+        source_seed = source_url or source_name or str(index)
+        source_id = _clean(raw.get("source_id")) or (
+            "submitted-" + hashlib.sha1(source_seed.encode("utf-8")).hexdigest()[:12]
+        )
+        source = {
+            "id": source_id,
+            "name": source_name,
+            "url": source_url or "https://treasurecoast.today/events.html",
+            "page_url": source_url or "https://treasurecoast.today/events.html",
+            "kind": _clean(raw.get("source_kind")) or "organizer",
+            # Direct organizer submissions outrank secondary aggregators if the same
+            # event is independently discovered elsewhere.
+            "priority": int(raw.get("source_priority", 3)),
+            "county": _clean(raw.get("county")),
+            "city": _clean(raw.get("city")),
+            "venue": _clean(raw.get("venue")),
+            "address": _clean(raw.get("address")),
+            "category": _clean(raw.get("category")),
+        }
+        event = _normalize_event(raw, source, window)
+        if event:
+            events.append(event)
+    return sorted(events, key=lambda event: (event["starts_at"], event["title"].lower()))
+
+
 def _dedupe_exact(events: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
     out: dict[tuple[str, str, str], dict[str, Any]] = {}
     for event in events:
@@ -1907,6 +1952,11 @@ def refresh(*, offline: bool = False) -> dict[str, Any]:
         })
         print(f"  events: {source_id}: {status} ({len(source_events)} events)" + (f" — {error}" if status == "failed" else ""))
 
+    submitted_events = _manual_submitted_events(MANUAL_EVENTS_PATH, window)
+    all_events.extend(submitted_events)
+    if submitted_events:
+        print(f"  events: submitted: local ({len(submitted_events)} events)")
+
     events = _dedupe_cross_source(all_events)
     stable_status_rows = [{k: item[k] for k in ("id", "name", "status", "event_count", "url", "error")} for item in statuses]
     status_generated_at = _stable_generated_at(STATUS_PATH, stable_status_rows, fetched_at, "sources")
@@ -1936,7 +1986,8 @@ def refresh(*, offline: bool = False) -> dict[str, Any]:
     print(
         "Events calendar updated: "
         f"{len(events)} events from {status_payload['successful_sources']} live + "
-        f"{status_payload['cached_sources']} cached sources; {status_payload['failed_sources']} unavailable."
+        f"{status_payload['cached_sources']} cached sources + {len(submitted_events)} submitted; "
+        f"{status_payload['failed_sources']} unavailable."
     )
     return status_payload
 
