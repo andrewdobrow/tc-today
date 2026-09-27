@@ -117,3 +117,54 @@ def test_manual_events_file_schema_must_be_valid(tmp_path: Path):
     path.write_text('{"schema_version": 999, "events": []}', encoding="utf-8")
     with pytest.raises(RuntimeError, match="events-manual.json is invalid"):
         events._manual_submitted_events(path, _window())
+
+
+def test_manual_submitted_event_allows_longer_description(tmp_path: Path):
+    description = (
+        "Beach Jam is a free waterfront concert and community festival featuring live music, "
+        "paddleboarding, a skate jam, kids activities, vendors, food trucks, family-friendly games "
+        "and a Community Resource Village. Kairo Reef is among the confirmed performers. "
+        "The event also serves as a cancer-awareness fundraiser benefiting Friends in Pink and Care Bag."
+    )
+    assert 260 < len(description) < 500
+    path = tmp_path / "events-manual.json"
+    path.write_text(json.dumps({
+        "schema_version": 1,
+        "events": [{
+            "title": "Beach Jam",
+            "starts_at": "2026-11-14T10:00:00-05:00",
+            "ends_at": "2026-11-14T20:00:00-05:00",
+            "venue": "Causeway Cove Marina",
+            "city": "Fort Pierce",
+            "county": "St. Lucie",
+            "description": description,
+            "event_url": "https://example.com/beach-jam",
+            "source_name": "Organizer",
+            "source_url": "https://example.com/beach-jam"
+        }]
+    }), encoding="utf-8")
+
+    loaded = events._manual_submitted_events(path, _window())
+    assert loaded[0]["description"] == description
+    assert not loaded[0]["description"].endswith("…")
+
+
+def test_scraped_event_description_still_clips_at_260():
+    description = "word " * 100
+    source = {
+        "id": "tourism-source",
+        "name": "Tourism Calendar",
+        "url": "https://example.com/events",
+        "county": "St. Lucie",
+        "city": "Fort Pierce",
+        "kind": "tourism",
+        "priority": 35,
+    }
+    event = events._normalize_event({
+        "title": "Long scraped event",
+        "starts_at": "2026-11-14T10:00:00-05:00",
+        "description": description,
+    }, source, _window())
+    assert event is not None
+    assert len(event["description"]) <= 260
+    assert event["description"].endswith("…")

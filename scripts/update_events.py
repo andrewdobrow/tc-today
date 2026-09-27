@@ -539,7 +539,11 @@ def _normalize_event(raw: dict[str, Any], source: dict[str, Any], window: Window
         "county": county,
         "category": _clean(raw.get("category")),
         "price": _clip(raw.get("price"), 100),
-        "description": _clip(raw.get("description"), 260, plain_html=True),
+        "description": _clip(
+            raw.get("description"),
+            500 if source.get("manual_submission") else 260,
+            plain_html=True,
+        ),
         "event_url": _absolute_event_url(
             raw.get("event_url") or raw.get("url") or _source_url(source), source
         ),
@@ -1511,6 +1515,7 @@ def _manual_submitted_events(path: Path, window: Window) -> list[dict[str, Any]]
             "url": source_url or "https://treasurecoast.today/events.html",
             "page_url": source_url or "https://treasurecoast.today/events.html",
             "kind": _clean(raw.get("source_kind")) or "organizer",
+            "manual_submission": True,
             # Direct organizer submissions outrank secondary aggregators if the same
             # event is independently discovered elsewhere.
             "priority": int(raw.get("source_priority", 3)),
