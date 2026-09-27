@@ -93,6 +93,16 @@ def test_event_detail_pages_use_internal_canonical_and_event_schema(tmp_path, mo
     assert 'name="tct-event-lifecycle-end" content="2026-09-12T20:00:00-04:00"' in page
     assert 'name="tct-event-id" content="0123456789abcdef12"' in page
     assert 'data-tct-event-ended' not in page
+    assert '<span class="article-share-label">Share this event</span>' in page
+    assert 'Share this story' not in page
+    assert 'class="share-native"' in page
+    assert 'class="share-fb"' in page
+    assert 'class="share-x"' in page
+    assert 'class="share-copy"' in page
+    encoded_detail = features.quote(f"{features.SITE_URL}{detail}", safe="")
+    assert f'https://www.facebook.com/sharer/sharer.php?u={encoded_detail}' in page
+    assert f'https://twitter.com/intent/tweet?url={encoded_detail}&amp;text=Stuart%20Art%20Walk' in page
+    assert 'text: "Stuart Art Walk", url: window.location.href' in page
 
 
 def _minimal_sitemap(path):

@@ -783,6 +783,64 @@ def _event_detail_eligible(event: dict) -> bool:
     return substantive
 
 
+def _event_share_block(title: str, detail_path: str) -> str:
+    '''Render the same share controls used on article pages for an event.'''
+    share_url = f"{SITE_URL}{detail_path}"
+    share_url_enc = quote(share_url, safe="")
+    title_enc = quote(title, safe="")
+    title_js = json.dumps(title, ensure_ascii=False).replace("</", "<\\/")
+    return f'''<div class="article-share event-share">
+  <span class="article-share-label">Share this event</span>
+  <div class="article-share-btns">
+    <button class="share-native" onclick="tctShare()" aria-label="Share">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Share
+    </button>
+    <a class="share-fb" href="https://www.facebook.com/sharer/sharer.php?u={share_url_enc}" target="_blank" rel="noopener" aria-label="Share on Facebook">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+      Facebook
+    </a>
+    <a class="share-x" href="https://twitter.com/intent/tweet?url={share_url_enc}&amp;text={title_enc}" target="_blank" rel="noopener" aria-label="Share on X">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.6l5.24 6.93zM17.6 20.64h2.04L6.49 3.24H4.3z"/></svg>
+      X
+    </a>
+    <button class="share-copy" onclick="tctCopyLink(this)" aria-label="Copy link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Copy link
+    </button>
+  </div>
+</div>
+<script>
+function tctShare() {{
+  const data = {{ title: document.title, text: {title_js}, url: window.location.href }};
+  if (navigator.share) {{ navigator.share(data).catch(function(){{}}); }}
+  else {{ tctCopyLink(document.querySelector('.event-share .share-copy')); }}
+}}
+function tctCopyLink(btn) {{
+  navigator.clipboard.writeText(window.location.href).then(function() {{
+    if (!btn) return;
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied';
+    setTimeout(function() {{ btn.innerHTML = orig; }}, 1500);
+  }}).catch(function(){{}});
+}}
+</script>'''
+
+
+def _event_share_styles() -> str:
+    return '''<style>
+.event-share { margin:36px 0 8px; padding:20px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.event-share .article-share-label { display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:12px; text-transform:uppercase; letter-spacing:.05em; }
+.event-share .article-share-btns { display:flex; flex-wrap:wrap; gap:10px; }
+.event-share .article-share-btns button, .event-share .article-share-btns a { display:inline-flex; align-items:center; gap:7px; padding:9px 15px; font-size:14px; font-weight:500; font-family:inherit; border-radius:8px; cursor:pointer; text-decoration:none; border:1px solid var(--border); background:var(--bg); color:var(--text); transition:all .15s; }
+.event-share .article-share-btns button:hover, .event-share .article-share-btns a:hover { border-color:var(--accent); color:var(--accent); }
+.event-share .article-share-btns .share-fb:hover { background:#1877F2; border-color:#1877F2; color:#fff; }
+.event-share .article-share-btns .share-x:hover { background:#000; border-color:#000; color:#fff; }
+.event-share .article-share-btns .share-native { background:var(--accent); border-color:var(--accent); color:#fff; }
+.event-share .article-share-btns .share-native:hover { background:#08595d; border-color:#08595d; color:#fff; }
+</style>'''
+
+
 def _format_event_datetime(raw: str) -> str:
     if not raw:
         return ""
@@ -1071,7 +1129,7 @@ def render_event_detail_pages() -> dict:
         if lifecycle_end is not None:
             lifecycle_meta += f'\n<meta name="tct-event-lifecycle-end" content="{html_lib.escape(lifecycle_end.isoformat(timespec="seconds"), quote=True)}">'
         lifecycle_meta += f'\n<meta name="tct-event-id" content="{html_lib.escape(_clean_text(event.get("id")), quote=True)}">'
-        head = _page_head(f"{title} | Treasure Coast Events", description[:155], detail_path, structured_data=schema) + lifecycle_meta
+        head = _page_head(f"{title} | Treasure Coast Events", description[:155], detail_path, structured_data=schema) + lifecycle_meta + "\n" + _event_share_styles()
         source_url = _clean_text(event.get("source_url")); event_url = _clean_text(event.get("event_url")); ticket_url = _clean_text(event.get("ticket_url"))
         source_link = f'<a href="{html_lib.escape(source_url, quote=True)}" target="_blank" rel="noopener noreferrer external">{html_lib.escape(_clean_text(event.get("source_name")) or "Official source")}</a>' if source_url else "Official source"
         official = event_url or source_url
@@ -1085,6 +1143,7 @@ def render_event_detail_pages() -> dict:
 <div class="event-detail-grid"><article class="event-detail-main">
 <dl class="event-detail-facts"><div><dt>When</dt><dd>{html_lib.escape(when_display)}{(' – ' + html_lib.escape(end)) if time_known and end and end != start else ''}</dd></div><div><dt>Where</dt><dd>{html_lib.escape(location or _clean_text(event.get('county')) + ' County')}</dd></div>{f'<div><dt>Price</dt><dd>{html_lib.escape(_clean_text(event.get("price")))}</dd></div>' if event.get('price') else ''}</dl>
 <p class="event-detail-description">{html_lib.escape(description)}</p><div class="event-detail-actions">{official_link}{tickets}</div>
+{_event_share_block(title, detail_path)}
 <p class="event-detail-source">Event information from {source_link}. Details can change; verify with the organizer before attending.</p>
 </article><aside class="event-detail-aside"><h2>More Treasure Coast events</h2><p>Browse concerts, community events, family activities, arts, markets and more across Martin, St. Lucie and Indian River counties.</p><a href="/events.html">Browse the full calendar →</a></aside></div>
 </div></main>
