@@ -12,15 +12,15 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | 3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach | Fort Pierce community raising funds to bring home 2 brothers killed in Georgia | 50 | importance 0; freshness 83.02; urgency 2/10; validated material update |
-| 2 | Fort Pierce community raising funds to bring home 2 brothers killed in Georgia | 3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach | 46 | importance 0; freshness 91.48; urgency 2/10 |
-| 3 | Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3 | Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3 | 42 | importance 0; freshness 51.56; urgency 2/10; validated material update |
-| 4 | South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes | South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes | 37 | importance 0; freshness 54.92; urgency 2/10 |
+| 1 | 3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach | Fort Pierce community raising funds to bring home 2 brothers killed in Georgia | 46 | importance 0; freshness 68.25; urgency 2/10; validated material update |
+| 2 | Fort Pierce community raising funds to bring home 2 brothers killed in Georgia | 3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach | 42 | importance 0; freshness 76.71; urgency 2/10 |
+| 3 | Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3 | Martin, St. Lucie, Palm Beach voters to decide eight local ballot questions Nov. 3 | 38 | importance 0; freshness 36.79; urgency 2/10; validated material update |
+| 4 | South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes | South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes | 33 | importance 0; freshness 40.15; urgency 2/10 |
 
 ## Recommended moves
 
-- **Fort Pierce community raising funds to bring home 2 brothers killed in Georgia**: 2 → 1 — importance 0; freshness 83.02; urgency 2/10; validated material update
-- **3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach**: 1 → 2 — importance 0; freshness 91.48; urgency 2/10
+- **Fort Pierce community raising funds to bring home 2 brothers killed in Georgia**: 2 → 1 — importance 0; freshness 68.25; urgency 2/10; validated material update
+- **3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach**: 1 → 2 — importance 0; freshness 76.71; urgency 2/10
 
 ## Guardrails
 
