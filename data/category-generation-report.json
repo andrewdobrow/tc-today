@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-28T16:01:28Z",
+  "generated_at": "2026-09-28T19:02:05Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -17,26 +17,26 @@
     "statuses": {
       "category_eligibility_archive_recovery": 4,
       "generated_live": 3,
-      "generation_failed_archive_recovery": 2
+      "no_publishable_sources": 1,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "article_framing_integrity": 1,
-      "contextless_update_lead": 1,
-      "no_category_eligible_sources": 4
+      "no_category_eligible_sources": 4,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 7,
-    "model_elapsed_seconds": 120.925,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 39.148,
     "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 3,
-    "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 3,
-    "published_story_duplicate_suppression_count": 22,
-    "story_aware_update_context_count": 5,
-    "material_update_promotion_evaluation_count": 1,
+    "contextual_update_lead_rejection_count": 0,
+    "article_framing_rejection_count": 0,
+    "category_eligibility_rejection_count": 1,
+    "published_story_duplicate_suppression_count": 32,
+    "story_aware_update_context_count": 2,
+    "material_update_promotion_evaluation_count": 6,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 0,
-    "material_update_promotion_model_call_count": 1
+    "material_update_promotion_cache_hit_count": 2,
+    "material_update_promotion_model_call_count": 4
   },
   "categories": [
     {
@@ -44,8 +44,8 @@
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 9,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -62,25 +62,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrested"
-          ],
-          "local_nexus_signals": [],
-          "headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say"
-        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -96,8 +80,18 @@
           "source_url": "https://www.wptv.com/traffic/traffic-news/deadly-early-morning-crash-shuts-down-lanes-of-i-95-north-in-martin-county"
         }
       ],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "editorial_story_id": "story_017442",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "I-95 Crash Near Indiantown Road Shuts Down Martin County Highway - Hoodline",
@@ -118,6 +112,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "I-95 Crash Near Indiantown Road Shuts Down Martin County Highway - Hoodline",
           "source_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQaGpKV0dvYTNPSXFkWVVYQ0hJcjRtNDFLaWRWS29OU2h4T0FWdVJKdV92VldaS01ocnI2aExncHExQnN4YkVKVU9tYlQ1YlhDVkpsV2x5SzhCdmpadk9lMDVqeXBRSkxPdW91dzJkRHB1dXRkdlZJZk01ME9lM0pwNHJZaDFzY0xrRGZYU3kwMGN2c3U4TkhiaFFYTjBUYmwxeTR0MVdLVUJTeXh0R2cyYjdaRm5tZTBMeDI0",
           "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
@@ -132,17 +141,17 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 29.616
+      "new_publication_stale_rejected_count": 4,
+      "elapsed_seconds": 21.06
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 11,
-      "selected_source_count": 6,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 5,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -150,67 +159,44 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 27.6,
+          "elapsed_seconds": 11.727,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 27.6,
+      "model_elapsed_seconds": 11.727,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 35,
-          "baseline_anchor": "fatality",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "95",
-            "driver",
-            "flames",
-            "honda",
-            "martin",
-            "truck"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
-          "semantic_novel_fact_hits": [],
-          "semantic_novel_fact_token_count": 0,
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - WPEC",
-          "headline": "Driver killed after Honda crashes into box truck, catches fire on I-95 in Martin County"
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue",
-          "editorial_story_id": "story_016726",
-          "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
-          "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
+          "editorial_story_id": "story_017442",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "editorial_story_id": "story_017442",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -237,7 +223,7 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - WPEC",
+          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - WPEC",
           "source_url": "https://cbs12.com/news/local/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
@@ -252,7 +238,6 @@
             "shared_locality",
             "shared_event_family",
             "shared_precise_location",
-            "shared_agency",
             "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
@@ -264,10 +249,10 @@
             "shared_event_families=['crash']",
             "shared_named_people=[]",
             "shared_precise_locations=['indiantown-road']",
-            "shared_agencies=['martin-county-sheriff']",
+            "shared_agencies=[]",
             "shared_subject_phrases=[]",
             "shared_headline_topic_core=['car', 'crash', 'wpec']",
-            "shared_distinctive_token_count=72",
+            "shared_distinctive_token_count=70",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -283,12 +268,27 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue",
-          "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
-          "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -330,9 +330,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+      "live_hero_headline": "I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again",
       "generated_card_count": 0,
-      "elapsed_seconds": 70.977
+      "elapsed_seconds": 65.085
     },
     {
       "category_key": "business",
@@ -340,7 +340,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 8,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -357,30 +357,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 1,
-      "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "local_nexus_signals": [
-            "source_locality:port st lucie"
-          ],
-          "headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say"
-        }
-      ],
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "editorial_story_id": "story_017442",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Martin County barn fire destroys building, 6 vehicles; 1 firefighter taken to hospital",
@@ -410,16 +401,6 @@
           "canonical_headline": "17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-          "editorial_story_id": "story_013919",
-          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -429,6 +410,21 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "business",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "business",
           "source_headline": "Martin County barn fire destroys building, 6 vehicles; 1 firefighter taken to hospital",
@@ -473,25 +469,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 7,
-      "elapsed_seconds": 17.432
+      "elapsed_seconds": 21.862
     },
     {
       "category_key": "sports",
@@ -499,7 +480,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 2,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -528,8 +509,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 17,
-      "elapsed_seconds": 20.628
+      "new_publication_stale_rejected_count": 16,
+      "elapsed_seconds": 19.129
     },
     {
       "category_key": "things_to_do",
@@ -606,12 +587,12 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Bacon BBQ Festival at MIDFLORIDA Event Center Sept 26-27",
-            "Outrun Hunger 5K on Saturday 7:30 a.m. at 7715 Forest Hill Blvd",
-            "Asian Food Festival at 100 N. Clematis St.",
-            "Craft Festival on NE Fourth Avenue in Delray Beach",
-            "9th Annual DAStoberfest on Sunday 4 p.m. in Jupiter",
-            "Art After Dark Friday at 1450 S. Dixie Highway"
+            "Bacon BBQ Festival Sept 26-27 at MIDFLORIDA Event Center Port St. Lucie",
+            "Outrun Hunger 5K Saturday 7:30 a.m. at 7715 Forest Hill Blvd West Palm Beach",
+            "Asian Food Festival at 100 N. Clematis St. West Palm Beach",
+            "Craft Festival Saturday-Sunday at 401 East Atlantic Ave Delray Beach",
+            "9th Annual DAStoberfest Sunday 4 p.m. at 1203 Town Center Drive Jupiter",
+            "Art After Dark Friday 5:30-10 p.m. at 1450 S. Dixie Highway West Palm Beach"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -635,28 +616,21 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.84
+      "elapsed_seconds": 20.516
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 23.743,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 23.743,
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -667,57 +641,70 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida Attorney General seeks emergency order to restrict ChatGPT, cites harm to minors",
+          "source_url": "https://www.wptv.com/news/state/florida-attorney-general-seeks-emergency-order-to-restrict-chatgpt-cites-harm-to-minors",
+          "editorial_story_id": "story_017453",
+          "canonical_slug": "2026-09-28-florida-ag-seeks-emergency-order-to-halt-chatgpt-access-for-minors-ban-human-mim",
+          "canonical_headline": "Florida AG seeks emergency order to halt ChatGPT access for minors, ban human mimicry",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida Attorney General seeks emergency order to restrict ChatGPT, cites harm to minors",
+          "source_url": "https://www.wptv.com/news/state/florida-attorney-general-seeks-emergency-order-to-restrict-chatgpt-cites-harm-to-minors",
+          "canonical_slug": "2026-09-28-florida-ag-seeks-emergency-order-to-halt-chatgpt-access-for-minors-ban-human-mim",
+          "canonical_headline": "Florida AG seeks emergency order to halt ChatGPT access for minors, ban human mimicry",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida AG seeks emergency order to halt ChatGPT access for minors, ban human mimicry",
-      "generated_card_count": 0,
-      "elapsed_seconds": 53.13
+      "elapsed_seconds": 37.224
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 4,
+      "selected_source_count": 4,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.995,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - WPEC"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.094,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - WPEC"
+          "elapsed_seconds": 14.269,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 36.089,
-      "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: new_development_missing — Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - WPEC",
+      "model_elapsed_seconds": 14.269,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -726,18 +713,38 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "Fatal crash closes I-95 near Hobe Sound - The Palm Beach Post",
-          "source_url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQeGV1S0d6ZXdkbUUzVjRpc0IwV29hLUFRMEFSMEJFREo4Z2hPcExUTk9LTC1TQ0o5bWotM0JMV3p3WjZtNTViY1E0RW9CNmFNX0J2Qk5IckhRRzlhbG8wN0VUMTlwendCc3JPTGdQOEx2QnFoSnVtX19VZGxRc0Z6eWpPQTIzTFhpRE1tajRHSFU4ZFo3WGpMMV80b3RTMmJSUUZnTmRHdG1LUDU5Q3N1NEkydjNOTk5adlFCUnhmWVpwbnltMEE",
-          "editorial_story_id": "story_013913",
-          "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
-          "canonical_headline": "Hobe Sound community raises funds for man whose fiancée died in Monday house fire",
+          "source_headline": "Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation?teaserSource=trending",
+          "editorial_story_id": "story_017379",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "I-95 North in Martin County shut down after deadly crash involving sedan, box truck - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/28/i-95-north-martin-county-shut-down-after-deadly-crash-involving-sedan-box-truck?outputType=amp",
+          "editorial_story_id": "story_017379",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Deadly early-morning crash shuts down lanes of I-95 North in Martin County - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/28/deadly-early-morning-crash-shuts-down-lanes-i-95-north-martin-county?outputType=amp",
+          "editorial_story_id": "story_017379",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
           "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -762,10 +769,10 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 3,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - WPEC",
+          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - WPEC",
           "source_url": "https://cbs12.com/news/local/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
@@ -784,100 +791,91 @@
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "I-95 North in Martin County shut down after deadly crash involving sedan, box truck - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/28/i-95-north-martin-county-shut-down-after-deadly-crash-involving-sedan-box-truck?outputType=amp",
-          "publisher": "www.wflx.com",
-          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_017278",
-            "source:https://www.wflx.com/2026/09/28/i-95-north-martin-county-shut-down-after-deadly-crash-involving-sedan-box-truck?outputType=amp"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county']",
-            "shared_event_families=['crash']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['indiantown-road']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['crash', 'down', 'involv', 'shut']",
-            "shared_distinctive_token_count=40",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Deadly early-morning crash shuts down lanes of I-95 North in Martin County - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/28/deadly-early-morning-crash-shuts-down-lanes-i-95-north-martin-county?outputType=amp",
-          "publisher": "www.wflx.com",
-          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_017278",
-            "source:https://www.wflx.com/2026/09/28/deadly-early-morning-crash-shuts-down-lanes-i-95-north-martin-county?outputType=amp"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county']",
-            "shared_event_families=['crash']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['indiantown-road']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['crash', 'down', 'shut']",
-            "shared_distinctive_token_count=41",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
-          "source_headline": "Fatal crash closes I-95 near Hobe Sound - The Palm Beach Post",
-          "source_url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQeGV1S0d6ZXdkbUUzVjRpc0IwV29hLUFRMEFSMEJFREo4Z2hPcExUTk9LTC1TQ0o5bWotM0JMV3p3WjZtNTViY1E0RW9CNmFNX0J2Qk5IckhRRzlhbG8wN0VUMTlwendCc3JPTGdQOEx2QnFoSnVtX19VZGxRc0Z6eWpPQTIzTFhpRE1tajRHSFU4ZFo3WGpMMV80b3RTMmJSUUZnTmRHdG1LUDU5Q3N1NEkydjNOTk5adlFCUnhmWVpwbnltMEE",
-          "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
-          "canonical_headline": "Hobe Sound community raises funds for man whose fiancée died in Monday house fire",
+          "source_headline": "Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation?teaserSource=trending",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
           "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
-          "eligibility_reason": "insufficient_source_depth",
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "2020 Honda Civic crashed into 2027 Hino box truck",
+            "Northbound I-95 in Martin County",
+            "Monday morning crash",
+            "Driver pronounced dead at 4:05 a.m.",
+            "37-year-old Miami man driving box truck not injured",
+            "Honda engulfed in flames",
+            "Traffic diverted to Indiantown Road",
+            "Florida Highway Patrol investigation"
+          ],
+          "novel_facts": [
+            "Northbound lanes have reopened"
+          ],
+          "reason": "This is definitively the same fatal crash. Both articles describe identical specific details: a 2020 Honda Civic rear-ending a 2027 Hino box truck on northbound I-95 in Martin County on Monday morning, with the Honda driver killed at 4:05 a.m. and the 37-year-old Miami truck driver uninjured. The only new information in the incoming article is that the previously closed northbound lanes have since reopened—a routine post-incident traffic update that does not constitute a material development. The victim remains unidentified in both articles, no arrest or new investigation finding is reported, and this is simply a later update about road reopening status.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "I-95 North in Martin County shut down after deadly crash involving sedan, box truck - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/28/i-95-north-martin-county-shut-down-after-deadly-crash-involving-sedan-box-truck?outputType=amp",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Honda Civic crashed into Hino box truck on I-95 North in Martin County",
+            "Monday morning crash around 3:40 a.m.",
+            "Mile marker 91 area near Indiantown Road",
+            "Honda burst into flames",
+            "Driver of Honda pronounced deceased",
+            "Box truck driver not injured",
+            "Northbound lanes closed",
+            "Traffic diverted to Indiantown Road in Jupiter"
+          ],
+          "novel_facts": [
+            "Specific time of 3:40 a.m.",
+            "Exact mile marker 91",
+            "Honda Civic model year 2020",
+            "Box truck model year 2027"
+          ],
+          "reason": "Both articles describe the same fatal crash involving a Honda Civic rear-ending a Hino box truck on northbound I-95 in Martin County on Monday morning, resulting in the Honda bursting into flames and the driver dying. The incoming article adds minor details (3:40 a.m. time, mile marker 91, vehicle years) but no material update such as victim identification, cause determination, or charges. These are scene details that should be incorporated into the existing canonical rather than creating a new URL.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Deadly early-morning crash shuts down lanes of I-95 North in Martin County - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/28/deadly-early-morning-crash-shuts-down-lanes-i-95-north-martin-county?outputType=amp",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -916,32 +914,34 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 71.81
+      "live_hero_headline": "I-95 northbound reopens in Martin County after fatal Honda-box truck crash",
+      "generated_card_count": 0,
+      "elapsed_seconds": 80.295
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 20.884,
+          "elapsed_seconds": 5.659,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 20.884,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 5.659,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -950,11 +950,51 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+          "editorial_story_id": "story_012823",
+          "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+          "canonical_headline": "Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
+          "editorial_story_id": "story_017442",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "editorial_story_id": "story_017442",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "editorial_story_id": "story_017442",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - WPEC",
@@ -967,32 +1007,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
-          "editorial_story_id": "story_017314",
-          "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
-          "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - cw34.com",
           "source_url": "https://cw34.com/news/local/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue?teaserSource=trending",
           "editorial_story_id": "story_016726",
           "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
           "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - WPEC",
-          "source_url": "https://cbs12.com/news/local/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue",
-          "editorial_story_id": "story_016726",
-          "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
-          "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1028,11 +1048,94 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+          "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+          "canonical_headline": "Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Operation Late Checkout",
+            "Indian River County Sheriff Eric Flowers",
+            "More than 50 arrests",
+            "Started Sept. 13 in Indian River County",
+            "Over 60 contacts",
+            "Multi-agency operation targeting human trafficking and illegal sexual activity",
+            "Thursday press conference announcement"
+          ],
+          "novel_facts": [
+            "Names of additional participating agencies (St. Lucie County Sheriff's Office, Seminole County Sheriff's Office, etc.)",
+            "Three ICE detainers",
+            "FDLE Assistant Special Agent in Charge Alfonso Williams quotes",
+            "One case involved man traveling to meet a minor",
+            "Internet Crimes Against Children Task Force mentioned",
+            "Florida Trafficking Hotline number provided",
+            "Victims' advocates were on hand"
+          ],
+          "reason": "Both articles report on the same real-world event: Operation Late Checkout's results announced by Sheriff Eric Flowers on Thursday. They share identical core facts including the operation name, sheriff, arrest count (50+), contact count (60+), start date (Sept. 13), and target (human trafficking/illegal sexual activity in Indian River County). The incoming article adds agency names, quotes, and operational details, but no material developments like new arrests, charges filed, victim identifications, or subsequent actions. These are elaborations on the same announcement, not newsworthy updates that change what readers need to know.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - WPEC",
@@ -1050,42 +1153,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
-          "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
-          "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - cw34.com",
           "source_url": "https://cw34.com/news/local/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue?teaserSource=trending",
           "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
           "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - WPEC",
-          "source_url": "https://cbs12.com/news/local/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue",
-          "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
-          "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1142,42 +1215,30 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie man arrested for attempted murder after calling 911 to confess to stabbing",
-      "generated_card_count": 0,
-      "elapsed_seconds": 47.657
+      "elapsed_seconds": 35.744
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 7,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 5,
       "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 6.145,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach parking fines double Oct. 1, fire lane and hydrant violations jump to $60"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 6.464,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach parking fines rise Oct. 1, many penalties doubling to $60"
+          "elapsed_seconds": 7.493,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 12.609,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach parking fines rise Oct. 1, many penalties doubling to $60",
+      "model_elapsed_seconds": 7.493,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1186,11 +1247,41 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+          "editorial_story_id": "story_012823",
+          "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+          "canonical_headline": "Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation?teaserSource=trending",
+          "editorial_story_id": "story_017379",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "editorial_story_id": "story_017442",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "3 arrested after saw palmetto berry harvest turns into K9 search along I-95 in Vero Beach - cw34.com",
@@ -1212,52 +1303,99 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation?teaserSource=trending",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_017446"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county', 'palm-beach-county']",
-            "shared_event_families=['crash']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['indiantown-road']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['car', 'crash']",
-            "shared_distinctive_token_count=69",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Indian River County sheriff announces 50+ arrests in multi-agency human trafficking operation - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-reveal-results-of-multi-agency-operation",
+          "canonical_slug": "2026-09-17-indian-river-county-sheriffs-office-to-reveal-multi-agency-sex-sting-results",
+          "canonical_headline": "Indian River County's Operation Late Checkout nets over 50 arrests in human trafficking sting",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Operation Late Checkout",
+            "Indian River County Sheriff Eric Flowers",
+            "More than 50 arrests",
+            "Started Sept. 13 in Indian River County",
+            "Over 60 contacts",
+            "Multi-agency operation targeting human trafficking and illegal sexual activity",
+            "Thursday press conference announcement"
+          ],
+          "novel_facts": [
+            "Names of additional participating agencies (St. Lucie County Sheriff's Office, Seminole County Sheriff's Office, etc.)",
+            "Three ICE detainers",
+            "FDLE Assistant Special Agent in Charge Alfonso Williams quotes",
+            "One case involved man traveling to meet a minor",
+            "Internet Crimes Against Children Task Force mentioned",
+            "Florida Trafficking Hotline number provided",
+            "Victims' advocates were on hand"
+          ],
+          "reason": "Both articles report on the same real-world event: Operation Late Checkout's results announced by Sheriff Eric Flowers on Thursday. They share identical core facts including the operation name, sheriff, arrest count (50+), contact count (60+), start date (Sept. 13), and target (human trafficking/illegal sexual activity in Indian River County). The incoming article adds agency names, quotes, and operational details, but no material developments like new arrests, charges filed, victim identifications, or subsequent actions. These are elaborations on the same announcement, not newsworthy updates that change what readers need to know.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Honda driver killed after car crashes into truck, catches fire on I-95 in Martin County - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation?teaserSource=trending",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "Driver killed after Honda slams into box truck, bursts into flames on I-95 in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "2020 Honda Civic crashed into 2027 Hino box truck",
+            "Northbound I-95 in Martin County",
+            "Monday morning crash",
+            "Driver pronounced dead at 4:05 a.m.",
+            "37-year-old Miami man driving box truck not injured",
+            "Honda engulfed in flames",
+            "Traffic diverted to Indiantown Road",
+            "Florida Highway Patrol investigation"
+          ],
+          "novel_facts": [
+            "Northbound lanes have reopened"
+          ],
+          "reason": "This is definitively the same fatal crash. Both articles describe identical specific details: a 2020 Honda Civic rear-ending a 2027 Hino box truck on northbound I-95 in Martin County on Monday morning, with the Honda driver killed at 4:05 a.m. and the 37-year-old Miami truck driver uninjured. The only new information in the incoming article is that the previously closed northbound lanes have since reopened—a routine post-incident traffic update that does not constitute a material development. The victim remains unidentified in both articles, no arrest or new investigation finding is reported, and this is simply a later update about road reopening status.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "3 arrested after saw palmetto berry harvest turns into K9 search along I-95 in Vero Beach - cw34.com",
@@ -1290,9 +1428,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 46.496
+      "live_hero_headline": "Vero Beach parking fines double for fire lanes, hydrants starting Oct. 1",
+      "generated_card_count": 0,
+      "elapsed_seconds": 28.233
     }
   ]
 }
