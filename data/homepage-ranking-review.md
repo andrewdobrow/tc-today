@@ -4,29 +4,28 @@
 
 ## Hero
 
-- Current: **Former Fort Pierce city manager Nick Mimms' bid-tampering trial begins Monday**
-- Recommended: **Former Fort Pierce city manager Nick Mimms' bid-tampering trial begins Monday**
-- Recommendation: KEEP (not enforced)
+- Current: **Construction truck crashes through guardrail, bursts into flames on Florida's Turnpike in St. Lucie County**
+- Recommended: **Port St. Lucie man charged with attempted homicide after admitting intent to kill father**
+- Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again | I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again | 62 | importance 0; freshness 96.52; urgency 6/10; validated material update |
-| 2 | Fort Pierce driver fled police twice, rammed vehicle during traffic stop | Fort Pierce driver fled police twice, rammed vehicle during traffic stop | 54 | importance 0; freshness 99.92; urgency 5/10 |
-| 3 | Two swimmers rescued from rip current at Hobe Sound Beach | Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old | 46 | importance 0; freshness 91.5; urgency 2/10 |
-| 4 | Florida AG seeks emergency order to halt ChatGPT access for minors, ban human mimicry | Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate | 44 | importance 0; freshness 82.95; urgency 2/10 |
-| 5 | Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old | Florida AG seeks emergency order to halt ChatGPT access for minors, ban human mimicry | 42 | importance 0; freshness 91.51; urgency 2/10 |
-| 6 | Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate | Two swimmers rescued from rip current at Hobe Sound Beach | 42 | importance 0; freshness 59.72; urgency 4/10 |
-| 7 | Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce | Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce | 40 | importance 0; freshness 68.1; urgency 2/10 |
-| 8 | Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized | Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized | 37 | importance 0; freshness 28.17; urgency 2/10; validated material update; -6 category saturation |
+| 1 | Port St. Lucie man charged with attempted homicide after admitting intent to kill father | Port St. Lucie man charged with attempted homicide after admitting intent to kill father | 69 | importance 0; freshness 99.94; urgency 9/10; validated material update |
+| 2 | Former Fort Pierce city manager Nick Mimms' bid-tampering trial begins Monday | I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again | 61 | importance 0; freshness 93.06; urgency 6/10; validated material update |
+| 3 | I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again | Former Fort Pierce city manager Nick Mimms' bid-tampering trial begins Monday | 55 | importance 0; freshness 83.06; urgency 7/10 |
+| 4 | Fort Pierce driver fled police twice, rammed vehicle during traffic stop | Fort Pierce driver fled police twice, rammed vehicle during traffic stop | 47 | importance 0; freshness 96.45; urgency 2/10 |
+| 5 | Two swimmers rescued from rip current at Hobe Sound Beach | Two swimmers rescued from rip current at Hobe Sound Beach | 42 | importance 0; freshness 56.25; urgency 4/10 |
+| 6 | Florida AG seeks emergency order to halt ChatGPT access for minors, ban human mimicry | Florida AG seeks emergency order to halt ChatGPT access for minors, ban human mimicry | 41 | importance 0; freshness 88.04; urgency 2/10 |
+| 7 | Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate | Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate | 43 | importance 0; freshness 79.49; urgency 2/10; -4 county saturation |
+| 8 | Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce | Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce | 39 | importance 0; freshness 64.63; urgency 2/10 |
+| 9 | Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized | Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized | 36 | importance 0; freshness 24.71; urgency 2/10; validated material update; -6 category saturation |
 
 ## Recommended moves
 
-- **Two swimmers rescued from rip current at Hobe Sound Beach**: 3 → 6 — importance 0; freshness 59.72; urgency 4/10
-- **Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old**: 5 → 3 — importance 0; freshness 91.5; urgency 2/10
-- **Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate**: 6 → 4 — importance 0; freshness 82.95; urgency 2/10
-- **Florida AG seeks emergency order to halt ChatGPT access for minors, ban human mimicry**: 4 → 5 — importance 0; freshness 91.51; urgency 2/10
+- **I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again**: 3 → 2 — importance 0; freshness 93.06; urgency 6/10; validated material update
+- **Former Fort Pierce city manager Nick Mimms' bid-tampering trial begins Monday**: 2 → 3 — importance 0; freshness 83.06; urgency 7/10
 
 ## Guardrails
 
