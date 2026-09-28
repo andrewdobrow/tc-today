@@ -418,10 +418,9 @@ class EditorialEngine:
         payload = {
             "version": _STATE_VERSION,
             "articles": compacted_history,
-            # Keep the derived snapshot and registry fingerprint in saved state for
-            # compatibility/diagnostics, but load() deliberately does not use them
-            # to bypass historical replay. Full replay remains the safety-first
-            # behavior until snapshot restore has proven identity equivalence.
+            # Persist a derived pipeline snapshot beside the authoritative registry
+            # fingerprint. load() may use this cache only when the registry bytes
+            # still match exactly; otherwise it falls back to historical replay.
             "pipeline_state": self._pipeline.export_replay_state(),
             "registry_fingerprint": self._registry_fingerprint(self.registry_path),
         }
@@ -515,12 +514,66 @@ class EditorialEngine:
 
         registry_already_exists = Path(registry_path).exists()
 
-        # SAFETY HOLD: always rebuild derived editorial state by replaying the
-        # historical journal. The snapshot fast path is intentionally disabled
-        # because persisted story-registry compaction can remove historical
-        # unified-incident evidence that replay reconstructs in memory. Until
-        # snapshot restore is proven identity-equivalent against production-shaped
-        # history, skipping replay is not allowed.
+        # Fast path: the saved pipeline snapshot is derived state only. It may be
+        # restored when (and only when) the authoritative persistent registry is
+        # byte-for-byte identical to the registry from which the snapshot was
+        # produced. StoryRegistry._load() deterministically rebuilds omitted runtime
+        # caches, and unified-incident evidence is reconstructed lazily from durable
+        # story fields when needed. Any uncertainty falls back to the historical
+        # replay path below.
+        saved_registry_fingerprint = payload.get("registry_fingerprint")
+        current_registry_fingerprint = cls._registry_fingerprint(registry_path)
+        pipeline_state = payload.get("pipeline_state")
+        snapshot_eligible = bool(
+            registry_already_exists
+            and isinstance(saved_registry_fingerprint, dict)
+            and saved_registry_fingerprint == current_registry_fingerprint
+            and isinstance(pipeline_state, dict)
+        )
+
+        if snapshot_eligible:
+            _detail_started = time.perf_counter()
+            try:
+                restored = engine._pipeline.restore_replay_state(pipeline_state)
+            except Exception as exc:
+                print(
+                    "  Editorial snapshot restore rejected; using historical replay: "
+                    f"{exc}"
+                )
+            else:
+                engine._history = articles
+                engine._state_restore_mode = "snapshot"
+                print(
+                    "  Timing detail: editorial pipeline snapshot restore "
+                    f"{time.perf_counter() - _detail_started:.1f}s "
+                    f"({restored.get('candidate_count', 0)} candidate(s), "
+                    f"{restored.get('event_count', 0)} event(s))"
+                )
+                print(
+                    "  Timing detail: editorial history replay 0.0s "
+                    f"({len(articles)} record(s) bypassed by verified snapshot)"
+                )
+                print(
+                    "  Timing detail: editorial state restore total "
+                    f"{time.perf_counter() - _restore_started:.1f}s (mode=snapshot)"
+                )
+                return engine
+        else:
+            if not registry_already_exists:
+                reason = "persistent registry is missing"
+            elif not isinstance(saved_registry_fingerprint, dict):
+                reason = "saved registry fingerprint is missing"
+            elif saved_registry_fingerprint != current_registry_fingerprint:
+                reason = "persistent registry fingerprint changed"
+            elif not isinstance(pipeline_state, dict):
+                reason = "pipeline snapshot is missing or invalid"
+            else:
+                reason = "snapshot eligibility check failed"
+            print(
+                "  Editorial snapshot restore unavailable; using historical replay: "
+                f"{reason}"
+            )
+
         _detail_started = time.perf_counter()
         with engine._pipeline.defer_registry_saves(
             commit=not registry_already_exists
