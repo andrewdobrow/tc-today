@@ -4,23 +4,23 @@
 
 ## Hero
 
-- Current: **Looking for something to do this weekend? Here are the Top 5 local events for Sept. 26-27**
-- Recommended: **Two swimmers rescued from rip current at Hobe Sound Beach**
-- Recommendation: CHANGE (not enforced)
+- Current: **Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce**
+- Recommended: **Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce**
+- Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Two swimmers rescued from rip current at Hobe Sound Beach | Two swimmers rescued from rip current at Hobe Sound Beach | 51 | importance 0; freshness 96.56; urgency 4/10 |
-| 2 | Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized | Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized | 46 | importance 0; freshness 65.02; urgency 2/10; validated material update |
-| 3 | 3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach | Fort Pierce community raising funds to bring home 2 brothers killed in Georgia | 41 | importance 0; freshness 48.09; urgency 2/10; validated material update |
-| 4 | Fort Pierce community raising funds to bring home 2 brothers killed in Georgia | 3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach | 37 | importance 0; freshness 56.55; urgency 2/10 |
+| 1 | Two swimmers rescued from rip current at Hobe Sound Beach | Two swimmers rescued from rip current at Hobe Sound Beach | 50 | importance 0; freshness 91.57; urgency 4/10 |
+| 2 | Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized | Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized | 44 | importance 0; freshness 60.03; urgency 2/10; validated material update |
+| 3 | 3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach | Fort Pierce community raising funds to bring home 2 brothers killed in Georgia | 40 | importance 0; freshness 43.1; urgency 2/10; validated material update |
+| 4 | Fort Pierce community raising funds to bring home 2 brothers killed in Georgia | 3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach | 36 | importance 0; freshness 51.56; urgency 2/10 |
 
 ## Recommended moves
 
-- **Fort Pierce community raising funds to bring home 2 brothers killed in Georgia**: 4 → 3 — importance 0; freshness 48.09; urgency 2/10; validated material update
-- **3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach**: 3 → 4 — importance 0; freshness 56.55; urgency 2/10
+- **Fort Pierce community raising funds to bring home 2 brothers killed in Georgia**: 4 → 3 — importance 0; freshness 43.1; urgency 2/10; validated material update
+- **3 Okeechobee men arrested after K9 tracks them through saw palmetto on I-95 in Vero Beach**: 3 → 4 — importance 0; freshness 51.56; urgency 2/10
 
 ## Guardrails
 
