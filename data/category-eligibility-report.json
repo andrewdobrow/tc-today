@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T16:18:35Z",
+  "generated_at": "2026-09-29T18:24:47Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 22,
-    "rejected_count": 4,
+    "assessed_count": 21,
+    "rejected_count": 6,
     "enforced_categories": [
       "business",
       "crime",
@@ -35,8 +35,24 @@
       "mode": "enforce",
       "policy": "central_government_action_required",
       "assessed_count": 2,
-      "rejected_count": 1,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:suspect"
+          ],
+          "local_nexus_signals": [],
+          "headline": "FHP seeks help finding driver who hit, killed man in Okeechobee County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/fhp-seeks-help-finding-driver-who-hit-killed-man-in-okeechobee-county"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -60,7 +76,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 3,
+      "assessed_count": 5,
       "rejected_count": 2,
       "rejections": [
         {
@@ -74,8 +90,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Decision not to charge parent in Indiantown bus stop gun incident sparks heated community debate - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/29/decision-not-charge-parent-indiantown-bus-stop-gun-incident-sparks-heated-community-debate/"
+          "headline": "Decision not to charge parent in Indiantown bus stop gun incident sparks heated community debate - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/decision-not-to-charge-parent-in-indiantown-bus-stop-gun-incident-sparks-heated-community-debate"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -88,7 +104,7 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Jensen Beach Boulevard shut down after construction crew strikes gas line, MCSO says - cbs12.com",
+          "headline": "Jensen Beach Boulevard shut down after construction crew strikes gas line, MCSO says - WPEC",
           "source_url": "https://cbs12.com/news/local/jensen-beach-boulevard-shut-down-after-construction-crew-strikes-gas-line-mcso-says-florida-news-local-news-martin-county-news"
         }
       ]
@@ -98,9 +114,27 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 1,
-      "rejected_count": 1,
+      "assessed_count": 2,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:fatal crash"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast"
+          ],
+          "headline": "FHP seeks help finding driver who hit, killed man in Okeechobee County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/fhp-seeks-help-finding-driver-who-hit-killed-man-in-okeechobee-county"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -146,7 +180,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 2,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -155,7 +189,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -173,7 +207,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 8,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     }

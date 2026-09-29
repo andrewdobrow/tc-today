@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-29T16:18:35Z",
+  "generated_at": "2026-09-29T18:24:47Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,49 +15,44 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 4,
-      "generated_live": 5
+      "category_eligibility_archive_recovery": 6,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 4
+      "article_framing_integrity": 1,
+      "no_category_eligible_sources": 6
     },
-    "model_attempt_count": 5,
-    "model_elapsed_seconds": 87.602,
-    "archive_recovery_requested_count": 4,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 76.295,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 4,
-    "published_story_duplicate_suppression_count": 31,
-    "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 4,
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 6,
+    "published_story_duplicate_suppression_count": 32,
+    "story_aware_update_context_count": 0,
+    "material_update_promotion_evaluation_count": 6,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 0,
-    "material_update_promotion_model_call_count": 4
+    "material_update_promotion_cache_hit_count": 4,
+    "material_update_promotion_model_call_count": 2
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 11,
-      "selected_source_count": 1,
+      "publishable_source_count": 10,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.376,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 11.376,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Local Government category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -67,8 +62,24 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
       "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:suspect"
+          ],
+          "local_nexus_signals": [],
+          "headline": "FHP seeks help finding driver who hit, killed man in Okeechobee County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/fhp-seeks-help-finding-driver-who-hit-killed-man-in-okeechobee-county"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -90,6 +101,16 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
+          "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
+          "editorial_story_id": "story_017829",
+          "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
+          "canonical_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct - WFLX",
           "source_url": "https://www.wflx.com/2026/09/28/jury-selection-trial-fort-pierce-city-manager-accused-bid-tampering-official-misconduct",
           "editorial_story_id": "story_017375",
@@ -100,56 +121,37 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct",
-          "editorial_story_id": "story_017375",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Jury selected in bid-tampering trial of former Fort Pierce city manager",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
+          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
+          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
           "editorial_story_id": "story_017314",
           "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
           "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
         {
-          "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - cbs12.com",
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
-          "publisher": "cbs12.com",
           "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
           "canonical_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_017829",
-            "source:https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_017829,source:https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
-      "material_update_promotion_decisions": [
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct - WFLX",
@@ -161,8 +163,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -185,50 +187,52 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Jury selected in bid-tampering trial of former Fort Pierce city manager",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
+          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
+          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
           "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
           "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Port St. Lucie City Council final vote Monday",
+            "$971.6 million budget for fiscal year 2026-27",
+            "Property tax rate of 4.8750 mills down from 4.9750",
+            "Final budget hearing at 5:30 p.m. at Port St. Lucie City Hall",
+            "Following 5 p.m. Community Redevelopment Agency meeting",
+            "Same date September 28, 2026"
+          ],
+          "novel_facts": [
+            "Contextual background about $48 million potential revenue loss",
+            "184 unfunded positions worth $28.3 million",
+            "25 proposed police officer positions cut",
+            "$7.8 million in cut projects including Marshall Parkway interchange study",
+            "Explanation of mill calculation",
+            "Quote from City Manager Jesus Merejo from July workshop"
+          ],
+          "reason": "Both articles cover the identical government action: the Port St. Lucie City Council's scheduled final vote on Monday, September 28, 2026, on the same $971.6M budget and 4.8750 mill tax rate, at the same time and location. The incoming article adds extensive background context about how the budget was developed (summer workshops, cuts made, reasons for reductions), but this is explanatory detail about the same pending vote, not a material update. No new development has occurred—the vote has not yet happened. The additional context about budget preparation should be folded into the existing canonical rather than creating a duplicate article about the same scheduled meeting.",
+          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-      "generated_card_count": 0,
-      "elapsed_seconds": 50.782
+      "elapsed_seconds": 37.973
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 12,
-      "selected_source_count": 1,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 14,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -236,11 +240,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 20.74,
+          "elapsed_seconds": 23.883,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 20.74,
+      "model_elapsed_seconds": 23.883,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -251,7 +255,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -265,8 +269,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Decision not to charge parent in Indiantown bus stop gun incident sparks heated community debate - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/29/decision-not-charge-parent-indiantown-bus-stop-gun-incident-sparks-heated-community-debate/"
+          "headline": "Decision not to charge parent in Indiantown bus stop gun incident sparks heated community debate - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/decision-not-to-charge-parent-in-indiantown-bus-stop-gun-incident-sparks-heated-community-debate"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -279,7 +283,7 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Jensen Beach Boulevard shut down after construction crew strikes gas line, MCSO says - cbs12.com",
+          "headline": "Jensen Beach Boulevard shut down after construction crew strikes gas line, MCSO says - WPEC",
           "source_url": "https://cbs12.com/news/local/jensen-beach-boulevard-shut-down-after-construction-crew-strikes-gas-line-mcso-says-florida-news-local-news-martin-county-news"
         }
       ],
@@ -287,17 +291,7 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct",
-          "editorial_story_id": "story_017375",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Jury selected in bid-tampering trial of former Fort Pierce city manager",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
+          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
           "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
           "editorial_story_id": "story_017314",
           "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
@@ -307,7 +301,17 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - cbs12.com",
+          "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-fort-pierce-city-manager-nick-mimms-heads-to-trial-nearly-2-years-after-arrestnick-mimms-nicholas-mimms-fort-pierce-former-fort-pierce-city-manager-nick-mimms-trial-fort-pierce-city-manager-trial-st-lucie-county-st-lucie-county-courthouse",
+          "editorial_story_id": "story_017375",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Jury selected in bid-tampering trial of former Fort Pierce city manager",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
           "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
           "editorial_story_id": "story_017442",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
@@ -330,17 +334,53 @@
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct",
+          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
+          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
+          "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
+          "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Port St. Lucie City Council final vote Monday",
+            "$971.6 million budget for fiscal year 2026-27",
+            "Property tax rate of 4.8750 mills down from 4.9750",
+            "Final budget hearing at 5:30 p.m. at Port St. Lucie City Hall",
+            "Following 5 p.m. Community Redevelopment Agency meeting",
+            "Same date September 28, 2026"
+          ],
+          "novel_facts": [
+            "Contextual background about $48 million potential revenue loss",
+            "184 unfunded positions worth $28.3 million",
+            "25 proposed police officer positions cut",
+            "$7.8 million in cut projects including Marshall Parkway interchange study",
+            "Explanation of mill calculation",
+            "Quote from City Manager Jesus Merejo from July workshop"
+          ],
+          "reason": "Both articles cover the identical government action: the Port St. Lucie City Council's scheduled final vote on Monday, September 28, 2026, on the same $971.6M budget and 4.8750 mill tax rate, at the same time and location. The incoming article adds extensive background context about how the budget was developed (summer workshops, cuts made, reasons for reductions), but this is explanatory detail about the same pending vote, not a material update. No new development has occurred—the vote has not yet happened. The additional context about budget preparation should be folded into the existing canonical rather than creating a duplicate article about the same scheduled meeting.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-fort-pierce-city-manager-nick-mimms-heads-to-trial-nearly-2-years-after-arrestnick-mimms-nicholas-mimms-fort-pierce-former-fort-pierce-city-manager-nick-mimms-trial-fort-pierce-city-manager-trial-st-lucie-county-st-lucie-county-courthouse",
           "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
           "canonical_headline": "Jury selected in bid-tampering trial of former Fort Pierce city manager",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -350,39 +390,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
-          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
-          "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
-          "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Port St. Lucie City Council final vote Monday",
-            "$971.6 million budget for fiscal year 2026-27",
-            "Property tax rate reduction from 4.9750 to 4.8750 mills",
-            "Final budget hearing at 5:30 p.m. at Port St. Lucie City Hall",
-            "Following 5 p.m. Community Redevelopment Agency meeting",
-            "184 unfunded positions worth $28.3 million",
-            "25 proposed police officer positions cut",
-            "$7.8 million in planned projects cut including Marshall Parkway interchange study",
-            "Concerns about $48 million property tax revenue loss over two years"
-          ],
-          "novel_facts": [],
-          "reason": "These are the exact same article covering the identical government action. The incoming article has identical source URL, published date, and covers the same Monday City Council vote on the same $971.6M budget and 4.8750 mill rate. The candidate was already published from this same CBS12 source. All key details match perfectly: budget amount, millage rates, meeting time/location, unfunded positions, cut projects. The incoming article contains no new information - it appears to be the same content with slightly more body text but no material updates about the vote outcome or any developments. This is a clear duplicate of existing canonical coverage of a scheduled vote that has not yet occurred.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - cbs12.com",
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
           "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
           "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
@@ -414,17 +422,17 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indiantown residents erupt at NAACP meeting over gun at bus stop, no charges",
-      "generated_card_count": 0,
-      "elapsed_seconds": 55.979
+      "live_hero_headline": "Indiantown residents pack meeting, demand answers after father not charged in bus stop gun incident",
+      "generated_card_count": 1,
+      "elapsed_seconds": 59.594
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 12,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 13,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -441,9 +449,27 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:fatal crash"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast"
+          ],
+          "headline": "FHP seeks help finding driver who hit, killed man in Okeechobee County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/fhp-seeks-help-finding-driver-who-hit-killed-man-in-okeechobee-county"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -465,7 +491,7 @@
           "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/decision-not-to-charge-parent-in-indiantown-bus-stop-gun-incident-sparks-heated-community-debate"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -494,16 +520,6 @@
           "editorial_story_id": "story_017379",
           "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
           "canonical_headline": "I-95 northbound in Martin County reopens after fatal crash closes lanes over 7 hours",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Martin County barn fire destroys building, 6 vehicles; 1 firefighter taken to hospital",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-barn-fire-destroys-building-6-vehicles-1-firefighter-taken-to-hospital",
-          "editorial_story_id": "story_016009",
-          "canonical_slug": "2026-09-24-large-barn-fire-at-indiantown-ranch-closes-roads-prompts-horse-evacuations",
-          "canonical_headline": "Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -559,25 +575,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Martin County barn fire destroys building, 6 vehicles; 1 firefighter taken to hospital",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-barn-fire-destroys-building-6-vehicles-1-firefighter-taken-to-hospital",
-          "canonical_slug": "2026-09-24-large-barn-fire-at-indiantown-ranch-closes-roads-prompts-horse-evacuations",
-          "canonical_headline": "Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.103
+      "elapsed_seconds": 14.838
     },
     {
       "category_key": "sports",
@@ -615,7 +616,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.232
+      "elapsed_seconds": 16.363
     },
     {
       "category_key": "things_to_do",
@@ -693,11 +694,11 @@
           "shared_anchors": [],
           "novel_facts": [
             "Bacon BBQ Festival Sept. 26-27 at MIDFLORIDA Event Center in Port St. Lucie",
-            "Outrun Hunger 5K on Saturday at 7715 Forest Hill Blvd., West Palm Beach",
-            "Asian Food Festival at 100 N. Clematis St., West Palm Beach",
-            "Craft Festival on NE Fourth Avenue in Delray Beach",
-            "9th Annual DAStoberfest on Sunday at DAS Beer Garden in Jupiter",
-            "Art After Dark every Friday at 1450 S. Dixie Highway, West Palm Beach"
+            "Outrun Hunger 5K Saturday at 7715 Forest Hill Blvd",
+            "Asian Food Festival at 100 N. Clematis St.",
+            "Craft Festival Sept. 26-27 in Downtown Delray Beach",
+            "9th Annual DAStoberfest Sunday in Jupiter",
+            "Art After Dark Friday at Norton Museum"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -721,30 +722,23 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 24.084
+      "elapsed_seconds": 21.182
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 2,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 1,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.129,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 15.129,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Florida category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -753,33 +747,56 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida is set to execute a 77-year-old man convicted of a 1995 murder",
+          "source_url": "https://www.wptv.com/news/state/florida-is-set-to-execute-a-77-year-old-man-convicted-of-a-1995-murder",
+          "editorial_story_id": "story_017953",
+          "canonical_slug": "2026-09-29-florida-executes-77-year-old-curtis-beasley-states-16th-this-year",
+          "canonical_headline": "Florida executes 77-year-old Curtis Beasley, state's 16th this year",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida is set to execute a 77-year-old man convicted of a 1995 murder",
+          "source_url": "https://www.wptv.com/news/state/florida-is-set-to-execute-a-77-year-old-man-convicted-of-a-1995-murder",
+          "canonical_slug": "2026-09-29-florida-executes-77-year-old-curtis-beasley-states-16th-this-year",
+          "canonical_headline": "Florida executes 77-year-old Curtis Beasley, state's 16th this year",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida executes 77-year-old Curtis Beasley, state's 16th this year",
-      "generated_card_count": 0,
-      "elapsed_seconds": 44.077
+      "elapsed_seconds": 14.648
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -787,11 +804,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 23.827,
+          "elapsed_seconds": 18.165,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 23.827,
+      "model_elapsed_seconds": 18.165,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -802,14 +819,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - cbs12.com",
+          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - WPEC",
           "source_url": "https://cbs12.com/news/local/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation",
           "editorial_story_id": "story_017379",
           "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
@@ -857,7 +874,7 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
-          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - cbs12.com",
+          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - WPEC",
           "source_url": "https://cbs12.com/news/local/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation",
           "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
           "canonical_headline": "I-95 northbound in Martin County reopens after fatal crash closes lanes over 7 hours",
@@ -919,32 +936,42 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indiantown meeting erupts over no charges in bus stop gun incident",
+      "live_hero_headline": "Martin County residents demand charges in Indiantown bus stop gun incident at heated NAACP meeting",
       "generated_card_count": 0,
-      "elapsed_seconds": 45.547
+      "elapsed_seconds": 45.386
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 16,
+      "fresh_candidate_count": 15,
       "publishable_source_count": 2,
       "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.53,
-          "result": "success"
+          "elapsed_seconds": 13.273,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Port St. Lucie SWAT raid finds meth, cocaine, gun in home with infant; man faces $530K bond"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 20.974,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Port St. Lucie man held on $530,000 bond after SWAT raid finds meth, cocaine, gun in home with infant"
         }
       ],
-      "model_elapsed_seconds": 16.53,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 34.247,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Port St. Lucie man held on $530,000 bond after SWAT raid finds meth, cocaine, gun in home with infant",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -956,8 +983,18 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 13,
+      "published_story_duplicate_suppression_count": 14,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
+          "editorial_story_id": "story_017829",
+          "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
+          "canonical_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie man accused of stabbing father, admits intent to kill - WPBF",
@@ -1000,7 +1037,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - cbs12.com",
+          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - WPEC",
           "source_url": "https://cbs12.com/news/local/fort-pierce-driver-accused-of-fleeing-police-twice-during-targeted-traffic-enforcement-florida-news-florida-crime-local-news-local-crime-running-from-police",
           "editorial_story_id": "story_017609",
           "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
@@ -1030,8 +1067,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
-          "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxOOWlCN0ZVMXRlV1VsY0hGWDRjS1NHX2JkZUxEa0REQ3FZYnlkejdHQ0VyWUxFel9hYzVndDA5SDFGanVEZk4ydEF6TlNXS3BSVWljU1FQUUlnRHh2elc5c044N3VOM1ZfdVEzb2RTWHlqdkt0Z3l4c2lYTUVHVVNwcTZxeXMwVmVwWEdISnp5ZURiTTVsRGVwa3pCaG5aZ0Ztb05saEU5ZF8tLVVxWVRCLTNHb0NVMUlaVGNRS19KQ0NLVTJ0bDFNbVBtWmhCWHdfa2t5ZXIwYjVRZHBLMVA4Z2J4bTkya0U0Rk5HNUl3aWpxRWVGTWl3d2V1YlYxT1I2b2FGWG5PVVVKcHJjd0VpNHh6ZW5yZHBMMU8tY1Q5ZlBwWG1JbVYxS1VWZUxLZW8xcDY2VVk2ejI2TWROTjZQeXZtZ0p1Yy1HUVZycDRIeTMySmRyZG1fakVxMVA4d2hTdEc1UnM3alNuQlpiR2hFaEU1ODhmNUppckJkQkFuVmZsSVZrNENBZHBub3ZoZw",
+          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
+          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
           "editorial_story_id": "story_017314",
           "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
           "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
@@ -1040,7 +1077,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - cbs12.com",
+          "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - WPEC",
           "source_url": "https://cbs12.com/news/local/former-fort-pierce-city-manager-nick-mimms-heads-to-trial-nearly-2-years-after-arrestnick-mimms-nicholas-mimms-fort-pierce-former-fort-pierce-city-manager-nick-mimms-trial-fort-pierce-city-manager-trial-st-lucie-county-st-lucie-county-courthouse",
           "editorial_story_id": "story_017375",
           "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
@@ -1050,7 +1087,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - cbs12.com",
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
           "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
           "editorial_story_id": "story_017442",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
@@ -1070,7 +1107,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cbs12.com",
+          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
           "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
           "editorial_story_id": "story_015258",
           "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
@@ -1089,37 +1126,28 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-          "canonical_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_017829",
-            "source:https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_017829,source:https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
+          "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
+          "canonical_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie man accused of stabbing father, admits intent to kill - WPBF",
@@ -1184,17 +1212,15 @@
           "confidence": 0.92,
           "shared_anchors": [
             "Fort Pierce Police Department",
-            "shooting into occupied home with children",
-            "no injuries reported",
-            "reference to earlier Avenue L shooting on Sept 18"
+            "shooting at occupied home with children",
+            "no injuries reported"
           ],
           "novel_facts": [
-            "September 27, 11:35 p.m. shooting",
+            "September 27 at 11:35 p.m. incident date",
             "700 block of South 29th Street location",
-            "Two adults and five children in home",
-            "Two bullets penetrated home including bathroom",
-            "Two spent shell casings found near property",
-            "Distinct location from Avenue L shootings"
+            "two adults and five children present",
+            "two bullets penetrated home including bathroom",
+            "two spent shell casings found"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1203,7 +1229,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - cbs12.com",
+          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - WPEC",
           "source_url": "https://cbs12.com/news/local/fort-pierce-driver-accused-of-fleeing-police-twice-during-targeted-traffic-enforcement-florida-news-florida-crime-local-news-local-crime-running-from-police",
           "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
           "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
@@ -1248,22 +1274,43 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
-          "source_url": "https://news.google.com/rss/articles/CBMijgNBVV95cUxOOWlCN0ZVMXRlV1VsY0hGWDRjS1NHX2JkZUxEa0REQ3FZYnlkejdHQ0VyWUxFel9hYzVndDA5SDFGanVEZk4ydEF6TlNXS3BSVWljU1FQUUlnRHh2elc5c044N3VOM1ZfdVEzb2RTWHlqdkt0Z3l4c2lYTUVHVVNwcTZxeXMwVmVwWEdISnp5ZURiTTVsRGVwa3pCaG5aZ0Ztb05saEU5ZF8tLVVxWVRCLTNHb0NVMUlaVGNRS19KQ0NLVTJ0bDFNbVBtWmhCWHdfa2t5ZXIwYjVRZHBLMVA4Z2J4bTkya0U0Rk5HNUl3aWpxRWVGTWl3d2V1YlYxT1I2b2FGWG5PVVVKcHJjd0VpNHh6ZW5yZHBMMU8tY1Q5ZlBwWG1JbVYxS1VWZUxLZW8xcDY2VVk2ejI2TWROTjZQeXZtZ0p1Yy1HUVZycDRIeTMySmRyZG1fakVxMVA4d2hTdEc1UnM3alNuQlpiR2hFaEU1ODhmNUppckJkQkFuVmZsSVZrNENBZHBub3ZoZw",
+          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
+          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
           "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
           "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Port St. Lucie City Council final vote Monday",
+            "$971.6 million budget for fiscal year 2026-27",
+            "Property tax rate of 4.8750 mills down from 4.9750",
+            "Final budget hearing at 5:30 p.m. at Port St. Lucie City Hall",
+            "Following 5 p.m. Community Redevelopment Agency meeting",
+            "Same date September 28, 2026"
+          ],
+          "novel_facts": [
+            "Contextual background about $48 million potential revenue loss",
+            "184 unfunded positions worth $28.3 million",
+            "25 proposed police officer positions cut",
+            "$7.8 million in cut projects including Marshall Parkway interchange study",
+            "Explanation of mill calculation",
+            "Quote from City Manager Jesus Merejo from July workshop"
+          ],
+          "reason": "Both articles cover the identical government action: the Port St. Lucie City Council's scheduled final vote on Monday, September 28, 2026, on the same $971.6M budget and 4.8750 mill tax rate, at the same time and location. The incoming article adds extensive background context about how the budget was developed (summer workshops, cuts made, reasons for reductions), but this is explanatory detail about the same pending vote, not a material update. No new development has occurred—the vote has not yet happened. The additional context about budget preparation should be folded into the existing canonical rather than creating a duplicate article about the same scheduled meeting.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - cbs12.com",
+          "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - WPEC",
           "source_url": "https://cbs12.com/news/local/former-fort-pierce-city-manager-nick-mimms-heads-to-trial-nearly-2-years-after-arrestnick-mimms-nicholas-mimms-fort-pierce-former-fort-pierce-city-manager-nick-mimms-trial-fort-pierce-city-manager-trial-st-lucie-county-st-lucie-county-courthouse",
           "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
           "canonical_headline": "Jury selected in bid-tampering trial of former Fort Pierce city manager",
@@ -1278,7 +1325,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - cbs12.com",
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
           "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
           "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
@@ -1308,7 +1355,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cbs12.com",
+          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
           "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
           "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
           "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
@@ -1338,11 +1385,9 @@
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-      "generated_card_count": 0,
-      "elapsed_seconds": 38.697
+      "elapsed_seconds": 54.75
     },
     {
       "category_key": "indian_river",
@@ -1350,7 +1395,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 8,
+      "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1367,14 +1412,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - cbs12.com",
+          "source_headline": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - WPEC",
           "source_url": "https://cbs12.com/news/local/vero-beach-parking-fines-rising-oct-1-with-some-penalties-doubling-fire-lane-overtime-parking-parking-over-line-emergency-vehicle-tow-away-zone-",
           "editorial_story_id": "story_015870",
           "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
@@ -1392,7 +1437,7 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - cbs12.com",
+          "source_headline": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - WPEC",
           "source_url": "https://cbs12.com/news/local/vero-beach-parking-fines-rising-oct-1-with-some-penalties-doubling-fire-lane-overtime-parking-parking-over-line-emergency-vehicle-tow-away-zone-",
           "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
           "canonical_headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
@@ -1407,7 +1452,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.6
+      "elapsed_seconds": 18.391
     }
   ]
 }
