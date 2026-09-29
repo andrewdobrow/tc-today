@@ -2177,7 +2177,7 @@ def _normalize_article_slug(value):
     return path.strip()
 
 
-def _load_article_content_overrides(path=None):
+def _load_article_content_overrides(path=None, now=None):
     override_path = Path(path or ARTICLE_CONTENT_OVERRIDES_PATH)
     if not override_path.is_file():
         return {}
@@ -2186,11 +2186,27 @@ def _load_article_content_overrides(path=None):
     except Exception:
         return {}
     rows = payload.get("overrides", payload) if isinstance(payload, dict) else {}
-    return {
-        _normalize_article_slug(k): dict(v)
-        for k, v in rows.items()
-        if _normalize_article_slug(k) and isinstance(v, dict)
-    }
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    result = {}
+    for key, value in rows.items():
+        slug = _normalize_article_slug(key)
+        if not slug or not isinstance(value, dict):
+            continue
+        row = dict(value)
+        active_until = str(row.get("active_until") or "").strip()
+        if active_until:
+            try:
+                cutoff = datetime.fromisoformat(active_until.replace("Z", "+00:00"))
+                if cutoff.tzinfo is None:
+                    cutoff = cutoff.replace(tzinfo=timezone.utc)
+                if now >= cutoff.astimezone(timezone.utc):
+                    continue
+            except Exception:
+                # Malformed expiry metadata must not silently disable an editorial
+                # correction. Keep the override active and let repository tests flag it.
+                pass
+        result[slug] = row
+    return result
 
 
 def _apply_article_content_overrides_to_outputs(output_root=None):
@@ -8031,6 +8047,103 @@ def _source_jurisdiction_diagnostics(item, source=None):
     }
 
 
+def _scheduled_execution_temporal_diagnostics(item, source=None):
+    """Block source-future execution coverage from being rewritten as completed.
+
+    Execution timing is a high-consequence factual state. A warrant or scheduled
+    execution does not prove that the sentence was carried out; stays, delays, and
+    other last-minute changes are possible. Completion language therefore requires
+    affirmative completion evidence in the supplied reporting source.
+    """
+    item = item if isinstance(item, dict) else {}
+    source = source if isinstance(source, dict) else item
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return {"required": False, "passed": True, "custom_exempt": True, "missing": []}
+
+    provenance_parts = [
+        source.get("source_title"),
+        source.get("source_headline"),
+        source.get("source_summary"),
+    ]
+    # During generation ``source`` is the immutable publisher input, so its raw
+    # title/text are trustworthy evidence. During late archive checks source==item;
+    # in that case use only preserved source-provenance fields so generated prose
+    # cannot self-authorize its own temporal claim.
+    if source is not item:
+        provenance_parts.extend([
+            source.get("title"),
+            source.get("summary"),
+            source.get("article_text"),
+            source.get("source_text"),
+        ])
+    source_blob = re.sub(
+        r"\s+", " ",
+        " ".join(str(value or "") for value in provenance_parts if value),
+    ).strip().lower()
+    if "execut" not in source_blob and "lethal injection" not in source_blob:
+        return {"required": False, "passed": True, "missing": []}
+
+    future_patterns = (
+        r"\b(?:is|was|remains)\s+scheduled\s+(?:on\s+\w+\s+)?to\s+(?:be\s+)?execut",
+        r"\b(?:is|was|remains)\s+(?:set|slated|due)\s+to\s+(?:be\s+)?execut",
+        r"\b(?:execution|lethal injection)\s+(?:is|was|remains)\s+(?:scheduled|set)\b",
+        r"\bscheduled\s+for\s+(?:an?\s+)?execution\b",
+        r"\bplans?\s+to\s+execut",
+        r"\bset\s+to\s+receive.{0,50}lethal injection\b",
+        r"\bif\s+(?:the\s+)?execution\s+(?:proceeds|takes place|is carried out)\b",
+    )
+    future_evidence = any(re.search(pattern, source_blob, re.I) for pattern in future_patterns)
+    if not future_evidence:
+        return {"required": False, "passed": True, "missing": []}
+
+    confirmation_patterns = (
+        r"\b(?:he|she|[a-z][a-z'’-]+)\s+(?:was|has been)\s+executed\b",
+        r"\b(?:florida|the state|state officials)\s+(?:has\s+)?executed\s+[a-z]",
+        r"\bsentence\s+(?:was|has been)\s+carried out\b",
+        r"\bexecution\s+(?:was|has been)\s+carried out\b",
+        r"\breceived\s+(?:a|the)\s+lethal injection\b",
+        r"\bpronounced\s+dead\s+at\b",
+    )
+    source_confirms_completion = any(
+        re.search(pattern, source_blob, re.I) for pattern in confirmation_patterns
+    )
+    if source_confirms_completion:
+        return {
+            "required": True,
+            "passed": True,
+            "future_execution_evidence": True,
+            "source_confirms_completion": True,
+            "missing": [],
+        }
+
+    headline = str(item.get("headline") or item.get("title") or "")
+    lead = _first_body_paragraph(item.get("body") or item.get("teaser") or "")
+    generated_blob = re.sub(r"\s+", " ", f"{headline} {lead}").strip().lower()
+    completion_patterns = (
+        r"\b(?:florida|the state|state officials)\s+(?:has\s+)?executed\b",
+        r"\b(?:was|has been)\s+executed\b",
+        r"\bexecuted\s+[a-z][a-z'’-]+\b",
+        r"\breceived\s+(?:a|the)\s+lethal injection\b",
+        r"\bexecution\s+(?:came|took place|was carried out|has been carried out)\b",
+        r"\bput\s+to\s+death\b",
+        r"\bsentence\s+(?:was|has been)\s+carried out\b",
+    )
+    generated_claims_completion = any(
+        re.search(pattern, generated_blob, re.I) for pattern in completion_patterns
+    )
+    missing = ["scheduled_execution_reported_as_completed"] if generated_claims_completion else []
+    return {
+        "required": True,
+        "passed": not missing,
+        "future_execution_evidence": True,
+        "source_confirms_completion": False,
+        "generated_claims_completion": generated_claims_completion,
+        "headline": headline,
+        "lead": lead,
+        "missing": missing,
+    }
+
+
 def _article_framing_diagnostics(item, source=None):
     """Combined universal lead-independence and headline/lead claim contract."""
     item = item if isinstance(item, dict) else {}
@@ -8046,12 +8159,14 @@ def _article_framing_diagnostics(item, source=None):
     source_focus_diag = _source_focus_diagnostics(item, source)
     source_jurisdiction_diag = _source_jurisdiction_diagnostics(item, source)
     official_jurisdiction_diag = _official_jurisdiction_source_diagnostics(item, source)
+    temporal_diag = _scheduled_execution_temporal_diagnostics(item, source)
     missing = list(dict.fromkeys(
         list(lead_diag.get("missing") or [])
         + list(claim_diag.get("missing") or [])
         + list(source_focus_diag.get("missing") or [])
         + list(source_jurisdiction_diag.get("missing") or [])
         + list(official_jurisdiction_diag.get("missing") or [])
+        + list(temporal_diag.get("missing") or [])
     ))
     return {
         "required": True,
@@ -8063,6 +8178,7 @@ def _article_framing_diagnostics(item, source=None):
         "source_focus": source_focus_diag,
         "source_jurisdiction": source_jurisdiction_diag,
         "official_jurisdiction": official_jurisdiction_diag,
+        "temporal_integrity": temporal_diag,
     }
 
 
@@ -8093,6 +8209,7 @@ def _filter_article_framing_live_placements(items):
             "lead_independence": diagnostics.get("lead_independence", {}),
             "claim_consistency": diagnostics.get("claim_consistency", {}),
             "source_focus": diagnostics.get("source_focus", {}),
+            "temporal_integrity": diagnostics.get("temporal_integrity", {}),
         })
     return kept, rejected
 
@@ -10017,8 +10134,9 @@ def _format_category_hero_timestamp(item, archive_entries=None):
 
 
 
-CANONICAL_HERO_FRESHNESS_VERSION = "1.1"
+CANONICAL_HERO_FRESHNESS_VERSION = "1.2"
 CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS = 18
+CANONICAL_HERO_OLD_CANONICAL_UPDATE_WINDOW_HOURS = 8
 CANONICAL_HERO_REFRESHED_SLUGS_THIS_RUN = set()
 
 
@@ -10061,6 +10179,30 @@ def _canonical_hero_freshness_assessment(item, now=None):
         or item.get("_archived_slug")
     )
     meaningful_validated = bool(item.get("meaningful_update_validated"))
+    canonical_slug = str(
+        item.get("canonical_slug") or item.get("_archived_slug") or item.get("slug") or ""
+    ).strip()
+    first_publication = None
+    first_publication_field = ""
+    first_publication_raw = ""
+    for _field, _value in (
+        ("canonical_first_published_at", item.get("canonical_first_published_at")),
+        ("first_published", item.get("first_published")),
+        ("date", item.get("date")),
+    ):
+        _parsed = _parse_publication_timestamp(_value)
+        if _parsed is not None:
+            first_publication = _parsed
+            first_publication_field = _field
+            first_publication_raw = str(_value or "")
+            break
+    first_publication_age_hours = (
+        max(0.0, (now - first_publication).total_seconds() / 3600)
+        if first_publication is not None else None
+    )
+    refreshed_this_run = bool(
+        canonical_slug and canonical_slug in CANONICAL_HERO_REFRESHED_SLUGS_THIS_RUN
+    )
     candidates = []
     if meaningful_validated:
         candidates.extend([
@@ -10102,8 +10244,22 @@ def _canonical_hero_freshness_assessment(item, now=None):
         }
 
     age_hours = max(0.0, (now - timestamp).total_seconds() / 3600)
-    stale = age_hours >= CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS
-    if field in {"canonical_last_material_update_at", "last_meaningful_update_at"}:
+    old_canonical_update_window_expired = bool(
+        canonical_bound
+        and meaningful_validated
+        and field in {"canonical_last_material_update_at", "last_meaningful_update_at"}
+        and first_publication_age_hours is not None
+        and first_publication_age_hours >= 24
+        and age_hours >= CANONICAL_HERO_OLD_CANONICAL_UPDATE_WINDOW_HOURS
+        and not refreshed_this_run
+    )
+    stale = bool(
+        old_canonical_update_window_expired
+        or age_hours >= CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS
+    )
+    if old_canonical_update_window_expired:
+        reason = "aged_canonical_update_hero_window_expired"
+    elif field in {"canonical_last_material_update_at", "last_meaningful_update_at"}:
         reason = "validated_meaningful_update_fresh" if not stale else "validated_meaningful_update_stale"
     elif canonical_bound:
         reason = "canonical_publication_fresh" if not stale else "canonical_publication_stale"
@@ -10117,6 +10273,11 @@ def _canonical_hero_freshness_assessment(item, now=None):
         "age_hours": round(age_hours, 2),
         "canonical_bound": canonical_bound,
         "meaningful_update_validated": meaningful_validated,
+        "first_publication_age_hours": (
+            round(first_publication_age_hours, 2)
+            if first_publication_age_hours is not None else None
+        ),
+        "refreshed_this_run": refreshed_this_run,
     }
 
 
@@ -11353,9 +11514,12 @@ def _run_assignment_writer(packet, assignment, *, role, timeout_seconds=None):
         )
         max_tokens = ASSIGNMENT_WRITER_CARD_MAX_TOKENS
     length_rule = full_article_rule
+    _writer_now_et = datetime.now(ZoneInfo("America/New_York"))
+    _writer_clock = _writer_now_et.strftime("%A, %B %d, %Y at %-I:%M %p ET")
 
     prompt = f"""You are the writer for Treasure Coast Today. The assignment editor has already selected the story. You have NO story-selection authority in this task.
 
+CURRENT TCT CLOCK: {_writer_clock}
 SECTION: {category_label}
 ASSIGNED SOURCE INDEX: {source_index}
 ASSIGNED SOURCE TITLE: {title}
@@ -11376,6 +11540,7 @@ Writing rules:
 - Follow the assigned angle as the lead focus, but never treat the angle itself as factual evidence.
 - Every specific fact, name, number, quote, allegation, chronology, and causal claim must be supported by the source text or prior canonical context supplied above.
 - Preserve proper nouns accurately. Attribute allegations and official characterizations.
+- NEVER convert a scheduled, planned, pending, or future event into a completed event. If the source says an execution, hearing, vote, launch, meeting, storm impact, or other event is scheduled or set to occur, keep it in future/pending tense unless the supplied source explicitly confirms that it occurred. A scheduled time passing by itself is not confirmation.
 - If this is an update, the opening must identify the new development and enough prior context to stand alone; do not open only with a quote, scene, reaction, or investigative procedure.
 - When a direct quotation spans multiple paragraphs, every continuation paragraph must begin with a new opening quotation mark. Do not close intermediate paragraphs; close the quotation only at the end of the final quoted paragraph.
 - Avoid generic filler and unsupported "what happens next" language.
