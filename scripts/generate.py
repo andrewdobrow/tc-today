@@ -37,6 +37,7 @@ from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_clien
 from tct_engine.model_bakeoff import write_bakeoff_artifacts
 from tct_engine.assignment_editor_shadow import normalize_assignment_plan, write_assignment_editor_artifacts
 from tct_engine.article_prose_policy import sanitize_article_text, sanitize_article_body_html
+from tct_engine.editorial_snapshot import stabilize_registry_for_snapshot
 
 # Editorial engine integration. Import failures remain fail-open. Production
 # behavior changes only through the separately gated v1.9 activation controller.
@@ -11377,7 +11378,6 @@ Writing rules:
 - Every specific fact, name, number, quote, allegation, chronology, and causal claim must be supported by the source text or prior canonical context supplied above.
 - Preserve proper nouns accurately. Attribute allegations and official characterizations.
 - If this is an update, the opening must identify the new development and enough prior context to stand alone; do not open only with a quote, scene, reaction, or investigative procedure.
-- When a direct quotation spans multiple paragraphs, every continuation paragraph must begin with a new opening quotation mark. Do not close intermediate paragraphs; close the quotation only at the end of the final quoted paragraph.
 - Avoid generic filler and unsupported "what happens next" language.
 - {length_rule}
 - The source_index, urgency_score, and published value are fixed editorial metadata. Echo them exactly.
@@ -37545,6 +37545,29 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
         )
 
 
+def _stabilize_editorial_registry_before_snapshot():
+    """Converge persistent registry repair before snapshot fingerprinting.
+
+    Production already runs the same deterministic normalizer before generation.
+    Running it again after all publication-time registry mutations ensures the
+    editorial snapshot is fingerprinted against the exact stabilized registry the
+    next run will load. This does not weaken the .57 fingerprint gate; it makes the
+    producer and consumer agree on the same authoritative bytes.
+    """
+    result = stabilize_registry_for_snapshot(EDITORIAL_REGISTRY_PATH)
+    print(
+        "  Editorial registry snapshot preflight: "
+        f"changed={str(bool(result.get('changed'))).lower()}, "
+        f"passes={int(result.get('repair_passes', 0) or 0)}, "
+        f"stories={int(result.get('active_stories_after', 0) or 0)}"
+    )
+    if not result.get("verification_clean"):
+        raise RuntimeError(
+            "Editorial registry snapshot preflight did not verify clean"
+        )
+    return result
+
+
 def _save_editorial_engine_audit(engine, audit_rows):
     """Persist shadow state and observations; failures remain non-fatal."""
     if engine is not None:
@@ -39671,6 +39694,12 @@ def main():
         "candidate(s) rejected"
     )
     write_trusted_source_recovery_report()
+    # Registry repair also runs before generation. Stabilize it again only after all
+    # current-run publication/identity mutations are complete, then fingerprint that
+    # final authoritative state into editorial_state.json. This prevents the next
+    # preflight from invalidating an otherwise-good snapshot and forcing O(history)
+    # replay on every production run.
+    _stabilize_editorial_registry_before_snapshot()
     _save_editorial_engine_audit(editorial_engine, editorial_audit_rows)
     _write_editorial_observability(
         editorial_engine, editorial_audit_rows, editorial_activation_run,
