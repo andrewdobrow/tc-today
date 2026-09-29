@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-09-28T23:09:57Z",
+  "generated_at": "2026-09-29T00:30:56Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,42 +15,51 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
-      "generated_live": 4
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 4,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 5
+      "no_category_eligible_sources": 4,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 78.026,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 125.513,
     "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 3,
     "article_framing_rejection_count": 1,
-    "category_eligibility_rejection_count": 4,
-    "published_story_duplicate_suppression_count": 23,
-    "story_aware_update_context_count": 3,
-    "material_update_promotion_evaluation_count": 7,
-    "material_update_promotion_count": 1,
+    "category_eligibility_rejection_count": 6,
+    "published_story_duplicate_suppression_count": 19,
+    "story_aware_update_context_count": 8,
+    "material_update_promotion_evaluation_count": 3,
+    "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 2,
-    "material_update_promotion_model_call_count": 5
+    "material_update_promotion_model_call_count": 1
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 10,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 11,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 9.008,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 9.008,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -59,9 +68,23 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/28/jury-selection-trial-fort-pierce-city-manager-accused-bid-tampering-official-misconduct/"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -91,25 +114,15 @@
           "source_url": "https://www.wptv.com/traffic/traffic-news/deadly-early-morning-crash-shuts-down-lanes-of-i-95-north-in-martin-county"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
-          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
-          "editorial_story_id": "story_017314",
-          "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
-          "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "local_gov",
           "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
           "editorial_story_id": "story_017442",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -124,55 +137,60 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
-      "material_update_promotion_decisions": [
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
         {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
+          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
           "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
+          "publisher": "cbs12.com",
           "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
           "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Port St. Lucie City Council final vote on Monday",
-            "$971.6 million budget for fiscal year 2026-27",
-            "Millage rate of 4.8750, down from 4.9750",
-            "Final budget hearing at 5:30 p.m. at Port St. Lucie City Hall",
-            "Following 5 p.m. Community Redevelopment Agency meeting",
-            "Same date September 28, 2026",
-            "References to Crosstown Parkway and Marshall Parkway projects"
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_017314",
+            "source:https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value"
           ],
-          "novel_facts": [
-            "Additional context about City Manager Jesus Merejo's July statement regarding $48M potential revenue loss",
-            "Detail about 184 unfunded positions worth $28.3 million including 25 police positions",
-            "Specific cut projects totaling $7.8 million including interchange study, inclusive playground, parking improvements",
-            "Explanation of mill calculation ($1 per $1,000 of taxable value)",
-            "Background about state constitutional amendment voter consideration in November"
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
-          "reason": "Both articles cover the exact same government action: the Port St. Lucie City Council's scheduled final vote on Monday, September 28, 2026, on the identical $971.6M budget and 4.8750 millage rate. The incoming article provides additional background context and explanation but no material new development. This is the same story with more detail, not a new event or material update requiring a new URL or canonical update.",
-          "validation_errors": []
-        },
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['port-st-lucie', 'st-lucie']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['crosstown-parkway', 'marshall-parkway']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['budget-lower-property', 'budget-lower-property-tax', 'lead-vote-nearly', 'lead-vote-nearly-budget', 'lower-property-tax', 'lower-property-tax-rate', 'nearly-budget-lower', 'nearly-budget-lower-property', 'property-tax-rate', 'vote-nearly-budget', 'vote-nearly-budget-lower']",
+            "shared_headline_topic_core=['budget', 'lead', 'lower', 'nearly', 'property', 'rate', 'tax']",
+            "shared_distinctive_token_count=123",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
           "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "canonical_is_custom": false,
           "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -199,40 +217,80 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 35.054
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
+      "generated_card_count": 0,
+      "elapsed_seconds": 28.384
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 7,
       "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.575,
+          "elapsed_seconds": 23.249,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 17.575,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 23.249,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 41,
+          "baseline_anchor": "fatality",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "lucie",
+            "port"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "79",
+            "911",
+            "called",
+            "police",
+            "stabbing",
+            "year"
+          ],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "original_event_context_missing"
+          ],
+          "source_title": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - cbs12.com",
+          "headline": "Body-camera video shows arrest after Port St. Lucie stabbing; victim stable but intubated"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -245,22 +303,26 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Jensen Beach Boulevard shut down after construction crew strikes gas line, MCSO says - WPEC",
+          "headline": "Jensen Beach Boulevard shut down after construction crew strikes gas line, MCSO says - cbs12.com",
           "source_url": "https://cbs12.com/news/local/jensen-beach-boulevard-shut-down-after-construction-crew-strikes-gas-line-mcso-says-florida-news-local-news-martin-county-news"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
+          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
-          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
-          "editorial_story_id": "story_017314",
-          "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
-          "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "crime",
           "source_headline": "3 arrested after saw palmetto berry harvest turns into K9 search along I-95 in Vero Beach - cw34.com",
@@ -272,14 +334,54 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
+          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - cbs12.com",
+          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
+          "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_017314",
+            "source:https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['port-st-lucie', 'st-lucie']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['crosstown-parkway', 'marshall-parkway']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['budget-lower-property', 'budget-lower-property-tax', 'lead-vote-nearly', 'lead-vote-nearly-budget', 'lower-property-tax', 'lower-property-tax-rate', 'nearly-budget-lower', 'nearly-budget-lower-property', 'property-tax-rate', 'vote-nearly-budget', 'vote-nearly-budget-lower']",
+            "shared_headline_topic_core=['budget', 'lead', 'lower', 'nearly', 'property', 'rate', 'tax']",
+            "shared_distinctive_token_count=123",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - cbs12.com",
           "source_url": "https://cbs12.com/news/crime/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "basis": "event-identity-authority:participant_plus_precise_location",
           "identity_keys": [
             "story:story_017442",
@@ -305,9 +407,9 @@
             "shared_named_people=['flown to hca', 'in the chest', 'later reported stable', 'with multiple apparent']",
             "shared_precise_locations=['northwest-blockbird-drive']",
             "shared_agencies=[]",
-            "shared_subject_phrases=['911-admitt-stabb', '911-admitt-stabb-old', 'admitt-stabb-old', 'admitt-stabb-old-wpec', 'call-911-admitt', 'call-911-admitt-stabb', 'stabb-old-wpec']",
-            "shared_headline_topic_core=['911', 'admitt', 'call', 'old', 'stabb', 'wpec']",
-            "shared_distinctive_token_count=107",
+            "shared_subject_phrases=['911-admitt-stabb', '911-admitt-stabb-old', 'admitt-stabb-old', 'call-911-admitt', 'call-911-admitt-stabb']",
+            "shared_headline_topic_core=['911', 'admitt', 'call', 'old', 'stabb']",
+            "shared_distinctive_token_count=106",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -316,47 +418,11 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "crime",
-          "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
-          "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
-          "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
-          "canonical_headline": "Port St. Lucie Council votes Monday on $971.6M budget, lower tax rate",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Port St. Lucie City Council final vote on Monday",
-            "$971.6 million budget for fiscal year 2026-27",
-            "Millage rate of 4.8750, down from 4.9750",
-            "Final budget hearing at 5:30 p.m. at Port St. Lucie City Hall",
-            "Following 5 p.m. Community Redevelopment Agency meeting",
-            "Same date September 28, 2026",
-            "References to Crosstown Parkway and Marshall Parkway projects"
-          ],
-          "novel_facts": [
-            "Additional context about City Manager Jesus Merejo's July statement regarding $48M potential revenue loss",
-            "Detail about 184 unfunded positions worth $28.3 million including 25 police positions",
-            "Specific cut projects totaling $7.8 million including interchange study, inclusive playground, parking improvements",
-            "Explanation of mill calculation ($1 per $1,000 of taxable value)",
-            "Background about state constitutional amendment voter consideration in November"
-          ],
-          "reason": "Both articles cover the exact same government action: the Port St. Lucie City Council's scheduled final vote on Monday, September 28, 2026, on the identical $971.6M budget and 4.8750 millage rate. The incoming article provides additional background context and explanation but no material new development. This is the same story with more detail, not a new event or material update requiring a new URL or canonical update.",
-          "validation_errors": []
-        },
         {
           "category_key": "crime",
           "source_headline": "3 arrested after saw palmetto berry harvest turns into K9 search along I-95 in Vero Beach - cw34.com",
@@ -368,8 +434,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -399,16 +465,14 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie man arrested after 911 call confessing to stabbing 79-year-old",
-      "generated_card_count": 0,
-      "elapsed_seconds": 58.633
+      "elapsed_seconds": 47.509
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 19,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 11,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -446,7 +510,7 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -454,7 +518,7 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
           "editorial_story_id": "story_017442",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -474,7 +538,7 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-doubles-parking-fines-starting-oct-1-first-rate-hike-since-2011",
           "editorial_story_id": "story_015870",
           "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
-          "canonical_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
+          "canonical_headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -486,16 +550,6 @@
           "canonical_slug": "2026-09-24-17-businesses-raise-over-10000-for-sebastian-river-high-play-clocks-after-coachs",
           "canonical_headline": "17 businesses raise over $10,000 for Sebastian River High play clocks after coach's Facebook post",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-          "editorial_story_id": "story_013919",
-          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -511,7 +565,7 @@
           "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "canonical_is_custom": false,
           "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -541,7 +595,7 @@
           "source_headline": "Vero Beach doubles most parking fines starting Oct. 1, first rate hike since 2011",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-doubles-parking-fines-starting-oct-1-first-rate-hike-since-2011",
           "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
-          "canonical_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
+          "canonical_headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -565,25 +619,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Witnesses tell police a parking dispute led to shooting at Pollo Tropical in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/parking-space-dispute-led-to-shooting-at-pollo-tropical-in-port-st-lucie-witnesses-say",
-          "canonical_slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-          "canonical_headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 3,
-      "elapsed_seconds": 15.875
+      "elapsed_seconds": 15.429
     },
     {
       "category_key": "sports",
@@ -621,7 +660,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 15,
-      "elapsed_seconds": 10.512
+      "elapsed_seconds": 10.166
     },
     {
       "category_key": "things_to_do",
@@ -653,7 +692,7 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318",
           "editorial_story_id": "story_000091",
           "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
@@ -681,7 +720,7 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318",
           "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
           "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
@@ -699,11 +738,11 @@
           "shared_anchors": [],
           "novel_facts": [
             "Bacon BBQ Festival Sept. 26-27 at MIDFLORIDA Event Center in Port St. Lucie",
-            "Outrun Hunger 5K on Saturday at 7715 Forest Hill Blvd., West Palm Beach",
-            "Asian Food Festival at 100 N. Clematis St., West Palm Beach",
-            "Craft Festival on Atlantic Ave. in Delray Beach",
-            "9th Annual DAStoberfest on Sunday at DAS Beer Garden in Jupiter",
-            "Art After Dark on Friday at 1450 S. Dixie Highway, West Palm Beach"
+            "Outrun Hunger 5K on Saturday at 7715 Forest Hill Blvd",
+            "Asian Food Festival at 100 N. Clematis St.",
+            "Craft Festival at 401 East Atlantic Ave. in Delray Beach",
+            "9th Annual DAStoberfest Sunday at DAS Beer Garden in Jupiter",
+            "Art After Dark Friday at 1450 S. Dixie Highway"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -727,7 +766,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.823
+      "elapsed_seconds": 20.091
     },
     {
       "category_key": "florida",
@@ -792,16 +831,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.103
+      "elapsed_seconds": 18.317
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -809,11 +848,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.957,
+          "elapsed_seconds": 27.912,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 18.957,
+      "model_elapsed_seconds": 27.912,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -824,21 +863,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation",
-          "editorial_story_id": "story_017379",
-          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-          "canonical_headline": "I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "I-95 North in Martin County shut down after deadly crash involving sedan, box truck - WFLX",
@@ -850,159 +879,17 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation",
-          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-          "canonical_headline": "I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "I-95 North in Martin County shut down after deadly crash involving sedan, box truck - WFLX",
-          "source_url": "https://www.wflx.com/2026/09/28/i-95-north-martin-county-shut-down-after-deadly-crash-involving-sedan-box-truck?outputType=amp",
-          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-          "canonical_headline": "I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
-      "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "I-95 North in Martin County reopens after fatal crash involving sedan, box truck",
-      "generated_card_count": 0,
-      "elapsed_seconds": 41.997
-    },
-    {
-      "category_key": "st_lucie",
-      "category_label": "St. Lucie County",
-      "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 33.916,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 33.916,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police investigate shooting at home with two adults and five children - WPBF",
-          "source_url": "https://www.wpbf.com/article/fort-pierce-police-investigate-shooting-home-south-29-street-adults-children/73931618",
-          "editorial_story_id": "story_014614",
-          "canonical_slug": "2026-09-21-fort-pierce-home-with-woman-4-children-struck-by-gunfire-on-avenue-l",
-          "canonical_headline": "Fort Pierce police link three Avenue L shootings, identify suspects",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - WPEC",
-          "source_url": "https://cbs12.com/news/local/fort-pierce-driver-accused-of-fleeing-police-twice-during-targeted-traffic-enforcement-florida-news-florida-crime-local-news-local-crime-running-from-police",
-          "editorial_story_id": "story_017609",
-          "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
-          "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
-          "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
-          "editorial_story_id": "story_017442",
-          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
-          "editorial_story_id": "story_017442",
-          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
-          "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
-          "editorial_story_id": "story_015258",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-county",
-          "editorial_story_id": "story_015258",
-          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Major crash on Florida's Turnpike south near Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/local/major-crash-on-floridas-turnpike-south-near-fort-pierce",
+          "source_headline": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/fiery-crash-involving-car-tractor-trailer-shuts-down-northbound-i-95-near-indiantown-rdi-95-crash-indiantown-road-tractor-trailer-crash-car-crash-fiery-crash-palm-beach-county-jupiter-traffic-i-95-northbound-traffic-closure-crash-investigation",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
           "canonical_headline": "I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again",
           "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
-            "story:story_017674",
-            "source:https://cbs12.com/news/local/major-crash-on-floridas-turnpike-south-near-fort-pierce"
+            "story:story_017446"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -1023,47 +910,8 @@
             "shared_precise_locations=['indiantown-road']",
             "shared_agencies=[]",
             "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['crash', 'wpec']",
-            "shared_distinctive_token_count=26",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - cw34.com",
-          "source_url": "https://cw34.com/news/local/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue?teaserSource=trending",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
-          "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_017513"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['fort-pierce', 'port-st-lucie', 'st-lucie']",
-            "shared_event_families=['crash']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['c24-canal-road', 'clear-the-road', 'crash-on-old-boynton-road', 'old-boynton-road', 'old-boynton-road-orange-avenue', 'orange-avenue', 'sneed-road']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['all-lane-orange', 'all-lane-orange-avenue', 'avenue-cw34-com', 'block-all-lane', 'block-all-lane-orange', 'cement-fort-block', 'cement-fort-block-all', 'fort-block-all', 'fort-block-all-lane', 'lane-orange-avenue', 'lane-orange-avenue-cw34', 'orange-avenue-cw34', 'orange-avenue-cw34-com', 'rollov-spill-cement', 'rollov-spill-cement-fort', 'spill-cement-fort', 'spill-cement-fort-block', 'truck-rollov-spill', 'truck-rollov-spill-cement']",
-            "shared_headline_topic_core=['all', 'avenue', 'block', 'cement', 'com', 'cw34', 'fort', 'lane', 'orange', 'rollov', 'spill', 'truck']",
-            "shared_distinctive_token_count=67",
+            "shared_headline_topic_core=['car', 'crash']",
+            "shared_distinctive_token_count=69",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -1072,71 +920,309 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police investigate shooting at home with two adults and five children - WPBF",
-          "source_url": "https://www.wpbf.com/article/fort-pierce-police-investigate-shooting-home-south-29-street-adults-children/73931618",
-          "canonical_slug": "2026-09-21-fort-pierce-home-with-woman-4-children-struck-by-gunfire-on-avenue-l",
-          "canonical_headline": "Fort Pierce police link three Avenue L shootings, identify suspects",
+          "category_key": "martin",
+          "source_headline": "I-95 North in Martin County shut down after deadly crash involving sedan, box truck - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/28/i-95-north-martin-county-shut-down-after-deadly-crash-involving-sedan-box-truck?outputType=amp",
+          "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
+          "canonical_headline": "I-95 reopens in Martin County after fatal Honda-box truck crash, then closes again",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Fort Pierce",
-            "Fort Pierce Police Department",
-            "shooting into occupied home",
-            "children present"
-          ],
-          "novel_facts": [
-            "Shooting on South 29th Street on Sept. 27, 11:35 p.m.",
-            "700 block of South 29th Street location",
-            "Two adults and five children in home",
-            "Two bullets penetrated home including bathroom",
-            "Two spent shell casings found",
-            "Different location from Avenue L shootings"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - WPEC",
-          "source_url": "https://cbs12.com/news/local/fort-pierce-driver-accused-of-fleeing-police-twice-during-targeted-traffic-enforcement-florida-news-florida-crime-local-news-local-crime-running-from-police",
-          "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
-          "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        }
+      ],
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "I-95 northbound in Martin County reopens after fatal Honda-box truck crash, then closes again",
+      "generated_card_count": 0,
+      "elapsed_seconds": 46.375
+    },
+    {
+      "category_key": "st_lucie",
+      "category_label": "St. Lucie County",
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 10,
+      "selected_source_count": 10,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 54.012,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 54.012,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 2,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 44,
+          "baseline_anchor": "legal_case",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "city",
+            "former",
+            "fort",
+            "manager",
+            "mimms",
+            "monday",
+            "nick",
+            "pierce",
+            "tampering"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Former Fort Pierce city manager Nick Mimms' bid-tampering trial begins Monday",
+          "novelty_anchor": "arrest_or_charge",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "arrest",
+            "nearly",
+            "years"
+          ],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "original_event_context_missing"
+          ],
+          "source_title": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - cbs12.com",
+          "headline": "Jury selection underway in former Fort Pierce city manager Nick Mimms' trial"
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 44,
+          "baseline_anchor": "fire",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "construction",
+            "florida",
+            "guardrail",
+            "lucie",
+            "truck",
+            "turnpike"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Construction truck crashes through guardrail, bursts into flames on Florida's Turnpike in St. Lucie County",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "Truck crashes into guardrail and bursts into flames off the turnpike in St. Lucie County - wpbf.com",
+          "headline": "Construction truck fire on Florida's Turnpike reopens with one lane after hour-long closure"
+        }
+      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 10,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMinAJBVV95cUxQWllJSUhrbE15ajZQT2k5eF9EX2N1TFJ2aWdHbWdaYks3R1VCZWxUT1VvRkJ2M19TeU5PRkZhbXQtTy00NkduSVl5RUxvdkVBbTNNQ3V4UERXaFdUNVE4WHVSNGxxMmZBWFFYZmlSNlVLSFFzejljTjRDak81akRONWp2UG9TNXJRT0kycTBtcUFoUjZrUkVITWhVMkZESzg0N3NTeXRKTDNWSFZhbzFEUzFrU1hqUHU1SGdKVHQwZURLbWJYcmdJMGV2WUhsZHZLOWpxb0J0TkJNNFVGYjhybmZIem9tMGhOUUZEVl9JNHJ4TlVIcFRxMG5PcFpzOWlDLWVUNnVmUEhBNmNVZEkxZ0lpTmx0WWpld1phSQ",
+          "editorial_story_id": "story_017609",
+          "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
+          "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - WPEC",
-          "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
+          "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
+          "editorial_story_id": "story_017442",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - cw34.com",
+          "source_url": "https://cw34.com/news/local/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue?teaserSource=trending",
+          "editorial_story_id": "story_016726",
+          "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
+          "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
+          "editorial_story_id": "story_015258",
+          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
+          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Woman arrested after stealing Broward Sheriff's cruiser, fleeing to St. Lucie County - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-county",
+          "editorial_story_id": "story_015258",
+          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
+          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cw34.com",
+          "source_url": "https://cw34.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news?teaserSource=trending",
+          "editorial_story_id": "story_015258",
+          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
+          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 4,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Truck crashes into guardrail and bursts into flames off the turnpike in St. Lucie County - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/truck-crashes-into-guardrail-and-bursts-into-flames-off-the-turnpike-in-st-lucie-county/73931359",
+          "publisher": "www.wpbf.com",
+          "canonical_slug": "2026-09-28-construction-truck-crashes-through-guardrail-bursts-into-flames-on-floridas-turn",
+          "canonical_headline": "Construction truck crashes through guardrail, bursts into flames on Florida's Turnpike in St. Lucie County",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_017671",
+            "source:https://www.wpbf.com/article/truck-crashes-into-guardrail-and-bursts-into-flames-off-the-turnpike-in-st-lucie-county/73931359"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_017671,source:https://www.wpbf.com/article/truck-crashes-into-guardrail-and-bursts-into-flames-off-the-turnpike-in-st-lucie-county/73931359",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-driver-accused-of-fleeing-police-twice-during-targeted-traffic-enforcement-florida-news-florida-crime-local-news-local-crime-running-from-police",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
+          "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
+          "basis": "event-identity-authority:exact_source_url",
+          "identity_keys": [
+            "story:story_017609"
+          ],
+          "match_confidence": 1.0,
+          "evidence_dimensions": [
+            "source_url"
+          ],
+          "decision_trace": [
+            "exact_source_url=True",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Former Fort Pierce city manager Nick Mimms heads to trial nearly 2 years after arrest - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/former-fort-pierce-city-manager-nick-mimms-heads-to-trial-nearly-2-years-after-arrestnick-mimms-nicholas-mimms-fort-pierce-former-fort-pierce-city-manager-nick-mimms-trial-fort-pierce-city-manager-trial-st-lucie-county-st-lucie-county-courthouse",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Former Fort Pierce city manager Nick Mimms' bid-tampering trial begins Monday",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_017375",
+            "source:https://cbs12.com/news/local/former-fort-pierce-city-manager-nick-mimms-heads-to-trial-nearly-2-years-after-arrestnick-mimms-nicholas-mimms-fort-pierce-former-fort-pierce-city-manager-nick-mimms-trial-fort-pierce-city-manager-trial-st-lucie-county-st-lucie-county-courthouse"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_017375,source:https://cbs12.com/news/local/former-fort-pierce-city-manager-nick-mimms-heads-to-trial-nearly-2-years-after-arrestnick-mimms-nicholas-mimms-fort-pierce-former-fort-pierce-city-manager-nick-mimms-trial-fort-pierce-city-manager-trial-st-lucie-county-st-lucie-county-courthouse",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Police: Port St. Lucie man called 911, admitted stabbing 79-year-old man - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_017442",
+            "source:https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_017442,source:https://cbs12.com/news/local/police-port-st-lucie-man-called-911-admitted-stabbing-79-year-old-man-cartavion-jermaine-merritt-79-year-old-man-44-year-old-man-911-call-port-st-lucie-crime-port-st-lucie-arrest-st-lucie-county-st-lucie-county-crime-florida-crime-florida-st",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce driver accused of fleeing police twice during targeted traffic enforcement - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMinAJBVV95cUxQWllJSUhrbE15ajZQT2k5eF9EX2N1TFJ2aWdHbWdaYks3R1VCZWxUT1VvRkJ2M19TeU5PRkZhbXQtTy00NkduSVl5RUxvdkVBbTNNQ3V4UERXaFdUNVE4WHVSNGxxMmZBWFFYZmlSNlVLSFFzejljTjRDak81akRONWp2UG9TNXJRT0kycTBtcUFoUjZrUkVITWhVMkZESzg0N3NTeXRKTDNWSFZhbzFEUzFrU1hqUHU1SGdKVHQwZURLbWJYcmdJMGV2WUhsZHZLOWpxb0J0TkJNNFVGYjhybmZIem9tMGhOUUZEVl9JNHJ4TlVIcFRxMG5PcFpzOWlDLWVUNnVmUEhBNmNVZEkxZ0lpTmx0WWpld1phSQ",
+          "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
+          "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1148,7 +1234,7 @@
           "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "canonical_is_custom": false,
           "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1160,7 +1246,22 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - WPEC",
+          "source_headline": "Truck rollover spills cement in Fort Pierce, blocks all lanes on Orange Avenue - cw34.com",
+          "source_url": "https://cw34.com/news/local/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue?teaserSource=trending",
+          "canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
+          "canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cbs12.com",
           "source_url": "https://cbs12.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news",
           "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
           "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
@@ -1187,14 +1288,29 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Stolen Broward deputy's car found on I-95 in St. Lucie County, woman arrested - cw34.com",
+          "source_url": "https://cw34.com/news/local/stolen-broward-deputys-car-found-on-i-95-in-st-lucie-county-woman-arrested-port-st-lucie-police-department-florida-highway-patrol-st-lucie-county-jail-florida-news?teaserSource=trending",
+          "canonical_slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
+          "canonical_headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie man admits intent to kill father after stabbing, victim remains intubated",
+      "live_hero_headline": "Port St. Lucie man arrested after stabbing 79-year-old father three times",
       "generated_card_count": 2,
-      "elapsed_seconds": 74.744
+      "elapsed_seconds": 78.592
     },
     {
       "category_key": "indian_river",
@@ -1206,154 +1322,32 @@
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.578,
+          "elapsed_seconds": 5.387,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Vero Beach parking fines double starting Oct. 1"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 5.946,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 7.578,
+      "model_elapsed_seconds": 11.332,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "hero",
-          "required": true,
-          "passed": false,
-          "headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
-          "missing": [
-            "headline_money_claim_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
-            "lead": "Vero Beach parking fines increase Wednesday, with most penalties doubling from rates set in 2011. The Vero Beach Police Department announced the changes Sunday and urged drivers to review the updated schedule before it takes effect Oct. 1.",
-            "lead_word_count": 38,
-            "headline_overlap_ratio": 0.455,
-            "new_context_token_count": 21,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "update",
-            "surname_first_reference": {
-              "required": false,
-              "passed": true,
-              "missing": [],
-              "candidates": []
-            },
-            "update_diagnostics": {
-              "required": true,
-              "passed": true,
-              "story_form": "update",
-              "lead_word_count": 38,
-              "baseline_anchor": "",
-              "baseline_present": true,
-              "baseline_anchor_present": true,
-              "baseline_details_present": true,
-              "baseline_context_hits": [
-                "2011",
-                "beach",
-                "fines",
-                "increase",
-                "most",
-                "parking",
-                "vero"
-              ],
-              "baseline_context_required": 2,
-              "canonical_context_available": true,
-              "canonical_context_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
-              "novelty_anchor": "semantic_gate_novel_fact",
-              "novelty_present": true,
-              "novelty_token_hits": [
-                "doubling",
-                "penalties"
-              ],
-              "semantic_novel_fact_hits": [
-                "announced",
-                "changes",
-                "department",
-                "drivers",
-                "police",
-                "review",
-                "schedule",
-                "sunday",
-                "updated",
-                "urged"
-              ],
-              "semantic_novel_fact_token_count": 31,
-              "missing": [],
-              "source_title": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - WPEC",
-              "headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
-            "lead": "Vero Beach parking fines increase Wednesday, with most penalties doubling from rates set in 2011. The Vero Beach Police Department announced the changes Sunday and urged drivers to review the updated schedule before it takes effect Oct. 1.",
-            "headline_money_claims": [
-              60
-            ],
-            "lead_money_claims": [],
-            "missing_money_claims": [
-              60
-            ],
-            "headline_jurisdictions": [
-              "vero_beach"
-            ],
-            "lead_jurisdictions": [
-              "vero_beach"
-            ],
-            "missing_jurisdictions": [],
-            "headline_judge_claims": [],
-            "lead_judge_claims": [],
-            "missing_judge_claims": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_money_claim_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
-            "generated_lead": "Vero Beach parking fines increase Wednesday, with most penalties doubling from rates set in 2011. The Vero Beach Police Department announced the changes Sunday and urged drivers to review the updated schedule before it takes effect Oct.",
-            "source_title": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - WPEC",
-            "source_lead": "Drivers in Vero Beach will face higher parking fines beginning Oct. 1, with several penalties set to double.",
-            "title_similarity": {
-              "score": 0.4372,
-              "overlap": 0.4545,
-              "jaccard": 0.2941,
-              "sorted_sequence": 0.6087,
-              "ordered_sequence": 0.4638,
-              "shared_token_count": 5.0
-            },
-            "lead_token_overlap": 0.615,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          },
-          "official_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
       "category_eligibility_assessed_count": 8,
@@ -1367,7 +1361,7 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
           "editorial_story_id": "story_017442",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1384,51 +1378,17 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
-      "material_update_promotion_count": 1,
+      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - WPEC",
-          "source_url": "https://cbs12.com/news/local/vero-beach-parking-fines-rising-oct-1-with-some-penalties-doubling-fire-lane-overtime-parking-parking-over-line-emergency-vehicle-tow-away-zone-",
-          "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
-          "canonical_headline": "Vero Beach doubles most parking fines starting Oct. 1, first increase since 2011",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": true,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "update_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "update_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Vero Beach parking fines",
-            "October 1 effective date",
-            "Fines doubling from $20 to $40 for timed parking",
-            "Fines doubling from $30 to $60 for other violations",
-            "First increase since 2011",
-            "Same government action by Vero Beach City Council"
-          ],
-          "novel_facts": [
-            "Vero Beach Police Department announced the increases on Sunday Sept. 28",
-            "Police urged drivers to review updated fine schedule",
-            "Specific enumeration of which violations increase: fire lane, fire hydrant, emergency vehicle zones, traffic obstruction",
-            "Police department is now actively communicating the imminent changes three days before Oct. 1 implementation"
-          ],
-          "reason": "Both articles cover the same government action: Vero Beach doubling parking fines effective Oct. 1, 2026. The incoming article provides a material update by reporting that the Police Department officially announced the increases on Sunday (Sept. 28) and is actively urging drivers to prepare for the Wednesday implementation. This is timely public notice three days before the penalties take effect. The incoming article also provides more specific detail about which violation categories are increasing. This is a material update that belongs in the existing canonical rather than a standalone follow-up, as it adds important implementation/communication details to the original council action story.",
-          "validation_errors": []
-        },
         {
           "category_key": "indian_river",
           "source_headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say",
           "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "canonical_headline": "Port St. Lucie man arrested after calling 911 to confess stabbing 79-year-old",
+          "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "canonical_is_custom": false,
           "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1480,9 +1440,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
+      "live_hero_headline": "Vero Beach parking fines double Oct. 1 for fire lanes, hydrants, tow-away zones",
       "generated_card_count": 0,
-      "elapsed_seconds": 30.96
+      "elapsed_seconds": 26.378
     }
   ]
 }
