@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T02:12:00Z",
+  "generated_at": "2026-09-29T15:18:20Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 27,
-    "rejected_count": 5,
+    "assessed_count": 32,
+    "rejected_count": 8,
     "enforced_categories": [
       "business",
       "crime",
@@ -58,12 +58,14 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
           "local_nexus_signals": [],
-          "headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct"
+          "headline": "Decision not to charge parent in Indiantown bus stop gun incident sparks heated community debate",
+          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/decision-not-to-charge-parent-in-indiantown-bus-stop-gun-incident-sparks-heated-community-debate"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -76,8 +78,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "I-95 North in Martin County reopens after deadly crash involving sedan, box truck",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/deadly-early-morning-crash-shuts-down-lanes-of-i-95-north-in-martin-county"
+          "headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct"
         }
       ]
     },
@@ -86,8 +88,8 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 1,
+      "assessed_count": 5,
+      "rejected_count": 2,
       "rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -100,7 +102,21 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Jensen Beach Boulevard shut down after construction crew strikes gas line, MCSO says - cbs12.com",
+          "headline": "Decision not to charge parent in Indiantown bus stop gun incident sparks heated community debate - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/29/decision-not-charge-parent-indiantown-bus-stop-gun-incident-sparks-heated-community-debate/"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Jensen Beach Boulevard shut down after construction crew strikes gas line, MCSO says - WPEC",
           "source_url": "https://cbs12.com/news/local/jensen-beach-boulevard-shut-down-after-construction-crew-strikes-gas-line-mcso-says-florida-news-local-news-martin-county-news"
         }
       ]
@@ -110,9 +126,29 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 1,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested",
+            "schools_education:students"
+          ],
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:indiantown"
+          ],
+          "headline": "Decision not to charge parent in Indiantown bus stop gun incident sparks heated community debate",
+          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/decision-not-to-charge-parent-in-indiantown-bus-stop-gun-incident-sparks-heated-community-debate"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -128,6 +164,24 @@
           ],
           "headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct",
           "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "local_nexus_signals": [
+            "source_locality:port st lucie"
+          ],
+          "headline": "Port St. Lucie man arrested after calling 911 to report stabbing he committed, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-arrested-after-calling-911-to-report-stabbing-he-committed-police-say"
         }
       ]
     },
@@ -154,7 +208,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 2,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -181,7 +235,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 9,
       "rejected_count": 0,
       "rejections": []
     }
