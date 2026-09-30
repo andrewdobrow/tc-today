@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-30T20:59:05Z",
+  "generated_at": "2026-09-30T22:49:51Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -11,7 +11,7 @@
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
     "assessed_count": 26,
-    "rejected_count": 4,
+    "rejected_count": 5,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,9 +34,39 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 2,
-      "rejected_count": 1,
+      "assessed_count": 4,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Rabies alert issued in Martin County after raccoon tests positive in Stuart - cw34.com",
+          "source_url": "https://cw34.com/news/local/health-alert-martin-county-residents-warned-after-raccoon-tests-positive-for-rabies-stuart-rabies-alert-60-days-south-kanner-highway-avoid-contact-wildlife-vaccination-pets-livestock"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Fort Pierce city clerk testifies about meetings in former city manager Nick Mimms corruption trial - WFLX",
+          "source_url": "https://www.wflx.com/2026/09/30/fort-pierce-city-clerk-testifies-about-meetings-former-city-manager-nick-mimms-corruption-trial/?outputType=amp"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -60,23 +90,9 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
-      "rejected_count": 2,
+      "assessed_count": 2,
+      "rejected_count": 1,
       "rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "St. Lucie County fire district attorney resigns amid hazing fallout; chief faces no-confidence vote",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-attorney-resigns-amid-hazing-fallout-chief-faces-no-confidence-vote"
-        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -98,7 +114,7 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 3,
+      "assessed_count": 1,
       "rejected_count": 1,
       "rejections": [
         {
@@ -108,15 +124,18 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:st lucie county"
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [
+            "development_project:redevelopment"
           ],
-          "headline": "St. Lucie County fire district attorney resigns amid hazing fallout; chief faces no-confidence vote",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-attorney-resigns-amid-hazing-fallout-chief-faces-no-confidence-vote"
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "local_nexus_signals": [
+            "source_locality:fort pierce"
+          ],
+          "headline": "Fort Pierce city clerk testifies about meetings in former city manager Nick Mimms corruption trial",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-city-clerk-testifies-about-meetings-in-former-city-manager-nick-mimms-corruption-trial"
         }
       ]
     },
@@ -143,7 +162,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 0,
+      "assessed_count": 2,
       "rejected_count": 0,
       "rejections": []
     },
@@ -161,7 +180,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     },
@@ -170,7 +189,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 5,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     }
