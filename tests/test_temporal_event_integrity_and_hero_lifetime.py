@@ -181,9 +181,52 @@ def test_content_override_active_until_expires_without_deleting_override(tmp_pat
     assert "article-b" in generate._load_article_content_overrides(path, now=after)
 
 
-def test_beasley_correction_override_is_present_and_time_bounded():
+def test_temporal_source_refresh_flags_near_term_scheduled_execution():
+    source = {
+        "title": "Florida is set to execute a 77-year-old man convicted of a 1995 murder",
+        "summary": (
+            "Curtis Wilkie Beasley is scheduled Tuesday to become Florida's 16th execution "
+            "this year and is set to receive a lethal injection at 6 p.m."
+        ),
+    }
+    assert generate._temporal_source_refresh_interval(source) == 3600
+
+
+def test_temporal_source_refresh_leaves_stable_reporting_on_normal_cache_window():
+    source = {
+        "title": "Port St. Lucie removes 18 Flock cameras",
+        "summary": "City crews removed the cameras after commissioners ended the agreement.",
+    }
+    assert generate._temporal_source_refresh_interval(source) is None
+
+
+def test_temporal_cache_max_age_invalidates_old_24_hour_entry(tmp_path):
+    cache = generate.PersistentGenerationCache(tmp_path / "cache.json")
+    key = "scheduled-event"
+    cache.put(
+        "source_text",
+        key,
+        {"text": "The execution is scheduled Tuesday at 6 p.m."},
+        ttl_seconds=86400,
+    )
+    entry = cache.payload["source_text"][key]
+    entry["cached_at"] = "2026-09-29T16:16:09Z"
+    entry["expires_at"] = "2026-09-30T16:16:09Z"
+
+    original_time = generate.time.time
+    generate.time.time = lambda: datetime.fromisoformat("2026-09-29T22:00:00+00:00").timestamp()
+    try:
+        assert cache.get("source_text", key, max_age_seconds=3600) is generate._CACHE_MISS
+        assert key not in cache.payload["source_text"]
+        assert cache.stats["source_text_age_expired"] == 1
+    finally:
+        generate.time.time = original_time
+
+
+def test_beasley_resolution_override_is_present_and_terminal():
     payload = json.loads((Path(__file__).resolve().parents[1] / "data" / "article-content-overrides.json").read_text())
     row = payload["overrides"]["2026-09-29-florida-executes-77-year-old-curtis-beasley-states-16th-this-year"]
-    assert row["headline"].startswith("Florida set to execute 77-year-old Curtis Beasley")
-    assert "scheduled for 6 p.m. Tuesday" in row["update_text"]
-    assert row["active_until"] == "2026-09-29T18:15:00-04:00"
+    assert row["headline"].startswith("Florida executes 77-year-old Curtis Beasley")
+    assert "pronounced dead at 6:12 p.m." in row["body"]
+    assert row["update_status"] == "resolved"
+    assert "active_until" not in row

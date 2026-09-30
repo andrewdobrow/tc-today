@@ -1085,6 +1085,61 @@ def _source_content_hint(source):
     })
 
 
+TEMPORAL_SOURCE_REFRESH_SECONDS = 3600
+
+
+def _temporal_source_refresh_interval(source):
+    """Return a short cache window for near-term stories whose factual state can flip.
+
+    Publisher pages are often updated in place without changing their RSS URL, title,
+    summary, or published timestamp.  A normal 24-hour source-text cache is valuable
+    for runtime, but it can freeze a story in a pre-event state after a scheduled
+    execution, vote, hearing, sentencing, launch, reopening, or similar near-term
+    event has actually happened.  Keep the ordinary cache for stable reporting and
+    revalidate only sources that combine (1) explicit future framing, (2) a near-term
+    day/clock marker, and (3) a state-transition event.
+    """
+    source = source if isinstance(source, dict) else {}
+    text = re.sub(
+        r"\s+",
+        " ",
+        " ".join(str(source.get(field) or "") for field in ("title", "summary")),
+    ).strip().lower()
+    if not text:
+        return None
+
+    future_state = bool(re.search(
+        r"\b(?:scheduled|set|slated|due|expected|planned)\b|"
+        r"\bplans?\s+to\b|\bwill\s+(?:be\s+)?(?:begin|start|end|close|reopen|"
+        r"execute|vote|meet|launch|take\s+effect|go\s+into\s+effect)\b",
+        text,
+        re.I,
+    ))
+    if not future_state:
+        return None
+
+    near_term = bool(re.search(
+        r"\b(?:today|tonight|tomorrow|monday|tuesday|wednesday|thursday|friday|"
+        r"saturday|sunday|this\s+morning|this\s+afternoon|this\s+evening)\b|"
+        r"\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b",
+        text,
+        re.I,
+    ))
+    if not near_term:
+        return None
+
+    state_transition = bool(re.search(
+        r"\b(?:execut(?:e|ed|ion)|vote|voting|hearing|sentenc(?:e|ed|ing)|arraign\w*|"
+        r"trial|ruling|decision|launch\w*|landfall|reopen\w*|clos(?:e|ed|ing|ure)|"
+        r"shutdown|meeting|press\s+conference|evacuat\w*|demolit\w*|open(?:ing|s)?|"
+        r"begin\w*|start\w*|end\w*|expir\w*|deadline|take\s+effect|"
+        r"go\s+into\s+effect)\b",
+        text,
+        re.I,
+    ))
+    return TEMPORAL_SOURCE_REFRESH_SECONDS if state_transition else None
+
+
 def _focus_extracted_source_text(text, source):
     """Trim obvious publisher-page contamination before editorial identity sees it.
 
@@ -1235,18 +1290,26 @@ class PersistentGenerationCache:
         with self.lock:
             self.stats = defaultdict(int)
 
-    def get(self, bucket, key):
+    def get(self, bucket, key, max_age_seconds=None):
         with self.lock:
             entry = self.payload.get(bucket, {}).get(key)
             if not isinstance(entry, dict) or "value" not in entry:
                 self.stats[f"{bucket}_miss"] += 1
                 return _CACHE_MISS
+            now = time.time()
             expires_at = _parse_cache_time(entry.get("expires_at"))
-            if expires_at and expires_at <= time.time():
+            if expires_at and expires_at <= now:
                 self.payload[bucket].pop(key, None)
                 self.dirty = True
                 self.stats[f"{bucket}_expired"] += 1
                 return _CACHE_MISS
+            if max_age_seconds:
+                cached_at = _parse_cache_time(entry.get("cached_at"))
+                if cached_at and cached_at + float(max_age_seconds) <= now:
+                    self.payload[bucket].pop(key, None)
+                    self.dirty = True
+                    self.stats[f"{bucket}_age_expired"] += 1
+                    return _CACHE_MISS
             self.stats[f"{bucket}_hit"] += 1
             return copy.deepcopy(entry["value"])
 
@@ -4030,7 +4093,12 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 resolved = resolve_google_news_url(h.get("aggregator_url") or link, domains)
                 recovery_row["resolved_url"] = resolved
                 if resolved:
-                    full = fetch_article_text(resolved, max_words=2500, content_hint=_source_content_hint(h))
+                    full = fetch_article_text(
+                        resolved,
+                        max_words=2500,
+                        content_hint=_source_content_hint(h),
+                        refresh_interval_seconds=_temporal_source_refresh_interval(h),
+                    )
                     raw_words = _word_count(full)
                     focused = _focus_extracted_source_text(full, h)
                     words = _word_count(focused)
@@ -4067,7 +4135,12 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
             # last). The cap exists only to guard against a pathologically long or
             # junk-filled scraped page, not to save tokens — the savings were pennies and
             # the cost was dropping the exact facts the article is about.
-            full = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(h))
+            full = fetch_article_text(
+                link,
+                max_words=2500,
+                content_hint=_source_content_hint(h),
+                refresh_interval_seconds=_temporal_source_refresh_interval(h),
+            )
             raw_words = _word_count(full)
             focused = _focus_extracted_source_text(full, h)
             if focused != full:
@@ -9666,7 +9739,7 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 
-def fetch_article_text(url, max_words=2500, content_hint=""):
+def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_seconds=None):
     """Fetch readable article body text.
 
     Uses trafilatura when available, then JSON-LD articleBody, then a paragraph fallback.
@@ -9676,7 +9749,9 @@ def fetch_article_text(url, max_words=2500, content_hint=""):
         return ""
 
     cache_key = _source_text_cache_key(url, max_words, content_hint)
-    cached = GENERATION_CACHE.get("source_text", cache_key)
+    cached = GENERATION_CACHE.get(
+        "source_text", cache_key, max_age_seconds=refresh_interval_seconds
+    )
     if cached is not _CACHE_MISS:
         return str(cached.get("text", ""))
 
@@ -9685,7 +9760,9 @@ def fetch_article_text(url, max_words=2500, content_hint=""):
     # acquiring the per-source lock.
     fetch_lock = _source_fetch_lock(cache_key)
     fetch_lock.acquire()
-    cached = GENERATION_CACHE.get("source_text", cache_key)
+    cached = GENERATION_CACHE.get(
+        "source_text", cache_key, max_age_seconds=refresh_interval_seconds
+    )
     if cached is not _CACHE_MISS:
         fetch_lock.release()
         return str(cached.get("text", ""))
@@ -9699,7 +9776,11 @@ def fetch_article_text(url, max_words=2500, content_hint=""):
                 "source_text",
                 cache_key,
                 {"text": text, "word_count": len(text.split()), "url": _normalize_cache_url(url)},
-                ttl_seconds=86400 if text else 7200,
+                ttl_seconds=(
+                    int(refresh_interval_seconds)
+                    if refresh_interval_seconds
+                    else (86400 if text else 7200)
+                ),
             )
             return text
         finally:
