@@ -31,6 +31,9 @@ jobs:
       # Pin the CLI so production never depends on GitHub's unauthenticated
       # "latest release" lookup, which can be rate-limited mid-run.
       SUPABASE_CLI_VERSION: "2.117.0"
+      # Bound the expensive live identity/replay working set. Older ordinary stories
+      # remain archived but stop participating in hourly same-story matching.
+      TCT_STORY_HOT_DAYS: "14"
     outputs:
       committed: ${{ steps.push.outputs.committed }}
 
@@ -43,6 +46,8 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Restore persistent generation cache
         id: generation-cache-restore
@@ -104,8 +109,14 @@ jobs:
           )
           PY
 
+      - name: Retire cold stories from live editorial working set
+        run: python scripts/compact_editorial_working_set.py --phase registry
+
       - name: Normalize persistent story registry
         run: python scripts/repair_editorial_story_registry.py
+
+      - name: Bound editorial replay working set
+        run: python scripts/compact_editorial_working_set.py --phase state
 
       - name: Bound persistent editorial audit history
         run: python scripts/compact_editorial_audit.py
@@ -442,12 +453,7 @@ jobs:
       - name: Commit and push
         id: push
         run: |
-          git config user.name "TCT Bot"
-          git config user.email "bot@treasurecoast.today"
-          git add -A
-          git diff --staged --quiet || git commit -m "Update: $(date -u '+%b %d %Y %H:%M UTC')"
-          git pull --rebase
-          git push
+          scripts/push_generated_update.sh
           echo "committed=true" >> "$GITHUB_OUTPUT"
 
   deploy:
