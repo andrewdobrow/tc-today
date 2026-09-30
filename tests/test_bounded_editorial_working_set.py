@@ -263,7 +263,7 @@ def test_production_workflow_bounds_working_set_before_normalize_and_generation(
     pytest = workflow.index("python -m pytest tests -v")
     generate = workflow.index("python -u scripts/generate.py")
     assert compact_registry < normalize < compact_state < pytest < generate
-    assert 'TCT_STORY_HOT_DAYS: "14"' in workflow
+    assert 'TCT_STORY_HOT_DAYS: "7"' in workflow
 
 
 def test_push_step_no_longer_uses_unhandled_git_pull_rebase():

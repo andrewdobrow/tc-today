@@ -29,11 +29,13 @@ from .editorial_proximity import (
 )
 from .incident_identity import find_matching_incident_story
 from .source_identity import find_matching_source_story
+from .working_set import verify_preflight_receipt
 from .unified_incident_identity import (
     evidence_from_mapping,
     find_matching_unified_incident_story,
 )
 from .registry_repair import (
+    REPAIR_VERSION,
     choose_primary_story_id,
     is_sparse_event_key,
     is_broad_event_class_key,
@@ -539,7 +541,16 @@ class StoryRegistry:
                 for token in _tokens(str(fact_value or ""))
             })
 
-        repair_registry_payload(payload)
+        preflight_receipt = verify_preflight_receipt(
+            self.path, repair_version=REPAIR_VERSION
+        )
+        if preflight_receipt is None:
+            repair_registry_payload(payload)
+        else:
+            print(
+                "  Editorial registry preflight receipt verified; "
+                "skipping duplicate full-registry repair"
+            )
         compaction = self._compact_payload_resolution_history(payload)
         previous_compaction = payload.get("history_compaction", {})
         payload["history_compaction"] = {

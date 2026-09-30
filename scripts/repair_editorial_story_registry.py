@@ -19,7 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tct_engine.registry_repair import repair_registry_payload
+from tct_engine.registry_repair import REPAIR_VERSION, repair_registry_payload
+from tct_engine.working_set import file_fingerprint, preflight_receipt_path
 
 DEFAULT_REGISTRY = ROOT / "data" / "editorial_story_registry.json"
 
@@ -87,7 +88,7 @@ def normalize_registry(path: Path = DEFAULT_REGISTRY) -> dict[str, Any]:
         _atomic_write(path, payload)
 
     final_report = reports[-1]
-    return {
+    result = {
         "changed": changed_any,
         "repair_passes": len(reports),
         "active_stories_before": active_before,
@@ -102,6 +103,25 @@ def normalize_registry(path: Path = DEFAULT_REGISTRY) -> dict[str, Any]:
         "remaining_timeline_coherence_violations": final_report.remaining_timeline_coherence_violations,
         "verification_clean": True,
     }
+
+    # The generator constructs StoryRegistry again immediately after this preflight.
+    # Bind a tiny receipt to the exact verified bytes so StoryRegistry can skip the
+    # same production-sized deterministic repair a second time. Any byte change or
+    # repair-contract version change invalidates the receipt automatically.
+    fingerprint = file_fingerprint(path)
+    if fingerprint is not None:
+        receipt = {
+            "version": 1,
+            "repair_version": REPAIR_VERSION,
+            "verification_clean": True,
+            "repair_changed": bool(changed_any),
+            "registry_fingerprint": fingerprint,
+        }
+        receipt_path = preflight_receipt_path(path)
+        _atomic_write(receipt_path, receipt)
+        result["preflight_receipt"] = str(receipt_path)
+
+    return result
 
 
 def main() -> None:
