@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-09-30T11:56:14Z",
+  "generated_at": "2026-09-30T12:49:37Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 3,
-    "placements_after": 3,
+    "placements_before": 2,
+    "placements_after": 2,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,20 +49,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 177,
+    "candidates_processed": 176,
     "routes": {
-      "generate_new": 20,
-      "skip": 157
+      "generate_new": 10,
+      "skip": 166
     },
     "eligibility": {
       "listing": 6,
       "low_value": 118,
-      "publishable": 53
+      "publishable": 52
     },
     "source_classes": {
       "aggregator": 124,
       "local_news": 29,
-      "regional_news": 22,
+      "regional_news": 21,
       "unknown": 2
     },
     "rejected_count": 6,
@@ -125,14 +125,28 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 14,
-      "same_event": 163
+      "new_story": 10,
+      "same_event": 166
     },
     "examples": [
       {
         "story_id": "story_018352",
         "title": "High gas prices have voters switching parties and voting for the first time",
         "event_key": "unknown-event-bd7ef97aab",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_018360",
+        "title": "8 things to know: Budget airline to launch BWI service this week - The Business Journals",
+        "event_key": "unknown-event-eb3cdd44a1",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -143,14 +157,15 @@
       },
       {
         "story_id": "story_018353",
-        "title": "WPTV connects with Jupiter Fire Chief",
-        "event_key": "fire-0ff4cbe007-0ff4cbe007",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "WPTV connects with Jupiter Fire Rescue ahead of Oct. 1 launch",
+        "event_key": "fire-708f5c72db-708f5c72db",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Exact source article identity: true",
+          "Normalized source URL: https://www.wptv.com/news/local-news/our-community/jupiter-tequesta-juno-beach/wptv-connects-with-jupiter-fire-chief",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -262,14 +277,15 @@
       },
       {
         "story_id": "story_018293",
-        "title": "Gerrymandering came for Kissimmee. So we hit the road to talk to voters - cfpublic.org",
-        "event_key": "unknown-event-acdb8ac7ce",
+        "title": "Gerrymandering came for Kissimmee. So we hit the road to talk to voters - Central Florida Public Media",
+        "event_key": "unknown-event-f55bcdcc0d",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMihAFBVV95cUxQY2hzcTIydlBhbkhNa3h2SjFDZnMyeENLY1ZCWHpGR24tYmlPdWFBeWJWY2UxQmt5czVnM2RhQkRPOXY4cnh2bElLZnVhNXVmQkIzX213cktpQ0pEenhMdGdlbm1mYkVBRnZwYkJSODZJd3JxQ0ZGU1JFa2Z6b3hKZHFmeUw",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -331,8 +347,8 @@
       },
       {
         "story_id": "story_017375",
-        "title": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - WPBF",
-        "event_key": "unknown-event-9654541f62",
+        "title": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - wpbf.com",
+        "event_key": "unknown-event-d0c7b7bf04",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -384,20 +400,6 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_017998",
-        "title": "Florida jury seated in trial of ex Fort Pierce City Manager Nick Mimms - Treasure Coast News",
-        "event_key": "unknown-event-2512fd50c7",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
@@ -405,6 +407,21 @@
         "story_id": "story_018352",
         "title": "High gas prices have voters switching parties and voting for the first time",
         "event_key": "unknown-event-bd7ef97aab",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_018360",
+        "title": "8 things to know: Budget airline to launch BWI service this week - The Business Journals",
+        "event_key": "unknown-event-eb3cdd44a1",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -416,15 +433,16 @@
       },
       {
         "story_id": "story_018353",
-        "title": "WPTV connects with Jupiter Fire Chief",
-        "event_key": "fire-0ff4cbe007-0ff4cbe007",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "WPTV connects with Jupiter Fire Rescue ahead of Oct. 1 launch",
+        "event_key": "fire-708f5c72db-708f5c72db",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Exact source article identity: true",
+          "Normalized source URL: https://www.wptv.com/news/local-news/our-community/jupiter-tequesta-juno-beach/wptv-connects-with-jupiter-fire-chief",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -534,15 +552,16 @@
       },
       {
         "story_id": "story_018293",
-        "title": "Gerrymandering came for Kissimmee. So we hit the road to talk to voters - cfpublic.org",
-        "event_key": "unknown-event-acdb8ac7ce",
+        "title": "Gerrymandering came for Kissimmee. So we hit the road to talk to voters - Central Florida Public Media",
+        "event_key": "unknown-event-f55bcdcc0d",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMihAFBVV95cUxQY2hzcTIydlBhbkhNa3h2SjFDZnMyeENLY1ZCWHpGR24tYmlPdWFBeWJWY2UxQmt5czVnM2RhQkRPOXY4cnh2bElLZnVhNXVmQkIzX213cktpQ0pEenhMdGdlbm1mYkVBRnZwYkJSODZJd3JxQ0ZGU1JFa2Z6b3hKZHFmeUw",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -608,8 +627,8 @@
       },
       {
         "story_id": "story_017375",
-        "title": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - WPBF",
-        "event_key": "unknown-event-9654541f62",
+        "title": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - wpbf.com",
+        "event_key": "unknown-event-d0c7b7bf04",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -680,21 +699,6 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_017375",
-        "title": "Nick Mimms trial: Prosecutor says former Fort Pierce city manager 'got caught with his hand in the cookie jar'",
-        "event_key": "unknown-event-ff565c6b7d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
@@ -714,9 +718,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 985,
-      "timeline_entries_examined": 2862,
-      "transitions_examined": 1765,
+      "stories_with_timelines": 991,
+      "timeline_entries_examined": 2874,
+      "transitions_examined": 1771,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 14,
       "high_confidence_candidate_count": 8,
@@ -2050,26 +2054,26 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 576,
+      "florida": 577,
       "treasure_coast_local": 433,
       "treasure_coast_region": 192,
-      "unknown": 1102
+      "unknown": 1105
     },
-    "average_score": 59.73
+    "average_score": 59.7
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 576,
+      "florida": 577,
       "treasure_coast_local": 433,
       "treasure_coast_region": 192,
-      "unknown": 1102
+      "unknown": 1105
     },
-    "average_priority": 4.44
+    "average_priority": 4.46
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1383,
-      "developing": 242,
+      "active": 1381,
+      "developing": 248,
       "ongoing": 677,
       "resolved": 1
     }
@@ -2110,18 +2114,18 @@
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-09-30T10:43:50Z",
     "quarantined_story_records_retained": 4154,
-    "active_story_count": 2303
+    "active_story_count": 2307
   },
   "stories": {
-    "total": 2303,
+    "total": 2307,
     "importance_levels": {
       "breaking": 1,
       "high": 48,
       "normal": 340,
-      "low": 1914,
+      "low": 1918,
       "archived": 0
     },
-    "average_importance": 10.39,
+    "average_importance": 10.41,
     "top": [
       {
         "story_id": "story_017379",
@@ -2136,7 +2140,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 13.82
+          "age_hours": 14.72
         },
         "level": "high",
         "importance_reasons": [
@@ -2177,7 +2181,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-29T22:03:25.542264+00:00",
-          "hours_since_update": 13.82,
+          "hours_since_update": 14.72,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -2195,7 +2199,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 35.59
+          "age_hours": 36.49
         },
         "level": "high",
         "importance_reasons": [
@@ -2236,7 +2240,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 35.59,
+          "hours_since_update": 36.49,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2254,7 +2258,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 8.04
+          "age_hours": 8.94
         },
         "level": "high",
         "importance_reasons": [
@@ -2292,7 +2296,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-30T03:48:11.708517+00:00",
-          "hours_since_update": 8.04,
+          "hours_since_update": 8.94,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2310,7 +2314,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 20.82
+          "age_hours": 21.71
         },
         "level": "high",
         "importance_reasons": [
@@ -2349,7 +2353,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-29T15:01:42.735572+00:00",
-          "hours_since_update": 20.82,
+          "hours_since_update": 21.71,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2367,7 +2371,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 17.69
+          "age_hours": 18.59
         },
         "level": "high",
         "importance_reasons": [
@@ -2401,7 +2405,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-09-29T18:10:14.603971+00:00",
-          "hours_since_update": 17.69,
+          "hours_since_update": 18.59,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2419,7 +2423,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 33.9
+          "age_hours": 34.8
         },
         "level": "high",
         "importance_reasons": [
@@ -2458,7 +2462,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-29T01:56:40.617429+00:00",
-          "hours_since_update": 33.9,
+          "hours_since_update": 34.8,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2476,7 +2480,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 35.58
+          "age_hours": 36.47
         },
         "level": "high",
         "importance_reasons": [
@@ -2515,7 +2519,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 35.58,
+          "hours_since_update": 36.47,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2533,7 +2537,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 130.1
+          "age_hours": 131.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2576,7 +2580,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-25T01:44:33.584920+00:00",
-          "hours_since_update": 130.1,
+          "hours_since_update": 131.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2594,7 +2598,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 49.11
+          "age_hours": 50.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2632,7 +2636,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-28T10:43:50.122383+00:00",
-          "hours_since_update": 49.11,
+          "hours_since_update": 50.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2650,7 +2654,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 35.61
+          "age_hours": 36.51
         },
         "level": "high",
         "importance_reasons": [
@@ -2702,7 +2706,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 35.61,
+          "hours_since_update": 36.51,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2720,7 +2724,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 302.38
+          "age_hours": 303.27
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2773,7 +2777,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-17T21:28:05.058852+00:00",
-          "hours_since_update": 302.38,
+          "hours_since_update": 303.27,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -2791,7 +2795,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 167.07
+          "age_hours": 167.97
         },
         "level": "high",
         "importance_reasons": [
@@ -2830,7 +2834,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-23T12:46:17.749679+00:00",
-          "hours_since_update": 167.07,
+          "hours_since_update": 167.97,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2848,7 +2852,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 140.07
+          "age_hours": 140.97
         },
         "level": "high",
         "importance_reasons": [
@@ -2887,7 +2891,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-24T15:46:17.405080+00:00",
-          "hours_since_update": 140.07,
+          "hours_since_update": 140.97,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2905,7 +2909,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 19.85
+          "age_hours": 20.75
         },
         "level": "normal",
         "importance_reasons": [
@@ -2953,7 +2957,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-29T15:59:44.983979+00:00",
-          "hours_since_update": 19.85,
+          "hours_since_update": 20.75,
           "event_count": 19,
           "timeline_entries": 19
         }
@@ -2971,7 +2975,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 8.08
+          "age_hours": 8.97
         },
         "level": "normal",
         "importance_reasons": [
@@ -3016,7 +3020,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-30T03:48:11.708517+00:00",
-          "hours_since_update": 8.08,
+          "hours_since_update": 8.97,
           "event_count": 5,
           "timeline_entries": 4
         }
@@ -3034,7 +3038,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 289.11
+          "age_hours": 290.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3077,7 +3081,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-18T10:43:58.186547+00:00",
-          "hours_since_update": 289.11,
+          "hours_since_update": 290.01,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3095,7 +3099,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 277.1
+          "age_hours": 278.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3138,7 +3142,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-18T22:44:41.448530+00:00",
-          "hours_since_update": 277.1,
+          "hours_since_update": 278.0,
           "event_count": 25,
           "timeline_entries": 25
         }
@@ -3156,7 +3160,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 297.07
+          "age_hours": 297.96
         },
         "level": "high",
         "importance_reasons": [
@@ -3199,7 +3203,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-18T02:46:44.737578+00:00",
-          "hours_since_update": 297.07,
+          "hours_since_update": 297.96,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3217,7 +3221,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 289.11
+          "age_hours": 290.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3260,7 +3264,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-18T10:43:58.186547+00:00",
-          "hours_since_update": 289.11,
+          "hours_since_update": 290.01,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3278,7 +3282,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 289.11
+          "age_hours": 290.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3322,7 +3326,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-18T10:43:58.186547+00:00",
-          "hours_since_update": 289.11,
+          "hours_since_update": 290.01,
           "event_count": 10,
           "timeline_entries": 10
         }
@@ -3332,7 +3336,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-09-30T11:54:14Z",
+    "generated_at": "2026-09-30T12:48:04Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3347,36 +3351,36 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 5,
-        "generated_live": 2,
+        "category_eligibility_archive_recovery": 4,
+        "generated_live": 1,
         "no_publishable_sources": 1,
-        "quality_gate_archive_recovery": 1
+        "quality_gate_archive_recovery": 3
       },
       "failures": {
-        "no_category_eligible_sources": 5,
-        "publication_quality_rejected": 1
+        "no_category_eligible_sources": 4,
+        "publication_quality_rejected": 3
       },
-      "model_attempt_count": 3,
-      "model_elapsed_seconds": 52.911,
-      "archive_recovery_requested_count": 7,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 44.313,
+      "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 1,
       "category_eligibility_rejection_count": 3,
-      "published_story_duplicate_suppression_count": 56,
-      "story_aware_update_context_count": 0,
+      "published_story_duplicate_suppression_count": 57,
+      "story_aware_update_context_count": 1,
       "material_update_promotion_evaluation_count": 12,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 11,
-      "material_update_promotion_model_call_count": 1
+      "material_update_promotion_cache_hit_count": 10,
+      "material_update_promotion_model_call_count": 2
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 19,
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 20,
         "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3397,7 +3401,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3421,7 +3425,7 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - WPBF",
+            "source_headline": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-fort-pierce-city-manager-trial-bidding/73949162",
             "editorial_story_id": "story_017375",
             "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
@@ -3436,16 +3440,6 @@
             "editorial_story_id": "story_017375",
             "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
             "canonical_headline": "Testimony begins in Fort Pierce ex-manager trial on bid rigging charges",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Florida Policy Institute launches 'Local Funding Cuts Calculator' to show impact if Amendment 3 passes - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxPeUw5VXEwa09aS1NkZWNRMmktWGZVY3A3bTRsS3k0dzlRbFZJLUh3Sk55Szd6RXJnc0tNZDFFd1lyaWF6WEt0a1F2Q3FnSFNjd0pCeEE5WDQ4R3BNOVItbEwzZUNtV0pWLTQxQ3hWZGpNNWx1Y0w3NDI1SnMxTjFWOEdKN3NNdlg4dEpzNkJ2SkVNVWVIWk0xVWV3WEFBTmxNWk1zT3VIVmgwUm52SUhSWUlTbzIyZlk3N0ZMSFZ5NExFc1ItemlveDA0RnZad0tFYVMwdmMzR0VyMG8tYlHSAd4BQVVfeXFMT3lMOVVxMGtPWktTZGVjUTJpLVhmVWNwN200bEt5NHc5UWxWSS1Id0pOeUs3ekVyZ3NLTWQxRXdZcmlhelhLdGtRdkNxZ0hTY3dKQnhBOVg0OEdwTTlSLWxMM2VDbVdKVi00MUN4VmRqTTVsdWNMNzQyNUpzMU4xVjhHSjdzTXZYOHRKczZCdkpFTVVlSFpNMVVld1hBQU5sTVpNc091SFZoMFJudklIUllJU28yMmZZNzdGTEhWeTRMRXNSLXppb3gwNEZ2WndLRWFTMHZjM0dFcjBvLWJR",
-            "editorial_story_id": "story_018134",
-            "canonical_slug": "2026-09-29-new-calculator-estimates-amendment-3-would-cut-7-million-in-st-lucie-county-road",
-            "canonical_headline": "New calculator estimates Amendment 3 would cut $7 million in St. Lucie County road funding",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3478,24 +3472,14 @@
             "canonical_headline": "Testimony begins in Fort Pierce ex-manager trial on bid rigging charges",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
-            "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
-            "editorial_story_id": "story_017314",
-            "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
-            "canonical_headline": "Port St. Lucie approves $971.6M budget, cuts tax rate for 11th straight year",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "local_gov",
@@ -3546,7 +3530,7 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - WPBF",
+            "source_headline": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-fort-pierce-city-manager-trial-bidding/73949162",
             "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
             "canonical_headline": "Testimony begins in Fort Pierce ex-manager trial on bid rigging charges",
@@ -3555,28 +3539,30 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
+            "cache_hit": false,
+            "model_call": true,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
             "confidence": 0.95,
             "shared_anchors": [
-              "Nick Mimms, former Fort Pierce City Manager",
-              "Bid tampering and official misconduct charges",
-              "Trial at St. Lucie County Courthouse",
+              "Nick Mimms former Fort Pierce City Manager",
+              "Trial for bid tampering and official misconduct charges",
               "Opening statements/testimony began Tuesday",
-              "City-owned properties in Lincoln Park",
-              "Nonprofit linked to his niece"
+              "St. Lucie County trial",
+              "Lincoln Park city-owned properties",
+              "Nonprofit linked to his niece",
+              "August 2024 arrest"
             ],
             "novel_facts": [
-              "Specific prosecutor quotes about steering bids to two city employees",
-              "Defense attorney Donald Murrell named and quoted",
+              "Specific prosecutor quote from Bridges about 'carefully, skillfully steered'",
+              "Defense attorney named as Donald Murrell",
               "Defense characterization of niece as 'distant niece'",
-              "Lincoln Park Young Professionals nonprofit named specifically",
-              "Mayor mentioned as expected witness"
+              "Specific nonprofit name: Lincoln Park Young Professionals",
+              "Detail that two city employees were involved, one being niece",
+              "Note that mayor expected to testify"
             ],
-            "reason": "Both articles cover the exact same trial proceeding - the Nick Mimms bid tampering trial that began with opening statements on Tuesday. The incoming article adds more granular courtroom detail (specific quotes from prosecutor Bridges and defense attorney Murrell, the nonprofit name), but these are routine trial coverage details from the same day's proceedings, not a material development that changes what readers need to know. The canonical already established that testimony began Tuesday; additional quotes and courtroom color from that same session should update the existing page rather than create a new URL.",
+            "reason": "Both articles cover the exact same trial event - the opening statements/testimony beginning Tuesday in Nick Mimms' trial on bid tampering and official misconduct charges. The incoming article adds more detailed quotes from opening statements and names the defense attorney, but these are routine trial coverage details from the same day's proceedings, not a material development. The canonical already reported that testimony began Tuesday. Additional quotes, attorney names, and witness preview do not constitute a material update requiring a new URL - they should be folded into the existing canonical story.",
             "validation_errors": []
           },
           {
@@ -3588,21 +3574,6 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Florida Policy Institute launches 'Local Funding Cuts Calculator' to show impact if Amendment 3 passes - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxPeUw5VXEwa09aS1NkZWNRMmktWGZVY3A3bTRsS3k0dzlRbFZJLUh3Sk55Szd6RXJnc0tNZDFFd1lyaWF6WEt0a1F2Q3FnSFNjd0pCeEE5WDQ4R3BNOVItbEwzZUNtV0pWLTQxQ3hWZGpNNWx1Y0w3NDI1SnMxTjFWOEdKN3NNdlg4dEpzNkJ2SkVNVWVIWk0xVWV3WEFBTmxNWk1zT3VIVmgwUm52SUhSWUlTbzIyZlk3N0ZMSFZ5NExFc1ItemlveDA0RnZad0tFYVMwdmMzR0VyMG8tYlHSAd4BQVVfeXFMT3lMOVVxMGtPWktTZGVjUTJpLVhmVWNwN200bEt5NHc5UWxWSS1Id0pOeUs3ekVyZ3NLTWQxRXdZcmlhelhLdGtRdkNxZ0hTY3dKQnhBOVg0OEdwTTlSLWxMM2VDbVdKVi00MUN4VmRqTTVsdWNMNzQyNUpzMU4xVjhHSjdzTXZYOHRKczZCdkpFTVVlSFpNMVVld1hBQU5sTVpNc091SFZoMFJudklIUllJU28yMmZZNzdGTEhWeTRMRXNSLXppb3gwNEZ2WndLRWFTMHZjM0dFcjBvLWJR",
-            "canonical_slug": "2026-09-29-new-calculator-estimates-amendment-3-would-cut-7-million-in-st-lucie-county-road",
-            "canonical_headline": "New calculator estimates Amendment 3 would cut $7 million in St. Lucie County road funding",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -3653,33 +3624,18 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Port St. Lucie leaders to vote on nearly $1B budget, lower property tax rate - WPEC",
-            "source_url": "https://cbs12.com/newsletter/port-st-lucie-leaders-to-vote-on-nearly-1b-budget-lower-property-tax-rateport-st-lucie-port-st-lucie-property-taxes-port-st-lucie-budget-property-tax-rate-millage-rate-st-lucie-county-florida-property-taxes-homeowners-taxable-property-value",
-            "canonical_slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
-            "canonical_headline": "Port St. Lucie approves $971.6M budget, cuts tax rate for 11th straight year",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 31.853
+        "elapsed_seconds": 38.849
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 11,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 10,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3688,11 +3644,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.139,
+            "elapsed_seconds": 7.494,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 6.139,
+        "model_elapsed_seconds": 7.494,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -3703,7 +3659,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -3721,8 +3677,18 @@
             "source_url": "https://www.wflx.com/2026/09/29/decision-not-charge-parent-indiantown-bus-stop-gun-incident-sparks-heated-community-debate/"
           }
         ],
-        "published_story_duplicate_suppression_count": 10,
+        "published_story_duplicate_suppression_count": 11,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Pratt Whitney and Bridge Roads intersection causes daily delays for Martin County commuters",
+            "source_url": "https://www.wptv.com/traffic/pratt-whitney-and-bridge-roads-intersection-causes-daily-delays-for-martin-county-commuters",
+            "editorial_story_id": "story_018354",
+            "canonical_slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
+            "canonical_headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Port St. Lucie man arrested after police say cocaine, meth and gun found in home with baby - WPEC",
@@ -3833,6 +3799,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
+            "source_headline": "Pratt Whitney and Bridge Roads intersection causes daily delays for Martin County commuters",
+            "source_url": "https://www.wptv.com/traffic/pratt-whitney-and-bridge-roads-intersection-causes-daily-delays-for-martin-county-commuters",
+            "canonical_slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
+            "canonical_headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Port St. Lucie man arrested after police say cocaine, meth and gun found in home with baby - WPEC",
             "source_url": "https://cbs12.com/news/local/florida-crime-news-port-st-lucie-drugs-guns-found-in-home-where-man-lived-with-baby-cocaine-meth-marijuana-stolen-ids-revolver-ammo-sw-fields-ave",
             "canonical_slug": "2026-09-29-port-st-lucie-swat-raid-uncovers-cocaine-meth-gun-in-home-with-infant",
@@ -4023,15 +4004,15 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 28.295
+        "elapsed_seconds": 32.529
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 13,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 12,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4048,7 +4029,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
@@ -4090,8 +4071,18 @@
             "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/decision-not-to-charge-parent-in-indiantown-bus-stop-gun-incident-sparks-heated-community-debate"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "Pratt Whitney and Bridge Roads intersection causes daily delays for Martin County commuters",
+            "source_url": "https://www.wptv.com/traffic/pratt-whitney-and-bridge-roads-intersection-causes-daily-delays-for-martin-county-commuters",
+            "editorial_story_id": "story_018354",
+            "canonical_slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
+            "canonical_headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "2 new Florida laws crack down on adults who exploit children",
@@ -4150,6 +4141,21 @@
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "business",
+            "source_headline": "Pratt Whitney and Bridge Roads intersection causes daily delays for Martin County commuters",
+            "source_url": "https://www.wptv.com/traffic/pratt-whitney-and-bridge-roads-intersection-causes-daily-delays-for-martin-county-commuters",
+            "canonical_slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
+            "canonical_headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "business",
             "source_headline": "2 new Florida laws crack down on adults who exploit children",
@@ -4242,7 +4248,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.087
+        "elapsed_seconds": 15.037
       },
       {
         "category_key": "sports",
@@ -4280,7 +4286,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 10.075
+        "elapsed_seconds": 8.535
       },
       {
         "category_key": "things_to_do",
@@ -4312,7 +4318,7 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "things_to_do",
-            "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+            "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318",
             "editorial_story_id": "story_000091",
             "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
@@ -4330,7 +4336,7 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "things_to_do",
-            "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+            "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-fun-things-treasure-coast-palm-beach-weekend-county/73883318",
             "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
             "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
@@ -4347,12 +4353,12 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Bacon BBQ Festival Sept. 26-27 at MIDFLORIDA Event Center in Port St. Lucie",
-              "Outrun Hunger 5K on Saturday at 7715 Forest Hill Blvd., West Palm Beach",
-              "Asian Food Festival at 100 N. Clematis St., West Palm Beach",
+              "Bacon BBQ Festival at MIDFLORIDA Event Center Sept. 26-27",
+              "Outrun Hunger 5K on Saturday 7:30 a.m. at 7715 Forest Hill Blvd",
+              "Asian Food Festival at 100 N. Clematis St.",
               "Craft Festival on NE Fourth Avenue in Delray Beach",
               "9th Annual DAStoberfest on Sunday at DAS Beer Garden in Jupiter",
-              "Art After Dark Friday performances at 1450 S. Dixie Highway, West Palm Beach"
+              "Art After Dark on Friday at 1450 S. Dixie Highway"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4361,7 +4367,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.696
+        "elapsed_seconds": 16.523
       },
       {
         "category_key": "florida",
@@ -4437,7 +4443,7 @@
             "source_url": "https://www.wptv.com/news/state/florida-is-set-to-execute-a-77-year-old-man-convicted-of-a-1995-murder",
             "editorial_story_id": "story_017953",
             "canonical_slug": "2026-09-29-florida-executes-77-year-old-curtis-beasley-states-16th-this-year",
-            "canonical_headline": "Florida set to execute 77-year-old Curtis Beasley at 6 p.m., state's 16th this year",
+            "canonical_headline": "Florida executes 77-year-old Curtis Beasley, state's 16th this year",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -4529,7 +4535,7 @@
             "source_headline": "Florida executes 77-year-old man convicted of a deadly hammer attack on a woman",
             "source_url": "https://www.wptv.com/news/state/florida-is-set-to-execute-a-77-year-old-man-convicted-of-a-1995-murder",
             "canonical_slug": "2026-09-29-florida-executes-77-year-old-curtis-beasley-states-16th-this-year",
-            "canonical_headline": "Florida set to execute 77-year-old Curtis Beasley at 6 p.m., state's 16th this year",
+            "canonical_headline": "Florida executes 77-year-old Curtis Beasley, state's 16th this year",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -4541,30 +4547,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.448
+        "elapsed_seconds": 12.195
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 5,
-        "selected_source_count": 5,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 4,
+        "selected_source_count": 4,
         "cache_hit": false,
-        "archive_recovery_requested": false,
+        "archive_recovery_requested": true,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 33.125,
+            "elapsed_seconds": 18.86,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 33.125,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 18.86,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4573,11 +4579,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Pratt Whitney and Bridge Roads intersection causes daily delays for Martin County commuters",
+            "source_url": "https://www.wptv.com/traffic/pratt-whitney-and-bridge-roads-intersection-causes-daily-delays-for-martin-county-commuters",
+            "editorial_story_id": "story_018354",
+            "canonical_slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
+            "canonical_headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
@@ -4620,7 +4636,7 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Jensen Beach Boulevard closed after construction crew strikes gas line - WPBF",
+            "source_headline": "Jensen Beach Boulevard closed after construction crew strikes gas line - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-jensen-beach-boulevard-closed-after-construction-crew-strikes-gas-line/73929586",
             "editorial_story_id": "story_017605",
             "canonical_slug": "2026-09-29-jensen-beach-boulevard-closed-after-construction-crew-strikes-gas-line",
@@ -4640,7 +4656,7 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Driver dies in crash involving box truck in Martin County - WPBF",
+            "source_headline": "Driver dies in crash involving box truck in Martin County - wpbf.com",
             "source_url": "https://www.wpbf.com/article/driver-dies-box-truck-crash-martin-county/73924070",
             "editorial_story_id": "story_017379",
             "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
@@ -4656,6 +4672,21 @@
         "material_update_promotion_cache_hit_count": 2,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Pratt Whitney and Bridge Roads intersection causes daily delays for Martin County commuters",
+            "source_url": "https://www.wptv.com/traffic/pratt-whitney-and-bridge-roads-intersection-causes-daily-delays-for-martin-county-commuters",
+            "canonical_slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
+            "canonical_headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "martin",
             "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
@@ -4750,7 +4781,7 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Jensen Beach Boulevard closed after construction crew strikes gas line - WPBF",
+            "source_headline": "Jensen Beach Boulevard closed after construction crew strikes gas line - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-jensen-beach-boulevard-closed-after-construction-crew-strikes-gas-line/73929586",
             "canonical_slug": "2026-09-29-jensen-beach-boulevard-closed-after-construction-crew-strikes-gas-line",
             "canonical_headline": "Jensen Beach Boulevard closed after construction crew strikes gas line",
@@ -4780,7 +4811,7 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Driver dies in crash involving box truck in Martin County - WPBF",
+            "source_headline": "Driver dies in crash involving box truck in Martin County - wpbf.com",
             "source_url": "https://www.wpbf.com/article/driver-dies-box-truck-crash-martin-county/73924070",
             "canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
             "canonical_headline": "I-95 northbound in Martin County reopens after fatal crash closes lanes over 7 hours",
@@ -4797,136 +4828,50 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
-        "generated_card_count": 0,
-        "elapsed_seconds": 48.137
+        "elapsed_seconds": 35.058
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 17,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 16,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.647,
+            "elapsed_seconds": 6.412,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Fiery crash blocks right lane on Florida's Turnpike South near Fort Pierce"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 5.406,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 13.647,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 11.818,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "headline": "Fiery crash on Florida's Turnpike South near Fort Pierce blocks lane",
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": true,
-              "headline": "Fiery crash on Florida's Turnpike South near Fort Pierce blocks lane",
-              "lead": "The crash happened around 3:51 p.m. Monday, according to FL511. The collision narrowed the road to just one lane.",
-              "lead_word_count": 21,
-              "headline_overlap_ratio": 0.2,
-              "new_context_token_count": 11,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "standard",
-              "surname_first_reference": {
-                "required": false,
-                "passed": true,
-                "missing": [],
-                "candidates": []
-              },
-              "update_diagnostics": {
-                "required": false,
-                "passed": true,
-                "story_form": "standard"
-              },
-              "missing": []
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": false,
-              "headline": "Fiery crash on Florida's Turnpike South near Fort Pierce blocks lane",
-              "lead": "The crash happened around 3:51 p.m. Monday, according to FL511. The collision narrowed the road to just one lane.",
-              "headline_money_claims": [],
-              "lead_money_claims": [],
-              "missing_money_claims": [],
-              "headline_jurisdictions": [
-                "fort_pierce"
-              ],
-              "lead_jurisdictions": [],
-              "missing_jurisdictions": [
-                "fort_pierce"
-              ],
-              "headline_judge_claims": [],
-              "lead_judge_claims": [],
-              "missing_judge_claims": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": [
-                "headline_jurisdiction_missing_from_lead"
-              ]
-            },
-            "source_focus": {
-              "required": true,
-              "passed": true,
-              "generated_headline": "Fiery crash on Florida's Turnpike South near Fort Pierce blocks lane",
-              "generated_lead": "The crash happened around 3:51 p.m. Monday, according to FL511.",
-              "source_title": "Major crash on Florida's Turnpike south near Fort Pierce - WPEC",
-              "source_lead": "Now 75 ° Thu 83 ° Fri 86 ° Watch Major crash on Florida s Turnpike south near Fort Pierce by Grace Bellinghausen videoframe_272784.png Comment on this story 0 Comment Share story Share topics: Florida Turnpike Fort Pierce Traffic Crash Mile-marker Right-lane Delays FORT PIERCE, Fla. (CBS12) — An apparent fiery crash on Florida s Turnpike South is causing traffic delays near Fort Pierce. According to FL511 , the crash happened around 3:51 p.m.",
-              "title_similarity": {
-                "score": 0.7105,
-                "overlap": 0.75,
-                "jaccard": 0.5455,
-                "sorted_sequence": 0.7706,
-                "ordered_sequence": 0.8073,
-                "shared_token_count": 6.0
-              },
-              "lead_token_overlap": 0.857,
-              "missing": []
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "official_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "temporal_integrity": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 13,
+        "published_story_duplicate_suppression_count": 14,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4950,7 +4895,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - WPBF",
+            "source_headline": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-fort-pierce-city-manager-trial-bidding/73949162",
             "editorial_story_id": "story_017375",
             "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
@@ -5020,7 +4965,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man accused of stabbing father, admits intent to kill - WPBF",
+            "source_headline": "Port St. Lucie man accused of stabbing father, admits intent to kill - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-son-stabbing-father/73932418",
             "editorial_story_id": "story_017442",
             "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
@@ -5030,12 +4975,22 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Truck crashes into guardrail and bursts into flames off the turnpike in St. Lucie County - WPBF",
+            "source_headline": "Truck crashes into guardrail and bursts into flames off the turnpike in St. Lucie County - wpbf.com",
             "source_url": "https://www.wpbf.com/article/truck-crashes-into-guardrail-and-bursts-into-flames-off-the-turnpike-in-st-lucie-county/73931359",
             "editorial_story_id": "story_017671",
             "canonical_slug": "2026-09-28-construction-truck-crashes-through-guardrail-bursts-into-flames-on-floridas-turn",
             "canonical_headline": "Construction truck crashes through guardrail, bursts into flames on Florida's Turnpike in St. Lucie County",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct",
+            "editorial_story_id": "story_017375",
+            "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+            "canonical_headline": "Testimony begins in Fort Pierce ex-manager trial on bid rigging charges",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5138,7 +5093,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - WPBF",
+            "source_headline": "Testimony begins in trial for former Fort Pierce city manager accused of bid tampering - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-fort-pierce-city-manager-trial-bidding/73949162",
             "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
             "canonical_headline": "Testimony begins in Fort Pierce ex-manager trial on bid rigging charges",
@@ -5154,21 +5109,23 @@
             "semantic_action": "duplicate_use_existing_canonical",
             "confidence": 0.95,
             "shared_anchors": [
-              "Nick Mimms, former Fort Pierce City Manager",
-              "Bid tampering and official misconduct charges",
-              "Trial at St. Lucie County Courthouse",
+              "Nick Mimms former Fort Pierce City Manager",
+              "Trial for bid tampering and official misconduct charges",
               "Opening statements/testimony began Tuesday",
-              "City-owned properties in Lincoln Park",
-              "Nonprofit linked to his niece"
+              "St. Lucie County trial",
+              "Lincoln Park city-owned properties",
+              "Nonprofit linked to his niece",
+              "August 2024 arrest"
             ],
             "novel_facts": [
-              "Specific prosecutor quotes about steering bids to two city employees",
-              "Defense attorney Donald Murrell named and quoted",
+              "Specific prosecutor quote from Bridges about 'carefully, skillfully steered'",
+              "Defense attorney named as Donald Murrell",
               "Defense characterization of niece as 'distant niece'",
-              "Lincoln Park Young Professionals nonprofit named specifically",
-              "Mayor mentioned as expected witness"
+              "Specific nonprofit name: Lincoln Park Young Professionals",
+              "Detail that two city employees were involved, one being niece",
+              "Note that mayor expected to testify"
             ],
-            "reason": "Both articles cover the exact same trial proceeding - the Nick Mimms bid tampering trial that began with opening statements on Tuesday. The incoming article adds more granular courtroom detail (specific quotes from prosecutor Bridges and defense attorney Murrell, the nonprofit name), but these are routine trial coverage details from the same day's proceedings, not a material development that changes what readers need to know. The canonical already established that testimony began Tuesday; additional quotes and courtroom color from that same session should update the existing page rather than create a new URL.",
+            "reason": "Both articles cover the exact same trial event - the opening statements/testimony beginning Tuesday in Nick Mimms' trial on bid tampering and official misconduct charges. The incoming article adds more detailed quotes from opening statements and names the defense attorney, but these are routine trial coverage details from the same day's proceedings, not a material development. The canonical already reported that testimony began Tuesday. Additional quotes, attorney names, and witness preview do not constitute a material update requiring a new URL - they should be folded into the existing canonical story.",
             "validation_errors": []
           },
           {
@@ -5263,7 +5220,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man accused of stabbing father, admits intent to kill - WPBF",
+            "source_headline": "Port St. Lucie man accused of stabbing father, admits intent to kill - wpbf.com",
             "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-son-stabbing-father/73932418",
             "canonical_slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
             "canonical_headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
@@ -5278,12 +5235,27 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Truck crashes into guardrail and bursts into flames off the turnpike in St. Lucie County - WPBF",
+            "source_headline": "Truck crashes into guardrail and bursts into flames off the turnpike in St. Lucie County - wpbf.com",
             "source_url": "https://www.wpbf.com/article/truck-crashes-into-guardrail-and-bursts-into-flames-off-the-turnpike-in-st-lucie-county/73931359",
             "canonical_slug": "2026-09-28-construction-truck-crashes-through-guardrail-bursts-into-flames-on-floridas-turn",
             "canonical_headline": "Construction truck crashes through guardrail, bursts into flames on Florida's Turnpike in St. Lucie County",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Jury selection in trial of Fort Pierce city manager accused of bid tampering, official misconduct - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct",
+            "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+            "canonical_headline": "Testimony begins in Fort Pierce ex-manager trial on bid rigging charges",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5325,25 +5297,30 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Former Fort Pierce city manager on trial for bid tampering in Lincoln Park project",
-        "generated_card_count": 0,
-        "elapsed_seconds": 30.11
+        "elapsed_seconds": 25.681
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 7,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 8,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Indian River County category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 6.141,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 6.141,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5352,10 +5329,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 8,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -5399,16 +5376,6 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Driver crashes into patrol vehicle in Indian River County, narrowly missing deputy - WPBF",
-            "source_url": "https://www.wpbf.com/article/driver-crashes-into-patrol-vehicle-in-indian-river-county-narrowly-missing-deputy/73948138",
-            "editorial_story_id": "story_018314",
-            "canonical_slug": "2026-09-29-driver-crashes-into-patrol-vehicle-in-indian-river-county-nearly-hits-deputy",
-            "canonical_headline": "Driver crashes into patrol vehicle in Indian River County, nearly hits deputy",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - WPEC",
             "source_url": "https://cbs12.com/news/local/vero-beach-parking-fines-rising-oct-1-with-some-penalties-doubling-fire-lane-overtime-parking-parking-over-line-emergency-vehicle-tow-away-zone-",
             "editorial_story_id": "story_015870",
@@ -5418,8 +5385,32 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Driver crashes into patrol vehicle in Indian River County, narrowly missing deputy - wpbf.com",
+            "source_url": "https://www.wpbf.com/article/driver-crashes-into-patrol-vehicle-in-indian-river-county-narrowly-missing-deputy/73948138",
+            "publisher": "www.wpbf.com",
+            "canonical_slug": "2026-09-29-driver-crashes-into-patrol-vehicle-in-indian-river-county-nearly-hits-deputy",
+            "canonical_headline": "Driver crashes into patrol vehicle in Indian River County, nearly hits deputy",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "story:story_018314",
+              "source:https://www.wpbf.com/article/driver-crashes-into-patrol-vehicle-in-indian-river-county-narrowly-missing-deputy/73948138"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=story:story_018314,source:https://www.wpbf.com/article/driver-crashes-into-patrol-vehicle-in-indian-river-county-narrowly-missing-deputy/73948138",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -5487,21 +5478,6 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Driver crashes into patrol vehicle in Indian River County, narrowly missing deputy - WPBF",
-            "source_url": "https://www.wpbf.com/article/driver-crashes-into-patrol-vehicle-in-indian-river-county-narrowly-missing-deputy/73948138",
-            "canonical_slug": "2026-09-29-driver-crashes-into-patrol-vehicle-in-indian-river-county-nearly-hits-deputy",
-            "canonical_headline": "Driver crashes into patrol vehicle in Indian River County, nearly hits deputy",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "Vero Beach parking fines rising Oct. 1, with some penalties doubling - WPEC",
             "source_url": "https://cbs12.com/news/local/vero-beach-parking-fines-rising-oct-1-with-some-penalties-doubling-fire-lane-overtime-parking-parking-over-line-emergency-vehicle-tow-away-zone-",
             "canonical_slug": "2026-09-24-vero-beach-doubles-most-parking-fines-starting-oct-1-first-increase-since-2011",
@@ -5517,7 +5493,11 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.122
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Driver crashes into patrol vehicle in Indian River County, nearly hits deputy",
+        "generated_card_count": 0,
+        "elapsed_seconds": 25.522
       }
     ]
   }
