@@ -1085,6 +1085,50 @@ def _source_content_hint(source):
     })
 
 
+def _temporal_source_refresh_interval(source):
+    """Return a short cache max-age for high-consequence pending event coverage.
+
+    Scheduled executions can change at the last minute because of stays, delays,
+    clemency action, or confirmation after the scheduled time. A normal 24-hour
+    source-text cache can therefore preserve stale future-tense reporting long
+    after the underlying source has been updated. Refresh those sources hourly.
+    Stable reporting keeps the normal cache behavior.
+    """
+    source = source if isinstance(source, dict) else {}
+    blob = re.sub(
+        r"\s+",
+        " ",
+        " ".join(
+            str(source.get(key) or "")
+            for key in (
+                "title",
+                "headline",
+                "source_title",
+                "source_headline",
+                "summary",
+                "source_summary",
+                "article_text",
+                "source_text",
+            )
+        ),
+    ).strip().lower()
+    if not blob or ("execut" not in blob and "lethal injection" not in blob):
+        return None
+
+    future_execution_patterns = (
+        r"\b(?:is|was|remains)\s+scheduled\s+(?:on\s+\w+\s+)?to\s+(?:be\s+)?execut",
+        r"\b(?:is|was|remains)\s+(?:set|slated|due)\s+to\s+(?:be\s+)?execut",
+        r"\b(?:execution|lethal injection)\s+(?:is|was|remains)\s+(?:scheduled|set)\b",
+        r"\bscheduled\s+for\s+(?:an?\s+)?execution\b",
+        r"\bplans?\s+to\s+execut",
+        r"\bset\s+to\s+receive.{0,50}lethal injection\b",
+        r"\bscheduled\b.{0,80}\blethal injection\b",
+    )
+    if any(re.search(pattern, blob, re.I) for pattern in future_execution_patterns):
+        return 3600
+    return None
+
+
 def _focus_extracted_source_text(text, source):
     """Trim obvious publisher-page contamination before editorial identity sees it.
 
@@ -1235,18 +1279,30 @@ class PersistentGenerationCache:
         with self.lock:
             self.stats = defaultdict(int)
 
-    def get(self, bucket, key):
+    def get(self, bucket, key, max_age_seconds=None):
         with self.lock:
             entry = self.payload.get(bucket, {}).get(key)
             if not isinstance(entry, dict) or "value" not in entry:
                 self.stats[f"{bucket}_miss"] += 1
                 return _CACHE_MISS
+            now = time.time()
             expires_at = _parse_cache_time(entry.get("expires_at"))
-            if expires_at and expires_at <= time.time():
+            if expires_at and expires_at <= now:
                 self.payload[bucket].pop(key, None)
                 self.dirty = True
                 self.stats[f"{bucket}_expired"] += 1
                 return _CACHE_MISS
+            if max_age_seconds is not None:
+                try:
+                    max_age = max(0.0, float(max_age_seconds))
+                except (TypeError, ValueError):
+                    max_age = 0.0
+                cached_at = _parse_cache_time(entry.get("cached_at"))
+                if not cached_at or (now - cached_at) >= max_age:
+                    self.payload[bucket].pop(key, None)
+                    self.dirty = True
+                    self.stats[f"{bucket}_expired"] += 1
+                    return _CACHE_MISS
             self.stats[f"{bucket}_hit"] += 1
             return copy.deepcopy(entry["value"])
 
@@ -4039,7 +4095,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 resolved = resolve_google_news_url(h.get("aggregator_url") or link, domains)
                 recovery_row["resolved_url"] = resolved
                 if resolved:
-                    full = fetch_article_text(resolved, max_words=2500, content_hint=_source_content_hint(h))
+                    full = fetch_article_text(resolved, max_words=2500, content_hint=_source_content_hint(h), source=h)
                     raw_words = _word_count(full)
                     focused = _focus_extracted_source_text(full, h)
                     words = _word_count(focused)
@@ -4076,7 +4132,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
             # last). The cap exists only to guard against a pathologically long or
             # junk-filled scraped page, not to save tokens — the savings were pennies and
             # the cost was dropping the exact facts the article is about.
-            full = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(h))
+            full = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(h), source=h)
             raw_words = _word_count(full)
             focused = _focus_extracted_source_text(full, h)
             if focused != full:
@@ -9675,7 +9731,7 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 
-def fetch_article_text(url, max_words=2500, content_hint=""):
+def fetch_article_text(url, max_words=2500, content_hint="", source=None):
     """Fetch readable article body text.
 
     Uses trafilatura when available, then JSON-LD articleBody, then a paragraph fallback.
@@ -9685,7 +9741,8 @@ def fetch_article_text(url, max_words=2500, content_hint=""):
         return ""
 
     cache_key = _source_text_cache_key(url, max_words, content_hint)
-    cached = GENERATION_CACHE.get("source_text", cache_key)
+    temporal_max_age = _temporal_source_refresh_interval(source)
+    cached = GENERATION_CACHE.get("source_text", cache_key, max_age_seconds=temporal_max_age)
     if cached is not _CACHE_MISS:
         return str(cached.get("text", ""))
 
@@ -9694,7 +9751,7 @@ def fetch_article_text(url, max_words=2500, content_hint=""):
     # acquiring the per-source lock.
     fetch_lock = _source_fetch_lock(cache_key)
     fetch_lock.acquire()
-    cached = GENERATION_CACHE.get("source_text", cache_key)
+    cached = GENERATION_CACHE.get("source_text", cache_key, max_age_seconds=temporal_max_age)
     if cached is not _CACHE_MISS:
         fetch_lock.release()
         return str(cached.get("text", ""))
@@ -9850,7 +9907,7 @@ def enhance_card(card, content_bank, headlines):
     # AND aggregators (Google News links resolve to real publisher pages). This is
     # what lets crime/things-to-do cards from Google News enrich instead of being dropped.
     if not source_text and link and not is_thin and source.get("source_type") in ("full_source", "aggregator"):
-        source_text = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(source))
+        source_text = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(source), source=source)
         if source_text and len(source_text.split()) >= 140:
             source["article_text"] = source_text
             source["source_quality"] = "full"
@@ -39097,7 +39154,7 @@ def main():
             # Try to fetch full article text for the hero — much richer than RSS summary
             fetched_text = ""
             if hero_link and not _is_thin_src:
-                fetched_text = fetch_article_text(hero_link, content_hint=_source_content_hint(hero_source))
+                fetched_text = fetch_article_text(hero_link, content_hint=_source_content_hint(hero_source), source=hero_source)
                 if fetched_text:
                     print(f"  Hero article text fetched: {len(fetched_text.split())} words")
 
