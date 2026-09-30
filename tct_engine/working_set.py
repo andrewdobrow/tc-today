@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 WORKING_SET_VERSION = 1
-DEFAULT_HOT_DAYS = 21
+DEFAULT_HOT_DAYS = 14
 ONGOING_STATUSES = frozenset({"breaking", "developing", "ongoing"})
 
 
