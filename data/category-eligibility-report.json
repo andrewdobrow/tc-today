@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-30T12:48:04Z",
+  "generated_at": "2026-09-30T15:47:19Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 17,
-    "rejected_count": 3,
+    "assessed_count": 22,
+    "rejected_count": 6,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,16 +34,61 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 0,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 3,
+      "rejected_count": 3,
+      "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Toddler drowns in pond near family home in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/toddler-drowns-in-pond-near-family-home-in-martin-county-child-death-drowning-pond-drowning-martin-county-sheriffs-office-florida-news"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Toddler drowns in pond on family's property in Martin County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/toddler-drowns-in-pond-on-familys-property-in-martin-county"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Martin County Fire Rescue extinguishes tractor-trailer blaze on Florida Turnpike - cw34.com",
+          "source_url": "https://cw34.com/news/local/martin-county-fire-rescue-extinguishes-tractor-trailer-blaze-on-florida-turnpike-florida-news-florida-fire-rescue-tractor-on-fire?teaserSource=trending"
+        }
+      ]
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 2,
+      "assessed_count": 4,
       "rejected_count": 1,
       "rejections": [
         {
@@ -77,16 +122,15 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
+          "reason": "missing_primary_business_development_focus",
           "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:fatal crash"
-          ],
+          "competing_signals": [],
           "local_nexus_signals": [
-            "source_locality:treasure coast"
+            "source_locality:treasure coast",
+            "source_locality:martin county"
           ],
-          "headline": "FHP seeks help finding driver who hit, killed man in Okeechobee County",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/fhp-seeks-help-finding-driver-who-hit-killed-man-in-okeechobee-county"
+          "headline": "Toddler drowns in pond on family's property in Martin County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/toddler-drowns-in-pond-on-familys-property-in-martin-county"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -133,7 +177,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 0,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -142,7 +186,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     },
@@ -151,7 +195,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 1,
+      "assessed_count": 0,
       "rejected_count": 0,
       "rejections": []
     },
@@ -160,7 +204,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 8,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     }
