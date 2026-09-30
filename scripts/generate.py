@@ -1301,7 +1301,12 @@ class PersistentGenerationCache:
                 if not cached_at or (now - cached_at) >= max_age:
                     self.payload[bucket].pop(key, None)
                     self.dirty = True
+                    # Keep the generic expiration counter for existing telemetry,
+                    # but distinguish an explicit max-age refresh from TTL expiry.
+                    # Temporal/high-consequence sources use this to prove that the
+                    # short refresh contract is actually evicting stale source text.
                     self.stats[f"{bucket}_expired"] += 1
+                    self.stats[f"{bucket}_age_expired"] += 1
                     return _CACHE_MISS
             self.stats[f"{bucket}_hit"] += 1
             return copy.deepcopy(entry["value"])
