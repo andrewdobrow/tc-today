@@ -799,7 +799,7 @@ def test_material_update_prompt_keeps_headlines_concise_without_hard_truncation(
     assert 'do not normalize "Florida\'s Turnpike" to "Florida Turnpike"' in prompt
     assert "mile markers, exit numbers, block numbers" in prompt
     assert "Never mechanically truncate" in prompt
-    assert material_update.SEMANTIC_MATERIAL_UPDATE_VERSION == "1.3"
+    assert material_update.SEMANTIC_MATERIAL_UPDATE_VERSION == "1.4"
 
 
 
@@ -943,3 +943,96 @@ def test_recent_source_image_reconciliation_repairs_visible_fallback_without_ref
     assert '<figcaption class="img-credit">Photo: CBS12</figcaption>' in html
     assert archive[0]["image_url"] == source_image
     assert archive[0]["source_image_url"] == source_image
+
+
+def test_material_update_headline_must_retain_original_geographic_context():
+    """Sept. 30 regression: a Martin County drowning update cannot become placeless."""
+    canonical = {
+        "headline": "23-month-old drowns in pond on family property in Martin County",
+        "teaser": "A 23-month-old boy drowned in a pond on his family's Martin County property.",
+        "body": (
+            "A 23-month-old boy drowned in a pond on his family's property in Martin County. "
+            "The child was taken to a hospital after relatives found him in the water.\n\n"
+            "The Martin County Sheriff's Office investigated the drowning."
+        ),
+    }
+    incoming = {
+        "headline": "Toddler was out of sight for 10 minutes before being found in pond",
+        "teaser": "Investigators said the child was missing for no more than 10 minutes before relatives found him.",
+        "body": (
+            "The 23-month-old boy was out of sight for no more than 10 minutes before his mother "
+            "and aunt found him in the pond on the family's Martin County property. He was taken "
+            "to Cleveland Clinic South and pronounced dead."
+        ),
+    }
+    decision = {
+        "novel_facts": [
+            "The child was out of sight for no more than 10 minutes",
+            "He was pronounced dead at Cleveland Clinic South",
+        ]
+    }
+    payload = {
+        "headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South",
+        "teaser": "The boy was out of sight for no more than 10 minutes before he was found and taken to the hospital.",
+        "body": (
+            "A 23-month-old boy who drowned in a pond on his family's property in Martin County "
+            "was out of sight for no more than 10 minutes before being found by his mother and aunt. "
+            "He was taken to Cleveland Clinic South and pronounced dead.\n\n"
+            "The child had been playing on the family property before relatives noticed he was missing.\n\n"
+            "The Martin County Sheriff's Office investigated the drowning and released the additional timeline."
+        ),
+    }
+
+    result = validate_material_update(
+        payload, canonical=canonical, incoming=incoming, decision=decision
+    )
+
+    assert result["status"] == "invalid_composition"
+    assert "headline_missing_canonical_geography" in result["validation_errors"]
+    assert result["headline_canonical_geography"] == ["martin county"]
+    assert result["headline_geography_hits"] == []
+
+
+def test_material_update_headline_can_advance_while_retaining_original_geography():
+    canonical = {
+        "headline": "23-month-old drowns in pond on family property in Martin County",
+        "teaser": "A 23-month-old boy drowned in a pond on his family's Martin County property.",
+        "body": (
+            "A 23-month-old boy drowned in a pond on his family's property in Martin County. "
+            "The child was taken to a hospital after relatives found him in the water.\n\n"
+            "The Martin County Sheriff's Office investigated the drowning."
+        ),
+    }
+    incoming = {
+        "headline": "Toddler was out of sight for 10 minutes before being found in pond",
+        "teaser": "Investigators said the child was missing for no more than 10 minutes before relatives found him.",
+        "body": (
+            "The 23-month-old boy was out of sight for no more than 10 minutes before his mother "
+            "and aunt found him in the pond on the family's Martin County property. He was taken "
+            "to Cleveland Clinic South and pronounced dead."
+        ),
+    }
+    decision = {
+        "novel_facts": [
+            "The child was out of sight for no more than 10 minutes",
+            "He was pronounced dead at Cleveland Clinic South",
+        ]
+    }
+    payload = {
+        "headline": "Martin County toddler found after 10 minutes in pond, pronounced dead",
+        "teaser": "The boy was out of sight for no more than 10 minutes before he was found and taken to the hospital.",
+        "body": (
+            "A 23-month-old boy who drowned in a pond on his family's property in Martin County "
+            "was out of sight for no more than 10 minutes before being found by his mother and aunt. "
+            "He was taken to Cleveland Clinic South and pronounced dead.\n\n"
+            "The child had been playing on the family property before relatives noticed he was missing.\n\n"
+            "The Martin County Sheriff's Office investigated the drowning and released the additional timeline."
+        ),
+    }
+
+    result = validate_material_update(
+        payload, canonical=canonical, incoming=incoming, decision=decision
+    )
+
+    assert "headline_missing_canonical_geography" not in result["validation_errors"]
+    assert result["headline_geography_hits"] == ["martin county"]

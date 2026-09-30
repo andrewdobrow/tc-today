@@ -86,3 +86,51 @@ def test_override_replaces_entire_paywall_region_and_is_idempotent(tmp_path, mon
     second = article.read_text()
     assert second == first
     assert second.count('Original report:') == 1
+
+
+def test_headline_only_override_preserves_existing_body_and_descriptions(tmp_path, monkeypatch):
+    import sys
+    import types
+
+    feedparser = types.ModuleType("feedparser")
+    feedparser.parse = lambda *args, **kwargs: None
+    anthropic = types.ModuleType("anthropic")
+    anthropic.Anthropic = lambda *args, **kwargs: None
+    monkeypatch.setitem(sys.modules, "feedparser", feedparser)
+    monkeypatch.setitem(sys.modules, "anthropic", anthropic)
+    from scripts import generate
+
+    root = tmp_path / "site"
+    (root / "data").mkdir(parents=True)
+    (root / "articles").mkdir()
+    slug = "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county"
+    old_headline = "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South"
+    new_headline = "Martin County toddler drowned in family pond after being out of sight no more than 10 minutes"
+    old_description = "A 23-month-old boy drowned in a pond on his family's property in Martin County."
+    old_body = "<div class=\"article-body\"><p>Existing full article body stays exactly here.</p></div>"
+
+    (root / "data" / "article-content-overrides.json").write_text(json.dumps({
+        "version": 1,
+        "overrides": {slug: {"headline": new_headline, "update_status": "headline_context_correction"}},
+    }))
+    (root / "archive.json").write_text(json.dumps([{
+        "slug": slug,
+        "headline": old_headline,
+        "teaser": old_description,
+    }]))
+    page = f'''<html><head><title>{old_headline} | Treasure Coast Today</title>
+<meta name="description" content="{old_description}">
+<meta property="og:title" content="{old_headline} | Treasure Coast Today">
+<meta property="og:description" content="{old_description}">
+<script type="application/ld+json">{{"headline": {json.dumps(old_headline)}, "description": {json.dumps(old_description)}}}</script>
+</head><body><h1 class="article-headline">{old_headline}</h1>{old_body}<div class="article-share">share</div></body></html>'''
+    article = root / "articles" / f"{slug}.html"
+    article.write_text(page)
+
+    assert generate._apply_article_content_overrides_to_outputs(root) == 1
+    rendered = article.read_text()
+    assert new_headline in rendered
+    assert old_description in rendered
+    assert "Existing full article body stays exactly here." in rendered
+    assert "article-update" not in rendered
+    assert "Original report:" not in rendered

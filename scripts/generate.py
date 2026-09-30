@@ -2274,6 +2274,7 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
         teaser = str(ov.get("teaser") or '')
         body = str(ov.get("body") or '')
         image_url = str(ov.get("image_url") or '')
+        rewrite_body = bool(body or ov.get("update_text"))
         modified = str(ov.get("updated") or ov.get("date_modified") or '')
         update_label = str(ov.get("update_label") or 'UPDATE — Aug. 5, 2026, 11:44 p.m.:')
         update_text = str(ov.get("update_text") or '')
@@ -2281,9 +2282,11 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
         esc_headline = html_lib.escape(headline, quote=True)
         esc_teaser = html_lib.escape(teaser, quote=True)
         text = re.sub(r'<title>.*?</title>', f'<title>{esc_headline} | Treasure Coast Today</title>', text, count=1, flags=re.S)
-        text = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc_teaser}">', text, count=1)
+        if teaser:
+            text = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc_teaser}">', text, count=1)
         text = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{esc_headline} | Treasure Coast Today">', text, count=1)
-        text = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{esc_teaser}">', text, count=1)
+        if teaser:
+            text = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{esc_teaser}">', text, count=1)
         if modified:
             text = re.sub(r'<meta property="article:modified_time" content="[^"]*">', f'<meta property="article:modified_time" content="{html_lib.escape(modified, quote=True)}">', text, count=1)
         text = re.sub(r'<h1 class="article-headline">.*?</h1>', f'<h1 class="article-headline">{html_lib.escape(headline)}</h1>', text, count=1, flags=re.S)
@@ -2291,27 +2294,29 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
             text = re.sub(r'(<figure class="article-hero-image"><img src=")[^"]+', r'\1'+image_url, text, count=1)
             text = re.sub(r'(<meta property="og:image" content=")[^"]+', r'\1'+image_url, text, count=1)
             text = re.sub(r'(<meta name="twitter:image" content=")[^"]+', r'\1'+image_url, text, count=1)
-        update_html = f'<div class="article-update"><p><strong>{html_lib.escape(update_label)}</strong> {html_lib.escape(update_text)}</p></div>'
-        original_html = ''.join(f'<p>{html_lib.escape(x.strip())}</p>' for x in body.split('\n\n') if x.strip())
-        replacement = f'<div class="article-body">{update_html}<p><strong>{html_lib.escape(original_label)}</strong></p>{original_html}</div>'
-        # Article pages may already be transformed into the membership preview/paywall
-        # shell from a previous production run. Replacing only the first closing
-        # ``</div>`` is not safe because the preview/paywall region contains nested
-        # divs. That old behavior left the remainder of the prior body behind and
-        # appended another copy on every run. Replace the complete article-content
-        # region, stopping only at the stable newsletter/share boundary.
-        article_region = re.compile(
-            r'<div class="article-body(?:\s+[^"]*)?"[^>]*>.*?\s*'
-            r'(?=(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?'
-            r'<div class="article-share">)',
-            re.I | re.S,
-        )
-        text = article_region.sub(replacement + "\n", text, count=1)
+        if rewrite_body:
+            update_html = f'<div class="article-update"><p><strong>{html_lib.escape(update_label)}</strong> {html_lib.escape(update_text)}</p></div>'
+            original_html = ''.join(f'<p>{html_lib.escape(x.strip())}</p>' for x in body.split('\n\n') if x.strip())
+            replacement = f'<div class="article-body">{update_html}<p><strong>{html_lib.escape(original_label)}</strong></p>{original_html}</div>'
+            # Article pages may already be transformed into the membership preview/paywall
+            # shell from a previous production run. Replacing only the first closing
+            # ``</div>`` is not safe because the preview/paywall region contains nested
+            # divs. That old behavior left the remainder of the prior body behind and
+            # appended another copy on every run. Replace the complete article-content
+            # region, stopping only at the stable newsletter/share boundary.
+            article_region = re.compile(
+                r'<div class="article-body(?:\s+[^"]*)?"[^>]*>.*?\s*'
+                r'(?=(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?'
+                r'<div class="article-share">)',
+                re.I | re.S,
+            )
+            text = article_region.sub(replacement + "\n", text, count=1)
         # JSON-LD
         m = re.search(r'<script type="application/ld\+json">(.*?)</script>', text, re.S)
         if m:
             try:
-                ld=json.loads(m.group(1)); ld['headline']=headline; ld['description']=teaser
+                ld=json.loads(m.group(1)); ld['headline']=headline
+                if teaser: ld['description']=teaser
                 if image_url: ld['image']=[image_url]
                 if modified: ld['dateModified']=modified
                 text=text[:m.start(1)]+json.dumps(ld, ensure_ascii=False)+text[m.end(1):]
@@ -20996,6 +21001,66 @@ def _durable_custom_local_alpr_policy_identity_match(candidate, authority):
     return True, f"local-alpr-policy|st-lucie|{authority_date.isoformat()}"
 
 
+def _durable_custom_near_term_subject_identity_match(candidate, authority):
+    """Bind a near-term publisher rewording to an authoritative custom canonical.
+
+    Manually written TCT stories are permanent publication authority, but ordinary
+    statewide/government stories do not always expose a named person, precise street,
+    or one of the narrow incident keys used by the high-risk identity system. A next-
+    day publisher story can therefore describe the exact same rollout in different
+    lifecycle language (``to begin issuing`` -> ``rolls out``) and otherwise escape
+    custom authority.
+
+    This contract remains deliberately narrow: both publications must be within three
+    calendar days, any concrete locality/event-family evidence must be compatible,
+    the HEADLINES must share an ordered 3/4-word subject phrase, at least three core
+    headline concepts, and at least four distinctive source facts. Those independent
+    requirements make this a same-subject event proof rather than broad topical
+    similarity. The later source is then routed to the custom canonical where the
+    normal material-update gate decides whether anything actually changed.
+    """
+    if not isinstance(candidate, dict) or not isinstance(authority, dict):
+        return False, ""
+    if not (authority.get("is_custom") or authority.get("authoritative_custom")):
+        return False, ""
+
+    candidate_date = _cross_source_date_value(candidate)
+    authority_date = _cross_source_date_value(authority)
+    if candidate_date is None or authority_date is None:
+        return False, ""
+    if abs((candidate_date - authority_date).days) > 3:
+        return False, ""
+
+    candidate_features = _cross_source_feature_bundle(candidate)
+    authority_features = _cross_source_feature_bundle(authority)
+
+    candidate_locality = set(candidate_features.get("locality") or ()) - {"i-95"}
+    authority_locality = set(authority_features.get("locality") or ()) - {"i-95"}
+    if candidate_locality and authority_locality and not (candidate_locality & authority_locality):
+        return False, ""
+
+    candidate_families = set(candidate_features.get("event_families") or ())
+    authority_families = set(authority_features.get("event_families") or ())
+    if candidate_families and authority_families and not (candidate_families & authority_families):
+        return False, ""
+
+    shared_subjects = set(candidate_features.get("subject_phrases") or ()) & set(
+        authority_features.get("subject_phrases") or ()
+    )
+    shared_topics = set(candidate_features.get("headline_topic_tokens") or ()) & set(
+        authority_features.get("headline_topic_tokens") or ()
+    )
+    shared_distinctive = set(candidate_features.get("distinctive_tokens") or ()) & set(
+        authority_features.get("distinctive_tokens") or ()
+    )
+
+    if not shared_subjects or len(shared_topics) < 3 or len(shared_distinctive) < 4:
+        return False, ""
+
+    subject = sorted(shared_subjects, key=lambda value: (-len(value.split("-")), value))[0]
+    return True, f"near-term-custom-subject|{authority_date.isoformat()}|{subject}"
+
+
 def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     """Return a deterministic cross-origin match for archived custom authority.
 
@@ -21034,9 +21099,18 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
         if "authority_sports_award" in precomputed
         else _sports_award_identity(authority)
     )
-    if not left or not right:
-        return False, ""
-    if left["team"] != right["team"] or left["award"] != right["award"]:
+    # Preserve the more specific recurring-sports identity contract when both sides
+    # are recognizable awards. The generic near-term custom subject contract is only
+    # a fallback for stories that do not belong to a more specific durable family.
+    if left and right:
+        if left["team"] != right["team"] or left["award"] != right["award"]:
+            return False, ""
+    else:
+        near_term_match, near_term_key = _durable_custom_near_term_subject_identity_match(
+            candidate, authority
+        )
+        if near_term_match:
+            return True, near_term_key
         return False, ""
     if left["person_surname"] != right["person_surname"]:
         return False, ""

@@ -17,7 +17,7 @@ import math
 import re
 from typing import Any, Mapping
 
-SEMANTIC_MATERIAL_UPDATE_VERSION = "1.3"
+SEMANTIC_MATERIAL_UPDATE_VERSION = "1.4"
 
 _STOP_WORDS = {
     "a", "an", "and", "are", "as", "at", "be", "been", "being", "by",
@@ -35,6 +35,38 @@ _TOKEN_CANONICAL = {
     "found": "find", "finding": "find",
     "receives": "receive", "received": "receive", "receiving": "receive",
 }
+
+
+
+_HEADLINE_GEOGRAPHY_PATTERNS = {
+    "florida": r"\bflorida\b",
+    "martin county": r"\bmartin county\b",
+    "st. lucie county": r"\bst[.]? lucie county\b",
+    "indian river county": r"\bindian river county\b",
+    "port st. lucie": r"\bport st[.]? lucie\b",
+    "fort pierce": r"\bfort pierce\b",
+    "stuart": r"\bstuart\b",
+    "vero beach": r"\bvero beach\b",
+    "sebastian": r"\bsebastian\b",
+    "hobe sound": r"\bhobe sound\b",
+    "jensen beach": r"\bjensen beach\b",
+    "palm city": r"\bpalm city\b",
+    "fellsmere": r"\bfellsmere\b",
+    "indiantown": r"\bindiantown\b",
+    "florida's turnpike": r"\bflorida['’]s turnpike\b",
+    "i-95": r"\b(?:i[- ]?95|interstate 95)\b",
+}
+
+
+def _headline_geography_anchors(value: object) -> set[str]:
+    """Return meaningful named geography explicitly present in a headline.
+
+    Material-update headlines are allowed to change their angle, but dropping the
+    only place anchor can make the replacement incomprehensible to a reader who did
+    not see the original story. This is intentionally headline-only and conservative.
+    """
+    text = _plain(value).casefold()
+    return {name for name, pattern in _HEADLINE_GEOGRAPHY_PATTERNS.items() if re.search(pattern, text, re.I)}
 
 
 def _plain(value: object) -> str:
@@ -202,6 +234,12 @@ def validate_material_update(
     if headline_progression["novelty_tokens"] and not headline_progression["novelty_hits"]:
         errors.append("headline_missing_material_development")
 
+    canonical_geography = _headline_geography_anchors(canonical.get("headline"))
+    updated_geography = _headline_geography_anchors(headline)
+    geography_hits = sorted(canonical_geography & updated_geography)
+    if canonical_geography and not geography_hits:
+        errors.append("headline_missing_canonical_geography")
+
     baseline_required = min(2, len(canonical_headline_tokens))
     if baseline_required and len(baseline_hits) < baseline_required:
         errors.append("lead_missing_original_event_context")
@@ -231,6 +269,8 @@ def validate_material_update(
         "headline_changed": not headline_progression["same_as_canonical"],
         "headline_novelty_hits": headline_progression["novelty_hits"],
         "headline_novelty_tokens": headline_progression["novelty_tokens"],
+        "headline_canonical_geography": sorted(canonical_geography),
+        "headline_geography_hits": geography_hits,
         "validation_errors": errors,
     }
 
@@ -271,6 +311,7 @@ Editorial requirements:
 - Use direct, neutral local-news language. No markdown, section headings, datelines, bullet lists, or commentary.
 - Do not use direct quotes unless the exact quote appears in the supplied text.
 - The headline MUST be refreshed to foreground the material development. Do not reuse or lightly paraphrase the old canonical headline when the story state has changed. It must remain accurate and locally specific.
+- If the existing canonical headline names a meaningful place (for example Martin County, Fort Pierce, Port St. Lucie, I-95 or Florida's Turnpike), retain at least one of those original geographic anchors in the refreshed headline. A reader seeing only the new headline must still know what/where the underlying incident is.
 - Keep the refreshed headline concise and newspaper-style. Aim roughly for 65-95 characters when natural; a headline above about 110 characters should normally be rewritten more tightly instead of becoming a sentence-length summary. Preserve meaningful source-supported geographic proper names such as "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County", including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike". Keep the core development and meaningful named geography, then cut or compress secondary chronology, causal clauses, routine attribution, and granular locator details such as mile markers, exit numbers, block numbers, or street addresses unless those coordinates are themselves central to the news. Do not add formulaic labels such as "Deputies:" or "Police:" just to shorten it. Never mechanically truncate or sacrifice accuracy, clarity, or meaningful geographic specificity for length.
 - Every specific city, county, or monetary claim stated in the headline must also be explicitly stated in the FIRST paragraph.
 - The teaser must be one or two complete sentences and explain the new development in context.
@@ -344,6 +385,7 @@ def compose_material_update(
         headline_errors = {
             "headline_not_refreshed_for_material_update",
             "headline_missing_material_development",
+            "headline_missing_canonical_geography",
             "headline_too_long",
         }
         errors = set(result.get("validation_errors") or [])
@@ -358,8 +400,10 @@ def compose_material_update(
                 "Return the complete JSON object again with a NEW headline that "
                 "foregrounds at least one of the semantic gate's novel facts, reads "
                 "like a concise newspaper headline, and is at or below 110 characters "
-                "without removing meaningful named geography. Preserve official proper "
-                "names such as Florida's Turnpike exactly. Do not reuse the existing "
+                "without removing meaningful named geography. Preserve at least one "
+                "meaningful named geographic anchor from the existing canonical headline "
+                "when it contains one, and preserve official proper names such as "
+                "Florida's Turnpike exactly. Do not reuse the existing "
                 "canonical headline."
             )
             retry = _request(retry_prompt)

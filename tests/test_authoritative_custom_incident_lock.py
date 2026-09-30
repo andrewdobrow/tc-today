@@ -239,3 +239,128 @@ def test_authoritative_custom_incident_lock_still_removes_unapproved_debevec_rep
 
     assert len(removed) == 1
     assert categories[0]["hero"] is None
+
+
+def _florida_driver_license_custom():
+    return {
+        "slug": "2026-09-29-florida-begins-issuing-redesigned-driver-licenses-id-cards",
+        "headline": "Florida to begin issuing redesigned driver licenses and ID cards",
+        "teaser": (
+            "Florida will begin issuing newly redesigned driver licenses and identification "
+            "cards Sept. 30, featuring updated security elements and imagery tied to the state's history."
+        ),
+        "body": (
+            "Florida will begin issuing newly redesigned driver licenses and identification cards "
+            "on Sept. 30 at service centers statewide. The new credentials include updated security "
+            "features and new imagery."
+        ),
+        "category_key": "florida",
+        "date": "2026-09-29",
+        "first_published": "Tue, 29 Sep 2026 14:26:16 -0400",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_id": "2026-09-29-florida-new-driver-license-design",
+        "custom_publication_key": "id:2026-09-29-florida-new-driver-license-design",
+        "editorial_story_id": "custom:florida-driver-license-redesign",
+    }
+
+
+def _florida_driver_license_rollout_reprint():
+    return {
+        "headline": "Florida rolls out redesigned driver's licenses with new imagery at service center",
+        "source_headline": "Florida rolls out redesigned driver's licenses with new imagery at service center",
+        "teaser": (
+            "Florida began issuing redesigned driver licenses and identification cards at service "
+            "centers statewide with updated security elements and imagery."
+        ),
+        "body": (
+            "The newly redesigned Florida driver licenses and identification cards are now being "
+            "issued at service centers statewide. The credentials feature updated security elements "
+            "and new imagery."
+        ),
+        "source_url": "https://example.com/florida-redesigned-driver-license-rollout",
+        "category_key": "florida",
+        "published": "Wed, 30 Sep 2026 09:00:00 -0400",
+    }
+
+
+def test_near_term_custom_subject_contract_routes_driver_license_rollout_to_custom_canonical():
+    """Sept. 30 regression: next-day rollout wording must not mint a second DMV URL."""
+    g = _load_generate()
+    custom = _florida_driver_license_custom()
+    incoming = _florida_driver_license_rollout_reprint()
+
+    matched, confidence, basis = g._find_authoritative_custom_incident_match(
+        incoming, archived_customs=[custom], current_customs=[]
+    )
+
+    assert matched is custom
+    assert confidence == 100
+    assert basis.startswith("durable_custom_incident_identity:near-term-custom-subject|")
+
+
+def test_near_term_custom_subject_contract_suppresses_parallel_driver_license_placement():
+    g = _load_generate()
+    custom = _florida_driver_license_custom()
+    incoming = _florida_driver_license_rollout_reprint()
+    categories = [{"category_key": "florida", "hero": incoming, "cards": []}]
+
+    removed = g.suppress_authoritative_custom_incidents_from_live(
+        categories, archived_customs=[custom], current_customs=[]
+    )
+
+    assert len(removed) == 1
+    assert categories[0]["hero"] is None
+    assert removed[0]["canonical_slug"] == custom["slug"]
+
+
+def test_near_term_custom_subject_contract_does_not_merge_unrelated_dmv_story():
+    g = _load_generate()
+    custom = _florida_driver_license_custom()
+    unrelated = {
+        "headline": "Florida DMV warns residents about phishing messages targeting driver records",
+        "teaser": "Officials warned motorists about fraudulent messages seeking personal information.",
+        "body": "The warning concerns phishing messages and does not involve the redesigned credential rollout.",
+        "source_url": "https://example.com/florida-dmv-phishing-warning",
+        "category_key": "florida",
+        "published": "Wed, 30 Sep 2026 10:00:00 -0400",
+    }
+
+    matched, confidence, basis = g._find_authoritative_custom_incident_match(
+        unrelated, archived_customs=[custom], current_customs=[]
+    )
+
+    assert matched is None
+    assert confidence == 0
+    assert basis == ""
+
+
+def test_canonical_cleanup_repairs_already_published_driver_license_duplicate(tmp_path):
+    g = _load_generate()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (tmp_path / "data").mkdir()
+    custom = _florida_driver_license_custom()
+    duplicate = {
+        **_florida_driver_license_rollout_reprint(),
+        "slug": "2026-09-30-florida-rolls-out-redesigned-drivers-licenses-with-new-imagery-at-service-center",
+        "date": "2026-09-30",
+        "lastmod": "2026-09-30",
+        "first_published": "Wed, 30 Sep 2026 12:00:00 -0400",
+        "article_word_count": 280,
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+    (articles / f"{custom['slug']}.html").write_text("custom", encoding="utf-8")
+    (articles / f"{duplicate['slug']}.html").write_text("duplicate", encoding="utf-8")
+
+    cleaned, redirects = g.apply_canonical_story_cleanup(
+        [custom, duplicate], articles, tmp_path
+    )
+
+    assert [row["slug"] for row in cleaned] == [custom["slug"]]
+    redirect = next(row for row in redirects if row["source_slug"] == duplicate["slug"])
+    assert redirect["target_slug"] == custom["slug"]
+    assert redirect["canonical_is_custom"] is True
+    rendered = (articles / f"{duplicate['slug']}.html").read_text(encoding="utf-8")
+    assert custom["slug"] in rendered
