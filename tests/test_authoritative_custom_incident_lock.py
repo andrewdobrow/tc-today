@@ -364,3 +364,36 @@ def test_canonical_cleanup_repairs_already_published_driver_license_duplicate(tm
     assert redirect["canonical_is_custom"] is True
     rendered = (articles / f"{duplicate['slug']}.html").read_text(encoding="utf-8")
     assert custom["slug"] in rendered
+
+
+def test_known_driver_license_duplicate_slug_is_permanent_redirect_even_with_sparse_metadata(tmp_path):
+    """Repair the already-public Sept. 30 DMV URL even if its archive evidence degrades."""
+    g = _load_generate()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (tmp_path / "data").mkdir()
+    custom = _florida_driver_license_custom()
+    duplicate = {
+        "slug": next(iter(g.FLORIDA_DRIVER_LICENSE_REDIRECT_SOURCE_SLUGS)),
+        "headline": "Florida rolls out redesigned driver's licenses with new imagery at service centers statewide",
+        "date": "2026-09-30",
+        "lastmod": "2026-09-30",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        # Deliberately omit body/teaser/source facts. The prevention matcher may no
+        # longer have enough evidence, but the known escaped public URL still must
+        # remain permanently bound to the verified custom canonical.
+    }
+    (articles / f"{custom['slug']}.html").write_text("custom", encoding="utf-8")
+    (articles / f"{duplicate['slug']}.html").write_text("duplicate", encoding="utf-8")
+
+    cleaned, redirects = g.apply_canonical_story_cleanup(
+        [custom, duplicate], articles, tmp_path
+    )
+
+    assert [row["slug"] for row in cleaned] == [custom["slug"]]
+    redirect = next(row for row in redirects if row["source_slug"] == duplicate["slug"])
+    assert redirect["target_slug"] == g.FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG
+    assert redirect["canonical_is_custom"] is True
+    rendered = (articles / f"{duplicate['slug']}.html").read_text(encoding="utf-8")
+    assert g.FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG in rendered

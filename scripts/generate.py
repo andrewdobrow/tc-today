@@ -2496,6 +2496,60 @@ def _apply_article_image_overrides_to_categories(all_categories, top_cat=None, o
                 changed += 1
     return changed
 
+
+def _apply_article_content_overrides_to_categories(all_categories, top_cat=None, overrides=None):
+    """Project canonical content corrections onto live hero/card objects.
+
+    Article-content overrides used to run only after ``index.html`` was rendered. That
+    fixed the article H1 and archive row but left the homepage hero, Top Stories and
+    category cards showing the pre-correction headline until a later run happened to
+    reload the corrected archive. Apply the same canonical override to the live object
+    graph before any homepage/RSS/data surface is rendered.
+    """
+    mapping = overrides if isinstance(overrides, dict) else _load_article_content_overrides()
+    if not mapping:
+        return 0
+    changed = 0
+    seen = set()
+    categories = list(all_categories or [])
+    if isinstance(top_cat, dict):
+        categories.append(top_cat)
+    for category in categories:
+        if not isinstance(category, dict):
+            continue
+        for item in [category.get("hero")] + list(category.get("cards") or []):
+            if not isinstance(item, dict) or id(item) in seen:
+                continue
+            seen.add(id(item))
+            slug = ""
+            for field in (
+                "slug", "canonical_slug", "_archived_slug", "_resolved_permalink_slug",
+                "link", "permalink", "url",
+            ):
+                slug = _normalize_article_slug(item.get(field))
+                if slug:
+                    break
+            ov = mapping.get(slug)
+            if not ov:
+                continue
+            item_changed = False
+            for field in (
+                "headline", "teaser", "image_url", "updated", "date_modified",
+                "meaningful_update_at",
+            ):
+                value = ov.get(field)
+                if value not in (None, "") and item.get(field) != value:
+                    item[field] = value
+                    item_changed = True
+            if ov.get("headline") and item.get("title") and item.get("title") != ov.get("headline"):
+                item["title"] = ov["headline"]
+                item_changed = True
+            if item_changed:
+                item["is_meaningful_update"] = True
+                item["update_status"] = ov.get("update_status", "resolved")
+                changed += 1
+    return changed
+
 def _canonical_social_category_key(*values):
     """Resolve labels and keys to one stable social-image category key."""
     aliases = {
@@ -24551,6 +24605,18 @@ WARE_AWARD_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-07-29-st-lucie-mets-pitcher-conner-ware-named-florida-state-league-pitcher-of-the-week",
 })
 
+# Permanent custom-authority regression for Florida's Sept. 2026 redesigned driver
+# license rollout. TCT published the custom canonical the day before statewide
+# issuance began; a next-day publisher rewording escaped as a second public URL.
+# The generalized near-term custom-subject contract prevents future escapes, while
+# this explicit migration guarantees the already-public duplicate can never revive.
+FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG = (
+    "2026-09-29-florida-begins-issuing-redesigned-driver-licenses-id-cards"
+)
+FLORIDA_DRIVER_LICENSE_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-09-30-florida-rolls-out-redesigned-drivers-licenses-with-new-imagery-at-service-center",
+})
+
 # Permanent general-registry regression for the Big Taste of Martin County event.
 # The editorial registry correctly identified the WPTV source as an already-published
 # no-change story, but the forward overwrite guard quarantined the original permalink
@@ -31356,6 +31422,48 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                 "reason": (
                     "Permanent regression migration to the authoritative TCT "
                     "Conner Ware award story."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
+    # Permanent cleanup for the Sept. 30 redesigned-driver-license duplicate.
+    # The generalized near-term custom authority contract is the prevention layer;
+    # this public-slug migration is the repair layer for the URL that already escaped.
+    driver_license_canonical = next(
+        (e for e in archive if e.get("slug") == FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG),
+        None,
+    )
+    if driver_license_canonical:
+        driver_license_canonical["is_custom"] = True
+        driver_license_canonical["authoritative_custom"] = True
+        driver_license_canonical.pop("exclude_from_live_recovery", None)
+        driver_license_canonical.pop("identity_quarantine_reason", None)
+        driver_license_canonical["legacy_identity_status"] = "identified"
+        driver_license_canonical["ranking_eligible"] = True
+        for source_slug in sorted(FLORIDA_DRIVER_LICENSE_REDIRECT_SOURCE_SLUGS):
+            duplicate = next((e for e in archive if e.get("slug") == source_slug), None)
+            if duplicate:
+                _merge_category_memberships(
+                    driver_license_canonical,
+                    duplicate,
+                    driver_license_canonical.get("category_key")
+                    or duplicate.get("category_key")
+                    or "florida",
+                )
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "Florida rolls out redesigned driver's licenses with new imagery at service centers statewide"
+                ),
+                "target_slug": FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG,
+                "target_headline": driver_license_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": True,
+                "editorial_story_id": driver_license_canonical.get("editorial_story_id", ""),
+                "reason": (
+                    "Permanent regression migration for the Sept. 30 publisher reprint "
+                    "of TCT's authoritative redesigned-driver-license custom article."
                 ),
             })
             removed_slugs.add(source_slug)
@@ -39738,6 +39846,20 @@ def main():
     _detail_started = time.perf_counter()
     _validate_promoted_material_updates_committed(OUTPUT_DIR)
     apply_custom_retirements_to_archive(OUTPUT_DIR)
+    # Apply canonical content corrections before archive rebinding, hero projection,
+    # Top Stories ranking, homepage rendering, data.json, and RSS. Previously this
+    # happened only after index.html had already been written, leaving same-run
+    # headline corrections stale on cards even when the article H1 was correct.
+    _early_content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
+    _early_live_content_override_count = _apply_article_content_overrides_to_categories(
+        all_categories, top_cat
+    )
+    if _early_content_override_count or _early_live_content_override_count:
+        print(
+            "  Early article content overrides applied before live-surface rendering: "
+            f"{_early_content_override_count} canonical article(s), "
+            f"{_early_live_content_override_count} live placement(s)"
+        )
     _runtime_timing_detail("archive stage promoted-update+custom-retirement gates", _detail_started)
 
     # Publication identity reconciliation can remove duplicate archive rows and turn
@@ -39845,6 +39967,18 @@ def main():
             )
     _runtime_timing_detail("archive stage final county membership authority", _detail_started)
     _detail_started = time.perf_counter()
+
+    # Recovery/rebinding can introduce a new live object after the early correction
+    # pass. Re-project overrides once more at the final mutation boundary so the
+    # homepage hero and Top Stories can never lag behind the canonical article H1.
+    _final_live_content_override_count = _apply_article_content_overrides_to_categories(
+        all_categories, top_cat
+    )
+    if _final_live_content_override_count:
+        print(
+            "  Final live-surface content override projection updated "
+            f"{_final_live_content_override_count} placement(s)"
+        )
 
     ensure_final_live_visual_images(all_categories, top_cat, OUTPUT_DIR)
     validate_live_county_membership_authority(all_categories, top_cat, OUTPUT_DIR)

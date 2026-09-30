@@ -134,3 +134,55 @@ def test_headline_only_override_preserves_existing_body_and_descriptions(tmp_pat
     assert "Existing full article body stays exactly here." in rendered
     assert "article-update" not in rendered
     assert "Original report:" not in rendered
+
+
+def test_headline_only_override_projects_to_live_hero_and_top_story_candidate(monkeypatch):
+    import sys
+    import types
+
+    feedparser = types.ModuleType("feedparser")
+    feedparser.parse = lambda *args, **kwargs: None
+    anthropic = types.ModuleType("anthropic")
+    anthropic.Anthropic = lambda *args, **kwargs: None
+    monkeypatch.setitem(sys.modules, "feedparser", feedparser)
+    monkeypatch.setitem(sys.modules, "anthropic", anthropic)
+    from scripts import generate
+
+    slug = "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county"
+    old_headline = "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South"
+    new_headline = "Martin County toddler drowned in family pond after being out of sight no more than 10 minutes"
+    hero = {
+        "headline": old_headline,
+        "link": f"https://treasurecoast.today/articles/{slug}.html",
+    }
+    card = {
+        "headline": old_headline,
+        "_archived_slug": slug,
+    }
+    categories = [{"category_key": "martin", "hero": hero, "cards": [card]}]
+    overrides = {
+        slug: {
+            "headline": new_headline,
+            "update_status": "headline_context_correction",
+        }
+    }
+
+    changed = generate._apply_article_content_overrides_to_categories(
+        categories, categories[0], overrides=overrides
+    )
+
+    assert changed == 2
+    assert hero["headline"] == new_headline
+    assert card["headline"] == new_headline
+    assert hero["update_status"] == "headline_context_correction"
+    assert card["update_status"] == "headline_context_correction"
+
+
+def test_production_applies_content_overrides_before_homepage_and_rss_rendering():
+    source = (ROOT / "scripts" / "generate.py").read_text(encoding="utf-8")
+    early = source.index("_early_content_override_count = _apply_article_content_overrides_to_outputs")
+    homepage = source.index("index_html = render_index(all_categories, top_cat)")
+    rss = source.index('(OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat)')
+    assert early < homepage < rss
+    final_live = source.index("_final_live_content_override_count = _apply_article_content_overrides_to_categories")
+    assert early < final_live < homepage
