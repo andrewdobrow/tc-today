@@ -362,11 +362,12 @@ def test_claude_adjudication_distinguishes_duplicate_from_material_update():
     })
     duplicate = adjudicate_candidates(
         duplicate_client,
-        model="claude-sonnet-4-5",
+        model="claude-sonnet-5",
         incoming=_article("", INCOMING_HEADLINE, "2026-08-01"),
         candidates=candidates,
     )
     assert duplicate["action"] == ACTION_DUPLICATE
+    assert duplicate_client.messages.calls[0]["thinking"] == {"type": "disabled"}
 
     update_client = _Client({
         "selected_candidate_slug": CANONICAL_SLUG,

@@ -292,7 +292,7 @@ def write_assignment_editor_artifacts(
 
     The writer supports the historical two-way production-vs-Sonnet comparison and,
     when ``opus_editor_model`` is supplied, the v1.13.6.7s three-way comparison:
-    production Sonnet 4.5 vs Sonnet 5 editor vs Opus 5 editor. Both challenger
+    historical production Sonnet 4.5 vs Sonnet 5 editor vs Opus 5 editor. Both challenger
     architectures use the same production writer and deterministic final pipeline.
     """
     report_path = Path(report_path)

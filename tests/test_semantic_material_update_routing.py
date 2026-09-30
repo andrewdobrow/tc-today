@@ -244,7 +244,7 @@ def test_material_update_composer_calls_model_once_and_validates_result():
     client = _Client(_composition_payload())
     result = compose_material_update(
         client,
-        model="claude-sonnet-4-5",
+        model="claude-sonnet-5",
         canonical={"headline": CANONICAL_HEADLINE, "body": CANONICAL_BODY},
         incoming={"headline": UPDATE_HEADLINE, "body": UPDATE_BODY},
         decision=_decision(),
@@ -252,6 +252,7 @@ def test_material_update_composer_calls_model_once_and_validates_result():
     assert result["status"] == "validated"
     assert len(client.messages.calls) == 1
     assert "temperature" not in client.messages.calls[0]
+    assert client.messages.calls[0]["thinking"] == {"type": "disabled"}
 
 
 def test_material_update_rejects_stale_canonical_headline_even_when_body_is_valid():

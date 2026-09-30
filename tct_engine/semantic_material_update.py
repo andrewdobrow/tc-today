@@ -326,6 +326,8 @@ def compose_material_update(
             "max_tokens": 1800,
             "messages": [{"role": "user", "content": prompt_text}],
         }
+        if str(model or "").strip().lower().startswith("claude-sonnet-5"):
+            kwargs["thinking"] = {"type": "disabled"}
         if not hasattr(client, "with_options"):
             kwargs["timeout"] = max(1.0, float(timeout_seconds))
         response = request_client.messages.create(**kwargs)

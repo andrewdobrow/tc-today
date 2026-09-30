@@ -981,9 +981,9 @@ MODEL_BAKEOFF_PENDING = {}
 
 # v1.13.7.1y production newsroom role separation. Sonnet 5 is the live assignment
 # editor: it chooses exact story assignments, hero/supporting order, angle and urgency.
-# Sonnet 4.5 remains the writer and receives one preassigned source at a time. A repo
-# variable can fail closed to the legacy mixed generator for emergency rollback, but
-# production defaults to the separated architecture.
+# Sonnet 5 is also the production writer and receives one preassigned source at a time.
+# A repo variable can fail closed to the legacy mixed generator for emergency rollback,
+# but production defaults to the separated architecture.
 ASSIGNMENT_EDITOR_LIVE_ENABLED = os.environ.get(
     "TCT_ASSIGNMENT_EDITOR_LIVE", "true"
 ).strip().lower() in {"1", "true", "yes", "on"}
@@ -1021,8 +1021,8 @@ GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
 CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.7-balanced-headline-concision"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
-# writer. Keeping one literal contract prevents the Sonnet 5 editor -> Sonnet 4.5
-# writer experiment from drifting behind the deterministic publication guards.
+# writer. Keeping one literal contract prevents the Sonnet 5 editor/writer path from
+# drifting behind the deterministic publication guards.
 LEAD_AND_HEADLINE_INTEGRITY_STANDARD = """LEAD AND HEADLINE INTEGRITY STANDARD:
 - Write concise, newspaper-style headlines focused on the core new development. Aim roughly for 65-95 characters when natural. A headline above about 110 characters should normally be rewritten more tightly rather than allowed to become a sentence-length summary. This is an editorial rewrite trigger, NOT permission to mechanically truncate text or drop essential facts.
 - Preserve meaningful source-supported geographic proper names. NEVER shorten a headline by deleting or mangling the named place, roadway/corridor, city, county, neighborhood, facility, or landmark that materially tells readers where the story happened — for example "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County". Preserve source-supported official proper names exactly enough to retain their identity, including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike".
@@ -1083,61 +1083,6 @@ def _source_content_hint(source):
         "summary": source.get("summary", ""),
         "published": source.get("published", ""),
     })
-
-
-TEMPORAL_SOURCE_REFRESH_SECONDS = 3600
-
-
-def _temporal_source_refresh_interval(source):
-    """Return a short cache window for near-term stories whose factual state can flip.
-
-    Publisher pages are often updated in place without changing their RSS URL, title,
-    summary, or published timestamp.  A normal 24-hour source-text cache is valuable
-    for runtime, but it can freeze a story in a pre-event state after a scheduled
-    execution, vote, hearing, sentencing, launch, reopening, or similar near-term
-    event has actually happened.  Keep the ordinary cache for stable reporting and
-    revalidate only sources that combine (1) explicit future framing, (2) a near-term
-    day/clock marker, and (3) a state-transition event.
-    """
-    source = source if isinstance(source, dict) else {}
-    text = re.sub(
-        r"\s+",
-        " ",
-        " ".join(str(source.get(field) or "") for field in ("title", "summary")),
-    ).strip().lower()
-    if not text:
-        return None
-
-    future_state = bool(re.search(
-        r"\b(?:scheduled|set|slated|due|expected|planned)\b|"
-        r"\bplans?\s+to\b|\bwill\s+(?:be\s+)?(?:begin|start|end|close|reopen|"
-        r"execute|vote|meet|launch|take\s+effect|go\s+into\s+effect)\b",
-        text,
-        re.I,
-    ))
-    if not future_state:
-        return None
-
-    near_term = bool(re.search(
-        r"\b(?:today|tonight|tomorrow|monday|tuesday|wednesday|thursday|friday|"
-        r"saturday|sunday|this\s+morning|this\s+afternoon|this\s+evening)\b|"
-        r"\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b",
-        text,
-        re.I,
-    ))
-    if not near_term:
-        return None
-
-    state_transition = bool(re.search(
-        r"\b(?:execut(?:e|ed|ion)|vote|voting|hearing|sentenc(?:e|ed|ing)|arraign\w*|"
-        r"trial|ruling|decision|launch\w*|landfall|reopen\w*|clos(?:e|ed|ing|ure)|"
-        r"shutdown|meeting|press\s+conference|evacuat\w*|demolit\w*|open(?:ing|s)?|"
-        r"begin\w*|start\w*|end\w*|expir\w*|deadline|take\s+effect|"
-        r"go\s+into\s+effect)\b",
-        text,
-        re.I,
-    ))
-    return TEMPORAL_SOURCE_REFRESH_SECONDS if state_transition else None
 
 
 def _focus_extracted_source_text(text, source):
@@ -1290,26 +1235,18 @@ class PersistentGenerationCache:
         with self.lock:
             self.stats = defaultdict(int)
 
-    def get(self, bucket, key, max_age_seconds=None):
+    def get(self, bucket, key):
         with self.lock:
             entry = self.payload.get(bucket, {}).get(key)
             if not isinstance(entry, dict) or "value" not in entry:
                 self.stats[f"{bucket}_miss"] += 1
                 return _CACHE_MISS
-            now = time.time()
             expires_at = _parse_cache_time(entry.get("expires_at"))
-            if expires_at and expires_at <= now:
+            if expires_at and expires_at <= time.time():
                 self.payload[bucket].pop(key, None)
                 self.dirty = True
                 self.stats[f"{bucket}_expired"] += 1
                 return _CACHE_MISS
-            if max_age_seconds:
-                cached_at = _parse_cache_time(entry.get("cached_at"))
-                if cached_at and cached_at + float(max_age_seconds) <= now:
-                    self.payload[bucket].pop(key, None)
-                    self.dirty = True
-                    self.stats[f"{bucket}_age_expired"] += 1
-                    return _CACHE_MISS
             self.stats[f"{bucket}_hit"] += 1
             return copy.deepcopy(entry["value"])
 
@@ -1553,8 +1490,12 @@ STORY_CLASSIFICATION = None
 
 # Model selection — flip these to switch the whole pipeline between tiers.
 # TEST: running everything on Sonnet to evaluate article quality vs Haiku.
-MODEL_ARTICLES = "claude-sonnet-4-5"   # article generation, enrichment, ranking, rewrites
-MODEL_SELECTION = "claude-sonnet-4-5"  # hero selection, structural decisions
+MODEL_ARTICLES = "claude-sonnet-5"     # article generation, enrichment, ranking, rewrites
+MODEL_SELECTION = "claude-sonnet-5"    # hero selection, structural decisions
+# Sonnet 4.5 production calls ran without extended thinking. Anthropic's Sonnet 5
+# migration guidance says to disable thinking explicitly to preserve that behavior,
+# avoiding an unintended latency/token-cost increase from Sonnet 5's adaptive default.
+MIGRATED_SONNET5_THINKING = {"type": "disabled"}
 
 # v1.12.2.3 semantic registry consolidation. The model sees only a bounded set of
 # recent fuzzy candidates; it never searches the archive and never writes directly.
@@ -4093,12 +4034,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 resolved = resolve_google_news_url(h.get("aggregator_url") or link, domains)
                 recovery_row["resolved_url"] = resolved
                 if resolved:
-                    full = fetch_article_text(
-                        resolved,
-                        max_words=2500,
-                        content_hint=_source_content_hint(h),
-                        refresh_interval_seconds=_temporal_source_refresh_interval(h),
-                    )
+                    full = fetch_article_text(resolved, max_words=2500, content_hint=_source_content_hint(h))
                     raw_words = _word_count(full)
                     focused = _focus_extracted_source_text(full, h)
                     words = _word_count(focused)
@@ -4135,12 +4071,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
             # last). The cap exists only to guard against a pathologically long or
             # junk-filled scraped page, not to save tokens — the savings were pennies and
             # the cost was dropping the exact facts the article is about.
-            full = fetch_article_text(
-                link,
-                max_words=2500,
-                content_hint=_source_content_hint(h),
-                refresh_interval_seconds=_temporal_source_refresh_interval(h),
-            )
+            full = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(h))
             raw_words = _word_count(full)
             focused = _focus_extracted_source_text(full, h)
             if focused != full:
@@ -9739,7 +9670,7 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 
-def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_seconds=None):
+def fetch_article_text(url, max_words=2500, content_hint=""):
     """Fetch readable article body text.
 
     Uses trafilatura when available, then JSON-LD articleBody, then a paragraph fallback.
@@ -9749,9 +9680,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_se
         return ""
 
     cache_key = _source_text_cache_key(url, max_words, content_hint)
-    cached = GENERATION_CACHE.get(
-        "source_text", cache_key, max_age_seconds=refresh_interval_seconds
-    )
+    cached = GENERATION_CACHE.get("source_text", cache_key)
     if cached is not _CACHE_MISS:
         return str(cached.get("text", ""))
 
@@ -9760,9 +9689,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_se
     # acquiring the per-source lock.
     fetch_lock = _source_fetch_lock(cache_key)
     fetch_lock.acquire()
-    cached = GENERATION_CACHE.get(
-        "source_text", cache_key, max_age_seconds=refresh_interval_seconds
-    )
+    cached = GENERATION_CACHE.get("source_text", cache_key)
     if cached is not _CACHE_MISS:
         fetch_lock.release()
         return str(cached.get("text", ""))
@@ -9776,11 +9703,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_se
                 "source_text",
                 cache_key,
                 {"text": text, "word_count": len(text.split()), "url": _normalize_cache_url(url)},
-                ttl_seconds=(
-                    int(refresh_interval_seconds)
-                    if refresh_interval_seconds
-                    else (86400 if text else 7200)
-                ),
+                ttl_seconds=86400 if text else 7200,
             )
             return text
         finally:
@@ -9966,6 +9889,7 @@ def enhance_card(card, content_bank, headlines):
         )
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=1600,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -10024,6 +9948,7 @@ def enhance_hero_article(hero, full_text):
     try:
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=1600,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -11002,6 +10927,7 @@ def select_front_page_hero(all_categories, deterministic_only=False):
     try:
         response = client.messages.create(
             model=MODEL_SELECTION,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=500,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -11113,9 +11039,9 @@ def _run_model_bakeoff_variant(packet):
     """Run the challenger only; failures are contained and never affect publication."""
     request_kwargs = copy.deepcopy(packet.get("request_kwargs") or {})
     request_kwargs["model"] = MODEL_BAKEOFF_CHALLENGER
-    # Sonnet 5 enables adaptive thinking by default. Disable it for the first bake-off
-    # so we compare direct structured writing/selection against the non-thinking
-    # Sonnet 4.5 baseline. 8000 leaves headroom for Sonnet 5's newer tokenizer.
+    # Keep the opt-in challenger on the same direct-response contract as production.
+    # Sonnet 5 otherwise enables adaptive thinking by default, which would confound
+    # latency/cost comparisons with the migrated non-thinking production path.
     request_kwargs["thinking"] = {"type": "disabled"}
     request_kwargs["max_tokens"] = MODEL_BAKEOFF_MAX_TOKENS
     request_kwargs.pop("timeout", None)
@@ -11535,7 +11461,7 @@ def _assignment_source_by_index(packet, source_index):
 
 
 def _run_assignment_writer(packet, assignment, *, role, timeout_seconds=None):
-    """Sonnet 4.5 writes one preassigned source only; selection is already closed."""
+    """Sonnet 5 writes one preassigned source only; selection is already closed."""
     source_index = int(assignment.get("source_index"))
     source = _assignment_source_by_index(packet, source_index)
     category_key = str(packet.get("category_key") or "")
@@ -11633,6 +11559,7 @@ Writing rules:
     system_prompt = FLORIDA_SYSTEM_PROMPT if category_key == "florida" else LOCAL_SYSTEM_PROMPT
     request_kwargs = {
         "model": MODEL_ARTICLES,
+        "thinking": MIGRATED_SONNET5_THINKING,
         "max_tokens": max_tokens,
         "system": [{"type": "text", "text": system_prompt}],
         "messages": [{"role": "user", "content": prompt}],
@@ -11685,6 +11612,7 @@ Return ONLY JSON: {{"headline":"..."}}
 """
         _repair_kwargs = {
             "model": MODEL_ARTICLES,
+            "thinking": MIGRATED_SONNET5_THINKING,
             "max_tokens": 300,
             "system": [{"type": "text", "text": system_prompt}],
             "messages": [{"role": "user", "content": _repair_prompt}],
@@ -11731,6 +11659,7 @@ def _run_legacy_mixed_category_request(*, system_prompt, prompt, request_timeout
     """Run the pre-v1.13.7.1y mixed selection+writing request for rollback only."""
     request_kwargs = {
         "model": MODEL_ARTICLES,
+        "thinking": MIGRATED_SONNET5_THINKING,
         "max_tokens": 5600,
         "system": [{
             "type": "text",
@@ -11792,7 +11721,7 @@ def _run_legacy_mixed_category_request(*, system_prompt, prompt, request_timeout
 def _run_live_assignment_editor_category(
     category_key, category_label, headlines, *, timeout_seconds=None,
 ):
-    """Run the promoted Sonnet 5 editor -> Sonnet 4.5 writer production path."""
+    """Run the promoted Sonnet 5 editor -> Sonnet 5 writer production path."""
     packet = _build_assignment_editor_packet(
         category_key=category_key,
         category_label=category_label,
@@ -13237,11 +13166,14 @@ def _request_json_index_array(
                 "such as [] or [2, 5]. Do not include prose or markdown."
             )
         try:
-            response = active_client.messages.create(
-                model=model,
-                max_tokens=max_tokens,
-                messages=[{"role": "user", "content": retry_prompt}],
-            )
+            request_kwargs = {
+                "model": model,
+                "max_tokens": max_tokens,
+                "messages": [{"role": "user", "content": retry_prompt}],
+            }
+            if str(model or "").strip().lower().startswith("claude-sonnet-5"):
+                request_kwargs["thinking"] = MIGRATED_SONNET5_THINKING
+            response = active_client.messages.create(**request_kwargs)
             raw = _extract_model_text(response)
             return _parse_json_index_array(raw, max_index=max_index), attempt
         except Exception as exc:
@@ -16139,6 +16071,7 @@ def _rewrite_alert_to_article(event, area, severity, headline_txt, desc, instr):
     try:
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=900,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -22778,7 +22711,7 @@ def find_canonical_event_entry(item, archive):
     )
     try:
         resp = client.messages.create(
-            model=MODEL_SELECTION, max_tokens=12,
+            model=MODEL_SELECTION, thinking=MIGRATED_SONNET5_THINKING, max_tokens=12,
             messages=[{"role": "user", "content": prompt}],
         )
         answer = resp.content[0].text.strip().upper()
@@ -24439,7 +24372,7 @@ def confirm_same_story(new_headline, new_teaser, existing_entry):
     )
     try:
         resp = client.messages.create(
-            model=MODEL_SELECTION, max_tokens=10,
+            model=MODEL_SELECTION, thinking=MIGRATED_SONNET5_THINKING, max_tokens=10,
             messages=[{"role": "user", "content": prompt}],
         )
         answer = resp.content[0].text.strip().upper()
@@ -35651,6 +35584,7 @@ def classify_stories(feed_cache):
         try:
             resp = client.messages.create(
                 model=MODEL_SELECTION,
+                thinking=MIGRATED_SONNET5_THINKING,
                 max_tokens=3000,
                 messages=[{"role": "user", "content": prompt}],
             )

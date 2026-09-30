@@ -1177,8 +1177,13 @@ def test_promoted_live_path_runs_sonnet5_editor_then_sonnet45_single_source_writ
 
     assert len(fake.messages.calls) == 3
     assert fake.messages.calls[0]["model"] == "claude-sonnet-5"
+    # The editor was already Sonnet 5 and keeps its adaptive-thinking behavior.
+    assert "thinking" not in fake.messages.calls[0]
     assert fake.messages.calls[1]["model"] == generate.MODEL_ARTICLES
     assert fake.messages.calls[2]["model"] == generate.MODEL_ARTICLES
+    # Migrated Sonnet 4.5 writer calls preserve their former non-thinking contract.
+    assert fake.messages.calls[1]["thinking"] == {"type": "disabled"}
+    assert fake.messages.calls[2]["thinking"] == {"type": "disabled"}
     assert "Your job is ONLY editorial assignment" in fake.messages.calls[0]["messages"][0]["content"]
     assert "UNIQUE_SOURCE_TWO_FACTS" in fake.messages.calls[1]["messages"][0]["content"]
     assert "UNIQUE_SOURCE_ONE_FACTS" not in fake.messages.calls[1]["messages"][0]["content"]
@@ -1195,5 +1200,5 @@ def test_promoted_live_architecture_is_default_and_disables_three_way_shadow():
 
     assert generate.ASSIGNMENT_EDITOR_LIVE_ENABLED is True
     assert generate.ASSIGNMENT_EDITOR_MODEL == "claude-sonnet-5"
-    assert generate.MODEL_ARTICLES == "claude-sonnet-4-5"
+    assert generate.MODEL_ARTICLES == "claude-sonnet-5"
     assert generate.ASSIGNMENT_EDITOR_SHADOW_ENABLED is False

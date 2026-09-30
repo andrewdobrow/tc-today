@@ -945,6 +945,8 @@ def adjudicate_candidates(
         "max_tokens": 1200,
         "messages": [{"role": "user", "content": _prompt(incoming, candidates)}],
     }
+    if str(model or "").strip().lower().startswith("claude-sonnet-5"):
+        kwargs["thinking"] = {"type": "disabled"}
     try:
         if hasattr(client, "with_options"):
             request_client = client.with_options(
@@ -1080,6 +1082,8 @@ def adjudicate_resolution(
         "max_tokens": 1200,
         "messages": [{"role": "user", "content": _resolution_prompt(incoming, candidates, initial_decision)}],
     }
+    if str(model or "").strip().lower().startswith("claude-sonnet-5"):
+        kwargs["thinking"] = {"type": "disabled"}
     try:
         if hasattr(client, "with_options"):
             request_client = client.with_options(

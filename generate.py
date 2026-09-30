@@ -1145,8 +1145,9 @@ STORY_CLASSIFICATION = None
 
 # Model selection — flip these to switch the whole pipeline between tiers.
 # TEST: running everything on Sonnet to evaluate article quality vs Haiku.
-MODEL_ARTICLES = "claude-sonnet-4-5"   # article generation, enrichment, ranking, rewrites
-MODEL_SELECTION = "claude-sonnet-4-5"  # hero selection, structural decisions
+MODEL_ARTICLES = "claude-sonnet-5"     # article generation, enrichment, ranking, rewrites
+MODEL_SELECTION = "claude-sonnet-5"    # hero selection, structural decisions
+MIGRATED_SONNET5_THINKING = {"type": "disabled"}
 
 # v1.12.2.3 semantic registry consolidation. The model sees only a bounded set of
 # recent fuzzy candidates; it never searches the archive and never writes directly.
@@ -6986,6 +6987,7 @@ Return ONLY valid JSON:
 
     request_kwargs = {
         "model": MODEL_ARTICLES,
+        "thinking": MIGRATED_SONNET5_THINKING,
         "max_tokens": 5600,
         "system": [{
             "type": "text",
@@ -8260,6 +8262,7 @@ def enhance_card(card, content_bank, headlines):
         )
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=800,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -8310,6 +8313,7 @@ def enhance_hero_article(hero, full_text):
     try:
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=1600,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -9152,6 +9156,7 @@ def select_front_page_hero(all_categories, deterministic_only=False):
     try:
         response = client.messages.create(
             model=MODEL_SELECTION,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=500,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -9259,11 +9264,14 @@ def _request_json_index_array(
                 "such as [] or [2, 5]. Do not include prose or markdown."
             )
         try:
-            response = active_client.messages.create(
-                model=model,
-                max_tokens=max_tokens,
-                messages=[{"role": "user", "content": retry_prompt}],
-            )
+            request_kwargs = {
+                "model": model,
+                "max_tokens": max_tokens,
+                "messages": [{"role": "user", "content": retry_prompt}],
+            }
+            if str(model or "").strip().lower().startswith("claude-sonnet-5"):
+                request_kwargs["thinking"] = MIGRATED_SONNET5_THINKING
+            response = active_client.messages.create(**request_kwargs)
             raw = _extract_model_text(response)
             return _parse_json_index_array(raw, max_index=max_index), attempt
         except Exception as exc:
@@ -11693,6 +11701,7 @@ def _rewrite_alert_to_article(event, area, severity, headline_txt, desc, instr):
     try:
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=900,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -17135,7 +17144,7 @@ def find_canonical_event_entry(item, archive):
     )
     try:
         resp = client.messages.create(
-            model=MODEL_SELECTION, max_tokens=12,
+            model=MODEL_SELECTION, thinking=MIGRATED_SONNET5_THINKING, max_tokens=12,
             messages=[{"role": "user", "content": prompt}],
         )
         answer = resp.content[0].text.strip().upper()
@@ -17882,7 +17891,7 @@ def confirm_same_story(new_headline, new_teaser, existing_entry):
     )
     try:
         resp = client.messages.create(
-            model=MODEL_SELECTION, max_tokens=10,
+            model=MODEL_SELECTION, thinking=MIGRATED_SONNET5_THINKING, max_tokens=10,
             messages=[{"role": "user", "content": prompt}],
         )
         answer = resp.content[0].text.strip().upper()
@@ -26907,6 +26916,7 @@ def classify_stories(feed_cache):
     try:
         resp = client.messages.create(
             model=MODEL_SELECTION,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=3000,
             messages=[{"role": "user", "content": prompt}],
         )
