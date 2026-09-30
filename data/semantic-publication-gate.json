@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-09-30T18:53:17.174170+00:00",
+  "generated_at": "2026-09-30T20:20:26.752637+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -32,12 +32,12 @@
       ],
       "effect": "candidate_only_model_adjudication_required"
     },
-    "model": "claude-sonnet-4-5",
+    "model": "claude-sonnet-5",
     "angle_shifted_event_recall": "dense shared article facts may nominate a recent candidate even when headlines diverge; nomination never merges without model adjudication",
     "independent_followup_policy": "same-event angle changes default to canonical update; a second permalink requires model-confirmed independent public-interest value plus a distinct persistent story identity",
     "material_update_composer": {
-      "version": "1.3",
-      "model": "claude-sonnet-4-5",
+      "version": "1.4",
+      "model": "claude-sonnet-5",
       "timeout_seconds": 60.0,
       "failure_behavior": "preserve_both_pages_and_retry",
       "canonical_url_policy": "preserve_original_permalink"
@@ -62,41 +62,41 @@
     }
   },
   "summary": {
-    "evaluations": 55,
-    "candidate_pairs": 5,
+    "evaluations": 52,
+    "candidate_pairs": 3,
     "structured_conflict_overrides": 2,
     "model_calls": 3,
-    "cache_hits": 2,
-    "no_candidate_passes": 50,
-    "duplicates_preserved": 0,
-    "canonical_updates_selected": 3,
-    "new_stories_allowed": 3,
-    "retroactive_rows_retained": 49,
+    "cache_hits": 0,
+    "no_candidate_passes": 49,
+    "duplicates_preserved": 1,
+    "canonical_updates_selected": 0,
+    "new_stories_allowed": 0,
+    "retroactive_rows_retained": 51,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 2,
-    "registry_aliases_written": 2,
-    "material_update_composer_calls": 3,
-    "material_updates_applied": 2,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
+    "material_update_composer_calls": 0,
+    "material_updates_applied": 0,
     "material_update_redirects": 0,
-    "material_update_holds": 1,
-    "material_update_replays_suppressed": 1,
-    "pre_generation_materiality_evaluations": 14,
+    "material_update_holds": 0,
+    "material_update_replays_suppressed": 0,
+    "pre_generation_materiality_evaluations": 11,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 13,
+    "pre_generation_materiality_duplicates": 10,
     "pre_generation_materiality_holds": 1,
-    "pre_generation_materiality_model_calls": 1,
-    "pre_generation_materiality_cache_hits": 13,
-    "terminal_permalink_evaluations": 3,
-    "terminal_permalink_candidate_pairs": 36,
-    "terminal_permalink_model_calls": 3,
+    "pre_generation_materiality_model_calls": 5,
+    "pre_generation_materiality_cache_hits": 6,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 2,
-    "terminal_permalink_duplicates_blocked": 1,
+    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
     "late_published_skip_materiality_evaluations": 0,
@@ -114,63 +114,25 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
+      "confidence": 0.97,
       "shared_anchors": [
-        "Bruce Alexander Francis, 30",
-        "406 SW Fields Ave., Port St. Lucie",
-        "SWAT warrant served at 5:30 a.m.",
-        "Cocaine, methamphetamine, marijuana found",
-        ".22-caliber revolver and ammunition",
-        "Stolen identification documents",
-        "Infant/baby living in home",
-        "Identical source URL from WPEC/CBS12"
+        "Bruce Alexander Francis",
+        "406 SW Fields Ave.",
+        "SWAT search warrant 5:30 a.m.",
+        "same source_url",
+        "cocaine/meth/gun/stolen IDs found with baby present"
       ],
       "novel_facts": [
-        "Neighbor Gail Lucas quoted with reactions",
-        "More detailed description of drug locations (toilet, Fanta bottle with 180.5g meth)",
-        "Bond amount of $530,000",
-        "More detail about prior cocaine sale via confidential informant in September",
-        "Specific charge list enumerated",
-        "2014 felony conviction mentioned"
+        "bond set at $530,000",
+        "neighbor quote from Gail Lucas",
+        "charges breakdown detail"
       ],
-      "reason": "This is the exact same arrest event. Both articles describe the same SWAT raid at 406 SW Fields Ave. involving Bruce Alexander Francis, 30, with identical core facts (drugs, gun, infant, stolen IDs). The incoming article adds neighbor reactions, more scene detail, bond amount, and background explanation—none of which constitutes a material new update like a court ruling, new charge, victim identification, or other development that changes what readers need to know. The additional detail should be folded into the existing canonical rather than creating a new URL. The identical source URL confirms this is a republication of the same reporting.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "local_gov",
-      "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
-      "source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
-      "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-      "canonical_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Port St. Lucie City Council meeting on Monday (Sept. 29, 2026)",
-        "18 Flock cameras scheduled for removal by Sept. 30",
-        "Cameras installed in county and state rights-of-way",
-        "Program pause amid privacy concerns",
-        "Same source URL (cbs12.com article)",
-        "Residents Casey Huneycutt, Jorge Borges, Steven Greer, James Reynolds speaking at meeting",
-        "Councilman Anthony Bonna's comments on pausing the program",
-        "Federal lawsuit by Steven Greer mentioned",
-        "Police Chief Leo Niemczyk authorization requirement for remaining systems"
-      ],
-      "novel_facts": [],
-      "reason": "The incoming article is from the exact same CBS12 source URL and covers the identical City Council meeting on Monday, Sept. 29. Both articles report the same core facts: 18 cameras scheduled for removal by Sept. 30, the same resident speakers and their comments, the same councilman quotes, and the same program pause details. The incoming article is simply a fuller version of the same reporting with more extensive quotes and background context, but contains no material new updates beyond what was already established in the canonical. This is the same story from the same outlet about the same meeting.",
+      "reason": "Same source article and identical incident (same suspect, address, time, evidence) as existing canonical; added details like bond amount and neighbor reaction are routine elaboration, not material new developments.",
       "validation_errors": []
     },
     {
@@ -184,28 +146,26 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.95,
+      "confidence": 0.93,
       "shared_anchors": [
-        "Nick Mimms, former Fort Pierce City Manager",
-        "Bid tampering and official misconduct charges",
-        "Trial at St. Lucie County Courthouse",
-        "Opening statements/testimony began Tuesday",
-        "City-owned properties in Lincoln Park",
-        "Nonprofit linked to his niece"
+        "Nick Mimms",
+        "Fort Pierce City Manager",
+        "bid tampering and official misconduct charges",
+        "opening statements/testimony began Tuesday",
+        "St. Lucie County Courthouse trial",
+        "niece-linked nonprofit / Lincoln Park properties"
       ],
       "novel_facts": [
-        "Specific prosecutor quotes about steering bids to two city employees",
-        "Defense attorney Donald Murrell named and quoted",
-        "Defense characterization of niece as 'distant niece'",
-        "Lincoln Park Young Professionals nonprofit named specifically",
-        "Mayor mentioned as expected witness"
+        "Additional quotes from prosecutor Bridges and defense attorney Donald Murrell",
+        "Naming of nonprofit Lincoln Park Young Professionals",
+        "Detail that mayor and city officials expected to testify"
       ],
-      "reason": "Both articles cover the exact same trial proceeding - the Nick Mimms bid tampering trial that began with opening statements on Tuesday. The incoming article adds more granular courtroom detail (specific quotes from prosecutor Bridges and defense attorney Murrell, the nonprofit name), but these are routine trial coverage details from the same day's proceedings, not a material development that changes what readers need to know. The canonical already established that testimony began Tuesday; additional quotes and courtroom color from that same session should update the existing page rather than create a new URL.",
+      "reason": "Both articles report the same trial event (opening statements/testimony beginning Tuesday) for the same defendant, same charges, and same underlying case. The incoming article adds courtroom color and quotes but no material new fact like a verdict, new charge, or ruling.",
       "validation_errors": []
     },
     {
@@ -219,23 +179,25 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
+      "confidence": 0.97,
       "shared_anchors": [
-        "396 acres near Kanner Highway (Waterside property)",
-        "October 13 hearing date",
-        "Agricultural enclave certification request under new Florida law",
-        "Kanner/96th Street Investments LLC applicant",
-        "Martin County commissioners' November 2025 5-0 vote against residential designation",
-        "Same source URL: cbs12.com article",
-        "Published same date: 2026-09-29"
+        "Waterside property, 396 acres near Kanner Highway",
+        "Martin County Commission",
+        "October 13 hearing on agricultural enclave certification",
+        "November 2025 5-0 vote rejecting residential rezoning",
+        "same source URL and publish date"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article and canonical candidate are the exact same article from the same source (cbs12.com) published on the same date (2026-09-29). The source URLs are identical. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match': true. Both cover the same government action (agricultural enclave certification request for Waterside property, Oct. 13 hearing). The incoming article contains no new material updates beyond what is already in the canonical—both report the same hearing date, property details, fee approval, and stakeholder comments. This is a duplicate of existing coverage.",
+      "novel_facts": [
+        "Additional quotes from Greg Braun and Gil Smart opposing the law",
+        "Fee amounts approved by commissioners for application review ($8,150 and $16,600)",
+        "Statement from Jim Harvey declining comment"
+      ],
+      "reason": "Identical source URL, same property, same hearing date, and same underlying dispute as the existing canonical article. The additional quotes and fee details are elaboration, not a material update changing what readers need to know.",
       "validation_errors": []
     },
     {
@@ -254,26 +216,20 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
+      "confidence": 0.97,
       "shared_anchors": [
-        "Bruce Alexander Francis, 30",
-        "406 SW Fields Ave., Port St. Lucie",
-        "SWAT warrant served at 5:30 a.m.",
-        "Cocaine, methamphetamine, marijuana found",
-        ".22-caliber revolver and ammunition",
-        "Stolen identification documents",
-        "Infant/baby living in home",
-        "Identical source URL from WPEC/CBS12"
+        "Bruce Alexander Francis",
+        "406 SW Fields Ave.",
+        "SWAT search warrant 5:30 a.m.",
+        "same source_url",
+        "cocaine/meth/gun/stolen IDs found with baby present"
       ],
       "novel_facts": [
-        "Neighbor Gail Lucas quoted with reactions",
-        "More detailed description of drug locations (toilet, Fanta bottle with 180.5g meth)",
-        "Bond amount of $530,000",
-        "More detail about prior cocaine sale via confidential informant in September",
-        "Specific charge list enumerated",
-        "2014 felony conviction mentioned"
+        "bond set at $530,000",
+        "neighbor quote from Gail Lucas",
+        "charges breakdown detail"
       ],
-      "reason": "This is the exact same arrest event. Both articles describe the same SWAT raid at 406 SW Fields Ave. involving Bruce Alexander Francis, 30, with identical core facts (drugs, gun, infant, stolen IDs). The incoming article adds neighbor reactions, more scene detail, bond amount, and background explanation—none of which constitutes a material new update like a court ruling, new charge, victim identification, or other development that changes what readers need to know. The additional detail should be folded into the existing canonical rather than creating a new URL. The identical source URL confirms this is a republication of the same reporting.",
+      "reason": "Same source article and identical incident (same suspect, address, time, evidence) as existing canonical; added details like bond amount and neighbor reaction are routine elaboration, not material new developments.",
       "validation_errors": []
     },
     {
@@ -292,18 +248,20 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
+      "confidence": 0.97,
       "shared_anchors": [
-        "396 acres near Kanner Highway (Waterside property)",
-        "October 13 hearing date",
-        "Agricultural enclave certification request under new Florida law",
-        "Kanner/96th Street Investments LLC applicant",
-        "Martin County commissioners' November 2025 5-0 vote against residential designation",
-        "Same source URL: cbs12.com article",
-        "Published same date: 2026-09-29"
+        "Waterside property, 396 acres near Kanner Highway",
+        "Martin County Commission",
+        "October 13 hearing on agricultural enclave certification",
+        "November 2025 5-0 vote rejecting residential rezoning",
+        "same source URL and publish date"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article and canonical candidate are the exact same article from the same source (cbs12.com) published on the same date (2026-09-29). The source URLs are identical. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match': true. Both cover the same government action (agricultural enclave certification request for Waterside property, Oct. 13 hearing). The incoming article contains no new material updates beyond what is already in the canonical—both report the same hearing date, property details, fee approval, and stakeholder comments. This is a duplicate of existing coverage.",
+      "novel_facts": [
+        "Additional quotes from Greg Braun and Gil Smart opposing the law",
+        "Fee amounts approved by commissioners for application review ($8,150 and $16,600)",
+        "Statement from Jim Harvey declining comment"
+      ],
+      "reason": "Identical source URL, same property, same hearing date, and same underlying dispute as the existing canonical article. The additional quotes and fee details are elaboration, not a material update changing what readers need to know.",
       "validation_errors": []
     },
     {
@@ -322,15 +280,12 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
-      "shared_anchors": [],
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Both are recurring 'weekend events roundup' listicles from WPBF covering Treasure Coast/Palm Beach"
+      ],
       "novel_facts": [
-        "Bacon BBQ Festival at MIDFLORIDA Event Center Sept 26-27",
-        "Outrun Hunger 5K on Saturday 7:30am at 7715 Forest Hill Blvd",
-        "Asian Food Festival at 100 N. Clematis St.",
-        "Craft Festival at 401 East Atlantic Ave in Delray Beach",
-        "9th Annual DAStoberfest on Sunday at DAS Beer Garden Jupiter",
-        "Art After Dark Friday 5:30-10pm at 1450 S. Dixie Highway"
+        "Entirely different weekend (Sept 26-27 vs July), different events: Bacon BBQ Festival, Outrun Hunger 5K, Asian Food Festival, Craft Festival, Dastoberfest, Art After Dark - none overlap with the July candidate's Christmas in July market or Rockn Riverwalk concert"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -353,50 +308,20 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
+      "confidence": 0.97,
       "shared_anchors": [
-        "396 acres near Kanner Highway (Waterside property)",
-        "October 13 hearing date",
-        "Agricultural enclave certification request under new Florida law",
-        "Kanner/96th Street Investments LLC applicant",
-        "Martin County commissioners' November 2025 5-0 vote against residential designation",
-        "Same source URL: cbs12.com article",
-        "Published same date: 2026-09-29"
+        "Waterside property, 396 acres near Kanner Highway",
+        "Martin County Commission",
+        "October 13 hearing on agricultural enclave certification",
+        "November 2025 5-0 vote rejecting residential rezoning",
+        "same source URL and publish date"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article and canonical candidate are the exact same article from the same source (cbs12.com) published on the same date (2026-09-29). The source URLs are identical. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match': true. Both cover the same government action (agricultural enclave certification request for Waterside property, Oct. 13 hearing). The incoming article contains no new material updates beyond what is already in the canonical—both report the same hearing date, property details, fee approval, and stakeholder comments. This is a duplicate of existing coverage.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "martin",
-      "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
-      "source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
-      "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-      "canonical_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Port St. Lucie City Council meeting on Monday (Sept. 29, 2026)",
-        "18 Flock cameras scheduled for removal by Sept. 30",
-        "Cameras installed in county and state rights-of-way",
-        "Program pause amid privacy concerns",
-        "Same source URL (cbs12.com article)",
-        "Residents Casey Huneycutt, Jorge Borges, Steven Greer, James Reynolds speaking at meeting",
-        "Councilman Anthony Bonna's comments on pausing the program",
-        "Federal lawsuit by Steven Greer mentioned",
-        "Police Chief Leo Niemczyk authorization requirement for remaining systems"
+      "novel_facts": [
+        "Additional quotes from Greg Braun and Gil Smart opposing the law",
+        "Fee amounts approved by commissioners for application review ($8,150 and $16,600)",
+        "Statement from Jim Harvey declining comment"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article is from the exact same CBS12 source URL and covers the identical City Council meeting on Monday, Sept. 29. Both articles report the same core facts: 18 cameras scheduled for removal by Sept. 30, the same resident speakers and their comments, the same councilman quotes, and the same program pause details. The incoming article is simply a fuller version of the same reporting with more extensive quotes and background context, but contains no material new updates beyond what was already established in the canonical. This is the same story from the same outlet about the same meeting.",
+      "reason": "Identical source URL, same property, same hearing date, and same underlying dispute as the existing canonical article. The additional quotes and fee details are elaboration, not a material update changing what readers need to know.",
       "validation_errors": []
     },
     {
@@ -415,18 +340,20 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
+      "confidence": 0.97,
       "shared_anchors": [
-        "396 acres near Kanner Highway (Waterside property)",
-        "October 13 hearing date",
-        "Agricultural enclave certification request under new Florida law",
-        "Kanner/96th Street Investments LLC applicant",
-        "Martin County commissioners' November 2025 5-0 vote against residential designation",
-        "Same source URL: cbs12.com article",
-        "Published same date: 2026-09-29"
+        "Waterside property, 396 acres near Kanner Highway",
+        "Martin County Commission",
+        "October 13 hearing on agricultural enclave certification",
+        "November 2025 5-0 vote rejecting residential rezoning",
+        "same source URL and publish date"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article and canonical candidate are the exact same article from the same source (cbs12.com) published on the same date (2026-09-29). The source URLs are identical. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match': true. Both cover the same government action (agricultural enclave certification request for Waterside property, Oct. 13 hearing). The incoming article contains no new material updates beyond what is already in the canonical—both report the same hearing date, property details, fee approval, and stakeholder comments. This is a duplicate of existing coverage.",
+      "novel_facts": [
+        "Additional quotes from Greg Braun and Gil Smart opposing the law",
+        "Fee amounts approved by commissioners for application review ($8,150 and $16,600)",
+        "Statement from Jim Harvey declining comment"
+      ],
+      "reason": "Identical source URL, same property, same hearing date, and same underlying dispute as the existing canonical article. The additional quotes and fee details are elaboration, not a material update changing what readers need to know.",
       "validation_errors": []
     },
     {
@@ -440,32 +367,27 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
+      "confidence": 0.95,
       "shared_anchors": [
-        "396 acres near Kanner Highway",
         "Waterside property",
-        "October 13 hearing date",
-        "Agricultural enclave certification request under new state law",
-        "Kanner/96th Street Investments LLC applicant",
-        "Previous November 2025 5-0 rejection by commissioners",
-        "Same published date 2026-09-29",
-        "Martin County Commission"
+        "396 acres near Kanner Highway",
+        "Martin County Commission",
+        "October 13 hearing",
+        "November 2025 5-0 rejection vote",
+        "agricultural enclave state law"
       ],
       "novel_facts": [
-        "Fee amounts approved: $8,150 and $16,600",
-        "Proposed density of 3.1 homes per acre, roughly 1,200 homes",
-        "Quotes from Greg Braun of Guardians of Martin County",
-        "Quotes from Gil Smart of Friends of the Everglades",
-        "Quote from Jim Harvey declining comment",
-        "Timeline details: 30 days for staff review, 30 days to public hearing",
-        "Mention of woman accused of wrong-way driving (unrelated sidebar)"
+        "Additional quotes from Greg Braun and Gil Smart",
+        "Fee amounts approved for application review ($8,150 and $16,600)",
+        "Jim Harvey's no-comment statement",
+        "Kolter Group listed as LLC manager"
       ],
-      "reason": "Both articles cover the exact same government proceeding: the October 13, 2026 hearing on whether the 396-acre Waterside property qualifies as an agricultural enclave under the new Florida law. The incoming article adds background quotes from advocacy groups, fee details, and procedural timeline information, but contains no material update to the core event. The canonical was published the same day and already established the hearing date and key facts. The additional context (fees, advocacy quotes, density figures) should be incorporated into the existing canonical rather than creating a duplicate URL for the same scheduled hearing.",
+      "reason": "Both articles report the same Waterside 396-acre agricultural enclave certification request and the same October 13 hearing date following the same November 2025 commission rejection. The incoming article adds background quotes, fee details, and color commentary but no material new update such as a decision, ruling, or changed outcome.",
       "validation_errors": []
     },
     {
@@ -484,58 +406,20 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
+      "confidence": 0.97,
       "shared_anchors": [
-        "Bruce Alexander Francis, 30",
-        "406 SW Fields Ave., Port St. Lucie",
-        "SWAT warrant served at 5:30 a.m.",
-        "Cocaine, methamphetamine, marijuana found",
-        ".22-caliber revolver and ammunition",
-        "Stolen identification documents",
-        "Infant/baby living in home",
-        "Identical source URL from WPEC/CBS12"
+        "Bruce Alexander Francis",
+        "406 SW Fields Ave.",
+        "SWAT search warrant 5:30 a.m.",
+        "same source_url",
+        "cocaine/meth/gun/stolen IDs found with baby present"
       ],
       "novel_facts": [
-        "Neighbor Gail Lucas quoted with reactions",
-        "More detailed description of drug locations (toilet, Fanta bottle with 180.5g meth)",
-        "Bond amount of $530,000",
-        "More detail about prior cocaine sale via confidential informant in September",
-        "Specific charge list enumerated",
-        "2014 felony conviction mentioned"
+        "bond set at $530,000",
+        "neighbor quote from Gail Lucas",
+        "charges breakdown detail"
       ],
-      "reason": "This is the exact same arrest event. Both articles describe the same SWAT raid at 406 SW Fields Ave. involving Bruce Alexander Francis, 30, with identical core facts (drugs, gun, infant, stolen IDs). The incoming article adds neighbor reactions, more scene detail, bond amount, and background explanation—none of which constitutes a material new update like a court ruling, new charge, victim identification, or other development that changes what readers need to know. The additional detail should be folded into the existing canonical rather than creating a new URL. The identical source URL confirms this is a republication of the same reporting.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
-      "source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
-      "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-      "canonical_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Port St. Lucie City Council meeting on Monday (Sept. 29, 2026)",
-        "18 Flock cameras scheduled for removal by Sept. 30",
-        "Cameras installed in county and state rights-of-way",
-        "Program pause amid privacy concerns",
-        "Same source URL (cbs12.com article)",
-        "Residents Casey Huneycutt, Jorge Borges, Steven Greer, James Reynolds speaking at meeting",
-        "Councilman Anthony Bonna's comments on pausing the program",
-        "Federal lawsuit by Steven Greer mentioned",
-        "Police Chief Leo Niemczyk authorization requirement for remaining systems"
-      ],
-      "novel_facts": [],
-      "reason": "The incoming article is from the exact same CBS12 source URL and covers the identical City Council meeting on Monday, Sept. 29. Both articles report the same core facts: 18 cameras scheduled for removal by Sept. 30, the same resident speakers and their comments, the same councilman quotes, and the same program pause details. The incoming article is simply a fuller version of the same reporting with more extensive quotes and background context, but contains no material new updates beyond what was already established in the canonical. This is the same story from the same outlet about the same meeting.",
+      "reason": "Same source article and identical incident (same suspect, address, time, evidence) as existing canonical; added details like bond amount and neighbor reaction are routine elaboration, not material new developments.",
       "validation_errors": []
     },
     {
@@ -554,23 +438,21 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.95,
+      "confidence": 0.93,
       "shared_anchors": [
-        "Nick Mimms, former Fort Pierce City Manager",
-        "Bid tampering and official misconduct charges",
-        "Trial at St. Lucie County Courthouse",
-        "Opening statements/testimony began Tuesday",
-        "City-owned properties in Lincoln Park",
-        "Nonprofit linked to his niece"
+        "Nick Mimms",
+        "Fort Pierce City Manager",
+        "bid tampering and official misconduct charges",
+        "opening statements/testimony began Tuesday",
+        "St. Lucie County Courthouse trial",
+        "niece-linked nonprofit / Lincoln Park properties"
       ],
       "novel_facts": [
-        "Specific prosecutor quotes about steering bids to two city employees",
-        "Defense attorney Donald Murrell named and quoted",
-        "Defense characterization of niece as 'distant niece'",
-        "Lincoln Park Young Professionals nonprofit named specifically",
-        "Mayor mentioned as expected witness"
+        "Additional quotes from prosecutor Bridges and defense attorney Donald Murrell",
+        "Naming of nonprofit Lincoln Park Young Professionals",
+        "Detail that mayor and city officials expected to testify"
       ],
-      "reason": "Both articles cover the exact same trial proceeding - the Nick Mimms bid tampering trial that began with opening statements on Tuesday. The incoming article adds more granular courtroom detail (specific quotes from prosecutor Bridges and defense attorney Murrell, the nonprofit name), but these are routine trial coverage details from the same day's proceedings, not a material development that changes what readers need to know. The canonical already established that testimony began Tuesday; additional quotes and courtroom color from that same session should update the existing page rather than create a new URL.",
+      "reason": "Both articles report the same trial event (opening statements/testimony beginning Tuesday) for the same defendant, same charges, and same underlying case. The incoming article adds courtroom color and quotes but no material new fact like a verdict, new charge, or ruling.",
       "validation_errors": []
     }
   ],
@@ -1223,24 +1105,22 @@
         "status": "validated",
         "action": "new_story",
         "recommended_action": "new_story",
-        "selected_candidate_slug": "",
+        "selected_candidate_slug": "2026-09-21-fort-pierce-home-with-woman-4-children-struck-by-gunfire-on-avenue-l",
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.85,
+        "confidence": 0.75,
         "shared_anchors": [
-          "Fort Pierce",
-          "shooting into occupied home",
-          "children present",
-          "Fort Pierce Police investigating"
+          "fort-pierce-police",
+          "fort-pierce locality",
+          "shooting into occupied home with children"
         ],
         "novel_facts": [
-          "Shooting occurred late Sunday night (September 20, 2026)",
-          "Location: South 29th Street",
-          "Seven total occupants (two adults, five children)",
-          "Second such shooting in just over a week per article context"
+          "Different location: South 29th Street vs Avenue L",
+          "Different household composition: two adults and five children vs woman and 4 children",
+          "Incoming explicitly frames this as the second shooting at an occupied home, a distinct incident from the Avenue L series"
         ],
-        "reason": "These are two distinct shooting incidents in Fort Pierce. The candidate covers shootings on Avenue L occurring on September 15 and September 18 (twice on Friday). The incoming article describes a shooting on South 29th Street late Sunday night (September 20). Different locations (Avenue L vs South 29th Street), different dates (Sept 15/18 vs Sept 20), and different known_event_keys confirm these are separate real-world events. While both involve Fort Pierce homes with children and share the generic pattern of shootings into occupied residences, they lack concrete shared anchors like the same address, victims, suspects, or case identifiers that would establish them as the same incident.",
+        "reason": "The candidate covers three connected, targeted shootings on Avenue L (Sept 15 and 18) with identified suspects. The incoming article describes a new shooting late Sunday night at a home on South 29th Street with two adults and five children, explicitly described as a separate, second occurrence in the city. Different precise location and victim household indicate a distinct incident, not an update to the Avenue L case.",
         "validation_errors": [],
         "consistency_repairs": []
       }
@@ -1387,7 +1267,7 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
+      "incoming_headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
       "incoming_source_url": "https://cbs12.com/news/local/port-st-lucie-city-pauses-flock-program-18-cameras-set-for-removal-september-30-license-plate-readers-alpr-florida-privacy-citizens-residents-public-comment-commission-meeting",
       "incoming_story_id": "story_017829",
       "candidates": [],
@@ -1495,17 +1375,18 @@
         "material_new_update": false,
         "independently_newsworthy_followup": false,
         "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Bruce Alexander Francis arrested",
-          "SWAT raid on Fields Avenue home",
-          "Undercover cocaine buy preceded warrant",
-          "Cocaine, meth, marijuana found",
-          "Stolen identification documents recovered",
-          "Revolver and ammunition seized",
-          "Infant present in home during raid"
+        "shared_anchors": [
+          "port-st-lucie locality",
+          "drug-case event family"
         ],
-        "reason": "These are two completely different drug arrests in Port St. Lucie. The candidate involves Kenneth Robert Ferow II found hiding under a hotel bed on Village Parkway on 2026-09-24 with meth possession and child neglect charges. The incoming involves Bruce Alexander Francis in a SWAT raid at a Fields Avenue home on 2026-09-29 following an undercover cocaine buy, with cocaine, meth, gun, and stolen IDs found with an infant present. Different suspects, different dates, different locations, different circumstances. No shared concrete anchors.",
+        "novel_facts": [
+          "Bruce Alexander Francis arrest",
+          "Fields Avenue SWAT raid",
+          "undercover cocaine buy leading to warrant",
+          "infant present in home",
+          "cocaine, meth, gun, stolen IDs found"
+        ],
+        "reason": "Different suspect (Bruce Alexander Francis vs. Kenneth Robert Ferow II), different location (Fields Avenue vs. Village Parkway hotel), different circumstances (SWAT raid after undercover buy vs. fugitive found hiding under a bed), and different date. Only shared elements are city and generic drug-case category, which is insufficient to establish the same real-world incident.",
         "validation_errors": [],
         "consistency_repairs": []
       }
@@ -1612,7 +1493,7 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Breeze Airways launches 4 nonstop routes from Vero Beach to East Coast cities",
+      "incoming_headline": "Breeze Airways launches nonstop Vero Beach flights to Trenton, Baltimore, Pittsburgh, Atlantic City",
       "incoming_source_url": "https://www.wptv.com/lifestyle/travel/breeze-airways-adds-new-routes-from-vero-beach-to-4-east-coast-cities-fares-starting-at-74",
       "incoming_story_id": "story_018351",
       "candidates": [],
@@ -1652,7 +1533,7 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "23-month-old drowns in pond on family property in Martin County",
+      "incoming_headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South",
       "incoming_source_url": "https://cw34.com/news/local/toddler-drowns-in-pond-near-family-home-in-martin-county-child-death-drowning-pond-drowning-martin-county-sheriffs-office-florida-news",
       "incoming_story_id": "story_018364",
       "candidates": [],
@@ -1691,410 +1572,105 @@
       }
     },
     {
-      "phase": "forward_publication",
-      "incoming_headline": "Port St. Lucie removes 18 Flock cameras from city streets after commission vote",
-      "incoming_source_url": "https://www.wpbf.com/article/port-st-lucie-removes-18-flock-cameras/73960040",
-      "incoming_story_id": "story_018423",
-      "candidates": [
-        {
-          "slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-          "headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-          "retrieval_score": 0.7675,
-          "headline_similarity": 0.558,
-          "similarity_basis": "final_headline",
-          "shared_headline_tokens": [
-            "18",
-            "cameras",
-            "flock",
-            "lucie",
-            "port",
-            "st"
-          ],
-          "shared_topic_tokens": [
-            "18",
-            "cameras",
-            "flock"
-          ],
-          "content_similarity": {
-            "score": 0.4068,
-            "overlap": 0.5238,
-            "jaccard": 0.1058,
-            "shared_token_count": 11,
-            "shared_tokens": [
-              "18",
-              "30",
-              "cameras",
-              "flock",
-              "license",
-              "plate",
-              "program",
-              "remove",
-              "rights",
-              "set",
-              "way"
-            ]
-          },
-          "strong_content_event_continuity": true,
-          "day_gap": 1,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "shared_locality_and_event_family",
-            "strong_content_event_continuity",
-            "publication_gap_1_days"
-          ]
-        }
-      ],
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Florida rolls out redesigned driver's licenses with new imagery at service centers statewide",
+      "incoming_source_url": "https://www.wptv.com/news/state/florida-driver-licenses-identification-cards-get-a-new-look",
+      "incoming_story_id": "story_018416",
+      "candidates": [],
       "decision": {
-        "status": "validated",
-        "action": "update_existing_canonical",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-        "same_real_world_event": true,
-        "material_new_update": true,
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Port St. Lucie city",
-          "18 Flock cameras",
-          "Sept. 30 removal date",
-          "county and state rights-of-way",
-          "city commission decision",
-          "privacy concerns from residents"
-        ],
-        "novel_facts": [
-          "Cameras were actually removed on Wednesday (Sept. 30)",
-          "City commission voted to end the program entirely",
-          "City went beyond state mandate by removing cameras from city streets too",
-          "Florida Department of Transportation requirement for state highway cameras specified",
-          "Specific resident quotes from Monday's commission meeting included"
-        ],
-        "reason": "Same real-world event: both articles cover Port St. Lucie's decision to remove the same 18 Flock cameras by Sept. 30. The candidate announced the scheduled removal; the incoming article reports the removal actually happened on that date and provides the material update that the commission voted to end the program (not just pause it) and that the city went beyond state requirements by removing cameras from city streets as well. This is a material development in the ongoing story that belongs in the existing canonical rather than creating a standalone follow-up.",
-        "validation_errors": [],
-        "consistency_repairs": []
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
+      "incoming_source_url": "https://cbs12.com/news/crime/florida-crime-news-port-st-lucie-man-accused-of-sexually-assaulting-16-year-old-relative-sexual-battery-person-12-17-injury-pelvic-pain-fathers-cousin-sexual-assault-admitted-crime",
+      "incoming_story_id": "story_018404",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
       }
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Martin County Sheriff's Office investigates drowning death of toddler in Port Salerno",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-toddler-drowning-pond-water-safety/73959979",
-      "incoming_story_id": "story_018402",
+      "incoming_headline": "23-Month-Old Boy Drowns in Pond on Family Property in Martin County",
+      "incoming_source_url": "https://www.wflx.com/2026/09/30/toddler-drowns-pond-familys-property-martin-county?outputType=amp",
+      "incoming_story_id": "story_018365",
       "candidates": [
         {
           "slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-          "headline": "23-month-old drowns in pond on family property in Martin County",
-          "retrieval_score": 0.6472,
-          "headline_similarity": 0.4459,
+          "headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South",
+          "retrieval_score": 1.0,
+          "headline_similarity": 0.77,
           "similarity_basis": "source_headline",
           "shared_headline_tokens": [
+            "com",
             "county",
+            "drowns",
+            "family",
             "martin",
             "pond",
             "toddler"
           ],
           "shared_topic_tokens": [
+            "com",
+            "drowns",
+            "family",
             "pond",
             "toddler"
           ],
           "content_similarity": {
-            "score": 0.5059,
-            "overlap": 0.6471,
-            "jaccard": 0.1429,
-            "shared_token_count": 11,
+            "score": 0.6416,
+            "overlap": 0.7647,
+            "jaccard": 0.325,
+            "shared_token_count": 26,
             "shared_tokens": [
+              "10",
               "23",
-              "death",
-              "family",
-              "found",
-              "his",
-              "month",
-              "old",
-              "pond",
-              "property",
-              "sheriff",
-              "toddler"
-            ]
-          },
-          "strong_content_event_continuity": true,
-          "day_gap": 0,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
-          "reasons": [
-            "strong_content_event_continuity",
-            "publication_gap_0_days"
-          ]
-        }
-      ],
-      "decision": {
-        "status": "validated",
-        "action": "update_existing_canonical",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-        "same_real_world_event": true,
-        "material_new_update": true,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.99,
-        "shared_anchors": [
-          "Pablo Mendoza-Arrojo, 23-month-old victim",
-          "Tuesday evening after 5 p.m.",
-          "pond on family property in Martin County",
-          "Darling Street location",
-          "Martin County Sheriff's Office investigation",
-          "child found by mother and family members"
-        ],
-        "novel_facts": [
-          "Child was out of sight for under 10 minutes",
-          "More precise location: Southeast Darling Street and Southeast Taylor Drive intersection",
-          "Mother and aunt found him (specifies aunt)",
-          "Family rushed him to Cleveland Clinic South",
-          "Pronounced dead in emergency room",
-          "Criminal investigators interviewed everyone at scene",
-          "Port Salerno identified as locality"
-        ],
-        "reason": "Same drowning death of Pablo Mendoza-Arrojo in pond on family property Tuesday evening. Incoming article adds material updates: confirms death occurred at Cleveland Clinic South emergency room after family transport, specifies 10-minute timeline, identifies Port Salerno location, and notes criminal investigators interviewed witnesses. These are substantive developments that belong in the existing canonical rather than a separate story.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Florida rolls out redesigned driver's licenses with new imagery at service centers statewide",
-      "incoming_source_url": "https://www.wptv.com/news/state/florida-driver-licenses-identification-cards-get-a-new-look",
-      "incoming_story_id": "story_018416",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Florida rolls out redesigned driver's licenses with new imagery at service centers statewide",
-      "incoming_source_url": "https://www.wptv.com/news/state/florida-driver-licenses-identification-cards-get-a-new-look",
-      "incoming_story_id": "story_018416",
-      "candidates": [
-        {
-          "slug": "2026-09-16-florida-ranks-8th-most-expensive-in-us-for-grocery-essentials",
-          "headline": "Florida ranks 8th most expensive in US for grocery essentials",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4322,
-          "retrieval_score": 0.4322,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
-          "headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4247,
-          "retrieval_score": 0.3907,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-09-29-two-new-florida-laws-close-loopholes-in-child-exploitation-animal-cruelty-statut",
-          "headline": "Two new Florida laws close loopholes in child exploitation, animal cruelty statutes",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4244,
-          "retrieval_score": 0.3874,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-fort-pierce-police-investigate-shooting-at-home-with-seven-people-inside",
-          "headline": "Fort Pierce police investigate shooting at home with seven people inside",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4028,
-          "retrieval_score": 0.3688,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-09-22-card-skimmer-discovered-on-7-eleven-gas-pump-in-fort-pierce-prompts-investigatio",
-          "headline": "Officers unfamiliar with skimmers check all pumps at Fort Pierce 7-Eleven",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3992,
-          "retrieval_score": 0.3802,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-          "headline": "I-95 northbound in Martin County reopens after fatal crash closes lanes over 7 hours",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3965,
-          "retrieval_score": 0.3625,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-florida-highway-patrol-to-equip-troopers-with-body-cameras-for-first-time",
-          "headline": "Florida Highway Patrol to equip troopers with body cameras for first time",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3962,
-          "retrieval_score": 0.3562,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-          "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3939,
-          "retrieval_score": 0.3539,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-09-22-floridas-left-lane-law-has-drivers-guessing-on-when-it-applies",
-          "headline": "Florida's left-lane law has drivers guessing on when it applies",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3718,
-          "retrieval_score": 0.3558,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-09-16-port-st-lucie-bus-stop-complaint-prompts-district-route-change-on-paar-drive",
-          "headline": "Port St. Lucie bus stop complaint prompts district route change on Paar Drive",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3714,
-          "retrieval_score": 0.3714,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-09-29-florida-executes-77-year-old-curtis-beasley-states-16th-this-year",
-          "headline": "Florida executes 77-year-old Curtis Beasley, state's 16th this year",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3692,
-          "retrieval_score": 0.3322,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
-          "headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.367,
-          "retrieval_score": 0.336,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Redesigned Florida driver's licenses/ID cards rolling out statewide",
-          "New imagery: Castillo de San Marcos, Discovery Space Shuttle, orange as letter 'o', alligator in REAL ID star",
-          "Distribution began Wednesday at service centers"
-        ],
-        "reason": "None of the candidates concern Florida driver's license design changes. The closest topical match (Florida Highway Patrol body cameras) is a different agency action about law enforcement equipment, not license/ID card redesign. No shared participants, locations, or governing action link this to any candidate.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Redesigned Florida driver's licenses/ID cards rolling out statewide",
-          "New imagery: Castillo de San Marcos, Discovery Space Shuttle, orange as letter 'o', alligator in REAL ID star",
-          "Distribution began Wednesday at service centers"
-        ],
-        "reason": "None of the candidates concern Florida driver's license design changes. The closest topical match (Florida Highway Patrol body cameras) is a different agency action about law enforcement equipment, not license/ID card redesign. No shared participants, locations, or governing action link this to any candidate.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "23-month-old Pablo Mendoza-Arrojo drowns in backyard pond in Port Salerno",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-toddler-drowning-pond-water-safety/73959979",
-      "incoming_story_id": "story_018402",
-      "candidates": [
-        {
-          "slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-          "headline": "23-month-old drowns in pond on family property in Martin County",
-          "retrieval_score": 0.7057,
-          "headline_similarity": 0.4945,
-          "similarity_basis": "final_headline",
-          "shared_headline_tokens": [
-            "23",
-            "drowns",
-            "month",
-            "old",
-            "pond"
-          ],
-          "shared_topic_tokens": [
-            "23",
-            "drowns",
-            "month",
-            "old",
-            "pond"
-          ],
-          "content_similarity": {
-            "score": 0.5508,
-            "overlap": 0.7059,
-            "jaccard": 0.1519,
-            "shared_token_count": 12,
-            "shared_tokens": [
-              "23",
+              "aunt",
+              "cleveland",
+              "clinic",
+              "com",
               "death",
               "drowns",
               "family",
               "found",
+              "him",
               "his",
+              "minutes",
               "month",
+              "more",
+              "mother",
               "old",
+              "out",
               "pond",
-              "property",
-              "sheriff",
-              "toddler"
+              "pronounced",
+              "rushed",
+              "sight",
+              "south",
+              "than",
+              "toddler",
+              "where"
             ]
           },
           "strong_content_event_continuity": true,
@@ -2104,6 +1680,8 @@
           "incident_anchor_conflict": false,
           "known_event_key_conflict": false,
           "reasons": [
+            "strong_fuzzy_headline",
+            "shared_incident_anchor",
             "strong_content_event_continuity",
             "publication_gap_0_days"
           ]
@@ -2111,873 +1689,38 @@
       ],
       "decision": {
         "status": "validated",
-        "action": "update_existing_canonical",
-        "recommended_action": "update_existing_canonical",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
         "selected_candidate_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
         "same_real_world_event": true,
-        "material_new_update": true,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.98,
-        "shared_anchors": [
-          "Pablo Mendoza-Arrojo, 23-month-old victim",
-          "Tuesday evening after 5 p.m.",
-          "pond on family property",
-          "Darling Street/Southeast Darling Street in Martin County",
-          "Martin County Sheriff's Office investigation"
-        ],
-        "novel_facts": [
-          "Specific cross-street location: Southeast Taylor Drive",
-          "Timeline detail: out of sight for no more than 10 minutes",
-          "Mother and aunt conducted the search",
-          "Taken to Cleveland Clinic South",
-          "Pronounced dead in emergency room",
-          "Criminal investigators interviewed everyone at scene"
-        ],
-        "reason": "Same drowning incident with identical victim name, age, date, time, location, and agency. The incoming article provides material new information including the specific hospital where he was taken (Cleveland Clinic South), that he was pronounced dead in the ER, the precise timeline (10 minutes), identification of who found him (mother and aunt), criminal investigators interviewing witnesses, and the cross-street (Southeast Taylor Drive). These are substantive updates that readers need to know about this tragedy, but they expand the existing story rather than creating an independently newsworthy follow-up angle.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Jury selection begins in Fort Pierce city manager bid-tampering trial",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct",
-      "incoming_story_id": "story_017375",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Jury selection begins in Fort Pierce city manager bid-tampering trial",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/jury-selection-in-trial-of-fort-pierce-city-manager-accused-of-bid-tampering-official-misconduct",
-      "incoming_story_id": "story_017375",
-      "candidates": [
-        {
-          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "headline": "Testimony begins in Fort Pierce ex-manager trial on bid rigging charges",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.7616,
-          "retrieval_score": 0.7246,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
-          "headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5643,
-          "retrieval_score": 0.5243,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
-          "headline": "Fort Pierce community raising funds to bring home 2 brothers killed in Georgia",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5186,
-          "retrieval_score": 0.4846,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-fort-pierce-police-investigate-shooting-at-home-with-seven-people-inside",
-          "headline": "Fort Pierce police investigate shooting at home with seven people inside",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5083,
-          "retrieval_score": 0.4683,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-09-16-diver-finds-suspected-wwii-torpedo-off-fort-pierce-beach-during-lobster-hunt",
-          "headline": "Diver finds suspected WWII torpedo off Fort Pierce beach during lobster hunt",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.487,
-          "retrieval_score": 0.483,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-08-11-fort-pierce-has-no-legal-options-to-block-causeway-cove-development-on-south-hut",
-          "headline": "Fort Pierce votes to explore outside counsel to challenge Causeway Cove under Live Local Act",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4863,
-          "retrieval_score": 0.4673,
-          "reasons": [
-            "publication_gap_48_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-13-fort-pierce-police-clear-hca-lawnwood-hospital-after-bomb-threat",
-          "headline": "FBI probes link between four Treasure Coast bomb threats in eight days",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4761,
-          "retrieval_score": 0.4761,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-18-fort-pierce-man-arrested-after-raid-seizes-fentanyl-cocaine-worth-millions",
-          "headline": "Fort Pierce man arrested after raid seizes fentanyl, cocaine worth millions",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4758,
-          "retrieval_score": 0.4658,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
-          "headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4699,
-          "retrieval_score": 0.4329,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-09-13-two-fort-pierce-residents-arrested-after-firing-weapons-at-happiness-street-resi",
-          "headline": "Fort Pierce couple bond out after arrest for firing guns while drinking",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4654,
-          "retrieval_score": 0.4654,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-18-free-responsible-dog-ownership-day-in-fort-pierce-saturday-aims-to-ease-shelter",
-          "headline": "Free Responsible Dog Ownership Day in Fort Pierce Saturday aims to ease shelter overcrowding",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.464,
-          "retrieval_score": 0.454,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-09-17-vero-beach-animal-hospital-manager-arrested-for-abandoning-cats-after-reclaiming",
-          "headline": "Vero Beach animal hospital manager arrested for abandoning cats after reclaiming them from Humane Society",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4589,
-          "retrieval_score": 0.4519,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.9,
-        "shared_anchors": [
-          "Nick Mimms",
-          "Fort Pierce city manager",
-          "bid tampering/official misconduct charges",
-          "Lincoln Park downtown corridor project",
-          "trial at St. Lucie County Courthouse"
-        ],
-        "novel_facts": [],
-        "reason": "Both articles cover the same Nick Mimms bid-tampering trial pro",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.9,
-        "shared_anchors": [
-          "Nick Mimms",
-          "Fort Pierce city manager",
-          "bid tampering/official misconduct charges",
-          "Lincoln Park downtown corridor project",
-          "trial at St. Lucie County Courthouse"
-        ],
-        "novel_facts": [],
-        "reason": "Both articles cover the same Nick Mimms bid-tampering trial pro",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
-      "incoming_source_url": "https://cbs12.com/news/crime/florida-crime-news-port-st-lucie-man-accused-of-sexually-assaulting-16-year-old-relative-sexual-battery-person-12-17-injury-pelvic-pain-fathers-cousin-sexual-assault-admitted-crime",
-      "incoming_story_id": "story_018404",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
-      "incoming_source_url": "https://cbs12.com/news/crime/florida-crime-news-port-st-lucie-man-accused-of-sexually-assaulting-16-year-old-relative-sexual-battery-person-12-17-injury-pelvic-pain-fathers-cousin-sexual-assault-admitted-crime",
-      "incoming_story_id": "story_018404",
-      "candidates": [
-        {
-          "slug": "2026-09-17-travel-mri-technician-arrested-on-sexual-battery-charge-at-hca-florida-st-lucie",
-          "headline": "Grant-Valkaria MRI tech told sedated patient 'nobody can see,' police report details",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.8193,
-          "retrieval_score": 0.7533,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-09-19-port-st-lucie-woman-arrested-for-draining-100k-from-85-year-olds-accounts",
-          "headline": "Port St. Lucie woman arrested for draining $100K from 85-year-old's accounts",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.7791,
-          "retrieval_score": 0.7221,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.711,
-          "retrieval_score": 0.677,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
-          "headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6963,
-          "retrieval_score": 0.6243,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-09-17-port-st-lucie-police-arrest-fentanyl-dealer-after-texting-him-from-overdose-vict",
-          "headline": "Port St. Lucie police arrest fentanyl dealer after texting him from overdose victim's phone",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5994,
-          "retrieval_score": 0.5484,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-09-18-road-rage-shooting-on-sw-brevity-terrace-leads-to-arrest-of-two-port-st-lucie-me",
-          "headline": "Police chief explains why shooter faces tougher charge than puncher in Port St. Lucie road rage case",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5669,
-          "retrieval_score": 0.5009,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-09-17-port-st-lucie-police-investigate-death-of-man-found-inside-vehicle",
-          "headline": "Port St. Lucie police investigate death of man found inside vehicle",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.538,
-          "retrieval_score": 0.487,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-          "headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5182,
-          "retrieval_score": 0.4462,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-09-22-port-st-lucie-veterans-home-raises-funds-for-wifi-medal-of-honor-museum-trip",
-          "headline": "Port St. Lucie veterans home raises funds for WiFi, Medal of Honor Museum trip",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4951,
-          "retrieval_score": 0.4791,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-09-23-port-st-lucie-hoa-gives-cadence-at-tradition-homeowners-sept-30-deadline-to-repl",
-          "headline": "Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.488,
-          "retrieval_score": 0.469,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-09-21-port-st-lucie-woman-launches-chriss-place-free-grief-support-community",
-          "headline": "Port St. Lucie woman launches Chris's Place, free grief support community",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4841,
-          "retrieval_score": 0.4711,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-09-29-port-st-lucie-swat-raid-uncovers-cocaine-meth-gun-in-home-with-infant",
-          "headline": "Port St. Lucie SWAT raid uncovers cocaine, meth, gun in home with infant",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4823,
-          "retrieval_score": 0.4453,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
         "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "New suspect Jean Emile Revange arrested Sept. 27",
-          "Victim is a 16-year-old relative (father's cousin's alleged assault)",
-          "Incident occurred at shared Port St. Lucie home",
-          "Investigation began Sept. 26 after hospital disclosure at Lawnwood Regional Medical Center"
+        "shared_anchors": [
+          "23-month-old boy",
+          "Darling Street, Martin County",
+          "family pond drowning",
+          "Cleveland Clinic South",
+          "Martin County Sheriff's Office",
+          "out of sight for no more than 10 minutes",
+          "mother and aunt found him"
         ],
-        "reason": "None of the candidates involve the same suspect, victim, location, or case. The closest topical match (MRI technician sexual battery case) involves a different suspect, victim, and hospital setting with no shared named participants or facts. This is a distinct new sexual battery case involving a different perpetrator and victim relationship.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "New suspect Jean Emile Revange arrested Sept. 27",
-          "Victim is a 16-year-old relative (father's cousin's alleged assault)",
-          "Incident occurred at shared Port St. Lucie home",
-          "Investigation began Sept. 26 after hospital disclosure at Lawnwood Regional Medical Center"
-        ],
-        "reason": "None of the candidates involve the same suspect, victim, location, or case. The closest topical match (MRI technician sexual battery case) involves a different suspect, victim, and hospital setting with no shared named participants or facts. This is a distinct new sexual battery case involving a different perpetrator and victim relationship.",
+        "novel_facts": [],
+        "reason": "Both articles describe the identical drowning incident of a 23-month-old boy on Darling Street in Martin County, same timeline, same hospital, same agency, and same details. The candidate even includes the victim's name (Pablo Mendoza-Arrojo), which is more specific than the incoming article. No new material facts are introduced.",
         "validation_errors": [],
         "consistency_repairs": []
       }
     }
   ],
   "archive_repairs": [],
-  "material_update_compositions": [
-    {
-      "phase": "forward_publication",
-      "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-      "incoming_slug": "",
-      "status": "validated",
-      "validation_errors": [],
-      "word_count": 274,
-      "paragraph_count": 4,
-      "baseline_lead_hits": [
-        "cameras",
-        "flock",
-        "lucie",
-        "port",
-        "removal",
-        "sept"
-      ],
-      "novelty_lead_hits": [
-        "commission",
-        "end",
-        "had",
-        "removed",
-        "streets",
-        "vendor",
-        "voted",
-        "wednesday"
-      ],
-      "headline_alignment": {
-        "aligned": true,
-        "reason": "validated_canonical_headline_evolution",
-        "token_similarity": 1.0,
-        "date_gap_days": 1,
-        "meaningful_update_basis": "semantic_material_update_gate",
-        "prospective": true,
-        "existing_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-        "incoming_headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
-        "candidate_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-        "prospective_lastmod": "2026-09-30",
-        "timestamp_evidence": "stored_archive_timestamp"
-      },
-      "context_diagnostics": {
-        "required": true,
-        "passed": true,
-        "story_form": "update",
-        "lead_word_count": 64,
-        "baseline_anchor": "",
-        "baseline_present": true,
-        "baseline_anchor_present": true,
-        "baseline_details_present": true,
-        "baseline_context_hits": [
-          "18",
-          "30",
-          "cameras",
-          "flock",
-          "lucie",
-          "port",
-          "removal",
-          "sept"
-        ],
-        "baseline_context_required": 2,
-        "canonical_context_available": true,
-        "canonical_context_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-        "novelty_anchor": "semantic_gate_novel_fact",
-        "novelty_present": true,
-        "novelty_token_hits": [
-          "concerns",
-          "privacy"
-        ],
-        "semantic_novel_fact_hits": [
-          "commission",
-          "removed",
-          "streets",
-          "voted",
-          "wednesday"
-        ],
-        "semantic_novel_fact_token_count": 23,
-        "missing": [],
-        "source_title": "Port St. Lucie removes 18 Flock cameras as privacy concerns grow - WPBF",
-        "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program"
-      },
-      "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program"
-    },
-    {
-      "phase": "forward_publication",
-      "canonical_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-      "incoming_slug": "",
-      "status": "invalid_composition",
-      "validation_errors": [
-        "body_too_short"
-      ],
-      "word_count": 169,
-      "paragraph_count": 4,
-      "baseline_lead_hits": [
-        "family",
-        "martin",
-        "month",
-        "old",
-        "pond",
-        "property"
-      ],
-      "novelty_lead_hits": [
-        "had",
-        "him",
-        "minutes",
-        "missing",
-        "more",
-        "port",
-        "salerno",
-        "sight",
-        "than",
-        "water",
-        "who"
-      ],
-      "reason": "composition_not_validated"
-    },
-    {
-      "phase": "forward_publication",
-      "canonical_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-      "incoming_slug": "",
-      "status": "validated",
-      "validation_errors": [],
-      "word_count": 183,
-      "paragraph_count": 4,
-      "baseline_lead_hits": [
-        "family",
-        "martin",
-        "month",
-        "old",
-        "pond",
-        "property"
-      ],
-      "novelty_lead_hits": [
-        "aunt",
-        "but",
-        "cleveland",
-        "clinic",
-        "dead",
-        "drowned",
-        "emergency",
-        "minutes",
-        "more",
-        "mother",
-        "pronounced",
-        "room",
-        "rushed",
-        "sight",
-        "south",
-        "than"
-      ],
-      "headline_alignment": {
-        "aligned": true,
-        "reason": "validated_canonical_headline_evolution",
-        "token_similarity": 1.0,
-        "date_gap_days": 0,
-        "meaningful_update_basis": "semantic_material_update_gate",
-        "prospective": true,
-        "existing_headline": "23-month-old drowns in pond on family property in Martin County",
-        "incoming_headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South",
-        "candidate_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-        "prospective_lastmod": "2026-09-30",
-        "timestamp_evidence": "stored_archive_timestamp"
-      },
-      "context_diagnostics": {
-        "required": true,
-        "passed": true,
-        "story_form": "update",
-        "lead_word_count": 63,
-        "baseline_anchor": "fatality",
-        "baseline_present": true,
-        "baseline_anchor_present": true,
-        "baseline_details_present": true,
-        "baseline_context_hits": [
-          "23",
-          "family",
-          "martin",
-          "month",
-          "pond",
-          "property"
-        ],
-        "baseline_context_required": 2,
-        "canonical_context_available": true,
-        "canonical_context_headline": "23-month-old drowns in pond on family property in Martin County",
-        "novelty_anchor": "semantic_gate_novel_fact",
-        "novelty_present": true,
-        "novelty_token_hits": [
-          "sheriff"
-        ],
-        "semantic_novel_fact_hits": [
-          "10",
-          "aunt",
-          "cleveland",
-          "clinic",
-          "dead",
-          "emergency",
-          "minutes",
-          "mother",
-          "pronounced",
-          "room",
-          "sight",
-          "south",
-          "than"
-        ],
-        "semantic_novel_fact_token_count": 30,
-        "missing": [],
-        "source_title": "Martin County sheriff investigates toddler death in pond - WPBF",
-        "headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South"
-      },
-      "headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South"
-    }
-  ],
-  "material_updates": [
-    {
-      "phase": "forward_publication",
-      "source_slug": "",
-      "target_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-      "source_story_id": "story_018423",
-      "target_story_id": "story_017829",
-      "source_headline": "Port St. Lucie removes 18 Flock cameras as privacy concerns grow - WPBF",
-      "updated_headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "Port St. Lucie city",
-        "18 Flock cameras",
-        "Sept. 30 removal date",
-        "county and state rights-of-way",
-        "city commission decision",
-        "privacy concerns from residents"
-      ],
-      "novel_facts": [
-        "Cameras were actually removed on Wednesday (Sept. 30)",
-        "City commission voted to end the program entirely",
-        "City went beyond state mandate by removing cameras from city streets too",
-        "Florida Department of Transportation requirement for state highway cameras specified",
-        "Specific resident quotes from Monday's commission meeting included"
-      ],
-      "updated_at": "2026-09-30T18:52:03Z",
-      "composition": {
-        "phase": "forward_publication",
-        "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-        "incoming_slug": "",
-        "status": "validated",
-        "validation_errors": [],
-        "word_count": 274,
-        "paragraph_count": 4,
-        "baseline_lead_hits": [
-          "cameras",
-          "flock",
-          "lucie",
-          "port",
-          "removal",
-          "sept"
-        ],
-        "novelty_lead_hits": [
-          "commission",
-          "end",
-          "had",
-          "removed",
-          "streets",
-          "vendor",
-          "voted",
-          "wednesday"
-        ],
-        "headline_alignment": {
-          "aligned": true,
-          "reason": "validated_canonical_headline_evolution",
-          "token_similarity": 1.0,
-          "date_gap_days": 1,
-          "meaningful_update_basis": "semantic_material_update_gate",
-          "prospective": true,
-          "existing_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-          "incoming_headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
-          "candidate_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-          "prospective_lastmod": "2026-09-30",
-          "timestamp_evidence": "stored_archive_timestamp"
-        },
-        "context_diagnostics": {
-          "required": true,
-          "passed": true,
-          "story_form": "update",
-          "lead_word_count": 64,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "18",
-            "30",
-            "cameras",
-            "flock",
-            "lucie",
-            "port",
-            "removal",
-            "sept"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Port St. Lucie schedules removal of 18 Flock cameras by Sept. 30",
-          "novelty_anchor": "semantic_gate_novel_fact",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "concerns",
-            "privacy"
-          ],
-          "semantic_novel_fact_hits": [
-            "commission",
-            "removed",
-            "streets",
-            "voted",
-            "wednesday"
-          ],
-          "semantic_novel_fact_token_count": 23,
-          "missing": [],
-          "source_title": "Port St. Lucie removes 18 Flock cameras as privacy concerns grow - WPBF",
-          "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program"
-        },
-        "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program"
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "source_slug": "",
-      "target_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-      "source_story_id": "story_018402",
-      "target_story_id": "story_018364",
-      "source_headline": "Martin County sheriff investigates toddler death in pond - WPBF",
-      "updated_headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Pablo Mendoza-Arrojo, 23-month-old victim",
-        "Tuesday evening after 5 p.m.",
-        "pond on family property",
-        "Darling Street/Southeast Darling Street in Martin County",
-        "Martin County Sheriff's Office investigation"
-      ],
-      "novel_facts": [
-        "Specific cross-street location: Southeast Taylor Drive",
-        "Timeline detail: out of sight for no more than 10 minutes",
-        "Mother and aunt conducted the search",
-        "Taken to Cleveland Clinic South",
-        "Pronounced dead in emergency room",
-        "Criminal investigators interviewed everyone at scene"
-      ],
-      "updated_at": "2026-09-30T18:52:41Z",
-      "composition": {
-        "phase": "forward_publication",
-        "canonical_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-        "incoming_slug": "",
-        "status": "validated",
-        "validation_errors": [],
-        "word_count": 183,
-        "paragraph_count": 4,
-        "baseline_lead_hits": [
-          "family",
-          "martin",
-          "month",
-          "old",
-          "pond",
-          "property"
-        ],
-        "novelty_lead_hits": [
-          "aunt",
-          "but",
-          "cleveland",
-          "clinic",
-          "dead",
-          "drowned",
-          "emergency",
-          "minutes",
-          "more",
-          "mother",
-          "pronounced",
-          "room",
-          "rushed",
-          "sight",
-          "south",
-          "than"
-        ],
-        "headline_alignment": {
-          "aligned": true,
-          "reason": "validated_canonical_headline_evolution",
-          "token_similarity": 1.0,
-          "date_gap_days": 0,
-          "meaningful_update_basis": "semantic_material_update_gate",
-          "prospective": true,
-          "existing_headline": "23-month-old drowns in pond on family property in Martin County",
-          "incoming_headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South",
-          "candidate_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-          "prospective_lastmod": "2026-09-30",
-          "timestamp_evidence": "stored_archive_timestamp"
-        },
-        "context_diagnostics": {
-          "required": true,
-          "passed": true,
-          "story_form": "update",
-          "lead_word_count": 63,
-          "baseline_anchor": "fatality",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "23",
-            "family",
-            "martin",
-            "month",
-            "pond",
-            "property"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "23-month-old drowns in pond on family property in Martin County",
-          "novelty_anchor": "semantic_gate_novel_fact",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "sheriff"
-          ],
-          "semantic_novel_fact_hits": [
-            "10",
-            "aunt",
-            "cleveland",
-            "clinic",
-            "dead",
-            "emergency",
-            "minutes",
-            "mother",
-            "pronounced",
-            "room",
-            "sight",
-            "south",
-            "than"
-          ],
-          "semantic_novel_fact_token_count": 30,
-          "missing": [],
-          "source_title": "Martin County sheriff investigates toddler death in pond - WPBF",
-          "headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South"
-        },
-        "headline": "Toddler drowned in 10 minutes, pronounced dead at Cleveland Clinic South"
-      }
-    }
-  ],
+  "material_update_compositions": [],
+  "material_updates": [],
   "registry_consolidation": {
     "status": "consolidated",
-    "directives_considered": 7,
-    "story_records_merged": 2,
-    "aliases_written": 2,
-    "already_consolidated": 0,
+    "directives_considered": 9,
+    "story_records_merged": 1,
+    "aliases_written": 1,
+    "already_consolidated": 2,
     "skipped": [
       {
         "source_story_id": "story_008278",
@@ -3309,57 +2052,24 @@
     "rejected_directives": [],
     "merges": [
       {
-        "source_story_id": "story_018423",
-        "target_story_id": "story_017829",
-        "target_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-        "incoming_headline": "Port St. Lucie removes 18 Flock cameras from city streets after commission vote",
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Port St. Lucie city",
-          "18 Flock cameras",
-          "Sept. 30 removal date",
-          "county and state rights-of-way",
-          "city commission decision",
-          "privacy concerns from residents"
-        ],
-        "reason": "Same real-world event: both articles cover Port St. Lucie's decision to remove the same 18 Flock cameras by Sept. 30. The candidate announced the scheduled removal; the incoming article reports the removal actually happened on that date and provides the material update that the commission voted to end the program (not just pause it) and that the city went beyond state requirements by removing cameras from city streets as well. This is a material development in the ongoing story that belongs in the existing canonical rather than creating a standalone follow-up.",
-        "relationship_type": "material_update",
-        "novel_facts": [
-          "Cameras were actually removed on Wednesday (Sept. 30)",
-          "City commission voted to end the program entirely",
-          "City went beyond state mandate by removing cameras from city streets too",
-          "Florida Department of Transportation requirement for state highway cameras specified",
-          "Specific resident quotes from Monday's commission meeting included"
-        ],
-        "resolved_source_story_id": "story_018423",
-        "resolved_target_story_id": "story_017829"
-      },
-      {
-        "source_story_id": "story_018402",
+        "source_story_id": "story_018365",
         "target_story_id": "story_018364",
         "target_slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-        "incoming_headline": "Martin County Sheriff's Office investigates drowning death of toddler in Port Salerno",
-        "confidence": 0.99,
+        "incoming_headline": "23-Month-Old Boy Drowns in Pond on Family Property in Martin County",
+        "confidence": 0.97,
         "shared_anchors": [
-          "Pablo Mendoza-Arrojo, 23-month-old victim",
-          "Tuesday evening after 5 p.m.",
-          "pond on family property in Martin County",
-          "Darling Street location",
-          "Martin County Sheriff's Office investigation",
-          "child found by mother and family members"
+          "23-month-old boy",
+          "Darling Street, Martin County",
+          "family pond drowning",
+          "Cleveland Clinic South",
+          "Martin County Sheriff's Office",
+          "out of sight for no more than 10 minutes",
+          "mother and aunt found him"
         ],
-        "reason": "Same drowning death of Pablo Mendoza-Arrojo in pond on family property Tuesday evening. Incoming article adds material updates: confirms death occurred at Cleveland Clinic South emergency room after family transport, specifies 10-minute timeline, identifies Port Salerno location, and notes criminal investigators interviewed witnesses. These are substantive developments that belong in the existing canonical rather than a separate story.",
-        "relationship_type": "material_update",
-        "novel_facts": [
-          "Child was out of sight for under 10 minutes",
-          "More precise location: Southeast Darling Street and Southeast Taylor Drive intersection",
-          "Mother and aunt found him (specifies aunt)",
-          "Family rushed him to Cleveland Clinic South",
-          "Pronounced dead in emergency room",
-          "Criminal investigators interviewed everyone at scene",
-          "Port Salerno identified as locality"
-        ],
-        "resolved_source_story_id": "story_018402",
+        "reason": "Both articles describe the identical drowning incident of a 23-month-old boy on Darling Street in Martin County, same timeline, same hospital, same agency, and same details. The candidate even includes the victim's name (Pablo Mendoza-Arrojo), which is more specific than the incoming article. No new material facts are introduced.",
+        "relationship_type": "duplicate",
+        "novel_facts": [],
+        "resolved_source_story_id": "story_018365",
         "resolved_target_story_id": "story_018364"
       }
     ]
