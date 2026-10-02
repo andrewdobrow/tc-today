@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments**
-- Recommended: **Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments**
+- Current: **Missing Jensen Beach Man Nicklaus Cantor Found Safe**
+- Recommended: **Missing Jensen Beach Man Nicklaus Cantor Found Safe**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting | Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week | 60 | importance 0; freshness 99.99; urgency 5/10; validated material update |
-| 2 | Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week | Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting | 56 | importance 0; freshness 99.98; urgency 6/10 |
-| 3 | St. Lucie County Teen Wins National Youth of the Year, Set for Hometown Welcome | St. Lucie County Teen Wins National Youth of the Year, Set for Hometown Welcome | 54 | importance 0; freshness 99.99; urgency 5/10; -6 category saturation |
-| 4 | Port St. Lucie TikTok Creator Jailed as Device-Access Case Reopened | Palm City hoarding case: 72 charges against O'Donnell, dogs find homes | 48 | importance 0; freshness 76.01; urgency 2/10; validated material update |
-| 5 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 3-4 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 3-4 | 46 | importance 0; freshness 79.39; urgency 5/10 |
-| 6 | Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd | 60-Day Rabies Alert Covers Part of Stuart After Raccoon Tests Positive | 44 | importance 0; freshness 59.91; urgency 2/10; validated material update |
-| 7 | Family Still Searching 8 Months After Fort Pierce Man Vanished | Martin County toddler drowned in family pond after being out of sight no more than 10 minutes | 42 | importance 0; freshness 49.98; urgency 2/10; validated material update; -4 county saturation |
-| 8 | St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days | Breeze Airways launches nonstop Vero Beach flights to Trenton, Baltimore, Pittsburgh, Atlantic City | 35 | importance 0; freshness 20.03; urgency 2/10; validated material update |
-| 9 | Missing Jensen Beach Man Nicklaus Cantor Found Safe | Missing Jensen Beach Man Nicklaus Cantor Found Safe | 48 | position locked: identity_conflict |
-| 10 | Palm City hoarding case: 72 charges against O'Donnell, dogs find homes | Family Still Searching 8 Months After Fort Pierce Man Vanished | 45 | importance 0; freshness 71.62; urgency 4/10; -12 category saturation |
-| 11 | Returning Stuart City Manager Michael Mortell Vows More Structure, Restored Trust | Florida Rolls Out Redesigned Driver's Licenses at Service Centers Statewide | 31 | importance 0; freshness 26.66; urgency 4/10 |
-| 12 | Martin County Issues Advisory After Sentinel Chickens Test Positive for West Nile Virus | Port St. Lucie removes 18 Flock cameras after commission votes to end program | 35 | importance 0; freshness 20.02; urgency 2/10; validated material update; -8 county saturation |
+| 1 | Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week | Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments | 54 | importance 0; freshness 98.63; urgency 2/10; validated material update |
+| 2 | Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments | Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week | 53 | importance 0; freshness 98.64; urgency 2/10; validated material update |
+| 3 | Returning Stuart City Manager Michael Mortell Vows More Structure, Restored Trust | Palm City hoarding case: 72 charges against O'Donnell, dogs find homes | 48 | importance 0; freshness 74.66; urgency 2/10; validated material update |
+| 4 | Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd | Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting | 47 | importance 0; freshness 98.63; urgency 2/10 |
+| 5 | Family Still Searching 8 Months After Fort Pierce Man Vanished | St. Lucie County Teen Wins National Youth of the Year, Set for Hometown Welcome | 47 | importance 0; freshness 98.64; urgency 2/10 |
+| 6 | Treasure Coast traffic report: I-95 ramp closures, road work planned Oct. 3-9 | Returning Stuart City Manager Michael Mortell Vows More Structure, Restored Trust | 45 | importance 0; freshness 70.28; urgency 4/10 |
+| 7 | Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting | Treasure Coast traffic report: I-95 ramp closures, road work planned Oct. 3-9 | 44 | importance 0; freshness 99.98; urgency 2/10; -4 county saturation |
+| 8 | St. Lucie County Teen Wins National Youth of the Year, Set for Hometown Welcome | Family Still Searching 8 Months After Fort Pierce Man Vanished | 45 | importance 0; freshness 70.27; urgency 4/10; -6 category saturation |
+| 9 | St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 3-4 | 39 | importance 0; freshness 78.04; urgency 2/10 |
+| 10 | Palm City hoarding case: 72 charges against O'Donnell, dogs find homes | 60-Day Rabies Alert Covers Part of Stuart After Raccoon Tests Positive | 44 | importance 0; freshness 58.56; urgency 2/10; validated material update; -6 category saturation; -12 county saturation |
+| 11 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 3-4 | Florida's Minimum Wage Hits Final Scheduled Increase to $15 an Hour | 26 | importance 0; freshness 25.31; urgency 2/10 |
+| 12 | Martin County Issues Advisory After Sentinel Chickens Test Positive for West Nile Virus | Florida Rolls Out Redesigned Driver's Licenses at Service Centers Statewide | 26 | importance 0; freshness 25.31; urgency 2/10 |
 
 ## Recommended moves
 
-- **60-Day Rabies Alert Covers Part of Stuart After Raccoon Tests Positive**: 55 → 6 — importance 0; freshness 59.91; urgency 2/10; validated material update
-- **Breeze Airways launches nonstop Vero Beach flights to Trenton, Baltimore, Pittsburgh, Atlantic City**: 56 → 8 — importance 0; freshness 20.03; urgency 2/10; validated material update
-- **Martin County toddler drowned in family pond after being out of sight no more than 10 minutes**: 30 → 7 — importance 0; freshness 49.98; urgency 2/10; validated material update; -4 county saturation
-- **Port St. Lucie TikTok Creator Jailed as Device-Access Case Reopened**: 4 → 13 — importance 0; freshness 63.31; urgency 6/10
-- **Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd**: 6 → 14 — importance 0; freshness 71.63; urgency 4/10
-- **St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days**: 8 → 15 — importance 0; freshness 66.63; urgency 4/10
-- **Port St. Lucie removes 18 Flock cameras after commission votes to end program**: 19 → 12 — importance 0; freshness 20.02; urgency 2/10; validated material update; -8 county saturation
-- **Palm City hoarding case: 72 charges against O'Donnell, dogs find homes**: 10 → 4 — importance 0; freshness 76.01; urgency 2/10; validated material update
-- **Returning Stuart City Manager Michael Mortell Vows More Structure, Restored Trust**: 11 → 16 — importance 0; freshness 71.62; urgency 2/10
-- **Martin County Issues Advisory After Sentinel Chickens Test Positive for West Nile Virus**: 12 → 17 — importance 0; freshness 66.64; urgency 2/10
-- **Family Still Searching 8 Months After Fort Pierce Man Vanished**: 7 → 10 — importance 0; freshness 71.62; urgency 4/10; -12 category saturation
-- **Florida Rolls Out Redesigned Driver's Licenses at Service Centers Statewide**: 14 → 11 — importance 0; freshness 26.66; urgency 4/10
+- **60-Day Rabies Alert Covers Part of Stuart After Raccoon Tests Positive**: 55 → 10 — importance 0; freshness 58.56; urgency 2/10; validated material update; -6 category saturation; -12 county saturation
+- **Florida Rolls Out Redesigned Driver's Licenses at Service Centers Statewide**: 54 → 12 — importance 0; freshness 25.31; urgency 2/10
+- **Florida's Minimum Wage Hits Final Scheduled Increase to $15 an Hour**: 49 → 11 — importance 0; freshness 25.31; urgency 2/10
+- **Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd**: 4 → 13 — importance 0; freshness 70.28; urgency 4/10
+- **Palm City hoarding case: 72 charges against O'Donnell, dogs find homes**: 10 → 3 — importance 0; freshness 74.66; urgency 2/10; validated material update
+- **St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days**: 9 → 14 — importance 0; freshness 65.29; urgency 4/10
+- **Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting**: 7 → 4 — importance 0; freshness 98.63; urgency 2/10
+- **St. Lucie County Teen Wins National Youth of the Year, Set for Hometown Welcome**: 8 → 5 — importance 0; freshness 98.64; urgency 2/10
+- **Returning Stuart City Manager Michael Mortell Vows More Structure, Restored Trust**: 3 → 6 — importance 0; freshness 70.28; urgency 4/10
+- **Family Still Searching 8 Months After Fort Pierce Man Vanished**: 5 → 8 — importance 0; freshness 70.27; urgency 4/10; -6 category saturation
+- **Martin County Issues Advisory After Sentinel Chickens Test Positive for West Nile Virus**: 12 → 15 — importance 0; freshness 65.29; urgency 2/10
+- **Looking for something to do this weekend? Here are the Top 5 local events for Oct. 3-4**: 11 → 9 — importance 0; freshness 78.04; urgency 2/10
 
 ## Guardrails
 
