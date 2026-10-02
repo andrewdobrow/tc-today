@@ -160,6 +160,14 @@ jobs:
           # and Sonnet 5 writes only those assignments. Set the repository variable false
           # only for emergency rollback to the legacy mixed selector/writer call.
           TCT_ASSIGNMENT_EDITOR_LIVE: ${{ vars.TCT_ASSIGNMENT_EDITOR_LIVE || 'true' }}
+          # Article-image mirroring is opt-in. Keep external until Bunny credentials
+          # and the custom CDN hostname have been verified; then use shadow before mirror.
+          TCT_ARTICLE_IMAGE_MODE: ${{ vars.TCT_ARTICLE_IMAGE_MODE || 'external' }}
+          BUNNY_STORAGE_ZONE_PASSWORD: ${{ secrets.BUNNY_STORAGE_ZONE_PASSWORD }}
+          BUNNY_STORAGE_ZONE_NAME: ${{ vars.BUNNY_STORAGE_ZONE_NAME || '' }}
+          BUNNY_STORAGE_REGION: ${{ vars.BUNNY_STORAGE_REGION || '' }}
+          BUNNY_STORAGE_API_HOST: ${{ vars.BUNNY_STORAGE_API_HOST || '' }}
+          BUNNY_CDN_BASE_URL: ${{ vars.BUNNY_CDN_BASE_URL || '' }}
 
       - name: Save generation cache even when generation fails
         if: always()
