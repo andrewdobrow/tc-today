@@ -37,6 +37,7 @@ from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_clien
 from tct_engine.model_bakeoff import write_bakeoff_artifacts
 from tct_engine.assignment_editor_shadow import normalize_assignment_plan, write_assignment_editor_artifacts
 from tct_engine.article_prose_policy import sanitize_article_text, sanitize_article_body_html
+from tct_engine.article_image_mirror import get_article_image_mirror, finalize_article_image_mirror
 
 # Editorial engine integration. Import failures remain fail-open. Production
 # behavior changes only through the separately gated v1.9 activation controller.
@@ -2221,6 +2222,74 @@ def _absolute_image_url(url):
     return raw
 
 
+def _article_image_delivery_mode():
+    mode = str(os.getenv("TCT_ARTICLE_IMAGE_MODE", "external")).strip().lower()
+    return mode if mode in {"external", "shadow", "mirror"} else "external"
+
+
+def _is_tct_mirrored_image_url(url):
+    """Return True for the TCT-owned public image CDN, never publisher provenance."""
+    raw = _absolute_image_url(url)
+    if not raw:
+        return False
+    try:
+        host = urlsplit(raw).netloc.lower().split(":", 1)[0]
+    except Exception:
+        return False
+    expected = {"images.treasurecoast.today"}
+    configured = str(os.getenv("BUNNY_CDN_BASE_URL", "")).strip()
+    if configured:
+        try:
+            cfg_host = urlsplit(configured if "://" in configured else "https://" + configured).netloc.lower().split(":", 1)[0]
+            if cfg_host:
+                expected.add(cfg_host)
+        except Exception:
+            pass
+    return host in expected
+
+
+def _mirror_article_image_for_render(item, *, slug=""):
+    """Mirror one article's authoritative external image without weakening fallback.
+
+    Shadow mode writes/verifies the mirror registry but leaves public rendering on the
+    publisher URL. Mirror mode switches only after Bunny verification and an atomic
+    registry write. Events are a separate pipeline and never pass through this hook.
+    """
+    if not isinstance(item, dict) or _article_image_delivery_mode() == "external":
+        return False
+    if str(item.get("article_type") or "").strip().lower() == "product_guide":
+        return False
+    original = _absolute_image_url(item.get("source_image_url") or item.get("image_url"))
+    if not _is_real_source_image_url(original) or _is_tct_mirrored_image_url(original):
+        return False
+    manager = get_article_image_mirror(OUTPUT_DIR)
+    decision = manager.mirror(
+        slug=str(slug or item.get("slug") or item.get("_archived_slug") or "").strip(),
+        original_url=original,
+        source_article_url=str(
+            item.get("source_url") or item.get("_source_url") or item.get("original_url") or item.get("feed_url") or ""
+        ).strip(),
+        source_name=str(item.get("source_name") or item.get("source") or "").strip(),
+    )
+    # Preserve publisher provenance even when public delivery switches to TCT's CDN.
+    item["source_image_url"] = original
+    item["article_image_mirror_status"] = str(decision.get("status") or "external")
+    item["article_image_mirror_action"] = str(decision.get("action") or "")
+    public_url = str(decision.get("public_url") or "").strip()
+    if public_url:
+        item["hosted_image_url"] = public_url
+        item["image_storage_provider"] = "bunny"
+        item["image_storage_key"] = str(decision.get("storage_key") or "")
+        item["image_sha256"] = str(decision.get("sha256") or "")
+    if _article_image_delivery_mode() == "mirror" and decision.get("status") == "mirrored" and public_url:
+        item["image_url"] = public_url
+        item["rss_social_image_url"] = public_url
+        item["rss_social_image_kind"] = "source"
+        item["rss_social_image_source"] = "tct_bunny_source_mirror"
+        item["social_image_is_source"] = True
+    return bool(public_url)
+
+
 
 def _normalize_article_slug(value):
     """Return one article slug from a slug, permalink, href, or archive field."""
@@ -2610,7 +2679,8 @@ def _social_syndication_image_url(item, category_key=""):
     key = _canonical_social_category_key(
         category_key, article.get("category_key"), article.get("category")
     )
-    for field in ("source_image_url", "image_url"):
+    fields = ("hosted_image_url", "source_image_url", "image_url") if _article_image_delivery_mode() == "mirror" else ("source_image_url", "image_url")
+    for field in fields:
         candidate = _absolute_image_url(article.get(field))
         if _is_real_source_image_url(candidate):
             return candidate
@@ -17936,8 +18006,9 @@ def validate_custom_body_fidelity(hero, page_html):
 
 
 def render_article_page(hero, category_label, category_key, pub_date, slug, related=None):
-    _apply_article_image_override(hero, slug=slug)
     """Render a permanent article page for a single TCT story."""
+    _apply_article_image_override(hero, slug=slug)
+    _mirror_article_image_for_render(hero, slug=slug)
     # Published + updated timestamps for the byline area. Prefer the article's real
     # first-published time; fall back to the pub_date passed in. "Updated" only shows
     # when it differs from published (a genuinely revised story).
@@ -18075,8 +18146,11 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     # ``source_image_url`` correctly preserves the canonical source photo.  Never
     # let that fallback silently downgrade the visible hero. Custom articles retain
     # their explicitly supplied display-image authority.
+    _hosted_art_img = _absolute_image_url(hero.get("hosted_image_url"))
     _source_art_img = _absolute_image_url(hero.get("source_image_url"))
-    if not _is_custom_article and _is_real_source_image_url(_source_art_img):
+    if _article_image_delivery_mode() == "mirror" and _is_real_source_image_url(_hosted_art_img):
+        _art_img = _hosted_art_img
+    elif not _is_custom_article and _is_real_source_image_url(_source_art_img):
         _art_img = _source_art_img
     else:
         _art_img = hero.get("image_url", "")
@@ -18521,7 +18595,11 @@ def _persist_rss_source_image_authority(archive_row, image_url, *, origin=""):
     if not _is_real_source_image_url(authoritative):
         return False
     changed = False
-    if str(archive_row.get("source_image_url") or "").strip() != authoritative:
+    if _is_tct_mirrored_image_url(authoritative):
+        if str(archive_row.get("hosted_image_url") or "").strip() != authoritative:
+            archive_row["hosted_image_url"] = authoritative
+            changed = True
+    elif str(archive_row.get("source_image_url") or "").strip() != authoritative:
         archive_row["source_image_url"] = authoritative
         changed = True
     provenance = str(origin or "rss_verified_source").strip()
@@ -18676,7 +18754,7 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
         enriched = dict(row)
         live = live_by_slug.get(slug) or live_by_headline.get(_exact_custom_headline(headline))
         if isinstance(live, dict):
-            for key in ("teaser", "body", "image_url", "category_key", "category"):
+            for key in ("teaser", "body", "image_url", "source_image_url", "hosted_image_url", "image_storage_key", "image_sha256", "category_key", "category"):
                 if live.get(key) not in (None, ""):
                     enriched[key] = live.get(key)
         published_dt = _rss_publication_datetime(enriched)
@@ -18721,7 +18799,7 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
                 if isinstance(live, dict)
                 and any(
                     _absolute_image_url(live.get(field)) == image_url
-                    for field in ("source_image_url", "image_url")
+                    for field in ("hosted_image_url", "source_image_url", "image_url")
                 )
                 else "verified_archive_article_source"
             )
@@ -18962,7 +19040,24 @@ def validate_rss_social_image_contract(output_root=None):
                     "reason": "authority_marks_non_source_as_source",
                     "actual_image": actual,
                 })
-            if not isinstance(row, dict) or _absolute_image_url(row.get("source_image_url")) != actual:
+            if _is_tct_mirrored_image_url(actual):
+                mirror_ok = (
+                    isinstance(row, dict)
+                    and _absolute_image_url(row.get("hosted_image_url")) == actual
+                    and _is_real_source_image_url(_absolute_image_url(row.get("source_image_url")))
+                    and not _is_tct_mirrored_image_url(_absolute_image_url(row.get("source_image_url")))
+                )
+                if not mirror_ok:
+                    issues.append({
+                        "slug": slug,
+                        "reason": "mirrored_source_authority_not_persisted_to_archive",
+                        "actual_image": actual,
+                        "archive_hosted_image": _absolute_image_url(row.get("hosted_image_url")) if isinstance(row, dict) else "",
+                        "archive_source_image": _absolute_image_url(row.get("source_image_url")) if isinstance(row, dict) else "",
+                    })
+                else:
+                    persisted_source_images += 1
+            elif not isinstance(row, dict) or _absolute_image_url(row.get("source_image_url")) != actual:
                 issues.append({
                     "slug": slug,
                     "reason": "source_image_authority_not_persisted_to_archive",
@@ -35013,6 +35108,14 @@ def write_archives(all_categories, top_cat):
                 existing["image_credit"] = hero.get("image_credit", "")
                 existing["image_source"] = hero.get("image_source", "source_image")
                 existing["is_fallback_image"] = False
+            if hero.get("hosted_image_url"):
+                existing["hosted_image_url"] = hero.get("hosted_image_url", "")
+                existing["image_storage_provider"] = hero.get("image_storage_provider", "bunny")
+                existing["image_storage_key"] = hero.get("image_storage_key", "")
+                existing["image_sha256"] = hero.get("image_sha256", "")
+                existing["article_image_mirror_status"] = hero.get("article_image_mirror_status", "")
+                if _article_image_delivery_mode() == "mirror":
+                    existing["image_url"] = hero.get("hosted_image_url", "")
             _merge_category_memberships(existing, hero, existing.get("category_key") or cat_key)
             existing["article_word_count"] = _word_count(hero.get("body", ""))
             existing["article_paragraph_count"] = _paragraph_count(hero.get("body", ""))
@@ -35113,6 +35216,11 @@ def write_archives(all_categories, top_cat):
                 "image_url": hero.get("image_url",""),
                 "source_image_url": (hero.get("source_image_url") or hero.get("image_url", ""))
                     if _is_real_source_image_url(hero.get("source_image_url") or hero.get("image_url", "")) else "",
+                "hosted_image_url": hero.get("hosted_image_url", ""),
+                "image_storage_provider": hero.get("image_storage_provider", ""),
+                "image_storage_key": hero.get("image_storage_key", ""),
+                "image_sha256": hero.get("image_sha256", ""),
+                "article_image_mirror_status": hero.get("article_image_mirror_status", ""),
                 "image_credit": hero.get("image_credit", ""),
                 "image_source": hero.get("image_source", ""),
                 "is_fallback_image": bool(hero.get("is_fallback_image")),
@@ -40232,4 +40340,20 @@ if __name__ == "__main__":
     try:
         main()
     finally:
+        try:
+            _image_report = finalize_article_image_mirror(OUTPUT_DIR)
+            if _image_report:
+                _image_summary = _image_report.get("summary", {})
+                print(
+                    "  Article image mirror: "
+                    f"mode={_image_report.get('mode')}, "
+                    f"candidates={_image_summary.get('candidates', 0)}, "
+                    f"registry_hits={_image_summary.get('registry_hits', 0)}, "
+                    f"downloads={_image_summary.get('downloads', 0)}, "
+                    f"uploads={_image_summary.get('uploads', 0)}, "
+                    f"fallbacks={_image_summary.get('fallbacks', 0)}, "
+                    f"elapsed={_image_report.get('elapsed_seconds', 0)}s"
+                )
+        except Exception as exc:
+            print(f"  Article image mirror observability unavailable ({type(exc).__name__}); continuing")
         _finalize_model_usage_observability()

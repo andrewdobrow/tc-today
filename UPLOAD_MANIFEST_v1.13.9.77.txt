@@ -1,0 +1,32 @@
+TCT v1.13.9.77 — Bunny article image mirror pilot
+
+APPLY ON TOP OF CURRENT REPO AFTER v1.13.9.76.
+
+FUNCTIONAL FILES
+.github/workflows/update.yml
+scripts/generate.py
+scripts/restore_external_article_images.py
+tct_engine/article_image_mirror.py
+data/article-image-registry.json
+
+TESTS
+tests/test_article_image_mirror.py
+tests/test_article_image_mirror_integration.py
+tests/test_restore_external_article_images.py
+
+DOCUMENTATION
+PATCH_NOTES_v1.13.9.77.md
+UPLOAD_MANIFEST_v1.13.9.77.txt
+
+REQUIRED GITHUB SECRET
+BUNNY_STORAGE_ZONE_PASSWORD
+
+REQUIRED/RECOMMENDED GITHUB VARIABLES
+BUNNY_STORAGE_ZONE_NAME=tct-article-images
+BUNNY_STORAGE_REGION=ny
+BUNNY_STORAGE_API_HOST=ny.storage.bunnycdn.com
+BUNNY_CDN_BASE_URL=https://images.treasurecoast.today
+TCT_ARTICLE_IMAGE_MODE=shadow
+
+FIRST ROLLOUT
+Use shadow, not mirror. Shadow uploads/verifies and writes provenance while all reader-facing image URLs remain publisher URLs.
