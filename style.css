@@ -6746,6 +6746,42 @@ main.article-page-main > .article-wrap {
    Kit now owns the newsletter modal presentation on every viewport.
    ============================================================ */
 
+/* ============================================================
+   TCT v1.13.9.72 — in-app browser newsletter modal safe area
+   Reddit and other iOS in-app browsers can overlay browser chrome on the
+   viewport edge. Keep Kit's dismiss control comfortably inside that edge and
+   leave extra vertical breathing room so the modal can always be bypassed.
+   ============================================================ */
+@media (max-width: 680px) {
+  .formkit-modal .formkit-form,
+  .formkit-overlay .formkit-form,
+  .formkit-form[data-format="modal"] {
+    width: min(420px, calc(100vw - 72px)) !important;
+    max-height: calc(100dvh - 112px) !important;
+    margin-top: max(40px, calc(env(safe-area-inset-top) + 20px)) !important;
+    margin-right: auto !important;
+    margin-bottom: max(72px, calc(env(safe-area-inset-bottom) + 32px)) !important;
+    margin-left: auto !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    box-sizing: border-box !important;
+  }
+
+  .formkit-modal .formkit-close,
+  .formkit-overlay .formkit-close,
+  .formkit-form[data-format="modal"] .formkit-close {
+    top: 14px !important;
+    right: 14px !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    transform: none !important;
+    z-index: 2147483646 !important;
+    touch-action: manipulation !important;
+  }
+}
+
 /* =========================================================
    TCT v1.13.9.0 — Missing Persons public-service directory
    ========================================================= */
