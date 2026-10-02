@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-02T19:40:21Z",
+  "generated_at": "2026-10-02T20:50:09Z",
   "mode": "enforce",
-  "publication_behavior_changed": false,
+  "publication_behavior_changed": true,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,16 +19,72 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
-    "applied_action_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
+    "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 2,
+    "placements_before": 3,
     "placements_after": 2,
-    "publication_behavior_changed": false,
+    "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
-    "recommendations": [],
-    "applied_actions": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+        "headline": "Miami Woman Jailed After Tow Yard Shooting Near Murray Middle School Triggers Lockout",
+        "source_title_key": "miami woman jailed after tow yard shooting near murray middle school triggers lockout",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-according-activated-active-shooter-additional-afternoon-8fafb6fc",
+        "canonical_is_custom": false,
+        "canonical_title": "Miami Woman Jailed After Tow Yard Shooting Triggers Murray Middle School Lockout",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "martin",
+        "placement": "hero"
+      }
+    ],
+    "applied_actions": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+        "headline": "Miami Woman Jailed After Tow Yard Shooting Near Murray Middle School Triggers Lockout",
+        "source_title_key": "miami woman jailed after tow yard shooting near murray middle school triggers lockout",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-according-activated-active-shooter-additional-afternoon-8fafb6fc",
+        "canonical_is_custom": false,
+        "canonical_title": "Miami Woman Jailed After Tow Yard Shooting Triggers Murray Middle School Lockout",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "martin",
+        "placement": "hero",
+        "slug": "",
+        "source_title": "Miami Woman Jailed After Tow Yard Shooting Near Murray Middle School Triggers Lockout",
+        "date": "A few minutes ago",
+        "category_key": "martin",
+        "is_custom": false,
+        "story_stage": "arrest-or-charges",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 98,
+        "matched_prior_slug": "",
+        "matched_prior_headline": "Miami Woman Jailed After Tow Yard Shooting Triggers Murray Middle School Lockout",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      }
+    ],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -51,20 +107,21 @@
   "audit": {
     "candidates_processed": 189,
     "routes": {
-      "generate_new": 23,
-      "skip": 166
+      "generate_new": 30,
+      "skip": 158,
+      "update_existing": 1
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 139,
-      "publishable": 47,
+      "low_value": 138,
+      "publishable": 48,
       "search_page": 1
     },
     "source_classes": {
-      "aggregator": 141,
-      "local_news": 24,
+      "aggregator": 140,
+      "local_news": 23,
       "regional_news": 20,
-      "unknown": 4
+      "unknown": 6
     },
     "rejected_count": 3,
     "rejected_examples": [
@@ -99,10 +156,33 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 12,
-      "same_event": 177
+      "new_story": 13,
+      "same_event": 176
     },
     "examples": [
+      {
+        "story_id": "story_018871",
+        "title": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County",
+        "event_key": "fire-d2874559a4-d2874559a4",
+        "relationship": "same_event",
+        "confidence": 0.96,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: road_rage",
+          "Shared people: none",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: martin_stuart, pit_maneuver",
+          "Shared distinctive tokens: 4",
+          "Distinctive-token overlap: 0.18",
+          "Title overlap: 0.56",
+          "Identity anchors qualified: True",
+          "Confidence: 0.96"
+        ]
+      },
       {
         "story_id": "story_018843",
         "title": "Samaritan Center Hosts 34th Annual Soup Bowl November 5 in Vero Beach - EIN News",
@@ -156,6 +236,19 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_018836",
+        "title": "Sebastian River High School Football Spotlight: Linemen Djoula, Jimmy Augustin - sebastiandaily.com",
+        "event_key": "unknown-event-2d82c157aa",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact source article URL already belongs to this story",
+        "decision_trace": [
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMivwFBVV95cUxQcjI5MUZCNzJsb0pqbHRSSTIwalhwLXNmOWpPYUZ1Y3dVRkxoTXJqZXdueTJXRE5pNnQ5czBIbWdWd1JyVzdlWTZUSG5ZOG5BME9RcWxxaTlESTRSMmozR2hteFU5VUpHSDc3VFZweURud1VTSmFBbk4xaTNFQ1F0ZGFpQTZWVHVkM0M5b3FHR001aDZ0VjBLUkNPV1RfSnk4WWl3X0p3b2N5NURrdDNHZ3BVeVU2bkFUUlY5ZHNOOA",
           "Confidence: 1.00"
         ]
       },
@@ -230,6 +323,20 @@
         ]
       },
       {
+        "story_id": "story_018768",
+        "title": "Out-of-town foes loom in Week 7 Jacksonville football. Who will win? - FL Times-Union",
+        "event_key": "unknown-event-28d55e336e",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_018794",
         "title": "Father and 3 children dead, 4 others injured in house fire - WFLX",
         "event_key": "fire-de2d40e2d6-de2d40e2d6",
@@ -245,15 +352,14 @@
       },
       {
         "story_id": "story_018764",
-        "title": "Sunburn — The morning read of what’s hot in Florida politics — 10.2.26 - Florida Politics",
-        "event_key": "unknown-event-dc742e89f2",
+        "title": "Sunburn — The morning read of what’s hot in Florida politics — 10.2.26 - floridapolitics.com",
+        "event_key": "unknown-event-5dcf8aa954",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMirwFBVV95cUxQWnFzVmYwbWZMdk9fUkh1Rkg0cWI1SjljQjI0anJWZ09EM0l0U3N3NGVJeklzdHFQd0xEWWl3LUJaenY1Ulp4QUpDdGdBTTVOcE91Wm5TalU1SjVtUVZQYmpVSDM3RkQ2MUVlV24yQkYzY09VWENDVDFqeG1wOHFLTEFPQlR1aDdGVWgwcmtUVDc0ZWhKZEJCanBULW1HQ3lyOFJzX194R2hFSnZSdkFn",
           "Confidence: 1.00"
         ]
       },
@@ -331,48 +437,6 @@
         "story_id": "story_018716",
         "title": "Jupiter launches its own fire department, aims to improve service and save taxpayers millions",
         "event_key": "fire-7472f3aca5-7472f3aca5",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_018398",
-        "title": "WPBF 25 Interactive Voter Guide for 2026 Florida general election - WPBF",
-        "event_key": "unknown-event-333cafefd9",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_018384",
-        "title": "2026 General Election: County-by-county guide for Florida voters - WPBF",
-        "event_key": "unknown-event-2e0c14093e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_018685",
-        "title": "Mosquito-borne illness advisory issued for Martin County - WFLX",
-        "event_key": "unknown-event-1b004c1186",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -386,6 +450,30 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_018871",
+        "title": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County",
+        "event_key": "fire-d2874559a4-d2874559a4",
+        "relationship": "same_event",
+        "confidence": 0.96,
+        "matched_existing": true,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: road_rage",
+          "Shared people: none",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: martin_stuart, pit_maneuver",
+          "Shared distinctive tokens: 4",
+          "Distinctive-token overlap: 0.18",
+          "Title overlap: 0.56",
+          "Identity anchors qualified: True",
+          "Confidence: 0.96"
+        ]
+      },
+      {
         "story_id": "story_018843",
         "title": "Samaritan Center Hosts 34th Annual Soup Bowl November 5 in Vero Beach - EIN News",
         "event_key": "unknown-event-7bc9a4521f",
@@ -442,6 +530,20 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_018836",
+        "title": "Sebastian River High School Football Spotlight: Linemen Djoula, Jimmy Augustin - sebastiandaily.com",
+        "event_key": "unknown-event-2d82c157aa",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact source article URL already belongs to this story",
+        "decision_trace": [
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMivwFBVV95cUxQcjI5MUZCNzJsb0pqbHRSSTIwalhwLXNmOWpPYUZ1Y3dVRkxoTXJqZXdueTJXRE5pNnQ5czBIbWdWd1JyVzdlWTZUSG5ZOG5BME9RcWxxaTlESTRSMmozR2hteFU5VUpHSDc3VFZweURud1VTSmFBbk4xaTNFQ1F0ZGFpQTZWVHVkM0M5b3FHR001aDZ0VjBLUkNPV1RfSnk4WWl3X0p3b2N5NURrdDNHZ3BVeVU2bkFUUlY5ZHNOOA",
           "Confidence: 1.00"
         ]
       },
@@ -521,6 +623,21 @@
         ]
       },
       {
+        "story_id": "story_018768",
+        "title": "Out-of-town foes loom in Week 7 Jacksonville football. Who will win? - FL Times-Union",
+        "event_key": "unknown-event-28d55e336e",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_018794",
         "title": "Father and 3 children dead, 4 others injured in house fire - WFLX",
         "event_key": "fire-de2d40e2d6-de2d40e2d6",
@@ -537,16 +654,15 @@
       },
       {
         "story_id": "story_018764",
-        "title": "Sunburn — The morning read of what’s hot in Florida politics — 10.2.26 - Florida Politics",
-        "event_key": "unknown-event-dc742e89f2",
+        "title": "Sunburn — The morning read of what’s hot in Florida politics — 10.2.26 - floridapolitics.com",
+        "event_key": "unknown-event-5dcf8aa954",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMirwFBVV95cUxQWnFzVmYwbWZMdk9fUkh1Rkg0cWI1SjljQjI0anJWZ09EM0l0U3N3NGVJeklzdHFQd0xEWWl3LUJaenY1Ulp4QUpDdGdBTTVOcE91Wm5TalU1SjVtUVZQYmpVSDM3RkQ2MUVlV24yQkYzY09VWENDVDFqeG1wOHFLTEFPQlR1aDdGVWgwcmtUVDc0ZWhKZEJCanBULW1HQ3lyOFJzX194R2hFSnZSdkFn",
           "Confidence: 1.00"
         ]
       },
@@ -629,51 +745,6 @@
         "story_id": "story_018716",
         "title": "Jupiter launches its own fire department, aims to improve service and save taxpayers millions",
         "event_key": "fire-7472f3aca5-7472f3aca5",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_018398",
-        "title": "WPBF 25 Interactive Voter Guide for 2026 Florida general election - WPBF",
-        "event_key": "unknown-event-333cafefd9",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_018384",
-        "title": "2026 General Election: County-by-county guide for Florida voters - WPBF",
-        "event_key": "unknown-event-2e0c14093e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_018685",
-        "title": "Mosquito-borne illness advisory issued for Martin County - WFLX",
-        "event_key": "unknown-event-1b004c1186",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -703,17 +774,17 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 988,
-      "timeline_entries_examined": 2852,
-      "transitions_examined": 1750,
+      "stories_with_timelines": 1001,
+      "timeline_entries_examined": 2883,
+      "transitions_examined": 1768,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 14,
       "high_confidence_candidate_count": 8,
       "activation_eligible_candidate_count": 6,
-      "same_source_evolution_count": 5,
+      "same_source_evolution_count": 6,
       "same_source_evolution_milestones": {
         "arrest": 1,
-        "death": 1,
+        "death": 2,
         "identified": 1,
         "investigation": 1,
         "opening": 1
@@ -820,6 +891,41 @@
             "title": "West Palm Beach murder suspect identified after deadly early-morning shooting - WPEC",
             "source": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOY29SbU56UkJScVVHMGVIR0M3Z1JKdWozckNwRVVwWUxDV2pMNktFaVJaSE44UzRXNzZnZUlTbzN5UktLNEZxNDBDMjNvTDcwRUotNVpxaFlFakl0UVdXYXhGYUx6a0R5ODFFSmZLRmQ0OEsxWkVHVjBnSlRBQXc2TkhJNVlvR3c2UzVVbVdScmUxZw?oc=5",
             "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOY29SbU56UkJScVVHMGVIR0M3Z1JKdWozckNwRVVwWUxDV2pMNktFaVJaSE44UzRXNzZnZUlTbzN5UktLNEZxNDBDMjNvTDcwRUotNVpxaFlFakl0UVdXYXhGYUx6a0R5ODFFSmZLRmQ0OEsxWkVHVjBnSlRBQXc2TkhJNVlvR3c2UzVVbVdScmUxZw?oc=5"
+          }
+        },
+        {
+          "story_id": "story_018845",
+          "story_title": "Suspect arrested after Bell County woman found killed, investigators recover fetal remains - LEX 18 News",
+          "milestones": [
+            "death"
+          ],
+          "matched_phrases": {
+            "death": [
+              "killed"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-365ffbcc56a9d5a4ab06",
+            "event_key": "unknown-event-db7b3048bf",
+            "published_at": "2026-10-02T18:44:46.318754+00:00",
+            "title": "Suspect arrested after Bell County woman found slain, investigators recover fetal remains - LEX 18 News",
+            "source": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQenc2WkktcHNKZmw2cTR6cE9mN2llYVNXOWxsd2VWM2dXeWFSeFd0UlY4WlVxVUl4Vkw5Q0xRVnZOTFlLSExsSEZqQTRiVGlkOTVzd0R6aDhzeUFHbEx4LVc4LVRHdmVlbHFKRGtNYlcyRXUyVUZwNjZ2V1JHOWJxR1UxdnNsc1RtWWFXMmc0alhNeFVMT0ZPTEpvLWxkZ1J3ckdmWE5QbjRqTGd6dDZRazBEUlZtYkJKVFhpTVMxOUNiMmxmM3JNOVpoQ3hMQQ?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQenc2WkktcHNKZmw2cTR6cE9mN2llYVNXOWxsd2VWM2dXeWFSeFd0UlY4WlVxVUl4Vkw5Q0xRVnZOTFlLSExsSEZqQTRiVGlkOTVzd0R6aDhzeUFHbEx4LVc4LVRHdmVlbHFKRGtNYlcyRXUyVUZwNjZ2V1JHOWJxR1UxdnNsc1RtWWFXMmc0alhNeFVMT0ZPTEpvLWxkZ1J3ckdmWE5QbjRqTGd6dDZRazBEUlZtYkJKVFhpTVMxOUNiMmxmM3JNOVpoQ3hMQQ?oc=5"
+          },
+          "newer_article": {
+            "article_id": "rss-244fa47b17a358080eb2",
+            "event_key": "unknown-event-8ceb42fb44",
+            "published_at": "2026-10-02T20:44:36.243218+00:00",
+            "title": "Suspect arrested after Bell County woman found killed, investigators recover fetal remains - LEX 18 News",
+            "source": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQenc2WkktcHNKZmw2cTR6cE9mN2llYVNXOWxsd2VWM2dXeWFSeFd0UlY4WlVxVUl4Vkw5Q0xRVnZOTFlLSExsSEZqQTRiVGlkOTVzd0R6aDhzeUFHbEx4LVc4LVRHdmVlbHFKRGtNYlcyRXUyVUZwNjZ2V1JHOWJxR1UxdnNsc1RtWWFXMmc0alhNeFVMT0ZPTEpvLWxkZ1J3ckdmWE5QbjRqTGd6dDZRazBEUlZtYkJKVFhpTVMxOUNiMmxmM3JNOVpoQ3hMQQ?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQenc2WkktcHNKZmw2cTR6cE9mN2llYVNXOWxsd2VWM2dXeWFSeFd0UlY4WlVxVUl4Vkw5Q0xRVnZOTFlLSExsSEZqQTRiVGlkOTVzd0R6aDhzeUFHbEx4LVc4LVRHdmVlbHFKRGtNYlcyRXUyVUZwNjZ2V1JHOWJxR1UxdnNsc1RtWWFXMmc0alhNeFVMT0ZPTEpvLWxkZ1J3ckdmWE5QbjRqTGd6dDZRazBEUlZtYkJKVFhpTVMxOUNiMmxmM3JNOVpoQ3hMQQ?oc=5"
           }
         },
         {
@@ -2108,28 +2214,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 583,
-      "treasure_coast_local": 425,
-      "treasure_coast_region": 183,
-      "unknown": 1063
+      "florida": 587,
+      "treasure_coast_local": 428,
+      "treasure_coast_region": 184,
+      "unknown": 1065
     },
-    "average_score": 59.89
+    "average_score": 59.94
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 583,
-      "treasure_coast_local": 425,
-      "treasure_coast_region": 183,
-      "unknown": 1063
+      "florida": 587,
+      "treasure_coast_local": 428,
+      "treasure_coast_region": 184,
+      "unknown": 1065
     },
-    "average_priority": 4.42
+    "average_priority": 4.49
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1273,
+      "active": 1259,
       "breaking": 1,
-      "developing": 294,
-      "ongoing": 686
+      "developing": 308,
+      "ongoing": 696
     }
   },
   "registry_health": {
@@ -2168,18 +2274,18 @@
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-10-02T19:33:10Z",
     "quarantined_story_records_retained": 4216,
-    "active_story_count": 2254
+    "active_story_count": 2264
   },
   "stories": {
-    "total": 2254,
+    "total": 2264,
     "importance_levels": {
       "breaking": 1,
       "high": 42,
-      "normal": 328,
-      "low": 1883,
+      "normal": 334,
+      "low": 1887,
       "archived": 0
     },
-    "average_importance": 10.28,
+    "average_importance": 10.38,
     "top": [
       {
         "story_id": "story_018832",
@@ -2236,17 +2342,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 5,
-        "timeline_entries": 4,
+        "event_count": 6,
+        "timeline_entries": 5,
         "relationship_decisions": 0,
-        "canonical_source_candidates": 4,
+        "canonical_source_candidates": 5,
         "lifecycle": {
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
-          "last_updated": "2026-10-02T19:33:47.786239+00:00",
+          "last_updated": "2026-10-02T20:44:36.243218+00:00",
           "hours_since_update": 0.05,
-          "event_count": 5,
-          "timeline_entries": 4
+          "event_count": 6,
+          "timeline_entries": 5
         }
       },
       {
@@ -2262,7 +2368,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 3.9
+          "age_hours": 5.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2305,7 +2411,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T15:44:32.039306+00:00",
-          "hours_since_update": 3.9,
+          "hours_since_update": 5.06,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2323,7 +2429,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 17.84
+          "age_hours": 19.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2366,7 +2472,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 17.84,
+          "hours_since_update": 19.01,
           "event_count": 28,
           "timeline_entries": 28
         }
@@ -2384,7 +2490,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 17.85
+          "age_hours": 19.02
         },
         "level": "high",
         "importance_reasons": [
@@ -2425,7 +2531,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 17.85,
+          "hours_since_update": 19.02,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2443,7 +2549,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 69.51
+          "age_hours": 70.69
         },
         "level": "high",
         "importance_reasons": [
@@ -2484,7 +2590,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-29T22:03:25.542264+00:00",
-          "hours_since_update": 69.51,
+          "hours_since_update": 70.69,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -2502,7 +2608,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 46.65
+          "age_hours": 47.82
         },
         "level": "high",
         "importance_reasons": [
@@ -2541,7 +2647,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-30T20:55:10.960121+00:00",
-          "hours_since_update": 46.65,
+          "hours_since_update": 47.82,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2559,7 +2665,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.84
+          "age_hours": 26.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2598,7 +2704,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-01T18:44:00.400323+00:00",
-          "hours_since_update": 24.84,
+          "hours_since_update": 26.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2616,7 +2722,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 91.3
+          "age_hours": 92.47
         },
         "level": "high",
         "importance_reasons": [
@@ -2657,7 +2763,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 91.3,
+          "hours_since_update": 92.47,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2675,7 +2781,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 47.32
+          "age_hours": 48.5
         },
         "level": "high",
         "importance_reasons": [
@@ -2727,7 +2833,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-30T20:14:49.662904+00:00",
-          "hours_since_update": 47.32,
+          "hours_since_update": 48.5,
           "event_count": 4,
           "timeline_entries": 3
         }
@@ -2745,7 +2851,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.87
+          "age_hours": 2.05
         },
         "level": "normal",
         "importance_reasons": [
@@ -2788,7 +2894,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T18:44:46.318754+00:00",
-          "hours_since_update": 0.87,
+          "hours_since_update": 2.05,
           "event_count": 24,
           "timeline_entries": 24
         }
@@ -2806,7 +2912,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 0.06
         },
         "level": "normal",
         "importance_reasons": [
@@ -2843,17 +2949,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 3,
-        "timeline_entries": 3,
+        "event_count": 4,
+        "timeline_entries": 4,
         "relationship_decisions": 0,
-        "canonical_source_candidates": 3,
+        "canonical_source_candidates": 4,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-02T19:33:47.786239+00:00",
-          "hours_since_update": 0.04,
-          "event_count": 3,
-          "timeline_entries": 3
+          "last_updated": "2026-10-02T20:44:36.243218+00:00",
+          "hours_since_update": 0.06,
+          "event_count": 4,
+          "timeline_entries": 4
         }
       },
       {
@@ -2869,7 +2975,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 76.54
+          "age_hours": 77.71
         },
         "level": "high",
         "importance_reasons": [
@@ -2908,7 +3014,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T15:01:42.735572+00:00",
-          "hours_since_update": 76.54,
+          "hours_since_update": 77.71,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2926,7 +3032,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 89.63
+          "age_hours": 90.8
         },
         "level": "high",
         "importance_reasons": [
@@ -2965,7 +3071,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T01:56:40.617429+00:00",
-          "hours_since_update": 89.63,
+          "hours_since_update": 90.8,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2983,7 +3089,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 91.3
+          "age_hours": 92.47
         },
         "level": "high",
         "importance_reasons": [
@@ -3022,7 +3128,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 91.3,
+          "hours_since_update": 92.47,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3040,7 +3146,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 73.4
+          "age_hours": 74.57
         },
         "level": "high",
         "importance_reasons": [
@@ -3074,7 +3180,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-29T18:10:14.603971+00:00",
-          "hours_since_update": 73.4,
+          "hours_since_update": 74.57,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3092,7 +3198,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 185.83
+          "age_hours": 187.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3135,7 +3241,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-25T01:44:33.584920+00:00",
-          "hours_since_update": 185.83,
+          "hours_since_update": 187.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3153,7 +3259,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 104.84
+          "age_hours": 106.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3191,7 +3297,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-28T10:43:50.122383+00:00",
-          "hours_since_update": 104.84,
+          "hours_since_update": 106.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3209,7 +3315,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 30.82
+          "age_hours": 32.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -3257,7 +3363,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-01T12:44:49.496404+00:00",
-          "hours_since_update": 30.82,
+          "hours_since_update": 32.0,
           "event_count": 15,
           "timeline_entries": 12
         }
@@ -3275,7 +3381,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 30.82
+          "age_hours": 32.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -3318,7 +3424,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-01T12:44:49.496404+00:00",
-          "hours_since_update": 30.82,
+          "hours_since_update": 32.0,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3336,7 +3442,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 328.76
+          "age_hours": 329.94
         },
         "level": "high",
         "importance_reasons": [
@@ -3379,7 +3485,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-19T02:47:55.970905+00:00",
-          "hours_since_update": 328.76,
+          "hours_since_update": 329.94,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3389,7 +3495,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-02T19:38:23Z",
+    "generated_at": "2026-10-02T20:48:25Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3405,25 +3511,25 @@
       "category_count": 9,
       "statuses": {
         "category_eligibility_archive_recovery": 4,
-        "generated_live": 1,
-        "generation_failed_archive_recovery": 2,
+        "generated_live": 2,
+        "generation_failed_archive_recovery": 1,
         "no_publishable_sources": 1,
         "quality_gate_archive_recovery": 1
       },
       "failures": {
-        "article_framing_integrity": 2,
+        "article_framing_integrity": 1,
         "no_category_eligible_sources": 4,
         "publication_quality_rejected": 1
       },
-      "model_attempt_count": 6,
-      "model_elapsed_seconds": 116.87,
-      "archive_recovery_requested_count": 8,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 83.466,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 4,
-      "category_eligibility_rejection_count": 6,
-      "published_story_duplicate_suppression_count": 39,
-      "story_aware_update_context_count": 4,
+      "contextual_update_lead_rejection_count": 2,
+      "article_framing_rejection_count": 3,
+      "category_eligibility_rejection_count": 8,
+      "published_story_duplicate_suppression_count": 37,
+      "story_aware_update_context_count": 3,
       "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 4,
@@ -3434,9 +3540,9 @@
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 5,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3453,9 +3559,25 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 1,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_government_action",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_incident:shooting"
+            ],
+            "local_nexus_signals": [],
+            "headline": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
+          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3471,7 +3593,7 @@
             "source_url": "https://cbs12.com/news/local/as-buc-ees-nears-construction-development-interest-builds-in-northern-st-lucie-county-florida-news-local-news-port-st-lucie-fort-pierce"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3521,16 +3643,6 @@
             "canonical_slug": "2026-10-01-martin-county-hoarding-case-against-paige-odonnell-heads-to-dec-1-hearing",
             "canonical_headline": "Palm City hoarding case: 72 charges against O'Donnell, dogs find homes",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "'Who put it up?' Unpermitted license plate readers found in St. Lucie County",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/unpermitted-license-plate-readers-found-in-st-lucie-county",
-            "editorial_story_id": "story_018682",
-            "canonical_slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
-            "canonical_headline": "St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -3627,57 +3739,76 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "'Who put it up?' Unpermitted license plate readers found in St. Lucie County",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/unpermitted-license-plate-readers-found-in-st-lucie-county",
-            "canonical_slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
-            "canonical_headline": "St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.513
+        "elapsed_seconds": 29.673
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "quality_gate_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 5,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 6,
+        "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.485,
+            "elapsed_seconds": 19.178,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 5.485,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 19.178,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 0,
-        "contextual_update_lead_rejections": [],
+        "contextual_update_lead_rejection_count": 1,
+        "contextual_update_lead_rejections": [
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "story_form": "update",
+            "lead_word_count": 35,
+            "baseline_anchor": "fatality",
+            "baseline_present": false,
+            "baseline_anchor_present": false,
+            "baseline_details_present": true,
+            "baseline_context_hits": [],
+            "baseline_context_required": 0,
+            "canonical_context_available": false,
+            "canonical_context_headline": "",
+            "novelty_anchor": "",
+            "novelty_present": true,
+            "novelty_token_hits": [
+              "crash",
+              "federal",
+              "four",
+              "highway",
+              "hobe",
+              "near",
+              "sound"
+            ],
+            "semantic_novel_fact_hits": [],
+            "semantic_novel_fact_token_count": 0,
+            "missing": [
+              "original_event_context_missing"
+            ],
+            "source_title": "Four-car crash near SE Federal Highway on US-1 prompts lane closures in Hobe Sound - WPEC",
+            "headline": "Four-Car Crash Shuts Down US-1 Northbound Lanes in Hobe Sound"
+          }
+        ],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -3695,7 +3826,7 @@
             "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach"
           }
         ],
-        "published_story_duplicate_suppression_count": 11,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3715,16 +3846,6 @@
             "canonical_slug": "2026-10-01-port-st-lucie-tiktok-creator-jailed-as-device-access-case-reopened",
             "canonical_headline": "Port St. Lucie TikTok Creator Jailed as Device-Access Case Reopened",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "'Not knowing where he is': Family searches for missing Port St. Lucie father - WPEC",
-            "source_url": "https://cbs12.com/news/local/not-knowing-where-he-is-family-searches-for-missing-port-st-lucie-father-florida-news-local-news-port-st-lucie-man-missing",
-            "editorial_story_id": "story_018584",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3759,16 +3880,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "King tides, full moon erode Fort Pierce road for second time in a week - WPEC",
-            "source_url": "https://cbs12.com/news/local/king-tides-full-moon-erode-fort-pierce-road-for-second-time-in-a-week-south-indian-river-drive-embankment-indian-river-lagoon-hurricane-nicole-erosion-jetty-park-tidal-action",
-            "editorial_story_id": "story_018704",
-            "canonical_slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
-            "canonical_headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Case reopened: Port St. Lucie TikTok creator jailed on computer-access charge - cw34.com",
             "source_url": "https://cw34.com/news/local/case-reopened-months-after-arrest-of-port-st-lucie-man-accused-of-cyberstalking",
             "editorial_story_id": "story_018657",
@@ -3795,6 +3906,16 @@
             "canonical_slug": "2026-09-30-fort-pierce-man-gets-probation-for-hiding-gun-used-in-june-shooting",
             "canonical_headline": "Fort Pierce man gets probation for hiding gun used in June shooting",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Port St. Lucie man accused of repeatedly sexually assaulting 16-year-old relative - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/florida-crime-news-port-st-lucie-man-accused-of-sexually-assaulting-16-year-old-relative-sexual-battery-person-12-17-injury-pelvic-pain-fathers-cousin-sexual-assault-admitted-crime",
+            "editorial_story_id": "story_018404",
+            "canonical_slug": "2026-09-30-port-st-lucie-man-arrested-on-sexual-battery-charges-involving-16-year-old-relat",
+            "canonical_headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3834,10 +3955,10 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
@@ -3882,21 +4003,6 @@
             "novel_facts": [],
             "reason": "This is the same event already covered by the canonical article from the prior day, same person, same arrest, same charge, same source. The incoming article adds minor details (bond amount, booking photo description, affidavit quotes) but these are elaboration/background, not material new developments like a new charge, court outcome, or status change.",
             "validation_errors": []
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "'Not knowing where he is': Family searches for missing Port St. Lucie father - WPEC",
-            "source_url": "https://cbs12.com/news/local/not-knowing-where-he-is-family-searches-for-missing-port-st-lucie-father-florida-news-local-news-port-st-lucie-man-missing",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "crime",
@@ -3960,21 +4066,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "King tides, full moon erode Fort Pierce road for second time in a week - WPEC",
-            "source_url": "https://cbs12.com/news/local/king-tides-full-moon-erode-fort-pierce-road-for-second-time-in-a-week-south-indian-river-drive-embankment-indian-river-lagoon-hurricane-nicole-erosion-jetty-park-tidal-action",
-            "canonical_slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
-            "canonical_headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Case reopened: Port St. Lucie TikTok creator jailed on computer-access charge - cw34.com",
             "source_url": "https://cw34.com/news/local/case-reopened-months-after-arrest-of-port-st-lucie-man-accused-of-cyberstalking",
             "canonical_slug": "2026-10-01-port-st-lucie-tiktok-creator-jailed-as-device-access-case-reopened",
@@ -4020,6 +4111,34 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "Port St. Lucie man accused of repeatedly sexually assaulting 16-year-old relative - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/florida-crime-news-port-st-lucie-man-accused-of-sexually-assaulting-16-year-old-relative-sexual-battery-person-12-17-injury-pelvic-pain-fathers-cousin-sexual-assault-admitted-crime",
+            "canonical_slug": "2026-09-30-port-st-lucie-man-arrested-on-sexual-battery-charges-involving-16-year-old-relat",
+            "canonical_headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.97,
+            "shared_anchors": [
+              "Jean Emile Revange",
+              "Port St. Lucie Police Department",
+              "16-year-old relative",
+              "three felony counts of sexual battery",
+              "same arrest affidavit details"
+            ],
+            "novel_facts": [],
+            "reason": "Both articles describe the identical arrest of Jean Emile Revange on the same three sexual battery charges involving the same 16-year-old relative, sourced from the same affidavit, with no new facts like additional charges, court outcomes, or victim developments.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Rabies alert issued in Martin County after raccoon tests positive in Stuart - WPEC",
             "source_url": "https://cbs12.com/news/local/health-alert-martin-county-residents-warned-after-raccoon-tests-positive-for-rabies-stuart-rabies-alert-60-days-south-kanner-highway-avoid-contact-wildlife-vaccination-pets-livestock",
             "canonical_slug": "2026-09-30-rabies-alert-issued-in-stuart-after-raccoon-tests-positive",
@@ -4037,7 +4156,9 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 21.557
+        "live_hero_headline": "Miami Woman Jailed After Tow Yard Shooting Triggers Murray Middle School Lockout",
+        "generated_card_count": 0,
+        "elapsed_seconds": 40.05
       },
       {
         "category_key": "business",
@@ -4054,23 +4175,23 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.161,
+            "elapsed_seconds": 11.116,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's Clears St. Lucie County Planning, Awaits State Sign-Off at I-95 and Indrio Road"
+            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's Clears St. Lucie Planning, Fueling Growth Along Indrio Road"
           },
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.657,
+            "elapsed_seconds": 12.187,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's Clears St. Lucie County Approvals, Awaits State Sign-Off at I-95 and Indrio Road"
+            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's Clears St. Lucie County Hurdles, Awaits State OK on Indrio Road"
           }
         ],
-        "model_elapsed_seconds": 22.818,
+        "model_elapsed_seconds": 23.303,
         "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's Clears St. Lucie County Approvals, Awaits State Sign-Off at I-95 and Indrio Road",
+        "failure_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's Clears St. Lucie County Hurdles, Awaits State OK on Indrio Road",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4079,9 +4200,28 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 5,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 6,
+        "category_eligibility_rejection_count": 4,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_public_safety:shooting"
+            ],
+            "local_nexus_signals": [
+              "source_locality:treasure coast",
+              "source_locality:martin county"
+            ],
+            "headline": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
+          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -4274,7 +4414,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 39.111
+        "elapsed_seconds": 39.43
       },
       {
         "category_key": "sports",
@@ -4282,7 +4422,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 4,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4312,7 +4452,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 9.895
+        "elapsed_seconds": 10.113
       },
       {
         "category_key": "things_to_do",
@@ -4395,12 +4535,12 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "generic 'fun things to do' weekend roundup format",
-              "Treasure Coast/Palm Beach region"
+              "Weekly 'fun things to do' roundup format",
+              "Treasure Coast / Palm Beach region"
             ],
             "novel_facts": [
-              "Different weekend (Oct 2 vs Jul 27)",
-              "entirely different events listed: GreenMarket, Bahamian Festival, Oktoberfest, Girls Rock, Nuestra Cultura, Antiques Festival"
+              "Different weekend (Oct 2 vs July 27)",
+              "Entirely different list of events: GreenMarket season opener, Bahamian Festival, Oktoberfest, Girls Rock concert, Nuestra Cultura Community Day, Antiques Festival"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4409,7 +4549,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.167
+        "elapsed_seconds": 13.29
       },
       {
         "category_key": "florida",
@@ -4447,16 +4587,16 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 8.684
+        "elapsed_seconds": 11.774
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 4,
-        "selected_source_count": 4,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 5,
+        "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4464,26 +4604,70 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 25.653,
+            "elapsed_seconds": 17.353,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 25.653,
+        "model_elapsed_seconds": 17.353,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 0,
-        "contextual_update_lead_rejections": [],
+        "contextual_update_lead_rejection_count": 1,
+        "contextual_update_lead_rejections": [
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "story_form": "update",
+            "lead_word_count": 50,
+            "baseline_anchor": "fatality",
+            "baseline_present": false,
+            "baseline_anchor_present": false,
+            "baseline_details_present": true,
+            "baseline_context_hits": [],
+            "baseline_context_required": 0,
+            "canonical_context_available": false,
+            "canonical_context_headline": "",
+            "novelty_anchor": "",
+            "novelty_present": true,
+            "novelty_token_hits": [
+              "crash",
+              "federal",
+              "four",
+              "highway",
+              "hobe",
+              "near",
+              "sound"
+            ],
+            "semantic_novel_fact_hits": [],
+            "semantic_novel_fact_token_count": 0,
+            "missing": [
+              "original_event_context_missing"
+            ],
+            "source_title": "Four-car crash near SE Federal Highway on US-1 prompts lane closures in Hobe Sound - WPEC",
+            "headline": "Four-Car Crash Shuts Down US-1 Northbound Lanes in Hobe Sound"
+          }
+        ],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
+            "editorial_story_id": "story_018861",
+            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Martin County deputies locate missing 29-year-old man with autism - WPBF",
@@ -4505,50 +4689,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
-            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
-            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
-            "basis": "event-identity-authority:participant_plus_precise_location",
-            "identity_keys": [
-              "story:story_018861",
-              "source:https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_named_people",
-              "shared_precise_location",
-              "shared_agency",
-              "shared_subject_phrase",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['port-st-lucie', 'st-lucie', 'stuart']",
-              "shared_event_families=['shooting']",
-              "shared_named_people=['following an extensive', 'him in douglasville', 'stuart vape shop']",
-              "shared_precise_locations=['millers-vapory-1596-se-federal-highway']",
-              "shared_agencies=['stuart-police']",
-              "shared_subject_phrases=['sentenc-vape-shop', 'sentenc-vape-shop-shoot', 'vape-shop-shoot']",
-              "shared_headline_topic_core=['sentenc', 'shoot', 'shop', 'vape']",
-              "shared_distinctive_token_count=90",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
           {
             "source_headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
             "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach",
@@ -4578,6 +4720,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
+            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "martin",
             "source_headline": "Martin County deputies locate missing 29-year-old man with autism - WPBF",
@@ -4612,55 +4769,152 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Shooting at Stuart Tow Yard Prompts Murray Middle Lockout, Chase With PIT Maneuver",
+        "live_hero_headline": "Miami Woman Jailed After Tow Yard Shooting Near Murray Middle School Triggers Lockout",
         "generated_card_count": 0,
-        "elapsed_seconds": 43.556
+        "elapsed_seconds": 26.815
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generation_failed_archive_recovery",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 17,
+        "fresh_candidate_count": 18,
         "publishable_source_count": 5,
         "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 30.528,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's clears all county hurdles, fuels growth rush on Indrio Road"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 32.387,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's clears St. Lucie County planning, awaits state sign-off at I-95 and Indrio Road"
+            "elapsed_seconds": 23.631,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 62.914,
-        "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's clears St. Lucie County planning, awaits state sign-off at I-95 and Indrio Road",
+        "model_elapsed_seconds": 23.632,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 0,
-        "article_framing_rejections": [],
+        "article_framing_rejection_count": 1,
+        "article_framing_rejections": [
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "headline": "Buc-ee's at I-95 and Indrio Road clears county review, awaits state sign-off",
+            "missing": [
+              "surname_only_first_reference"
+            ],
+            "lead_independence": {
+              "required": true,
+              "passed": false,
+              "headline": "Buc-ee's at I-95 and Indrio Road clears county review, awaits state sign-off",
+              "lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road has completed St. Lucie County's planning process and now awaits final approvals from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin. The 76,000-square-foot travel center would feature approximately 120 fuel pumps and could become the largest Buc-ee's location in Florida. Buc-ee's has previously targeted a 2028 opening date.",
+              "lead_word_count": 77,
+              "headline_overlap_ratio": 0.583,
+              "new_context_token_count": 40,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "standard",
+              "surname_first_reference": {
+                "required": true,
+                "passed": false,
+                "missing": [
+                  "surname_only_first_reference"
+                ],
+                "person": {
+                  "full": "As Buc",
+                  "first": "As",
+                  "last": "Buc"
+                },
+                "surname_word_index": 2
+              },
+              "update_diagnostics": {
+                "required": false,
+                "passed": true,
+                "story_form": "standard"
+              },
+              "missing": [
+                "surname_only_first_reference"
+              ]
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": true,
+              "headline": "Buc-ee's at I-95 and Indrio Road clears county review, awaits state sign-off",
+              "lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road has completed St. Lucie County's planning process and now awaits final approvals from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin. The 76,000-square-foot travel center would feature approximately 120 fuel pumps and could become the largest Buc-ee's location in Florida. Buc-ee's has previously targeted a 2028 opening date.",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [],
+              "lead_jurisdictions": [
+                "st_lucie_county"
+              ],
+              "missing_jurisdictions": [],
+              "headline_judge_claims": [],
+              "lead_judge_claims": [],
+              "missing_judge_claims": [],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": []
+            },
+            "source_focus": {
+              "required": true,
+              "passed": true,
+              "generated_headline": "Buc-ee's at I-95 and Indrio Road clears county review, awaits state sign-off",
+              "generated_lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road has completed St. Lucie County's planning process and now awaits final approvals from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin.",
+              "source_title": "As Buc-ee's nears construction, development interest builds in northern St. Lucie County - cw34.com",
+              "source_lead": "Buc-ee’s may be best known for its massive travel centers, barbecue sandwiches and loyal fan base, but on the Treasure Coast, county leaders say the proposed development could signal something even bigger: a wave of growth along the Indrio Road corridor in northern St. After years of planning and review, the proposed Buc-ee’s at Interstate 95 and Indrio Road has completed the county’s planning process, bringing the long-discussed project one step closer to reality.",
+              "title_similarity": {
+                "score": 0.2564,
+                "overlap": 0.25,
+                "jaccard": 0.1364,
+                "sorted_sequence": 0.3974,
+                "ordered_sequence": 0.2914,
+                "shared_token_count": 3.0
+              },
+              "lead_token_overlap": 0.464,
+              "missing": []
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "official_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "temporal_integrity": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
+          }
+        ],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
         "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 11,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
+            "editorial_story_id": "story_018861",
+            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "St. Lucie County teen earns Boys & Girls Clubs' top national honor - WPBF",
@@ -4669,16 +4923,6 @@
             "canonical_slug": "2026-10-02-st-lucie-county-teen-wins-national-youth-of-the-year-set-for-hometown-welcome",
             "canonical_headline": "St. Lucie County Teen Wins National Youth of the Year, Set for Hometown Welcome",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
-            "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident",
-            "editorial_story_id": "story_018584",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4743,16 +4987,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "King tides, full moon erode Fort Pierce road for second time in a week - WPEC",
-            "source_url": "https://cbs12.com/news/local/king-tides-full-moon-erode-fort-pierce-road-for-second-time-in-a-week-south-indian-river-drive-embankment-indian-river-lagoon-hurricane-nicole-erosion-jetty-park-tidal-action",
-            "editorial_story_id": "story_018704",
-            "canonical_slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
-            "canonical_headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Missing since January: St. Lucie County deputies search for 47-year-old man - cw34.com",
             "source_url": "https://cw34.com/newsletter-daily/47-year-old-man-missing-since-january-8-new-york-giants-tattoo-rosary-with-cross-st-lucie-county-sheriffs-office-florida-news",
             "editorial_story_id": "story_018584",
@@ -4772,56 +5006,28 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
-            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
-            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
-            "basis": "event-identity-authority:participant_plus_precise_location",
-            "identity_keys": [
-              "story:story_018861",
-              "source:https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_named_people",
-              "shared_precise_location",
-              "shared_agency",
-              "shared_subject_phrase",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['port-st-lucie', 'st-lucie', 'stuart']",
-              "shared_event_families=['shooting']",
-              "shared_named_people=['following an extensive', 'him in douglasville', 'stuart vape shop']",
-              "shared_precise_locations=['millers-vapory-1596-se-federal-highway']",
-              "shared_agencies=['stuart-police']",
-              "shared_subject_phrases=['sentenc-vape-shop', 'sentenc-vape-shop-shoot', 'vape-shop-shoot']",
-              "shared_headline_topic_core=['sentenc', 'shoot', 'shop', 'vape']",
-              "shared_distinctive_token_count=90",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 2,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
+            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "St. Lucie County teen earns Boys & Girls Clubs' top national honor - WPBF",
@@ -4836,32 +5042,6 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
-            "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.95,
-            "shared_anchors": [],
-            "novel_facts": [
-              "vehicle fire closing southbound Florida's Turnpike near mile marker 162 in St. Lucie County on Oct 2"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
           },
           {
             "category_key": "st_lucie",
@@ -4970,21 +5150,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "King tides, full moon erode Fort Pierce road for second time in a week - WPEC",
-            "source_url": "https://cbs12.com/news/local/king-tides-full-moon-erode-fort-pierce-road-for-second-time-in-a-week-south-indian-river-drive-embankment-indian-river-lagoon-hurricane-nicole-erosion-jetty-park-tidal-action",
-            "canonical_slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
-            "canonical_headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Missing since January: St. Lucie County deputies search for 47-year-old man - cw34.com",
             "source_url": "https://cw34.com/newsletter-daily/47-year-old-man-missing-since-january-8-new-york-giants-tattoo-rosary-with-cross-st-lucie-county-sheriffs-office-florida-news",
             "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
@@ -5015,17 +5180,17 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 77.307
+        "elapsed_seconds": 39.146
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 2,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5042,7 +5207,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 3,
@@ -5069,17 +5234,60 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Returning Stuart city manager Michael Mortell vows to improve city structure, restore public trust",
-            "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/returning-stuart-city-manager-michael-mortell-vows-to-improve-city-structure-restore-public-trust",
-            "editorial_story_id": "story_018715",
-            "canonical_slug": "2026-10-01-returning-stuart-city-manager-michael-mortell-vows-more-structure-restored-trust",
-            "canonical_headline": "Returning Stuart City Manager Michael Mortell Vows More Structure, Restored Trust",
+            "source_headline": "'Not knowing where he is': Family searches for missing Port St. Lucie father - WPEC",
+            "source_url": "https://cbs12.com/news/local/not-knowing-where-he-is-family-searches-for-missing-port-st-lucie-father-florida-news-local-news-port-st-lucie-man-missing",
+            "editorial_story_id": "story_018584",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - cw34.com",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk?teaserSource=trending",
+            "publisher": "cw34.com",
+            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
+            "basis": "event-identity-authority:participant_plus_precise_location",
+            "identity_keys": [
+              "story:story_018861",
+              "source:https://cw34.com/news/local/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk?teaserSource=trending"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_named_people",
+              "shared_precise_location",
+              "shared_agency",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=0",
+              "shared_locality=['port-st-lucie', 'st-lucie', 'stuart']",
+              "shared_event_families=['shooting']",
+              "shared_named_people=['following an extensive', 'him in douglasville', 'stuart vape shop']",
+              "shared_precise_locations=['millers-vapory-1596-se-federal-highway']",
+              "shared_agencies=['stuart-police']",
+              "shared_subject_phrases=['sentenc-vape-shop', 'sentenc-vape-shop-shoot', 'shoot-cw34-com', 'shop-shoot-cw34', 'shop-shoot-cw34-com', 'vape-shop-shoot', 'vape-shop-shoot-cw34']",
+              "shared_headline_topic_core=['com', 'cw34', 'sentenc', 'shoot', 'shop', 'vape']",
+              "shared_distinctive_token_count=92",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -5117,10 +5325,10 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Returning Stuart city manager Michael Mortell vows to improve city structure, restore public trust",
-            "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/returning-stuart-city-manager-michael-mortell-vows-to-improve-city-structure-restore-public-trust",
-            "canonical_slug": "2026-10-01-returning-stuart-city-manager-michael-mortell-vows-more-structure-restored-trust",
-            "canonical_headline": "Returning Stuart City Manager Michael Mortell Vows More Structure, Restored Trust",
+            "source_headline": "'Not knowing where he is': Family searches for missing Port St. Lucie father - WPEC",
+            "source_url": "https://cbs12.com/news/local/not-knowing-where-he-is-family-searches-for-missing-port-st-lucie-father-florida-news-local-news-port-st-lucie-man-missing",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -5132,7 +5340,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.112
+        "elapsed_seconds": 11.488
       }
     ]
   }
