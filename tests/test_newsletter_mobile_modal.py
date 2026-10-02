@@ -37,14 +37,29 @@ def test_monthly_free_anchored_banner_is_retired_while_newsletter_modal_remains(
     assert "tct-free-article-banner" not in membership
     assert 'mode: "sitewide-modal"' in main
 
-def test_mobile_kit_modal_keeps_dismiss_control_inside_in_app_browser_safe_area():
-    css = (ROOT / "style.css").read_text(encoding="utf-8")
-    assert "TCT v1.13.9.72 — in-app browser newsletter modal safe area" in css
-    assert 'width: min(420px, calc(100vw - 72px)) !important;' in css
-    assert 'max-height: calc(100dvh - 112px) !important;' in css
-    assert 'margin-bottom: max(72px, calc(env(safe-area-inset-bottom) + 32px)) !important;' in css
-    assert '.formkit-form[data-format="modal"] .formkit-close' in css
-    assert 'right: 14px !important;' in css
-    assert 'min-width: 44px !important;' in css
-    assert 'z-index: 2147483646 !important;' in css
 
+def test_mobile_kit_modal_gets_large_first_party_dismiss_control():
+    js = (ROOT / "main.js").read_text(encoding="utf-8")
+    css = (ROOT / "style.css").read_text(encoding="utf-8")
+
+    assert "No, I'd rather not be in the know" in js
+    assert 'className = "tct-kit-modal-dismiss"' in js
+    assert 'submit.insertAdjacentElement("afterend", dismiss)' in js
+    assert 'new MutationObserver' in js
+    assert 'close.click()' in js
+    assert 'Dismiss newsletter signup and continue reading' in js
+
+    assert 'TCT v1.13.9.73 — obvious mobile newsletter modal dismissal' in css
+    assert '.tct-kit-modal-dismiss {' in css
+    assert '@media (max-width: 680px)' in css
+    assert 'min-height: 44px !important;' in css
+    assert 'text-decoration: underline !important;' in css
+
+
+def test_newsletter_dismiss_control_remains_mobile_only():
+    css = (ROOT / "style.css").read_text(encoding="utf-8")
+    marker = css.index('TCT v1.13.9.73 — obvious mobile newsletter modal dismissal')
+    tail = css[marker:]
+    assert '.tct-kit-modal-dismiss {' in tail
+    assert 'display: none !important;' in tail
+    assert '.formkit-form[data-format="modal"] .tct-kit-modal-dismiss {' in tail

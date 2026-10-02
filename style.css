@@ -7172,3 +7172,46 @@ html.tct-nextdoor-ios header.site-masthead {
   top: auto !important;
 }
 
+
+/* ============================================================
+   TCT v1.13.9.73 — obvious mobile newsletter modal dismissal
+   Kit owns the modal lifecycle; TCT adds a large first-party text control
+   below the Subscribe button and delegates dismissal to Kit's own close
+   button so the provider can preserve its normal suppression behavior.
+   ============================================================ */
+.tct-kit-modal-dismiss {
+  display: none !important;
+}
+
+@media (max-width: 680px) {
+  .formkit-form[data-format="modal"] .tct-kit-modal-dismiss {
+    display: block !important;
+    grid-column: 1 / -1 !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    margin: 8px 0 0 !important;
+    padding: 10px 8px !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: inherit !important;
+    font: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+    text-align: center !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+    cursor: pointer !important;
+    opacity: .78 !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .formkit-form[data-format="modal"] .tct-kit-modal-dismiss:hover,
+  .formkit-form[data-format="modal"] .tct-kit-modal-dismiss:focus-visible {
+    opacity: 1 !important;
+    outline: 2px solid currentColor !important;
+    outline-offset: 2px !important;
+  }
+}

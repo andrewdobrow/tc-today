@@ -333,6 +333,68 @@ document.addEventListener("keydown", (event) => {
     mode: "sitewide-modal"
   };
 
+  const dismissCopy = "No, I'd rather not be in the know";
+
+  function addMobileDismissLink(form) {
+    if (!(form instanceof Element)) return;
+    if (!form.matches('.formkit-form[data-format="modal"]')) return;
+    if (form.querySelector(".tct-kit-modal-dismiss")) return;
+
+    const submit = form.querySelector('.formkit-submit, [data-element="submit"]');
+    if (!submit) return;
+
+    const dismiss = document.createElement("button");
+    dismiss.type = "button";
+    dismiss.className = "tct-kit-modal-dismiss";
+    dismiss.textContent = dismissCopy;
+    dismiss.setAttribute("aria-label", "Dismiss newsletter signup and continue reading");
+    submit.insertAdjacentElement("afterend", dismiss);
+  }
+
+  function inspectKitNode(node) {
+    if (!(node instanceof Element)) return;
+    if (node.matches('.formkit-form[data-format="modal"]')) addMobileDismissLink(node);
+    node.querySelectorAll?.('.formkit-form[data-format="modal"]').forEach(addMobileDismissLink);
+  }
+
+  document.querySelectorAll('.formkit-form[data-format="modal"]').forEach(addMobileDismissLink);
+
+  const modalObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach(inspectKitNode);
+    });
+  });
+  modalObserver.observe(document.body, { childList: true, subtree: true });
+
+  document.addEventListener("click", (event) => {
+    const dismiss = event.target.closest?.(".tct-kit-modal-dismiss");
+    if (!dismiss) return;
+
+    event.preventDefault();
+    const form = dismiss.closest('.formkit-form[data-format="modal"]');
+    if (!form) return;
+
+    const modal = form.closest(".formkit-modal, .formkit-overlay");
+    const close =
+      form.querySelector(".formkit-close") ||
+      modal?.querySelector(".formkit-close") ||
+      document.querySelector('.formkit-modal .formkit-close, .formkit-overlay .formkit-close');
+
+    if (close) {
+      close.click();
+      return;
+    }
+
+    // Defensive fallback for a future Kit markup change. Escape is the least
+    // invasive dismissal signal and leaves Kit in control of its own state.
+    document.dispatchEvent(new KeyboardEvent("keydown", {
+      key: "Escape",
+      code: "Escape",
+      bubbles: true,
+      cancelable: true
+    }));
+  });
+
   function loadSitewideKitModal() {
     if (document.querySelector(`script[data-uid="${config.uid}"]`)) return;
 
