@@ -7215,3 +7215,52 @@ html.tct-nextdoor-ios header.site-masthead {
     outline-offset: 2px !important;
   }
 }
+
+/* ============================================================
+   TCT v1.13.9.76 — article list gutter / mobile bullet fix
+   The global reset removes default list padding. Restore an explicit
+   article-body gutter so outside bullets/numbers remain fully visible,
+   including in narrow mobile and in-app-browser viewports.
+   ============================================================ */
+.article-body ul,
+.article-body ol {
+  box-sizing: border-box;
+  margin: 0 0 22px;
+  padding-left: 1.6rem;
+  padding-inline-start: 1.6rem;
+  list-style-position: outside;
+}
+
+.article-body li {
+  color: var(--text-secondary);
+  font-size: 17px;
+  line-height: 1.78;
+  margin-bottom: 10px;
+}
+
+.article-body li:last-child {
+  margin-bottom: 0;
+}
+
+.article-body ul ul,
+.article-body ul ol,
+.article-body ol ul,
+.article-body ol ol {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 760px) {
+  .article-body ul,
+  .article-body ol {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 1.55rem;
+    padding-inline-start: 1.55rem;
+  }
+
+  .article-body li {
+    font-size: 16px;
+    line-height: 1.72;
+  }
+}
