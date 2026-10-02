@@ -9623,6 +9623,34 @@ def make_paragraphs(text, preserve_all=False):
     if len(paragraphs) == 1:
         paragraphs = text.split("\n")
 
+    # Generated copy occasionally arrives with a paragraph break immediately after
+    # a time abbreviation even though the sentence continues with a weekday/date
+    # (for example: "planned for 7 p.m.\n\nFriday at the airport"). Joining that
+    # fragment here keeps the rendered article grammatical. Custom articles are an
+    # immutable editor payload, so preserve their submitted paragraph boundaries.
+    if not preserve_all:
+        _time_continuation_end = re.compile(r"\b(?:a\.m\.|p\.m\.)\s*$", re.IGNORECASE)
+        _time_continuation_start = re.compile(
+            r"^(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|"
+            r"January|February|March|April|May|June|July|August|September|October|November|December|"
+            r"Jan\.|Feb\.|Mar\.|Apr\.|Jun\.|Jul\.|Aug\.|Sep\.|Sept\.|Oct\.|Nov\.|Dec\.|"
+            r"EST|EDT|CST|CDT|MST|MDT|PST|PDT)(?=\s|$)",
+            re.IGNORECASE,
+        )
+        _joined = []
+        for _paragraph in paragraphs:
+            _candidate = str(_paragraph or "").strip()
+            if (
+                _joined
+                and _candidate
+                and _time_continuation_end.search(str(_joined[-1] or "").strip())
+                and _time_continuation_start.match(_candidate)
+            ):
+                _joined[-1] = str(_joined[-1]).rstrip() + " " + _candidate
+            else:
+                _joined.append(_paragraph)
+        paragraphs = _joined
+
     # WALL-OF-TEXT FALLBACK. Some sources (notably Google News summaries) arrive with
     # their paragraph breaks stripped, so the whole article is one or two enormous
     # blocks that render as an unreadable wall. When a "paragraph" is very long and has
@@ -9654,6 +9682,22 @@ def make_paragraphs(text, preserve_all=False):
                 _protected,
                 flags=_re.IGNORECASE,
             )
+        # A time abbreviation is not a sentence boundary when a weekday/date or
+        # timezone immediately follows it ("7 p.m. Friday", "8 a.m. Oct. 3").
+        # Protect only those continuation forms so a genuine sentence ending in
+        # "p.m." can still split normally when the next sentence begins.
+        _time_follow = (
+            r"(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|"
+            r"January|February|March|April|May|June|July|August|September|October|November|December|"
+            r"Jan\.|Feb\.|Mar\.|Apr\.|Jun\.|Jul\.|Aug\.|Sep\.|Sept\.|Oct\.|Nov\.|Dec\.|"
+            r"EST|EDT|CST|CDT|MST|MDT|PST|PDT)"
+        )
+        _protected = _re.sub(
+            rf"\b(?:a\.m\.|p\.m\.)(?=\s+{_time_follow}(?=\s|$))",
+            lambda m: m.group(0).replace(".", _abbr_token),
+            _protected,
+            flags=_re.IGNORECASE,
+        )
         sentences = _re.split(r'(?<=[.!?])\s+(?=[A-Z"])', _protected)
         sentences = [s.replace(_abbr_token, ".").strip() for s in sentences if s.strip()]
         if len(sentences) < 4:

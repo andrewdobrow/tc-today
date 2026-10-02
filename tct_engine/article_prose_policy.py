@@ -88,6 +88,67 @@ def _scan_direct_double_quote_state(text: str, quote_style: str | None) -> str |
     return state
 
 
+_TIME_CONTINUATION_END_RE = re.compile(r"\b(?:a\.m\.|p\.m\.)\s*$", re.IGNORECASE)
+_TIME_CONTINUATION_START_RE = re.compile(
+    r"^(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|"
+    r"January|February|March|April|May|June|July|August|September|October|November|December|"
+    r"Jan\.|Feb\.|Mar\.|Apr\.|Jun\.|Jul\.|Aug\.|Sep\.|Sept\.|Oct\.|Nov\.|Dec\.|"
+    r"EST|EDT|CST|CDT|MST|MDT|PST|PDT)(?=\s|$)",
+    re.IGNORECASE,
+)
+
+
+def repair_time_continuation_paragraph_breaks(body_html: str) -> tuple[str, int]:
+    """Merge a broken paragraph boundary inside a continuing time sentence.
+
+    Generated copy can occasionally contain ``... 7 p.m.</p><p>Friday at ...``.
+    The second paragraph is not a standalone sentence; it is the continuation of
+    the time phrase. This repair is intentionally narrow: adjacent plain generated
+    paragraphs only, a.m./p.m. at the end of the first, and a weekday/date/timezone
+    at the start of the second.
+    """
+    raw = str(body_html or "")
+    if not raw:
+        return raw, 0
+
+    matches = list(_P_RE.finditer(raw))
+    if len(matches) < 2:
+        return raw, 0
+
+    out: list[str] = []
+    cursor = 0
+    changed = 0
+    i = 0
+    while i < len(matches):
+        first = matches[i]
+        if i + 1 < len(matches):
+            second = matches[i + 1]
+            between = raw[first.end():second.start()]
+            first_plain = _plain(first.group(2))
+            second_plain = _plain(second.group(2))
+            second_attrs = (second.group(1) or "").strip()
+            if (
+                not between.strip()
+                and not second_attrs
+                and _TIME_CONTINUATION_END_RE.search(first_plain)
+                and _TIME_CONTINUATION_START_RE.match(second_plain)
+            ):
+                out.append(raw[cursor:first.start()])
+                attrs = first.group(1) or ""
+                merged_inner = first.group(2).rstrip() + " " + second.group(2).lstrip()
+                out.append(f"<p{attrs}>{merged_inner}</p>")
+                cursor = second.end()
+                changed += 1
+                i += 2
+                continue
+        i += 1
+
+    if not changed:
+        return raw, 0
+    out.append(raw[cursor:])
+    return "".join(out), changed
+
+
 def repair_multparagraph_quote_continuations(body_html: str) -> tuple[str, int]:
     """Restore journalistic opening marks on continued paragraph quotations.
 
@@ -290,5 +351,6 @@ def sanitize_article_body_html(
         return f"<p{attrs}>{html.escape(cleaned)}</p>"
 
     sanitized = _P_RE.sub(repl, raw)
-    repaired, quote_changed = repair_multparagraph_quote_continuations(sanitized)
-    return repaired, changed + quote_changed
+    repaired_time, time_changed = repair_time_continuation_paragraph_breaks(sanitized)
+    repaired, quote_changed = repair_multparagraph_quote_continuations(repaired_time)
+    return repaired, changed + time_changed + quote_changed
