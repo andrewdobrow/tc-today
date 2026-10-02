@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-02T12:48:35Z",
+  "generated_at": "2026-10-02T15:48:56Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 24,
-    "rejected_count": 8,
+    "assessed_count": 23,
+    "rejected_count": 9,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,9 +34,23 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 2,
-      "rejected_count": 1,
+      "assessed_count": 3,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Rabies alert issued in Indian River County after rabid bat found near apartment complex",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/rabies-alert-issued-in-indian-river-county-after-rabid-bat-found-near-apartment-complex"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -58,8 +72,8 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
-      "rejected_count": 3,
+      "assessed_count": 3,
+      "rejected_count": 2,
       "rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -72,8 +86,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Case reopened: Port St. Lucie TikTok creator jailed on computer-access charge - WPEC",
-          "source_url": "https://cbs12.com/news/instagram/case-reopened-months-after-arrest-of-port-st-lucie-man-accused-of-cyberstalking"
+          "headline": "Rabies alert issued in Indian River County after rabid bat found near apartment complex",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/rabies-alert-issued-in-indian-river-county-after-rabid-bat-found-near-apartment-complex"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -88,20 +102,6 @@
           "local_nexus_signals": [],
           "headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
           "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Heavy rain floods roads as storms move across Palm Beach County",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/heavy-rain-floods-roads-as-storms-move-across-palm-beach-county"
         }
       ]
     },
@@ -110,9 +110,29 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 4,
-      "rejected_count": 3,
+      "assessed_count": 5,
+      "rejected_count": 4,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "animal_welfare:animal control"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:indian river county",
+            "source_locality:fellsmere"
+          ],
+          "headline": "Rabies alert issued in Indian River County after rabid bat found near apartment complex",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/rabies-alert-issued-in-indian-river-county-after-rabid-bat-found-near-apartment-complex"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -181,7 +201,7 @@
       "category_label": "Things To Do",
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
-      "assessed_count": 1,
+      "assessed_count": 2,
       "rejected_count": 1,
       "rejections": [
         {
@@ -216,7 +236,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -234,7 +254,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 6,
+      "assessed_count": 5,
       "rejected_count": 0,
       "rejections": []
     }
