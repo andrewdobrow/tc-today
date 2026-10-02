@@ -333,7 +333,7 @@ document.addEventListener("keydown", (event) => {
     mode: "sitewide-modal"
   };
 
-  const dismissCopy = "No, I'd rather not be in the know";
+  const dismissCopy = "No thanks, I’ll keep reading";
 
   function addMobileDismissLink(form) {
     if (!(form instanceof Element)) return;

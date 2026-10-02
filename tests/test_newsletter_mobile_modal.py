@@ -42,7 +42,7 @@ def test_mobile_kit_modal_gets_large_first_party_dismiss_control():
     js = (ROOT / "main.js").read_text(encoding="utf-8")
     css = (ROOT / "style.css").read_text(encoding="utf-8")
 
-    assert "No, I'd rather not be in the know" in js
+    assert "No thanks, I’ll keep reading" in js
     assert 'className = "tct-kit-modal-dismiss"' in js
     assert 'submit.insertAdjacentElement("afterend", dismiss)' in js
     assert 'new MutationObserver' in js
