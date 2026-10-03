@@ -40340,6 +40340,7 @@ if __name__ == "__main__":
     try:
         main()
     finally:
+        _finalize_model_usage_observability()
         try:
             _image_report = finalize_article_image_mirror(OUTPUT_DIR)
             if _image_report:
@@ -40356,4 +40357,3 @@ if __name__ == "__main__":
                 )
         except Exception as exc:
             print(f"  Article image mirror observability unavailable ({type(exc).__name__}); continuing")
-        _finalize_model_usage_observability()
