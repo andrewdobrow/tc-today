@@ -2792,11 +2792,13 @@ def restore_live_source_images_from_archive(categories, archive):
 def recover_recent_archive_source_images(archive, articles_dir, *, max_age_days=3):
     """Recover or reconcile recent source images on permanent article pages.
 
-    A canonical row can already retain a real publisher image while a later material
-    update re-renders its visible hero from an incoming editorial fallback.  Treat the
-    archive's real ``source_image_url`` as durable authority and reconcile the page as
-    well as the row.  Only recent, non-custom stories are inspected so this remains a
-    bounded repair rather than a sitewide historical rewrite.
+    ``source_image_url`` is publisher provenance. ``hosted_image_url`` is delivery
+    provenance. In mirror mode a verified Bunny object must remain the public image;
+    this recovery pass may restore publisher provenance, but it must never downgrade
+    a successfully mirrored article back to the publisher URL.
+
+    Only recent, non-custom stories are inspected so this remains a bounded repair
+    rather than a sitewide historical rewrite.
     """
     try:
         from datetime import timedelta as _timedelta
@@ -2820,52 +2822,81 @@ def recover_recent_archive_source_images(archive, articles_dir, *, max_age_days=
             except Exception:
                 continue
 
-        existing_source_img = _absolute_image_url(
-            row.get("source_image_url") or row.get("image_url")
-        )
-        if _is_real_source_image_url(existing_source_img):
+        # Publisher provenance must stay distinct from TCT's mirrored delivery URL.
+        # Never infer ``source_image_url`` from a Bunny URL left in ``image_url``.
+        existing_source_img = _absolute_image_url(row.get("source_image_url"))
+        if not _is_real_source_image_url(existing_source_img) or _is_tct_mirrored_image_url(existing_source_img):
+            fallback_source_img = _absolute_image_url(row.get("image_url"))
+            if _is_real_source_image_url(fallback_source_img) and not _is_tct_mirrored_image_url(fallback_source_img):
+                existing_source_img = fallback_source_img
+
+        if _is_real_source_image_url(existing_source_img) and not _is_tct_mirrored_image_url(existing_source_img):
             source_img = existing_source_img
             recovered_metadata = False
         else:
             if not source_url.startswith(("https://", "http://")):
                 continue
             source_img = fetch_og_image(source_url, str(row.get("headline") or ""))
-            if not _is_real_source_image_url(source_img):
+            if not _is_real_source_image_url(source_img) or _is_tct_mirrored_image_url(source_img):
                 continue
             recovered_metadata = True
 
+        hosted_img = _absolute_image_url(row.get("hosted_image_url"))
+        mirror_delivery_active = bool(
+            _article_image_delivery_mode() == "mirror"
+            and str(row.get("article_image_mirror_status") or "").strip().lower() == "mirrored"
+            and _is_tct_mirrored_image_url(hosted_img)
+            and _is_real_source_image_url(hosted_img)
+        )
+        desired_delivery_img = hosted_img if mirror_delivery_active else source_img
+        prior_display_img = _absolute_image_url(row.get("image_url"))
+
         old_candidates = [
-            str(row.get("image_url") or "").strip(),
+            prior_display_img,
             _category_social_og_image_url(str(row.get("category_key") or "top_news")),
             f"{SITE_URL}/og-image.png",
         ]
+        # A page damaged by the old recovery pass can already contain the publisher
+        # URL even though the archive has a verified Bunny delivery object. Repair it
+        # back to Bunny on the next normal mirror-mode run.
+        if mirror_delivery_active:
+            old_candidates.append(source_img)
         for fallback_key in (str(row.get("category_key") or "top_news"), "top_news"):
             fallback, _ = get_fallback_image(
                 fallback_key, str(row.get("headline") or ""), item=row
             )
             if fallback:
                 old_candidates.append(fallback)
+        old_candidates = [
+            candidate for candidate in dict.fromkeys(str(value or "").strip() for value in old_candidates)
+            if candidate and candidate != desired_delivery_img
+        ]
 
+        row_changed = False
         if recovered_metadata:
-            row["image_url"] = source_img
             row["source_image_url"] = source_img
             row["image_credit"] = get_image_credit(source_url)
             row["image_source"] = "recent_archive_og_image_recovery"
-            row["is_fallback_image"] = False
             row["social_image_source"] = "recent_archive_og_image_recovery"
             row["social_image_is_source"] = True
-        else:
-            # Keep image_url aligned with the already-authoritative source image too;
-            # this prevents later update/render paths from seeing a stale fallback.
-            row["image_url"] = source_img
+            row_changed = True
+        elif str(row.get("source_image_url") or "").strip() != source_img:
             row["source_image_url"] = source_img
-            row["is_fallback_image"] = False
+            row_changed = True
+
+        if str(row.get("image_url") or "").strip() != desired_delivery_img:
+            row["image_url"] = desired_delivery_img
+            row_changed = True
+        row["is_fallback_image"] = False
 
         article_path = Path(articles_dir) / f"{slug}.html"
         page_repaired = _replace_article_fallback_references(
-            article_path, old_candidates, source_img, image_credit=str(row.get("image_credit") or "")
+            article_path,
+            old_candidates,
+            desired_delivery_img,
+            image_credit=str(row.get("image_credit") or ""),
         )
-        if recovered_metadata or page_repaired:
+        if row_changed or page_repaired:
             repaired += 1
 
     if repaired:

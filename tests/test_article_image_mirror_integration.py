@@ -173,3 +173,143 @@ def test_render_hook_derives_known_publisher_name_from_source_url(monkeypatch):
     generate._mirror_article_image_for_render(item, slug="2026-10-02-known-publisher")
 
     assert fake.calls[0]["source_name"] == "WPTV"
+
+
+def test_recent_source_reconciliation_keeps_verified_bunny_delivery_in_mirror_mode(tmp_path, monkeypatch):
+    """Regression: the recent-image repair must not undo a successful Bunny mirror."""
+    monkeypatch.setenv("TCT_ARTICLE_IMAGE_MODE", "mirror")
+    monkeypatch.setenv("BUNNY_CDN_BASE_URL", "https://images.treasurecoast.today")
+    original = "https://publisher.test/photo.png"
+    hosted = "https://images.treasurecoast.today/articles/5a/hash.png"
+    slug = "2026-10-02-mirrored-recovery-regression"
+
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    article_path = articles / f"{slug}.html"
+    # Reproduce the damaged live state: Bunny upload metadata exists, but the prior
+    # reconciliation pass replaced public image references with the publisher URL.
+    article_path.write_text(
+        f'<html><head><meta property="og:image" content="{original}">'
+        f'<meta name="twitter:image" content="{original}"></head><body>'
+        f'<figure class="article-hero-image"><img src="{original}" alt="Story"></figure>'
+        f'</body></html>',
+        encoding="utf-8",
+    )
+    archive = [{
+        "slug": slug,
+        "headline": "Mirrored recovery regression",
+        "category_key": "crime",
+        "date": "2026-10-02",
+        "lastmod": "2026-10-02",
+        "image_url": original,
+        "source_image_url": original,
+        "hosted_image_url": hosted,
+        "article_image_mirror_status": "mirrored",
+        "image_credit": "Publisher",
+        "source_url": "https://publisher.test/story",
+        "is_fallback_image": False,
+    }]
+
+    monkeypatch.setattr(
+        generate,
+        "fetch_og_image",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("publisher provenance already exists and must not be refetched")
+        ),
+    )
+    monkeypatch.setattr(generate, "get_fallback_image", lambda *a, **k: ("", ""))
+
+    repaired = generate.recover_recent_archive_source_images(
+        archive, articles, max_age_days=3650
+    )
+
+    assert repaired == 1
+    assert archive[0]["source_image_url"] == original
+    assert archive[0]["hosted_image_url"] == hosted
+    assert archive[0]["image_url"] == hosted
+    html = article_path.read_text(encoding="utf-8")
+    assert original not in html
+    assert f'<img src="{hosted}"' in html
+    assert f'<meta property="og:image" content="{hosted}"' in html
+    assert f'<meta name="twitter:image" content="{hosted}"' in html
+
+
+def test_recent_source_reconciliation_preserves_publisher_delivery_outside_mirror_mode(tmp_path, monkeypatch):
+    monkeypatch.setenv("TCT_ARTICLE_IMAGE_MODE", "shadow")
+    original = "https://publisher.test/photo.png"
+    hosted = "https://images.treasurecoast.today/articles/5a/hash.png"
+    slug = "2026-10-02-shadow-recovery-regression"
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    article_path = articles / f"{slug}.html"
+    article_path.write_text(
+        f'<figure class="article-hero-image"><img src="{original}" alt="Story"></figure>',
+        encoding="utf-8",
+    )
+    archive = [{
+        "slug": slug,
+        "headline": "Shadow recovery regression",
+        "category_key": "crime",
+        "date": "2026-10-02",
+        "lastmod": "2026-10-02",
+        "image_url": original,
+        "source_image_url": original,
+        "hosted_image_url": hosted,
+        "article_image_mirror_status": "mirrored",
+        "source_url": "https://publisher.test/story",
+        "is_fallback_image": False,
+    }]
+    monkeypatch.setattr(generate, "get_fallback_image", lambda *a, **k: ("", ""))
+
+    repaired = generate.recover_recent_archive_source_images(
+        archive, articles, max_age_days=3650
+    )
+
+    assert repaired == 0
+    assert archive[0]["source_image_url"] == original
+    assert archive[0]["hosted_image_url"] == hosted
+    assert archive[0]["image_url"] == original
+    assert original in article_path.read_text(encoding="utf-8")
+
+
+def test_recent_source_reconciliation_does_not_downgrade_fresh_mirror_render(tmp_path, monkeypatch):
+    monkeypatch.setenv("TCT_ARTICLE_IMAGE_MODE", "mirror")
+    monkeypatch.setenv("BUNNY_CDN_BASE_URL", "https://images.treasurecoast.today")
+    original = "https://publisher.test/photo.png"
+    hosted = "https://images.treasurecoast.today/articles/5a/hash.png"
+    slug = "2026-10-02-fresh-mirror-render"
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    article_path = articles / f"{slug}.html"
+    article_path.write_text(
+        f'<html><head><meta property="og:image" content="{hosted}">'
+        f'<meta name="twitter:image" content="{hosted}"></head><body>'
+        f'<figure class="article-hero-image"><img src="{hosted}" alt="Story"></figure>'
+        f'</body></html>',
+        encoding="utf-8",
+    )
+    archive = [{
+        "slug": slug,
+        "headline": "Fresh mirror render",
+        "category_key": "crime",
+        "date": "2026-10-02",
+        "lastmod": "2026-10-02",
+        "image_url": hosted,
+        "source_image_url": original,
+        "hosted_image_url": hosted,
+        "article_image_mirror_status": "mirrored",
+        "source_url": "https://publisher.test/story",
+        "is_fallback_image": False,
+    }]
+    monkeypatch.setattr(generate, "get_fallback_image", lambda *a, **k: ("", ""))
+
+    repaired = generate.recover_recent_archive_source_images(
+        archive, articles, max_age_days=3650
+    )
+
+    assert repaired == 0
+    assert archive[0]["image_url"] == hosted
+    assert archive[0]["source_image_url"] == original
+    html = article_path.read_text(encoding="utf-8")
+    assert original not in html
+    assert html.count(hosted) == 3
