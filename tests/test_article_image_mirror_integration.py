@@ -150,3 +150,26 @@ def test_rss_contract_accepts_mirrored_delivery_with_original_source_provenance(
     report = generate.validate_rss_social_image_contract(tmp_path)
     assert report["status"] == "passed"
     assert report["persisted_source_images"] == 1
+
+
+def test_render_hook_derives_known_publisher_name_from_source_url(monkeypatch):
+    monkeypatch.setenv("TCT_ARTICLE_IMAGE_MODE", "shadow")
+    monkeypatch.setenv("BUNNY_CDN_BASE_URL", "https://images.treasurecoast.today")
+    fake = FakeMirror({
+        "status": "mirrored",
+        "action": "registry_hit",
+        "public_url": "https://images.treasurecoast.today/articles/aa/hash.jpg",
+        "storage_key": "articles/aa/hash.jpg",
+        "sha256": "hash",
+    })
+    monkeypatch.setattr(generate, "get_article_image_mirror", lambda root: fake)
+    item = {
+        "headline": "Known publisher story",
+        "image_url": "https://ewscripps.brightspotcdn.com/photo.jpg",
+        "source_image_url": "https://ewscripps.brightspotcdn.com/photo.jpg",
+        "source_url": "https://www.wptv.com/news/region-martin-county/example",
+    }
+
+    generate._mirror_article_image_for_render(item, slug="2026-10-02-known-publisher")
+
+    assert fake.calls[0]["source_name"] == "WPTV"

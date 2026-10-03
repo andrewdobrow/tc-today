@@ -3,7 +3,11 @@ from pathlib import Path
 
 import pytest
 
-from tct_engine.article_image_mirror import ArticleImageMirror
+from tct_engine.article_image_mirror import (
+    ArticleImageMirror,
+    finalize_article_image_mirror,
+    reset_article_image_mirror_for_tests,
+)
 
 
 @pytest.fixture
@@ -156,3 +160,111 @@ def test_same_source_url_re_downloads_when_validator_reports_change(tmp_path, mo
     row = registry["articles"]["story"]
     assert row["current_image"]["sha256"] == second_digest
     assert row["history"][0]["sha256"] == first_digest
+
+
+def test_registry_source_names_backfill_without_new_candidates(tmp_path, monkeypatch, bunny_env):
+    monkeypatch.setenv("TCT_ARTICLE_IMAGE_MODE", "shadow")
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    registry = {
+        "schema_version": 1,
+        "storage_provider": "bunny",
+        "updated_at": "",
+        "articles": {
+            "cbs-story": {
+                "canonical_slug": "cbs-story",
+                "history": [],
+                "source_name": "",
+                "source_article_url": "https://cbs12.com/news/local/example",
+                "current_image": {"status": "mirrored"},
+            },
+            "wptv-story": {
+                "canonical_slug": "wptv-story",
+                "history": [],
+                "source_name": "",
+                "source_article_url": "https://www.wptv.com/news/region-martin-county/example",
+                "current_image": {"status": "mirrored"},
+            },
+            "wpbf-story": {
+                "canonical_slug": "wpbf-story",
+                "history": [],
+                "source_name": "",
+                "source_article_url": "https://www.wpbf.com/article/example/123",
+                "current_image": {"status": "mirrored"},
+            },
+        },
+        "objects": {},
+    }
+    path = data_dir / "article-image-registry.json"
+    path.write_text(json.dumps(registry), encoding="utf-8")
+
+    mirror = ArticleImageMirror(tmp_path)
+    repaired = json.loads(path.read_text(encoding="utf-8"))
+
+    assert repaired["articles"]["cbs-story"]["source_name"] == "CBS12"
+    assert repaired["articles"]["wptv-story"]["source_name"] == "WPTV"
+    assert repaired["articles"]["wpbf-story"]["source_name"] == "WPBF"
+    assert mirror.stats["metadata_repairs"] == 3
+    assert mirror.stats["candidates"] == 0
+
+
+def test_report_elapsed_measures_image_work_not_manager_lifetime(tmp_path, monkeypatch, bunny_env):
+    import time
+
+    monkeypatch.setenv("TCT_ARTICLE_IMAGE_MODE", "shadow")
+    mirror = ArticleImageMirror(tmp_path)
+    mirror.started = time.perf_counter() - 100
+    _stub_download(monkeypatch, mirror)
+    monkeypatch.setattr(mirror, "_upload", lambda key, content, ctype: None)
+    monkeypatch.setattr(mirror, "_verify_public", lambda url, size: None)
+
+    mirror.mirror(slug="story", original_url="https://publisher.test/a.jpg")
+    report = mirror.write_report()
+
+    assert report["manager_lifetime_seconds"] >= 99
+    assert report["image_work_elapsed_seconds"] < 2
+    assert report["elapsed_seconds"] == report["image_work_elapsed_seconds"]
+    assert set(report["timing_seconds"]) >= {
+        "candidate_seconds",
+        "download_seconds",
+        "upload_seconds",
+        "verification_seconds",
+        "revalidation_seconds",
+        "registry_write_seconds",
+        "metadata_repair_seconds",
+    }
+    assert "timing_seconds" in report["events"][0]
+
+
+def test_blank_source_name_is_inferred_on_new_mirror(tmp_path, monkeypatch, bunny_env):
+    monkeypatch.setenv("TCT_ARTICLE_IMAGE_MODE", "shadow")
+    mirror = ArticleImageMirror(tmp_path)
+    _stub_download(monkeypatch, mirror)
+    monkeypatch.setattr(mirror, "_upload", lambda key, content, ctype: None)
+    monkeypatch.setattr(mirror, "_verify_public", lambda url, size: None)
+
+    mirror.mirror(
+        slug="story",
+        original_url="https://cdn.example/photo.jpg",
+        source_article_url="https://www.wptv.com/news/region-martin-county/story",
+        source_name="",
+    )
+    registry = json.loads((tmp_path / "data" / "article-image-registry.json").read_text())
+    assert registry["articles"]["story"]["source_name"] == "WPTV"
+
+
+def test_finalize_writes_zero_candidate_shadow_report(tmp_path, monkeypatch, bunny_env):
+    monkeypatch.setenv("TCT_ARTICLE_IMAGE_MODE", "shadow")
+    reset_article_image_mirror_for_tests()
+    try:
+        report = finalize_article_image_mirror(tmp_path)
+    finally:
+        reset_article_image_mirror_for_tests()
+
+    assert report is not None
+    assert report["mode"] == "shadow"
+    assert report["summary"]["candidates"] == 0
+    assert report["summary"]["downloads"] == 0
+    assert report["summary"]["uploads"] == 0
+    assert report["image_work_elapsed_seconds"] >= 0
+    assert (tmp_path / "data" / "article-image-mirror-report.json").is_file()

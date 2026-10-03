@@ -2263,13 +2263,17 @@ def _mirror_article_image_for_render(item, *, slug=""):
     if not _is_real_source_image_url(original) or _is_tct_mirrored_image_url(original):
         return False
     manager = get_article_image_mirror(OUTPUT_DIR)
+    source_article_url = str(
+        item.get("source_url") or item.get("_source_url") or item.get("original_url") or item.get("feed_url") or ""
+    ).strip()
+    source_name = str(
+        item.get("source_name") or item.get("source") or get_image_credit(source_article_url) or ""
+    ).strip()
     decision = manager.mirror(
         slug=str(slug or item.get("slug") or item.get("_archived_slug") or "").strip(),
         original_url=original,
-        source_article_url=str(
-            item.get("source_url") or item.get("_source_url") or item.get("original_url") or item.get("feed_url") or ""
-        ).strip(),
-        source_name=str(item.get("source_name") or item.get("source") or "").strip(),
+        source_article_url=source_article_url,
+        source_name=source_name,
     )
     # Preserve publisher provenance even when public delivery switches to TCT's CDN.
     item["source_image_url"] = original
@@ -40353,7 +40357,8 @@ if __name__ == "__main__":
                     f"downloads={_image_summary.get('downloads', 0)}, "
                     f"uploads={_image_summary.get('uploads', 0)}, "
                     f"fallbacks={_image_summary.get('fallbacks', 0)}, "
-                    f"elapsed={_image_report.get('elapsed_seconds', 0)}s"
+                    f"metadata_repairs={_image_summary.get('metadata_repairs', 0)}, "
+                    f"image_work_elapsed={_image_report.get('image_work_elapsed_seconds', 0)}s"
                 )
         except Exception as exc:
             print(f"  Article image mirror observability unavailable ({type(exc).__name__}); continuing")

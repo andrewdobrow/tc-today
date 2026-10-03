@@ -40,6 +40,25 @@ _CONTENT_TYPE_EXTENSIONS = {
     "image/tiff": ".tif",
 }
 
+_PUBLISHER_NAMES_BY_DOMAIN = {
+    "tcpalm.com": "TCPalm",
+    "wptv.com": "WPTV",
+    "wpbf.com": "WPBF",
+    "cbs12.com": "CBS12",
+    "sun-sentinel.com": "Sun Sentinel",
+    "palmbeachpost.com": "Palm Beach Post",
+    "hometownnewstc.com": "Hometown News",
+    "wflx.com": "Fox 29",
+    "bbci.co.uk": "BBC News",
+    "npr.org": "NPR",
+    "yahoo.com": "Yahoo News",
+    "apnews.com": "AP News",
+    "reuters.com": "Reuters",
+    "usatoday.com": "USA Today",
+    "cnn.com": "CNN",
+    "nbcnews.com": "NBC News",
+}
+
 
 def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
@@ -68,6 +87,20 @@ def _storage_host_from_env() -> str:
     if not region or region in {"de", "de-fs", "falkenstein", "germany"}:
         return "storage.bunnycdn.com"
     return f"{region}.storage.bunnycdn.com"
+
+
+def _infer_source_name(source_url: str) -> str:
+    """Return a stable publisher label from a known publisher article URL."""
+    try:
+        host = urlsplit(str(source_url or "")).netloc.lower().split(":", 1)[0]
+    except Exception:
+        return ""
+    if host.startswith("www."):
+        host = host[4:]
+    for domain, name in _PUBLISHER_NAMES_BY_DOMAIN.items():
+        if host == domain or host.endswith("." + domain):
+            return name
+    return ""
 
 
 def _registry_template() -> dict:
@@ -119,8 +152,20 @@ class ArticleImageMirror:
             "verified": 0,
             "fallbacks": 0,
             "registry_writes": 0,
+            "metadata_repairs": 0,
+        }
+        self.timing = {
+            "candidate_seconds": 0.0,
+            "download_seconds": 0.0,
+            "upload_seconds": 0.0,
+            "verification_seconds": 0.0,
+            "revalidation_seconds": 0.0,
+            "registry_write_seconds": 0.0,
+            "metadata_repair_seconds": 0.0,
         }
         self.config_error = self._configuration_error()
+        if self.mode in {"shadow", "mirror"}:
+            self._repair_registry_source_names()
 
     @property
     def enabled(self) -> bool:
@@ -160,7 +205,8 @@ class ArticleImageMirror:
             payload["objects"] = {}
         return payload
 
-    def _write_registry(self) -> None:
+    def _write_registry(self) -> float:
+        started = time.perf_counter()
         self.registry_path.parent.mkdir(parents=True, exist_ok=True)
         self.registry["schema_version"] = SCHEMA_VERSION
         self.registry["storage_provider"] = "bunny"
@@ -169,6 +215,26 @@ class ArticleImageMirror:
         tmp.write_text(json.dumps(self.registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         tmp.replace(self.registry_path)
         self.stats["registry_writes"] += 1
+        elapsed = time.perf_counter() - started
+        self.timing["registry_write_seconds"] += elapsed
+        return elapsed
+
+    def _repair_registry_source_names(self) -> int:
+        """Backfill blank publisher labels from durable source article URLs."""
+        started = time.perf_counter()
+        repaired = 0
+        for row in self.registry.get("articles", {}).values():
+            if not isinstance(row, dict) or str(row.get("source_name") or "").strip():
+                continue
+            inferred = _infer_source_name(str(row.get("source_article_url") or ""))
+            if inferred:
+                row["source_name"] = inferred
+                repaired += 1
+        if repaired:
+            self.stats["metadata_repairs"] += repaired
+            self._write_registry()
+        self.timing["metadata_repair_seconds"] += time.perf_counter() - started
+        return repaired
 
     def _public_url(self, storage_key: str) -> str:
         return f"{self.public_base}/{storage_key.lstrip('/')}"
@@ -274,8 +340,9 @@ class ArticleImageMirror:
                 last_error = exc
         raise last_error or RuntimeError("Bunny public URL verification failed")
 
-    def _record_failure(self, *, slug: str, original_url: str, source_article_url: str, source_name: str, error: Exception) -> None:
+    def _record_failure(self, *, slug: str, original_url: str, source_article_url: str, source_name: str, error: Exception) -> float:
         now = _utc_now()
+        source_name = str(source_name or _infer_source_name(source_article_url)).strip()
         articles = self.registry.setdefault("articles", {})
         row = articles.setdefault(slug, {"canonical_slug": slug, "history": []})
         prior = row.get("current_image") if isinstance(row.get("current_image"), dict) else None
@@ -304,7 +371,7 @@ class ArticleImageMirror:
             "first_seen": now,
             "mirrored_at": "",
         }
-        self._write_registry()
+        return self._write_registry()
 
     def mirror(self, *, slug: str, original_url: str, source_article_url: str = "", source_name: str = "") -> dict:
         """Mirror one publisher image and return a delivery decision.
@@ -315,6 +382,17 @@ class ArticleImageMirror:
         """
         original_url = str(original_url or "").strip()
         slug = str(slug or "").strip()
+        source_article_url = str(source_article_url or "").strip()
+        source_name = str(source_name or _infer_source_name(source_article_url)).strip()
+        candidate_started = time.perf_counter()
+        event_timing = {
+            "download": 0.0,
+            "upload": 0.0,
+            "verify": 0.0,
+            "revalidate": 0.0,
+            "registry_write": 0.0,
+            "total": 0.0,
+        }
         result = {
             "mode": self.mode,
             "original_url": original_url,
@@ -333,18 +411,32 @@ class ArticleImageMirror:
         if self.config_error:
             self.stats["fallbacks"] += 1
             result.update(status="external", action="configuration_fallback", error=self.config_error)
+            event_timing["total"] = time.perf_counter() - candidate_started
+            self.timing["candidate_seconds"] += event_timing["total"]
             return result
 
         articles = self.registry.setdefault("articles", {})
         article_row = articles.get(slug) if isinstance(articles.get(slug), dict) else {}
         current = article_row.get("current_image") if isinstance(article_row.get("current_image"), dict) else {}
+        source_changed = False
         if (
             current.get("status") == "mirrored"
             and current.get("original_url") == original_url
             and current.get("public_url")
             and current.get("storage_key")
             and current.get("sha256")
-            and not self._source_changed_since(original_url, current)
+        ):
+            _revalidation_started = time.perf_counter()
+            source_changed = self._source_changed_since(original_url, current)
+            event_timing["revalidate"] = time.perf_counter() - _revalidation_started
+            self.timing["revalidation_seconds"] += event_timing["revalidate"]
+        if (
+            current.get("status") == "mirrored"
+            and current.get("original_url") == original_url
+            and current.get("public_url")
+            and current.get("storage_key")
+            and current.get("sha256")
+            and not source_changed
         ):
             self.stats["registry_hits"] += 1
             public_url = str(current["public_url"])
@@ -356,11 +448,24 @@ class ArticleImageMirror:
                 "status": "mirrored",
                 "action": "registry_hit",
             })
-            self.events.append({"slug": slug, "action": "registry_hit", "original_url": original_url, "public_url": public_url})
+            event_timing["total"] = time.perf_counter() - candidate_started
+            self.timing["candidate_seconds"] += event_timing["total"]
+            self.events.append({
+                "slug": slug,
+                "action": "registry_hit",
+                "original_url": original_url,
+                "public_url": public_url,
+                "timing_seconds": {k: round(v, 3) for k, v in event_timing.items()},
+            })
             return result
 
         try:
-            content, sha256, content_type, final_source_url, validators = self._download(original_url)
+            _download_started = time.perf_counter()
+            try:
+                content, sha256, content_type, final_source_url, validators = self._download(original_url)
+            finally:
+                event_timing["download"] = time.perf_counter() - _download_started
+                self.timing["download_seconds"] += event_timing["download"]
             self.stats["downloads"] += 1
             extension = _extension_for(content_type, final_source_url or original_url)
             object_row = self.registry.setdefault("objects", {}).get(sha256)
@@ -372,9 +477,19 @@ class ArticleImageMirror:
             else:
                 storage_key = f"articles/{sha256[:2]}/{sha256}{extension}"
                 public_url = self._public_url(storage_key)
-                self._upload(storage_key, content, content_type)
+                _upload_started = time.perf_counter()
+                try:
+                    self._upload(storage_key, content, content_type)
+                finally:
+                    event_timing["upload"] = time.perf_counter() - _upload_started
+                    self.timing["upload_seconds"] += event_timing["upload"]
                 self.stats["uploads"] += 1
-                self._verify_public(public_url, len(content))
+                _verify_started = time.perf_counter()
+                try:
+                    self._verify_public(public_url, len(content))
+                finally:
+                    event_timing["verify"] = time.perf_counter() - _verify_started
+                    self.timing["verification_seconds"] += event_timing["verify"]
                 self.stats["verified"] += 1
                 self.registry.setdefault("objects", {})[sha256] = {
                     "storage_provider": "bunny",
@@ -428,7 +543,7 @@ class ArticleImageMirror:
             }
             # Critical ordering: provenance is durable before a mirrored URL can be
             # returned to the page renderer.
-            self._write_registry()
+            event_timing["registry_write"] = self._write_registry()
             result.update({
                 "resolved_url": public_url if self.mode == "mirror" else original_url,
                 "public_url": public_url,
@@ -437,12 +552,20 @@ class ArticleImageMirror:
                 "status": "mirrored",
                 "action": action,
             })
-            self.events.append({"slug": slug, "action": action, "original_url": original_url, "public_url": public_url})
+            event_timing["total"] = time.perf_counter() - candidate_started
+            self.timing["candidate_seconds"] += event_timing["total"]
+            self.events.append({
+                "slug": slug,
+                "action": action,
+                "original_url": original_url,
+                "public_url": public_url,
+                "timing_seconds": {k: round(v, 3) for k, v in event_timing.items()},
+            })
             return result
         except Exception as exc:
             self.stats["fallbacks"] += 1
             try:
-                self._record_failure(
+                event_timing["registry_write"] = self._record_failure(
                     slug=slug,
                     original_url=original_url,
                     source_article_url=source_article_url,
@@ -452,10 +575,19 @@ class ArticleImageMirror:
             except Exception:
                 pass
             result.update(status="external", action="mirror_failed", error=f"{type(exc).__name__}: {exc}"[:500])
-            self.events.append({"slug": slug, "action": "mirror_failed", "original_url": original_url, "error": result["error"]})
+            event_timing["total"] = time.perf_counter() - candidate_started
+            self.timing["candidate_seconds"] += event_timing["total"]
+            self.events.append({
+                "slug": slug,
+                "action": "mirror_failed",
+                "original_url": original_url,
+                "error": result["error"],
+                "timing_seconds": {k: round(v, 3) for k, v in event_timing.items()},
+            })
             return result
 
     def write_report(self) -> dict:
+        image_work_elapsed = self.timing["candidate_seconds"] + self.timing["metadata_repair_seconds"]
         report = {
             "schema_version": 1,
             "generated_at": _utc_now(),
@@ -466,7 +598,12 @@ class ArticleImageMirror:
             "storage_zone": self.zone,
             "storage_host": self.storage_host,
             "public_base_url": self.public_base,
-            "elapsed_seconds": round(time.perf_counter() - self.started, 3),
+            # Keep elapsed_seconds for compatibility, but make it honest: it now
+            # measures cumulative image-stage work instead of manager lifetime.
+            "elapsed_seconds": round(image_work_elapsed, 3),
+            "image_work_elapsed_seconds": round(image_work_elapsed, 3),
+            "manager_lifetime_seconds": round(time.perf_counter() - self.started, 3),
+            "timing_seconds": {k: round(v, 3) for k, v in self.timing.items()},
             "summary": dict(self.stats),
             "events": self.events[-200:],
         }
@@ -495,9 +632,11 @@ def reset_article_image_mirror_for_tests() -> None:
 
 
 def finalize_article_image_mirror(root: Path):
-    """Write observability only when the mirror was actually instantiated."""
+    """Write a shadow/mirror report even when a run produced zero candidates."""
     if _INSTANCE is None:
-        return None
+        if _normalized_mode() not in {"shadow", "mirror"}:
+            return None
+        get_article_image_mirror(root)
     if _INSTANCE_ROOT != Path(root).resolve():
         return None
     return _INSTANCE.write_report()
