@@ -2361,6 +2361,56 @@ def _load_article_content_overrides(path=None, now=None):
     return result
 
 
+def _article_content_override_marks_meaningful_update(override):
+    """Return whether an editorial override represents a substantive story update.
+
+    Most historical overrides are substantive corrections/updates and keep the legacy
+    default of ``True``. Surgical copy edits can explicitly set
+    ``mark_meaningful_update`` to false so grammar/style cleanup does not alter story
+    freshness, timestamps, or update semantics.
+    """
+    if not isinstance(override, dict):
+        return True
+    return override.get("mark_meaningful_update", True) is not False
+
+
+def _article_content_override_body_replacements(value, override, html_encoded=False):
+    """Apply exact, slug-scoped copy edits without regenerating an article body.
+
+    ``body_replacements`` is intentionally literal and deterministic. It is for
+    already-published copy that needs a verified wording/grammar correction while
+    preserving every other byte of the story. The HTML path also checks the escaped
+    representation used by rendered paragraph text.
+    """
+    text = str(value or "")
+    rows = override.get("body_replacements") if isinstance(override, dict) else None
+    if not isinstance(rows, list):
+        return text, False
+    changed = False
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        old = str(row.get("from") or "")
+        new = str(row.get("to") or "")
+        if not old or old == new:
+            continue
+        pairs = [(old, new)]
+        if html_encoded:
+            pairs.extend([
+                (html_lib.escape(old, quote=True), html_lib.escape(new, quote=True)),
+                (html_lib.escape(old, quote=False), html_lib.escape(new, quote=False)),
+            ])
+        seen = set()
+        for old_variant, new_variant in pairs:
+            if not old_variant or (old_variant, new_variant) in seen:
+                continue
+            seen.add((old_variant, new_variant))
+            if old_variant in text:
+                text = text.replace(old_variant, new_variant)
+                changed = True
+    return text, changed
+
+
 def _apply_article_content_overrides_to_outputs(output_root=None):
     root = Path(output_root or OUTPUT_DIR)
     overrides = _load_article_content_overrides(root / "data" / "article-content-overrides.json")
@@ -2377,8 +2427,14 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
         for field in ("headline", "teaser", "body", "image_url", "updated", "date_modified", "meaningful_update_at"):
             if ov.get(field):
                 row[field] = ov[field]
-        row["is_meaningful_update"] = True
-        row["update_status"] = ov.get("update_status", "resolved")
+        repaired_body, _body_changed = _article_content_override_body_replacements(
+            row.get("body"), ov
+        )
+        if _body_changed:
+            row["body"] = repaired_body
+        if _article_content_override_marks_meaningful_update(ov):
+            row["is_meaningful_update"] = True
+            row["update_status"] = ov.get("update_status", "resolved")
         changed += 1
     if changed:
         archive_path.write_text(json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -2399,8 +2455,15 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
                         for field in ("headline", "teaser", "body", "image_url", "updated", "date_modified", "meaningful_update_at"):
                             if ov.get(field):
                                 node[field] = ov[field]
-                        node["is_meaningful_update"] = True
-                        node["update_status"] = ov.get("update_status", "resolved")
+                        if "body" in node:
+                            repaired_body, _body_changed = _article_content_override_body_replacements(
+                                node.get("body"), ov
+                            )
+                            if _body_changed:
+                                node["body"] = repaired_body
+                        if _article_content_override_marks_meaningful_update(ov):
+                            node["is_meaningful_update"] = True
+                            node["update_status"] = ov.get("update_status", "resolved")
                     for value in node.values():
                         _patch_payload(value)
                 elif isinstance(node, list):
@@ -2459,6 +2522,13 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
                 re.I | re.S,
             )
             text = article_region.sub(replacement + "\n", text, count=1)
+        elif ov.get("body_replacements"):
+            # Copy-edit-only overrides must be surgical. They repair the exact known
+            # sentence in an already-published page without rebuilding the paywall
+            # shell, touching unrelated paragraphs, or fabricating a visible update.
+            text, _ = _article_content_override_body_replacements(
+                text, ov, html_encoded=True
+            )
         # JSON-LD
         m = re.search(r'<script type="application/ld\+json">(.*?)</script>', text, re.S)
         if m:
@@ -2631,9 +2701,17 @@ def _apply_article_content_overrides_to_categories(all_categories, top_cat=None,
             if ov.get("headline") and item.get("title") and item.get("title") != ov.get("headline"):
                 item["title"] = ov["headline"]
                 item_changed = True
+            if "body" in item:
+                repaired_body, _body_changed = _article_content_override_body_replacements(
+                    item.get("body"), ov
+                )
+                if _body_changed:
+                    item["body"] = repaired_body
+                    item_changed = True
             if item_changed:
-                item["is_meaningful_update"] = True
-                item["update_status"] = ov.get("update_status", "resolved")
+                if _article_content_override_marks_meaningful_update(ov):
+                    item["is_meaningful_update"] = True
+                    item["update_status"] = ov.get("update_status", "resolved")
                 changed += 1
     return changed
 
