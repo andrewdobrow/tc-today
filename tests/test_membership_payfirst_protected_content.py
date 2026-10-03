@@ -183,7 +183,7 @@ def test_paywall_markup_uses_editorial_single_offer_and_home_exit():
     markup = paywall_html("example-story")
     assert "Keep reading for" in markup
     assert 'class="tct-paywall-headline-accent">$1</span>' in markup
-    assert "Get full access to every story" in markup
+    assert "Get unlimited, ad-free access to every story." in markup
     assert "tct-paywall-subscriber-strip" in markup
     assert "Already a subscriber?" in markup
     assert "tct-paywall-primary-offer" in markup

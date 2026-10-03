@@ -37,7 +37,7 @@ def test_paywall_discloses_one_dollar_intro_and_renewal_price():
     markup = paywall_html("example-story")
     assert "Keep reading for" in markup
     assert 'class="tct-paywall-headline-accent">$1</span>' in markup
-    assert "Get full access to every story" in markup
+    assert "Get unlimited, ad-free access to every story." in markup
     assert 'class="tct-paywall-current-price">$1</strong>' in markup
     assert 'class="tct-paywall-old-price">$4.99</span>' in markup
     assert "for your first month" in markup
@@ -105,3 +105,12 @@ def test_article_paywall_uses_editorial_single_offer_presentation():
     assert "white-space: nowrap" in release_css
     assert "tct-paywall-subscriber-strip" in release_css
 
+
+
+def test_retained_paywall_subhead_is_normalized_to_ad_free_copy():
+    from tct_engine.membership_paywall import inject_membership_assets
+
+    page = """<html><head></head><body><p class=\"tct-paywall-offer-subhead\">Get full access to every story</p></body></html>"""
+    updated = inject_membership_assets(page, "example-story")
+    assert "Get unlimited, ad-free access to every story." in updated
+    assert "Get full access to every story" not in updated

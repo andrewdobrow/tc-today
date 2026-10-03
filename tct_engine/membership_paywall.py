@@ -123,6 +123,10 @@ def split_article_body(body_html: str, preview_max_chars: int = PREVIEW_MAX_CHAR
 
 
 
+PAYWALL_ACCESS_SUBHEAD = "Get unlimited, ad-free access to every story."
+LEGACY_PAYWALL_ACCESS_SUBHEAD = "Get full access to every story"
+
+
 def paywall_section_html(slug: str) -> str:
     escaped_slug = html.escape(slug, quote=True)
     return f'''<section class="tct-paywall" data-tct-paywall data-slug="{escaped_slug}" aria-label="Treasure Coast Today membership">
@@ -132,7 +136,7 @@ def paywall_section_html(slug: str) -> str:
   <div class="tct-paywall-offer-panel">
     <div class="tct-paywall-meter-status hidden" data-meter-status></div>
     <h2 class="tct-paywall-offer-headline" data-paywall-headline>Keep reading for <span class="tct-paywall-headline-accent">$1</span></h2>
-    <p class="tct-paywall-offer-subhead">Get full access to every story</p>
+    <p class="tct-paywall-offer-subhead">{PAYWALL_ACCESS_SUBHEAD}</p>
     <div class="membership-message hidden"></div>
     <div class="tct-paywall-signin hidden" data-paywall-signin>
       <form class="membership-form" data-signin-form>
@@ -222,6 +226,15 @@ MEMBER_PREPAINT_SCRIPT = (
 def inject_membership_assets(page_html: str, slug: str) -> str:
     css_href = f"/membership.css?v={MEMBERSHIP_ASSET_VERSION}"
     js_src = f"/membership.js?v={MEMBERSHIP_JS_ASSET_VERSION}"
+
+    # Retained paywalled pages can survive across generator runs. Normalize the
+    # previous subhead whenever membership assets are refreshed so the new
+    # membership benefit copy reaches existing articles without requiring a
+    # story rewrite or publication-date change.
+    page_html = page_html.replace(
+        f'<p class="tct-paywall-offer-subhead">{LEGACY_PAYWALL_ACCESS_SUBHEAD}</p>',
+        f'<p class="tct-paywall-offer-subhead">{PAYWALL_ACCESS_SUBHEAD}</p>',
+    )
 
     # Run the visual member hint before first paint. This only suppresses the
     # sales treatment while entitlement is rechecked; protected article text is

@@ -360,7 +360,7 @@ def test_paywall_avoids_duplicate_newsletter_fallback_and_keeps_value_copy():
     assert "free TCT Morning Brief" not in html
     assert "tct-paywall-newsletter-fallback" not in html
     assert "Keep reading for" in html and "$1</span>" in html
-    assert "Get full access to every story" in html
+    assert "Get unlimited, ad-free access to every story." in html
     assert "Start for $1" in html
     assert 'tct-paywall-current-price">$1<' in html
     assert 'tct-paywall-old-price">$4.99<' in html
