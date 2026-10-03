@@ -1020,11 +1020,24 @@ ASSIGNMENT_EDITOR_PENDING = {}
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.7-balanced-headline-concision"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.9.81-newsroom-copy-desk"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
 # writer. Keeping one literal contract prevents the Sonnet 5 editor/writer path from
 # drifting behind the deterministic publication guards.
+NEWSROOM_COPY_DESK_STANDARD = """NEWSROOM COPY DESK STANDARD:
+- Write publication-ready local journalism, not merely factually correct notes. Every sentence must be grammatical, natural, concise, clear, and professionally edited.
+- Favor direct, engaging news prose with varied sentence structure and strong verbs. Engaging does not mean dramatic: never sensationalize, speculate, editorialize, or add color that is not supported by the source.
+- Preserve every factual limit in the reporting. Never invent, infer, embellish, combine, or smooth over facts just to improve the prose. When a detail is unknown, omit it rather than guessing.
+- Silently copy edit for grammar, syntax, agreement, punctuation, parallel construction, modifier placement, repetition, awkward phrasing, and mechanical or AI-sounding wording before returning the article.
+- Use normal journalistic list construction. Do not chain repeated conjunctions such as "video and phone and vehicle search warrants." For three or more parallel items, use commas and one final conjunction when that preserves the meaning, or rewrite the sentence so the relationships are unambiguous.
+- Never use an em dash (—) in a headline, teaser, or article body. Rewrite the sentence with commas, parentheses, a colon, semicolon, or separate sentences as appropriate. Do not substitute a spaced hyphen for an em dash.
+- Preserve direct quotations exactly if you keep them. If a quotation's punctuation or construction conflicts with TCT house style, paraphrase the supported fact instead of silently altering quoted words.
+- Avoid repetitive sentence openings, redundant phrases, choppy fragments, run-ons, and overloaded sentences. Split or recast a sentence when clarity improves.
+- Before returning JSON, perform a final copy-desk read from the perspective of a professional local-news editor. The draft should be ready to publish without a human grammar cleanup.
+
+"""
+
 LEAD_AND_HEADLINE_INTEGRITY_STANDARD = """LEAD AND HEADLINE INTEGRITY STANDARD:
 - Write concise, newspaper-style headlines focused on the core new development. Aim roughly for 65-95 characters when natural. A headline above about 110 characters should normally be rewritten more tightly rather than allowed to become a sentence-length summary. This is an editorial rewrite trigger, NOT permission to mechanically truncate text or drop essential facts.
 - Preserve meaningful source-supported geographic proper names. NEVER shorten a headline by deleting or mangling the named place, roadway/corridor, city, county, neighborhood, facility, or landmark that materially tells readers where the story happened — for example "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County". Preserve source-supported official proper names exactly enough to retain their identity, including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike".
@@ -7234,7 +7247,7 @@ LOCAL_SYSTEM_PROMPT = (
     "analysis or speculation on top of a missing fact. If you find yourself about to explain what is missing, stop "
     "and omit it entirely. "
     "Always produce a complete, readable article."
-)
+) + "\n\n" + NEWSROOM_COPY_DESK_STANDARD
 
 FLORIDA_SYSTEM_PROMPT = (
     "You write factual news articles for the Florida section of Treasure Coast Today. "
@@ -7255,7 +7268,7 @@ FLORIDA_SYSTEM_PROMPT = (
     "analysis or speculation on top of a missing fact. If you find yourself about to explain what is missing, stop "
     "and omit it entirely. "
     "Always produce a complete, readable article."
-)
+) + "\n\n" + NEWSROOM_COPY_DESK_STANDARD
 
 
 
@@ -8963,6 +8976,30 @@ Return ONLY valid JSON:
         normalized_cards.append(card)
     data["cards"] = normalized_cards
 
+    # Final generated-copy house-style gate. The assignment writer normally repairs
+    # objective copy defects before returning. Keep this second boundary here so a
+    # legacy/rollback generation path or future refactor cannot bypass the newsroom
+    # standard and publish mechanical prose.
+    _hero_copydesk = _article_copydesk_diagnostics(data.get("hero", {}))
+    if _hero_copydesk.get("required") and not _hero_copydesk.get("passed"):
+        _codes = sorted({
+            issue.get("code") for issue in _hero_copydesk.get("issues", [])
+            if issue.get("code")
+        })
+        raise CopyDeskIntegrityError(
+            "Copy-desk integrity failed for hero: " + ",".join(_codes or ["unknown"])
+        )
+    for _card in data.get("cards", []) or []:
+        _card_copydesk = _article_copydesk_diagnostics(_card)
+        if _card_copydesk.get("required") and not _card_copydesk.get("passed"):
+            _codes = sorted({
+                issue.get("code") for issue in _card_copydesk.get("issues", [])
+                if issue.get("code")
+            })
+            raise CopyDeskIntegrityError(
+                "Copy-desk integrity failed for card: " + ",".join(_codes or ["unknown"])
+            )
+
     # Deterministic update-lead gate. A contextless update hero triggers the normal
     # bounded category retry; contextless update cards are removed rather than
     # published as standalone articles.
@@ -9418,6 +9455,8 @@ def _category_generation_error_code(exc):
         return "contextless_update_lead"
     if isinstance(exc, ArticleFramingIntegrityError) or "article framing integrity" in message:
         return "article_framing_integrity"
+    if isinstance(exc, CopyDeskIntegrityError) or "copy-desk" in message or "copy desk" in message:
+        return "copydesk_integrity"
     if "timeout" in name or "timed out" in message or "timeout" in message:
         return "model_timeout"
     if isinstance(exc, (ValueError, json.JSONDecodeError)) or "json" in name or "json" in message:
@@ -11791,6 +11830,199 @@ def _assignment_source_by_index(packet, source_index):
     return sources[index - 1]
 
 
+
+class CopyDeskIntegrityError(RuntimeError):
+    """Raised when generated publication copy violates TCT house style."""
+
+
+_EM_DASH_PATTERN = re.compile(r"(?:\u2014|&mdash;|&#8212;|&#x2014;)", re.IGNORECASE)
+_DIRECT_QUOTE_SPAN_PATTERN = re.compile(r'“[^”]*”|"[^"]*"', re.DOTALL)
+_WORD_TOKEN_PATTERN = re.compile(r"[A-Za-z0-9]+(?:['’.-][A-Za-z0-9]+)*|\band\b", re.IGNORECASE)
+
+
+def _copydesk_text_issues(text):
+    """Return narrow, deterministic copy defects that must never reach publication.
+
+    This is intentionally not a general grammar parser. Sonnet receives the broad
+    copy-desk standard; this guard catches house-style failures that are objective
+    enough to enforce mechanically without rewriting facts locally.
+    """
+    raw = str(text or "")
+    if not raw.strip():
+        return []
+
+    issues = []
+    if _EM_DASH_PATTERN.search(raw):
+        issues.append({"code": "em_dash", "snippet": "em dash present"})
+
+    # Direct quotations are source language. We never silently rewrite a quote just
+    # because its speaker used a repetitive conjunction. TCT-authored prose around it
+    # is still checked. Em dashes remain a document-level violation so the model can
+    # paraphrase the supported statement instead of altering a quotation.
+    prose = _DIRECT_QUOTE_SPAN_PATTERN.sub(" ", raw)
+    sentences = [
+        part.strip()
+        for part in re.split(r"(?<=[.!?])\s+|\n+", prose)
+        if part.strip()
+    ]
+    for sentence in sentences:
+        and_matches = list(re.finditer(r"\band\b", sentence, flags=re.IGNORECASE))
+        if len(and_matches) < 2:
+            continue
+        for first, second in zip(and_matches, and_matches[1:]):
+            between = sentence[first.end():second.start()]
+            # A comma/semicolon/colon usually means the conjunctions coordinate
+            # separate clauses. The recurring defect is the compressed list form
+            # ``A and B and C`` with only a few words between conjunctions.
+            if re.search(r"[,;:]", between):
+                continue
+            between_words = re.findall(r"\b[A-Za-z0-9][A-Za-z0-9'’.-]*\b", between)
+            after = sentence[second.end():]
+            after_words = [
+                token.lower()
+                for token in re.findall(r"\b[A-Za-z0-9][A-Za-z0-9'’.-]*\b", after)[:5]
+            ]
+            # ``A and B and C`` is a list defect; ``A and B and the board was...``
+            # is a new coordinated clause. An early finite/auxiliary verb after the
+            # second conjunction is strong evidence of the latter and avoids false
+            # positives such as ``dehydration and malnutrition and three caregivers
+            # were arrested``.
+            starts_new_clause = any(
+                token in {
+                    "am", "is", "are", "was", "were", "be", "been", "being",
+                    "has", "have", "had", "do", "does", "did", "can", "could",
+                    "will", "would", "may", "might", "must", "shall", "should",
+                }
+                for token in after_words
+            )
+            if len(between_words) <= 3 and not starts_new_clause:
+                snippet_start = max(0, first.start() - 36)
+                snippet_end = min(len(sentence), second.end() + 48)
+                snippet = re.sub(r"\s+", " ", sentence[snippet_start:snippet_end]).strip()
+                issues.append({"code": "chained_and", "snippet": snippet[:140]})
+                break
+        if any(issue.get("code") == "chained_and" for issue in issues):
+            break
+    return issues
+
+
+def _article_copydesk_diagnostics(item):
+    """Audit generated headline/teaser/body for enforceable TCT copy defects."""
+    if not isinstance(item, dict):
+        return {"required": False, "passed": True, "issues": []}
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return {"required": False, "passed": True, "issues": []}
+
+    issues = []
+    for field in ("headline", "teaser", "body"):
+        value = str(item.get(field) or "")
+        for issue in _copydesk_text_issues(value):
+            issues.append({"field": field, **issue})
+    return {
+        "required": True,
+        "passed": not issues,
+        "issues": issues,
+    }
+
+
+def _copydesk_repair_assignment_item(
+    item,
+    *,
+    role,
+    source_title,
+    request_client,
+    system_prompt,
+    writer_timeout,
+):
+    """Run one bounded wording-only repair when deterministic house-style defects appear."""
+    diagnostics = _article_copydesk_diagnostics(item)
+    if diagnostics.get("passed"):
+        return item, 0.0
+
+    issue_codes = sorted({issue.get("code") for issue in diagnostics.get("issues", []) if issue.get("code")})
+    issue_text = ", ".join(issue_codes) or "copy quality"
+    original_headline = str(item.get("headline") or "").strip()
+    original_teaser = str(item.get("teaser") or "").strip()
+    original_body = str(item.get("body") or "").strip()
+
+    if role == "hero":
+        contract = 'Return ONLY JSON: {"headline":"...","body":"..."}'
+    else:
+        contract = 'Return ONLY JSON: {"headline":"...","teaser":"...","body":"..."}'
+
+    repair_prompt = f"""You are the final copy desk for Treasure Coast Today. Copy edit the existing draft below. This is a wording-only repair, not a reporting task.
+
+SOURCE TITLE FOR CONTEXT: {source_title}
+DETECTED HOUSE-STYLE ISSUE(S): {issue_text}
+
+CURRENT HEADLINE:
+{original_headline}
+
+CURRENT TEASER:
+{original_teaser}
+
+CURRENT BODY:
+{original_body}
+
+Rules:
+- Preserve the draft's factual claims, names, numbers, chronology, attribution, uncertainty, and allegation status. Do not add a fact, inference, explanation, background detail, or causal claim that is not already in the draft.
+- Correct grammar, syntax, punctuation, parallel construction, modifier placement, repetition, awkward wording, and mechanical or AI-sounding phrasing.
+- Use polished, natural, engaging newspaper prose without sensationalism or editorializing.
+- Never use an em dash (—). Do not replace one with a spaced hyphen. Recast the sentence with conventional punctuation or split it into sentences.
+- Do not chain conjunctions in compressed lists. Rewrite constructions like "video and phone and vehicle search warrants" with normal journalistic list structure while preserving the exact relationships among the items.
+- Preserve direct quotations exactly if retained. If a direct quotation contains an em dash that conflicts with house style, paraphrase the supported statement rather than altering quoted wording.
+- Do not make the article longer merely for style. Do not remove a material fact.
+- Keep the headline concise and preserve meaningful source-supported geographic proper names.
+- Read the complete result once more for grammar and house style before returning it.
+
+{contract}
+"""
+    kwargs = {
+        "model": MODEL_ARTICLES,
+        "thinking": MIGRATED_SONNET5_THINKING,
+        "max_tokens": ASSIGNMENT_WRITER_HERO_MAX_TOKENS if role == "hero" else ASSIGNMENT_WRITER_CARD_MAX_TOKENS,
+        "system": [{"type": "text", "text": system_prompt}],
+        "messages": [{"role": "user", "content": repair_prompt}],
+    }
+    if not hasattr(client, "with_options"):
+        kwargs["timeout"] = writer_timeout
+
+    started = time.perf_counter()
+    try:
+        response = request_client.messages.create(**kwargs)
+    except Exception as exc:
+        raise CopyDeskIntegrityError(
+            f"Copy-desk repair failed after detecting {issue_text}: {type(exc).__name__}: {exc}"
+        ) from exc
+    elapsed = time.perf_counter() - started
+    repaired = _parse_assignment_shadow_json(_extract_model_text(response))
+    if not isinstance(repaired, dict):
+        raise CopyDeskIntegrityError("Copy-desk repair returned no JSON object")
+
+    candidate = dict(item)
+    candidate["headline"] = str(repaired.get("headline") or "").strip()
+    candidate["body"] = str(repaired.get("body") or "").strip()
+    if role != "hero":
+        candidate["teaser"] = str(repaired.get("teaser") or "").strip()
+    if not candidate["headline"] or not candidate["body"]:
+        raise CopyDeskIntegrityError("Copy-desk repair removed required headline/body copy")
+    if role != "hero" and not candidate.get("teaser"):
+        raise CopyDeskIntegrityError("Copy-desk repair removed required card teaser")
+
+    remaining = _article_copydesk_diagnostics(candidate)
+    if not remaining.get("passed"):
+        codes = sorted({issue.get("code") for issue in remaining.get("issues", []) if issue.get("code")})
+        raise CopyDeskIntegrityError(
+            "Copy-desk repair still violates TCT house style: " + ",".join(codes or ["unknown"])
+        )
+
+    print(
+        "  COPY DESK: repaired generated "
+        f"{role} ({issue_text}) for '{candidate.get('headline','')[:72]}'"
+    )
+    return candidate, elapsed
+
+
 def _run_assignment_writer(packet, assignment, *, role, timeout_seconds=None):
     """Sonnet 5 writes one preassigned source only; selection is already closed."""
     source_index = int(assignment.get("source_index"))
@@ -11870,7 +12102,7 @@ STORY FORM: {story_form}
 SOURCE TEXT — this is the only factual source you may use:
 {source_text}
 
-{LEAD_AND_HEADLINE_INTEGRITY_STANDARD}For this assignment, the STORY FORM field above is authoritative. If it is `update`, treat the item as [story_form:update] for the standard above. Before returning JSON, verify that every money amount and local jurisdiction used in the headline also appears accurately in the FIRST paragraph; if the lead cannot support that claim cleanly, remove it from the headline instead of moving the supporting fact to a later paragraph.
+{LEAD_AND_HEADLINE_INTEGRITY_STANDARD}{NEWSROOM_COPY_DESK_STANDARD}For this assignment, the STORY FORM field above is authoritative. If it is `update`, treat the item as [story_form:update] for the standard above. Before returning JSON, verify that every money amount and local jurisdiction used in the headline also appears accurately in the FIRST paragraph; if the lead cannot support that claim cleanly, remove it from the headline instead of moving the supporting fact to a later paragraph.
 
 Writing rules:
 - Write ONLY the assigned source above. Do not substitute, combine, or refer to another story.
@@ -11972,6 +12204,20 @@ Return ONLY JSON: {{"headline":"..."}}
                 "  Headline concision repair skipped after model error: "
                 f"{type(exc).__name__}: {exc}"
             )
+
+    # Deterministic house-style defects never reach publication. The main writer is
+    # expected to self-edit against NEWSROOM_COPY_DESK_STANDARD; this bounded repair
+    # is a safety net for objective misses such as em dashes or compressed A-and-B-and-C
+    # constructions. It is wording-only and cannot add reporting.
+    item, _copydesk_duration = _copydesk_repair_assignment_item(
+        item,
+        role=role,
+        source_title=title,
+        request_client=request_client,
+        system_prompt=system_prompt,
+        writer_timeout=writer_timeout,
+    )
+    duration += _copydesk_duration
 
     # Editorial metadata comes from the validated assignment/source, never from the writer.
     item["source_index"] = source_index

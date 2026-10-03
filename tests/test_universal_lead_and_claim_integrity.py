@@ -571,7 +571,7 @@ def test_release_versions_and_reports_are_bumped():
     import tct_engine.observability as observability
 
     assert g.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.13.7.7-balanced-headline-concision"
+        "v1.13.9.81-newsroom-copy-desk"
     )
     assert "Aim roughly for 65-95 characters" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
     assert "above about 110 characters should normally be rewritten" in g.LEAD_AND_HEADLINE_INTEGRITY_STANDARD
