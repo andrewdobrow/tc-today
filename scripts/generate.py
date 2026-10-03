@@ -37,6 +37,7 @@ from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_clien
 from tct_engine.model_bakeoff import write_bakeoff_artifacts
 from tct_engine.assignment_editor_shadow import normalize_assignment_plan, write_assignment_editor_artifacts
 from tct_engine.article_prose_policy import sanitize_article_text, sanitize_article_body_html
+from tct_engine.article_image_mirror import get_article_image_mirror, finalize_article_image_mirror
 
 # Editorial engine integration. Import failures remain fail-open. Production
 # behavior changes only through the separately gated v1.9 activation controller.
@@ -982,9 +983,9 @@ MODEL_BAKEOFF_PENDING = {}
 
 # v1.13.7.1y production newsroom role separation. Sonnet 5 is the live assignment
 # editor: it chooses exact story assignments, hero/supporting order, angle and urgency.
-# Sonnet 4.5 remains the writer and receives one preassigned source at a time. A repo
-# variable can fail closed to the legacy mixed generator for emergency rollback, but
-# production defaults to the separated architecture.
+# Sonnet 5 is also the production writer and receives one preassigned source at a time.
+# A repo variable can fail closed to the legacy mixed generator for emergency rollback,
+# but production defaults to the separated architecture.
 ASSIGNMENT_EDITOR_LIVE_ENABLED = os.environ.get(
     "TCT_ASSIGNMENT_EDITOR_LIVE", "true"
 ).strip().lower() in {"1", "true", "yes", "on"}
@@ -1022,8 +1023,8 @@ GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
 CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.7.7-balanced-headline-concision"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
-# writer. Keeping one literal contract prevents the Sonnet 5 editor -> Sonnet 4.5
-# writer experiment from drifting behind the deterministic publication guards.
+# writer. Keeping one literal contract prevents the Sonnet 5 editor/writer path from
+# drifting behind the deterministic publication guards.
 LEAD_AND_HEADLINE_INTEGRITY_STANDARD = """LEAD AND HEADLINE INTEGRITY STANDARD:
 - Write concise, newspaper-style headlines focused on the core new development. Aim roughly for 65-95 characters when natural. A headline above about 110 characters should normally be rewritten more tightly rather than allowed to become a sentence-length summary. This is an editorial rewrite trigger, NOT permission to mechanically truncate text or drop essential facts.
 - Preserve meaningful source-supported geographic proper names. NEVER shorten a headline by deleting or mangling the named place, roadway/corridor, city, county, neighborhood, facility, or landmark that materially tells readers where the story happened — for example "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County". Preserve source-supported official proper names exactly enough to retain their identity, including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike".
@@ -1086,59 +1087,48 @@ def _source_content_hint(source):
     })
 
 
-TEMPORAL_SOURCE_REFRESH_SECONDS = 3600
-
-
 def _temporal_source_refresh_interval(source):
-    """Return a short cache window for near-term stories whose factual state can flip.
+    """Return a short cache max-age for high-consequence pending event coverage.
 
-    Publisher pages are often updated in place without changing their RSS URL, title,
-    summary, or published timestamp.  A normal 24-hour source-text cache is valuable
-    for runtime, but it can freeze a story in a pre-event state after a scheduled
-    execution, vote, hearing, sentencing, launch, reopening, or similar near-term
-    event has actually happened.  Keep the ordinary cache for stable reporting and
-    revalidate only sources that combine (1) explicit future framing, (2) a near-term
-    day/clock marker, and (3) a state-transition event.
+    Scheduled executions can change at the last minute because of stays, delays,
+    clemency action, or confirmation after the scheduled time. A normal 24-hour
+    source-text cache can therefore preserve stale future-tense reporting long
+    after the underlying source has been updated. Refresh those sources hourly.
+    Stable reporting keeps the normal cache behavior.
     """
     source = source if isinstance(source, dict) else {}
-    text = re.sub(
+    blob = re.sub(
         r"\s+",
         " ",
-        " ".join(str(source.get(field) or "") for field in ("title", "summary")),
+        " ".join(
+            str(source.get(key) or "")
+            for key in (
+                "title",
+                "headline",
+                "source_title",
+                "source_headline",
+                "summary",
+                "source_summary",
+                "article_text",
+                "source_text",
+            )
+        ),
     ).strip().lower()
-    if not text:
+    if not blob or ("execut" not in blob and "lethal injection" not in blob):
         return None
 
-    future_state = bool(re.search(
-        r"\b(?:scheduled|set|slated|due|expected|planned)\b|"
-        r"\bplans?\s+to\b|\bwill\s+(?:be\s+)?(?:begin|start|end|close|reopen|"
-        r"execute|vote|meet|launch|take\s+effect|go\s+into\s+effect)\b",
-        text,
-        re.I,
-    ))
-    if not future_state:
-        return None
-
-    near_term = bool(re.search(
-        r"\b(?:today|tonight|tomorrow|monday|tuesday|wednesday|thursday|friday|"
-        r"saturday|sunday|this\s+morning|this\s+afternoon|this\s+evening)\b|"
-        r"\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b",
-        text,
-        re.I,
-    ))
-    if not near_term:
-        return None
-
-    state_transition = bool(re.search(
-        r"\b(?:execut(?:e|ed|ion)|vote|voting|hearing|sentenc(?:e|ed|ing)|arraign\w*|"
-        r"trial|ruling|decision|launch\w*|landfall|reopen\w*|clos(?:e|ed|ing|ure)|"
-        r"shutdown|meeting|press\s+conference|evacuat\w*|demolit\w*|open(?:ing|s)?|"
-        r"begin\w*|start\w*|end\w*|expir\w*|deadline|take\s+effect|"
-        r"go\s+into\s+effect)\b",
-        text,
-        re.I,
-    ))
-    return TEMPORAL_SOURCE_REFRESH_SECONDS if state_transition else None
+    future_execution_patterns = (
+        r"\b(?:is|was|remains)\s+scheduled\s+(?:on\s+\w+\s+)?to\s+(?:be\s+)?execut",
+        r"\b(?:is|was|remains)\s+(?:set|slated|due)\s+to\s+(?:be\s+)?execut",
+        r"\b(?:execution|lethal injection)\s+(?:is|was|remains)\s+(?:scheduled|set)\b",
+        r"\bscheduled\s+for\s+(?:an?\s+)?execution\b",
+        r"\bplans?\s+to\s+execut",
+        r"\bset\s+to\s+receive.{0,50}lethal injection\b",
+        r"\bscheduled\b.{0,80}\blethal injection\b",
+    )
+    if any(re.search(pattern, blob, re.I) for pattern in future_execution_patterns):
+        return 3600
+    return None
 
 
 def _focus_extracted_source_text(text, source):
@@ -1304,11 +1294,20 @@ class PersistentGenerationCache:
                 self.dirty = True
                 self.stats[f"{bucket}_expired"] += 1
                 return _CACHE_MISS
-            if max_age_seconds:
+            if max_age_seconds is not None:
+                try:
+                    max_age = max(0.0, float(max_age_seconds))
+                except (TypeError, ValueError):
+                    max_age = 0.0
                 cached_at = _parse_cache_time(entry.get("cached_at"))
-                if cached_at and cached_at + float(max_age_seconds) <= now:
+                if not cached_at or (now - cached_at) >= max_age:
                     self.payload[bucket].pop(key, None)
                     self.dirty = True
+                    # Keep the generic expiration counter for existing telemetry,
+                    # but distinguish an explicit max-age refresh from TTL expiry.
+                    # Temporal/high-consequence sources use this to prove that the
+                    # short refresh contract is actually evicting stale source text.
+                    self.stats[f"{bucket}_expired"] += 1
                     self.stats[f"{bucket}_age_expired"] += 1
                     return _CACHE_MISS
             self.stats[f"{bucket}_hit"] += 1
@@ -1554,8 +1553,12 @@ STORY_CLASSIFICATION = None
 
 # Model selection — flip these to switch the whole pipeline between tiers.
 # TEST: running everything on Sonnet to evaluate article quality vs Haiku.
-MODEL_ARTICLES = "claude-sonnet-4-5"   # article generation, enrichment, ranking, rewrites
-MODEL_SELECTION = "claude-sonnet-4-5"  # hero selection, structural decisions
+MODEL_ARTICLES = "claude-sonnet-5"     # article generation, enrichment, ranking, rewrites
+MODEL_SELECTION = "claude-sonnet-5"    # hero selection, structural decisions
+# Sonnet 4.5 production calls ran without extended thinking. Anthropic's Sonnet 5
+# migration guidance says to disable thinking explicitly to preserve that behavior,
+# avoiding an unintended latency/token-cost increase from Sonnet 5's adaptive default.
+MIGRATED_SONNET5_THINKING = {"type": "disabled"}
 
 # v1.12.2.3 semantic registry consolidation. The model sees only a bounded set of
 # recent fuzzy candidates; it never searches the archive and never writes directly.
@@ -2220,6 +2223,78 @@ def _absolute_image_url(url):
     return raw
 
 
+def _article_image_delivery_mode():
+    mode = str(os.getenv("TCT_ARTICLE_IMAGE_MODE", "external")).strip().lower()
+    return mode if mode in {"external", "shadow", "mirror"} else "external"
+
+
+def _is_tct_mirrored_image_url(url):
+    """Return True for the TCT-owned public image CDN, never publisher provenance."""
+    raw = _absolute_image_url(url)
+    if not raw:
+        return False
+    try:
+        host = urlsplit(raw).netloc.lower().split(":", 1)[0]
+    except Exception:
+        return False
+    expected = {"images.treasurecoast.today"}
+    configured = str(os.getenv("BUNNY_CDN_BASE_URL", "")).strip()
+    if configured:
+        try:
+            cfg_host = urlsplit(configured if "://" in configured else "https://" + configured).netloc.lower().split(":", 1)[0]
+            if cfg_host:
+                expected.add(cfg_host)
+        except Exception:
+            pass
+    return host in expected
+
+
+def _mirror_article_image_for_render(item, *, slug=""):
+    """Mirror one article's authoritative external image without weakening fallback.
+
+    Shadow mode writes/verifies the mirror registry but leaves public rendering on the
+    publisher URL. Mirror mode switches only after Bunny verification and an atomic
+    registry write. Events are a separate pipeline and never pass through this hook.
+    """
+    if not isinstance(item, dict) or _article_image_delivery_mode() == "external":
+        return False
+    if str(item.get("article_type") or "").strip().lower() == "product_guide":
+        return False
+    original = _absolute_image_url(item.get("source_image_url") or item.get("image_url"))
+    if not _is_real_source_image_url(original) or _is_tct_mirrored_image_url(original):
+        return False
+    manager = get_article_image_mirror(OUTPUT_DIR)
+    source_article_url = str(
+        item.get("source_url") or item.get("_source_url") or item.get("original_url") or item.get("feed_url") or ""
+    ).strip()
+    source_name = str(
+        item.get("source_name") or item.get("source") or get_image_credit(source_article_url) or ""
+    ).strip()
+    decision = manager.mirror(
+        slug=str(slug or item.get("slug") or item.get("_archived_slug") or "").strip(),
+        original_url=original,
+        source_article_url=source_article_url,
+        source_name=source_name,
+    )
+    # Preserve publisher provenance even when public delivery switches to TCT's CDN.
+    item["source_image_url"] = original
+    item["article_image_mirror_status"] = str(decision.get("status") or "external")
+    item["article_image_mirror_action"] = str(decision.get("action") or "")
+    public_url = str(decision.get("public_url") or "").strip()
+    if public_url:
+        item["hosted_image_url"] = public_url
+        item["image_storage_provider"] = "bunny"
+        item["image_storage_key"] = str(decision.get("storage_key") or "")
+        item["image_sha256"] = str(decision.get("sha256") or "")
+    if _article_image_delivery_mode() == "mirror" and decision.get("status") == "mirrored" and public_url:
+        item["image_url"] = public_url
+        item["rss_social_image_url"] = public_url
+        item["rss_social_image_kind"] = "source"
+        item["rss_social_image_source"] = "tct_bunny_source_mirror"
+        item["social_image_is_source"] = True
+    return bool(public_url)
+
+
 
 def _normalize_article_slug(value):
     """Return one article slug from a slug, permalink, href, or archive field."""
@@ -2334,6 +2409,7 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
         teaser = str(ov.get("teaser") or '')
         body = str(ov.get("body") or '')
         image_url = str(ov.get("image_url") or '')
+        rewrite_body = bool(body or ov.get("update_text"))
         modified = str(ov.get("updated") or ov.get("date_modified") or '')
         update_label = str(ov.get("update_label") or 'UPDATE — Aug. 5, 2026, 11:44 p.m.:')
         update_text = str(ov.get("update_text") or '')
@@ -2341,9 +2417,11 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
         esc_headline = html_lib.escape(headline, quote=True)
         esc_teaser = html_lib.escape(teaser, quote=True)
         text = re.sub(r'<title>.*?</title>', f'<title>{esc_headline} | Treasure Coast Today</title>', text, count=1, flags=re.S)
-        text = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc_teaser}">', text, count=1)
+        if teaser:
+            text = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc_teaser}">', text, count=1)
         text = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{esc_headline} | Treasure Coast Today">', text, count=1)
-        text = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{esc_teaser}">', text, count=1)
+        if teaser:
+            text = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{esc_teaser}">', text, count=1)
         if modified:
             text = re.sub(r'<meta property="article:modified_time" content="[^"]*">', f'<meta property="article:modified_time" content="{html_lib.escape(modified, quote=True)}">', text, count=1)
         text = re.sub(r'<h1 class="article-headline">.*?</h1>', f'<h1 class="article-headline">{html_lib.escape(headline)}</h1>', text, count=1, flags=re.S)
@@ -2351,27 +2429,29 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
             text = re.sub(r'(<figure class="article-hero-image"><img src=")[^"]+', r'\1'+image_url, text, count=1)
             text = re.sub(r'(<meta property="og:image" content=")[^"]+', r'\1'+image_url, text, count=1)
             text = re.sub(r'(<meta name="twitter:image" content=")[^"]+', r'\1'+image_url, text, count=1)
-        update_html = f'<div class="article-update"><p><strong>{html_lib.escape(update_label)}</strong> {html_lib.escape(update_text)}</p></div>'
-        original_html = ''.join(f'<p>{html_lib.escape(x.strip())}</p>' for x in body.split('\n\n') if x.strip())
-        replacement = f'<div class="article-body">{update_html}<p><strong>{html_lib.escape(original_label)}</strong></p>{original_html}</div>'
-        # Article pages may already be transformed into the membership preview/paywall
-        # shell from a previous production run. Replacing only the first closing
-        # ``</div>`` is not safe because the preview/paywall region contains nested
-        # divs. That old behavior left the remainder of the prior body behind and
-        # appended another copy on every run. Replace the complete article-content
-        # region, stopping only at the stable newsletter/share boundary.
-        article_region = re.compile(
-            r'<div class="article-body(?:\s+[^"]*)?"[^>]*>.*?\s*'
-            r'(?=(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?'
-            r'<div class="article-share">)',
-            re.I | re.S,
-        )
-        text = article_region.sub(replacement + "\n", text, count=1)
+        if rewrite_body:
+            update_html = f'<div class="article-update"><p><strong>{html_lib.escape(update_label)}</strong> {html_lib.escape(update_text)}</p></div>'
+            original_html = ''.join(f'<p>{html_lib.escape(x.strip())}</p>' for x in body.split('\n\n') if x.strip())
+            replacement = f'<div class="article-body">{update_html}<p><strong>{html_lib.escape(original_label)}</strong></p>{original_html}</div>'
+            # Article pages may already be transformed into the membership preview/paywall
+            # shell from a previous production run. Replacing only the first closing
+            # ``</div>`` is not safe because the preview/paywall region contains nested
+            # divs. That old behavior left the remainder of the prior body behind and
+            # appended another copy on every run. Replace the complete article-content
+            # region, stopping only at the stable newsletter/share boundary.
+            article_region = re.compile(
+                r'<div class="article-body(?:\s+[^"]*)?"[^>]*>.*?\s*'
+                r'(?=(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?'
+                r'<div class="article-share">)',
+                re.I | re.S,
+            )
+            text = article_region.sub(replacement + "\n", text, count=1)
         # JSON-LD
         m = re.search(r'<script type="application/ld\+json">(.*?)</script>', text, re.S)
         if m:
             try:
-                ld=json.loads(m.group(1)); ld['headline']=headline; ld['description']=teaser
+                ld=json.loads(m.group(1)); ld['headline']=headline
+                if teaser: ld['description']=teaser
                 if image_url: ld['image']=[image_url]
                 if modified: ld['dateModified']=modified
                 text=text[:m.start(1)]+json.dumps(ld, ensure_ascii=False)+text[m.end(1):]
@@ -2490,6 +2570,60 @@ def _apply_article_image_overrides_to_categories(all_categories, top_cat=None, o
                 changed += 1
     return changed
 
+
+def _apply_article_content_overrides_to_categories(all_categories, top_cat=None, overrides=None):
+    """Project canonical content corrections onto live hero/card objects.
+
+    Article-content overrides used to run only after ``index.html`` was rendered. That
+    fixed the article H1 and archive row but left the homepage hero, Top Stories and
+    category cards showing the pre-correction headline until a later run happened to
+    reload the corrected archive. Apply the same canonical override to the live object
+    graph before any homepage/RSS/data surface is rendered.
+    """
+    mapping = overrides if isinstance(overrides, dict) else _load_article_content_overrides()
+    if not mapping:
+        return 0
+    changed = 0
+    seen = set()
+    categories = list(all_categories or [])
+    if isinstance(top_cat, dict):
+        categories.append(top_cat)
+    for category in categories:
+        if not isinstance(category, dict):
+            continue
+        for item in [category.get("hero")] + list(category.get("cards") or []):
+            if not isinstance(item, dict) or id(item) in seen:
+                continue
+            seen.add(id(item))
+            slug = ""
+            for field in (
+                "slug", "canonical_slug", "_archived_slug", "_resolved_permalink_slug",
+                "link", "permalink", "url",
+            ):
+                slug = _normalize_article_slug(item.get(field))
+                if slug:
+                    break
+            ov = mapping.get(slug)
+            if not ov:
+                continue
+            item_changed = False
+            for field in (
+                "headline", "teaser", "image_url", "updated", "date_modified",
+                "meaningful_update_at",
+            ):
+                value = ov.get(field)
+                if value not in (None, "") and item.get(field) != value:
+                    item[field] = value
+                    item_changed = True
+            if ov.get("headline") and item.get("title") and item.get("title") != ov.get("headline"):
+                item["title"] = ov["headline"]
+                item_changed = True
+            if item_changed:
+                item["is_meaningful_update"] = True
+                item["update_status"] = ov.get("update_status", "resolved")
+                changed += 1
+    return changed
+
 def _canonical_social_category_key(*values):
     """Resolve labels and keys to one stable social-image category key."""
     aliases = {
@@ -2550,7 +2684,8 @@ def _social_syndication_image_url(item, category_key=""):
     key = _canonical_social_category_key(
         category_key, article.get("category_key"), article.get("category")
     )
-    for field in ("source_image_url", "image_url"):
+    fields = ("hosted_image_url", "source_image_url", "image_url") if _article_image_delivery_mode() == "mirror" else ("source_image_url", "image_url")
+    for field in fields:
         candidate = _absolute_image_url(article.get(field))
         if _is_real_source_image_url(candidate):
             return candidate
@@ -3834,9 +3969,9 @@ def _is_external_weekend_event_roundup(item):
     """Return True for publisher-authored multi-event weekend roundups.
 
     TCT publishes its own curated recurring weekend guide. Publisher roundups such as
-    "Fun things to do ... this weekend" are therefore both duplicate-prone and poor
-    persistent-story identities because outlets frequently recycle the same generic
-    headline/page shape across editions. Custom/TCT-authored articles are exempt.
+    "Fun things to do ... this weekend" are therefore duplicate-prone and poor
+    persistent-story identities because outlets can recycle a generic page/headline
+    shape across editions. Custom/TCT-authored articles are explicitly exempt.
     """
     item = item if isinstance(item, dict) else {}
     if item.get("is_custom") or item.get("authoritative_custom"):
@@ -4157,12 +4292,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 resolved = resolve_google_news_url(h.get("aggregator_url") or link, domains)
                 recovery_row["resolved_url"] = resolved
                 if resolved:
-                    full = fetch_article_text(
-                        resolved,
-                        max_words=2500,
-                        content_hint=_source_content_hint(h),
-                        refresh_interval_seconds=_temporal_source_refresh_interval(h),
-                    )
+                    full = fetch_article_text(resolved, max_words=2500, content_hint=_source_content_hint(h), source=h)
                     raw_words = _word_count(full)
                     focused = _focus_extracted_source_text(full, h)
                     words = _word_count(focused)
@@ -4199,12 +4329,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
             # last). The cap exists only to guard against a pathologically long or
             # junk-filled scraped page, not to save tokens — the savings were pennies and
             # the cost was dropping the exact facts the article is about.
-            full = fetch_article_text(
-                link,
-                max_words=2500,
-                content_hint=_source_content_hint(h),
-                refresh_interval_seconds=_temporal_source_refresh_interval(h),
-            )
+            full = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(h), source=h)
             raw_words = _word_count(full)
             focused = _focus_extracted_source_text(full, h)
             if focused != full:
@@ -9630,7 +9755,12 @@ def _now_eastern_rfc822():
 
 
 def _stamp_brand_new_tct_publication_time(item):
-    """Overwrite any inherited story-level clock with this permalink's TCT publish time."""
+    """Stamp a newly created TCT permalink with its actual TCT publication time.
+
+    Incoming items can inherit an older canonical/story timestamp during identity
+    reconciliation. That value is useful for story continuity but must never become
+    the first-published clock of a genuinely new TCT URL.
+    """
     if not isinstance(item, dict):
         return ""
     stamp = _now_eastern_rfc822()
@@ -9658,6 +9788,34 @@ def make_paragraphs(text, preserve_all=False):
     paragraphs = text.split("\n\n")
     if len(paragraphs) == 1:
         paragraphs = text.split("\n")
+
+    # Generated copy occasionally arrives with a paragraph break immediately after
+    # a time abbreviation even though the sentence continues with a weekday/date
+    # (for example: "planned for 7 p.m.\n\nFriday at the airport"). Joining that
+    # fragment here keeps the rendered article grammatical. Custom articles are an
+    # immutable editor payload, so preserve their submitted paragraph boundaries.
+    if not preserve_all:
+        _time_continuation_end = re.compile(r"\b(?:a\.m\.|p\.m\.)\s*$", re.IGNORECASE)
+        _time_continuation_start = re.compile(
+            r"^(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|"
+            r"January|February|March|April|May|June|July|August|September|October|November|December|"
+            r"Jan\.|Feb\.|Mar\.|Apr\.|Jun\.|Jul\.|Aug\.|Sep\.|Sept\.|Oct\.|Nov\.|Dec\.|"
+            r"EST|EDT|CST|CDT|MST|MDT|PST|PDT)(?=\s|$)",
+            re.IGNORECASE,
+        )
+        _joined = []
+        for _paragraph in paragraphs:
+            _candidate = str(_paragraph or "").strip()
+            if (
+                _joined
+                and _candidate
+                and _time_continuation_end.search(str(_joined[-1] or "").strip())
+                and _time_continuation_start.match(_candidate)
+            ):
+                _joined[-1] = str(_joined[-1]).rstrip() + " " + _candidate
+            else:
+                _joined.append(_paragraph)
+        paragraphs = _joined
 
     # WALL-OF-TEXT FALLBACK. Some sources (notably Google News summaries) arrive with
     # their paragraph breaks stripped, so the whole article is one or two enormous
@@ -9690,6 +9848,22 @@ def make_paragraphs(text, preserve_all=False):
                 _protected,
                 flags=_re.IGNORECASE,
             )
+        # A time abbreviation is not a sentence boundary when a weekday/date or
+        # timezone immediately follows it ("7 p.m. Friday", "8 a.m. Oct. 3").
+        # Protect only those continuation forms so a genuine sentence ending in
+        # "p.m." can still split normally when the next sentence begins.
+        _time_follow = (
+            r"(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|"
+            r"January|February|March|April|May|June|July|August|September|October|November|December|"
+            r"Jan\.|Feb\.|Mar\.|Apr\.|Jun\.|Jul\.|Aug\.|Sep\.|Sept\.|Oct\.|Nov\.|Dec\.|"
+            r"EST|EDT|CST|CDT|MST|MDT|PST|PDT)"
+        )
+        _protected = _re.sub(
+            rf"\b(?:a\.m\.|p\.m\.)(?=\s+{_time_follow}(?=\s|$))",
+            lambda m: m.group(0).replace(".", _abbr_token),
+            _protected,
+            flags=_re.IGNORECASE,
+        )
         sentences = _re.split(r'(?<=[.!?])\s+(?=[A-Z"])', _protected)
         sentences = [s.replace(_abbr_token, ".").strip() for s in sentences if s.strip()]
         if len(sentences) < 4:
@@ -9826,7 +10000,7 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 
-def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_seconds=None):
+def fetch_article_text(url, max_words=2500, content_hint="", source=None):
     """Fetch readable article body text.
 
     Uses trafilatura when available, then JSON-LD articleBody, then a paragraph fallback.
@@ -9836,9 +10010,8 @@ def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_se
         return ""
 
     cache_key = _source_text_cache_key(url, max_words, content_hint)
-    cached = GENERATION_CACHE.get(
-        "source_text", cache_key, max_age_seconds=refresh_interval_seconds
-    )
+    temporal_max_age = _temporal_source_refresh_interval(source)
+    cached = GENERATION_CACHE.get("source_text", cache_key, max_age_seconds=temporal_max_age)
     if cached is not _CACHE_MISS:
         return str(cached.get("text", ""))
 
@@ -9847,9 +10020,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_se
     # acquiring the per-source lock.
     fetch_lock = _source_fetch_lock(cache_key)
     fetch_lock.acquire()
-    cached = GENERATION_CACHE.get(
-        "source_text", cache_key, max_age_seconds=refresh_interval_seconds
-    )
+    cached = GENERATION_CACHE.get("source_text", cache_key, max_age_seconds=temporal_max_age)
     if cached is not _CACHE_MISS:
         fetch_lock.release()
         return str(cached.get("text", ""))
@@ -9863,11 +10034,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", refresh_interval_se
                 "source_text",
                 cache_key,
                 {"text": text, "word_count": len(text.split()), "url": _normalize_cache_url(url)},
-                ttl_seconds=(
-                    int(refresh_interval_seconds)
-                    if refresh_interval_seconds
-                    else (86400 if text else 7200)
-                ),
+                ttl_seconds=86400 if text else 7200,
             )
             return text
         finally:
@@ -10009,7 +10176,7 @@ def enhance_card(card, content_bank, headlines):
     # AND aggregators (Google News links resolve to real publisher pages). This is
     # what lets crime/things-to-do cards from Google News enrich instead of being dropped.
     if not source_text and link and not is_thin and source.get("source_type") in ("full_source", "aggregator"):
-        source_text = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(source))
+        source_text = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(source), source=source)
         if source_text and len(source_text.split()) >= 140:
             source["article_text"] = source_text
             source["source_quality"] = "full"
@@ -10053,6 +10220,7 @@ def enhance_card(card, content_bank, headlines):
         )
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=1600,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -10111,6 +10279,7 @@ def enhance_hero_article(hero, full_text):
     try:
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=1600,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -11089,6 +11258,7 @@ def select_front_page_hero(all_categories, deterministic_only=False):
     try:
         response = client.messages.create(
             model=MODEL_SELECTION,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=500,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -11200,9 +11370,9 @@ def _run_model_bakeoff_variant(packet):
     """Run the challenger only; failures are contained and never affect publication."""
     request_kwargs = copy.deepcopy(packet.get("request_kwargs") or {})
     request_kwargs["model"] = MODEL_BAKEOFF_CHALLENGER
-    # Sonnet 5 enables adaptive thinking by default. Disable it for the first bake-off
-    # so we compare direct structured writing/selection against the non-thinking
-    # Sonnet 4.5 baseline. 8000 leaves headroom for Sonnet 5's newer tokenizer.
+    # Keep the opt-in challenger on the same direct-response contract as production.
+    # Sonnet 5 otherwise enables adaptive thinking by default, which would confound
+    # latency/cost comparisons with the migrated non-thinking production path.
     request_kwargs["thinking"] = {"type": "disabled"}
     request_kwargs["max_tokens"] = MODEL_BAKEOFF_MAX_TOKENS
     request_kwargs.pop("timeout", None)
@@ -11622,7 +11792,7 @@ def _assignment_source_by_index(packet, source_index):
 
 
 def _run_assignment_writer(packet, assignment, *, role, timeout_seconds=None):
-    """Sonnet 4.5 writes one preassigned source only; selection is already closed."""
+    """Sonnet 5 writes one preassigned source only; selection is already closed."""
     source_index = int(assignment.get("source_index"))
     source = _assignment_source_by_index(packet, source_index)
     category_key = str(packet.get("category_key") or "")
@@ -11720,6 +11890,7 @@ Writing rules:
     system_prompt = FLORIDA_SYSTEM_PROMPT if category_key == "florida" else LOCAL_SYSTEM_PROMPT
     request_kwargs = {
         "model": MODEL_ARTICLES,
+        "thinking": MIGRATED_SONNET5_THINKING,
         "max_tokens": max_tokens,
         "system": [{"type": "text", "text": system_prompt}],
         "messages": [{"role": "user", "content": prompt}],
@@ -11772,6 +11943,7 @@ Return ONLY JSON: {{"headline":"..."}}
 """
         _repair_kwargs = {
             "model": MODEL_ARTICLES,
+            "thinking": MIGRATED_SONNET5_THINKING,
             "max_tokens": 300,
             "system": [{"type": "text", "text": system_prompt}],
             "messages": [{"role": "user", "content": _repair_prompt}],
@@ -11818,6 +11990,7 @@ def _run_legacy_mixed_category_request(*, system_prompt, prompt, request_timeout
     """Run the pre-v1.13.7.1y mixed selection+writing request for rollback only."""
     request_kwargs = {
         "model": MODEL_ARTICLES,
+        "thinking": MIGRATED_SONNET5_THINKING,
         "max_tokens": 5600,
         "system": [{
             "type": "text",
@@ -11879,7 +12052,7 @@ def _run_legacy_mixed_category_request(*, system_prompt, prompt, request_timeout
 def _run_live_assignment_editor_category(
     category_key, category_label, headlines, *, timeout_seconds=None,
 ):
-    """Run the promoted Sonnet 5 editor -> Sonnet 4.5 writer production path."""
+    """Run the promoted Sonnet 5 editor -> Sonnet 5 writer production path."""
     packet = _build_assignment_editor_packet(
         category_key=category_key,
         category_label=category_label,
@@ -13324,11 +13497,14 @@ def _request_json_index_array(
                 "such as [] or [2, 5]. Do not include prose or markdown."
             )
         try:
-            response = active_client.messages.create(
-                model=model,
-                max_tokens=max_tokens,
-                messages=[{"role": "user", "content": retry_prompt}],
-            )
+            request_kwargs = {
+                "model": model,
+                "max_tokens": max_tokens,
+                "messages": [{"role": "user", "content": retry_prompt}],
+            }
+            if str(model or "").strip().lower().startswith("claude-sonnet-5"):
+                request_kwargs["thinking"] = MIGRATED_SONNET5_THINKING
+            response = active_client.messages.create(**request_kwargs)
             raw = _extract_model_text(response)
             return _parse_json_index_array(raw, max_index=max_index), attempt
         except Exception as exc:
@@ -16226,6 +16402,7 @@ def _rewrite_alert_to_article(event, area, severity, headline_txt, desc, instr):
     try:
         resp = client.messages.create(
             model=MODEL_ARTICLES,
+            thinking=MIGRATED_SONNET5_THINKING,
             max_tokens=900,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -16808,8 +16985,9 @@ def apply_custom_retirements_to_archive(output_root=None):
 def _load_source_retirement_cleanup(output_root=None):
     """Load explicit cleanup tombstones for already-published source failures.
 
-    This is not a publisher-wide historical ban. Each row names one TCT slug and
-    therefore cannot silently retire unrelated Hometown News archive coverage.
+    The baseline policy remains intact. A small editor overlay can add or replace
+    slug-scoped retirements without rewriting the baseline file. This is not a
+    publisher-wide historical ban.
     """
     root = Path(output_root or OUTPUT_DIR)
     data_dir = root / "data"
@@ -16827,6 +17005,7 @@ def _load_source_retirement_cleanup(output_root=None):
             continue
         if isinstance(payload, dict) and isinstance(payload.get("retirements"), list):
             rows.extend(payload.get("retirements") or [])
+
     normalized = []
     seen_slugs = set()
     # Later editor-overlay rows replace same-slug base policy entries without
@@ -17939,8 +18118,9 @@ def validate_custom_body_fidelity(hero, page_html):
 
 
 def render_article_page(hero, category_label, category_key, pub_date, slug, related=None):
-    _apply_article_image_override(hero, slug=slug)
     """Render a permanent article page for a single TCT story."""
+    _apply_article_image_override(hero, slug=slug)
+    _mirror_article_image_for_render(hero, slug=slug)
     # Published + updated timestamps for the byline area. Prefer the article's real
     # first-published time; fall back to the pub_date passed in. "Updated" only shows
     # when it differs from published (a genuinely revised story).
@@ -18078,8 +18258,11 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     # ``source_image_url`` correctly preserves the canonical source photo.  Never
     # let that fallback silently downgrade the visible hero. Custom articles retain
     # their explicitly supplied display-image authority.
+    _hosted_art_img = _absolute_image_url(hero.get("hosted_image_url"))
     _source_art_img = _absolute_image_url(hero.get("source_image_url"))
-    if not _is_custom_article and _is_real_source_image_url(_source_art_img):
+    if _article_image_delivery_mode() == "mirror" and _is_real_source_image_url(_hosted_art_img):
+        _art_img = _hosted_art_img
+    elif not _is_custom_article and _is_real_source_image_url(_source_art_img):
         _art_img = _source_art_img
     else:
         _art_img = hero.get("image_url", "")
@@ -18524,7 +18707,11 @@ def _persist_rss_source_image_authority(archive_row, image_url, *, origin=""):
     if not _is_real_source_image_url(authoritative):
         return False
     changed = False
-    if str(archive_row.get("source_image_url") or "").strip() != authoritative:
+    if _is_tct_mirrored_image_url(authoritative):
+        if str(archive_row.get("hosted_image_url") or "").strip() != authoritative:
+            archive_row["hosted_image_url"] = authoritative
+            changed = True
+    elif str(archive_row.get("source_image_url") or "").strip() != authoritative:
         archive_row["source_image_url"] = authoritative
         changed = True
     provenance = str(origin or "rss_verified_source").strip()
@@ -18679,7 +18866,7 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
         enriched = dict(row)
         live = live_by_slug.get(slug) or live_by_headline.get(_exact_custom_headline(headline))
         if isinstance(live, dict):
-            for key in ("teaser", "body", "image_url", "category_key", "category"):
+            for key in ("teaser", "body", "image_url", "source_image_url", "hosted_image_url", "image_storage_key", "image_sha256", "category_key", "category"):
                 if live.get(key) not in (None, ""):
                     enriched[key] = live.get(key)
         published_dt = _rss_publication_datetime(enriched)
@@ -18724,7 +18911,7 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
                 if isinstance(live, dict)
                 and any(
                     _absolute_image_url(live.get(field)) == image_url
-                    for field in ("source_image_url", "image_url")
+                    for field in ("hosted_image_url", "source_image_url", "image_url")
                 )
                 else "verified_archive_article_source"
             )
@@ -18965,7 +19152,24 @@ def validate_rss_social_image_contract(output_root=None):
                     "reason": "authority_marks_non_source_as_source",
                     "actual_image": actual,
                 })
-            if not isinstance(row, dict) or _absolute_image_url(row.get("source_image_url")) != actual:
+            if _is_tct_mirrored_image_url(actual):
+                mirror_ok = (
+                    isinstance(row, dict)
+                    and _absolute_image_url(row.get("hosted_image_url")) == actual
+                    and _is_real_source_image_url(_absolute_image_url(row.get("source_image_url")))
+                    and not _is_tct_mirrored_image_url(_absolute_image_url(row.get("source_image_url")))
+                )
+                if not mirror_ok:
+                    issues.append({
+                        "slug": slug,
+                        "reason": "mirrored_source_authority_not_persisted_to_archive",
+                        "actual_image": actual,
+                        "archive_hosted_image": _absolute_image_url(row.get("hosted_image_url")) if isinstance(row, dict) else "",
+                        "archive_source_image": _absolute_image_url(row.get("source_image_url")) if isinstance(row, dict) else "",
+                    })
+                else:
+                    persisted_source_images += 1
+            elif not isinstance(row, dict) or _absolute_image_url(row.get("source_image_url")) != actual:
                 issues.append({
                     "slug": slug,
                     "reason": "source_image_authority_not_persisted_to_archive",
@@ -21164,6 +21368,66 @@ def _durable_custom_local_alpr_policy_identity_match(candidate, authority):
     return True, f"local-alpr-policy|st-lucie|{authority_date.isoformat()}"
 
 
+def _durable_custom_near_term_subject_identity_match(candidate, authority):
+    """Bind a near-term publisher rewording to an authoritative custom canonical.
+
+    Manually written TCT stories are permanent publication authority, but ordinary
+    statewide/government stories do not always expose a named person, precise street,
+    or one of the narrow incident keys used by the high-risk identity system. A next-
+    day publisher story can therefore describe the exact same rollout in different
+    lifecycle language (``to begin issuing`` -> ``rolls out``) and otherwise escape
+    custom authority.
+
+    This contract remains deliberately narrow: both publications must be within three
+    calendar days, any concrete locality/event-family evidence must be compatible,
+    the HEADLINES must share an ordered 3/4-word subject phrase, at least three core
+    headline concepts, and at least four distinctive source facts. Those independent
+    requirements make this a same-subject event proof rather than broad topical
+    similarity. The later source is then routed to the custom canonical where the
+    normal material-update gate decides whether anything actually changed.
+    """
+    if not isinstance(candidate, dict) or not isinstance(authority, dict):
+        return False, ""
+    if not (authority.get("is_custom") or authority.get("authoritative_custom")):
+        return False, ""
+
+    candidate_date = _cross_source_date_value(candidate)
+    authority_date = _cross_source_date_value(authority)
+    if candidate_date is None or authority_date is None:
+        return False, ""
+    if abs((candidate_date - authority_date).days) > 3:
+        return False, ""
+
+    candidate_features = _cross_source_feature_bundle(candidate)
+    authority_features = _cross_source_feature_bundle(authority)
+
+    candidate_locality = set(candidate_features.get("locality") or ()) - {"i-95"}
+    authority_locality = set(authority_features.get("locality") or ()) - {"i-95"}
+    if candidate_locality and authority_locality and not (candidate_locality & authority_locality):
+        return False, ""
+
+    candidate_families = set(candidate_features.get("event_families") or ())
+    authority_families = set(authority_features.get("event_families") or ())
+    if candidate_families and authority_families and not (candidate_families & authority_families):
+        return False, ""
+
+    shared_subjects = set(candidate_features.get("subject_phrases") or ()) & set(
+        authority_features.get("subject_phrases") or ()
+    )
+    shared_topics = set(candidate_features.get("headline_topic_tokens") or ()) & set(
+        authority_features.get("headline_topic_tokens") or ()
+    )
+    shared_distinctive = set(candidate_features.get("distinctive_tokens") or ()) & set(
+        authority_features.get("distinctive_tokens") or ()
+    )
+
+    if not shared_subjects or len(shared_topics) < 3 or len(shared_distinctive) < 4:
+        return False, ""
+
+    subject = sorted(shared_subjects, key=lambda value: (-len(value.split("-")), value))[0]
+    return True, f"near-term-custom-subject|{authority_date.isoformat()}|{subject}"
+
+
 def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     """Return a deterministic cross-origin match for archived custom authority.
 
@@ -21202,9 +21466,18 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
         if "authority_sports_award" in precomputed
         else _sports_award_identity(authority)
     )
-    if not left or not right:
-        return False, ""
-    if left["team"] != right["team"] or left["award"] != right["award"]:
+    # Preserve the more specific recurring-sports identity contract when both sides
+    # are recognizable awards. The generic near-term custom subject contract is only
+    # a fallback for stories that do not belong to a more specific durable family.
+    if left and right:
+        if left["team"] != right["team"] or left["award"] != right["award"]:
+            return False, ""
+    else:
+        near_term_match, near_term_key = _durable_custom_near_term_subject_identity_match(
+            candidate, authority
+        )
+        if near_term_match:
+            return True, near_term_key
         return False, ""
     if left["person_surname"] != right["person_surname"]:
         return False, ""
@@ -22879,7 +23152,7 @@ def find_canonical_event_entry(item, archive):
     )
     try:
         resp = client.messages.create(
-            model=MODEL_SELECTION, max_tokens=12,
+            model=MODEL_SELECTION, thinking=MIGRATED_SONNET5_THINKING, max_tokens=12,
             messages=[{"role": "user", "content": prompt}],
         )
         answer = resp.content[0].text.strip().upper()
@@ -24540,7 +24813,7 @@ def confirm_same_story(new_headline, new_teaser, existing_entry):
     )
     try:
         resp = client.messages.create(
-            model=MODEL_SELECTION, max_tokens=10,
+            model=MODEL_SELECTION, thinking=MIGRATED_SONNET5_THINKING, max_tokens=10,
             messages=[{"role": "user", "content": prompt}],
         )
         answer = resp.content[0].text.strip().upper()
@@ -24581,6 +24854,18 @@ WARE_AWARD_CANONICAL_SLUG = (
 )
 WARE_AWARD_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-07-29-st-lucie-mets-pitcher-conner-ware-named-florida-state-league-pitcher-of-the-week",
+})
+
+# Permanent custom-authority regression for Florida's Sept. 2026 redesigned driver
+# license rollout. TCT published the custom canonical the day before statewide
+# issuance began; a next-day publisher rewording escaped as a second public URL.
+# The generalized near-term custom-subject contract prevents future escapes, while
+# this explicit migration guarantees the already-public duplicate can never revive.
+FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG = (
+    "2026-09-29-florida-begins-issuing-redesigned-driver-licenses-id-cards"
+)
+FLORIDA_DRIVER_LICENSE_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-09-30-florida-rolls-out-redesigned-drivers-licenses-with-new-imagery-at-service-center",
 })
 
 # Permanent general-registry regression for the Big Taste of Martin County event.
@@ -31392,6 +31677,48 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             })
             removed_slugs.add(source_slug)
 
+    # Permanent cleanup for the Sept. 30 redesigned-driver-license duplicate.
+    # The generalized near-term custom authority contract is the prevention layer;
+    # this public-slug migration is the repair layer for the URL that already escaped.
+    driver_license_canonical = next(
+        (e for e in archive if e.get("slug") == FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG),
+        None,
+    )
+    if driver_license_canonical:
+        driver_license_canonical["is_custom"] = True
+        driver_license_canonical["authoritative_custom"] = True
+        driver_license_canonical.pop("exclude_from_live_recovery", None)
+        driver_license_canonical.pop("identity_quarantine_reason", None)
+        driver_license_canonical["legacy_identity_status"] = "identified"
+        driver_license_canonical["ranking_eligible"] = True
+        for source_slug in sorted(FLORIDA_DRIVER_LICENSE_REDIRECT_SOURCE_SLUGS):
+            duplicate = next((e for e in archive if e.get("slug") == source_slug), None)
+            if duplicate:
+                _merge_category_memberships(
+                    driver_license_canonical,
+                    duplicate,
+                    driver_license_canonical.get("category_key")
+                    or duplicate.get("category_key")
+                    or "florida",
+                )
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "Florida rolls out redesigned driver's licenses with new imagery at service centers statewide"
+                ),
+                "target_slug": FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG,
+                "target_headline": driver_license_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": True,
+                "editorial_story_id": driver_license_canonical.get("editorial_story_id", ""),
+                "reason": (
+                    "Permanent regression migration for the Sept. 30 publisher reprint "
+                    "of TCT's authoritative redesigned-driver-license custom article."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
     # Permanent general-registry regression for the Big Taste fundraiser. The
     # duplicate was not a custom-authority edge case: the registry had already
     # classified the WPTV item as a no-change skip under the same persistent story.
@@ -34893,6 +35220,14 @@ def write_archives(all_categories, top_cat):
                 existing["image_credit"] = hero.get("image_credit", "")
                 existing["image_source"] = hero.get("image_source", "source_image")
                 existing["is_fallback_image"] = False
+            if hero.get("hosted_image_url"):
+                existing["hosted_image_url"] = hero.get("hosted_image_url", "")
+                existing["image_storage_provider"] = hero.get("image_storage_provider", "bunny")
+                existing["image_storage_key"] = hero.get("image_storage_key", "")
+                existing["image_sha256"] = hero.get("image_sha256", "")
+                existing["article_image_mirror_status"] = hero.get("article_image_mirror_status", "")
+                if _article_image_delivery_mode() == "mirror":
+                    existing["image_url"] = hero.get("hosted_image_url", "")
             _merge_category_memberships(existing, hero, existing.get("category_key") or cat_key)
             existing["article_word_count"] = _word_count(hero.get("body", ""))
             existing["article_paragraph_count"] = _paragraph_count(hero.get("body", ""))
@@ -34959,9 +35294,9 @@ def write_archives(all_categories, top_cat):
                 base_slug = _generated_custom_publication_slug(hero, today, headline)
             slug = _allocate_new_publication_slug(base_slug, archive, OUTPUT_DIR)
             # Byline timestamp: a brand-new TCT permalink is first-published NOW.
-            # Never preserve a story-registry/canonical-context timestamp here: a
-            # recurring publisher page can share an editorial story identity with an
-            # older edition, but that must not make a new TCT article appear months old.
+            # Do not preserve an inherited story/canonical timestamp here: recurring
+            # publisher pages can share identity with older editions without making a
+            # newly minted TCT URL appear months old.
             _stamp_brand_new_tct_publication_time(hero)
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
@@ -34996,6 +35331,11 @@ def write_archives(all_categories, top_cat):
                 "image_url": hero.get("image_url",""),
                 "source_image_url": (hero.get("source_image_url") or hero.get("image_url", ""))
                     if _is_real_source_image_url(hero.get("source_image_url") or hero.get("image_url", "")) else "",
+                "hosted_image_url": hero.get("hosted_image_url", ""),
+                "image_storage_provider": hero.get("image_storage_provider", ""),
+                "image_storage_key": hero.get("image_storage_key", ""),
+                "image_sha256": hero.get("image_sha256", ""),
+                "article_image_mirror_status": hero.get("article_image_mirror_status", ""),
                 "image_credit": hero.get("image_credit", ""),
                 "image_source": hero.get("image_source", ""),
                 "is_fallback_image": bool(hero.get("is_fallback_image")),
@@ -35755,6 +36095,7 @@ def classify_stories(feed_cache):
         try:
             resp = client.messages.create(
                 model=MODEL_SELECTION,
+                thinking=MIGRATED_SONNET5_THINKING,
                 max_tokens=3000,
                 messages=[{"role": "user", "content": prompt}],
             )
@@ -39193,7 +39534,7 @@ def main():
             # Try to fetch full article text for the hero — much richer than RSS summary
             fetched_text = ""
             if hero_link and not _is_thin_src:
-                fetched_text = fetch_article_text(hero_link, content_hint=_source_content_hint(hero_source))
+                fetched_text = fetch_article_text(hero_link, content_hint=_source_content_hint(hero_source), source=hero_source)
                 if fetched_text:
                     print(f"  Hero article text fetched: {len(fetched_text.split())} words")
 
@@ -39772,6 +40113,20 @@ def main():
     _detail_started = time.perf_counter()
     _validate_promoted_material_updates_committed(OUTPUT_DIR)
     apply_custom_retirements_to_archive(OUTPUT_DIR)
+    # Apply canonical content corrections before archive rebinding, hero projection,
+    # Top Stories ranking, homepage rendering, data.json, and RSS. Previously this
+    # happened only after index.html had already been written, leaving same-run
+    # headline corrections stale on cards even when the article H1 was correct.
+    _early_content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
+    _early_live_content_override_count = _apply_article_content_overrides_to_categories(
+        all_categories, top_cat
+    )
+    if _early_content_override_count or _early_live_content_override_count:
+        print(
+            "  Early article content overrides applied before live-surface rendering: "
+            f"{_early_content_override_count} canonical article(s), "
+            f"{_early_live_content_override_count} live placement(s)"
+        )
     _runtime_timing_detail("archive stage promoted-update+custom-retirement gates", _detail_started)
 
     # Publication identity reconciliation can remove duplicate archive rows and turn
@@ -39879,6 +40234,18 @@ def main():
             )
     _runtime_timing_detail("archive stage final county membership authority", _detail_started)
     _detail_started = time.perf_counter()
+
+    # Recovery/rebinding can introduce a new live object after the early correction
+    # pass. Re-project overrides once more at the final mutation boundary so the
+    # homepage hero and Top Stories can never lag behind the canonical article H1.
+    _final_live_content_override_count = _apply_article_content_overrides_to_categories(
+        all_categories, top_cat
+    )
+    if _final_live_content_override_count:
+        print(
+            "  Final live-surface content override projection updated "
+            f"{_final_live_content_override_count} placement(s)"
+        )
 
     ensure_final_live_visual_images(all_categories, top_cat, OUTPUT_DIR)
     validate_live_county_membership_authority(all_categories, top_cat, OUTPUT_DIR)
@@ -40089,3 +40456,20 @@ if __name__ == "__main__":
         main()
     finally:
         _finalize_model_usage_observability()
+        try:
+            _image_report = finalize_article_image_mirror(OUTPUT_DIR)
+            if _image_report:
+                _image_summary = _image_report.get("summary", {})
+                print(
+                    "  Article image mirror: "
+                    f"mode={_image_report.get('mode')}, "
+                    f"candidates={_image_summary.get('candidates', 0)}, "
+                    f"registry_hits={_image_summary.get('registry_hits', 0)}, "
+                    f"downloads={_image_summary.get('downloads', 0)}, "
+                    f"uploads={_image_summary.get('uploads', 0)}, "
+                    f"fallbacks={_image_summary.get('fallbacks', 0)}, "
+                    f"metadata_repairs={_image_summary.get('metadata_repairs', 0)}, "
+                    f"image_work_elapsed={_image_report.get('image_work_elapsed_seconds', 0)}s"
+                )
+        except Exception as exc:
+            print(f"  Article image mirror observability unavailable ({type(exc).__name__}); continuing")

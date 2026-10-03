@@ -168,3 +168,34 @@ def test_editor_retirement_overlay_contains_both_known_wpbf_weekend_duplicates()
     assert by_slug[
         "2026-09-25-bacon-and-bbq-festival-at-midflorida-event-center-tops-weekend-events"
     ]["target_slug"] == "2026-09-22-treasure-coast-weekend-events-sep-26-27"
+
+
+def test_editor_retirement_overlay_merges_with_baseline_policy(tmp_path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir(parents=True)
+    baseline = {
+        "schema_version": 1,
+        "retirements": [
+            {
+                "slug": "baseline-story",
+                "action": "retire",
+                "reason": "baseline remains intact",
+            }
+        ],
+    }
+    overlay = {
+        "schema_version": 1,
+        "retirements": [
+            {
+                "slug": "editor-story",
+                "action": "retire",
+                "reason": "editor overlay",
+            }
+        ],
+    }
+    (data_dir / "source-retirement-cleanup.json").write_text(json.dumps(baseline), encoding="utf-8")
+    (data_dir / "source-retirement-editor-overrides.json").write_text(json.dumps(overlay), encoding="utf-8")
+
+    rows = generate._load_source_retirement_cleanup(tmp_path)
+    by_slug = {row["slug"]: row for row in rows}
+    assert set(by_slug) == {"baseline-story", "editor-story"}
