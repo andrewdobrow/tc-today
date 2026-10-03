@@ -94,6 +94,70 @@ def _load_snapshot() -> dict[str, str]:
     return result
 
 
+def _load_article_body_replacements() -> dict[str, list[dict[str, str]]]:
+    """Load slug-scoped copy edits that must survive protected-store rehydration."""
+    path = ROOT / "data" / "article-content-overrides.json"
+    if not path.is_file():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise RuntimeError(f"Article content overrides could not be read: {path}") from exc
+    overrides = payload.get("overrides", {}) if isinstance(payload, dict) else {}
+    if not isinstance(overrides, dict):
+        raise RuntimeError("Article content overrides have invalid shape")
+
+    result: dict[str, list[dict[str, str]]] = {}
+    for slug, override in overrides.items():
+        if not isinstance(override, dict):
+            continue
+        edits = override.get("body_replacements")
+        if not isinstance(edits, list):
+            continue
+        cleaned: list[dict[str, str]] = []
+        for edit in edits:
+            if not isinstance(edit, dict):
+                continue
+            old = str(edit.get("from") or "")
+            new = str(edit.get("to") or "")
+            if old and old != new:
+                cleaned.append({"from": old, "to": new})
+        if cleaned:
+            result[str(slug)] = cleaned
+    return result
+
+
+def _apply_article_body_replacements(
+    body_html: str, replacements: list[dict[str, str]]
+) -> tuple[str, int]:
+    """Apply exact editorial copy edits to raw or HTML-escaped article body text."""
+    text = str(body_html or "")
+    changed = 0
+    for edit in replacements or []:
+        old = str(edit.get("from") or "")
+        new = str(edit.get("to") or "")
+        if not old or old == new:
+            continue
+
+        candidates = [
+            (old, new),
+            (html.escape(old, quote=True), html.escape(new, quote=True)),
+            (html.escape(old, quote=False), html.escape(new, quote=False)),
+        ]
+        seen: set[tuple[str, str]] = set()
+        for before, after in candidates:
+            pair = (before, after)
+            if pair in seen:
+                continue
+            seen.add(pair)
+            occurrences = text.count(before)
+            if not occurrences:
+                continue
+            text = text.replace(before, after)
+            changed += occurrences
+    return text, changed
+
+
 def _load_article_source_context() -> dict[str, dict[str, object]]:
     """Load source provenance needed only to remove reader-facing outlet boilerplate."""
     path = ROOT / "archive.json"
@@ -170,9 +234,10 @@ def main() -> None:
 
     snapshot = _load_snapshot()
     source_context = _load_article_source_context()
+    body_replacements = _load_article_body_replacements()
     snapshot_expected = bool(os.getenv("TCT_PROTECTED_SNAPSHOT_PATH", "").strip())
     protected: list[dict[str, str]] = []
-    rewritten = short = already = rehydrated = prose_repaired = 0
+    rewritten = short = already = rehydrated = prose_repaired = copyedit_repaired = 0
     for path in sorted(ARTICLES.glob("*.html")):
         text = path.read_text(encoding="utf-8", errors="ignore")
         original_text = text
@@ -204,6 +269,23 @@ def main() -> None:
         if not body_match:
             continue
         body_html = body_match.group(1)
+
+        # The protected Supabase snapshot is authoritative for hidden member copy,
+        # but it can predate a later editorial copy edit. Reapply the same durable,
+        # slug-scoped replacement ledger *after* rehydration and before re-splitting
+        # so neither the public preview nor the protected export can resurrect stale
+        # wording that the generator already corrected.
+        repaired_body_html, replacement_count = _apply_article_body_replacements(
+            body_html, body_replacements.get(slug, [])
+        )
+        if replacement_count:
+            text = text[:body_match.start(1)] + repaired_body_html + text[body_match.end(1):]
+            copyedit_repaired += replacement_count
+            body_match = BODY_RE.search(text)
+            if not body_match:
+                raise RuntimeError(f"Article copy edit invalidated article-body boundary: {slug}")
+            body_html = body_match.group(1)
+
         context = source_context.get(slug, {})
         if not context.get("is_custom"):
             cleaned_body_html, changed_paragraphs = sanitize_article_body_html(
@@ -249,7 +331,8 @@ def main() -> None:
     print(
         f"Membership paywall prepared: {rewritten} protected, {rehydrated} legacy/current pages rehydrated, "
         f"{short} too short, {already} already protected without snapshot, "
-        f"{prose_repaired} prohibited reporting-process paragraph(s) normalized"
+        f"{prose_repaired} prohibited reporting-process paragraph(s) normalized, "
+        f"{copyedit_repaired} protected copy-edit replacement(s) applied"
     )
     print(f"Protected export written outside repo: {export_path}")
 
