@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-03T05:27:26Z",
+  "generated_at": "2026-10-03T10:48:21Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -69,7 +69,7 @@
         "placement": "hero",
         "slug": "",
         "source_title": "Port St. Lucie Man Gets 37.5 Years in Stuart Vape Shop Shooting",
-        "date": "Yesterday, 5:42 PM ET",
+        "date": "5:20 AM ET",
         "category_key": "st_lucie",
         "is_custom": false,
         "story_stage": "sentencing",
@@ -105,25 +105,35 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 185,
+    "candidates_processed": 183,
     "routes": {
-      "generate_new": 21,
-      "skip": 164
+      "generate_new": 28,
+      "skip": 154,
+      "update_existing": 1
     },
     "eligibility": {
-      "listing": 1,
-      "low_value": 133,
-      "publishable": 50,
+      "listing": 2,
+      "low_value": 129,
+      "publishable": 51,
       "search_page": 1
     },
     "source_classes": {
-      "aggregator": 134,
+      "aggregator": 131,
       "local_news": 23,
-      "regional_news": 22,
-      "unknown": 6
+      "regional_news": 25,
+      "unknown": 4
     },
-    "rejected_count": 2,
+    "rejected_count": 3,
     "rejected_examples": [
+      {
+        "headline": ", Fort Pierce, FL 34949 | Realtor.com® - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQcEw2MjR6YTB1Z1FxNENGc3JqWUpNM01KNGEyWW8tZmxUTVR3Q2c5ZVRiVDhiTmFIZWFsT0Y0amloLXQ5RHpObGtKeExLRHdtUmE5MXIwazBoUGlyLU9ZSThRcF9Pd1VCdDl0N092YWw2ZTJZRHVOUWQxWFhlSWNrNkRQVnVYQQ?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
         "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach",
@@ -146,32 +156,44 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 15,
-      "same_event": 170
+      "new_story": 27,
+      "same_event": 156
     },
     "examples": [
+      {
+        "story_id": "",
+        "title": ", Fort Pierce, FL 34949 | Realtor.com® - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
+      },
       {
         "story_id": "story_018957",
         "title": "Treasure Coast football posts another shutout in win over Westwood - Treasure Coast News",
         "event_key": "unknown-event-15cada9d1e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_018958",
-        "title": "Martin Bowl 43: South Fork uses late comeback to snap six-game skid - sports.yahoo.com",
-        "event_key": "unknown-event-54c7202ae8",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Martin Bowl 43: South Fork uses late comeback to snap six-game skid - Yahoo Sports",
+        "event_key": "unknown-event-2b2a13d8bf",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMif0FVX3lxTE9sZ0UyUmJ4dGFYQ1EzSjc4anZWUnhBX0dseHI3ZWxRNkxBR0U2blNCcHhmNl8wX0NfS0thZmZ1VjBqTzhrY1Y0RnFVSHpKeHZLQ1pidVlBNDBGSWVRa1FBN1ZKcE8xSnM1dUtwZE9wUnBGNVlkSXYzU2FCQXBzUDQ",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -217,17 +239,26 @@
         ]
       },
       {
-        "story_id": "story_018943",
+        "story_id": "story_018960",
         "title": "21-year-old Okeechobee woman killed in car crash involving tractor-trailer on State Road 710",
-        "event_key": "traffic-crash-2449ad4448-2449ad4448",
+        "event_key": "traffic-crash-stuart-9f0395c45e",
         "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "confidence": 0.96,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: traffic_crash",
+          "Shared people: state road",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: age_21, minor_subject",
+          "Shared distinctive tokens: 9",
+          "Distinctive-token overlap: 0.19",
+          "Title overlap: 0.18",
+          "Identity anchors qualified: True",
+          "Confidence: 0.96"
         ]
       },
       {
@@ -260,8 +291,8 @@
       },
       {
         "story_id": "story_018871",
-        "title": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County - WFLX",
-        "event_key": "fire-80bb65fc58-80bb65fc58",
+        "title": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+        "event_key": "traffic-crash-7ee64f40e1-7ee64f40e1",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -274,14 +305,15 @@
       },
       {
         "story_id": "story_018871",
-        "title": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-        "event_key": "traffic-crash-7ee64f40e1-7ee64f40e1",
+        "title": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County - WFLX",
+        "event_key": "fire-83d9152092-83d9152092",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -303,12 +335,14 @@
         "story_id": "story_018959",
         "title": "Trump stumps for candidates in deep red Alabama and says he'll be back again next week - News4JAX",
         "event_key": "unknown-event-c188ff7d30",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -408,20 +442,6 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_018762",
-        "title": "SPCA in Aiken breaks ground for new building, kicks off fundraising effort's public phase - Post and Courier",
-        "event_key": "unknown-event-19b116d8e9",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
@@ -429,26 +449,29 @@
         "story_id": "story_018957",
         "title": "Treasure Coast football posts another shutout in win over Westwood - Treasure Coast News",
         "event_key": "unknown-event-15cada9d1e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_018958",
-        "title": "Martin Bowl 43: South Fork uses late comeback to snap six-game skid - sports.yahoo.com",
-        "event_key": "unknown-event-54c7202ae8",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Martin Bowl 43: South Fork uses late comeback to snap six-game skid - Yahoo Sports",
+        "event_key": "unknown-event-2b2a13d8bf",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMif0FVX3lxTE9sZ0UyUmJ4dGFYQ1EzSjc4anZWUnhBX0dseHI3ZWxRNkxBR0U2blNCcHhmNl8wX0NfS0thZmZ1VjBqTzhrY1Y0RnFVSHpKeHZLQ1pidVlBNDBGSWVRa1FBN1ZKcE8xSnM1dUtwZE9wUnBGNVlkSXYzU2FCQXBzUDQ",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -497,18 +520,27 @@
         ]
       },
       {
-        "story_id": "story_018943",
+        "story_id": "story_018960",
         "title": "21-year-old Okeechobee woman killed in car crash involving tractor-trailer on State Road 710",
-        "event_key": "traffic-crash-2449ad4448-2449ad4448",
+        "event_key": "traffic-crash-stuart-9f0395c45e",
         "relationship": "same_event",
-        "confidence": 1.0,
+        "confidence": 0.96,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: traffic_crash",
+          "Shared people: state road",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: age_21, minor_subject",
+          "Shared distinctive tokens: 9",
+          "Distinctive-token overlap: 0.19",
+          "Title overlap: 0.18",
+          "Identity anchors qualified: True",
+          "Confidence: 0.96"
         ]
       },
       {
@@ -543,8 +575,8 @@
       },
       {
         "story_id": "story_018871",
-        "title": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County - WFLX",
-        "event_key": "fire-80bb65fc58-80bb65fc58",
+        "title": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+        "event_key": "traffic-crash-7ee64f40e1-7ee64f40e1",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -558,15 +590,16 @@
       },
       {
         "story_id": "story_018871",
-        "title": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-        "event_key": "traffic-crash-7ee64f40e1-7ee64f40e1",
+        "title": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County - WFLX",
+        "event_key": "fire-83d9152092-83d9152092",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -589,13 +622,15 @@
         "story_id": "story_018959",
         "title": "Trump stumps for candidates in deep red Alabama and says he'll be back again next week - News4JAX",
         "event_key": "unknown-event-c188ff7d30",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -736,9 +771,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 988,
-      "timeline_entries_examined": 2808,
-      "transitions_examined": 1710,
+      "stories_with_timelines": 989,
+      "timeline_entries_examined": 2813,
+      "transitions_examined": 1714,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 14,
       "high_confidence_candidate_count": 9,
@@ -2115,27 +2150,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 581,
-      "treasure_coast_local": 425,
-      "treasure_coast_region": 183,
-      "unknown": 1056
+      "florida": 584,
+      "treasure_coast_local": 429,
+      "treasure_coast_region": 188,
+      "unknown": 1067
     },
-    "average_score": 59.96
+    "average_score": 59.99
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 581,
-      "treasure_coast_local": 425,
-      "treasure_coast_region": 183,
-      "unknown": 1056
+      "florida": 584,
+      "treasure_coast_local": 429,
+      "treasure_coast_region": 188,
+      "unknown": 1067
     },
-    "average_priority": 4.41
+    "average_priority": 4.4
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1247,
+      "active": 1269,
       "developing": 300,
-      "ongoing": 698
+      "ongoing": 699
     }
   },
   "registry_health": {
@@ -2173,19 +2208,19 @@
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-10-03T05:21:15Z",
-    "quarantined_story_records_retained": 4233,
-    "active_story_count": 2245
+    "quarantined_story_records_retained": 4234,
+    "active_story_count": 2268
   },
   "stories": {
-    "total": 2245,
+    "total": 2268,
     "importance_levels": {
       "breaking": 0,
       "high": 39,
-      "normal": 335,
-      "low": 1871,
+      "normal": 340,
+      "low": 1889,
       "archived": 0
     },
-    "average_importance": 10.28,
+    "average_importance": 10.24,
     "top": [
       {
         "story_id": "story_018269",
@@ -2200,7 +2235,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 13.7
+          "age_hours": 19.04
         },
         "level": "high",
         "importance_reasons": [
@@ -2243,7 +2278,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T15:44:32.039306+00:00",
-          "hours_since_update": 13.7,
+          "hours_since_update": 19.04,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2261,7 +2296,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 27.63
+          "age_hours": 33.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2304,7 +2339,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 27.63,
+          "hours_since_update": 33.0,
           "event_count": 28,
           "timeline_entries": 28
         }
@@ -2322,7 +2357,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 27.63
+          "age_hours": 33.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2363,7 +2398,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 27.63,
+          "hours_since_update": 33.0,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2381,7 +2416,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 79.31
+          "age_hours": 84.67
         },
         "level": "high",
         "importance_reasons": [
@@ -2422,7 +2457,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T22:03:25.542264+00:00",
-          "hours_since_update": 79.31,
+          "hours_since_update": 84.67,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -2440,7 +2475,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 56.45
+          "age_hours": 61.81
         },
         "level": "high",
         "importance_reasons": [
@@ -2479,7 +2514,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-30T20:55:10.960121+00:00",
-          "hours_since_update": 56.45,
+          "hours_since_update": 61.81,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2497,7 +2532,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 34.63
+          "age_hours": 40.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2536,7 +2571,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-01T18:44:00.400323+00:00",
-          "hours_since_update": 34.63,
+          "hours_since_update": 40.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2554,7 +2589,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 101.1
+          "age_hours": 106.46
         },
         "level": "high",
         "importance_reasons": [
@@ -2595,7 +2630,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 101.1,
+          "hours_since_update": 106.46,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2613,7 +2648,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 57.12
+          "age_hours": 62.48
         },
         "level": "high",
         "importance_reasons": [
@@ -2665,73 +2700,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-09-30T20:14:49.662904+00:00",
-          "hours_since_update": 57.12,
+          "hours_since_update": 62.48,
           "event_count": 4,
           "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_018960",
-        "title": "Four-car crash near SE Federal Highway on US-1 prompts lane closures in Hobe Sound - WPEC",
-        "score": 45,
-        "editorial_priority": 50,
-        "editorial_score": 50,
-        "score_breakdown": {
-          "score": 50,
-          "importance": 45,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 0.06
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County"
-          ],
-          "places": [
-            "Stuart",
-            "Hobe Sound",
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 4,
-        "timeline_entries": 4,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-03T05:21:44.177214+00:00",
-          "hours_since_update": 0.06,
-          "event_count": 4,
-          "timeline_entries": 4
         }
       },
       {
@@ -2747,7 +2718,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 86.34
+          "age_hours": 91.7
         },
         "level": "high",
         "importance_reasons": [
@@ -2786,7 +2757,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T15:01:42.735572+00:00",
-          "hours_since_update": 86.34,
+          "hours_since_update": 91.7,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2804,7 +2775,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 99.42
+          "age_hours": 104.78
         },
         "level": "high",
         "importance_reasons": [
@@ -2843,7 +2814,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T01:56:40.617429+00:00",
-          "hours_since_update": 99.42,
+          "hours_since_update": 104.78,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2861,7 +2832,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 101.1
+          "age_hours": 106.46
         },
         "level": "high",
         "importance_reasons": [
@@ -2900,7 +2871,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 101.1,
+          "hours_since_update": 106.46,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2918,7 +2889,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 83.2
+          "age_hours": 88.56
         },
         "level": "high",
         "importance_reasons": [
@@ -2952,7 +2923,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-29T18:10:14.603971+00:00",
-          "hours_since_update": 83.2,
+          "hours_since_update": 88.56,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2970,7 +2941,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 10.67
+          "age_hours": 16.03
         },
         "level": "normal",
         "importance_reasons": [
@@ -3013,7 +2984,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T18:44:46.318754+00:00",
-          "hours_since_update": 10.67,
+          "hours_since_update": 16.03,
           "event_count": 24,
           "timeline_entries": 24
         }
@@ -3031,7 +3002,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 8.66
+          "age_hours": 14.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -3076,7 +3047,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-02T20:44:36.243218+00:00",
-          "hours_since_update": 8.66,
+          "hours_since_update": 14.0,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3094,7 +3065,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 195.62
+          "age_hours": 200.99
         },
         "level": "high",
         "importance_reasons": [
@@ -3137,7 +3108,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-25T01:44:33.584920+00:00",
-          "hours_since_update": 195.62,
+          "hours_since_update": 200.99,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3155,7 +3126,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 114.64
+          "age_hours": 120.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3193,58 +3164,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-28T10:43:50.122383+00:00",
-          "hours_since_update": 114.64,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_018917",
-        "title": "'I get chewed to death': St. Lucie County tackles mosquito breeding after heavy rain - WPBF",
-        "score": 40,
-        "editorial_priority": 45,
-        "editorial_score": 45,
-        "score_breakdown": {
-          "score": 45,
-          "importance": 40,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 5.13
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-10-03T00:17:33.418416+00:00",
-          "hours_since_update": 5.13,
+          "hours_since_update": 120.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3262,7 +3182,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 40.62
+          "age_hours": 45.98
         },
         "level": "normal",
         "importance_reasons": [
@@ -3310,7 +3230,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-01T12:44:49.496404+00:00",
-          "hours_since_update": 40.62,
+          "hours_since_update": 45.98,
           "event_count": 15,
           "timeline_entries": 12
         }
@@ -3328,7 +3248,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 40.62
+          "age_hours": 45.98
         },
         "level": "normal",
         "importance_reasons": [
@@ -3371,9 +3291,116 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-01T12:44:49.496404+00:00",
-          "hours_since_update": 40.62,
+          "hours_since_update": 45.98,
           "event_count": 3,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_018917",
+        "title": "'I get chewed to death': St. Lucie County tackles mosquito breeding after heavy rain - WPBF",
+        "score": 40,
+        "editorial_priority": 43,
+        "editorial_score": 43,
+        "score_breakdown": {
+          "score": 43,
+          "importance": 40,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 10.48
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-10-03T00:17:33.418416+00:00",
+          "hours_since_update": 10.48,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_018871",
+        "title": "Two women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+        "score": 35,
+        "editorial_priority": 40,
+        "editorial_score": 40,
+        "score_breakdown": {
+          "score": 40,
+          "importance": 35,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 5.4
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Stuart"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 13,
+        "timeline_entries": 12,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 12,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-03T05:21:44.177214+00:00",
+          "hours_since_update": 5.4,
+          "event_count": 13,
+          "timeline_entries": 12
         }
       }
     ]
@@ -3381,7 +3408,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-03T05:26:30Z",
+    "generated_at": "2026-10-03T10:47:12Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3396,28 +3423,27 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 4,
+        "category_eligibility_archive_recovery": 6,
         "generated_live": 1,
-        "generation_failed_archive_recovery": 3,
-        "no_publishable_sources": 1
+        "quality_gate_archive_recovery": 2
       },
       "failures": {
-        "copydesk_integrity": 3,
-        "no_category_eligible_sources": 4
+        "no_category_eligible_sources": 6,
+        "publication_quality_rejected": 2
       },
-      "model_attempt_count": 8,
-      "model_elapsed_seconds": 175.715,
+      "model_attempt_count": 4,
+      "model_elapsed_seconds": 62.828,
       "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 2,
-      "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 47,
-      "story_aware_update_context_count": 6,
-      "material_update_promotion_evaluation_count": 12,
+      "article_framing_rejection_count": 1,
+      "category_eligibility_rejection_count": 4,
+      "published_story_duplicate_suppression_count": 55,
+      "story_aware_update_context_count": 2,
+      "material_update_promotion_evaluation_count": 15,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 11,
-      "material_update_promotion_model_call_count": 1
+      "material_update_promotion_cache_hit_count": 13,
+      "material_update_promotion_model_call_count": 2
     },
     "categories": [
       {
@@ -3425,8 +3451,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 26,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 4,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3443,27 +3469,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 1,
-        "category_eligibility_rejection_count": 1,
-        "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_government_action",
-            "positive_signals": [],
-            "competing_signals": [
-              "crime_incident:arrested"
-            ],
-            "local_nexus_signals": [],
-            "headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
-          }
-        ],
-        "published_story_duplicate_suppression_count": 7,
+        "category_eligibility_assessed_count": 0,
+        "category_eligibility_rejection_count": 0,
+        "category_eligibility_rejections": [],
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3497,8 +3506,18 @@
           },
           {
             "category_key": "local_gov",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "editorial_story_id": "story_018871",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County - WFLX",
-            "source_url": "https://www.wflx.com/2026/10/02/miami-woman-custody-after-shooting-tow-yard-near-murray-middle-school-martin-county",
+            "source_url": "https://www.wflx.com/2026/10/02/miami-woman-custody-after-shooting-tow-yard-near-murray-middle-school-martin-county?outputType=amp",
             "editorial_story_id": "story_018871",
             "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
             "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
@@ -3536,32 +3555,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
-            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_018871",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_018871,source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 3,
@@ -3638,8 +3633,23 @@
           },
           {
             "category_key": "local_gov",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Miami woman in custody after shooting at tow yard near Murray Middle School in Martin County - WFLX",
-            "source_url": "https://www.wflx.com/2026/10/02/miami-woman-custody-after-shooting-tow-yard-near-murray-middle-school-martin-county",
+            "source_url": "https://www.wflx.com/2026/10/02/miami-woman-custody-after-shooting-tow-yard-near-murray-middle-school-martin-county?outputType=amp",
             "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
             "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
             "canonical_is_custom": false,
@@ -3710,40 +3720,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 10.642
+        "elapsed_seconds": 22.557
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 5,
-        "selected_source_count": 2,
+        "status": "quality_gate_archive_recovery",
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 16,
+        "publishable_source_count": 6,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 20.843,
-            "result": "copydesk_integrity",
-            "error_type": "CopyDeskIntegrityError",
-            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 21.197,
-            "result": "copydesk_integrity",
-            "error_type": "CopyDeskIntegrityError",
-            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+            "elapsed_seconds": 5.934,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 42.04,
-        "failure_code": "copydesk_integrity",
-        "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
+        "model_elapsed_seconds": 5.934,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3752,10 +3752,39 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 10,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 2,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Indiantown flooding remains a problem despite millions spent on drainage - WPEC",
+            "source_url": "https://cbs12.com/news/local/indiantown-flooding-booker-town-indiantown-middle-school-oak-river-anthony-dowling-florida-news-local-news-florida-flooding-indiantown-flooding"
+          },
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
+            "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach"
+          }
+        ],
+        "published_story_duplicate_suppression_count": 13,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3799,11 +3828,41 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "editorial_story_id": "story_018871",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "editorial_story_id": "story_018871",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Woman in custody after Martin County tow yard shooting leads to pursuit, PIT maneuver - WPEC",
             "source_url": "https://cbs12.com/news/crime/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news",
             "editorial_story_id": "story_018871",
             "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
             "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
+            "editorial_story_id": "story_018861",
+            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3829,16 +3888,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "King tides, full moon erode Fort Pierce road for second time in a week - cw34.com",
-            "source_url": "https://cw34.com/news/local/king-tides-full-moon-erode-fort-pierce-road-for-second-time-in-a-week-south-indian-river-drive-embankment-indian-river-lagoon-hurricane-nicole-erosion-jetty-park-tidal-action",
-            "editorial_story_id": "story_018704",
-            "canonical_slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
-            "canonical_headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Two men arrested in separate Port St. Lucie hit-and-run cases - WPEC",
             "source_url": "https://cbs12.com/news/local/two-men-arrested-in-separate-port-st-lucie-hit-and-run-teen-on-e-bike-u-turn-traffic-sign-hca-florida-lawnwood-hospital-port-st-lucie-police-department-florida-news",
             "editorial_story_id": "story_018614",
@@ -3856,37 +3905,47 @@
             "canonical_headline": "Port St. Lucie TikTok Creator Jailed as Device-Access Case Reopened",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Video captures SUV crash and rollover near Port St. Lucie Turnpike entrance - WPEC",
+            "source_url": "https://cbs12.com/news/local/video-captures-suv-crash-and-rollover-near-port-st-lucie-turnpike-entrance",
+            "editorial_story_id": "story_018669",
+            "canonical_slug": "2026-10-01-video-shows-suv-rollover-on-floridas-turnpike-ramp-near-bayshore-blvd",
+            "canonical_headline": "Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
-            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "source_headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
+            "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-10-01-martin-county-deputies-search-for-missing-autistic-man-last-seen-in-jensen-beach",
+            "canonical_headline": "Missing Jensen Beach Man Nicklaus Cantor Found Safe",
             "basis": "exact_source_url",
             "identity_keys": [
-              "story:story_018871",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
+              "incident:missing-person:nicklaus-cantor",
+              "source:https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach"
             ],
             "match_confidence": 0.99,
             "evidence_dimensions": [
-              "story",
+              "incident",
               "source"
             ],
             "decision_trace": [
-              "deterministic_identity_keys=story:story_018871,source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+              "deterministic_identity_keys=incident:missing-person:nicklaus-cantor,source:https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach",
               "write_authorized=True"
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 5,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_cache_hit_count": 4,
         "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
@@ -3900,8 +3959,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -3932,12 +3991,32 @@
             "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Jade Rondon",
+              "Valerie Valdes",
+              "Gary's/Garry's Towing and Recovery",
+              "Cove Road",
+              "Martin County Sheriff",
+              "Murray Middle School lockdown",
+              "US-1 crash",
+              "same Friday incident"
+            ],
+            "novel_facts": [
+              "Specific charges listed in more detail (aggravated assault counts, reckless driving citations)",
+              "Quotes from tow yard owner Gary Reed",
+              "Sheriff plans to seek search warrants and expects more answers next week"
+            ],
+            "reason": "This covers the identical tow yard shooting, chase, and crash involving the same named suspects, location, and school lockdown already captured in the canonical story. The additional charge specifics and owner quotes are incremental detail, not a material new development like an arrest, death, or new charge not already indicated by the canonical's 'more charges likely' framing.",
+            "validation_errors": []
           },
           {
             "category_key": "crime",
@@ -3983,10 +4062,55 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Woman in custody after Martin County tow yard shooting leads to pursuit, PIT maneuver - WPEC",
             "source_url": "https://cbs12.com/news/crime/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news",
             "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
             "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
+            "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+            "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -4042,21 +4166,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "King tides, full moon erode Fort Pierce road for second time in a week - cw34.com",
-            "source_url": "https://cw34.com/news/local/king-tides-full-moon-erode-fort-pierce-road-for-second-time-in-a-week-south-indian-river-drive-embankment-indian-river-lagoon-hurricane-nicole-erosion-jetty-park-tidal-action",
-            "canonical_slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
-            "canonical_headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Two men arrested in separate Port St. Lucie hit-and-run cases - WPEC",
             "source_url": "https://cbs12.com/news/local/two-men-arrested-in-separate-port-st-lucie-hit-and-run-teen-on-e-bike-u-turn-traffic-sign-hca-florida-lawnwood-hospital-port-st-lucie-police-department-florida-news",
             "canonical_slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
@@ -4099,45 +4208,43 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Video captures SUV crash and rollover near Port St. Lucie Turnpike entrance - WPEC",
+            "source_url": "https://cbs12.com/news/local/video-captures-suv-crash-and-rollover-near-port-st-lucie-turnpike-entrance",
+            "canonical_slug": "2026-10-01-video-shows-suv-rollover-on-floridas-turnpike-ramp-near-bayshore-blvd",
+            "canonical_headline": "Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 56.003
+        "elapsed_seconds": 27.731
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 10,
-        "selected_source_count": 1,
+        "status": "category_eligibility_archive_recovery",
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 16,
+        "publishable_source_count": 7,
+        "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.883,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Buc-ee's Clears St. Lucie County Planning as Indrio Road Corridor Draws New Development"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 19.114,
-            "result": "copydesk_integrity",
-            "error_type": "CopyDeskIntegrityError",
-            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-          }
-        ],
-        "model_elapsed_seconds": 30.997,
-        "failure_code": "copydesk_integrity",
-        "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Business & Development category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4146,28 +4253,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 4,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 1,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [
-              "crime_public_safety:arrested"
-            ],
-            "local_nexus_signals": [
-              "source_locality:treasure coast",
-              "source_locality:martin county"
-            ],
-            "headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
-          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -4183,29 +4271,9 @@
             ],
             "headline": "Jupiter launches its own fire department, aims to improve service and save taxpayers millions",
             "source_url": "https://www.wptv.com/news/local-news/our-community/jupiter-tequesta-juno-beach/jupiter-launches-its-own-fire-department-aiming-to-improve-service-and-save-taxpayers-millions"
-          },
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [
-              "election_political_process:early voting"
-            ],
-            "local_nexus_signals": [
-              "source_locality:martin county",
-              "source_locality:st lucie county",
-              "source_locality:indian river county"
-            ],
-            "headline": "Florida Election 2026: Voter Registration, Vote-by-Mail and Early Voting deadlines you need to know",
-            "source_url": "https://www.wptv.com/news/political/elections-local/florida-election-2026-voter-registration-vote-by-mail-and-early-voting-deadlines-you-need-to-know"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -4224,6 +4292,16 @@
             "editorial_story_id": "story_018896",
             "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
             "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "editorial_story_id": "story_018871",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4278,32 +4356,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
-            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_018871",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_018871,source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
@@ -4342,6 +4396,21 @@
             "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
             "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
             "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -4428,9 +4497,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 40.733
+        "elapsed_seconds": 13.624
       },
       {
         "category_key": "sports",
@@ -4467,8 +4534,8 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 7.361
+        "new_publication_stale_rejected_count": 2,
+        "elapsed_seconds": 10.658
       },
       {
         "category_key": "things_to_do",
@@ -4523,23 +4590,23 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 6.311
+        "elapsed_seconds": 8.217
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "no_publishable_sources",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
+        "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "",
-        "failure_summary": "",
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Florida category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4548,7 +4615,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -4561,16 +4628,16 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 6.056
+        "elapsed_seconds": 12.294
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 4,
-        "selected_source_count": 4,
+        "status": "quality_gate_archive_recovery",
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 3,
+        "selected_source_count": 3,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 2,
@@ -4578,7 +4645,7 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 22.26,
+            "elapsed_seconds": 10.961,
             "result": "copydesk_integrity",
             "error_type": "CopyDeskIntegrityError",
             "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
@@ -4586,15 +4653,13 @@
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 24.288,
-            "result": "copydesk_integrity",
-            "error_type": "CopyDeskIntegrityError",
-            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+            "elapsed_seconds": 18.046,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 46.548,
-        "failure_code": "copydesk_integrity",
-        "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
+        "model_elapsed_seconds": 29.007,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4603,10 +4668,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -4630,16 +4695,6 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms",
-            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
-            "editorial_story_id": "story_018896",
-            "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
-            "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
             "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
             "editorial_story_id": "story_018896",
@@ -4650,12 +4705,52 @@
           },
           {
             "category_key": "martin",
+            "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
+            "editorial_story_id": "story_018896",
+            "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
+            "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "editorial_story_id": "story_018871",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Tow yard shooting leads to two arrests, multiple crashes in Martin County - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMisgJBVV95cUxOZ1pHVmctSUk0WTI4YmVhS2s5cDdYMmpXdXl6NENoUVcycWxQLVl1LW9GRjc4YmpUQ09URUtzSHVCOTRtd0ZRRHI5LWJDZ04yMVVlNG9NSkM3Wnl4SzdWNWxYZDJLSHJsT3huTVgzM1Y3d1RvYXVpM2hDci1BbG85dlY0NFdYMnUycHFrb29CR0NJaGRvVXpjWTM0VnZ3VGpGblMycHp4bkduMlk0d0tMQ0R6bmNnTHVBajVxT2JxZ3g5NTZmWjNVQ0dORzZ1ZDk5VElBSXJaRkRDQUNvYUVwVEFiQjBYNjFxNmZ2VVRNU1dkcEl0bE5SeXZ6d2tOU3VJVUpnYmUxMUNKMzRySXhuX2RacTlxRHdxY1VvOVVUR3g0VTZqNDcxcFkzdWdUeWdZaXc",
+            "editorial_story_id": "story_018871",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
             "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
             "editorial_story_id": "story_018861",
             "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
             "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
             "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County border collie hoarding case moves forward as 30 rescued dogs find new homes - WFLX",
+            "source_url": "https://www.wflx.com/2026/10/01/martin-county-border-collie-hoarding-case-moves-forward-30-rescued-dogs-find-new-homes",
+            "editorial_story_id": "story_018281",
+            "canonical_slug": "2026-10-01-martin-county-hoarding-case-against-paige-odonnell-heads-to-dec-1-hearing",
+            "canonical_headline": "Palm City hoarding case: 72 charges against O'Donnell, dogs find homes",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4679,31 +4774,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
-          {
-            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
-            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_018871",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_018871,source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
           {
             "source_headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
             "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach",
@@ -4728,10 +4800,10 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
@@ -4776,6 +4848,41 @@
             "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Jade Rondon",
+              "Valerie Valdes",
+              "Gary's/Garry's Towing and Recovery",
+              "Cove Road",
+              "Martin County Sheriff",
+              "Murray Middle School lockdown",
+              "US-1 crash",
+              "same Friday incident"
+            ],
+            "novel_facts": [
+              "Specific charges listed in more detail (aggravated assault counts, reckless driving citations)",
+              "Quotes from tow yard owner Gary Reed",
+              "Sheriff plans to seek search warrants and expects more answers next week"
+            ],
+            "reason": "This covers the identical tow yard shooting, chase, and crash involving the same named suspects, location, and school lockdown already captured in the canonical story. The additional charge specifics and owner quotes are incremental detail, not a material new development like an arrest, death, or new charge not already indicated by the canonical's 'more charges likely' framing.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms - WPTV",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
+            "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
+            "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -4800,13 +4907,28 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms - WPTV",
-            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
-            "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
-            "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Tow yard shooting leads to two arrests, multiple crashes in Martin County - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMisgJBVV95cUxOZ1pHVmctSUk0WTI4YmVhS2s5cDdYMmpXdXl6NENoUVcycWxQLVl1LW9GRjc4YmpUQ09URUtzSHVCOTRtd0ZRRHI5LWJDZ04yMVVlNG9NSkM3Wnl4SzdWNWxYZDJLSHJsT3huTVgzM1Y3d1RvYXVpM2hDci1BbG85dlY0NFdYMnUycHFrb29CR0NJaGRvVXpjWTM0VnZ3VGpGblMycHp4bkduMlk0d0tMQ0R6bmNnTHVBajVxT2JxZ3g5NTZmWjNVQ0dORzZ1ZDk5VElBSXJaRkRDQUNvYUVwVEFiQjBYNjFxNmZ2VVRNU1dkcEl0bE5SeXZ6d2tOU3VJVUpnYmUxMUNKMzRySXhuX2RacTlxRHdxY1VvOVVUR3g0VTZqNDcxcFkzdWdUeWdZaXc",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4827,6 +4949,35 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County border collie hoarding case moves forward as 30 rescued dogs find new homes - WFLX",
+            "source_url": "https://www.wflx.com/2026/10/01/martin-county-border-collie-hoarding-case-moves-forward-30-rescued-dogs-find-new-homes",
+            "canonical_slug": "2026-10-01-martin-county-hoarding-case-against-paige-odonnell-heads-to-dec-1-hearing",
+            "canonical_headline": "Palm City hoarding case: 72 charges against O'Donnell, dogs find homes",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Paige O'Donnell",
+              "72 criminal charges",
+              "36 border collies",
+              "Martin County home",
+              "Dec. 1 hearing",
+              "Humane Society of the Treasure Coast adoption figures"
+            ],
+            "novel_facts": [],
+            "reason": "Identical source URL and same underlying event (O'Donnell hoarding case, same charges, same hearing date, same adoption statistics). This is the same source article already canonicalized; no new material facts are present.",
+            "validation_errors": []
           },
           {
             "category_key": "martin",
@@ -4860,38 +5011,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 52.875
+        "elapsed_seconds": 49.911
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 15,
-        "publishable_source_count": 5,
-        "selected_source_count": 5,
+        "fetched_candidate_count": 30,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 4,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 2,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 30.753,
-            "result": "copydesk_integrity",
-            "error_type": "CopyDeskIntegrityError",
-            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 25.377,
+            "elapsed_seconds": 27.887,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 56.13,
+        "model_elapsed_seconds": 27.887,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4904,18 +5047,18 @@
             "surface": "card",
             "required": true,
             "passed": false,
-            "headline": "Buc-ee's clears county review as development interest builds along Indrio Road",
+            "headline": "Buc-ee's Clears Final County Hurdles, Spurring Growth Push on Indrio Road",
             "missing": [
               "surname_only_first_reference"
             ],
             "lead_independence": {
               "required": true,
               "passed": false,
-              "headline": "Buc-ee's clears county review as development interest builds along Indrio Road",
-              "lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road in northern St. Lucie County has completed the county's planning process and now awaits final approvals from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin. The 76,000-square-foot travel center would feature approximately 120 fuel pumps and could become the largest Buc-ee's location in Florida, with a previously targeted opening date of 2028.",
-              "lead_word_count": 79,
-              "headline_overlap_ratio": 0.455,
-              "new_context_token_count": 43,
+              "headline": "Buc-ee's Clears Final County Hurdles, Spurring Growth Push on Indrio Road",
+              "lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road in northern St. Lucie County has completed the county's planning process and now needs only final sign-off from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin. The 76,000-square-foot travel center would include approximately 120 fuel pumps and could become the largest Buc-ee's location in Florida. Buc-ee's has previously targeted a 2028 opening date.",
+              "lead_word_count": 83,
+              "headline_overlap_ratio": 0.545,
+              "new_context_token_count": 44,
               "opaque_references": [],
               "undefined_references": [],
               "story_form": "standard",
@@ -4944,8 +5087,8 @@
             "claim_consistency": {
               "required": true,
               "passed": true,
-              "headline": "Buc-ee's clears county review as development interest builds along Indrio Road",
-              "lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road in northern St. Lucie County has completed the county's planning process and now awaits final approvals from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin. The 76,000-square-foot travel center would feature approximately 120 fuel pumps and could become the largest Buc-ee's location in Florida, with a previously targeted opening date of 2028.",
+              "headline": "Buc-ee's Clears Final County Hurdles, Spurring Growth Push on Indrio Road",
+              "lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road in northern St. Lucie County has completed the county's planning process and now needs only final sign-off from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin. The 76,000-square-foot travel center would include approximately 120 fuel pumps and could become the largest Buc-ee's location in Florida. Buc-ee's has previously targeted a 2028 opening date.",
               "headline_money_claims": [],
               "lead_money_claims": [],
               "missing_money_claims": [],
@@ -4965,19 +5108,19 @@
             "source_focus": {
               "required": true,
               "passed": true,
-              "generated_headline": "Buc-ee's clears county review as development interest builds along Indrio Road",
-              "generated_lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road in northern St. Lucie County has completed the county's planning process and now awaits final approvals from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin.",
+              "generated_headline": "Buc-ee's Clears Final County Hurdles, Spurring Growth Push on Indrio Road",
+              "generated_lead": "The proposed Buc-ee's travel center at Interstate 95 and Indrio Road in northern St. Lucie County has completed the county's planning process and now needs only final sign-off from the Florida Department of Transportation and the Florida Department of Environmental Protection before construction can begin.",
               "source_title": "As Buc-ee's nears construction, development interest builds in northern St. Lucie County - cw34.com",
               "source_lead": "Buc-ee’s may be best known for its massive travel centers, barbecue sandwiches and loyal fan base, but on the Treasure Coast, county leaders say the proposed development could signal something even bigger: a wave of growth along the Indrio Road corridor in northern St. After years of planning and review, the proposed Buc-ee’s at Interstate 95 and Indrio Road has completed the county’s planning process, bringing the long-discussed project one step closer to reality.",
               "title_similarity": {
-                "score": 0.55,
-                "overlap": 0.5455,
-                "jaccard": 0.3333,
-                "sorted_sequence": 0.625,
-                "ordered_sequence": 0.625,
-                "shared_token_count": 6.0
+                "score": 0.2857,
+                "overlap": 0.2727,
+                "jaccard": 0.1429,
+                "sorted_sequence": 0.3636,
+                "ordered_sequence": 0.3247,
+                "shared_token_count": 3.0
               },
-              "lead_token_overlap": 0.483,
+              "lead_token_overlap": 0.452,
               "missing": []
             },
             "source_jurisdiction": {
@@ -4999,10 +5142,10 @@
         ],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 12,
+        "published_story_duplicate_suppression_count": 11,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -5082,16 +5225,6 @@
             "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
             "canonical_headline": "Fort Pierce Trial: Mimms' Niece Testifies on Lincoln Park Nonprofit Lease",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "'Who put it up?' Unpermitted license plate readers found in St. Lucie County",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/unpermitted-license-plate-readers-found-in-st-lucie-county",
-            "editorial_story_id": "story_018682",
-            "canonical_slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
-            "canonical_headline": "St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5278,21 +5411,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "'Who put it up?' Unpermitted license plate readers found in St. Lucie County",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/unpermitted-license-plate-readers-found-in-st-lucie-county",
-            "canonical_slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
-            "canonical_headline": "St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "'Who put it up?' Unpermitted license plate readers found in St. Lucie County - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/unpermitted-license-plate-readers-found-in-st-lucie-county",
             "canonical_slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
@@ -5337,20 +5455,20 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 0,
+        "new_publication_stale_rejected_count": 1,
         "generation_status": "success",
         "budget_seconds": 180.0,
         "live_hero_headline": "Port St. Lucie Man Gets 37.5 Years in Stuart Vape Shop Shooting",
         "generated_card_count": 0,
-        "elapsed_seconds": 67.7
+        "elapsed_seconds": 42.801
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 4,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5367,10 +5485,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -5394,12 +5512,12 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Rabies alert issued in Indian River County after rabid bat found near apartment complex",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/rabies-alert-issued-in-indian-river-county-after-rabid-bat-found-near-apartment-complex",
-            "editorial_story_id": "story_018811",
-            "canonical_slug": "2026-10-02-indian-river-county-rabies-alert-follows-positive-bat-near-fellsmere-apartments",
-            "canonical_headline": "Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "editorial_story_id": "story_018871",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5411,34 +5529,20 @@
             "canonical_headline": "Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
+          },
           {
-            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
-            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_018871",
-              "source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_018871,source:https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
+            "category_key": "indian_river",
+            "source_headline": "Rabies alert issued in Indian River County after rabid bat found near apartment complex",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/rabies-alert-issued-in-indian-river-county-after-rabid-bat-found-near-apartment-complex",
+            "editorial_story_id": "story_018811",
+            "canonical_slug": "2026-10-02-indian-river-county-rabies-alert-follows-positive-bat-near-fellsmere-apartments",
+            "canonical_headline": "Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
@@ -5488,12 +5592,12 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Rabies alert issued in Indian River County after rabid bat found near apartment complex",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/rabies-alert-issued-in-indian-river-county-after-rabid-bat-found-near-apartment-complex",
-            "canonical_slug": "2026-10-02-indian-river-county-rabies-alert-follows-positive-bat-near-fellsmere-apartments",
-            "canonical_headline": "Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments",
+            "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+            "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+            "canonical_headline": "More Charges Likely After Stuart Tow Yard Shooting, Chase, Crash",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5515,10 +5619,25 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Rabies alert issued in Indian River County after rabid bat found near apartment complex",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/rabies-alert-issued-in-indian-river-county-after-rabid-bat-found-near-apartment-complex",
+            "canonical_slug": "2026-10-02-indian-river-county-rabies-alert-follows-positive-bat-near-fellsmere-apartments",
+            "canonical_headline": "Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 8.373
+        "elapsed_seconds": 11.536
       }
     ]
   }
