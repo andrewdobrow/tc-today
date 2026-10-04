@@ -6,6 +6,7 @@ Runs 4x/day via GitHub Actions.
 
 import os
 import sys
+import subprocess
 import json
 import re
 import hashlib
@@ -19887,6 +19888,28 @@ def _known_event_key(text):
     t = re.sub(r"[^a-z0-9]+", " ", (text or "").lower())
     words = set(t.split())
 
+    # Oct. 2-3, 2026 Garry's Towing shooting/chase near Stuart.  Follow-up coverage
+    # shifted from a school-lockout/shooting frame to named defendants, charges, a
+    # pursuit and crashes.  The law-enforcement PIT maneuver used during the pursuit
+    # must never make this story look like the unrelated Aug. 3 road-rage incident.
+    has_tow_yard = (
+        ("garry" in words and ("towing" in words or "tow" in words))
+        or (("tow" in words or "towing" in words) and "yard" in words)
+    )
+    has_martin_stuart = (
+        ("martin" in words and "county" in words)
+        or "stuart" in words
+        or ("cove" in words and "road" in words)
+    )
+    has_tow_yard_incident = bool(words & {"shooting", "gunfire", "shot", "chase", "lockout"})
+    has_tow_yard_identity = (
+        "rondon" in words
+        or "valdes" in words
+        or ("murray" in words and "middle" in words)
+    )
+    if has_tow_yard and has_martin_stuart and has_tow_yard_incident and has_tow_yard_identity:
+        return "2026-10-martin-garrys-towing-shooting-chase"
+
     # July 2026 Stuart/Martin County animal-hoarding case involving about 80 cats.
     # Headline variants have used "80", "about 80", "rescued", "removed",
     # "arrested", and "worst hoarding case". Require several independent signals
@@ -21891,10 +21914,20 @@ def _same_event_items(a, b):
     probe.setdefault("slug", "__candidate__")
     if find_matching_entry(a.get("headline", ""), [probe], a.get("link", "")):
         return True
-    aa, bb = _sig_tokens(ta), _sig_tokens(tb)
-    shared = _shared_tokens(aa, bb)
-    distinctive = [t for t in shared if t not in GENERIC_TOKENS]
-    return len(shared) >= 6 and len(distinctive) >= 3
+    # A raw six-token overlap is not destructive identity.  That legacy fallback
+    # incorrectly declared the Oct. 2026 Garry's Towing shooting/chase and the
+    # Aug. 2026 I-95 road-rage attack to be the same event because both mentioned
+    # deputies, a crash, a maneuver, a road, charges and a vehicle.  Reuse the
+    # direct pairwise authority contract instead: it enforces bounded time, locality,
+    # event-family compatibility and concrete source facts before permitting a merge.
+    evidence = _cross_source_same_event_evidence(
+        a, b,
+        allow_custom=bool(
+            a.get("is_custom") or a.get("authoritative_custom")
+            or b.get("is_custom") or b.get("authoritative_custom")
+        ),
+    )
+    return bool(evidence.get("write_authorized"))
 
 
 def _story_priority(item):
@@ -25254,6 +25287,21 @@ ROAD_RAGE_CANONICAL_SLUG = (
 )
 ROAD_RAGE_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-08-05-florida-man-used-police-maneuver-to-run-north-carolina-family-off-road-near-stua",
+})
+
+# Oct. 2026 Garry's Towing shooting/chase permalink regression.  The Oct. 2 URL
+# was already public when an Oct. 3 follow-up escaped as a second URL.  A contaminated
+# road-rage identity then pointed both reader paths at an unrelated Aug. 3 article.
+# The Oct. 2 permalink is permanently canonical; the Oct. 3 URL is a durable alias.
+TOW_YARD_CANONICAL_SLUG = (
+    "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou"
+)
+TOW_YARD_REDIRECT_SOURCE_SLUGS = frozenset({
+    # First Oct. 2 generated framing. The historical redirect audit proves this
+    # URL was incorrectly sent to the unrelated Aug. 4 road-rage story.
+    "2026-10-02-shooting-at-stuart-tow-yard-prompts-murray-middle-lockout-chase-with-pit-maneuve",
+    # Oct. 3 charge/follow-up framing pulled into RSS/Nextdoor.
+    "2026-10-03-two-miami-women-charged-after-gunfire-chase-at-martin-county-tow-yard",
 })
 
 # Permanent regression for the Aug. 2026 Port St. Lucie animal-cruelty arrest.
@@ -32342,6 +32390,154 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
 
 
 
+
+def _redirect_slug_date(slug):
+    match = re.match(r"^(\d{4})-(\d{2})-(\d{2})-", str(slug or ""))
+    if not match:
+        return None
+    try:
+        return datetime(int(match.group(1)), int(match.group(2)), int(match.group(3))).date()
+    except Exception:
+        return None
+
+
+def _write_canonical_redirect_safety_audit(records, archive, articles_dir, output_root, current_by_source=None):
+    """Write a non-destructive audit of every cumulative canonical redirect.
+
+    Historical redirects can be legitimate even when their publication dates or
+    wording differ, so advisory heuristics never delete them.  The report surfaces
+    chains, cycles, missing targets, large date jumps and obvious headline-family
+    conflicts for manual review while the hard redirect guards continue to fail
+    closed for known or current-run corruption.
+    """
+    records = [row for row in (records or []) if isinstance(row, dict)]
+    by_source = {
+        str(row.get("source_slug") or ""): row
+        for row in records if str(row.get("source_slug") or "")
+    }
+    archive_slugs = {
+        str(row.get("slug") or "")
+        for row in (archive or []) if isinstance(row, dict) and str(row.get("slug") or "")
+    }
+    articles_dir = Path(articles_dir)
+    chains = []
+    cycles = []
+    missing_targets = []
+    long_date_gaps = []
+    family_conflicts = []
+
+    seen_cycles = set()
+    for source, row in sorted(by_source.items()):
+        target = str(row.get("target_slug") or "")
+        if not target:
+            continue
+        if target in by_source:
+            chains.append({"source_slug": source, "target_slug": target})
+        if target not in archive_slugs and not (articles_dir / f"{target}.html").exists():
+            missing_targets.append({"source_slug": source, "target_slug": target})
+        left_date = _redirect_slug_date(source)
+        right_date = _redirect_slug_date(target)
+        if left_date and right_date:
+            gap = abs((left_date - right_date).days)
+            if gap > 45:
+                long_date_gaps.append({
+                    "source_slug": source,
+                    "target_slug": target,
+                    "day_gap": gap,
+                    "source_headline": str(row.get("source_headline") or ""),
+                    "target_headline": str(row.get("target_headline") or ""),
+                })
+        source_headline = str(row.get("source_headline") or "").strip()
+        target_headline = str(row.get("target_headline") or "").strip()
+        if source_headline and target_headline:
+            try:
+                from tct_engine.unified_incident_identity import build_unified_incident_evidence
+                left = build_unified_incident_evidence(title=source_headline)
+                right = build_unified_incident_evidence(title=target_headline)
+                if left.family != "unknown" and right.family != "unknown" and left.family != right.family:
+                    family_conflicts.append({
+                        "source_slug": source,
+                        "target_slug": target,
+                        "source_family": left.family,
+                        "target_family": right.family,
+                        "source_headline": source_headline,
+                        "target_headline": target_headline,
+                    })
+            except Exception:
+                pass
+
+        trail = []
+        cursor = source
+        local_seen = {}
+        while cursor in by_source:
+            if cursor in local_seen:
+                cycle_nodes = trail[local_seen[cursor]:] + [cursor]
+                key = tuple(sorted(set(cycle_nodes)))
+                if key and key not in seen_cycles:
+                    seen_cycles.add(key)
+                    cycles.append({"cycle": cycle_nodes})
+                break
+            local_seen[cursor] = len(trail)
+            trail.append(cursor)
+            cursor = str(by_source[cursor].get("target_slug") or "")
+            if not cursor:
+                break
+
+    old = TOW_YARD_CANONICAL_SLUG
+    aliases = set(TOW_YARD_REDIRECT_SOURCE_SLUGS)
+    tow_old_mapping = by_source.get(old)
+    tow_alias_bad = [
+        {"source_slug": alias, "target_slug": str((by_source.get(alias) or {}).get("target_slug") or "")}
+        for alias in sorted(aliases)
+        if alias in by_source and str((by_source.get(alias) or {}).get("target_slug") or "") != old
+    ]
+    tow_yard_integrity_passed = tow_old_mapping is None and not tow_alias_bad
+
+    current_sources = set((current_by_source or {}).keys())
+    current_chain_violations = [row for row in chains if row["source_slug"] in current_sources]
+    current_missing_target_violations = [row for row in missing_targets if row["source_slug"] in current_sources]
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "redirect_count": len(records),
+        "current_run_redirect_count": len(current_sources),
+        "tow_yard_integrity_passed": tow_yard_integrity_passed,
+        "tow_yard_bad_aliases": tow_alias_bad,
+        "redirect_chain_count": len(chains),
+        "cycle_count": len(cycles),
+        "missing_target_count": len(missing_targets),
+        "long_date_gap_advisory_count": len(long_date_gaps),
+        "headline_family_conflict_advisory_count": len(family_conflicts),
+        "current_run_chain_violation_count": len(current_chain_violations),
+        "current_run_missing_target_violation_count": len(current_missing_target_violations),
+        "redirect_chains": chains,
+        "cycles": cycles,
+        "missing_targets": missing_targets,
+        "long_date_gap_advisories": long_date_gaps,
+        "headline_family_conflict_advisories": family_conflicts,
+        "current_run_chain_violations": current_chain_violations,
+        "current_run_missing_target_violations": current_missing_target_violations,
+    }
+    path = Path(output_root) / "data" / "canonical-redirect-safety-audit.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    _atomic_write_text(path, json.dumps(report, indent=2, ensure_ascii=False))
+    if not tow_yard_integrity_passed:
+        raise RuntimeError(
+            "Canonical redirect safety audit FAILED: Garry's Towing permalink ownership is still corrupted"
+        )
+    if current_chain_violations or current_missing_target_violations:
+        raise RuntimeError(
+            "Canonical redirect safety audit FAILED: current-run redirect created a chain or missing target"
+        )
+    print(
+        "  Canonical redirect safety audit: "
+        f"{len(records)} redirects; {len(chains)} chain(s), {len(cycles)} cycle(s), "
+        f"{len(missing_targets)} missing target(s), {len(long_date_gaps)} long-gap advisory(s), "
+        f"{len(family_conflicts)} family-conflict advisory(s)"
+    )
+    return report
+
+
 def enforce_canonical_redirects(archive, articles_dir, output_root, current_run_redirects=None):
     """Apply every canonical redirect after all article pages have been generated.
 
@@ -32382,6 +32578,46 @@ def enforce_canonical_redirects(archive, articles_dir, output_root, current_run_
         for row in (archive or [])
         if isinstance(row, dict) and str(row.get("slug") or "")
     }
+    # Oct. 2026 emergency permalink guard.  Keep this outside the historical audit
+    # tables because CI tests run before generation and the checked-out production
+    # manifest may still contain the very corruption this run is responsible for
+    # repairing.  The generator self-heal above removes stale state; this final gate
+    # then makes the corrected ownership permanent for every subsequent run.
+    tow_old = TOW_YARD_CANONICAL_SLUG
+    tow_aliases = set(TOW_YARD_REDIRECT_SOURCE_SLUGS)
+    tow_current = current_by_source.get(tow_old)
+    if tow_current and str(tow_current.get("target_slug") or "") != tow_old:
+        raise RuntimeError(
+            "Canonical redirect safety FAILED: the established Oct. 2 Garry's "
+            f"Towing permalink attempted to redirect to {tow_current.get('target_slug') or 'unknown target'}"
+        )
+    # The established Oct. 2 article is never an alias.  Drop any stale cumulative
+    # mapping before a redirect page or host-level 301 can be written.
+    merged.pop(tow_old, None)
+    for tow_alias in tow_aliases:
+        current = current_by_source.get(tow_alias)
+        if current and str(current.get("target_slug") or "") != tow_old:
+            raise RuntimeError(
+                "Canonical redirect safety FAILED: a Garry's Towing "
+                f"alias attempted to target {current.get('target_slug') or 'unknown target'} "
+                f"instead of {tow_old}"
+            )
+        if tow_alias in merged or tow_alias in archive_by_slug or tow_old in archive_by_slug:
+            prior = merged.get(tow_alias) or {"source_slug": tow_alias}
+            target_row = archive_by_slug.get(tow_old) or {}
+            merged[tow_alias] = {
+                **prior,
+                "source_slug": tow_alias,
+                "target_slug": tow_old,
+                "target_headline": target_row.get("headline") or prior.get("target_headline", ""),
+                "story_stage": "tow-yard-permalink-safety-repair",
+                "match_confidence": 100,
+                "reason": (
+                    "Audited duplicate/alternate framing of the Oct. 2 Garry's Towing "
+                    "shooting/chase; the established Oct. 2 permalink remains canonical."
+                ),
+            }
+
     for source_slug, approved_target in HISTORICAL_REDIRECT_ALIAS_TARGETS.items():
         current = current_by_source.get(source_slug)
         if current and str(current.get("target_slug") or "") != approved_target:
@@ -32437,6 +32673,10 @@ def enforce_canonical_redirects(archive, articles_dir, output_root, current_run_
             "permalink cannot be redirected to "
             + str(corbin_redirect.get("target_slug") or "unknown target")
         )
+
+    _write_canonical_redirect_safety_audit(
+        records, archive, articles_dir, output_root, current_by_source=current_by_source
+    )
 
     source_slugs = {r["source_slug"] for r in records if r.get("source_slug")}
     cleaned = [e for e in (archive or []) if e.get("slug") not in source_slugs]
@@ -39156,6 +39396,310 @@ def _validate_promoted_material_updates_committed(output_root=None):
     return report
 
 
+
+def _is_canonical_redirect_html(page_html):
+    text = str(page_html or "")
+    return bool(
+        'http-equiv="refresh"' in text.lower()
+        or "window.location.replace" in text
+        or 'name="robots" content="noindex,follow"' in text.lower()
+    )
+
+
+def _git_show_text(repo_root, revision, relative_path):
+    """Read one historical repository file without changing the working tree."""
+    try:
+        completed = subprocess.run(
+            ["git", "show", f"{revision}:{relative_path}"],
+            cwd=str(repo_root),
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=20,
+        )
+    except Exception:
+        return ""
+    if completed.returncode != 0:
+        return ""
+    return completed.stdout.decode("utf-8", errors="replace")
+
+
+def _latest_substantive_git_article_snapshot(repo_root, slug):
+    """Recover the newest pre-redirect article and its archive row from git history.
+
+    Production checkout uses ``fetch-depth: 0`` specifically so a destructive static
+    redirect can be repaired from the last substantive committed page without guessing
+    or refetching publisher copy.
+    """
+    relative = f"articles/{slug}.html"
+    try:
+        completed = subprocess.run(
+            ["git", "rev-list", "HEAD", "--", relative],
+            cwd=str(repo_root),
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=20,
+            text=True,
+        )
+    except Exception:
+        return None
+    if completed.returncode != 0:
+        return None
+    for revision in [row.strip() for row in completed.stdout.splitlines() if row.strip()][:24]:
+        page_html = _git_show_text(repo_root, revision, relative)
+        if not page_html or _is_canonical_redirect_html(page_html):
+            continue
+        archive_text = _git_show_text(repo_root, revision, "archive.json")
+        archive_row = None
+        if archive_text:
+            try:
+                payload = json.loads(archive_text)
+                rows = payload if isinstance(payload, list) else payload.get("articles", []) if isinstance(payload, dict) else []
+                archive_row = next(
+                    (
+                        dict(row) for row in rows
+                        if isinstance(row, dict)
+                        and _normalize_existing_article_slug(row.get("slug")) == slug
+                    ),
+                    None,
+                )
+            except Exception:
+                archive_row = None
+        return {
+            "revision": revision,
+            "html": page_html,
+            "archive_row": archive_row,
+        }
+    return None
+
+
+def _repair_tow_yard_permalink_regression(output_root=None):
+    """Restore the Oct. 2 Garry's Towing canonical after the Oct. 3 redirect escape.
+
+    This is intentionally slug-scoped.  It repairs only the two public permalinks
+    proven to represent the same Oct. 2-3 incident and removes the unrelated Aug. 3
+    road-rage target.  The substantive Oct. 2 page/metadata are recovered from git
+    history when a previous run already replaced them with redirect output.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    archive_path = root / "archive.json"
+    articles_dir = root / "articles"
+    manifest_path = root / "data" / "canonical-redirects.json"
+    canonical_slug = TOW_YARD_CANONICAL_SLUG
+    aliases = set(TOW_YARD_REDIRECT_SOURCE_SLUGS)
+
+    if not archive_path.is_file() or not articles_dir.is_dir():
+        return {"status": "not_applicable", "repaired": 0, "reason": "publication_files_missing"}
+
+    archive = load_archive(archive_path)
+    archive_by_slug = {
+        _normalize_existing_article_slug(row.get("slug")): row
+        for row in archive if isinstance(row, dict) and row.get("slug")
+    }
+    manifest = _read_json_file(manifest_path, {"redirects": []})
+    manifest_rows = list(manifest.get("redirects", []) or []) if isinstance(manifest, dict) else []
+    manifest_sources = {
+        _normalize_existing_article_slug(row.get("source_slug"))
+        for row in manifest_rows if isinstance(row, dict)
+    }
+    canonical_path = articles_dir / f"{canonical_slug}.html"
+    alias_paths = {slug: articles_dir / f"{slug}.html" for slug in aliases}
+    signal = bool(
+        canonical_slug in archive_by_slug
+        or any(slug in archive_by_slug for slug in aliases)
+        or canonical_slug in manifest_sources
+        or any(slug in manifest_sources for slug in aliases)
+        or canonical_path.exists()
+        or any(path.exists() for path in alias_paths.values())
+    )
+    if not signal:
+        return {"status": "not_applicable", "repaired": 0, "reason": "incident_not_present"}
+
+    old_html = canonical_path.read_text(encoding="utf-8", errors="ignore") if canonical_path.exists() else ""
+    alias_html = ""
+    alias_html_slug = ""
+    # Prefer the newest known alias if more than one substantive page survived.
+    # This preserves the latest reporting while rebinding it to the established
+    # Oct. 2 permalink.
+    for slug in sorted(alias_paths, reverse=True):
+        path = alias_paths[slug]
+        if not path.exists():
+            continue
+        candidate = path.read_text(encoding="utf-8", errors="ignore")
+        if candidate and not _is_canonical_redirect_html(candidate):
+            alias_html = candidate
+            alias_html_slug = slug
+            break
+
+    current_old_row = archive_by_slug.get(canonical_slug)
+    current_alias_row = next(
+        (
+            archive_by_slug.get(slug)
+            for slug in sorted(aliases, reverse=True)
+            if archive_by_slug.get(slug)
+        ),
+        None,
+    )
+
+    # If the canonical is already substantive, every known alias points to it, and
+    # no alias remains in the archive as a standalone publication, this incident is
+    # already healthy. Avoid rewriting durable metadata on every hourly run.
+    by_source = {
+        _normalize_existing_article_slug(row.get("source_slug")): row
+        for row in manifest_rows if isinstance(row, dict) and row.get("source_slug")
+    }
+    alias_state_healthy = all(
+        str((by_source.get(slug) or {}).get("target_slug") or "") == canonical_slug
+        for slug in aliases
+    )
+    if (
+        isinstance(current_old_row, dict)
+        and old_html
+        and not _is_canonical_redirect_html(old_html)
+        and canonical_slug not in by_source
+        and not any(slug in archive_by_slug for slug in aliases)
+        and alias_state_healthy
+    ):
+        return {"status": "already_healthy", "repaired": 0, "reason": "canonical_and_aliases_verified"}
+
+    # Publication time and permalink ownership are historical facts, so never guess
+    # them during emergency recovery. Production checkout has full git history; use
+    # the last substantive Oct. 2 snapshot as the authority whenever available.
+    historical = _latest_substantive_git_article_snapshot(root, canonical_slug)
+    historical_html = str((historical or {}).get("html") or "")
+    historical_row = (historical or {}).get("archive_row")
+
+    substantive_html = alias_html or (
+        old_html if old_html and not _is_canonical_redirect_html(old_html) else historical_html
+    )
+    stable_row = historical_row or current_old_row
+    latest_row = current_alias_row or current_old_row or historical_row
+    if not substantive_html or not isinstance(latest_row, dict) or not isinstance(stable_row, dict):
+        raise RuntimeError(
+            "Tow-yard permalink recovery FAILED: the audited Oct. 2 canonical is "
+            "present in redirect state but no substantive committed article/archive "
+            "snapshot could be recovered. Publication stopped rather than guessing "
+            "permalink ownership or article content."
+        )
+
+    stable_first_published = str(
+        stable_row.get("canonical_first_published_at")
+        or stable_row.get("first_published")
+        or ""
+    ).strip()
+    if not stable_first_published:
+        raise RuntimeError(
+            "Tow-yard permalink recovery FAILED: the Oct. 2 historical publication "
+            "timestamp could not be recovered from committed metadata. Publication "
+            "stopped rather than inventing a timestamp."
+        )
+
+    repaired_row = dict(latest_row)
+    repaired_row["slug"] = canonical_slug
+    repaired_row["canonical_slug"] = canonical_slug
+    repaired_row["publication_id"] = _stable_publication_id(canonical_slug)
+    repaired_row["canonical_publication_id"] = _stable_publication_id(canonical_slug)
+    repaired_row["date"] = str(stable_row.get("date") or "2026-10-02")
+    repaired_row["permalink_origin_date"] = str(
+        stable_row.get("permalink_origin_date") or repaired_row["date"]
+    )
+    repaired_row["first_published"] = stable_first_published
+    repaired_row["canonical_first_published_at"] = stable_first_published
+    if stable_row.get("permalink_origin_headline"):
+        repaired_row["permalink_origin_headline"] = stable_row.get("permalink_origin_headline")
+
+    # Never carry the unrelated road-rage story ID into the repaired canonical.
+    road_rage_row = archive_by_slug.get(ROAD_RAGE_CANONICAL_SLUG) or {}
+    road_rage_story_id = str(road_rage_row.get("editorial_story_id") or "").strip()
+    stable_story_id = str(stable_row.get("editorial_story_id") or "").strip()
+    latest_story_id = str(repaired_row.get("editorial_story_id") or "").strip()
+    safe_story_id = stable_story_id or latest_story_id
+    if road_rage_story_id and safe_story_id == road_rage_story_id:
+        safe_story_id = ""
+    repaired_row["editorial_story_id"] = safe_story_id
+    if not safe_story_id:
+        repaired_row["legacy_identity_status"] = "unresolved"
+        repaired_row.pop("publication_relationship", None)
+        repaired_row.pop("related_parent_slug", None)
+        repaired_row.pop("related_parent_story_id", None)
+
+    new_archive = [
+        row for row in archive
+        if _normalize_existing_article_slug((row or {}).get("slug"))
+        not in ({canonical_slug} | aliases)
+    ]
+    new_archive.append(repaired_row)
+    archive_path.write_text(json.dumps(new_archive, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    if alias_html_slug:
+        substantive_html = _replace_slug_references(
+            substantive_html, {alias_html_slug: canonical_slug}
+        )
+    # A recovered historical page may still contain another audited alias in social
+    # metadata; normalize every known alias to the permanent Oct. 2 URL.
+    substantive_html = _replace_slug_references(
+        substantive_html, {slug: canonical_slug for slug in aliases}
+    )
+    _atomic_write_text(canonical_path, substantive_html)
+
+    # Repair cumulative redirect state immediately.  The final redirect enforcement
+    # pass will render/verify the alias page again after generation.
+    repaired_redirects = []
+    for row in manifest_rows:
+        if not isinstance(row, dict):
+            continue
+        source = _normalize_existing_article_slug(row.get("source_slug"))
+        if source == canonical_slug or source in aliases:
+            continue
+        repaired_redirects.append(row)
+    for alias_slug in sorted(aliases):
+        repaired_redirects.append({
+            "source_slug": alias_slug,
+            "source_headline": str((current_alias_row or {}).get("headline") or ""),
+            "target_slug": canonical_slug,
+            "target_headline": str(repaired_row.get("headline") or ""),
+            "story_stage": "audited-permalink-regression-repair",
+            "match_confidence": 100,
+            "reason": (
+                "Audited duplicate/alternate framing of the Oct. 2 Garry's Towing "
+                "shooting/chase; this alias may only resolve to the established Oct. 2 canonical."
+            ),
+        })
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps({
+        "schema_version": 2,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "redirect_count": len(repaired_redirects),
+        "redirects": repaired_redirects,
+    }, indent=2, ensure_ascii=False), encoding="utf-8")
+    redirect_rules = [
+        f"/articles/{row.get('source_slug')}.html /articles/{row.get('target_slug')}.html 301!"
+        for row in repaired_redirects
+        if row.get("source_slug") and row.get("target_slug")
+    ]
+    (root / "_redirects").write_text(
+        "\n".join(redirect_rules) + ("\n" if redirect_rules else ""),
+        encoding="utf-8",
+    )
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "status": "repaired",
+        "canonical_slug": canonical_slug,
+        "alias_slugs": sorted(aliases),
+        "historical_revision": str((historical or {}).get("revision") or ""),
+        "restored_from_git": bool(historical),
+        "used_current_alias_body": bool(alias_html),
+        "removed_unrelated_redirect_from_canonical": True,
+        "canonical_first_published_at": repaired_row.get("canonical_first_published_at", ""),
+        "canonical_story_id": repaired_row.get("editorial_story_id", ""),
+    }
+    report_path = root / "data" / "tow-yard-permalink-regression-repair.json"
+    _atomic_write_text(report_path, json.dumps(report, indent=2, ensure_ascii=False))
+    return {"status": "repaired", "repaired": 1, **report}
+
 def main():
     global CURRENT_RUN_EDITORIAL_IDENTITIES, CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
     global CROSS_SOURCE_IDENTITY_OBSERVATIONS, CURRENT_RUN_QUARANTINED_STORY_IDS
@@ -39189,6 +39733,12 @@ def main():
         print(
             "  Article slug integrity migrated "
             f"{_slug_migration['migrated']} Unicode permalink(s) to ASCII"
+        )
+    _tow_yard_repair = _repair_tow_yard_permalink_regression(OUTPUT_DIR)
+    if _tow_yard_repair.get("repaired"):
+        print(
+            "  Audited permalink recovery restored the Oct. 2 Garry's Towing "
+            "canonical and rebound the Oct. 3 alias"
         )
     _cache_counts = GENERATION_CACHE.counts()
     print(

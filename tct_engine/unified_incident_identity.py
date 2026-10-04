@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-UNIFIED_INCIDENT_EVIDENCE_VERSION = 4
+UNIFIED_INCIDENT_EVIDENCE_VERSION = 5
 _STORY_EVIDENCE_CACHE: dict[tuple[Any, ...], tuple["UnifiedIncidentEvidence", ...]] = {}
 _STORY_EVIDENCE_CACHE_LIMIT = 10000
 
@@ -91,7 +91,12 @@ def _missing_person_shared_aliases(
 
 def _family(text: str) -> str:
     patterns = (
-        ("road_rage", r"\broad rage\b|\b(?:pit|police) maneuver\b|\brun(?:ning)? .{0,45} off (?:the )?road\b|\bchased? off (?:the )?road\b"),
+        # A law-enforcement PIT maneuver is a pursuit tactic, not evidence that the
+        # underlying incident is road rage.  Keep road-rage identity tied to explicit
+        # road-rage wording or the distinctive act of one civilian forcing another
+        # vehicle off the roadway.  The former bare ``PIT/police maneuver`` branch
+        # contaminated unrelated Martin County pursuit stories.
+        ("road_rage", r"\broad rage\b|\brun(?:ning)? .{0,45} off (?:the )?road\b|\bchased? off (?:the )?road\b|\bforced .{0,45} off (?:the )?road\b"),
         ("wildfire_arson", r"\bwildfire\b|\bbrush fire\b.{0,45}\b(?:arson|set|setting|charged)\b|\b(?:arson|set|setting)\b.{0,45}\b(?:wildfire|brush fire)\b"),
         ("animal_cruelty", r"\banimal cruelty\b|\b(?:dog|cat|animal|pet)\b.{0,55}\b(?:kicked|kicking|abused|abusing|beaten|beating|cruelty)\b|\b(?:kicked|kicking|abused|abusing|beaten|beating|cruelty)\b.{0,55}\b(?:dog|cat|animal|pet)\b"),
         ("animal_rescue", r"\b(?:cat|cats|dog|dogs|animal|animals|hamster|pets?)\b.{0,45}\b(?:rescue|rescued|saved)\b|\b(?:rescue|rescued|saved)\b.{0,45}\b(?:cat|cats|dog|dogs|animal|animals|hamster|pets?)\b"),
@@ -305,8 +310,13 @@ def build_unified_incident_evidence(
     # from the distinctive token set prevents a broad city/county name from
     # masquerading as independent evidence.
     distinctive = _tokens(text) - _GENERIC - location_tokens - agency_tokens
+    # Prefer the event family stated by the article's own headline.  A persistent
+    # story can contain accumulated facts from several historical members; using
+    # those pooled facts to classify every title can propagate a prior bad merge.
+    # Fall back to the full article evidence only when the headline itself is silent.
+    title_family = _family(_norm(title_text))
     return UnifiedIncidentEvidence(
-        family=_family(normalized),
+        family=title_family if title_family != "unknown" else _family(normalized),
         concepts=tuple(sorted(_concepts(text))),
         people=tuple(sorted(_person_names(text))),
         locations=tuple(sorted(normalized_locations)),
