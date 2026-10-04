@@ -1716,27 +1716,84 @@ def _render_card(event: dict[str, Any]) -> str:
 </article>'''
 
 
+def _event_effective_end(event: dict[str, Any]) -> datetime | None:
+    """Return the point after which an event should no longer appear as current.
+
+    Explicit source end times win. Date-only/all-day/unknown-time events remain
+    eligible through the end of their calendar day. Timed events with no end use
+    the same conservative four-hour lifetime used during ingestion.
+    """
+    start = _parse_iso_datetime(event.get("starts_at"))
+    if start is None:
+        return None
+    end = _parse_iso_datetime(event.get("ends_at"))
+    if end is not None:
+        return end
+    if event.get("all_day") or event.get("time_known") is False:
+        return start.replace(hour=23, minute=59, second=59, microsecond=0)
+    return start + timedelta(hours=4)
+
+
+def _events_for_display(
+    events: list[dict[str, Any]],
+    *,
+    now: datetime | None = None,
+) -> list[dict[str, Any]]:
+    """Filter elapsed events and keep old-start ongoing events out of the lead slot.
+
+    Today's still-live events lead. Multi-day events that began on an earlier day
+    remain discoverable, but follow today's events instead of pinning an old date
+    to the top of the calendar. Future dates follow after that.
+    """
+    current = (now or _now_local()).astimezone(TZ)
+    today = current.date()
+    kept: list[dict[str, Any]] = []
+    for event in events:
+        start = _parse_iso_datetime(event.get("starts_at"))
+        effective_end = _event_effective_end(event)
+        if start is None or effective_end is None or effective_end < current:
+            continue
+        kept.append(event)
+
+    def sort_key(event: dict[str, Any]) -> tuple[Any, ...]:
+        start = _parse_iso_datetime(event.get("starts_at")) or current
+        effective_end = _event_effective_end(event) or start
+        if start.date() == today:
+            bucket = 0
+            temporal = start
+        elif start.date() < today:
+            bucket = 1
+            temporal = effective_end
+        else:
+            bucket = 2
+            temporal = start
+        return (bucket, temporal, _clean(event.get("title")).lower())
+
+    return sorted(kept, key=sort_key)
+
+
 def _render_dynamic(events: list[dict[str, Any]], status: dict[str, Any]) -> str:
     generated = _parse_iso_datetime(status.get("generated_at"))
     updated = generated.strftime("%b %-d, %Y at %-I:%M %p") if generated else "not yet"
-    initial_events = events[:INITIAL_EVENT_ROWS]
+    display_events = _events_for_display(events)
+    initial_events = display_events[:INITIAL_EVENT_ROWS]
     cards = "\n".join(_render_card(event) for event in initial_events)
     if not cards:
         cards = '''<div class="events-empty events-empty--initial"><strong>The calendar is refreshing.</strong><span>We couldn't load a current event listing yet. Check back shortly.</span></div>'''
-    visible_count = min(len(events), INITIAL_EVENT_ROWS)
-    remaining = max(0, len(events) - visible_count)
+    visible_count = min(len(display_events), INITIAL_EVENT_ROWS)
+    remaining = max(0, len(display_events) - visible_count)
     next_count = min(INITIAL_EVENT_ROWS, remaining)
     more_hidden = " hidden" if remaining == 0 else ""
     more_label = f"View {next_count} more" if next_count else "View more"
     return f'''{DYNAMIC_START}
 <section class="events-results" aria-live="polite">
-  <div class="events-results-head"><p><strong data-events-count>{len(events)}</strong> upcoming events</p><p class="events-updated">Updated {html_lib.escape(updated)} ET</p></div>
+  <div class="events-results-head"><p><strong data-events-count>{len(display_events)}</strong> upcoming events</p><p class="events-updated">Updated {html_lib.escape(updated)} ET</p></div>
   <div class="events-list" data-events-list>
 {cards}
   </div>
   <div class="events-more-wrap" data-events-more-wrap{more_hidden}>
     <button class="events-more" type="button" data-events-more>{html_lib.escape(more_label)}</button>
-    <span class="events-showing" data-events-showing>Showing {visible_count} of {len(events)}</span>
+    <span class="events-showing" data-events-showing>Showing {visible_count} of {len(display_events)}</span>
   </div>
   <div class="events-empty" data-events-empty hidden><strong>No events match those filters.</strong><span>Try another county, category or date range.</span></div>
 </section>
@@ -1793,8 +1850,9 @@ def _ensure_time_fallback_js(text: str) -> str:
 def _render_page(events: list[dict[str, Any]], status: dict[str, Any]) -> None:
     text = EVENTS_HTML_PATH.read_text(encoding="utf-8")
     text = _ensure_time_fallback_js(text)
+    display_events = _events_for_display(events)
     text = _replace_between(text, DYNAMIC_START, DYNAMIC_END, _render_dynamic(events, status))
-    payload = json.dumps(_jsonld_payload(events), ensure_ascii=False, separators=(",", ":"))
+    payload = json.dumps(_jsonld_payload(display_events), ensure_ascii=False, separators=(",", ":"))
     jsonld = f'{JSONLD_START}\n<script type="application/ld+json" data-tct-events-jsonld>{payload}</script>\n{JSONLD_END}'
     text = _replace_between(text, JSONLD_START, JSONLD_END, jsonld)
     _atomic_text(EVENTS_HTML_PATH, text)
@@ -1839,7 +1897,7 @@ def validate_outputs() -> None:
         raise RuntimeError("events.html still contains the retired coming-soon experience")
     page_soup = BeautifulSoup(page, "html.parser")
     rendered_cards = page_soup.select("article.event-card")
-    expected_initial = min(len(events), INITIAL_EVENT_ROWS)
+    expected_initial = min(len(_events_for_display(events)), INITIAL_EVENT_ROWS)
     if len(rendered_cards) != expected_initial:
         raise RuntimeError(
             f"events.html must server-render exactly {expected_initial} initial event cards, found {len(rendered_cards)}"
@@ -1864,6 +1922,9 @@ def validate_outputs() -> None:
         "const countySelect = document.querySelector('[data-events-county]');",
         "const categorySelect = document.querySelector('[data-events-category]');",
         "state.range === 'next_weekend'",
+        "const eventIsLive = (event, today, nowMs) =>",
+        "const displayBucket = (event, today) =>",
+        "refreshFromInteraction();",
         "if (moreButton) moreButton.addEventListener('click'",
     ):
         if js_contract not in page:
