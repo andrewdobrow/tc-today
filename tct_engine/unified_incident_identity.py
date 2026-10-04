@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-UNIFIED_INCIDENT_EVIDENCE_VERSION = 5
+UNIFIED_INCIDENT_EVIDENCE_VERSION = 6
 _STORY_EVIDENCE_CACHE: dict[tuple[Any, ...], tuple["UnifiedIncidentEvidence", ...]] = {}
 _STORY_EVIDENCE_CACHE_LIMIT = 10000
 
@@ -28,6 +28,20 @@ _GENERIC = frozenset({
     "murder", "suicide", "domestic", "related", "victim", "suspect",
     "identified", "identify", "identifies", "dies", "died", "fatal",
     "collision", "wreck", "driver", "rider", "person", "people",
+})
+
+# Geographic names can appear immediately after verbs such as ``find`` or
+# ``searching for`` and therefore resemble a two-token person name to the small
+# deterministic name extractor.  Never let a Treasure Coast place become a
+# missing-person identity anchor.  This list is intentionally local and explicit
+# rather than attempting a fuzzy place/person classifier.
+_NONPERSON_NAME_ALIASES = frozenset({
+    "fort pierce", "port st lucie", "port saint lucie", "st lucie",
+    "saint lucie", "st lucie county", "saint lucie county", "vero beach",
+    "jensen beach", "hobe sound", "palm city", "port salerno", "indian river",
+    "indian river county", "martin county", "palm beach", "palm beach county",
+    "fort myers", "jupiter island", "sewall s point", "rio", "stuart",
+    "sebastian", "fellsmere", "indialantic", "treasure coast",
 })
 
 
@@ -48,12 +62,16 @@ def _overlap(left: set[str], right: set[str]) -> float:
 
 def _person_alias_key(value: object) -> str:
     """Normalize a person to first + surname, ignoring middle names/suffix drift."""
-    parts = [token for token in _WORD_RE.findall(str(value or "").casefold()) if token]
+    normalized = _norm(value)
+    if not normalized or normalized in _NONPERSON_NAME_ALIASES:
+        return ""
+    parts = [token for token in _WORD_RE.findall(normalized) if token]
     while parts and parts[-1] in {"jr", "sr", "ii", "iii", "iv", "v"}:
         parts.pop()
     if len(parts) < 2:
         return ""
-    return f"{parts[0]} {parts[-1]}"
+    alias = f"{parts[0]} {parts[-1]}"
+    return "" if alias in _NONPERSON_NAME_ALIASES else alias
 
 
 def _missing_person_shared_aliases(
@@ -102,9 +120,9 @@ def _family(text: str) -> str:
         ("animal_rescue", r"\b(?:cat|cats|dog|dogs|animal|animals|hamster|pets?)\b.{0,45}\b(?:rescue|rescued|saved)\b|\b(?:rescue|rescued|saved)\b.{0,45}\b(?:cat|cats|dog|dogs|animal|animals|hamster|pets?)\b"),
         (
             "missing_person",
-            r"\b(?:missing|reported missing|went missing|last seen)\b.{0,90}\b(?:person|child|boy|girl|teen|teenager|man|woman|student)\b"
+            r"\b(?:missing|reported missing|went missing|last seen)\b.{0,90}\b(?:person|child|boy|girl|teen|teenager|man|woman|father|mother|male|female|student)\b"
             r"|\b(?:help|search|seek|seeking|find|finding|locate|locating)\b.{0,75}\b(?:missing|last seen|autistic|teen|boy|girl|child)\b"
-            r"|\b(?:person|child|boy|girl|teen|teenager|man|woman|student)\b.{0,75}\b(?:missing|last seen|reported missing|went missing)\b"
+            r"|\b(?:person|child|boy|girl|teen|teenager|man|woman|father|mother|male|female|student)\b.{0,75}\b(?:missing|last seen|reported missing|went missing)\b"
             r"|\b(?:search(?:ing)? for|locat(?:e|ing))\b.{0,120}\b(?:disappeared|disappearance|has not been heard from|family has not heard)\b",
         ),
         ("traffic_crash", r"\b(?:crash|collision|wreck|vehicle overturned|hit and run)\b"),
@@ -140,6 +158,8 @@ def _concepts(text: str) -> set[str]:
         ("public_search", r"\b(?:help|search|seek|seeking|find|finding|locate|locating|looking)\b"),
         ("autistic_subject", r"\bautistic\b|\bautism\b"),
         ("minor_subject", r"\b(?:child|boy|girl|teen|teenager|juvenile|minor)\b|\b\d{1,2}\s+year\s+old\b"),
+        ("missing_male_subject", r"\b(?:missing|search(?:ing)? for|looking for|find(?:ing)?|locat(?:e|ing))\b.{0,80}\b(?:man|father|male)\b|\b(?:man|father|male)\b.{0,80}\b(?:missing|last seen|vanished|disappeared)\b"),
+        ("missing_female_subject", r"\b(?:missing|search(?:ing)? for|looking for|find(?:ing)?|locat(?:e|ing))\b.{0,80}\b(?:woman|mother|female)\b|\b(?:woman|mother|female)\b.{0,80}\b(?:missing|last seen|vanished|disappeared)\b"),
         ("grand_oaks", r"\bgrand oaks(?: living facility| senior living| living)?\b"),
         ("coquina_cove", r"\bcoquina cove\b"),
         ("palm_city", r"\bpalm city\b"),
@@ -205,9 +225,8 @@ def _person_names(text: str) -> set[str]:
             value = " ".join(match.group(1).casefold().split())
             names.add(value)
 
-    excluded = {
-        "north carolina", "martin county", "palm beach", "fort myers",
-        "palm city", "grand oaks", "grand oaks living",
+    excluded = set(_NONPERSON_NAME_ALIASES) | {
+        "north carolina", "grand oaks", "grand oaks living",
         "grand oaks living facility", "coquina cove",
         "martin county sheriff", "martin county sheriff office",
         "martin county sheriff s office", "treasure coast today",
@@ -442,10 +461,16 @@ def compare_unified_incident_evidence(
         shared_age = ages_a & ages_b
         age_conflict = bool(ages_a and ages_b and not shared_age)
         person_conflict = bool(people_a and people_b and not effective_shared_people)
-        if age_conflict or person_conflict:
+        male_a = "missing_male_subject" in concepts_a
+        male_b = "missing_male_subject" in concepts_b
+        female_a = "missing_female_subject" in concepts_a
+        female_b = "missing_female_subject" in concepts_b
+        subject_gender_conflict = bool((male_a and female_b) or (female_a and male_b))
+        if age_conflict or person_conflict or (subject_gender_conflict and not effective_shared_people):
             return 0.0, (
                 f"Missing-person age conflict: {age_conflict}",
                 f"Missing-person name conflict: {person_conflict}",
+                f"Missing-person subject gender conflict: {subject_gender_conflict}",
             )
         shared_landmark = shared_concepts & {"grand_oaks", "coquina_cove"}
         shared_profile = shared_concepts & {"autistic_subject", "minor_subject"}
