@@ -760,7 +760,11 @@
       return `${start}–${formatClock(event.ends_at)}`;
     };
     const renderCard = event => {
-      const date = dateBox(event.starts_at);
+      const today = treasureCoastToday().iso;
+      const nowMs = Date.now();
+      const display = eventDisplayState(event, today, nowMs);
+      const date = dateBox(`${display.dateIso}T12:00:00Z`);
+      const startDate = dateBox(event.starts_at);
       const location = [event.venue, event.city].filter(Boolean).join(' · ') || `${event.county || 'Treasure Coast'} County`;
       const detailsUrl = event.detail_url ? String(event.detail_url) : safeUrl(event.event_url || event.source_url);
       const detailAttrs = detailsUrl.startsWith('/') ? '' : ' target="_blank" rel="noopener noreferrer external"';
@@ -772,12 +776,16 @@
       const description = descriptionText ? `<p class="event-desc">${escapeHtml(descriptionText)}</p>` : '';
       const tickets = ticketUrl !== '#' && ticketUrl !== detailsUrl
         ? `<a class="event-ticket" href="${escapeHtml(ticketUrl)}" target="_blank" rel="noopener noreferrer external">Tickets</a>` : '';
-      return `<article class="event-card" data-event-id="${escapeHtml(event.id)}" data-county="${escapeHtml(event.county)}" data-category="${escapeHtml(event.category)}" data-date="${escapeHtml(treasureCoastDate(event.starts_at))}">
-  <div class="event-datebox" aria-label="${escapeHtml(date.label)}"><span>${escapeHtml(date.weekday)}</span><strong>${escapeHtml(date.month)} ${escapeHtml(date.day)}</strong></div>
+      const startMonth = startDate.month ? `${startDate.month.slice(0, 1)}${startDate.month.slice(1).toLowerCase()}` : '';
+      const context = [display.ongoing ? `Started ${startMonth} ${startDate.day}` : '', location].filter(Boolean).join(' · ');
+      const kicker = display.ongoing ? 'ONGOING' : date.weekday;
+      const ariaLabel = display.ongoing ? `Ongoing event on ${date.label}` : date.label;
+      return `<article class="event-card" data-event-id="${escapeHtml(event.id)}" data-county="${escapeHtml(event.county)}" data-category="${escapeHtml(event.category)}" data-date="${escapeHtml(display.dateIso)}">
+  <div class="event-datebox" aria-label="${escapeHtml(ariaLabel)}"><span>${escapeHtml(kicker)}</span><strong>${escapeHtml(date.month)} ${escapeHtml(date.day)}</strong></div>
   <div class="event-card-body">
     <div class="event-card-meta"><span class="event-category">${escapeHtml(event.category)}</span>${price}</div>
     <h2 class="event-title"><a href="${escapeHtml(detailsUrl)}"${detailAttrs}>${escapeHtml(event.title)}</a></h2>
-    <p class="event-whenwhere"><strong>${escapeHtml(time)}</strong>${time && location ? ' · ' : ''}${escapeHtml(location)}</p>
+    <p class="event-whenwhere"><strong>${escapeHtml(time)}</strong>${time && context ? ' · ' : ''}${escapeHtml(context)}</p>
     ${description}
     <div class="event-card-footer"><span>Source: <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer external">${escapeHtml(event.source_name)}</a></span><div class="event-actions"><a href="${escapeHtml(detailsUrl)}"${detailAttrs}>Event details →</a>${tickets}</div></div>
   </div>
@@ -803,6 +811,11 @@
       const eventDate = treasureCoastDate(event.starts_at);
       if (!eventDate || eventDate > today) return true;
       return eventEffectiveEndMs(event) >= nowMs;
+    };
+    const eventDisplayState = (event, today, nowMs) => {
+      const startDate = treasureCoastDate(event.starts_at);
+      const ongoing = Boolean(startDate && startDate < today && eventEffectiveEndMs(event) >= nowMs);
+      return { dateIso: ongoing ? today : startDate, ongoing };
     };
     const eventEndDate = event => event.ends_at ? treasureCoastDate(event.ends_at) : treasureCoastDate(event.starts_at);
     const overlapsRange = (event, startIso, endIso) => {

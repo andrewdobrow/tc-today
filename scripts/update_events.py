@@ -1686,9 +1686,40 @@ def _format_time(event: dict[str, Any]) -> str:
     return f"{start_text}–{end_text}"
 
 
-def _render_card(event: dict[str, Any]) -> str:
-    start = _parse_iso_datetime(event["starts_at"]) or _now_local()
-    weekday, month, day = _date_label(start)
+def _event_display_state(
+    event: dict[str, Any],
+    *,
+    now: datetime | None = None,
+) -> tuple[datetime, bool]:
+    """Return the date shown on the card and whether it is an ongoing multi-day event.
+
+    Once a still-live event crosses into a later Treasure Coast calendar day, the
+    card rolls forward with the reader instead of continuing to advertise the
+    original start date.  The underlying starts_at/ends_at values remain intact
+    for chronology, filtering and event-detail accuracy.
+    """
+    current = (now or _now_local()).astimezone(TZ)
+    start = _parse_iso_datetime(event.get("starts_at"))
+    if start is None:
+        return current, False
+    effective_end = _event_effective_end(event)
+    ongoing = bool(
+        start.date() < current.date()
+        and effective_end is not None
+        and effective_end >= current
+    )
+    return (current if ongoing else start), ongoing
+
+
+def _render_card(event: dict[str, Any], *, now: datetime | None = None) -> str:
+    current = (now or _now_local()).astimezone(TZ)
+    start = _parse_iso_datetime(event["starts_at"]) or current
+    display_date, ongoing = _event_display_state(event, now=current)
+    weekday, month, day = _date_label(display_date)
+    date_kicker = "ONGOING" if ongoing else weekday
+    date_aria = display_date.strftime("%A, %B %-d, %Y")
+    if ongoing:
+        date_aria = f"Ongoing event on {date_aria}"
     esc = html_lib.escape
     venue_parts = [event.get("venue"), event.get("city")]
     location = " · ".join(_clean(x) for x in venue_parts if _clean(x))
@@ -1704,12 +1735,19 @@ def _render_card(event: dict[str, Any]) -> str:
     description_html = f'<p class="event-desc">{esc(description)}</p>' if description else ""
     price_html = f'<span class="event-price">{esc(price)}</span>' if price else ""
     source_name = _clean(event.get("source_name")).replace(" — ", " | ").replace("—", "-")
-    return f'''<article class="event-card" data-event-id="{esc(event['id'])}" data-county="{esc(event['county'])}" data-category="{esc(event['category'])}" data-date="{esc(start.date().isoformat())}">
-  <div class="event-datebox" aria-label="{esc(start.strftime('%A, %B %-d, %Y'))}"><span>{weekday}</span><strong>{month} {day}</strong></div>
+    time_text = _format_time(event)
+    context_parts: list[str] = []
+    if ongoing:
+        context_parts.append(f"Started {start.strftime('%b %-d')}")
+    if location:
+        context_parts.append(location)
+    context_text = " · ".join(context_parts)
+    return f'''<article class="event-card" data-event-id="{esc(event['id'])}" data-county="{esc(event['county'])}" data-category="{esc(event['category'])}" data-date="{esc(display_date.date().isoformat())}">
+  <div class="event-datebox" aria-label="{esc(date_aria)}"><span>{date_kicker}</span><strong>{month} {day}</strong></div>
   <div class="event-card-body">
     <div class="event-card-meta"><span class="event-category">{esc(event['category'])}</span>{price_html}</div>
     <h2 class="event-title"><a href="{esc(details_url, quote=True)}" target="_blank" rel="noopener noreferrer external">{esc(event['title'])}</a></h2>
-    <p class="event-whenwhere"><strong>{esc(_format_time(event))}</strong>{' · ' if _format_time(event) and location else ''}{esc(location)}</p>
+    <p class="event-whenwhere"><strong>{esc(time_text)}</strong>{' · ' if time_text and context_text else ''}{esc(context_text)}</p>
     {description_html}
     <div class="event-card-footer"><span>Source: <a href="{esc(event['source_url'], quote=True)}" target="_blank" rel="noopener noreferrer external">{esc(source_name)}</a></span><div class="event-actions"><a href="{esc(details_url, quote=True)}" target="_blank" rel="noopener noreferrer external">Event details →</a>{secondary}</div></div>
   </div>
@@ -1775,9 +1813,10 @@ def _events_for_display(
 def _render_dynamic(events: list[dict[str, Any]], status: dict[str, Any]) -> str:
     generated = _parse_iso_datetime(status.get("generated_at"))
     updated = generated.strftime("%b %-d, %Y at %-I:%M %p") if generated else "not yet"
-    display_events = _events_for_display(events)
+    current = _now_local()
+    display_events = _events_for_display(events, now=current)
     initial_events = display_events[:INITIAL_EVENT_ROWS]
-    cards = "\n".join(_render_card(event) for event in initial_events)
+    cards = "\n".join(_render_card(event, now=current) for event in initial_events)
     if not cards:
         cards = '''<div class="events-empty events-empty--initial"><strong>The calendar is refreshing.</strong><span>We couldn't load a current event listing yet. Check back shortly.</span></div>'''
     visible_count = min(len(display_events), INITIAL_EVENT_ROWS)
@@ -1923,6 +1962,7 @@ def validate_outputs() -> None:
         "const categorySelect = document.querySelector('[data-events-category]');",
         "state.range === 'next_weekend'",
         "const eventIsLive = (event, today, nowMs) =>",
+        "const eventDisplayState = (event, today, nowMs) =>",
         "const displayBucket = (event, today) =>",
         "refreshFromInteraction();",
         "if (moreButton) moreButton.addEventListener('click'",
