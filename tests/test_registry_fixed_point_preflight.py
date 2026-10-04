@@ -530,7 +530,10 @@ def test_registry_preflight_does_not_rejoin_timeline_split_siblings_via_named_de
     persisted = json.loads(path.read_text(encoding="utf-8"))
 
     assert result["verification_clean"] is True
-    assert result["repair_passes"] == 3
+    # Unified incident evidence v5 no longer treats a police PIT tactic as road rage
+    # and therefore avoids one unnecessary merge/split convergence cycle in this
+    # legacy-contamination fixture. Two passes are now the expected fixed point.
+    assert result["repair_passes"] == 2
     assert len(persisted["stories"]) == 2
     assert normalize_registry(path)["changed"] is False
 
@@ -540,7 +543,9 @@ def test_registry_preflight_does_not_rejoin_timeline_split_siblings_via_named_de
         for row in story.get("timeline", ())
     ]
     assert {row["article_id"] for row in rows} == {"rss-shark", "rss-crash"}
-    assert all(
-        "story_002044" in (story.get("timeline_coherence_split_roots") or [])
-        for story in persisted["stories"].values()
-    )
+    # v5 prevents the bad unified-incident merge before a timeline split is needed,
+    # so no split-lineage marker is required. The stronger invariant is that the
+    # two timelines remain separate and no alias edge reconnects them.
+    aliases = persisted.get("story_aliases") or {}
+    assert aliases.get("story_002044") != "story_012307"
+    assert aliases.get("story_012307") != "story_002044"
