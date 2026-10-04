@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-04T01:09:34Z",
+  "generated_at": "2026-10-04T01:47:50Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,33 +15,35 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
-      "generated_live": 4
+      "category_eligibility_archive_recovery": 7,
+      "generated_live": 1,
+      "generation_failed_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 5
+      "contextless_update_lead": 1,
+      "no_category_eligible_sources": 7
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 68.67,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 3,
+    "model_elapsed_seconds": 55.759,
+    "archive_recovery_requested_count": 8,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 2,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 53,
+    "published_story_duplicate_suppression_count": 59,
     "story_aware_update_context_count": 4,
-    "material_update_promotion_evaluation_count": 11,
+    "material_update_promotion_evaluation_count": 15,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 4,
-    "material_update_promotion_model_call_count": 7
+    "material_update_promotion_cache_hit_count": 7,
+    "material_update_promotion_model_call_count": 8
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 16,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 15,
       "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -161,7 +163,7 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - cbs12.com",
+          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
           "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
           "editorial_story_id": "story_018861",
           "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
@@ -277,8 +279,8 @@
           "shared_anchors": [],
           "novel_facts": [
             "21-year-old Okeechobee woman killed in crash with tractor-trailer",
-            "Crash occurred at State Road 710 and Southeast 86th Boulevard",
-            "Victim died at HCA Florida Lawnwood Hospital"
+            "Crash occurred at intersection of State Road 710 and Southeast 86th Boulevard",
+            "Incident happened Thursday around 1 p.m."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -332,7 +334,7 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - cbs12.com",
+          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
           "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
           "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
           "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
@@ -389,30 +391,23 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.787
+      "elapsed_seconds": 24.374
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 6,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 4,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.526,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 16.526,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Crime & Safety category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -421,7 +416,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -449,12 +444,22 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - cbs12.com",
+          "headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
           "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach"
         }
       ],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 13,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "17-year-old killed in late-night shooting near Vero Beach boat ramp - WPEC",
+          "source_url": "https://cbs12.com/news/local/17-year-old-killed-in-late-night-shooting-near-vero-beach-boat-ramp-indian-river-county-indian-river-county-sheriffs-office-indian-river-county-shooting-teen-shooting-17-year-old-shot-17-year-old-killed-juvenile-shooting-deadly-shooting-fatal",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County",
@@ -473,6 +478,16 @@
           "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
           "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Tow yard shooting leads to two arrests, multiple crashes in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news",
+          "editorial_story_id": "story_018871",
+          "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
+          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -507,6 +522,16 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+          "editorial_story_id": "story_018871",
+          "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
           "editorial_story_id": "story_018871",
@@ -527,7 +552,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - cbs12.com",
+          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
           "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
           "editorial_story_id": "story_018861",
           "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
@@ -537,7 +562,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Case reopened: Port St. Lucie TikTok creator jailed on computer-access charge - cbs12.com",
+          "source_headline": "Case reopened: Port St. Lucie TikTok creator jailed on computer-access charge - WPEC",
           "source_url": "https://cbs12.com/news/instagram/case-reopened-months-after-arrest-of-port-st-lucie-man-accused-of-cyberstalking",
           "editorial_story_id": "story_018657",
           "canonical_slug": "2026-10-01-port-st-lucie-tiktok-creator-jailed-as-device-access-case-reopened",
@@ -556,50 +581,10 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Tow yard shooting leads to two arrests, multiple crashes in Martin County - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
-          "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_018871",
-            "source:https://cbs12.com/news/local/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county']",
-            "shared_event_families=['crash', 'shooting', 'vehicle-chase']",
-            "shared_named_people=['valerie valdes']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['com', 'lead', 'shoot', 'tow', 'yard']",
-            "shared_distinctive_token_count=97",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - cbs12.com",
+          "source_headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
           "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-10-01-martin-county-deputies-search-for-missing-autistic-man-last-seen-in-jensen-beach",
@@ -622,11 +607,39 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 4,
+      "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 4,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 5,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "17-year-old killed in late-night shooting near Vero Beach boat ramp - WPEC",
+          "source_url": "https://cbs12.com/news/local/17-year-old-killed-in-late-night-shooting-near-vero-beach-boat-ramp-indian-river-county-indian-river-county-sheriffs-office-indian-river-county-shooting-teen-shooting-17-year-old-shot-17-year-old-killed-juvenile-shooting-deadly-shooting-fatal",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.9,
+          "shared_anchors": [
+            "17-year-old boy",
+            "Garcia's Boat Ramp",
+            "Friday night shooting",
+            "Indian River County Sheriff's Office",
+            "same date of death report"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles report the same fatal shooting of a 17-year-old near Garcia's Boat Ramp in Indian River County on the same Friday night, investigated by the same sheriff's office. The incoming article contains no new facts beyond what the canonical already reports (e.g., school enrollment status); it lacks the school district detail present in the canonical, making it less complete, not more.",
+          "validation_errors": []
+        },
         {
           "category_key": "crime",
           "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County",
@@ -658,17 +671,53 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
+          "confidence": 0.97,
           "shared_anchors": [
             "Jade Rondon",
             "Valerie Valdes",
-            "Gary's Towing and Recovery, 4405 SE Cove Road",
-            "Martin County Sheriff John Budensiek",
-            "same source_url",
-            "Friday shooting, chase, crash, school lockout"
+            "Gary's Towing and Recovery",
+            "Cove Road",
+            "Martin County Sheriff",
+            "Murray Middle School lockout",
+            "same source_url"
           ],
           "novel_facts": [],
-          "reason": "Identical source URL, same named suspects, same location, sheriff quote, and sequence of events already covered by the existing canonical article with the same known_event_key. No new charges, injuries, or developments are reported beyond what's already captured.",
+          "reason": "Same source URL and identical incident with same named suspects, location, charges, and school lockout detail already reported in the canonical article; no new material facts beyond minor rewording.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Tow yard shooting leads to two arrests, multiple crashes in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news",
+          "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.9,
+          "shared_anchors": [
+            "Jade Rondon",
+            "Valerie Valdes",
+            "Gary's Towing and Recovery",
+            "Southeast Cove Road",
+            "Murray Middle School lockout",
+            "Martin County Sheriff's Office",
+            "US-1 crash/chase"
+          ],
+          "novel_facts": [
+            "Specific charges listed for both women",
+            "Quote from tow yard owner Gary Reed",
+            "School's lockout message text",
+            "PIT maneuver detail"
+          ],
+          "reason": "Both articles describe the identical incident: Rondon's shooting at the tow yard, the school lockout, Valdes's crash on US-1, and both women's arrests. The candidate already reports both women were charged, so the incoming article's additional charge specifics and quotes are elaboration, not material new developments like an identification, death, or new arrest not already captured.",
           "validation_errors": []
         },
         {
@@ -705,9 +754,9 @@
           "confidence": 0.98,
           "shared_anchors": [],
           "novel_facts": [
-            "21-year-old Okeechobee woman killed in crash with tractor-trailer",
-            "Crash occurred at T-intersection of State Road 710 and SE 86th Boulevard",
-            "Incident occurred Thursday around 1 p.m."
+            "Fatal crash on State Road 710 at Southeast 86th Boulevard involving a 21-year-old Okeechobee woman and a tractor-trailer",
+            "Victim died at HCA Florida Lawnwood Hospital",
+            "FHP investigation of a traffic crash"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -722,6 +771,21 @@
           "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "2 women arrested after shooting at Martin County tow yard sparked a chase and crash, more charges possible",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/miami-woman-in-custody-after-shooting-at-tow-yard-near-murray-middle-school-in-martin-county",
+          "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -761,7 +825,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - cbs12.com",
+          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
           "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
           "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
           "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
@@ -776,7 +840,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Case reopened: Port St. Lucie TikTok creator jailed on computer-access charge - cbs12.com",
+          "source_headline": "Case reopened: Port St. Lucie TikTok creator jailed on computer-access charge - WPEC",
           "source_url": "https://cbs12.com/news/instagram/case-reopened-months-after-arrest-of-port-st-lucie-man-accused-of-cyberstalking",
           "canonical_slug": "2026-10-01-port-st-lucie-tiktok-creator-jailed-as-device-access-case-reopened",
           "canonical_headline": "Port St. Lucie TikTok Creator Jailed as Device-Access Case Reopened",
@@ -785,8 +849,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -794,12 +858,13 @@
           "shared_anchors": [
             "Mark Stephen Asea",
             "Port St. Lucie",
-            "St. Lucie County Jail booking",
+            "St. Lucie County Jail",
             "offense against computer users charge",
-            "case reopened after May closure"
+            "case reopened after May closure",
+            "same source article (WPEC/CBS12)"
           ],
           "novel_facts": [],
-          "reason": "This is the same arrest and reopened investigation of Mark Stephen Asea reported the prior day, with identical details (charge, bond, booking, affidavit specifics). No new facts such as additional charges, court action, or further developments are present; it appears to be a republished or near-duplicate version of the same article.",
+          "reason": "This is the same event already covered by the canonical article from the prior day, same person, same arrest, same charge, same source. The incoming article adds minor details (bond amount, booking photo description, affidavit quotes) but these are elaboration/background, not material new developments like a new charge, court outcome, or status change.",
           "validation_errors": []
         },
         {
@@ -818,12 +883,13 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.97,
+          "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Four-car crash on US-1 near SE Federal Highway in Hobe Sound",
-            "Martin County Fire Rescue treated four patients with minor injuries",
-            "Occurred just before 2 p.m. Friday, northbound lanes closed"
+            "Four-car crash in Hobe Sound on US-1 near SE Federal Highway",
+            "Occurred Friday around 2 p.m.",
+            "Four patients treated with minor injuries by Martin County Fire Rescue",
+            "Northbound lanes of US-1 closed"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -832,11 +898,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "17-Year-Old Killed in Shooting Near Vero Beach Boat Ramp, Deputies Seek Witnesses",
-      "generated_card_count": 1,
-      "elapsed_seconds": 39.843
+      "elapsed_seconds": 33.504
     },
     {
       "category_key": "business",
@@ -844,7 +906,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 14,
-      "publishable_source_count": 5,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1041,9 +1103,9 @@
           "confidence": 0.98,
           "shared_anchors": [],
           "novel_facts": [
-            "Fatal crash on State Road 710 at Southeast 86th Boulevard involving a tractor-trailer",
-            "21-year-old Okeechobee woman killed",
-            "Occurred Thursday around 1 p.m."
+            "21-year-old Okeechobee woman killed in crash with tractor-trailer",
+            "Crash occurred at SR 710 and SE 86th Boulevard",
+            "Victim died at HCA Florida Lawnwood Hospital"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1156,8 +1218,8 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 15.732
+      "new_publication_stale_rejected_count": 4,
+      "elapsed_seconds": 18.678
     },
     {
       "category_key": "sports",
@@ -1194,8 +1256,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 8.129
+      "new_publication_stale_rejected_count": 3,
+      "elapsed_seconds": 8.257
     },
     {
       "category_key": "things_to_do",
@@ -1250,7 +1312,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.821
+      "elapsed_seconds": 10.509
     },
     {
       "category_key": "florida",
@@ -1288,30 +1350,40 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 6.796
+      "elapsed_seconds": 8.178
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 29.858,
-          "result": "success"
+          "elapsed_seconds": 19.414,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Four-car crash near SE Federal Highway on US-1 prompts lane closures in Hobe Sound - WPEC"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 19.846,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Four-car crash near SE Federal Highway on US-1 prompts lane closures in Hobe Sound - WPEC"
         }
       ],
-      "model_elapsed_seconds": 29.858,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 39.26,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — Four-car crash near SE Federal Highway on US-1 prompts lane closures in Hobe Sound - WPEC",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1320,10 +1392,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -1337,7 +1409,17 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms",
+          "source_headline": "Tow yard shooting leads to two arrests, multiple crashes in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news",
+          "editorial_story_id": "story_018871",
+          "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms - WPTV",
           "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
           "editorial_story_id": "story_018896",
           "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
@@ -1347,7 +1429,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms - WPTV",
+          "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms",
           "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
           "editorial_story_id": "story_018896",
           "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
@@ -1387,7 +1469,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - cbs12.com",
+          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
           "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
           "editorial_story_id": "story_018861",
           "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
@@ -1406,50 +1488,10 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Tow yard shooting leads to two arrests, multiple crashes in Martin County - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
-          "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_018871",
-            "source:https://cbs12.com/news/local/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county']",
-            "shared_event_families=['crash', 'shooting', 'vehicle-chase']",
-            "shared_named_people=['valerie valdes']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['com', 'lead', 'shoot', 'tow', 'yard']",
-            "shared_distinctive_token_count=97",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - cbs12.com",
+          "source_headline": "Search underway for missing autistic man last seen at Jensen Beach home Thursday morning - WPEC",
           "source_url": "https://cbs12.com/news/local/search-underway-for-missing-autistic-man-last-seen-at-jensen-beach-home-thursday-morning-florida-news-florida-missing-persons-autistic-adult-missing-jensen-beach",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-10-01-martin-county-deputies-search-for-missing-autistic-man-last-seen-in-jensen-beach",
@@ -1472,9 +1514,9 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 3,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -1493,22 +1535,58 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
+          "confidence": 0.97,
           "shared_anchors": [
             "Jade Rondon",
             "Valerie Valdes",
-            "Gary's Towing and Recovery, 4405 SE Cove Road",
-            "Martin County Sheriff John Budensiek",
-            "same source_url",
-            "Friday shooting, chase, crash, school lockout"
+            "Gary's Towing and Recovery",
+            "Cove Road",
+            "Martin County Sheriff",
+            "Murray Middle School lockout",
+            "same source_url"
           ],
           "novel_facts": [],
-          "reason": "Identical source URL, same named suspects, same location, sheriff quote, and sequence of events already covered by the existing canonical article with the same known_event_key. No new charges, injuries, or developments are reported beyond what's already captured.",
+          "reason": "Same source URL and identical incident with same named suspects, location, charges, and school lockout detail already reported in the canonical article; no new material facts beyond minor rewording.",
           "validation_errors": []
         },
         {
           "category_key": "martin",
-          "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms",
+          "source_headline": "Tow yard shooting leads to two arrests, multiple crashes in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/woman-custody-martin-county-tow-yard-shooting-leads-pursuit-pit-maneuver-shooting-investigation-us-1-murray-middle-school-woman-in-custody-treasure-coast-crime-florida-news",
+          "canonical_slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "canonical_headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.9,
+          "shared_anchors": [
+            "Jade Rondon",
+            "Valerie Valdes",
+            "Gary's Towing and Recovery",
+            "Southeast Cove Road",
+            "Murray Middle School lockout",
+            "Martin County Sheriff's Office",
+            "US-1 crash/chase"
+          ],
+          "novel_facts": [
+            "Specific charges listed for both women",
+            "Quote from tow yard owner Gary Reed",
+            "School's lockout message text",
+            "PIT maneuver detail"
+          ],
+          "reason": "Both articles describe the identical incident: Rondon's shooting at the tow yard, the school lockout, Valdes's crash on US-1, and both women's arrests. The candidate already reports both women were charged, so the incoming article's additional charge specifics and quotes are elaboration, not material new developments like an identification, death, or new arrest not already captured.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms - WPTV",
           "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
           "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
           "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
@@ -1523,7 +1601,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms - WPTV",
+          "source_headline": "'I'm forced to live in this filth': Jensen Beach residents frustrated by recurring septic backups after storms",
           "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
           "canonical_slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
           "canonical_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
@@ -1597,7 +1675,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - cbs12.com",
+          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
           "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
           "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
           "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
@@ -1627,18 +1705,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Second Suspect Arrested After Martin County Tow Yard Shooting, Chase",
-      "generated_card_count": 0,
-      "elapsed_seconds": 43.514
+      "elapsed_seconds": 51.257
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 2,
       "selected_source_count": 2,
       "cache_hit": false,
@@ -1648,11 +1724,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.882,
+          "elapsed_seconds": 16.499,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 15.882,
+      "model_elapsed_seconds": 16.499,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1666,7 +1742,7 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1682,6 +1758,16 @@
           "category_key": "st_lucie",
           "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
           "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident?teaserSource=trending",
+          "editorial_story_id": "story_017306",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQWkxwYXp1U2tSN3l5d0FwbWNrTjdiemVmUVBFQ0VCQWNteEpuZ2FmM1Btdm5tUC1xaVJPMnBXdnVDdmxSeDJ5OGpsZEgwRmx1dE8zbHRkOTd6TllfaW5NNFhyZGdRWnd6YzYxQ3pZQ0ZEMHR2d3pMSkdiMkxoTXVaUXBPRERkTEs4OUk3VGl0SzRsUjQwMlNENFJMVlczWFJRRHhlaWJiWldzOHZIbF9OR1hHLTcxWUl2akNnU05qb1Jwc0o5Tm50anI0cnl0bTZieDFENw",
           "editorial_story_id": "story_017306",
           "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
           "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
@@ -1710,6 +1796,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
+          "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
+          "editorial_story_id": "story_018861",
+          "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+          "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "St. Lucie County teen earns Boys & Girls Clubs' top national honor - WPBF",
           "source_url": "https://www.wpbf.com/article/st-lucie-county-teen-boys-girls-clubs-honor/73994029",
           "editorial_story_id": "story_018864",
@@ -1730,16 +1826,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "'Not knowing where he is': Family searches for missing Port St. Lucie father - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/not-knowing-where-he-is-family-searches-for-missing-port-st-lucie-father-florida-news-local-news-port-st-lucie-man-missing",
-          "editorial_story_id": "story_017306",
-          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "'Who put it up?' Unpermitted license plate readers found in St. Lucie County - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/unpermitted-license-plate-readers-found-in-st-lucie-county",
           "editorial_story_id": "story_018682",
@@ -1747,10 +1833,85 @@
           "canonical_headline": "St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Missing since January: St. Lucie County deputies search for 47-year-old man - WPEC",
+          "source_url": "https://cbs12.com/news/local/47-year-old-man-missing-since-january-8-new-york-giants-tattoo-rosary-with-cross-st-lucie-county-sheriffs-office-florida-news",
+          "editorial_story_id": "story_017306",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "'Not knowing where he is': Family searches for missing Port St. Lucie father - cw34.com",
+          "source_url": "https://cw34.com/news/local/not-knowing-where-he-is-family-searches-for-missing-port-st-lucie-father-florida-news-local-news-port-st-lucie-man-missing?teaserSource=trending",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:missing-person:aubrey-finley",
+            "story:story_017306",
+            "source:https://cw34.com/news/local/not-knowing-where-he-is-family-searches-for-missing-port-st-lucie-father-florida-news-local-news-port-st-lucie-man-missing?teaserSource=trending"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:missing-person:aubrey-finley,story:story_017306",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Video captures SUV crash and rollover near Port St. Lucie Turnpike entrance - cw34.com",
+          "source_url": "https://cw34.com/news/local/video-captures-suv-crash-and-rollover-near-port-st-lucie-turnpike-entrance",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-10-01-video-shows-suv-rollover-on-floridas-turnpike-ramp-near-bayshore-blvd",
+          "canonical_headline": "Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_018669",
+            "source:https://cw34.com/news/local/video-captures-suv-crash-and-rollover-near-port-st-lucie-turnpike-entrance"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['port-st-lucie', 'st-lucie']",
+            "shared_event_families=['crash', 'vehicle-chase']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['bayshore-boulevard']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['captur-suv-crash', 'captur-suv-crash-rollov', 'crash-rollov-near', 'crash-rollov-near-turnpike', 'near-turnpike-entrance', 'rollov-near-turnpike', 'rollov-near-turnpike-entrance', 'suv-crash-rollov', 'suv-crash-rollov-near']",
+            "shared_headline_topic_core=['captur', 'crash', 'entrance', 'near', 'rollov', 'suv', 'turnpike']",
+            "shared_distinctive_token_count=78",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
@@ -1802,16 +1963,31 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.95,
+          "confidence": 0.97,
           "shared_anchors": [],
           "novel_facts": [
             "Vehicle fire on Florida's Turnpike southbound near mile marker 162 in St. Lucie County",
-            "Incident began about 10:56 a.m. Friday, reported by Florida 511"
+            "Incident reported around 10:56 a.m. Friday with closure starting 12:22 p.m."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQWkxwYXp1U2tSN3l5d0FwbWNrTjdiemVmUVBFQ0VCQWNteEpuZ2FmM1Btdm5tUC1xaVJPMnBXdnVDdmxSeDJ5OGpsZEgwRmx1dE8zbHRkOTd6TllfaW5NNFhyZGdRWnd6YzYxQ3pZQ0ZEMHR2d3pMSkdiMkxoTXVaUXBPRERkTEs4OUk3VGl0SzRsUjQwMlNENFJMVlczWFJRRHhlaWJiWldzOHZIbF9OR1hHLTcxWUl2akNnU05qb1Jwc0o5Tm50anI0cnl0bTZieDFENw",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -1836,6 +2012,21 @@
           "canonical_headline": "St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man sentenced to 37 1/2 years in Stuart vape shop shooting - WPEC",
+          "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-joshua-gibbs-sentenced-to-37-years-in-stuart-vape-shop-shooting-millers-vapory-stuart-police-department-ski-mask-douglasville-georgia-arrest-threatened-clerk",
+          "canonical_slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+          "canonical_headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1875,21 +2066,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "'Not knowing where he is': Family searches for missing Port St. Lucie father - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/not-knowing-where-he-is-family-searches-for-missing-port-st-lucie-father-florida-news-local-news-port-st-lucie-man-missing",
-          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "'Who put it up?' Unpermitted license plate readers found in St. Lucie County - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/unpermitted-license-plate-readers-found-in-st-lucie-county",
           "canonical_slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
@@ -1902,37 +2078,45 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Missing since January: St. Lucie County deputies search for 47-year-old man - WPEC",
+          "source_url": "https://cbs12.com/news/local/47-year-old-man-missing-since-january-8-new-york-giants-tattoo-rosary-with-cross-st-lucie-county-sheriffs-office-florida-news",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 2,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie Man Gets 37.5 Years in Stuart Vape Shop Shooting",
+      "live_hero_headline": "Port St. Lucie Man Gets 37.5 Years for Stuart Vape Shop Shooting",
       "generated_card_count": 1,
-      "elapsed_seconds": 30.56
+      "elapsed_seconds": 30.516
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 19,
-      "publishable_source_count": 2,
-      "selected_source_count": 1,
+      "publishable_source_count": 1,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 6.404,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 6.404,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Indian River County category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1941,7 +2125,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 6,
@@ -1950,6 +2134,16 @@
           "category_key": "indian_river",
           "source_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-teen-dies-after-shooting-near-garcias-boat-ramp-in-indian-river-county/74005820",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "17-year-old killed in late-night shooting near Vero Beach boat ramp - WPEC",
+          "source_url": "https://cbs12.com/news/local/17-year-old-killed-in-late-night-shooting-near-vero-beach-boat-ramp-indian-river-county-indian-river-county-sheriffs-office-indian-river-county-shooting-teen-shooting-17-year-old-shot-17-year-old-killed-juvenile-shooting-deadly-shooting-fatal",
           "editorial_story_id": "story_019058",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
           "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
@@ -1974,16 +2168,6 @@
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
           "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/03/17-year-old-dies-after-shooting-near-garcias-boat-ramp-indian-river-county?outputType=amp",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
-          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -2009,9 +2193,9 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -2028,6 +2212,34 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "17-year-old killed in late-night shooting near Vero Beach boat ramp - WPEC",
+          "source_url": "https://cbs12.com/news/local/17-year-old-killed-in-late-night-shooting-near-vero-beach-boat-ramp-indian-river-county-indian-river-county-sheriffs-office-indian-river-county-shooting-teen-shooting-17-year-old-shot-17-year-old-killed-juvenile-shooting-deadly-shooting-fatal",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.9,
+          "shared_anchors": [
+            "17-year-old boy",
+            "Garcia's Boat Ramp",
+            "Friday night shooting",
+            "Indian River County Sheriff's Office",
+            "same date of death report"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles report the same fatal shooting of a 17-year-old near Garcia's Boat Ramp in Indian River County on the same Friday night, investigated by the same sheriff's office. The incoming article contains no new facts beyond what the canonical already reports (e.g., school enrollment status); it lacks the school district detail present in the canonical, making it less complete, not more.",
+          "validation_errors": []
         },
         {
           "category_key": "indian_river",
@@ -2052,21 +2264,6 @@
           "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/03/17-year-old-dies-after-shooting-near-garcias-boat-ramp-indian-river-county?outputType=amp",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -2106,11 +2303,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Teen Dies After Shooting Near Vero Beach Boat Ramp",
-      "generated_card_count": 0,
-      "elapsed_seconds": 17.086
+      "elapsed_seconds": 9.798
     }
   ]
 }
