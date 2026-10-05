@@ -4,15 +4,16 @@
 
 ## Hero
 
-- Current: **Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County**
-- Recommended: **Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County**
+- Current: **Jensen Beach Septic Backups Persist as Sewer Conversion Date Stays Unset**
+- Recommended: **Jensen Beach Septic Backups Persist as Sewer Conversion Date Stays Unset**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | 42 | importance 0; freshness 51.75; urgency 2/10; validated material update |
+| 1 | Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County | Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County | 62 | importance 0; freshness 76.57; urgency 8/10; validated material update |
+| 2 | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | 40 | importance 0; freshness 39.92; urgency 2/10; validated material update |
 
 ## Recommended moves
 
