@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-05T01:48:10.990112+00:00",
+  "generated_at": "2026-10-05T03:46:45.995887+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -81,11 +81,11 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 8,
+    "pre_generation_materiality_evaluations": 9,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 4,
+    "pre_generation_materiality_duplicates": 5,
     "pre_generation_materiality_holds": 4,
-    "pre_generation_materiality_model_calls": 4,
+    "pre_generation_materiality_model_calls": 5,
     "pre_generation_materiality_cache_hits": 4,
     "terminal_permalink_evaluations": 0,
     "terminal_permalink_candidate_pairs": 0,
@@ -119,13 +119,10 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 0.97,
       "shared_anchors": [],
       "novel_facts": [
-        "Four-car crash on US-1 near SE Federal Highway in Hobe Sound",
-        "Occurred Friday around 2 p.m.",
-        "Four patients treated with minor injuries, transported by MCFR",
-        "Northbound lanes of US-1 closed"
+        "Four-car crash on US-1 near SE Federal Highway in Hobe Sound on Friday, four patients with minor injuries treated by MCFR"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -182,9 +179,8 @@
       "shared_anchors": [],
       "novel_facts": [
         "21-year-old Okeechobee woman killed in crash with tractor-trailer",
-        "Crash occurred at SR 710 and SE 86th Boulevard",
-        "Victim died at HCA Florida Lawnwood Hospital",
-        "Florida Highway Patrol investigating"
+        "Crash occurred at T-intersection of State Road 710 and Southeast 86th Boulevard",
+        "Incident happened Thursday at approximately 1 p.m."
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -284,7 +280,7 @@
     {
       "category_key": "st_lucie",
       "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
-      "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident",
+      "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident?teaserSource=trending",
       "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
       "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
       "canonical_is_custom": false,
@@ -298,11 +294,10 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.95,
-      "shared_anchors": [
-        "St. Lucie County location only"
-      ],
+      "shared_anchors": [],
       "novel_facts": [
-        "Vehicle fire closing southbound Florida's Turnpike near mile marker 162 on a Friday morning"
+        "Vehicle fire closed southbound Florida's Turnpike near mile marker 162 in St. Lucie County",
+        "Incident began about 10:56 a.m., reported as major by Florida 511"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -328,12 +323,40 @@
       "confidence": 0.95,
       "shared_anchors": [],
       "novel_facts": [
-        "Vehicle fire closed southbound lanes of Florida's Turnpike near mile marker 162 in St. Lucie County on Friday morning"
+        "Vehicle fire closed southbound Florida's Turnpike lanes near mile marker 162 in St. Lucie County on a Friday around 10:56 a.m."
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
+    },
+    {
+      "category_key": "indian_river",
+      "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County - WFLX",
+      "source_url": "https://www.wflx.com/2026/10/04/17-year-old-dies-after-shooting-near-garcias-boat-ramp-indian-river-county?outputType=amp",
+      "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+      "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Garcia's Boat Ramp",
+        "3700 block of County Road 512",
+        "11:24 p.m. Friday night",
+        "17-year-old victim",
+        "Indian River County Sheriff's Office"
+      ],
+      "novel_facts": [],
+      "reason": "Same shooting death reported a day earlier by the same outlet with identical location, time, and victim age; this version adds minor details (hospital names, 'isolated incident' framing) but no material new update such as ID, arrest, or cause of death beyond what's already known.",
+      "validation_errors": []
     }
   ],
   "decisions": [

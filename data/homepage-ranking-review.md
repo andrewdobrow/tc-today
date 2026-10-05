@@ -12,8 +12,7 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | 43 | importance 0; freshness 55.05; urgency 2/10; validated material update |
-| 2 | Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard | Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard | 29 | importance 0; freshness 20.01; urgency 2/10 |
+| 1 | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | 42 | importance 0; freshness 51.75; urgency 2/10; validated material update |
 
 ## Recommended moves
 
