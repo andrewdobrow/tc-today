@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-05T10:52:33.002041+00:00",
+  "generated_at": "2026-10-05T12:48:11.215713+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,16 +62,16 @@
     }
   },
   "summary": {
-    "evaluations": 47,
+    "evaluations": 49,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 47,
+    "no_candidate_passes": 49,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
-    "retroactive_rows_retained": 47,
+    "new_stories_allowed": 4,
+    "retroactive_rows_retained": 45,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 3,
+    "pre_generation_materiality_evaluations": 5,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 1,
-    "pre_generation_materiality_holds": 2,
-    "pre_generation_materiality_model_calls": 2,
+    "pre_generation_materiality_duplicates": 2,
+    "pre_generation_materiality_holds": 3,
+    "pre_generation_materiality_model_calls": 4,
     "pre_generation_materiality_cache_hits": 1,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 4,
+    "terminal_permalink_candidate_pairs": 48,
+    "terminal_permalink_model_calls": 4,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 4,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -103,6 +103,37 @@
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "crime",
+      "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County - WFLX",
+      "source_url": "https://www.wflx.com/2026/10/05/17-year-old-dies-after-shooting-near-garcias-boat-ramp-indian-river-county",
+      "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+      "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "17-year-old victim",
+        "Garcia's Boat Ramp",
+        "3700 block of County Road 512",
+        "11:24 p.m. Friday",
+        "Indian River County Sheriff's Office",
+        "same death outcome"
+      ],
+      "novel_facts": [
+        "Additional detail on hospital transfer route (Sebastian River Medical Center to Holmes Regional Medical Center)"
+      ],
+      "reason": "Both articles describe the identical shooting: same victim age, same location, same time, same agency, and same fatal outcome. The incoming article adds minor transport detail but no new material fact such as suspect identification, arrest, or cause determination, so it should update rather than duplicate as a new story.",
+      "validation_errors": []
+    },
     {
       "category_key": "business",
       "source_headline": "21-year-old Okeechobee woman killed in car crash involving tractor-trailer on State Road 710",
@@ -123,8 +154,8 @@
       "shared_anchors": [],
       "novel_facts": [
         "21-year-old Okeechobee woman killed in crash with tractor-trailer",
-        "Crash occurred at T-intersection of SR 710 and SE 86th Boulevard",
-        "Victim died at HCA Florida Lawnwood Hospital"
+        "Crash occurred at T-intersection of State Road 710 and Southeast 86th Boulevard",
+        "Incident is unrelated to missing person case in candidate"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -150,8 +181,34 @@
       "confidence": 0.95,
       "shared_anchors": [],
       "novel_facts": [
-        "Vehicle fire closed southbound lanes of Florida's Turnpike in St. Lucie County near mile marker 162",
-        "Incident began around 10:56 a.m. Friday, reported by Florida 511"
+        "Vehicle fire on Florida's Turnpike southbound near mile marker 162 in St. Lucie County",
+        "Incident began about 10:56 a.m., major incident per Florida 511"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - WPEC",
+      "source_url": "https://cbs12.com/traffic/traffic-tracker-12/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Vehicle fire closed southbound lanes of Florida's Turnpike near mile marker 162 in St. Lucie County, reported around 10:56 a.m. Friday"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -193,46 +250,6 @@
       "incoming_headline": "Vero Beach parking fines double Wednesday, with fire lane violations rising to $60",
       "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-doubles-parking-fines-starting-oct-1-first-rate-hike-since-2011",
       "incoming_story_id": "story_015870",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Two swimmers rescued from rip current at Hobe Sound Beach",
-      "incoming_source_url": "https://www.wpbf.com/article/two-people-rescued-from-rip-current-at-hobe-sound-beach/73915963",
-      "incoming_story_id": "story_017134",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
-      "incoming_source_url": "https://cw34.com/news/local/truck-rollover-spills-cement-in-port-st-lucie-blocks-all-lanes-on-orange-avenue-truck-rollover-orange-avenue-crash-port-st-lucie-crash-port-st-lucie-traffic-cement-truck-truck-rollover-cement-spill-construction-materials-spill-orange-avenue?teaserSource=trending",
-      "incoming_story_id": "story_017840",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1050,8 +1067,8 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion",
-      "incoming_source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/im-forced-to-live-in-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
+      "incoming_headline": "Jensen Beach Septic Backups Persist as Sewer Conversion Date Stays Unset",
+      "incoming_source_url": "https://www.wflx.com/2026/10/02/im-forced-live-this-filth-jensen-beach-residents-frustrated-by-recurring-septic-backups-after-storms",
       "incoming_story_id": "story_018896",
       "candidates": [],
       "decision": {
@@ -1126,6 +1143,785 @@
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Indiantown Flooding Persists Despite $2M Booker Park Drainage Project",
+      "incoming_source_url": "https://cbs12.com/news/local/flood-safety-tips-shared-as-indiantown-residents-prepare-for-more-rainindiantown-flooding-flood-safety-tips-martin-county-fire-rescue-martin-county-health-department-flooded-roadways-drainage-problems-booker-park-turn-around-dont-drown-heavy-rai",
+      "incoming_story_id": "story_019305",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Indiantown Flooding Persists Despite $2M Booker Park Drainage Project",
+      "incoming_source_url": "https://cbs12.com/news/local/flood-safety-tips-shared-as-indiantown-residents-prepare-for-more-rainindiantown-flooding-flood-safety-tips-martin-county-fire-rescue-martin-county-health-department-flooded-roadways-drainage-problems-booker-park-turn-around-dont-drown-heavy-rai",
+      "incoming_story_id": "story_019305",
+      "candidates": [
+        {
+          "slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
+          "headline": "Two Port St. Lucie Hit-and-Run Suspects Arrested, Released on Bond",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4621,
+          "retrieval_score": 0.4341,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-23-no-charges-in-indiantown-bus-stop-gun-incident-two-teens-dispute-sheriffs-accoun",
+          "headline": "No charges in Indiantown bus stop gun incident; two teens dispute sheriff's account",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4595,
+          "retrieval_score": 0.4555,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-09-24-large-barn-fire-at-indiantown-ranch-closes-roads-prompts-horse-evacuations",
+          "headline": "Indiantown barn fire destroys building and 6 vehicles, firefighter hospitalized",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4578,
+          "retrieval_score": 0.4448,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-09-24-martin-county-first-responders-rescue-man-from-st-lucie-river-after-jump-from-we",
+          "headline": "Martin County first responders rescue man from St. Lucie River after jump from West Bridge",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4368,
+          "retrieval_score": 0.4298,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-09-23-port-st-lucie-hoa-gives-cadence-at-tradition-homeowners-sept-30-deadline-to-repl",
+          "headline": "Port St. Lucie HOA offers bulk tree program as Sept. 30 deadline nears in Cadence at Tradition dispute",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4285,
+          "retrieval_score": 0.4245,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-09-22-indiantown-data-center-plan-returns-with-waterless-design-but-residents-remain-o",
+          "headline": "Indiantown data center plan returns with waterless design, but residents remain opposed",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4113,
+          "retrieval_score": 0.4103,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
+          "headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4054,
+          "retrieval_score": 0.3984,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-09-27-two-swimmers-rescued-from-rip-current-at-hobe-sound-beach",
+          "headline": "Two swimmers rescued from rip current at Hobe Sound Beach",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3985,
+          "retrieval_score": 0.3825,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-09-18-martin-county-high-school-receives-third-bomb-threat-in-eight-days",
+          "headline": "Martin County High School sophomore arrested for hoax bomb threat",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3979,
+          "retrieval_score": 0.3969,
+          "reasons": [
+            "publication_gap_17_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-02-jensen-beach-residents-battle-repeated-septic-backups-await-sewer-conversion",
+          "headline": "Jensen Beach Septic Backups Persist as Sewer Conversion Date Stays Unset",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3945,
+          "retrieval_score": 0.3545,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-09-19-swat-team-safely-resolves-armed-barricade-on-southwest-bessey-creek-trail-in-pal",
+          "headline": "Palm City man charged with felony, faces $12,500 bond after SWAT standoff",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3907,
+          "retrieval_score": 0.3907,
+          "reasons": [
+            "publication_gap_16_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-09-30-rabies-alert-issued-in-stuart-after-raccoon-tests-positive",
+          "headline": "60-Day Rabies Alert Covers Part of Stuart After Raccoon Tests Positive",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3875,
+          "retrieval_score": 0.3595,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.85,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Booker Park $2M drainage project context",
+          "Recent flooding returning to Indiantown streets after heavy rain",
+          "Resident Mary Brown quote about insurance burden",
+          "Upcoming Indiantown Village Council meeting Thursday",
+          "Flood safety guidance from Martin County Fire Rescue and Health Department"
+        ],
+        "reason": "None of the candidates address Indiantown flooding or the Booker Park drainage project; they cover unrelated Martin County events (bus stop gun incident, barn fire, river rescue, data center plan, etc.). This is a distinct recurring-flooding story with no matching candidate, so it should be treated as a new story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.85,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Booker Park $2M drainage project context",
+          "Recent flooding returning to Indiantown streets after heavy rain",
+          "Resident Mary Brown quote about insurance burden",
+          "Upcoming Indiantown Village Council meeting Thursday",
+          "Flood safety guidance from Martin County Fire Rescue and Health Department"
+        ],
+        "reason": "None of the candidates address Indiantown flooding or the Booker Park drainage project; they cover unrelated Martin County events (bus stop gun incident, barn fire, river rescue, data center plan, etc.). This is a distinct recurring-flooding story with no matching candidate, so it should be treated as a new story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/slc-seniors-demand-answers-as-fort-pierce-center-prepares-to-close",
+      "incoming_story_id": "story_019245",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/slc-seniors-demand-answers-as-fort-pierce-center-prepares-to-close",
+      "incoming_story_id": "story_019245",
+      "candidates": [
+        {
+          "slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
+          "headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
+          "terminal_recall_tier": 5,
+          "terminal_recall_score": 0.7483,
+          "retrieval_score": 0.5923,
+          "reasons": [
+            "shared_incident_anchor",
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-09-22-card-skimmer-discovered-on-7-eleven-gas-pump-in-fort-pierce-prompts-investigatio",
+          "headline": "Officers unfamiliar with skimmers check all pumps at Fort Pierce 7-Eleven",
+          "terminal_recall_tier": 5,
+          "terminal_recall_score": 0.7061,
+          "retrieval_score": 0.5621,
+          "reasons": [
+            "shared_incident_anchor",
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
+          "headline": "St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days",
+          "terminal_recall_tier": 5,
+          "terminal_recall_score": 0.6195,
+          "retrieval_score": 0.4515,
+          "reasons": [
+            "shared_incident_anchor",
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-video-shows-suv-rollover-on-floridas-turnpike-ramp-near-bayshore-blvd",
+          "headline": "Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd",
+          "terminal_recall_tier": 5,
+          "terminal_recall_score": 0.6074,
+          "retrieval_score": 0.4394,
+          "reasons": [
+            "shared_incident_anchor",
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-21-fort-pierce-home-with-woman-4-children-struck-by-gunfire-on-avenue-l",
+          "headline": "Fort Pierce police link three Avenue L shootings, identify suspects",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.56,
+          "retrieval_score": 0.556,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
+          "headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5296,
+          "retrieval_score": 0.4986,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Trial: Mimms' Niece Testifies on Lincoln Park Nonprofit Lease",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5065,
+          "retrieval_score": 0.4755,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-08-11-fort-pierce-has-no-legal-options-to-block-causeway-cove-development-on-south-hut",
+          "headline": "Fort Pierce votes to explore outside counsel to challenge Causeway Cove under Live Local Act",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4862,
+          "retrieval_score": 0.4862,
+          "reasons": [
+            "publication_gap_55_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-09-24-arsenic-hot-spot-found-on-fort-pierce-brownfield-not-shelli-development-site",
+          "headline": "Arsenic hot spot found on Fort Pierce brownfield, not Shelli development site",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4616,
+          "retrieval_score": 0.4546,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-09-30-fort-pierce-man-gets-probation-for-hiding-gun-used-in-june-shooting",
+          "headline": "Fort Pierce man gets probation for hiding gun used in June shooting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4592,
+          "retrieval_score": 0.4342,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4455,
+          "retrieval_score": 0.4175,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
+          "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4455,
+          "retrieval_score": 0.4205,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Council on Aging of St. Lucie confirmed senior center at 1505 Orange Avenue is expected to close",
+          "property listed for sale at $2.2 million",
+          "seniors to transition to Bayshore Boulevard facility in Port St. Lucie",
+          "community reaction from senior Sandy Pietrewicz and Geneira Lovett"
+        ],
+        "reason": "None of the candidates concern the Council on Aging senior center closure/sale; they involve unrelated events (cement truck rollover, card skimmer, license plate readers, SUV rollover, shootings, erosion repairs, Mimms trial, Causeway Cove, arsenic contamination, gun-hiding plea, missing person, Flock cameras) that merely share locality or street-name tokens like 'Orange Avenue' or 'Bayshore Boulevard' without describing the same incident. This is a new, distinct story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Council on Aging of St. Lucie confirmed senior center at 1505 Orange Avenue is expected to close",
+          "property listed for sale at $2.2 million",
+          "seniors to transition to Bayshore Boulevard facility in Port St. Lucie",
+          "community reaction from senior Sandy Pietrewicz and Geneira Lovett"
+        ],
+        "reason": "None of the candidates concern the Council on Aging senior center closure/sale; they involve unrelated events (cement truck rollover, card skimmer, license plate readers, SUV rollover, shootings, erosion repairs, Mimms trial, Causeway Cove, arsenic contamination, gun-hiding plea, missing person, Flock cameras) that merely share locality or street-name tokens like 'Orange Avenue' or 'Bayshore Boulevard' without describing the same incident. This is a new, distinct story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
+      "incoming_source_url": "https://cbs12.com/news/local/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
+      "incoming_story_id": "story_019281",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
+      "incoming_source_url": "https://cbs12.com/news/local/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
+      "incoming_story_id": "story_019281",
+      "candidates": [
+        {
+          "slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
+          "headline": "Two Port St. Lucie Hit-and-Run Suspects Arrested, Released on Bond",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5658,
+          "retrieval_score": 0.5378,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4865,
+          "retrieval_score": 0.4585,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Trial: Mimms' Niece Testifies on Lincoln Park Nonprofit Lease",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4751,
+          "retrieval_score": 0.4441,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
+          "headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4734,
+          "retrieval_score": 0.4664,
+          "reasons": [
+            "publication_gap_15_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
+          "headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.463,
+          "retrieval_score": 0.456,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-09-21-port-st-lucie-woman-launches-chriss-place-free-grief-support-community",
+          "headline": "Port St. Lucie woman launches Chris's Place, free grief support community",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4625,
+          "retrieval_score": 0.4625,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-video-shows-suv-rollover-on-floridas-turnpike-ramp-near-bayshore-blvd",
+          "headline": "Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4609,
+          "retrieval_score": 0.4329,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-10-02-st-lucie-county-teen-wins-national-youth-of-the-year-set-for-hometown-welcome",
+          "headline": "St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4567,
+          "retrieval_score": 0.4227,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-port-st-lucie-tiktok-creator-jailed-as-device-access-case-reopened",
+          "headline": "Port St. Lucie TikTok Creator Jailed as Device-Access Case Reopened",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4566,
+          "retrieval_score": 0.4286,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
+          "headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4544,
+          "retrieval_score": 0.4474,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-construction-truck-crashes-through-guardrail-bursts-into-flames-on-floridas-turn",
+          "headline": "Construction truck crashes through guardrail, bursts into flames on Florida's Turnpike in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4477,
+          "retrieval_score": 0.4287,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-09-30-port-st-lucie-man-arrested-on-sexual-battery-charges-involving-16-year-old-relat",
+          "headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.443,
+          "retrieval_score": 0.418,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Updated state cancer registry analysis through 2023 finds no elevated brain cancer rates in St. Lucie County or specific ZIP codes",
+          "Stephanie Ankiel's house-by-house mapping of brain cancer cases in Fort Pierce neighborhoods",
+          "Three new brain cancer diagnoses confirmed in August",
+          "Rep. Brian Mast's renewed request to CDC for data and review",
+          "Matt Elliott's glioblastoma diagnosis and decision to forgo further treatment"
+        ],
+        "reason": "None of the candidates concern the brain cancer cluster investigation in St. Lucie County; they cover unrelated topics (hit-and-run arrests, missing person case, corruption trial, shootings, vehicle chase, grief support group, etc.). There is no shared incident, participant, or case anchor with any candidate, so this is a new story with no existing canonical to update.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Updated state cancer registry analysis through 2023 finds no elevated brain cancer rates in St. Lucie County or specific ZIP codes",
+          "Stephanie Ankiel's house-by-house mapping of brain cancer cases in Fort Pierce neighborhoods",
+          "Three new brain cancer diagnoses confirmed in August",
+          "Rep. Brian Mast's renewed request to CDC for data and review",
+          "Matt Elliott's glioblastoma diagnosis and decision to forgo further treatment"
+        ],
+        "reason": "None of the candidates concern the brain cancer cluster investigation in St. Lucie County; they cover unrelated topics (hit-and-run arrests, missing person case, corruption trial, shootings, vehicle chase, grief support group, etc.). There is no shared incident, participant, or case anchor with any candidate, so this is a new story with no existing canonical to update.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce Man Charged After Ramming Two Tow Trucks With U-Haul",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-fort-pierce-man-aggrvated-assault-charge-incident-u-haul-truck/74021692",
+      "incoming_story_id": "story_019282",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Fort Pierce Man Charged After Ramming Two Tow Trucks With U-Haul",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-fort-pierce-man-aggrvated-assault-charge-incident-u-haul-truck/74021692",
+      "incoming_story_id": "story_019282",
+      "candidates": [
+        {
+          "slug": "2026-09-30-fort-pierce-man-gets-probation-for-hiding-gun-used-in-june-shooting",
+          "headline": "Fort Pierce man gets probation for hiding gun used in June shooting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.7495,
+          "retrieval_score": 0.6745,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
+          "headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6434,
+          "retrieval_score": 0.5744,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-fort-pierce-police-investigate-shooting-at-home-with-seven-people-inside",
+          "headline": "Fort Pierce police investigate shooting at home with seven people inside",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6024,
+          "retrieval_score": 0.5334,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-09-21-fort-pierce-home-with-woman-4-children-struck-by-gunfire-on-avenue-l",
+          "headline": "Fort Pierce police link three Avenue L shootings, identify suspects",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.563,
+          "retrieval_score": 0.509,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5363,
+          "retrieval_score": 0.5023,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-09-24-fort-pierce-community-rallies-for-brothers-killed-in-georgia-shooting-suspect-ch",
+          "headline": "Fort Pierce community raising funds to bring home 2 brothers killed in Georgia",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5102,
+          "retrieval_score": 0.4972,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
+          "headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4863,
+          "retrieval_score": 0.4553,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-09-22-card-skimmer-discovered-on-7-eleven-gas-pump-in-fort-pierce-prompts-investigatio",
+          "headline": "Officers unfamiliar with skimmers check all pumps at Fort Pierce 7-Eleven",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4748,
+          "retrieval_score": 0.4208,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-09-30-port-st-lucie-man-arrested-on-sexual-battery-charges-involving-16-year-old-relat",
+          "headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4716,
+          "retrieval_score": 0.4466,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-seniors-push-back-as-orange-avenue-center-sale-nears",
+          "headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4631,
+          "retrieval_score": 0.4231,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
+          "headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4614,
+          "retrieval_score": 0.4424,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4393,
+          "retrieval_score": 0.4113,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "U-Haul box truck rammed two tow trucks on Jamboree Drive",
+          "HOA-ordered tow dispute",
+          "aggravated assault charge filed against unnamed Fort Pierce man"
+        ],
+        "reason": "No candidate matches this specific incident: a distinct location (Jamboree Drive), distinct vehicle (U-Haul vs tow trucks), and distinct fact pattern (HOA tow dispute leading to ramming). The closest candidate about a driver ramming a vehicle during a traffic stop involves a different vehicle (blue Volkswagen Jetta), different location, and different circumstances (police traffic stop vs. HOA tow). No shared named participant, case, or location ties this to any candidate.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "U-Haul box truck rammed two tow trucks on Jamboree Drive",
+          "HOA-ordered tow dispute",
+          "aggravated assault charge filed against unnamed Fort Pierce man"
+        ],
+        "reason": "No candidate matches this specific incident: a distinct location (Jamboree Drive), distinct vehicle (U-Haul vs tow trucks), and distinct fact pattern (HOA tow dispute leading to ramming). The closest candidate about a driver ramming a vehicle during a traffic stop involves a different vehicle (blue Volkswagen Jetta), different location, and different circumstances (police traffic stop vs. HOA tow). No shared named participant, case, or location ties this to any candidate.",
+        "validation_errors": [],
+        "consistency_repairs": []
       }
     }
   ],
