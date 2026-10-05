@@ -32,7 +32,7 @@ PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
 COMMUNITY_PARTNER_URL = "https://www.facebook.com/groups/188814797289161"
 COMMUNITY_PARTNER_IMAGE = "/images/tccn-circle.png"
 COMMUNITY_PARTNER_NAME = "Treasure Coast Community News"
-ASSET_VERSION = "1.13.9.43"
+ASSET_VERSION = "1.13.9.44"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
