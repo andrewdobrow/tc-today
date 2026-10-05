@@ -12,10 +12,8 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | 44 | importance 0; freshness 60.1; urgency 2/10; validated material update |
-| 2 | Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard | Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard | 30 | importance 0; freshness 25.06; urgency 2/10 |
-| 3 | St. Lucie Mosquito Crews Treat Standing Water Near U.S. 1 in Fort Pierce | St. Lucie Mosquito Crews Treat Standing Water Near U.S. 1 in Fort Pierce | 29 | importance 0; freshness 22.7; urgency 2/10 |
-| 4 | Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion | Jensen Beach Residents Battle Repeated Septic Backups, Await Sewer Conversion | 29 | importance 0; freshness 22.69; urgency 2/10 |
+| 1 | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year | 43 | importance 0; freshness 55.05; urgency 2/10; validated material update |
+| 2 | Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard | Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard | 29 | importance 0; freshness 20.01; urgency 2/10 |
 
 ## Recommended moves
 
