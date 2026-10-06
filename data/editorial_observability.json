@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-05T22:51:23Z",
+  "generated_at": "2026-10-06T01:51:09Z",
   "mode": "enforce",
-  "publication_behavior_changed": false,
+  "publication_behavior_changed": true,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,16 +19,72 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
-    "applied_action_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
+    "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 7,
+    "placements_before": 8,
     "placements_after": 7,
-    "publication_behavior_changed": false,
+    "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
-    "recommendations": [],
-    "applied_actions": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.96,
+        "source_url": "https://www.wpbf.com/article/matthew-allen-waggle-vero-beach-murder-returned-indian-river-county-florida/74039096",
+        "headline": "Murder Suspect Extradited From North Carolina to Indian River County Jail",
+        "source_title_key": "murder suspect extradited from north carolina to indian river county jail",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-accused-back-bail-began-booked-1869193a",
+        "canonical_is_custom": false,
+        "canonical_title": "Man Wanted in Vero Beach Murder Extradited to Indian River County Jail",
+        "canonical_source": "",
+        "canonical_url": "https://www.wpbf.com/article/matthew-allen-waggle-vero-beach-murder-returned-indian-river-county-florida/74039096",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 96% confidence.",
+        "category": "indian_river",
+        "placement": "card"
+      }
+    ],
+    "applied_actions": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.96,
+        "source_url": "https://www.wpbf.com/article/matthew-allen-waggle-vero-beach-murder-returned-indian-river-county-florida/74039096",
+        "headline": "Murder Suspect Extradited From North Carolina to Indian River County Jail",
+        "source_title_key": "murder suspect extradited from north carolina to indian river county jail",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-accused-back-bail-began-booked-1869193a",
+        "canonical_is_custom": false,
+        "canonical_title": "Man Wanted in Vero Beach Murder Extradited to Indian River County Jail",
+        "canonical_source": "",
+        "canonical_url": "https://www.wpbf.com/article/matthew-allen-waggle-vero-beach-murder-returned-indian-river-county-florida/74039096",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 96% confidence.",
+        "category": "indian_river",
+        "placement": "card",
+        "slug": "",
+        "source_title": "Murder Suspect Extradited From North Carolina to Indian River County Jail",
+        "date": "5:19 PM ET",
+        "category_key": "indian_river",
+        "is_custom": false,
+        "story_stage": "arrest-or-charges",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 96,
+        "matched_prior_slug": "",
+        "matched_prior_headline": "Man Wanted in Vero Beach Murder Extradited to Indian River County Jail",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://www.wpbf.com/article/matthew-allen-waggle-vero-beach-murder-returned-indian-river-county-florida/74039096",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      }
+    ],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -49,21 +105,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 186,
+    "candidates_processed": 190,
     "routes": {
-      "generate_new": 40,
-      "skip": 145,
-      "update_existing": 1
+      "generate_new": 32,
+      "skip": 158
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 140,
-      "publishable": 44
+      "low_value": 141,
+      "publishable": 47
     },
     "source_classes": {
-      "aggregator": 142,
+      "aggregator": 143,
       "local_news": 23,
-      "regional_news": 17,
+      "regional_news": 20,
       "unknown": 4
     },
     "rejected_count": 2,
@@ -90,10 +145,30 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 32,
-      "same_event": 154
+      "new_story": 23,
+      "same_event": 167
     },
     "examples": [
+      {
+        "story_id": "story_019472",
+        "title": "I-Team investigates Florida rules for seatbelts on school buses after fatal crash in Winter Haven",
+        "event_key": "named-person-death:winter-haven",
+        "relationship": "new_story",
+        "confidence": 0.355927,
+        "reason": "Created new story: conservative merge requirements were not met",
+        "decision_trace": [
+          "Category: crime_public_safety",
+          "Facts overlap: 0.00",
+          "Locations overlap: 0.00",
+          "Agencies overlap: 0.00",
+          "Event types overlap: 1.00",
+          "Entities overlap: 1.00",
+          "Title support: 0.18",
+          "Event-key support: 0.00",
+          "Identity anchors: 2",
+          "Threshold: 0.78"
+        ]
+      },
       {
         "story_id": "",
         "title": ", Fort Pierce, FL 34949 | Realtor.com® - Realtor.com",
@@ -107,48 +182,56 @@
         "story_id": "story_019437",
         "title": "I-Team investigates Florida rules for seatbelts on school buses after Winter Haven crash - Tampa Bay 28",
         "event_key": "traffic-crash-cf0a12c4d5-cf0a12c4d5",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_019438",
         "title": "Family prepares to donate son’s organs after devastating high school football injury - ABC7 WWSB",
         "event_key": "unknown-event-60157314e1",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_019439",
         "title": "Indian River County sheriff investigates whether fatal shooting of teen at boat ramp was self-defense",
         "event_key": "unknown-event-15823791d2",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_019440",
         "title": "School bus carrying Centennial High students crashes into utility pole - cw34.com",
         "event_key": "traffic-crash-a7df6676d4-a7df6676d4",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -157,10 +240,11 @@
         "event_key": "traffic-crash-b16a2ea225-b16a2ea225",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -208,15 +292,14 @@
       },
       {
         "story_id": "story_019402",
-        "title": "Last Squeeze🍊— 10.5.2026 — Rubio Confirms Russia 'Plague' Outbreak Monitoring — DeSantis Announces $100M Investment — and Much More... - Floridian Press",
-        "event_key": "unknown-event-3f6127a5a6",
+        "title": "Last Squeeze🍊— 10.5.2026 — Rubio Confirms Russia 'Plague' Outbreak Monitoring — DeSantis Announces $100M Investment — and Much More... - floridianpress.com",
+        "event_key": "unknown-event-4768e56075",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMi_AFBVV95cUxNY2NicTlaRnM5V2lTeUt0QXI4MUFhNkthbFhTZTRJcTNlclVmOHpLWmJoRzNISTBkeGo4XzhBNnN1U3pZcEo2czJuSG5GQmRjSVBVdzJ0TG51dWdSOTBhRllwazdFMVEwa2FpQXdiS2FxMGtGMTRWaE1hWTJlcTUxajNEYnYxNlNBXzdlU3ZYQW9IQjV2bXRWYm1yOTVXMXp6YjBGUTNTMkRGbzBWUzJleWYweVZpRGJfd3NLQVB2TmdtOHNQOS1BOTR1RDI4eWxQUTdmLTh4X0I2R3F6OGJLM3FPalljNVlXNzBna2FYOGNqMkF1eGpzRVdzT3E",
           "Confidence: 1.00"
         ]
       },
@@ -224,20 +307,6 @@
         "story_id": "story_019356",
         "title": "Discover The Palm Beaches to host 2-day hospitality and tourism job fair in Lake Worth Beach & Greenacres",
         "event_key": "unknown-event-f826a39829",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019357",
-        "title": "Ron DeSantis rebuts argument that homestead exemption hike hurts renters - Florida Politics",
-        "event_key": "unknown-event-00289a986a",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -363,55 +432,84 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_019472",
+        "title": "I-Team investigates Florida rules for seatbelts on school buses after fatal crash in Winter Haven",
+        "event_key": "named-person-death:winter-haven",
+        "relationship": "new_story",
+        "confidence": 0.355927,
+        "matched_existing": false,
+        "reason": "Created new story: conservative merge requirements were not met",
+        "decision_trace": [
+          "Category: crime_public_safety",
+          "Facts overlap: 0.00",
+          "Locations overlap: 0.00",
+          "Agencies overlap: 0.00",
+          "Event types overlap: 1.00",
+          "Entities overlap: 1.00",
+          "Title support: 0.18",
+          "Event-key support: 0.00",
+          "Identity anchors: 2",
+          "Threshold: 0.78"
+        ]
+      },
+      {
         "story_id": "story_019437",
         "title": "I-Team investigates Florida rules for seatbelts on school buses after Winter Haven crash - Tampa Bay 28",
         "event_key": "traffic-crash-cf0a12c4d5-cf0a12c4d5",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_019438",
         "title": "Family prepares to donate son’s organs after devastating high school football injury - ABC7 WWSB",
         "event_key": "unknown-event-60157314e1",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_019439",
         "title": "Indian River County sheriff investigates whether fatal shooting of teen at boat ramp was self-defense",
         "event_key": "unknown-event-15823791d2",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_019440",
         "title": "School bus carrying Centennial High students crashes into utility pole - cw34.com",
         "event_key": "traffic-crash-a7df6676d4-a7df6676d4",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -421,10 +519,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -475,16 +574,15 @@
       },
       {
         "story_id": "story_019402",
-        "title": "Last Squeeze🍊— 10.5.2026 — Rubio Confirms Russia 'Plague' Outbreak Monitoring — DeSantis Announces $100M Investment — and Much More... - Floridian Press",
-        "event_key": "unknown-event-3f6127a5a6",
+        "title": "Last Squeeze🍊— 10.5.2026 — Rubio Confirms Russia 'Plague' Outbreak Monitoring — DeSantis Announces $100M Investment — and Much More... - floridianpress.com",
+        "event_key": "unknown-event-4768e56075",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMi_AFBVV95cUxNY2NicTlaRnM5V2lTeUt0QXI4MUFhNkthbFhTZTRJcTNlclVmOHpLWmJoRzNISTBkeGo4XzhBNnN1U3pZcEo2czJuSG5GQmRjSVBVdzJ0TG51dWdSOTBhRllwazdFMVEwa2FpQXdiS2FxMGtGMTRWaE1hWTJlcTUxajNEYnYxNlNBXzdlU3ZYQW9IQjV2bXRWYm1yOTVXMXp6YjBGUTNTMkRGbzBWUzJleWYweVZpRGJfd3NLQVB2TmdtOHNQOS1BOTR1RDI4eWxQUTdmLTh4X0I2R3F6OGJLM3FPalljNVlXNzBna2FYOGNqMkF1eGpzRVdzT3E",
           "Confidence: 1.00"
         ]
       },
@@ -492,21 +590,6 @@
         "story_id": "story_019356",
         "title": "Discover The Palm Beaches to host 2-day hospitality and tourism job fair in Lake Worth Beach & Greenacres",
         "event_key": "unknown-event-f826a39829",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019357",
-        "title": "Ron DeSantis rebuts argument that homestead exemption hike hurts renters - Florida Politics",
-        "event_key": "unknown-event-00289a986a",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -658,88 +741,56 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 2,
-    "high_confidence_candidate_count": 0,
+    "candidate_count": 1,
+    "high_confidence_candidate_count": 1,
     "unanchored_candidate_suppressed_count": 0,
     "current_relationships": {
-      "new_story": 2
+      "new_story": 1
     },
     "milestones": {
-      "death": 2
+      "arrest": 1
     },
     "reason_codes": {
-      "entity_match": 2,
-      "event_type_match": 1,
-      "identity_anchor_qualified": 2,
-      "location_match": 2,
-      "novel_milestone": 2,
+      "agency_match": 1,
+      "entity_match": 1,
+      "identity_anchor_qualified": 1,
+      "location_match": 1,
+      "novel_milestone": 1,
       "title_continuity": 1
     },
     "examples": [
       {
-        "headline": "17-year-old Killed at Garcia's Boat Ramp near Fellsmere: Indian River Sheriff Press Conference - Sebastian Daily",
-        "event_key": "named-person-death:press-conference",
-        "current_story_id": "story_019462",
+        "headline": "Two arrested in Fort Pierce shooting incident - WPBF",
+        "event_key": "unknown-event-c48803c9f5",
+        "current_story_id": "story_019487",
         "current_relationship": "new_story",
-        "candidate_story_id": "story_017890",
-        "candidate_confidence": 0.633333,
+        "candidate_story_id": "story_014614",
+        "candidate_confidence": 0.771429,
         "candidate_milestones": [
-          "death"
+          "arrest"
         ],
         "candidate_reason_codes": [
           "novel_milestone",
           "location_match",
-          "entity_match",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_017890",
-          "Novel milestones: death",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.33",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.63"
-        ]
-      },
-      {
-        "headline": "Fatal crash reported near Vero Beach intersection - WPBF",
-        "event_key": "traffic-crash-vero-beach-48dfdb047b",
-        "current_story_id": "story_019464",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_017840",
-        "candidate_confidence": 0.722857,
-        "candidate_milestones": [
-          "death"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "event_type_match",
+          "agency_match",
           "entity_match",
           "title_continuity",
           "identity_anchor_qualified"
         ],
         "candidate_trace": [
           "Follow-up candidate mode: observe_only",
-          "Candidate story: story_017840",
-          "Novel milestones: death",
+          "Candidate story: story_014614",
+          "Novel milestones: arrest",
           "Exact event-key anchor: False",
           "Facts overlap: 0.00",
-          "Title overlap: 0.43",
+          "Title overlap: 0.71",
           "Location match: True",
-          "Agency match: False",
-          "Event type match: True",
+          "Agency match: True",
+          "Event type match: False",
           "Entity match: True",
           "Agency conflict: False",
           "Event type conflict: False",
-          "Candidate confidence: 0.72"
+          "Candidate confidence: 0.77"
         ]
       }
     ],
@@ -749,9 +800,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1010,
-      "timeline_entries_examined": 2861,
-      "transitions_examined": 1749,
+      "stories_with_timelines": 1014,
+      "timeline_entries_examined": 2869,
+      "transitions_examined": 1752,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 14,
       "high_confidence_candidate_count": 9,
@@ -1212,11 +1263,11 @@
         "same_timestamp_order_uncertain": 4,
         "timeline_identity_unanchored": 4
       },
-      "excluded_entry_count": 114,
+      "excluded_entry_count": 115,
       "exclusion_reasons": {
         "insufficient_title_detail": 42,
         "low_value_title": 4,
-        "social_source": 68
+        "social_source": 69
       },
       "examples": [
         {
@@ -2236,35 +2287,35 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 634,
-      "treasure_coast_local": 431,
-      "treasure_coast_region": 177,
-      "unknown": 1122
+      "florida": 632,
+      "treasure_coast_local": 439,
+      "treasure_coast_region": 175,
+      "unknown": 1124
     },
-    "average_score": 59.39
+    "average_score": 59.47
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 634,
-      "treasure_coast_local": 431,
-      "treasure_coast_region": 177,
-      "unknown": 1122
+      "florida": 632,
+      "treasure_coast_local": 439,
+      "treasure_coast_region": 175,
+      "unknown": 1124
     },
-    "average_priority": 4.5
+    "average_priority": 4.51
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1291,
+      "active": 1335,
       "developing": 217,
-      "ongoing": 856
+      "ongoing": 818
     }
   },
   "registry_health": {
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2333,
-    "active_stories_after": 2333,
+    "active_stories_before": 2346,
+    "active_stories_after": 2346,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2289,21 +2340,21 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 45,
+    "incident_anchor_to_story_count": 46,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-05T22:44:13Z",
-    "quarantined_story_records_retained": 4268,
-    "active_story_count": 2364
+    "generated_at": "2026-10-06T01:43:44Z",
+    "quarantined_story_records_retained": 4269,
+    "active_story_count": 2370
   },
   "stories": {
-    "total": 2364,
+    "total": 2370,
     "importance_levels": {
       "breaking": 1,
       "high": 51,
-      "normal": 350,
-      "low": 1962,
+      "normal": 351,
+      "low": 1967,
       "archived": 0
     },
     "average_importance": 10.43,
@@ -2321,7 +2372,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 36.06
+          "age_hours": 39.06
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2383,7 +2434,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-04T10:44:28.549866+00:00",
-          "hours_since_update": 36.06,
+          "hours_since_update": 39.06,
           "event_count": 57,
           "timeline_entries": 39
         }
@@ -2401,7 +2452,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 2.02
+          "age_hours": 5.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2446,7 +2497,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 2.02,
+          "hours_since_update": 5.0,
           "event_count": 16,
           "timeline_entries": 16
         }
@@ -2454,6 +2505,126 @@
       {
         "story_id": "story_019439",
         "title": "Indian River County sheriff investigates whether fatal shooting of teen at boat ramp was self-defense",
+        "score": 75,
+        "editorial_priority": 85,
+        "editorial_score": 85,
+        "score_breakdown": {
+          "score": 85,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.02
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-06T01:44:20.146901+00:00",
+          "hours_since_update": 0.02,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_019464",
+        "title": "Fatal crash reported near Vero Beach intersection - WPBF",
+        "score": 75,
+        "editorial_priority": 84,
+        "editorial_score": 84,
+        "score_breakdown": {
+          "score": 84,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 0.07
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-06T01:44:20.146901+00:00",
+          "hours_since_update": 0.07,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_019472",
+        "title": "I-Team investigates Florida rules for seatbelts on school buses after fatal crash in Winter Haven",
         "score": 65,
         "editorial_priority": 74,
         "editorial_score": 74,
@@ -2483,7 +2654,7 @@
           "scope": "treasure_coast_local",
           "score": 100,
           "counties": [
-            "Indian River County"
+            "St. Lucie County"
           ],
           "places": []
         },
@@ -2499,7 +2670,7 @@
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
-          "last_updated": "2026-10-05T22:44:49.358045+00:00",
+          "last_updated": "2026-10-06T01:44:20.146901+00:00",
           "hours_since_update": 0.01,
           "event_count": 1,
           "timeline_entries": 1
@@ -2518,7 +2689,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 2.04
+          "age_hours": 5.04
         },
         "level": "high",
         "importance_reasons": [
@@ -2556,63 +2727,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 2.04,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_019464",
-        "title": "Fatal crash reported near Vero Beach intersection - WPBF",
-        "score": 65,
-        "editorial_priority": 73,
-        "editorial_score": 73,
-        "score_breakdown": {
-          "score": 73,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 0.05
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-10-05T22:44:49.358045+00:00",
-          "hours_since_update": 0.05,
+          "hours_since_update": 5.04,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2630,7 +2745,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 1.99
+          "age_hours": 4.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2673,7 +2788,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 1.99,
+          "hours_since_update": 4.99,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2691,7 +2806,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.05
+          "age_hours": 3.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2721,13 +2836,13 @@
         },
         "event_count": 1,
         "timeline_entries": 1,
-        "relationship_decisions": 1,
+        "relationship_decisions": 0,
         "canonical_source_candidates": 1,
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-05T22:44:49.358045+00:00",
-          "hours_since_update": 0.05,
+          "hours_since_update": 3.06,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2745,7 +2860,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 93.02
+          "age_hours": 96.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2788,7 +2903,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 93.02,
+          "hours_since_update": 96.01,
           "event_count": 28,
           "timeline_entries": 28
         }
@@ -2806,7 +2921,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 48.01
+          "age_hours": 51.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2845,7 +2960,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-03T22:44:32.452692+00:00",
-          "hours_since_update": 48.01,
+          "hours_since_update": 51.0,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -2863,7 +2978,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 144.7
+          "age_hours": 147.69
         },
         "level": "high",
         "importance_reasons": [
@@ -2904,7 +3019,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T22:03:25.542264+00:00",
-          "hours_since_update": 144.7,
+          "hours_since_update": 147.69,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -2922,7 +3037,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 93.02
+          "age_hours": 96.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2963,68 +3078,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 93.02,
+          "hours_since_update": 96.01,
           "event_count": 12,
           "timeline_entries": 12
-        }
-      },
-      {
-        "story_id": "story_017446",
-        "title": "I-95 reopens after Honda driver killed when car crashes, catches fire in Martin County - cbs12.com",
-        "score": 75,
-        "editorial_priority": 59,
-        "editorial_score": 59,
-        "score_breakdown": {
-          "score": 59,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 166.48
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 4,
-        "timeline_entries": 4,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 166.48,
-          "event_count": 4,
-          "timeline_entries": 4
         }
       },
       {
@@ -3040,7 +3096,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 79.01
+          "age_hours": 82.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3083,7 +3139,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-02T15:44:32.039306+00:00",
-          "hours_since_update": 79.01,
+          "hours_since_update": 82.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3101,7 +3157,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 52.01
+          "age_hours": 55.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3139,7 +3195,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-03T18:44:43.048284+00:00",
-          "hours_since_update": 52.01,
+          "hours_since_update": 55.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3157,7 +3213,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 36.01
+          "age_hours": 39.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3198,7 +3254,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-04T10:44:28.549866+00:00",
-          "hours_since_update": 36.01,
+          "hours_since_update": 39.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3216,7 +3272,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 164.81
+          "age_hours": 167.8
         },
         "level": "high",
         "importance_reasons": [
@@ -3255,66 +3311,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-29T01:56:40.617429+00:00",
-          "hours_since_update": 164.81,
+          "hours_since_update": 167.8,
           "event_count": 4,
           "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_017392",
-        "title": "Florida fatal crash closes northbound lanes of I-95 for seven hours - Treasure Coast News",
-        "score": 75,
-        "editorial_priority": 49,
-        "editorial_score": 49,
-        "score_breakdown": {
-          "score": 49,
-          "importance": 75,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 166.48
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 166.48,
-          "event_count": 3,
-          "timeline_entries": 3
         }
       },
       {
@@ -3330,7 +3329,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 121.83
+          "age_hours": 124.83
         },
         "level": "high",
         "importance_reasons": [
@@ -3369,7 +3368,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-09-30T20:55:10.960121+00:00",
-          "hours_since_update": 121.83,
+          "hours_since_update": 124.83,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3387,7 +3386,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 100.02
+          "age_hours": 103.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3426,7 +3425,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-01T18:44:00.400323+00:00",
-          "hours_since_update": 100.02,
+          "hours_since_update": 103.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3444,7 +3443,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 148.58
+          "age_hours": 151.57
         },
         "level": "high",
         "importance_reasons": [
@@ -3478,9 +3477,65 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-09-29T18:10:14.603971+00:00",
-          "hours_since_update": 148.58,
+          "hours_since_update": 151.57,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_018917",
+        "title": "'I get chewed to death': St. Lucie County tackles mosquito breeding after heavy rain - wpbf.com",
+        "score": 50,
+        "editorial_priority": 48,
+        "editorial_score": 48,
+        "score_breakdown": {
+          "score": 48,
+          "importance": 50,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.85,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 51.0
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-03T22:44:32.452692+00:00",
+          "hours_since_update": 51.0,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       }
     ]
@@ -3488,7 +3543,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-05T22:48:54Z",
+    "generated_at": "2026-10-06T01:48:57Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3503,26 +3558,25 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 6,
-        "generated_live": 2,
-        "no_publishable_sources": 1
+        "category_eligibility_archive_recovery": 5,
+        "generated_live": 4
       },
       "failures": {
-        "no_category_eligible_sources": 6
+        "no_category_eligible_sources": 5
       },
-      "model_attempt_count": 2,
-      "model_elapsed_seconds": 58.051,
-      "archive_recovery_requested_count": 7,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 100.105,
+      "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 26,
-      "story_aware_update_context_count": 4,
-      "material_update_promotion_evaluation_count": 10,
-      "material_update_promotion_count": 2,
-      "material_update_promotion_cache_hit_count": 5,
-      "material_update_promotion_model_call_count": 5
+      "published_story_duplicate_suppression_count": 32,
+      "story_aware_update_context_count": 3,
+      "material_update_promotion_evaluation_count": 12,
+      "material_update_promotion_count": 3,
+      "material_update_promotion_cache_hit_count": 8,
+      "material_update_promotion_model_call_count": 4
     },
     "categories": [
       {
@@ -3530,7 +3584,7 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 26,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 19,
         "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3549,24 +3603,8 @@
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
         "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_government_action",
-            "positive_signals": [],
-            "competing_signals": [
-              "crime_incident:shooting"
-            ],
-            "local_nexus_signals": [],
-            "headline": "Indian River County sheriff investigates whether fatal shooting of teen at boat ramp was self-defense",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriff-investigates-whether-fatal-shooting-of-teen-at-boat-ramp-was-self-defense"
-          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3582,8 +3620,18 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-i-95-oslo-road-interchange-opens-in-indian-river-county-over-a-year-ahead-of-schedule"
           }
         ],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Indian River County sheriff investigates whether fatal shooting of teen at boat ramp was self-defense",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriff-investigates-whether-fatal-shooting-of-teen-at-boat-ramp-was-self-defense",
+            "editorial_story_id": "story_019058",
+            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+            "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Amendment 3 supporters outspent opponents 26-to-1 as Florida Realtors poured $18 million into the race",
@@ -3592,6 +3640,26 @@
             "canonical_slug": "2026-10-05-florida-realtors-18-million-gives-amendment-3-a-26-to-1-spending-edge-over-oppon",
             "canonical_headline": "Florida Realtors' $18 Million Gives Amendment 3 a 26-to-1 Spending Edge Over Opponents",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "2026 General Election: County-by-county guide for Florida voters - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNGoteThTd2prLVllWjJSWGc5blJwdlAtbWMtd2xfMkZrcHJsWVFIR19Ra1hUV0g1TWVpT2xKNGl0NVJUc3lvTUlIN2pwTkIxV0NOVDcwME83VzlJMVFLWkR5R01WenItcWFIYkNyMTlTeWFUajVTamZzRXJ2RmFYSmdSWWxXbVhoM3FDRHZKa2lBSFFqZGNIU3pHSzk",
+            "editorial_story_id": "story_018384",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "WPBF 25 Interactive Voter Guide for 2026 Florida general election - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQcGdDMU1Mb3Q1VWVKRE1hVURhVnRJcnF3MFJ0LXhSSUlzZ1ZUc1NyMWlDUnZYMzhROHpqa0V3MlNjVVQwZzBfMzJDZER0X2xuMjkyMTRvVm5mUi1rb2c1S2VLZWdXZzBCVlVSZ3lqMEZCNERpU056TUFUUDJjcXhlbFh1NHItWWFZU2g3bjVPVC1lOE44ZWc",
+            "editorial_story_id": "story_018398",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3625,37 +3693,50 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Indian River County sheriff investigates whether fatal shooting of teen at boat ramp was self-defense",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriff-investigates-whether-fatal-shooting-of-teen-at-boat-ramp-was-self-defense",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-            "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
-            "basis": "exact_structured_incident_key",
-            "identity_keys": [
-              "incident:named-person-death:boat-ramp",
-              "story:story_019439",
-              "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriff-investigates-whether-fatal-shooting-of-teen-at-boat-ramp-was-self-defense"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "incident"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=incident:named-person-death:boat-ramp",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 2,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 1,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 2,
         "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Indian River County sheriff investigates whether fatal shooting of teen at boat ramp was self-defense",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriff-investigates-whether-fatal-shooting-of-teen-at-boat-ramp-was-self-defense",
+            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+            "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.85,
+            "shared_anchors": [
+              "17-year-old victim",
+              "Garcia's Boat Ramp",
+              "Indian River County",
+              "Friday night shooting",
+              "Indian River County Sheriff's Office"
+            ],
+            "novel_facts": [
+              "Sheriff Eric Flowers news conference detailing video evidence",
+              "Investigation examining whether shooting was self-defense",
+              "Teen seen on video opening truck door and punching occupants before being shot",
+              "Shooter and driver cooperated, turned over firearm and vehicle",
+              "No arrests made as of Monday; charging decision pending with State Attorney",
+              "Sheriff's commentary on social media driving teen gatherings and gun risks"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Amendment 3 supporters outspent opponents 26-to-1 as Florida Realtors poured $18 million into the race",
@@ -3682,8 +3763,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": true,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "update_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "update_existing_canonical",
@@ -3704,6 +3785,36 @@
             ],
             "reason": "Same shooting death of 17-year-old at Garcia's Boat Ramp on County Road 512 investigated by Indian River County Sheriff's Office. The incoming article provides material updates: no arrests, self-defense claim, suspect identification via Flock technology, and detailed circumstances of the shooting, which should update the existing canonical rather than create a new story.",
             "validation_errors": []
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "2026 General Election: County-by-county guide for Florida voters - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNGoteThTd2prLVllWjJSWGc5blJwdlAtbWMtd2xfMkZrcHJsWVFIR19Ra1hUV0g1TWVpT2xKNGl0NVJUc3lvTUlIN2pwTkIxV0NOVDcwME83VzlJMVFLWkR5R01WenItcWFIYkNyMTlTeWFUajVTamZzRXJ2RmFYSmdSWWxXbVhoM3FDRHZKa2lBSFFqZGNIU3pHSzk",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "WPBF 25 Interactive Voter Guide for 2026 Florida general election - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQcGdDMU1Mb3Q1VWVKRE1hVURhVnRJcnF3MFJ0LXhSSUlzZ1ZUc1NyMWlDUnZYMzhROHpqa0V3MlNjVVQwZzBfMzJDZER0X2xuMjkyMTRvVm5mUi1rb2c1S2VLZWdXZzBCVlVSZ3lqMEZCNERpU056TUFUUDJjcXhlbFh1NHItWWFZU2g3bjVPVC1lOE44ZWc",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "local_gov",
@@ -3767,15 +3878,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 24.265
+        "elapsed_seconds": 29.261
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 6,
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 8,
         "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": false,
@@ -3784,11 +3895,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 25.754,
+            "elapsed_seconds": 29.866,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 25.754,
+        "model_elapsed_seconds": 29.866,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3799,21 +3910,11 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "crime",
-            "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - cw34.com",
-            "source_url": "https://cw34.com/news/local/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_019318",
-            "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-            "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "crime",
             "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - WPEC",
@@ -3836,12 +3937,22 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "DeSantis opens new I-95 interchange in Indian River County, a year early - WPEC",
-            "source_url": "https://cbs12.com/news/local/governor-ron-desantis-appear-indian-river-county-i95-olso-road-florida-department-of-transportation-secretary-jared-perdue-florida-news",
-            "editorial_story_id": "story_019349",
-            "canonical_slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
-            "canonical_headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
-            "basis": "exact_source_and_persistent_story_skip",
+            "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMi4gJBVV95cUxNRlU1VHI3RUpESHpXcHl5elZBVlc3MXN5bk8wU04wX0V0QVV4QnlPdlBnbnZ3Uy1pZGJyYzJ6OWVaOFhKTzJlRFdMQmN3UjRWTVd0MDZtM0lvY283Ukk1bUVWR2tBakdBNFAyV3BBZnc0ay1aMkdMNFpvR3pxanctRE5TMktwZ1dPTFNibTBJWjZLTTBOLUh4czU1Sldra0Q0ZF9vWldIbmI0WHhxeW5xTWtxb1gwQzYybGFGRkdCOHM1bkl3b3lDbXM0QVZ0ellPVGMtV3ptcGRyT1RaWm82anMzWERiR3FaRGZJNllpYUFpcEZxai1Wbi13a2hqMGdaQkgyckVOdWpZN2VEa0c5eVJDLVRyTG52ck5lZ2xsbE1Ib2E4TF9yS3pjVk1pOWpiQ0w1TGRJNWxtRE16SFZxUElkMlhuX2NHc0lSOV9FMTRjNllZdGpQLTVycWVmTnR4c1E",
+            "editorial_story_id": "story_019318",
+            "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
+            "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County - WFLX",
+            "source_url": "https://www.wflx.com/2026/10/05/17-year-old-dies-after-shooting-near-garcias-boat-ramp-indian-river-county",
+            "editorial_story_id": "story_019058",
+            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+            "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
+            "basis": "same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -3872,38 +3983,43 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 3,
-        "material_update_promotion_count": 1,
-        "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_count": 2,
+        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
-            "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - cw34.com",
-            "source_url": "https://cw34.com/news/local/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
-            "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-            "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
+            "source_headline": "Indian River County sheriff investigates whether fatal shooting of teen at boat ramp was self-defense",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriff-investigates-whether-fatal-shooting-of-teen-at-boat-ramp-was-self-defense",
+            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+            "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
             "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
+            "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
-            "promoted": false,
+            "promoted": true,
             "cache_hit": false,
             "model_call": true,
-            "action": "preserve_existing_canonical",
+            "action": "update_existing_canonical",
             "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.95,
+            "semantic_action": "update_existing_canonical",
+            "confidence": 0.93,
             "shared_anchors": [
-              "Matthew Waggle",
-              "Dawn Kriskewic",
-              "Indian River County Jail booking Monday 5:20 a.m.",
-              "first-degree murder charge",
-              "Vero Beach killing",
-              "West Virginia arrest"
+              "Garcia's Boat Ramp",
+              "Indian River County",
+              "17-year-old victim",
+              "Friday night shooting",
+              "Indian River County Sheriff's Office"
             ],
-            "novel_facts": [],
-            "reason": "Both articles report the identical booking event of Matthew Waggle on a first-degree murder charge for killing Dawn Kriskewic, with the same timeline, agency, and background details. No new facts beyond what's in the canonical article.",
+            "novel_facts": [
+              "Sheriff Flowers detailed video showing victim opening truck door and punching occupants before being shot",
+              "investigation now focused on possible self-defense claim",
+              "shooter and driver cooperated, turned over firearm and vehicle",
+              "no arrests made as of Monday",
+              "sheriff commented on social media driving teen gatherings and risk of firearms"
+            ],
+            "reason": "Same fatal shooting of a 17-year-old at Garcia's Boat Ramp previously reported as a death; the new article adds material investigative developments (self-defense theory, video evidence, cooperation of parties, no arrests yet) that update the existing case rather than constituting a separate newsworthy event.",
             "validation_errors": []
           },
           {
@@ -3960,8 +4076,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": true,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "update_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "update_existing_canonical",
@@ -3986,34 +4102,65 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "DeSantis opens new I-95 interchange in Indian River County, a year early - WPEC",
-            "source_url": "https://cbs12.com/news/local/governor-ron-desantis-appear-indian-river-county-i95-olso-road-florida-department-of-transportation-secretary-jared-perdue-florida-news",
-            "canonical_slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
-            "canonical_headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
+            "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMi4gJBVV95cUxNRlU1VHI3RUpESHpXcHl5elZBVlc3MXN5bk8wU04wX0V0QVV4QnlPdlBnbnZ3Uy1pZGJyYzJ6OWVaOFhKTzJlRFdMQmN3UjRWTVd0MDZtM0lvY283Ukk1bUVWR2tBakdBNFAyV3BBZnc0ay1aMkdMNFpvR3pxanctRE5TMktwZ1dPTFNibTBJWjZLTTBOLUh4czU1Sldra0Q0ZF9vWldIbmI0WHhxeW5xTWtxb1gwQzYybGFGRkdCOHM1bkl3b3lDbXM0QVZ0ellPVGMtV3ptcGRyT1RaWm82anMzWERiR3FaRGZJNllpYUFpcEZxai1Wbi13a2hqMGdaQkgyckVOdWpZN2VEa0c5eVJDLVRyTG52ck5lZ2xsbE1Ib2E4TF9yS3pjVk1pOWpiQ0w1TGRJNWxtRE16SFZxUElkMlhuX2NHc0lSOV9FMTRjNllZdGpQLTVycWVmTnR4c1E",
+            "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
+            "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County - WFLX",
+            "source_url": "https://www.wflx.com/2026/10/05/17-year-old-dies-after-shooting-near-garcias-boat-ramp-indian-river-county",
+            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+            "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "17-year-old victim",
+              "Garcia's Boat Ramp",
+              "3700 block of County Road 512",
+              "11:24 p.m. Friday",
+              "Indian River County Sheriff's Office",
+              "same death outcome"
+            ],
+            "novel_facts": [
+              "Additional detail on hospital transfer route (Sebastian River Medical Center to Holmes Regional Medical Center)"
+            ],
+            "reason": "Both articles describe the identical shooting: same victim age, same location, same time, same agency, and same fatal outcome. The incoming article adds minor transport detail but no new material fact such as suspect identification, arrest, or cause determination, so it should update rather than duplicate as a new story.",
+            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "IRC Sheriff Names Teen Killed at Garcia's Boat Ramp, No Arrests Made",
+        "live_hero_headline": "Family Identifies Teen Killed at Indian River County Boat Ramp, No Arrests Yet",
         "generated_card_count": 1,
-        "elapsed_seconds": 55.786
+        "elapsed_seconds": 54.452
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 10,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 11,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4030,9 +4177,28 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 4,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_public_safety:fatal crash",
+              "schools_education:students"
+            ],
+            "local_nexus_signals": [
+              "source_locality:st lucie county"
+            ],
+            "headline": "I-Team investigates Florida rules for seatbelts on school buses after fatal crash in Winter Haven",
+            "source_url": "https://www.wptv.com/wptv-investigates/i-team-investigates-florida-rules-for-seatbelts-on-school-buses-after-fatal-crash-in-winter-haven"
+          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -4075,7 +4241,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-give-update-on-shooting-death-of-17-year-old-boy"
           }
         ],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -4095,16 +4261,6 @@
             "canonical_slug": "2026-10-05-fort-pierce-seniors-push-back-as-orange-avenue-center-sale-nears",
             "canonical_headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/17-year-old-dies-after-shooting-near-garcias-boat-ramp-in-indian-river-county",
-            "editorial_story_id": "story_019058",
-            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-            "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
-            "basis": "same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -4169,25 +4325,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "17-year-old dies after shooting near Garcia's Boat Ramp in Indian River County",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/17-year-old-dies-after-shooting-near-garcias-boat-ramp-in-indian-river-county",
-            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-            "canonical_headline": "Teen Dies After Shooting Near Garcia's Boat Ramp in Indian River County",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.816
+        "elapsed_seconds": 12.735
       },
       {
         "category_key": "sports",
@@ -4224,8 +4365,8 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 9,
-        "elapsed_seconds": 7.186
+        "new_publication_stale_rejected_count": 7,
+        "elapsed_seconds": 12.131
       },
       {
         "category_key": "things_to_do",
@@ -4280,23 +4421,38 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 10.106
+        "elapsed_seconds": 9.948
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 1,
-        "selected_source_count": 0,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Florida category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 2,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 21.592,
+            "result": "copydesk_integrity",
+            "error_type": "CopyDeskIntegrityError",
+            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 14.52,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 36.112,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4305,7 +4461,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 1,
@@ -4345,14 +4501,18 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.355
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Winter Haven Bus Crash Death Revives Seatbelt Fight Rooted in St. Lucie County",
+        "generated_card_count": 0,
+        "elapsed_seconds": 44.441
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 24,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4373,8 +4533,18 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - cw34.com",
+            "source_url": "https://cw34.com/news/local/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
+            "editorial_story_id": "story_019318",
+            "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
+            "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Flood safety tips shared as Indiantown residents prepare for more rain - WPEC",
@@ -4388,11 +4558,40 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 2,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - cw34.com",
+            "source_url": "https://cw34.com/news/local/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
+            "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Matthew Waggle",
+              "Dawn Kriskewic",
+              "Indian River County Jail booking Monday 5:20 a.m.",
+              "first-degree murder charge",
+              "Vero Beach killing",
+              "West Virginia arrest"
+            ],
+            "novel_facts": [],
+            "reason": "Both articles report the identical booking event of Matthew Waggle on a first-degree murder charge for killing Dawn Kriskewic, with the same timeline, agency, and background details. No new facts beyond what's in the canonical article.",
+            "validation_errors": []
+          },
           {
             "category_key": "martin",
             "source_headline": "Flood safety tips shared as Indiantown residents prepare for more rain - WPEC",
@@ -4423,21 +4622,28 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.16
+        "elapsed_seconds": 9.354
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 29,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 7.035,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 7.035,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4448,10 +4654,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 11,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4471,6 +4677,26 @@
             "canonical_slug": "2026-10-05-port-st-lucie-mayor-shannon-martin-challenger-steven-giordano-clash-in-debate",
             "canonical_headline": "Port St. Lucie Mayor Shannon Martin, Challenger Steven Giordano Clash in Debate",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "2026 General Election: County-by-county guide for Florida voters - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNGoteThTd2prLVllWjJSWGc5blJwdlAtbWMtd2xfMkZrcHJsWVFIR19Ra1hUV0g1TWVpT2xKNGl0NVJUc3lvTUlIN2pwTkIxV0NOVDcwME83VzlJMVFLWkR5R01WenItcWFIYkNyMTlTeWFUajVTamZzRXJ2RmFYSmdSWWxXbVhoM3FDRHZKa2lBSFFqZGNIU3pHSzk",
+            "editorial_story_id": "story_018384",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "WPBF 25 Interactive Voter Guide for 2026 Florida general election - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQcGdDMU1Mb3Q1VWVKRE1hVURhVnRJcnF3MFJ0LXhSSUlzZ1ZUc1NyMWlDUnZYMzhROHpqa0V3MlNjVVQwZzBfMzJDZER0X2xuMjkyMTRvVm5mUi1rb2c1S2VLZWdXZzBCVlVSZ3lqMEZCNERpU056TUFUUDJjcXhlbFh1NHItWWFZU2g3bjVPVC1lOE44ZWc",
+            "editorial_story_id": "story_018398",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4532,6 +4758,16 @@
             "canonical_headline": "St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Missing since January: St. Lucie County deputies search for 47-year-old man - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/47-year-old-man-missing-since-january-8-new-york-giants-tattoo-rosary-with-cross-st-lucie-county-sheriffs-office-florida-news",
+            "editorial_story_id": "story_017306",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -4578,6 +4814,36 @@
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "2026 General Election: County-by-county guide for Florida voters - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNGoteThTd2prLVllWjJSWGc5blJwdlAtbWMtd2xfMkZrcHJsWVFIR19Ra1hUV0g1TWVpT2xKNGl0NVJUc3lvTUlIN2pwTkIxV0NOVDcwME83VzlJMVFLWkR5R01WenItcWFIYkNyMTlTeWFUajVTamZzRXJ2RmFYSmdSWWxXbVhoM3FDRHZKa2lBSFFqZGNIU3pHSzk",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "WPBF 25 Interactive Voter Guide for 2026 Florida general election - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQcGdDMU1Mb3Q1VWVKRE1hVURhVnRJcnF3MFJ0LXhSSUlzZ1ZUc1NyMWlDUnZYMzhROHpqa0V3MlNjVVQwZzBfMzJDZER0X2xuMjkyMTRvVm5mUi1rb2c1S2VLZWdXZzBCVlVSZ3lqMEZCNERpU056TUFUUDJjcXhlbFh1NHItWWFZU2g3bjVPVC1lOE44ZWc",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4645,13 +4911,11 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "St. Lucie County location"
-            ],
+            "confidence": 0.97,
+            "shared_anchors": [],
             "novel_facts": [
-              "Vehicle fire closing southbound lanes of Florida's Turnpike near mile marker 162",
-              "Incident reported Friday morning, Oct 2 2026"
+              "Vehicle fire closing southbound lanes of Florida's Turnpike near mile marker 162 in St. Lucie County",
+              "Incident reported around 10:56 a.m. Friday with major traffic impact"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4677,7 +4941,8 @@
             "confidence": 0.95,
             "shared_anchors": [],
             "novel_facts": [
-              "Vehicle fire closed southbound Florida's Turnpike near mile marker 162 in St. Lucie County on a Friday around 10:56 a.m."
+              "Vehicle fire closed southbound lanes of Florida's Turnpike near mile marker 162 in St. Lucie County",
+              "Incident began about 10:56 a.m., right shoulder closed as of 12:22 p.m."
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4698,19 +4963,38 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Missing since January: St. Lucie County deputies search for 47-year-old man - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/47-year-old-man-missing-since-january-8-new-york-giants-tattoo-rosary-with-cross-st-lucie-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 15.776
+        "new_publication_stale_rejected_count": 1,
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
+        "generated_card_count": 0,
+        "elapsed_seconds": 25.316
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "generated_live",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 7,
-        "selected_source_count": 5,
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 6,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4718,11 +5002,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 32.297,
+            "elapsed_seconds": 27.092,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 32.297,
+        "model_elapsed_seconds": 27.092,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4733,18 +5017,18 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
-            "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - WPEC",
-            "source_url": "https://cbs12.com/news/crime/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_019318",
-            "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-            "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
+            "source_headline": "Fatal crash reported near Vero Beach intersection - WPBF",
+            "source_url": "https://www.wpbf.com/article/fatal-crash-reported-near-vero-beach-intersection/74039290",
+            "editorial_story_id": "story_019464",
+            "canonical_slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
+            "canonical_headline": "Fatal Crash Shuts Down A1A at Regatta Drive in Vero Beach",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4816,38 +5100,25 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
-            "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - WPEC",
-            "source_url": "https://cbs12.com/news/crime/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
-            "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-            "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
+            "source_headline": "Fatal crash reported near Vero Beach intersection - WPBF",
+            "source_url": "https://www.wpbf.com/article/fatal-crash-reported-near-vero-beach-intersection/74039290",
+            "canonical_slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
+            "canonical_headline": "Fatal Crash Shuts Down A1A at Regatta Drive in Vero Beach",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
             "promoted": false,
-            "cache_hit": true,
+            "cache_hit": false,
             "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
-            "shared_anchors": [
-              "Matthew Waggle",
-              "Dawn Kriskewic",
-              "Indian River County Jail booking Monday 5:20 a.m.",
-              "first-degree murder charge",
-              "same source URL"
-            ],
-            "novel_facts": [],
-            "reason": "Identical source article and event: same suspect, victim, booking time, and charge. No new facts beyond what's in the existing canonical.",
-            "validation_errors": []
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "indian_river",
@@ -4913,9 +5184,9 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Sheriff: Video Shows Teen Punching Before Fatal Garcia's Boat Ramp Shooting",
-        "generated_card_count": 3,
-        "elapsed_seconds": 52.993
+        "live_hero_headline": "IRC Sheriff: Video Shows Teen Punching Before Fatal Boat Ramp Shooting",
+        "generated_card_count": 2,
+        "elapsed_seconds": 41.851
       }
     ]
   }
