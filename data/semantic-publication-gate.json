@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-07T18:11:56.696310+00:00",
+  "generated_at": "2026-10-07T18:52:58.345985+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -70,8 +70,8 @@
     "no_candidate_passes": 50,
     "duplicates_preserved": 1,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 3,
-    "retroactive_rows_retained": 47,
+    "new_stories_allowed": 1,
+    "retroactive_rows_retained": 49,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 1,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 5,
+    "pre_generation_materiality_evaluations": 6,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 5,
-    "pre_generation_materiality_holds": 0,
-    "pre_generation_materiality_model_calls": 1,
+    "pre_generation_materiality_holds": 1,
+    "pre_generation_materiality_model_calls": 2,
     "pre_generation_materiality_cache_hits": 4,
-    "terminal_permalink_evaluations": 3,
-    "terminal_permalink_candidate_pairs": 36,
-    "terminal_permalink_model_calls": 3,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 2,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 1,
@@ -135,37 +135,6 @@
         "56% emergency response time reduction estimate"
       ],
       "reason": "Both articles report the same DeSantis press event opening the same I-95 Oslo Road interchange on the same Monday, with identical core facts (cost, schedule acceleration, first new interchange in 50 years). The incoming article adds quotes and background color but no material update like a new consequence, ruling, or casualty revision.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "crime",
-      "source_headline": "Fort Pierce police arrest 2 people after woman attacked, shot at in Fort Pierce - WPEC",
-      "source_url": "https://cbs12.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news",
-      "canonical_slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
-      "canonical_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
-      "canonical_is_custom": false,
-      "identity_basis": "same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "Keibin Lopez-Godoy",
-        "Kailee Yurubi",
-        "South 6th Street",
-        "Fort Pierce Police",
-        "Saturday October 3 arrest",
-        "same charges: attempted first-degree homicide and accessory after the fact"
-      ],
-      "novel_facts": [
-        "Additional narrative detail about the victim going to speak with her boyfriend and being attacked before fleeing"
-      ],
-      "reason": "This is the same arrest event already covered in the canonical article, with identical suspects, charges, location, and date. The incoming article adds narrative color about the sequence of events but no new arrest, charge, or outcome beyond what's already reported.",
       "validation_errors": []
     },
     {
@@ -227,6 +196,33 @@
       "validation_errors": []
     },
     {
+      "category_key": "st_lucie",
+      "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
+      "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident?teaserSource=trending",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.97,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Vehicle fire closed southbound Florida's Turnpike lanes in St. Lucie County near mile marker 162",
+        "Incident began around 10:56 a.m. with right shoulder closure reported at 12:22 p.m."
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
       "category_key": "indian_river",
       "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - WPEC",
       "source_url": "https://cbs12.com/news/crime/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
@@ -252,6 +248,41 @@
       ],
       "novel_facts": [],
       "reason": "Same source article (identical URL) covering the same booking of Matthew Waggle for the murder of Dawn Kriskewic, with no new facts beyond additional background already covered in the canonical version.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "indian_river",
+      "source_headline": "New I-95 Oslo Road interchange opens in Indian River County over a year ahead of schedule - WFLX",
+      "source_url": "https://www.wflx.com/2026/10/05/new-i-95-oslo-road-interchange-opens-indian-river-county-over-year-ahead-schedule",
+      "canonical_slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
+      "canonical_headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Oslo Road interchange",
+        "Indian River County",
+        "Governor Ron DeSantis",
+        "October 5 opening event",
+        "$100 million cost",
+        "one year/400 days ahead of schedule",
+        "first new I-95 interchange in ~50 years"
+      ],
+      "novel_facts": [
+        "additional quotes from DeSantis and FDOT Secretary Jared Perdue",
+        "gopher tortoise relocation habitat detail",
+        "Moving Florida Forward acceleration program detail",
+        "projected emergency response time improvement of 56%"
+      ],
+      "reason": "Both articles cover the same DeSantis press event opening the same Oslo Road I-95 interchange on the same date with the same cost and schedule details. The incoming article adds more quotes and background color (tortoise habitat, acceleration program mechanics) but no material update like a new consequence, ruling, or casualty change that would warrant a new canonical or update.",
       "validation_errors": []
     }
   ],
@@ -1060,7 +1091,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
       "incoming_source_url": "https://www.wpbf.com/article/two-arrested-in-fort-pierce-shooting-incident/74040790",
-      "incoming_story_id": "story_019487",
+      "incoming_story_id": "",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1197,8 +1228,48 @@
       }
     },
     {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
+      "incoming_source_url": "https://cbs12.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
+      "incoming_story_id": "story_019822",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Missing 82-Year-Old Port St. Lucie Woman Found Safe",
+      "incoming_source_url": "https://www.wpbf.com/article/missing-endangered-woman-port-st-lucie/74063768",
+      "incoming_story_id": "story_019851",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
       "phase": "forward_publication",
-      "incoming_headline": "Port St. Lucie Flooding Spurs Scrutiny of $30 Million Oak Hammock Drainage Plan",
+      "incoming_headline": "Port St. Lucie Flooding Puts Spotlight Back on $30 Million Oak Hammock Project",
       "incoming_source_url": "https://cbs12.com/news/local/port-st-lucie-flooding-problem-renews-focus-on-citys-stormwater-spending-30-million-through-2031-reduce-flooding-public-works",
       "incoming_story_id": "story_019849",
       "candidates": [],
@@ -1221,7 +1292,7 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Port St. Lucie Flooding Spurs Scrutiny of $30 Million Oak Hammock Drainage Plan",
+      "incoming_headline": "Port St. Lucie Flooding Puts Spotlight Back on $30 Million Oak Hammock Project",
       "incoming_source_url": "https://cbs12.com/news/local/port-st-lucie-flooding-problem-renews-focus-on-citys-stormwater-spending-30-million-through-2031-reduce-flooding-public-works",
       "incoming_story_id": "story_019849",
       "candidates": [
@@ -1229,10 +1300,9 @@
           "slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
           "headline": "Port St. Lucie Flooding Continues, More Rain Expected This Week",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.72,
-          "retrieval_score": 0.68,
+          "terminal_recall_score": 0.6829,
+          "retrieval_score": 0.6429,
           "reasons": [
-            "moderate_fuzzy_headline",
             "publication_gap_0_days"
           ]
         },
@@ -1240,8 +1310,8 @@
           "slug": "2026-09-21-port-st-lucie-advances-22-billion-2050-mobility-plan-with-phased-fee-hikes",
           "headline": "Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5662,
-          "retrieval_score": 0.5662,
+          "terminal_recall_score": 0.5571,
+          "retrieval_score": 0.5571,
           "reasons": [
             "publication_gap_16_days",
             "outside_recent_window"
@@ -1251,10 +1321,20 @@
           "slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
           "headline": "Two Port St. Lucie Hit-and-Run Suspects Arrested, Released on Bond",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5454,
-          "retrieval_score": 0.5234,
+          "terminal_recall_score": 0.5363,
+          "retrieval_score": 0.5143,
           "reasons": [
             "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-indiantown-flooding-persists-despite-2m-booker-park-drainage-project",
+          "headline": "Indiantown Flooding Persists Despite $2M Booker Park Drainage Project",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.529,
+          "retrieval_score": 0.495,
+          "reasons": [
+            "publication_gap_2_days"
           ]
         },
         {
@@ -1268,6 +1348,16 @@
           ]
         },
         {
+          "slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
+          "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5173,
+          "retrieval_score": 0.4983,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
           "slug": "2026-10-06-port-st-lucie-woman-pleads-guilty-in-palm-beach-county-apartment-theft-scheme",
           "headline": "Port St. Lucie Woman Pleads Guilty in Palm Beach County Apartment Theft Scheme",
           "terminal_recall_tier": 1,
@@ -1278,21 +1368,11 @@
           ]
         },
         {
-          "slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-          "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5018,
-          "retrieval_score": 0.4828,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
           "slug": "2026-09-28-port-st-lucie-council-votes-monday-on-9716m-budget-lower-tax-rate",
           "headline": "Port St. Lucie approves $971.6M budget, cuts tax rate for 11th straight year",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5012,
-          "retrieval_score": 0.4852,
+          "terminal_recall_score": 0.5011,
+          "retrieval_score": 0.4851,
           "reasons": [
             "publication_gap_9_days"
           ]
@@ -1318,59 +1398,49 @@
           ]
         },
         {
-          "slug": "2026-10-02-st-lucie-mosquito-crews-treat-standing-water-near-us-1-in-fort-pierce",
-          "headline": "St. Lucie Mosquito Crews Treat Standing Water Near U.S. 1 in Fort Pierce",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4751,
-          "retrieval_score": 0.4501,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
           "slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
           "headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.463,
-          "retrieval_score": 0.45,
+          "terminal_recall_score": 0.4777,
+          "retrieval_score": 0.4647,
           "reasons": [
             "publication_gap_9_days"
           ]
         },
         {
-          "slug": "2026-09-29-port-st-lucie-swat-raid-uncovers-cocaine-meth-gun-in-home-with-infant",
-          "headline": "Port St. Lucie SWAT raid uncovers cocaine, meth, gun in home with infant",
+          "slug": "2026-10-02-st-lucie-mosquito-crews-treat-standing-water-near-us-1-in-fort-pierce",
+          "headline": "St. Lucie Mosquito Crews Treat Standing Water Near U.S. 1 in Fort Pierce",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4604,
-          "retrieval_score": 0.4444,
+          "terminal_recall_score": 0.4629,
+          "retrieval_score": 0.4379,
           "reasons": [
-            "publication_gap_8_days"
+            "publication_gap_5_days"
           ]
         }
       ],
       "initial_decision": {
         "status": "invalid_model_response",
         "action": "hold",
-        "recommended_action": "new_story",
+        "recommended_action": "update_existing_canonical",
         "selected_candidate_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
         "same_real_world_event": true,
         "material_new_update": true,
-        "independently_newsworthy_followup": true,
+        "independently_newsworthy_followup": false,
         "confidence": 0.78,
         "shared_anchors": [
           "same flooding event in Port St. Lucie",
-          "same rainfall totals (4 inches over 48 hours, 2-4 more inches forecast)",
-          "same published date 2026-10-07",
-          "overlapping locations near California Boulevard/Savona Boulevard"
+          "same 4 inches of rain over past 48 hours / 2-4 more inches forecast",
+          "same timeframe (published same day, Oct 7 2026)",
+          "overlapping neighborhoods affected by flooding"
         ],
         "novel_facts": [
-          "introduces the $30 million Oak Hammock Watershed Improvement Project in the city's FY2027-2031 capital plan",
-          "proposed $6 stormwater assessment fee increase ($183 to $189)",
-          "resident account (Frank Camarda) alleging reduced swale maintenance",
-          "city spokesperson's detailed explanation of infrastructure capacity, 2 feet of water in 30 minutes, and planned mitigation (retention ponds, pumps, raising roadway)",
-          "scope of citywide drainage infrastructure (200 miles of canals, 1,200 miles of swales, 6,000+ culverts) and property owner responsibilities"
+          "$30 million Oak Hammock Watershed Improvement Project details and funding plan",
+          "proposed $6 stormwater assessment increase from $183 to $189",
+          "city official Scott Samples' explanation of system capacity and response",
+          "resident Frank Camarda's account of swale maintenance lapse",
+          "specifics on five flood-related capital projects (Oak Hammock, Elkcam Basin, E-8 Canal, Hogpen Slough, swale/culvert replacement)"
         ],
-        "reason": "This article covers the same flooding event as the candidate but shifts the angle from scene/damage reporting to government accountability: it ties the flooding to a specific $30 million capital project, a proposed fee increase, and a resident's claim that maintenance lapsed, raising a policy/accountability question not addressed in the original flood story. This distinct public-interest angle (infrastructure spending and city response under scrutiny) merits independent newsworthy treatment rather than folding into the generic flood-conditions canonical.",
+        "reason": "This is the same ongoing Port St. Lucie flooding event covered in the canonical article (same rainfall totals, same timeframe, same city), but it adds substantial new material: specifics of the $30 million Oak Hammock drainage project, a proposed stormwater fee increase, and official city response explaining why the system failed to keep up. This is a material update that changes what readers need to know about the city's response and planned fixes, but does not rise to an independently newsworthy accountability story distinct from the flooding itself — it should be folded into the existing flooding canonical rather than spun into a new URL.",
         "validation_errors": [
           "same_event_confidence_below_threshold"
         ],
@@ -1380,26 +1450,26 @@
       "decision": {
         "status": "invalid_model_response",
         "action": "hold",
-        "recommended_action": "new_story",
+        "recommended_action": "update_existing_canonical",
         "selected_candidate_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
         "same_real_world_event": true,
         "material_new_update": true,
-        "independently_newsworthy_followup": true,
+        "independently_newsworthy_followup": false,
         "confidence": 0.78,
         "shared_anchors": [
           "same flooding event in Port St. Lucie",
-          "same rainfall totals (4 inches over 48 hours, 2-4 more inches forecast)",
-          "same published date 2026-10-07",
-          "overlapping locations near California Boulevard/Savona Boulevard"
+          "same 4 inches of rain over past 48 hours / 2-4 more inches forecast",
+          "same timeframe (published same day, Oct 7 2026)",
+          "overlapping neighborhoods affected by flooding"
         ],
         "novel_facts": [
-          "introduces the $30 million Oak Hammock Watershed Improvement Project in the city's FY2027-2031 capital plan",
-          "proposed $6 stormwater assessment fee increase ($183 to $189)",
-          "resident account (Frank Camarda) alleging reduced swale maintenance",
-          "city spokesperson's detailed explanation of infrastructure capacity, 2 feet of water in 30 minutes, and planned mitigation (retention ponds, pumps, raising roadway)",
-          "scope of citywide drainage infrastructure (200 miles of canals, 1,200 miles of swales, 6,000+ culverts) and property owner responsibilities"
+          "$30 million Oak Hammock Watershed Improvement Project details and funding plan",
+          "proposed $6 stormwater assessment increase from $183 to $189",
+          "city official Scott Samples' explanation of system capacity and response",
+          "resident Frank Camarda's account of swale maintenance lapse",
+          "specifics on five flood-related capital projects (Oak Hammock, Elkcam Basin, E-8 Canal, Hogpen Slough, swale/culvert replacement)"
         ],
-        "reason": "This article covers the same flooding event as the candidate but shifts the angle from scene/damage reporting to government accountability: it ties the flooding to a specific $30 million capital project, a proposed fee increase, and a resident's claim that maintenance lapsed, raising a policy/accountability question not addressed in the original flood story. This distinct public-interest angle (infrastructure spending and city response under scrutiny) merits independent newsworthy treatment rather than folding into the generic flood-conditions canonical.",
+        "reason": "This is the same ongoing Port St. Lucie flooding event covered in the canonical article (same rainfall totals, same timeframe, same city), but it adds substantial new material: specifics of the $30 million Oak Hammock drainage project, a proposed stormwater fee increase, and official city response explaining why the system failed to keep up. This is a material update that changes what readers need to know about the city's response and planned fixes, but does not rise to an independently newsworthy accountability story distinct from the flooding itself — it should be folded into the existing flooding canonical rather than spun into a new URL.",
         "validation_errors": [
           "same_event_confidence_below_threshold"
         ],
@@ -1408,417 +1478,34 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
-      "incoming_source_url": "https://cbs12.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
-      "incoming_story_id": "story_019822",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
-      "incoming_source_url": "https://cbs12.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
-      "incoming_story_id": "story_019822",
-      "candidates": [
-        {
-          "slug": "2026-10-02-indian-river-county-rabies-alert-follows-positive-bat-near-fellsmere-apartments",
-          "headline": "Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.639,
-          "retrieval_score": 0.514,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-02-st-lucie-mosquito-crews-treat-standing-water-near-us-1-in-fort-pierce",
-          "headline": "St. Lucie Mosquito Crews Treat Standing Water Near U.S. 1 in Fort Pierce",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6351,
-          "retrieval_score": 0.5101,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
-          "headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5819,
-          "retrieval_score": 0.5479,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
-          "headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.545,
-          "retrieval_score": 0.508,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-09-29-driver-crashes-into-patrol-vehicle-in-indian-river-county-nearly-hits-deputy",
-          "headline": "Driver crashes into patrol vehicle in Indian River County, nearly hits deputy",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4702,
-          "retrieval_score": 0.4542,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-          "headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4542,
-          "retrieval_score": 0.4202,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-indiantown-flooding-persists-despite-2m-booker-park-drainage-project",
-          "headline": "Indiantown Flooding Persists Despite $2M Booker Park Drainage Project",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4456,
-          "retrieval_score": 0.4116,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-09-21-port-st-lucie-advances-22-billion-2050-mobility-plan-with-phased-fee-hikes",
-          "headline": "Port St. Lucie's $2.2 billion mobility plan aims to tackle traffic and keep up with growth",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4404,
-          "retrieval_score": 0.4404,
-          "reasons": [
-            "publication_gap_16_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-09-23-indian-river-county-deputy-k9-penny-help-rescue-missing-gadsden-county-woman",
-          "headline": "Indian River County deputy, K9 Penny help rescue missing Gadsden County woman",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4313,
-          "retrieval_score": 0.4313,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-10-06-port-st-lucie-woman-pleads-guilty-in-palm-beach-county-apartment-theft-scheme",
-          "headline": "Port St. Lucie Woman Pleads Guilty in Palm Beach County Apartment Theft Scheme",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4303,
-          "retrieval_score": 0.3933,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
-          "headline": "St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4262,
-          "retrieval_score": 0.4042,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-martin-county-issues-advisory-after-sentinel-chickens-test-positive-for-west-nil",
-          "headline": "Martin County Issues Advisory After Sentinel Chickens Test Positive for West Nile Virus",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4241,
-          "retrieval_score": 0.4021,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.93,
-        "shared_anchors": [],
-        "novel_facts": [
-          "UF/IFAS Florida Medical Entomology Laboratory study finding high Aedes aegypti counts in Indian River County yards",
-          "Bite Diary smartphone study methodology and statistics (3,788 mosquitoes from 78 yards, 93% outdoor bites)",
-          "Statewide dengue case counts from Sept 20-26 surveillance report"
-        ],
-        "reason": "None of the candidates concern this UF study on Aedes aegypti mosquitoes and dengue risk in Indian River County. The closest topical matches (Martin County West Nile advisory, St. Lucie mosquito control after rain, Fellsmere rabies alert) are distinct incidents involving different agencies, locations, and disease vectors with no shared named study, location, or specific event anchor. This is a new, standalone story.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.93,
-        "shared_anchors": [],
-        "novel_facts": [
-          "UF/IFAS Florida Medical Entomology Laboratory study finding high Aedes aegypti counts in Indian River County yards",
-          "Bite Diary smartphone study methodology and statistics (3,788 mosquitoes from 78 yards, 93% outdoor bites)",
-          "Statewide dengue case counts from Sept 20-26 surveillance report"
-        ],
-        "reason": "None of the candidates concern this UF study on Aedes aegypti mosquitoes and dengue risk in Indian River County. The closest topical matches (Martin County West Nile advisory, St. Lucie mosquito control after rain, Fellsmere rabies alert) are distinct incidents involving different agencies, locations, and disease vectors with no shared named study, location, or specific event anchor. This is a new, standalone story.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Missing 82-Year-Old Port St. Lucie Woman Found Safe",
-      "incoming_source_url": "https://www.wpbf.com/article/missing-endangered-woman-port-st-lucie/74063768",
-      "incoming_story_id": "story_019851",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Missing 82-Year-Old Port St. Lucie Woman Found Safe",
-      "incoming_source_url": "https://www.wpbf.com/article/missing-endangered-woman-port-st-lucie/74063768",
-      "incoming_story_id": "story_019851",
-      "candidates": [
-        {
-          "slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
-          "headline": "Two Port St. Lucie Hit-and-Run Suspects Arrested, Released on Bond",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.7475,
-          "retrieval_score": 0.5755,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-martin-county-deputies-search-for-missing-autistic-man-last-seen-in-jensen-beach",
-          "headline": "Missing Jensen Beach Man Nicklaus Cantor Found Safe",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6157,
-          "retrieval_score": 0.5907,
-          "reasons": [
-            "publication_gap_6_days",
-            "structured_identity_conflict"
-          ]
-        },
-        {
-          "slug": "2026-09-30-port-st-lucie-man-arrested-on-sexual-battery-charges-involving-16-year-old-relat",
-          "headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6083,
-          "retrieval_score": 0.5393,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-09-24-port-st-lucie-police-find-martin-county-warrant-fugitive-hiding-under-hotel-bed",
-          "headline": "Port St. Lucie man arrested under hotel bed faces meth, child neglect charges",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6034,
-          "retrieval_score": 0.5524,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-09-20-police-investigate-at-port-st-lucie-pollo-tropical-subject-taken-into-custody",
-          "headline": "Parking dispute sparked Pollo Tropical shooting in Port St. Lucie, police say",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5895,
-          "retrieval_score": 0.5385,
-          "reasons": [
-            "publication_gap_17_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-          "headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5181,
-          "retrieval_score": 0.4961,
-          "reasons": [
-            "publication_gap_6_days",
-            "structured_identity_conflict"
-          ]
-        },
-        {
-          "slug": "2026-09-23-woman-arrested-after-stealing-broward-sheriffs-cruiser-fleeing-to-st-lucie-count",
-          "headline": "Woman faces 9 charges after stolen Broward Sheriff's cruiser found on I-95 in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5075,
-          "retrieval_score": 0.4565,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-10-06-port-st-lucie-woman-pleads-guilty-in-palm-beach-county-apartment-theft-scheme",
-          "headline": "Port St. Lucie Woman Pleads Guilty in Palm Beach County Apartment Theft Scheme",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4853,
-          "retrieval_score": 0.4483,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-p1-motor-clubs-first-racetrack-85-done-on-former-st-lucie-orange-grove",
-          "headline": "P1 Motor Club's First Racetrack 85% Done on Former St. Lucie Orange Grove",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4787,
-          "retrieval_score": 0.4597,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
-          "headline": "Port St. Lucie Flooding Continues, More Rain Expected This Week",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4733,
-          "retrieval_score": 0.4333,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-port-st-lucie-man-arrested-after-calling-911-to-confess-stabbing-79-year-old",
-          "headline": "Port St. Lucie man charged with attempted homicide after admitting intent to kill father",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.472,
-          "retrieval_score": 0.459,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-port-st-lucie-tiktok-creator-jailed-as-device-access-case-reopened",
-          "headline": "Port St. Lucie TikTok Creator Jailed as Device-Access Case Reopened",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.471,
-          "retrieval_score": 0.449,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Marie Romain, 82, Port St. Lucie woman",
-          "last seen near SE Watercrest Street",
-          "found safe"
-        ],
-        "reason": "No candidate involves Marie Romain or this specific missing-person incident; none share the named individual, location, or incident anchor. The closest missing-person candidates (Nicklaus Cantor, Robert La Polla) are different named people/incidents entirely. This is a distinct real-world event requiring its own story.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Marie Romain, 82, Port St. Lucie woman",
-          "last seen near SE Watercrest Street",
-          "found safe"
-        ],
-        "reason": "No candidate involves Marie Romain or this specific missing-person incident; none share the named individual, location, or incident anchor. The closest missing-person candidates (Nicklaus Cantor, Robert La Polla) are different named people/incidents entirely. This is a distinct real-world event requiring its own story.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Murder Suspect Michael Waggle Extradited to Indian River County Jail",
+      "incoming_headline": "Man Wanted in Vero Beach Murder Extradited to Indian River County Jail",
       "incoming_source_url": "https://www.wpbf.com/article/matthew-allen-waggle-vero-beach-murder-returned-indian-river-county-florida/74039096",
-      "incoming_story_id": "story_019819",
+      "incoming_story_id": "story_019854",
       "candidates": [
         {
           "slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
           "headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
-          "retrieval_score": 0.632,
-          "headline_similarity": 0.4115,
+          "retrieval_score": 0.8677,
+          "headline_similarity": 0.6394,
           "similarity_basis": "final_headline",
           "shared_headline_tokens": [
+            "beach",
             "county",
             "indian",
             "jail",
-            "river"
+            "man",
+            "river",
+            "vero"
           ],
           "shared_topic_tokens": [
-            "jail"
+            "jail",
+            "man"
           ],
           "content_similarity": {
-            "score": 0.3205,
-            "overlap": 0.4,
-            "jaccard": 0.1159,
-            "shared_token_count": 8,
+            "score": 0.3559,
+            "overlap": 0.45,
+            "jaccard": 0.1139,
+            "shared_token_count": 9,
             "shared_tokens": [
               "accused",
               "booked",
@@ -1826,6 +1513,7 @@
               "degree",
               "jail",
               "killing",
+              "lines",
               "man",
               "murder"
             ]
@@ -1837,6 +1525,7 @@
           "incident_anchor_conflict": false,
           "known_event_key_conflict": false,
           "reasons": [
+            "moderate_fuzzy_headline",
             "shared_locality_and_event_family",
             "strong_content_event_continuity",
             "publication_gap_0_days"
@@ -1851,18 +1540,19 @@
         "same_real_world_event": true,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.9,
+        "confidence": 0.93,
         "shared_anchors": [
-          "Suspect Waggle, 33 (Michael/Matthew A. Waggle)",
-          "Victim Dawn Kriskewic",
-          "First-degree murder charge",
-          "Indian River County Jail booking same day (Oct. 5-6)",
-          "Indian River County Sheriff's Office"
+          "Same suspect (Matthew/Michael Waggle, 33)",
+          "Same victim Dawn Kriskewic",
+          "Same booking into Indian River County Jail on Oct. 5",
+          "Same first-degree murder charge",
+          "Same agency: Indian River County Sheriff's Office",
+          "Same date published"
         ],
         "novel_facts": [
-          "Capture location detail (Dunbar, West Virginia motel) and transfer through Mecklenburg County, NC"
+          "Additional detail on capture location (Dunbar, West Virginia motel) and transfer through Mecklenburg County, NC"
         ],
-        "reason": "Both articles report the same suspect being booked into Indian River County Jail on the same first-degree murder charge for killing Dawn Kriskewic, published the same day. The extradition/transport details are incremental color, not a material new development like a new charge, death, or ruling.",
+        "reason": "Both articles report the same booking event of the same suspect into the same jail on the same day for the same murder charge against the same victim. The incoming article adds background detail on the manhunt and extradition path but does not introduce a new material development (no new charge, status change, or ruling) beyond what's already captured in the canonical booking story.",
         "validation_errors": [],
         "consistency_repairs": []
       }
@@ -2208,26 +1898,43 @@
     "rejected_directives": [],
     "merges": [
       {
-        "source_story_id": "story_019819",
+        "source_story_id": "story_019854",
         "target_story_id": "story_019318",
         "target_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-        "incoming_headline": "Murder Suspect Michael Waggle Extradited to Indian River County Jail",
-        "confidence": 0.9,
+        "incoming_headline": "Man Wanted in Vero Beach Murder Extradited to Indian River County Jail",
+        "confidence": 0.93,
         "shared_anchors": [
-          "Suspect Waggle, 33 (Michael/Matthew A. Waggle)",
-          "Victim Dawn Kriskewic",
-          "First-degree murder charge",
-          "Indian River County Jail booking same day (Oct. 5-6)",
-          "Indian River County Sheriff's Office"
+          "Same suspect (Matthew/Michael Waggle, 33)",
+          "Same victim Dawn Kriskewic",
+          "Same booking into Indian River County Jail on Oct. 5",
+          "Same first-degree murder charge",
+          "Same agency: Indian River County Sheriff's Office",
+          "Same date published"
         ],
-        "reason": "Both articles report the same suspect being booked into Indian River County Jail on the same first-degree murder charge for killing Dawn Kriskewic, published the same day. The extradition/transport details are incremental color, not a material new development like a new charge, death, or ruling.",
+        "reason": "Both articles report the same booking event of the same suspect into the same jail on the same day for the same murder charge against the same victim. The incoming article adds background detail on the manhunt and extradition path but does not introduce a new material development (no new charge, status change, or ruling) beyond what's already captured in the canonical booking story.",
         "relationship_type": "duplicate",
         "novel_facts": [
-          "Capture location detail (Dunbar, West Virginia motel) and transfer through Mecklenburg County, NC"
+          "Additional detail on capture location (Dunbar, West Virginia motel) and transfer through Mecklenburg County, NC"
         ],
-        "resolved_source_story_id": "story_019819",
+        "resolved_source_story_id": "story_019854",
         "resolved_target_story_id": "story_019318"
       }
     ]
-  }
+  },
+  "late_published_skip_materiality_decisions": [
+    {
+      "phase": "late_published_skip_write_barrier",
+      "source_headline": "Five years later, Port St. Lucie police seek answers in 20-year-old woman’s killing - WPEC",
+      "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-seek-answers-gabriella-gina-hanley-20-killed-shooting-black-kia-forte-southeast-green-river-parkway-killed-2021-five-years-later-answers-sought-treasure-coast-crime-stoppers-florida-news",
+      "canonical_slug": "2026-10-07-5-years-after-gabriella-hanleys-killing-on-green-river-parkway-case-remains-unso",
+      "canonical_headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "incoming_not_newer_than_canonical",
+      "evaluated": false,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": false,
+      "action": "preserve_existing_canonical"
+    }
+  ]
 }
