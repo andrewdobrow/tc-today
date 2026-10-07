@@ -397,3 +397,189 @@ def test_known_driver_license_duplicate_slug_is_permanent_redirect_even_with_spa
     assert redirect["canonical_is_custom"] is True
     rendered = (articles / f"{duplicate['slug']}.html").read_text(encoding="utf-8")
     assert g.FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG in rendered
+
+
+def _st_lucie_polling_change_custom():
+    return {
+        "slug": (
+            "2026-10-05-st-lucie-county-changes-polling-location-for-"
+            "precincts-39-and-52-for-nov-3-election"
+        ),
+        "headline": (
+            "St. Lucie County changes polling location for Precincts 39 and 52 "
+            "for Nov. 3 election"
+        ),
+        "teaser": (
+            "Voters in Precincts 39 and 52 will cast Election Day ballots at Lakewood "
+            "Park Church instead of Spanish Lakes Country Club because of clubhouse renovations."
+        ),
+        "body": (
+            "Voters in St. Lucie County Precincts 39 and 52 will have a temporary polling "
+            "place for the Nov. 3 general election because of renovations at their usual "
+            "Election Day location. The two precincts will move from the Spanish Lakes "
+            "Country Club clubhouse to Lakewood Park Church, 5405 Turnpike Feeder Road in "
+            "Fort Pierce. The change applies to the Nov. 3, 2026 General Election."
+        ),
+        "category_key": "local_gov",
+        "date": "2026-10-05",
+        "first_published": "Mon, 05 Oct 2026 18:50:00 -0400",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_id": "st-lucie-precincts-39-52-polling-place-change-2026-11-03",
+    }
+
+
+def _st_lucie_polling_change_reprint():
+    return {
+        "slug": (
+            "2026-10-07-st-lucie-precincts-39-52-move-to-lakewood-park-church-"
+            "for-nov-3-vote"
+        ),
+        "headline": (
+            "St. Lucie Precincts 39, 52 Move to Lakewood Park Church for Nov. 3 Vote"
+        ),
+        "teaser": (
+            "Voters in St. Lucie County's Precincts 39 and 52 will use a temporary polling "
+            "place for the Nov. 3 general election because of renovations at their regular site."
+        ),
+        "body": (
+            "Supervisor of Elections Gertrude Walker announced Tuesday that voters in both "
+            "precincts will move from the Spanish Lakes Country Club clubhouse to Lakewood "
+            "Park Church, 5405 Turnpike Feeder Road in Fort Pierce."
+        ),
+        "category_key": "st_lucie",
+        "date": "2026-10-07",
+        "first_published": "Wed, 07 Oct 2026 08:46:00 -0400",
+        "source_url": (
+            "https://cbs12.com/news/local/st-lucie-county-voting-precincts-36-52-"
+            "moved-temporary-polling-places-november-3-election-supervisor-of-elections-"
+            "gertrude-walker-florida-news"
+        ),
+    }
+
+
+def test_polling_place_identity_matches_reworded_publisher_copy():
+    g = _load_generate()
+    custom = _st_lucie_polling_change_custom()
+    incoming = _st_lucie_polling_change_reprint()
+
+    expected = "polling-place-change|st-lucie|2026-11-03|precincts-39-52"
+    assert g._polling_place_change_identity(custom) == expected
+    assert g._polling_place_change_identity(incoming) == expected
+
+    matched, confidence, basis = g._find_authoritative_custom_incident_match(
+        incoming, archived_customs=[custom], current_customs=[]
+    )
+    assert matched is custom
+    assert confidence == 100
+    assert basis == f"durable_custom_incident_identity:{expected}"
+
+
+def test_polling_place_custom_lock_suppresses_parallel_generated_placement():
+    g = _load_generate()
+    custom = _st_lucie_polling_change_custom()
+    incoming = _st_lucie_polling_change_reprint()
+    categories = [{"category_key": "st_lucie", "hero": incoming, "cards": []}]
+
+    removed = g.suppress_authoritative_custom_incidents_from_live(
+        categories, archived_customs=[custom], current_customs=[]
+    )
+
+    assert len(removed) == 1
+    assert categories[0]["hero"] is None
+    assert removed[0]["canonical_slug"] == custom["slug"]
+    assert removed[0]["confidence"] == 100
+
+
+def test_polling_place_identity_does_not_merge_different_election_or_precincts():
+    g = _load_generate()
+    custom = _st_lucie_polling_change_custom()
+
+    different_election = dict(_st_lucie_polling_change_reprint())
+    different_election["headline"] = (
+        "St. Lucie Precincts 39, 52 Move to Lakewood Park Church for Aug. 18 Vote"
+    )
+    different_election["teaser"] = (
+        "Voters in St. Lucie County Precincts 39 and 52 will use a temporary polling place "
+        "for the Aug. 18 primary election."
+    )
+    different_election["body"] = ""
+
+    different_precincts = dict(_st_lucie_polling_change_reprint())
+    different_precincts["headline"] = (
+        "St. Lucie Precincts 2 and 7 Move to Lakewood Park Church for Nov. 3 Vote"
+    )
+    different_precincts["teaser"] = (
+        "Voters in St. Lucie County Precincts 2 and 7 will use a temporary polling place "
+        "for the Nov. 3 general election."
+    )
+    different_precincts["body"] = ""
+
+    custom_key = g._polling_place_change_identity(custom)
+    assert g._polling_place_change_identity(different_election) != custom_key
+    assert g._polling_place_change_identity(different_precincts) != custom_key
+
+    assert g._find_authoritative_custom_incident_match(
+        different_election, archived_customs=[custom], current_customs=[]
+    )[0] is None
+    assert g._find_authoritative_custom_incident_match(
+        different_precincts, archived_customs=[custom], current_customs=[]
+    )[0] is None
+
+
+def test_canonical_cleanup_repairs_oct_7_polling_place_duplicate(tmp_path):
+    g = _load_generate()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (tmp_path / "data").mkdir()
+    custom = _st_lucie_polling_change_custom()
+    duplicate = _st_lucie_polling_change_reprint()
+    duplicate.update({
+        "lastmod": "2026-10-07",
+        "article_word_count": 350,
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    })
+    (articles / f"{custom['slug']}.html").write_text("custom", encoding="utf-8")
+    (articles / f"{duplicate['slug']}.html").write_text("duplicate", encoding="utf-8")
+
+    cleaned, redirects = g.apply_canonical_story_cleanup(
+        [custom, duplicate], articles, tmp_path
+    )
+
+    assert [row["slug"] for row in cleaned] == [custom["slug"]]
+    redirect = next(row for row in redirects if row["source_slug"] == duplicate["slug"])
+    assert redirect["target_slug"] == custom["slug"]
+    assert redirect["canonical_is_custom"] is True
+    rendered = (articles / f"{duplicate['slug']}.html").read_text(encoding="utf-8")
+    assert custom["slug"] in rendered
+
+
+def test_known_polling_place_duplicate_slug_is_permanent_redirect_with_sparse_metadata(tmp_path):
+    g = _load_generate()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (tmp_path / "data").mkdir()
+    custom = _st_lucie_polling_change_custom()
+    duplicate_slug = next(iter(g.ST_LUCIE_POLLING_CHANGE_REDIRECT_SOURCE_SLUGS))
+    duplicate = {
+        "slug": duplicate_slug,
+        "headline": "St. Lucie polling place update",
+        "date": "2026-10-07",
+        "lastmod": "2026-10-07",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+    (articles / f"{custom['slug']}.html").write_text("custom", encoding="utf-8")
+    (articles / f"{duplicate_slug}.html").write_text("duplicate", encoding="utf-8")
+
+    cleaned, redirects = g.apply_canonical_story_cleanup(
+        [custom, duplicate], articles, tmp_path
+    )
+
+    assert [row["slug"] for row in cleaned] == [custom["slug"]]
+    redirect = next(row for row in redirects if row["source_slug"] == duplicate_slug)
+    assert redirect["target_slug"] == g.ST_LUCIE_POLLING_CHANGE_CANONICAL_SLUG
+    assert redirect["canonical_is_custom"] is True
+    rendered = (articles / f"{duplicate_slug}.html").read_text(encoding="utf-8")
+    assert g.ST_LUCIE_POLLING_CHANGE_CANONICAL_SLUG in rendered

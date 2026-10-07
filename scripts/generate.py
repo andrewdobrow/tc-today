@@ -21806,6 +21806,108 @@ def _durable_custom_near_term_subject_identity_match(candidate, authority):
     return True, f"near-term-custom-subject|{authority_date.isoformat()}|{subject}"
 
 
+_POLLING_CHANGE_ACTION_RE = re.compile(
+    r"\b(?:temporary\s+)?poll(?:ing)?\s+(?:place|location)s?\b|"
+    r"\b(?:change(?:d|s|ing)?|mov(?:e|ed|es|ing)|relocat(?:e|ed|es|ing))\b[^.!?]{0,90}"
+    r"\bpoll(?:ing)?\s+(?:place|location)s?\b|"
+    r"\bpoll(?:ing)?\s+(?:place|location)s?\b[^.!?]{0,90}"
+    r"\b(?:change(?:d|s|ing)?|mov(?:e|ed|es|ing)|relocat(?:e|ed|es|ing))\b",
+    re.I,
+)
+_POLLING_ELECTION_CONTEXT_RE = re.compile(
+    r"\b(?:general|primary|special)?\s*election\b|\belection\s+day\b|\bballot(?:s)?\b|\bvoters?\b",
+    re.I,
+)
+_POLLING_COUNTY_PATTERNS = (
+    ("st-lucie", re.compile(r"\bst\.?\s+lucie(?:\s+county)?\b", re.I)),
+    ("martin", re.compile(r"\bmartin\s+county\b", re.I)),
+    ("indian-river", re.compile(r"\bindian\s+river\s+county\b", re.I)),
+)
+_POLLING_MONTHS = {
+    "jan": 1, "january": 1, "feb": 2, "february": 2,
+    "mar": 3, "march": 3, "apr": 4, "april": 4, "may": 5,
+    "jun": 6, "june": 6, "jul": 7, "july": 7, "aug": 8, "august": 8,
+    "sep": 9, "sept": 9, "september": 9, "oct": 10, "october": 10,
+    "nov": 11, "november": 11, "dec": 12, "december": 12,
+}
+
+
+def _polling_place_change_identity(item):
+    """Return a deterministic identity for a precinct polling-place change.
+
+    Election-location notices are unusually vulnerable to publisher headline drift:
+    ``changes polling location`` and ``precincts move to church`` describe the same
+    notice while sharing too little ordered headline phrasing for the generic custom
+    subject lock.  County + election date + exact precinct set is a concrete civic
+    event identity. A second location change for those same precincts before the same
+    election is an update to that canonical notice, not a separate publication.
+    """
+    if not isinstance(item, dict):
+        return ""
+    text = _cross_source_text(item)
+    if not text:
+        text = _story_text(item)
+    normalized = re.sub(r"\s+", " ", text or "").strip()
+    if not _POLLING_CHANGE_ACTION_RE.search(normalized):
+        return ""
+    if not _POLLING_ELECTION_CONTEXT_RE.search(normalized):
+        return ""
+
+    county = next((key for key, rx in _POLLING_COUNTY_PATTERNS if rx.search(normalized)), "")
+    if not county:
+        return ""
+
+    precincts = set()
+    for match in re.finditer(
+        r"\bprecincts?\s+(\d{1,3})(?:\s*(?:,|and|&|/)\s*(\d{1,3}))?\b",
+        normalized,
+        re.I,
+    ):
+        precincts.add(int(match.group(1)))
+        if match.group(2):
+            precincts.add(int(match.group(2)))
+    if not precincts:
+        return ""
+
+    election_date = None
+    publication_date = _cross_source_date_value(item) or _identity_item_date(item)
+    month_rx = (
+        r"\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|"
+        r"jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)"
+        r"\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s*(20\d{2}))?\b"
+    )
+    for match in re.finditer(month_rx, normalized, re.I):
+        start = max(0, match.start() - 90)
+        end = min(len(normalized), match.end() + 90)
+        context = normalized[start:end]
+        if not re.search(r"\b(?:election|vote|voting|ballot|poll(?:ing)?)\b", context, re.I):
+            continue
+        month = _POLLING_MONTHS.get(match.group(1).lower().rstrip("."))
+        day = int(match.group(2))
+        explicit_year = int(match.group(3)) if match.group(3) else None
+        candidate_years = []
+        if explicit_year:
+            candidate_years = [explicit_year]
+        elif publication_date:
+            candidate_years = [publication_date.year, publication_date.year + 1]
+        for year in candidate_years:
+            try:
+                parsed = datetime(year, month, day).date()
+            except (TypeError, ValueError):
+                continue
+            if publication_date and not explicit_year and parsed < publication_date - timedelta(days=14):
+                continue
+            election_date = parsed
+            break
+        if election_date:
+            break
+    if election_date is None:
+        return ""
+
+    precinct_key = "-".join(str(value) for value in sorted(precincts))
+    return f"polling-place-change|{county}|{election_date.isoformat()}|precincts-{precinct_key}"
+
+
 def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     """Return a deterministic cross-origin match for archived custom authority.
 
@@ -21822,6 +21924,12 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
         return False, ""
 
     precomputed = precomputed if isinstance(precomputed, dict) else {}
+
+    polling_candidate = _polling_place_change_identity(candidate)
+    polling_authority = _polling_place_change_identity(authority)
+    if polling_candidate and polling_candidate == polling_authority:
+        return True, polling_candidate
+
     alpr_match, alpr_key = _durable_custom_local_alpr_policy_identity_match(
         candidate, authority
     )
@@ -21880,6 +21988,9 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
 
 
 def _custom_event_identity_key(item):
+    polling_key = _polling_place_change_identity(item)
+    if polling_key:
+        return polling_key
     award = _sports_award_identity(item)
     if not award:
         return ""
@@ -25254,6 +25365,19 @@ FLORIDA_DRIVER_LICENSE_CANONICAL_SLUG = (
 )
 FLORIDA_DRIVER_LICENSE_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-09-30-florida-rolls-out-redesigned-drivers-licenses-with-new-imagery-at-service-center",
+})
+
+# Permanent custom-authority regression for the Nov. 3, 2026 St. Lucie County
+# Precincts 39/52 temporary polling-place change. TCT published the Supervisor of
+# Elections notice as a custom article on Oct. 5; a later CBS12 rewrite escaped as a
+# second public URL on Oct. 7. The durable polling-place identity below prevents
+# future publisher rewrites from minting another permalink, while this explicit
+# migration permanently repairs the already-public duplicate URL.
+ST_LUCIE_POLLING_CHANGE_CANONICAL_SLUG = (
+    "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election"
+)
+ST_LUCIE_POLLING_CHANGE_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-10-07-st-lucie-precincts-39-52-move-to-lakewood-park-church-for-nov-3-vote",
 })
 
 # Permanent general-registry regression for the Big Taste of Martin County event.
@@ -32137,6 +32261,52 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                 "reason": (
                     "Permanent regression migration for the Sept. 30 publisher reprint "
                     "of TCT's authoritative redesigned-driver-license custom article."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
+    # Permanent cleanup for the Oct. 7 Precincts 39/52 polling-place duplicate.
+    # The durable polling-place identity is the prevention layer; this explicit
+    # public-slug migration is the repair layer for the URL that already escaped.
+    polling_change_canonical = next(
+        (e for e in archive if e.get("slug") == ST_LUCIE_POLLING_CHANGE_CANONICAL_SLUG),
+        None,
+    )
+    if polling_change_canonical:
+        polling_change_canonical["is_custom"] = True
+        polling_change_canonical["authoritative_custom"] = True
+        polling_change_canonical.pop("exclude_from_live_recovery", None)
+        polling_change_canonical.pop("identity_quarantine_reason", None)
+        polling_change_canonical["legacy_identity_status"] = "identified"
+        polling_change_canonical["ranking_eligible"] = True
+        polling_key = _polling_place_change_identity(polling_change_canonical)
+        if polling_key:
+            polling_change_canonical["custom_event_key"] = polling_key
+        for source_slug in sorted(ST_LUCIE_POLLING_CHANGE_REDIRECT_SOURCE_SLUGS):
+            duplicate = next((e for e in archive if e.get("slug") == source_slug), None)
+            if duplicate:
+                _merge_category_memberships(
+                    polling_change_canonical,
+                    duplicate,
+                    polling_change_canonical.get("category_key")
+                    or duplicate.get("category_key")
+                    or "local_gov",
+                )
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "St. Lucie Precincts 39, 52 Move to Lakewood Park Church for Nov. 3 Vote"
+                ),
+                "target_slug": ST_LUCIE_POLLING_CHANGE_CANONICAL_SLUG,
+                "target_headline": polling_change_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": True,
+                "editorial_story_id": polling_change_canonical.get("editorial_story_id", ""),
+                "event_key": polling_key,
+                "reason": (
+                    "Permanent regression migration for the Oct. 7 publisher reprint "
+                    "of TCT's authoritative Precincts 39/52 polling-place custom article."
                 ),
             })
             removed_slugs.add(source_slug)
