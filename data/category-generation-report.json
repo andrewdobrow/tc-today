@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-08T01:50:46Z",
+  "generated_at": "2026-10-08T10:49:58Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,38 +15,37 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 4,
-      "generated_live": 3,
+      "category_eligibility_archive_recovery": 2,
+      "generated_live": 5,
       "generation_failed_archive_recovery": 1,
-      "quality_gate_archive_recovery": 1
+      "no_publishable_sources": 1
     },
     "failures": {
       "missing_or_null_hero": 1,
-      "no_category_eligible_sources": 4,
-      "publication_quality_rejected": 1
+      "no_category_eligible_sources": 2
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 125.604,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 7,
+    "model_elapsed_seconds": 146.363,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 1,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 10,
-    "published_story_duplicate_suppression_count": 23,
+    "category_eligibility_rejection_count": 14,
+    "published_story_duplicate_suppression_count": 17,
     "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 5,
+    "material_update_promotion_evaluation_count": 6,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 4,
-    "material_update_promotion_model_call_count": 1
+    "material_update_promotion_cache_hit_count": 3,
+    "material_update_promotion_model_call_count": 3
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 11,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 13,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -55,19 +54,19 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.968,
+          "elapsed_seconds": 12.695,
           "result": "missing_or_null_hero",
           "error_summary": "Model response did not contain a usable hero after normalization"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.908,
+          "elapsed_seconds": 12.765,
           "result": "missing_or_null_hero",
           "error_summary": "Model response did not contain a usable hero after normalization"
         }
       ],
-      "model_elapsed_seconds": 25.875,
+      "model_elapsed_seconds": 25.46,
       "failure_code": "missing_or_null_hero",
       "failure_summary": "Model response did not contain a usable hero after normalization",
       "sports_expired_event_preview_count": 0,
@@ -78,9 +77,53 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 5,
+      "category_eligibility_assessed_count": 7,
+      "category_eligibility_rejection_count": 6,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
+          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Trump proposes Camp David-style presidential retreat at West Palm Beach golf course",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/trump-seeks-to-turn-his-palm-beach-co-golf-club-into-permanent-presidential-golf-club-camp-david-style-retreat"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -94,34 +137,6 @@
           "local_nexus_signals": [],
           "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/07/st-lucie-county-fire-board-continues-law-firm-search-effort-create-complaint-policy-amid-hazing-fallout/?outputType=amp"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Port St. Lucie flooding problem renews focus on city's stormwater spending - cw34.com",
-          "source_url": "https://cw34.com/news/local/port-st-lucie-flooding-problem-renews-focus-on-citys-stormwater-spending-30-million-through-2031-reduce-flooding-public-works"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -152,18 +167,8 @@
           "source_url": "https://cw34.com/news/local/crash-in-martin-county-i95-south-blocks-2-right-lanes-bring-heavy-delays-snarls-traffic-florida-511-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "local_gov",
-          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
-          "source_url": "https://cbs12.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
-          "editorial_story_id": "story_019822",
-          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "local_gov",
           "source_headline": "Student hit by vehicle in St. Lucie County, school district confirms - WFLX",
@@ -172,16 +177,6 @@
           "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
           "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "editorial_story_id": "story_019789",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -204,21 +199,6 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
-          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
-          "source_url": "https://cbs12.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
-          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Student hit by vehicle in St. Lucie County, school district confirms - WFLX",
           "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNcmhnMDZzdmg0ZEtuSzlXamQ5QkNTYXhMZVhpQ3d6d3lQZlRWLVY3WDNHZFA2RTdmUEtBM3llRE5mTEFfcjFJb0NPWTNHNEdNNHlTelNJdzZhMHlNRXUyUkVxSUZkVUxUUHl5UXVrV1NRYWJhQ2VkQWVabzZWNWZfTlpHMGpLR2dicmg3TFhrLWZSYnZ4R0p1OEFkOUU",
           "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
@@ -226,21 +206,6 @@
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -266,16 +231,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 50.022
+      "elapsed_seconds": 48.539
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 10,
-      "selected_source_count": 3,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 14,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -283,11 +248,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.809,
+          "elapsed_seconds": 27.136,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 16.809,
+      "model_elapsed_seconds": 27.136,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -298,9 +263,51 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 9,
+      "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
+          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Trump proposes Camp David-style presidential retreat at West Palm Beach golf course",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/trump-seeks-to-turn-his-palm-beach-co-golf-club-into-permanent-presidential-golf-club-camp-david-style-retreat"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -314,47 +321,22 @@
           "local_nexus_signals": [],
           "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "UF study finds dengue-linked mosquito common in Indian River County yards - cw34.com",
-          "source_url": "https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-"
         }
       ],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "editorial_story_id": "story_019789",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - cw34.com",
-          "source_url": "https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
+          "source_headline": "Fort Pierce police arrest 2 people after woman attacked, shot at in Fort Pierce - cw34.com",
+          "source_url": "https://cw34.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news?teaserSource=trending",
           "publisher": "cw34.com",
-          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
+          "canonical_slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
+          "canonical_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
           "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
           "identity_keys": [
-            "story:story_019822",
-            "source:https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-"
+            "story:story_019953",
+            "source:https://cw34.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news?teaserSource=trending"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -362,22 +344,21 @@
             "shared_locality",
             "shared_event_family",
             "shared_named_people",
-            "shared_subject_phrase",
-            "shared_headline_topic",
+            "shared_agency",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county', 'miami-dade', 'palm-beach-county', 'st-lucie', 'st-lucie-county', 'vero-beach']",
-            "shared_event_families=['animal-case']",
-            "shared_named_people=['does not mean']",
+            "publication_gap_days=3",
+            "shared_locality=['fort-pierce']",
+            "shared_event_families=['shooting']",
+            "shared_named_people=['able to escape', 'kailee yurubi']",
             "shared_precise_locations=[]",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['dengue-link-mosquito', 'dengue-link-mosquito-common', 'find-dengue-link', 'find-dengue-link-mosquito', 'link-mosquito-common', 'link-mosquito-common-yard', 'mosquito-common-yard', 'study-find-dengue', 'study-find-dengue-link']",
-            "shared_headline_topic_core=['common', 'dengue', 'find', 'link', 'mosquito', 'study', 'yard']",
-            "shared_distinctive_token_count=155",
+            "shared_agencies=['fort-pierce-police']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['fort']",
+            "shared_distinctive_token_count=47",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -421,45 +402,37 @@
           ],
           "reason": "Same arrests, same suspects, same charges, same date and location already covered in the canonical article; incoming only adds narrative detail without new accountability development.",
           "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce Police Arrest Two After Woman Shot At During South Sixth Street Attack",
+      "live_hero_headline": "Fort Pierce Police Arrest Two After Woman Attacked, Shot At on South 6th Street",
       "generated_card_count": 0,
-      "elapsed_seconds": 37.254
+      "elapsed_seconds": 42.852
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 11,
-      "selected_source_count": 0,
+      "publishable_source_count": 13,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Business & Development category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 10.039,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 10.039,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -468,9 +441,51 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [
+            "commercial_real_estate:restaurant"
+          ],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:indian river county",
+            "source_locality:vero beach",
+            "source_locality:sebastian"
+          ],
+          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "election_political_process:candidate"
+          ],
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:stuart"
+          ],
+          "headline": "Trump proposes Camp David-style presidential retreat at West Palm Beach golf course",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/trump-seeks-to-turn-his-palm-beach-co-golf-club-into-permanent-presidential-golf-club-camp-david-style-retreat"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -488,25 +503,6 @@
           ],
           "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:charged"
-          ],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:port st lucie"
-          ],
-          "headline": "Shooting death of Gabriella Hanley remains unsolved 5 years later, police seeking tips",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/shooting-death-of-gabriella-hanley-remains-unsolved-5-years-later-police-seeking-tips"
         }
       ],
       "published_story_duplicate_suppression_count": 2,
@@ -571,7 +567,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 18.941
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "New Ikonick Energetics Primer Plant in Indiantown to Add 100-Plus Jobs in Martin County",
+      "generated_card_count": 0,
+      "elapsed_seconds": 29.092
     },
     {
       "category_key": "sports",
@@ -660,15 +660,15 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 5,
-      "elapsed_seconds": 11.621
+      "new_publication_stale_rejected_count": 7,
+      "elapsed_seconds": 12.654
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -706,33 +706,60 @@
           "source_url": "https://www.wptv.com/shining-a-light/jupiter-fire-rescue-answers-first-calls-unveils-ladder-truck-honoring-fdny-heroes"
         }
       ],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "2026 General Election: County-by-county guide for Florida voters - WPBF",
+          "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNGoteThTd2prLVllWjJSWGc5blJwdlAtbWMtd2xfMkZrcHJsWVFIR19Ra1hUV0g1TWVpT2xKNGl0NVJUc3lvTUlIN2pwTkIxV0NOVDcwME83VzlJMVFLWkR5R01WenItcWFIYkNyMTlTeWFUajVTamZzRXJ2RmFYSmdSWWxXbVhoM3FDRHZKa2lBSFFqZGNIU3pHSzk",
+          "editorial_story_id": "story_018384",
+          "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+          "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "2026 General Election: County-by-county guide for Florida voters - WPBF",
+          "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNGoteThTd2prLVllWjJSWGc5blJwdlAtbWMtd2xfMkZrcHJsWVFIR19Ra1hUV0g1TWVpT2xKNGl0NVJUc3lvTUlIN2pwTkIxV0NOVDcwME83VzlJMVFLWkR5R01WenItcWFIYkNyMTlTeWFUajVTamZzRXJ2RmFYSmdSWWxXbVhoM3FDRHZKa2lBSFFqZGNIU3pHSzk",
+          "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+          "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.136
+      "elapsed_seconds": 11.347
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "category_eligibility_archive_recovery",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Florida category eligibility contract",
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -741,7 +768,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -754,30 +781,30 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.408
+      "elapsed_seconds": 22.152
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 5,
-      "selected_source_count": 4,
+      "status": "generated_live",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 28,
+      "publishable_source_count": 6,
+      "selected_source_count": 5,
       "cache_hit": false,
-      "archive_recovery_requested": true,
+      "archive_recovery_requested": false,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 21.171,
+          "elapsed_seconds": 12.455,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 21.171,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 12.455,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -786,7 +813,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -801,15 +828,17 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 43.259
+      "live_hero_headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
+      "generated_card_count": 0,
+      "elapsed_seconds": 34.715
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 8,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 7,
       "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -818,11 +847,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 50.47,
+          "elapsed_seconds": 48.809,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 50.47,
+      "model_elapsed_seconds": 48.809,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -833,15 +862,15 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Treasure Coast HS student critically injured after being struck while walking to school - WPEC",
-          "source_url": "https://cbs12.com/news/local/treasure-coast-hs-student-critically-injured-after-being-struck-while-walking-to-school-port-st-lucie-port-st-lucie-news-treasure-coast-high-school-treasure-coast-high-14-year-old-teen-pedestrian-pedestrian-crash-pedestrian-accident-suv-crash",
+          "source_headline": "Port St. Lucie Teen walking to school critically injured after being hit by SUV - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-treasure-coast-high-school-student-suffers-life-threatening-port-st-lucie-crash/74069215",
           "editorial_story_id": "story_019789",
           "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
           "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
@@ -850,11 +879,11 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie Teen walking to school critically injured after being hit by SUV - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-treasure-coast-high-school-student-suffers-life-threatening-port-st-lucie-crash/74069215",
-          "editorial_story_id": "story_019789",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "source_headline": "'Just insanity': Port St. Lucie residents reacting to heavy rain and flooding - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-rain-swales-storms-flooding/74069863",
+          "editorial_story_id": "story_019779",
+          "canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
+          "canonical_headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -884,7 +913,7 @@
           "source_url": "https://cbs12.com/news/local/port-st-lucie-flooding-port-st-lucie-heavy-rain-flooded-roads-standing-water-difficult-driving-conditions-bayshore-heights-flooding-port-st-lucie-weather-south-florida-rain-flood-safety-water-covered-streets-neighborhood-flooding-florida-fl",
           "editorial_story_id": "story_019779",
           "canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
-          "canonical_headline": "Port St. Lucie Flooding Continues, More Rain Expected This Week",
+          "canonical_headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -896,16 +925,6 @@
           "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
           "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
           "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|temporary-poll-place",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Driver dies in crash involving two trucks on A1A in Indian River County - WPBF",
-          "source_url": "https://www.wpbf.com/article/fatal-crash-reported-near-vero-beach-intersection/74039290",
-          "editorial_story_id": "story_019464",
-          "canonical_slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
-          "canonical_headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -927,40 +946,15 @@
           "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County teen wins Boys & Girls Clubs' top honor - WPBF",
-          "source_url": "https://www.wpbf.com/article/st-lucie-county-teen-boys-girls-clubs-honor/73994029",
-          "editorial_story_id": "story_018864",
-          "canonical_slug": "2026-10-02-st-lucie-county-teen-wins-national-youth-of-the-year-set-for-hometown-welcome",
-          "canonical_headline": "St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Treasure Coast HS student critically injured after being struck while walking to school - WPEC",
-          "source_url": "https://cbs12.com/news/local/treasure-coast-hs-student-critically-injured-after-being-struck-while-walking-to-school-port-st-lucie-port-st-lucie-news-treasure-coast-high-school-treasure-coast-high-14-year-old-teen-pedestrian-pedestrian-crash-pedestrian-accident-suv-crash",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie Teen walking to school critically injured after being hit by SUV - WPBF",
@@ -969,7 +963,39 @@
           "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.9,
+          "shared_anchors": [
+            "14-year-old Treasure Coast High School student",
+            "struck while walking to school Wednesday morning",
+            "Port St. Lucie",
+            "Port St. Lucie Police Department",
+            "SUV driver"
+          ],
+          "novel_facts": [
+            "Vehicle identified as 2002 Ford Excursion driven by 72-year-old man",
+            "Specific intersection: Southwest Port St. Lucie Boulevard and Southwest Squirrel Avenue",
+            "Driver initially thought he hit a construction barrel, made U-turn, found teen unconscious"
+          ],
+          "reason": "Same incident as the canonical: same victim age/school, same crash circumstances, same morning walk-to-school setting, same agency. Incoming adds more granular detail (vehicle type, exact intersection, driver's account) but these are elaborations of the same ongoing crash investigation, not a material status change like an arrest, death, or official finding.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "'Just insanity': Port St. Lucie residents reacting to heavy rain and flooding - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-rain-swales-storms-flooding/74069863",
+          "canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
+          "canonical_headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1042,7 +1068,7 @@
           "source_headline": "Port St. Lucie residents share videos of flooding after heavy rain - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-flooding-port-st-lucie-heavy-rain-flooded-roads-standing-water-difficult-driving-conditions-bayshore-heights-flooding-port-st-lucie-weather-south-florida-rain-flood-safety-water-covered-streets-neighborhood-flooding-florida-fl",
           "canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
-          "canonical_headline": "Port St. Lucie Flooding Continues, More Rain Expected This Week",
+          "canonical_headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1084,21 +1110,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Driver dies in crash involving two trucks on A1A in Indian River County - WPBF",
-          "source_url": "https://www.wpbf.com/article/fatal-crash-reported-near-vero-beach-intersection/74039290",
-          "canonical_slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
-          "canonical_headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "I-TEAM: A widow maps brain cancer cases in St. Lucie County - some just doors apart - WPEC",
           "source_url": "https://cbs12.com/news/cbs12-news-i-team/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
           "canonical_slug": "2026-10-05-states-updated-data-shows-no-elevated-brain-cancer-rates-in-st-lucie-families-st",
@@ -1131,44 +1142,29 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Vehicle fire on Florida's Turnpike southbound in St. Lucie County near mile marker 162, reported ~10:56 a.m."
+            "Vehicle fire closes southbound Florida's Turnpike in St. Lucie County near mile marker 162 on Friday morning"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County teen wins Boys & Girls Clubs' top honor - WPBF",
-          "source_url": "https://www.wpbf.com/article/st-lucie-county-teen-boys-girls-clubs-honor/73994029",
-          "canonical_slug": "2026-10-02-st-lucie-county-teen-wins-national-youth-of-the-year-set-for-hometown-welcome",
-          "canonical_headline": "St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 0,
+      "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie's $30 Million Oak Hammock Flood Project Still Years Away",
-      "generated_card_count": 3,
-      "elapsed_seconds": 70.361
+      "live_hero_headline": "Fort Pierce Police Arrest Two After Woman Attacked, Shot At on South Sixth Street",
+      "generated_card_count": 2,
+      "elapsed_seconds": 72.89
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 7,
-      "selected_source_count": 1,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 11,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1176,26 +1172,70 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.279,
+          "elapsed_seconds": 22.464,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 11.279,
+      "model_elapsed_seconds": 22.464,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 68,
+          "baseline_anchor": "",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "common",
+            "dengue",
+            "indian",
+            "mosquito",
+            "river",
+            "study",
+            "yards"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "UF study finds dengue-linked mosquito common in Indian River County yards - cw34.com",
+          "headline": "UF Study Finds Dengue Mosquito Common in Indian River County Yards"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 11,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Hundreds gather in Vero Beach to remember 17-year-old Sulliman Bah and call for justice - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-vero-beach-sulliman-bah-shooting/74071870",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Victim's Mother Disputes Self-Defense Claim",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
@@ -1205,50 +1245,20 @@
           "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Teen identified after deadly Fellsmere shooting involving 100-plus teens - WPEC",
-          "source_url": "https://cbs12.com/news/local/indian-river-county-sheriffs-office-reveals-new-details-deadly-shooting-17-year-old-garcia-boat-ramp-died-holmes-regional-medical-center-florida-news",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Victim's Mother Disputes Self-Defense Claim",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Driver dies in crash involving two trucks on A1A in Indian River County - WPBF",
-          "source_url": "https://www.wpbf.com/article/fatal-crash-reported-near-vero-beach-intersection/74039290",
-          "editorial_story_id": "story_019464",
-          "canonical_slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
-          "canonical_headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - WPEC",
-          "source_url": "https://cbs12.com/news/crime/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
-          "editorial_story_id": "story_019318",
-          "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-          "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
-          "source_url": "https://cbs12.com/news/health/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
-          "publisher": "cbs12.com",
+          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - cw34.com",
+          "source_url": "https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-?teaserSource=trending",
+          "publisher": "cw34.com",
           "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
+          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
           "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
           "identity_keys": [
             "story:story_019822",
-            "source:https://cbs12.com/news/health/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-"
+            "source:https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-?teaserSource=trending"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -1263,15 +1273,15 @@
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
+            "publication_gap_days=1",
             "shared_locality=['indian-river', 'indian-river-county', 'miami-dade', 'palm-beach-county', 'st-lucie', 'st-lucie-county', 'vero-beach']",
             "shared_event_families=['animal-case']",
             "shared_named_people=['does not mean']",
             "shared_precise_locations=[]",
             "shared_agencies=[]",
-            "shared_subject_phrases=['common-yard-wpec', 'dengue-link-mosquito', 'dengue-link-mosquito-common', 'find-dengue-link', 'find-dengue-link-mosquito', 'link-mosquito-common', 'link-mosquito-common-yard', 'mosquito-common-yard', 'mosquito-common-yard-wpec', 'study-find-dengue', 'study-find-dengue-link']",
-            "shared_headline_topic_core=['common', 'dengue', 'find', 'link', 'mosquito', 'study', 'wpec', 'yard']",
-            "shared_distinctive_token_count=156",
+            "shared_subject_phrases=['dengue-link-mosquito', 'dengue-link-mosquito-common', 'find-dengue-link', 'find-dengue-link-mosquito', 'link-mosquito-common', 'link-mosquito-common-yard', 'mosquito-common-yard', 'study-find-dengue', 'study-find-dengue-link']",
+            "shared_headline_topic_core=['common', 'dengue', 'find', 'link', 'mosquito', 'study', 'yard']",
+            "shared_distinctive_token_count=155",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -1282,9 +1292,44 @@
       ],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Hundreds gather in Vero Beach to remember 17-year-old Sulliman Bah and call for justice - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-vero-beach-sulliman-bah-shooting/74071870",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Victim's Mother Disputes Self-Defense Claim",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "invalid_model_response",
+          "semantic_action": "hold",
+          "confidence": 0.75,
+          "shared_anchors": [
+            "Sulliman Bah",
+            "Garcia Boat Ramp shooting",
+            "Vero Beach/Indian River area",
+            "Sheriff Eric Flowers",
+            "self-defense claim dispute by mother"
+          ],
+          "novel_facts": [
+            "Community vigil held at Farm and Flame restaurant where Bah worked",
+            "Hundreds attended public gathering calling for justice",
+            "New video details described showing Bah opening truck door and passenger firing",
+            "Explicit statement no arrests made yet and case still awaiting state attorney decision"
+          ],
+          "reason": "This is the same underlying shooting death of Sulliman Bah, but the vigil and public call for justice is a distinct newsworthy community accountability event—a large public gathering demanding justice—rather than just a restatement of the original shooting facts. It introduces a new public-interest dimension (community response, pressure for charges) that merits its own coverage beyond updating the original canonical.",
+          "validation_errors": [
+            "same_event_confidence_below_threshold"
+          ]
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
@@ -1299,72 +1344,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Teen identified after deadly Fellsmere shooting involving 100-plus teens - WPEC",
-          "source_url": "https://cbs12.com/news/local/indian-river-county-sheriffs-office-reveals-new-details-deadly-shooting-17-year-old-garcia-boat-ramp-died-holmes-regional-medical-center-florida-news",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Victim's Mother Disputes Self-Defense Claim",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:exact_source_url",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Driver dies in crash involving two trucks on A1A in Indian River County - WPBF",
-          "source_url": "https://www.wpbf.com/article/fatal-crash-reported-near-vero-beach-intersection/74039290",
-          "canonical_slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
-          "canonical_headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Man accused of traveling to Treasure Coast to kill ex-girlfriend booked into IRC - WPEC",
-          "source_url": "https://cbs12.com/news/crime/matthew-waggle-dawn-kriskewic-33-charged-first-degree-murder-accused-of-traveling-indian-river-county-killing-ex-girlfriend-arrested-in-west-virginia-hid-motel-indian-river-county-sheriffs-office-florida-news",
-          "canonical_slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-          "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
-          "shared_anchors": [
-            "Matthew Waggle",
-            "Dawn Kriskewic",
-            "Indian River County Jail booking",
-            "first-degree murder charge",
-            "same source URL"
-          ],
-          "novel_facts": [],
-          "reason": "Same source article (identical URL) covering the same booking of Matthew Waggle for the murder of Dawn Kriskewic, with no new facts beyond additional background already covered in the canonical version.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
+      "live_hero_headline": "Vero Beach Mourns Sulli Bah as Family Presses for Arrest in Fatal Shooting",
       "generated_card_count": 0,
-      "elapsed_seconds": 30.919
+      "elapsed_seconds": 42.313
     }
   ]
 }
