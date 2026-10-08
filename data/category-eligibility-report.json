@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-08T15:47:53Z",
+  "generated_at": "2026-10-08T18:52:44Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,7 +10,7 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 34,
+    "assessed_count": 37,
     "rejected_count": 9,
     "enforced_categories": [
       "business",
@@ -35,7 +35,7 @@
       "mode": "enforce",
       "policy": "central_government_action_required",
       "assessed_count": 6,
-      "rejected_count": 5,
+      "rejected_count": 4,
       "rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -44,12 +44,14 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
           "local_nexus_signals": [],
-          "headline": "Treasure Coast HS student critically injured after being struck while walking to school - cw34.com",
-          "source_url": "https://cw34.com/news/local/treasure-coast-hs-student-critically-injured-after-being-struck-while-walking-to-school-port-st-lucie-port-st-lucie-news-treasure-coast-high-school-treasure-coast-high-14-year-old-teen-pedestrian-pedestrian-crash-pedestrian-accident-suv-crash?teaserSource=trending"
+          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice/?outputType=amp"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -62,8 +64,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Trump proposes Camp David-style presidential retreat at West Palm Beach golf course",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/trump-seeks-to-turn-his-palm-beach-co-golf-club-into-permanent-presidential-golf-club-camp-david-style-retreat"
+          "headline": "Martin County Public Transit riders left without service after transit provider suspends operations - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/08/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations/"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -92,22 +94,6 @@
           "local_nexus_signals": [],
           "headline": "Port St. Lucie streets flood after downpour, stranding vehicles and disrupting commutes - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-roads-face-reroutes-as-flooding-leaves-cars-partially-submerged-port-st-lucie-flooding-port-st-lucie-flooding-florida-flooding-flooded-roads-road-closures-road-reroutes-traffic-traffic-safety-partially-submerged-cars-flooded-car"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrested"
-          ],
-          "local_nexus_signals": [],
-          "headline": "I-95 south crash in Martin County blocks 2 right lanes, bringing heavy delays - cw34.com",
-          "source_url": "https://cw34.com/news/local/crash-in-martin-county-i95-south-blocks-2-right-lanes-bring-heavy-delays-snarls-traffic-florida-511-florida-news"
         }
       ]
     },
@@ -116,7 +102,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
+      "assessed_count": 5,
       "rejected_count": 1,
       "rejections": [
         {
@@ -130,8 +116,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Trump proposes Camp David-style presidential retreat at West Palm Beach golf course",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/trump-seeks-to-turn-his-palm-beach-co-golf-club-into-permanent-presidential-golf-club-camp-david-style-retreat"
+          "headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations"
         }
       ]
     },
@@ -140,9 +126,27 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 2,
+      "assessed_count": 4,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:shooting"
+          ],
+          "local_nexus_signals": [
+            "source_locality:indian river county"
+          ],
+          "headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
+          "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -187,7 +191,7 @@
       "category_label": "Sports",
       "mode": "observe_only",
       "policy": "existing_athletic_guard_retained",
-      "assessed_count": 0,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -222,7 +226,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 1,
+      "assessed_count": 0,
       "rejected_count": 0,
       "rejections": []
     },
@@ -231,7 +235,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -240,7 +244,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 9,
+      "assessed_count": 8,
       "rejected_count": 0,
       "rejections": []
     },
