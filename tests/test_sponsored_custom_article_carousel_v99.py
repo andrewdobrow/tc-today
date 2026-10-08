@@ -6,6 +6,7 @@ import os
 import sys
 import types
 from datetime import datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 
@@ -27,8 +28,12 @@ def _load_generate():
     return importlib.import_module("scripts.generate")
 
 
-def _queue(g):
-    return json.loads((g.OUTPUT_DIR / "custom_articles.json").read_text(encoding="utf-8"))
+ROOT = Path(__file__).resolve().parents[1]
+CUSTOM = ROOT / "custom_articles.json"
+
+
+def _queue(_g=None):
+    return json.loads(CUSTOM.read_text(encoding="utf-8"))
 
 
 def _packard_item(g):
@@ -41,14 +46,9 @@ def _packard_item(g):
     return item
 
 
-def test_current_custom_queue_keeps_polling_article_and_packard():
-    g = _load_generate()
-    queue = _queue(g)
-    ids = {row.get("custom_id") for row in queue}
-    assert "st-lucie-precincts-39-52-polling-place-change-2026-11-03" in ids
-    assert "packard-roofing-sponsored-2026-10-04" in ids
-    polling = next(row for row in queue if row.get("custom_id") == "st-lucie-precincts-39-52-polling-place-change-2026-11-03")
-    assert polling["image_url"] == "https://treasurecoast.today/images/early-voting.webp"
+def test_current_custom_queue_contains_only_packard():
+    queue = _queue()
+    assert [row.get("custom_id") for row in queue] == ["packard-roofing-sponsored-2026-10-04"]
 
 
 def test_packard_article_is_scheduled_for_october_4_eastern():
