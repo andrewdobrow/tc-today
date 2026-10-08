@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-08T12:53:37Z",
+  "generated_at": "2026-10-08T15:49:50Z",
   "mode": "shadow",
   "publication_behavior_changed": false,
   "activation": {
@@ -25,8 +25,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 2,
-    "placements_after": 2,
+    "placements_before": 5,
+    "placements_after": 5,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -51,21 +51,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 178,
+    "candidates_processed": 176,
     "routes": {
-      "generate_new": 28,
-      "skip": 148,
-      "update_existing": 2
+      "generate_new": 41,
+      "skip": 135
     },
     "eligibility": {
       "listing": 4,
-      "low_value": 121,
-      "publishable": 53
+      "low_value": 122,
+      "publishable": 50
     },
     "source_classes": {
-      "aggregator": 125,
-      "local_news": 28,
-      "regional_news": 17,
+      "aggregator": 126,
+      "local_news": 27,
+      "regional_news": 15,
       "unknown": 8
     },
     "rejected_count": 4,
@@ -110,44 +109,72 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 28,
-      "same_event": 150
+      "new_story": 38,
+      "same_event": 138
     },
     "examples": [
       {
-        "story_id": "story_020002",
-        "title": "Trump faces hecklers while making high-profile Texas campaign push",
-        "event_key": "unknown-event-ddc1aa719f",
+        "story_id": "story_020029",
+        "title": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
+        "event_key": "unknown-event-90ddfe9b01",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020030",
+        "title": "When a Comma Is the Decisive Factor: The Importance of Precision in Forum Selection Clauses - Holland & Knight",
+        "event_key": "unknown-event-b39efb024b",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020031",
+        "title": "WHERE'S WALTER? Taking a spin with the dancers of Paris Ballet",
+        "event_key": "unknown-event-a7ded687d8",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020002",
+        "title": "Trump faces hecklers while making high-profile Texas campaign push",
+        "event_key": "unknown-event-ddc1aa719f",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_020003",
         "title": "Central High School (Fort Pierce, FL) Volleyball - MaxPreps",
         "event_key": "unknown-event-bd72df261c",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_020004",
-        "title": "TROPICS: Hurricane Isaias expected to remain strong ahead of Gulf Coast landfall - WFLX",
-        "event_key": "unknown-event-d9eed3a715",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -161,6 +188,19 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_019789",
+        "title": "Treasure Coast HS student critically injured after being struck while walking to school - cw34.com",
+        "event_key": "traffic-crash-port-st-lucie-3c6de8aa0a",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -194,15 +234,27 @@
       },
       {
         "story_id": "story_019957",
-        "title": "West Palm Beach woman turns husband’s Huntington’s diagnosis into awareness mission",
-        "event_key": "unknown-event-79c2a6c780",
+        "title": "West Palm Beach woman turns husband's Huntington's diagnosis into awareness mission",
+        "event_key": "unknown-event-284a5044b5",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_019957",
+        "title": "West Palm Beach woman turns husband’s Huntington’s diagnosis into awareness mission - WFLX",
+        "event_key": "unknown-event-8108b95775",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -322,62 +374,6 @@
         "story_id": "story_019932",
         "title": "School Board takes no action on grade acceleration policy - Henry County Enterprise",
         "event_key": "unknown-event-860cfa256b",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019933",
-        "title": "'They can’t investigate themselves': St. Lucie Fire Board seeks outside review - WPEC",
-        "event_key": "fire-caaf829716-caaf829716",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019825",
-        "title": "Poll: Vero Beach Council Race Wide Open as City Manager's Record Emerges as Potential Issue - Floridian Press",
-        "event_key": "unknown-event-166e78cebb",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019879",
-        "title": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WPTV",
-        "event_key": "fire-fort-pierce-4f94272eaf",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019891",
-        "title": "Falling video display board at Riviera Elementary in Palm Bay kills student - Spectrum News 13",
-        "event_key": "unknown-event-1ffc56405f",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -391,9 +387,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_020002",
-        "title": "Trump faces hecklers while making high-profile Texas campaign push",
-        "event_key": "unknown-event-ddc1aa719f",
+        "story_id": "story_020029",
+        "title": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
+        "event_key": "unknown-event-90ddfe9b01",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -401,32 +397,62 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020030",
+        "title": "When a Comma Is the Decisive Factor: The Importance of Precision in Forum Selection Clauses - Holland & Knight",
+        "event_key": "unknown-event-b39efb024b",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020031",
+        "title": "WHERE'S WALTER? Taking a spin with the dancers of Paris Ballet",
+        "event_key": "unknown-event-a7ded687d8",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020002",
+        "title": "Trump faces hecklers while making high-profile Texas campaign push",
+        "event_key": "unknown-event-ddc1aa719f",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_020003",
         "title": "Central High School (Fort Pierce, FL) Volleyball - MaxPreps",
         "event_key": "unknown-event-bd72df261c",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_020004",
-        "title": "TROPICS: Hurricane Isaias expected to remain strong ahead of Gulf Coast landfall - WFLX",
-        "event_key": "unknown-event-d9eed3a715",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -441,6 +467,20 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_019789",
+        "title": "Treasure Coast HS student critically injured after being struck while walking to school - cw34.com",
+        "event_key": "traffic-crash-port-st-lucie-3c6de8aa0a",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -476,16 +516,29 @@
       },
       {
         "story_id": "story_019957",
-        "title": "West Palm Beach woman turns husband’s Huntington’s diagnosis into awareness mission",
-        "event_key": "unknown-event-79c2a6c780",
+        "title": "West Palm Beach woman turns husband's Huntington's diagnosis into awareness mission",
+        "event_key": "unknown-event-284a5044b5",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_019957",
+        "title": "West Palm Beach woman turns husband’s Huntington’s diagnosis into awareness mission - WFLX",
+        "event_key": "unknown-event-8108b95775",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -613,66 +666,6 @@
         "story_id": "story_019932",
         "title": "School Board takes no action on grade acceleration policy - Henry County Enterprise",
         "event_key": "unknown-event-860cfa256b",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019933",
-        "title": "'They can’t investigate themselves': St. Lucie Fire Board seeks outside review - WPEC",
-        "event_key": "fire-caaf829716-caaf829716",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019825",
-        "title": "Poll: Vero Beach Council Race Wide Open as City Manager's Record Emerges as Potential Issue - Floridian Press",
-        "event_key": "unknown-event-166e78cebb",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019879",
-        "title": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WPTV",
-        "event_key": "fire-fort-pierce-4f94272eaf",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_019891",
-        "title": "Falling video display board at Riviera Elementary in Palm Bay kills student - Spectrum News 13",
-        "event_key": "unknown-event-1ffc56405f",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -689,22 +682,64 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 1,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
+    "current_relationships": {
+      "new_story": 1
+    },
+    "milestones": {
+      "court_action": 1
+    },
+    "reason_codes": {
+      "entity_match": 1,
+      "identity_anchor_qualified": 1,
+      "location_match": 1,
+      "novel_milestone": 1
+    },
+    "examples": [
+      {
+        "headline": "Jury deliberates in trial of former Fort Pierce city manager - WPBF",
+        "event_key": "unknown-event-a5b4369295",
+        "current_story_id": "story_020058",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_014614",
+        "candidate_confidence": 0.633333,
+        "candidate_milestones": [
+          "court_action"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "entity_match",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_014614",
+          "Novel milestones: court_action",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.33",
+          "Location match: True",
+          "Agency match: False",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.63"
+        ]
+      }
+    ],
     "retrospective_candidate_count": 12,
     "retrospective_high_confidence_candidate_count": 7,
     "retrospective_activation_eligible_candidate_count": 4,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 938,
-      "timeline_entries_examined": 2664,
-      "transitions_examined": 1627,
+      "stories_with_timelines": 936,
+      "timeline_entries_examined": 2663,
+      "transitions_examined": 1628,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 12,
       "high_confidence_candidate_count": 7,
@@ -2033,26 +2068,26 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 650,
-      "treasure_coast_local": 435,
-      "treasure_coast_region": 155,
-      "unknown": 1195
+      "florida": 660,
+      "treasure_coast_local": 439,
+      "treasure_coast_region": 157,
+      "unknown": 1202
     },
-    "average_score": 58.44
+    "average_score": 58.5
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 650,
-      "treasure_coast_local": 435,
-      "treasure_coast_region": 155,
-      "unknown": 1195
+      "florida": 660,
+      "treasure_coast_local": 439,
+      "treasure_coast_region": 157,
+      "unknown": 1202
     },
-    "average_priority": 4.44
+    "average_priority": 4.5
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1446,
-      "developing": 154,
+      "active": 1465,
+      "developing": 158,
       "ongoing": 834,
       "resolved": 1
     }
@@ -2061,8 +2096,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2409,
-    "active_stories_after": 2409,
+    "active_stories_before": 2423,
+    "active_stories_after": 2423,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2091,20 +2126,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-08T12:44:41Z",
-    "quarantined_story_records_retained": 4311,
-    "active_story_count": 2435
+    "generated_at": "2026-10-08T15:43:30Z",
+    "quarantined_story_records_retained": 4314,
+    "active_story_count": 2458
   },
   "stories": {
-    "total": 2435,
+    "total": 2458,
     "importance_levels": {
       "breaking": 1,
-      "high": 53,
-      "normal": 403,
-      "low": 1978,
+      "high": 55,
+      "normal": 412,
+      "low": 1990,
       "archived": 0
     },
-    "average_importance": 10.77,
+    "average_importance": 10.84,
     "top": [
       {
         "story_id": "story_019058",
@@ -2119,7 +2154,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 2.06
+          "age_hours": 5.02
         },
         "level": "high",
         "importance_reasons": [
@@ -2164,7 +2199,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-08T10:44:05.138329+00:00",
-          "hours_since_update": 2.06,
+          "hours_since_update": 5.02,
           "event_count": 21,
           "timeline_entries": 21
         }
@@ -2182,7 +2217,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 98.08
+          "age_hours": 101.0
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2244,7 +2279,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-04T10:44:28.549866+00:00",
-          "hours_since_update": 98.08,
+          "hours_since_update": 101.0,
           "event_count": 59,
           "timeline_entries": 39
         }
@@ -2262,7 +2297,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 50.02
+          "age_hours": 53.04
         },
         "level": "high",
         "importance_reasons": [
@@ -2289,6 +2324,7 @@
             "Indian River County"
           ],
           "places": [
+            "Vero Beach",
             "Fellsmere"
           ]
         },
@@ -2300,12 +2336,12 @@
         "event_count": 3,
         "timeline_entries": 3,
         "relationship_decisions": 0,
-        "canonical_source_candidates": 3,
+        "canonical_source_candidates": 4,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 50.02,
+          "hours_since_update": 53.04,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2323,7 +2359,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 50.02
+          "age_hours": 52.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2368,9 +2404,63 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 50.02,
+          "hours_since_update": 52.99,
           "event_count": 3,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_020062",
+        "title": "Indian River County sheriff investigates fatal shooting of teen - WFLX",
+        "score": 65,
+        "editorial_priority": 64,
+        "editorial_score": 64,
+        "score_breakdown": {
+          "score": 64,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.06
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-10-08T15:44:00.204545+00:00",
+          "hours_since_update": 0.06,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -2386,7 +2476,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 50.02
+          "age_hours": 52.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2424,7 +2514,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 50.02,
+          "hours_since_update": 52.99,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2442,7 +2532,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 59.03
+          "age_hours": 62.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2478,7 +2568,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T01:44:20.146901+00:00",
-          "hours_since_update": 59.03,
+          "hours_since_update": 62.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2496,7 +2586,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 38.01
+          "age_hours": 40.98
         },
         "level": "high",
         "importance_reasons": [
@@ -2534,7 +2624,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-06T22:45:22.065683+00:00",
-          "hours_since_update": 38.01,
+          "hours_since_update": 40.98,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2552,7 +2642,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 64.01
+          "age_hours": 66.98
         },
         "level": "high",
         "importance_reasons": [
@@ -2590,7 +2680,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 64.01,
+          "hours_since_update": 66.98,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2608,7 +2698,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 155.03
+          "age_hours": 158.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2651,7 +2741,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 155.03,
+          "hours_since_update": 158.0,
           "event_count": 28,
           "timeline_entries": 28
         }
@@ -2669,7 +2759,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 155.03
+          "age_hours": 158.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2710,7 +2800,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 155.03,
+          "hours_since_update": 158.01,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2728,7 +2818,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 141.02
+          "age_hours": 143.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2771,7 +2861,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-02T15:44:32.039306+00:00",
-          "hours_since_update": 141.02,
+          "hours_since_update": 143.99,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2789,7 +2879,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 64.0
+          "age_hours": 66.98
         },
         "level": "high",
         "importance_reasons": [
@@ -2832,7 +2922,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 64.0,
+          "hours_since_update": 66.98,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2850,7 +2940,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 62.02
+          "age_hours": 64.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2886,7 +2976,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-05T22:44:49.358045+00:00",
-          "hours_since_update": 62.02,
+          "hours_since_update": 64.99,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2904,7 +2994,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 45.01
+          "age_hours": 47.98
         },
         "level": "high",
         "importance_reasons": [
@@ -2938,7 +3028,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-06T15:45:27.113429+00:00",
-          "hours_since_update": 45.01,
+          "hours_since_update": 47.98,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2956,7 +3046,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 110.02
+          "age_hours": 112.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2995,7 +3085,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-03T22:44:32.452692+00:00",
-          "hours_since_update": 110.02,
+          "hours_since_update": 112.99,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -3013,7 +3103,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 162.03
+          "age_hours": 165.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3052,7 +3142,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-01T18:44:00.400323+00:00",
-          "hours_since_update": 162.03,
+          "hours_since_update": 165.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3070,7 +3160,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 18.01
+          "age_hours": 20.98
         },
         "level": "normal",
         "importance_reasons": [
@@ -3115,7 +3205,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-07T18:45:39.623722+00:00",
-          "hours_since_update": 18.01,
+          "hours_since_update": 20.98,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -3133,7 +3223,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 14.07
+          "age_hours": 17.03
         },
         "level": "normal",
         "importance_reasons": [
@@ -3180,7 +3270,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-07T22:45:03.810082+00:00",
-          "hours_since_update": 14.07,
+          "hours_since_update": 17.03,
           "event_count": 12,
           "timeline_entries": 8
         }
@@ -3198,7 +3288,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 206.71
+          "age_hours": 209.68
         },
         "level": "high",
         "importance_reasons": [
@@ -3239,70 +3329,9 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-29T22:03:25.542264+00:00",
-          "hours_since_update": 206.71,
+          "hours_since_update": 209.68,
           "event_count": 11,
           "timeline_entries": 11
-        }
-      },
-      {
-        "story_id": "story_015954",
-        "title": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - wpbf.com",
-        "score": 75,
-        "editorial_priority": 46,
-        "editorial_score": 46,
-        "score_breakdown": {
-          "score": 46,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.55,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 323.02
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Multi-event story remains open but is no longer rapidly developing",
-          "last_updated": "2026-09-25T01:44:33.584920+00:00",
-          "hours_since_update": 323.02,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       }
     ]
@@ -3310,7 +3339,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-08T12:51:44Z",
+    "generated_at": "2026-10-08T15:47:53Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3325,31 +3354,30 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 4,
-        "generated_live": 1,
-        "generation_failed_archive_recovery": 2,
-        "no_publishable_sources": 1,
+        "cache_hit": 1,
+        "category_eligibility_archive_recovery": 3,
+        "generated_live": 3,
+        "generation_failed_archive_recovery": 1,
         "quality_gate_archive_recovery": 1
       },
       "failures": {
-        "generation_exception": 1,
         "missing_or_null_hero": 1,
-        "no_category_eligible_sources": 4,
+        "no_category_eligible_sources": 3,
         "publication_quality_rejected": 1
       },
       "model_attempt_count": 6,
-      "model_elapsed_seconds": 157.325,
-      "archive_recovery_requested_count": 8,
+      "model_elapsed_seconds": 83.391,
+      "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 9,
-      "published_story_duplicate_suppression_count": 31,
+      "published_story_duplicate_suppression_count": 25,
       "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 7,
+      "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 4,
-      "material_update_promotion_model_call_count": 3
+      "material_update_promotion_cache_hit_count": 6,
+      "material_update_promotion_model_call_count": 0
     },
     "categories": [
       {
@@ -3358,7 +3386,7 @@
         "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 27,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 11,
+        "publishable_source_count": 13,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3367,19 +3395,19 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.344,
+            "elapsed_seconds": 11.507,
             "result": "missing_or_null_hero",
             "error_summary": "Model response did not contain a usable hero after normalization"
           },
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.86,
+            "elapsed_seconds": 11.662,
             "result": "missing_or_null_hero",
             "error_summary": "Model response did not contain a usable hero after normalization"
           }
         ],
-        "model_elapsed_seconds": 25.203,
+        "model_elapsed_seconds": 23.169,
         "failure_code": "missing_or_null_hero",
         "failure_summary": "Model response did not contain a usable hero after normalization",
         "sports_expired_event_preview_count": 0,
@@ -3390,9 +3418,23 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 5,
-        "category_eligibility_rejection_count": 4,
+        "category_eligibility_assessed_count": 6,
+        "category_eligibility_rejection_count": 5,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Treasure Coast HS student critically injured after being struck while walking to school - cw34.com",
+            "source_url": "https://cw34.com/news/local/treasure-coast-hs-student-critically-injured-after-being-struck-while-walking-to-school-port-st-lucie-port-st-lucie-news-treasure-coast-high-school-treasure-coast-high-14-year-old-teen-pedestrian-pedestrian-crash-pedestrian-accident-suv-crash?teaserSource=trending"
+          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3566,28 +3608,21 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 48.369
+        "elapsed_seconds": 40.794
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 10,
+        "publishable_source_count": 9,
         "selected_source_count": 3,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 18.385,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 18.385,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3598,8 +3633,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 6,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 4,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-primary-crime-safety-focus",
@@ -3614,34 +3649,10 @@
             "local_nexus_signals": [],
             "headline": "Trump proposes Camp David-style presidential retreat at West Palm Beach golf course",
             "source_url": "https://www.wptv.com/news/palm-beach-county/trump-seeks-to-turn-his-palm-beach-co-golf-club-into-permanent-presidential-golf-club-camp-david-style-retreat"
-          },
-          {
-            "contract_version": "1.0-primary-crime-safety-focus",
-            "category_key": "crime",
-            "mode": "enforce",
-            "policy": "primary_crime_safety_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_crime_safety_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
           }
         ],
         "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-            "editorial_story_id": "story_019058",
-            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-            "canonical_headline": "Fellsmere Boat Ramp Shooting: No Arrest Yet as Vero Beach Mourns Sulli Bah",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "crime",
             "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
@@ -3664,6 +3675,16 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+            "editorial_story_id": "story_019058",
+            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+            "canonical_headline": "Fellsmere Boat Ramp Shooting: No Arrest Yet as Vero Beach Mourns Sulli Bah",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
             "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown",
             "editorial_story_id": "story_019959",
@@ -3677,24 +3698,9 @@
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-            "canonical_headline": "Fellsmere Boat Ramp Shooting: No Arrest Yet as Vero Beach Mourns Sulli Bah",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "crime",
             "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
@@ -3719,6 +3725,21 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+            "canonical_headline": "Fellsmere Boat Ramp Shooting: No Arrest Yet as Vero Beach Mourns Sulli Bah",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -3751,8 +3772,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -3804,18 +3825,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Fort Pierce Teen Charged With Attempted Homicide After Woman Shot At On South Sixth Street",
-        "generated_card_count": 0,
-        "elapsed_seconds": 38.398
+        "elapsed_seconds": 12.936
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 19,
+        "fresh_candidate_count": 20,
         "publishable_source_count": 10,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3874,7 +3892,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -3915,16 +3933,6 @@
             "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "5 years after Gabriella Hanley's unsolved killing, family and police still calling on community for answers",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/5-years-after-gabriella-hanleys-unsolved-killing-family-and-police-still-calling-on-community-for-answers",
-            "editorial_story_id": "story_019716",
-            "canonical_slug": "2026-10-07-5-years-after-gabriella-hanleys-killing-on-green-river-parkway-case-remains-unso",
-            "canonical_headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -3993,32 +4001,17 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "5 years after Gabriella Hanley's unsolved killing, family and police still calling on community for answers",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/5-years-after-gabriella-hanleys-unsolved-killing-family-and-police-still-calling-on-community-for-answers",
-            "canonical_slug": "2026-10-07-5-years-after-gabriella-hanleys-killing-on-green-river-parkway-case-remains-unso",
-            "canonical_headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.568
+        "elapsed_seconds": 11.595
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4039,22 +4032,12 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "sports",
             "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-            "editorial_story_id": "story_019058",
-            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-            "canonical_headline": "Fellsmere Boat Ramp Shooting: No Arrest Yet as Vero Beach Mourns Sulli Bah",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "sports",
-            "source_headline": "No arrests after 17-year-old shot, killed at meetup in Indian River County, self-defense claim expected - WFLX",
-            "source_url": "https://www.wflx.com/2026/10/05/no-arrests-after-17-year-old-shot-killed-meetup-indian-river-county-self-defense-claim-expected?outputType=amp",
             "editorial_story_id": "story_019058",
             "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
             "canonical_headline": "Fellsmere Boat Ramp Shooting: No Arrest Yet as Vero Beach Mourns Sulli Bah",
@@ -4096,21 +4079,6 @@
           },
           {
             "category_key": "sports",
-            "source_headline": "No arrests after 17-year-old shot, killed at meetup in Indian River County, self-defense claim expected - WFLX",
-            "source_url": "https://www.wflx.com/2026/10/05/no-arrests-after-17-year-old-shot-killed-meetup-indian-river-county-self-defense-claim-expected?outputType=amp",
-            "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-            "canonical_headline": "Fellsmere Boat Ramp Shooting: No Arrest Yet as Vero Beach Mourns Sulli Bah",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "sports",
             "source_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-teen-dies-after-shooting-near-garcias-boat-ramp-in-indian-river-county/74005820",
             "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -4125,8 +4093,8 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 6,
-        "elapsed_seconds": 12.769
+        "new_publication_stale_rejected_count": 5,
+        "elapsed_seconds": 8.121
       },
       {
         "category_key": "things_to_do",
@@ -4134,7 +4102,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 9,
+        "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4181,21 +4149,28 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.083
+        "elapsed_seconds": 9.387
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 10.345,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 10.345,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4206,7 +4181,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -4219,7 +4194,11 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.645
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
+        "generated_card_count": 0,
+        "elapsed_seconds": 26.274
       },
       {
         "category_key": "martin",
@@ -4227,8 +4206,8 @@
         "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 26,
         "fresh_candidate_count": 25,
-        "publishable_source_count": 4,
-        "selected_source_count": 3,
+        "publishable_source_count": 3,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 1,
@@ -4236,11 +4215,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 19.06,
+            "elapsed_seconds": 7.895,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 19.06,
+        "model_elapsed_seconds": 7.895,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -4251,7 +4230,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 1,
@@ -4293,40 +4272,30 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 37.432
+        "elapsed_seconds": 24.972
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generation_failed_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 25,
         "publishable_source_count": 9,
         "selected_source_count": 8,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 50.197,
-            "result": "copydesk_integrity",
-            "error_type": "CopyDeskIntegrityError",
-            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 44.48,
-            "result": "generation_exception",
-            "error_type": "TypeError",
-            "error_summary": "'<' not supported between instances of 'int' and 'NoneType'"
+            "elapsed_seconds": 33.774,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 94.677,
-        "failure_code": "generation_exception",
-        "failure_summary": "'<' not supported between instances of 'int' and 'NoneType'",
+        "model_elapsed_seconds": 33.774,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4338,7 +4307,7 @@
         "category_eligibility_assessed_count": 9,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4372,16 +4341,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "editorial_story_id": "story_019789",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Port St. Lucie residents share videos of flooding after heavy rain - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-flooding-port-st-lucie-heavy-rain-flooded-roads-standing-water-difficult-driving-conditions-bayshore-heights-flooding-port-st-lucie-weather-south-florida-rain-flood-safety-water-covered-streets-neighborhood-flooding-florida-fl",
             "editorial_story_id": "story_019779",
@@ -4399,34 +4358,14 @@
             "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
             "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|temporary-poll-place",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "I-TEAM: A widow maps brain cancer cases in St. Lucie County - some just doors apart - WPEC",
-            "source_url": "https://cbs12.com/news/cbs12-news-i-team/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
-            "editorial_story_id": "story_019281",
-            "canonical_slug": "2026-10-05-states-updated-data-shows-no-elevated-brain-cancer-rates-in-st-lucie-families-st",
-            "canonical_headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
-            "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident?teaserSource=trending",
-            "editorial_story_id": "story_017306",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 3,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
@@ -4523,21 +4462,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Port St. Lucie residents share videos of flooding after heavy rain - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-flooding-port-st-lucie-heavy-rain-flooded-roads-standing-water-difficult-driving-conditions-bayshore-heights-flooding-port-st-lucie-weather-south-florida-rain-flood-safety-water-covered-streets-neighborhood-flooding-florida-fl",
             "canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
@@ -4580,70 +4504,37 @@
             ],
             "reason": "Both articles report the identical polling place change for the same precincts, same old and new locations, same reason (renovations), and same election. The incoming article adds routine early voting/vote-by-mail logistical details, which is background explanation, not a material update to the core event.",
             "validation_errors": []
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "I-TEAM: A widow maps brain cancer cases in St. Lucie County - some just doors apart - WPEC",
-            "source_url": "https://cbs12.com/news/cbs12-news-i-team/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
-            "canonical_slug": "2026-10-05-states-updated-data-shows-no-elevated-brain-cancer-rates-in-st-lucie-families-st",
-            "canonical_headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
-            "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident?teaserSource=trending",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.97,
-            "shared_anchors": [],
-            "novel_facts": [
-              "Vehicle fire on Florida's Turnpike southbound in St. Lucie County near mile marker 162",
-              "Incident began about 10:56 a.m., shoulder closed as of 12:22 p.m."
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 116.415
+        "live_hero_headline": "St. Lucie Fire District's Search for Outside Law Firm Stalls Amid Hazing Fallout",
+        "generated_card_count": 0,
+        "elapsed_seconds": 50.03
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 7,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 8,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Indian River County category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 8.208,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 8.208,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4652,10 +4543,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 8,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -4706,24 +4597,14 @@
             "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "editorial_story_id": "story_019789",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
@@ -4736,8 +4617,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -4811,25 +4692,14 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.421
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Family Demands Charges in Fellsmere Teen Party Shooting Death",
+        "generated_card_count": 0,
+        "elapsed_seconds": 22.675
       }
     ]
   }
