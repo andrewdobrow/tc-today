@@ -17871,6 +17871,75 @@ def validate_custom_category_placement(all_categories, output_root=None):
     return report
 
 
+
+def _custom_publish_on_ready(value, *, now_et=None):
+    """Return True when a scheduled custom article is eligible to publish in Eastern time.
+
+    ``publish_on`` is intentionally date-only. A queued custom article remains dormant
+    through 11:59 p.m. ET on the preceding day and becomes eligible at midnight ET.
+    Invalid dates fail closed so a typo cannot publish an advertiser or editorial article
+    on the wrong day.
+    """
+    raw = str(value or "").strip()
+    if not raw:
+        return True
+    try:
+        target = datetime.strptime(raw, "%Y-%m-%d").date()
+    except ValueError as exc:
+        raise RuntimeError(
+            f"Invalid custom article publish_on date '{raw}'. Expected YYYY-MM-DD."
+        ) from exc
+    if now_et is None:
+        now_et = datetime.now(ZoneInfo("America/New_York"))
+    if getattr(now_et, "tzinfo", None) is None:
+        now_et = now_et.replace(tzinfo=ZoneInfo("America/New_York"))
+    else:
+        now_et = now_et.astimezone(ZoneInfo("America/New_York"))
+    return now_et.date() >= target
+
+
+def _normalize_custom_presentation_fields(art):
+    """Validate optional sponsored-article and image-carousel presentation fields."""
+    if not isinstance(art, dict):
+        return art
+
+    carousel = art.get("carousel_images")
+    if carousel is not None:
+        if not isinstance(carousel, list):
+            raise ValueError("carousel_images must be a list")
+        normalized = []
+        for index, raw in enumerate(carousel, start=1):
+            if isinstance(raw, str):
+                url = raw.strip()
+                alt = ""
+                caption = ""
+            elif isinstance(raw, dict):
+                url = str(raw.get("url") or "").strip()
+                alt = str(raw.get("alt") or "").strip()
+                caption = str(raw.get("caption") or "").strip()
+            else:
+                raise ValueError(f"carousel_images item {index} must be a URL string or object")
+            if not url.startswith(("https://", "http://")):
+                raise ValueError(f"carousel_images item {index} has an invalid URL")
+            normalized.append({"url": url, "alt": alt, "caption": caption})
+        if len(normalized) > 12:
+            raise ValueError("carousel_images supports at most 12 images")
+        art["carousel_images"] = normalized
+        if normalized and not str(art.get("image_url") or "").strip():
+            art["image_url"] = normalized[0]["url"]
+
+    if art.get("sponsored") or art.get("is_sponsored"):
+        art["sponsored"] = True
+        sponsor_name = str(art.get("sponsor_name") or "").strip()
+        sponsor_url = str(art.get("sponsor_url") or "").strip()
+        if not sponsor_name:
+            raise ValueError("sponsored custom articles require sponsor_name")
+        if not sponsor_url.startswith(("https://", "http://")):
+            raise ValueError("sponsored custom articles require a valid sponsor_url")
+        art["sponsor_name"] = sponsor_name
+        art["sponsor_url"] = sponsor_url
+    return art
+
 def load_custom_articles():
     """Load manual publications using durable custom-publication identity.
 
@@ -17914,6 +17983,8 @@ def load_custom_articles():
     live = []
     skipped_published = 0
     retired_skips = 0
+    scheduled_skips = 0
+    now_et = datetime.now(ZoneInfo("America/New_York"))
     queued_headlines = set()
     queued_slugs = {}
     queued_publication_keys = {}
@@ -17924,6 +17995,10 @@ def load_custom_articles():
                 f"not {type(raw).__name__}."
             )
         art = dict(raw)
+        try:
+            _normalize_custom_presentation_fields(art)
+        except ValueError as exc:
+            raise RuntimeError(f"custom_articles.json item {index} invalid: {exc}") from exc
         headline = _exact_custom_headline(art.get("headline"))
         if not headline:
             raise RuntimeError(f"custom_articles.json item {index} is missing a non-empty headline.")
@@ -17935,6 +18010,10 @@ def load_custom_articles():
         queued_headlines.add(headline)
         if art.get("retired") is True or headline in retired:
             retired_skips += 1
+            continue
+
+        if not _custom_publish_on_ready(art.get("publish_on"), now_et=now_et):
+            scheduled_skips += 1
             continue
 
         requested_slug = _validated_custom_requested_slug(art.get("slug"))
@@ -18091,6 +18170,8 @@ def load_custom_articles():
         print(f"  Custom queue retained {skipped_published} unchanged published item(s) as active placement(s)")
     if retired_skips:
         print(f"  Custom queue ignored {retired_skips} retired item(s)")
+    if scheduled_skips:
+        print(f"  Custom queue held {scheduled_skips} scheduled item(s) until publish_on date")
     return live
 
 def load_archive(archive_path):
@@ -18527,6 +18608,9 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     )
 
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
+    _is_sponsored = bool(hero.get("sponsored") or hero.get("is_sponsored"))
+    _sponsor_name = str(hero.get("sponsor_name") or "").strip()
+    _sponsor_url = str(hero.get("sponsor_url") or "").strip()
     # RSS, Open Graph, Twitter, and NewsArticle schema share one authoritative image
     # resolver. A real source image wins regardless of which publisher CDN hosts it;
     # otherwise the green category OG card is used. Reusable article placeholders are
@@ -18565,6 +18649,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         },
         "isAccessibleForFree": True,
     }
+    if _is_sponsored and _sponsor_name:
+        structured_data["sponsor"] = {
+            "@type": "Organization",
+            "name": _sponsor_name,
+            **({"url": _sponsor_url} if _sponsor_url.startswith(("https://", "http://")) else {}),
+        }
     import json as _json
     schema_tag = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
     if _is_product_guide:
@@ -18590,6 +18680,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         body = make_paragraphs(
             hero.get("body", ""),
             preserve_all=bool(hero.get("is_custom") or hero.get("authoritative_custom")),
+        )
+    if _is_sponsored and _sponsor_url.startswith(("https://", "http://")):
+        _sponsor_href = html_lib.escape(_sponsor_url, quote=True)
+        body = body.replace(
+            f'href="{_sponsor_href}" target="_blank" rel="noopener"',
+            f'href="{_sponsor_href}" target="_blank" rel="sponsored nofollow noopener noreferrer external"',
         )
 
     # Optional user-service link for Things To Do coverage. This is an official event,
@@ -18634,8 +18730,60 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
             _fb, _ = get_fallback_image("top_news", hero.get("headline", ""), item=hero)
         _art_img = _fb or f"{SITE_URL}/og-image.png"
     if _art_img:
-        credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
-        img_html = f'<figure class="article-hero-image"><img src="{_art_img}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
+        credit = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
+        _carousel_raw = hero.get("carousel_images") if isinstance(hero.get("carousel_images"), list) else []
+        _carousel = []
+        for _entry in _carousel_raw:
+            if isinstance(_entry, str):
+                _url, _alt, _caption = _entry.strip(), "", ""
+            elif isinstance(_entry, dict):
+                _url = str(_entry.get("url") or "").strip()
+                _alt = str(_entry.get("alt") or "").strip()
+                _caption = str(_entry.get("caption") or "").strip()
+            else:
+                continue
+            if _url.startswith(("https://", "http://")):
+                _carousel.append((_url, _alt, _caption))
+        if _carousel:
+            _slides = []
+            _dots = []
+            _count = len(_carousel)
+            for _idx, (_url, _alt, _caption) in enumerate(_carousel):
+                _safe_url = html_lib.escape(_url, quote=True)
+                _safe_alt = html_lib.escape(
+                    _alt or f"{hero.get('headline', '')} photo {_idx + 1} of {_count}",
+                    quote=True,
+                )
+                _safe_caption = html_lib.escape(_caption)
+                _active = " is-active" if _idx == 0 else ""
+                _loading = "eager" if _idx == 0 else "lazy"
+                _slides.append(
+                    f'<div class="article-carousel-slide{_active}" data-carousel-slide="{_idx}" '
+                    f'aria-hidden="{"false" if _idx == 0 else "true"}">'
+                    f'<img src="{_safe_url}" alt="{_safe_alt}" loading="{_loading}">'
+                    + (f'<div class="article-carousel-caption">{_safe_caption}</div>' if _safe_caption else "")
+                    + '</div>'
+                )
+                _dots.append(
+                    f'<button type="button" class="article-carousel-dot{_active}" data-carousel-dot="{_idx}" '
+                    f'aria-label="Show image {_idx + 1} of {_count}" aria-current="{"true" if _idx == 0 else "false"}"></button>'
+                )
+            _controls = ""
+            if _count > 1:
+                _controls = (
+                    '<button type="button" class="article-carousel-nav article-carousel-prev" data-carousel-prev aria-label="Previous image">&#8249;</button>'
+                    '<button type="button" class="article-carousel-nav article-carousel-next" data-carousel-next aria-label="Next image">&#8250;</button>'
+                    f'<div class="article-carousel-counter" data-carousel-counter>1 / {_count}</div>'
+                    f'<div class="article-carousel-dots">{"".join(_dots)}</div>'
+                )
+            img_html = (
+                '<figure class="article-hero-image article-image-carousel" data-tct-carousel tabindex="0" '
+                f'aria-label="Photo gallery, {_count} images">'
+                f'<div class="article-carousel-track">{"".join(_slides)}</div>'
+                f'{_controls}{credit}</figure>'
+            )
+        else:
+            img_html = f'<figure class="article-hero-image"><img src="{html_lib.escape(str(_art_img), quote=True)}" alt="{html_lib.escape(str(hero.get("headline") or ""), quote=True)}" loading="eager">{credit}</figure>'
 
     head   = _page_head(
         f"{hero['headline']} | Treasure Coast Today",
@@ -18695,6 +18843,20 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 
     _urgency_text = f"{category_label} {hero.get('headline','')}".strip().lower()
     urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if hero.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
+    if _is_sponsored and _sponsor_name:
+        _safe_sponsor_name = html_lib.escape(_sponsor_name)
+        _safe_sponsor_url = html_lib.escape(_sponsor_url, quote=True)
+        _article_byline_html = (
+            f'<span class="article-byline article-sponsored-byline">Sponsored by '
+            f'<a href="{_safe_sponsor_url}" target="_blank" rel="sponsored nofollow noopener noreferrer external">{_safe_sponsor_name}</a></span>'
+        )
+        _sponsored_partnership_html = (
+            '<p class="article-sponsored-partnership">This article was produced in partnership with '
+            f'<a href="{_safe_sponsor_url}" target="_blank" rel="sponsored nofollow noopener noreferrer external">{_safe_sponsor_name}</a>.</p>'
+        )
+    else:
+        _article_byline_html = '<span class="article-byline">By <a href="/author/andrew-dobrow.html" rel="author">Andrew Dobrow</a></span>'
+        _sponsored_partnership_html = ""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -18743,6 +18905,24 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-side-rail .related-more-link:hover {{ text-decoration: underline; }}
     .article-hero-image {{ margin: 0 0 34px; width: 100%; }}
     .article-hero-image img {{ width: 100%; aspect-ratio: 16 / 9; max-height: 560px; object-fit: cover; border-radius: 12px; display: block; }}
+    .article-image-carousel {{ position: relative; overflow: hidden; border-radius: 12px; background: var(--surface); outline: none; }}
+    .article-image-carousel:focus-visible {{ box-shadow: 0 0 0 3px rgba(10,112,117,.24); }}
+    .article-carousel-track {{ position: relative; width: 100%; }}
+    .article-carousel-slide {{ display: none; position: relative; }}
+    .article-carousel-slide.is-active {{ display: block; }}
+    .article-image-carousel .article-carousel-slide img {{ border-radius: 12px; }}
+    .article-carousel-caption {{ padding: 9px 12px 0; color: var(--text-muted); font-size: 11px; line-height: 1.45; }}
+    .article-carousel-nav {{ position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; width: 42px; height: 42px; border: 0; border-radius: 50%; background: rgba(0,0,0,.62); color: #fff; font-size: 30px; line-height: 1; cursor: pointer; display: grid; place-items: center; }}
+    .article-carousel-prev {{ left: 12px; }}
+    .article-carousel-next {{ right: 12px; }}
+    .article-carousel-nav:hover {{ background: rgba(0,0,0,.8); }}
+    .article-carousel-counter {{ position: absolute; right: 12px; bottom: 12px; z-index: 3; padding: 5px 9px; border-radius: 999px; background: rgba(0,0,0,.68); color: #fff; font-size: 11px; font-weight: 700; }}
+    .article-carousel-dots {{ display: flex; justify-content: center; gap: 7px; padding: 11px 0 2px; }}
+    .article-carousel-dot {{ width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: var(--border); cursor: pointer; }}
+    .article-carousel-dot.is-active {{ background: var(--accent); }}
+    .article-sponsored-byline a {{ color: var(--accent); }}
+    .article-sponsored-partnership {{ margin: 28px 0 6px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px !important; line-height: 1.55 !important; }}
+    .article-sponsored-partnership a {{ color: var(--accent); font-weight: 700; }}
     .article-body p {{ font-size: 17px; line-height: 1.86; color: var(--text-secondary); margin-bottom: 22px; text-wrap: pretty; }}
     .article-body blockquote {{ margin: 34px 0; padding: 4px 0 4px 24px; border-left: 4px solid var(--accent); font-family: "Fraunces", serif; font-size: 22px; line-height: 1.5; color: var(--text); }}
     .article-reading-progress {{ position: fixed; top: 0; left: 0; z-index: 10000; width: 0; height: 3px; background: var(--accent); pointer-events: none; transition: width 70ms linear; }}
@@ -18806,7 +18986,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 {banner_slot}
       <div class="article-meta">
         <span class="article-category{urgency_cls}">{category_label}</span>
-        <span class="article-byline">By <a href="/author/andrew-dobrow.html" rel="author">Andrew Dobrow</a></span>
+        {_article_byline_html}
       </div>
       <div class="article-times">
         <span class="article-published">Published {_pub_display}</span>{_updated_html}
@@ -18816,6 +18996,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         <div class="article-main-column">
           {img_html}
           <div class="article-body">{body}</div>
+          {_sponsored_partnership_html}
           {_newsletter_inline_embed("article")}
           {event_link_html}
           <div class="article-share">
@@ -18860,6 +19041,48 @@ function tctUpdateReadingProgress() {{
 window.addEventListener('scroll', tctUpdateReadingProgress, {{ passive: true }});
 window.addEventListener('resize', tctUpdateReadingProgress);
 tctUpdateReadingProgress();
+
+document.querySelectorAll('[data-tct-carousel]').forEach(function(root) {{
+  const slides = Array.from(root.querySelectorAll('[data-carousel-slide]'));
+  const dots = Array.from(root.querySelectorAll('[data-carousel-dot]'));
+  const counter = root.querySelector('[data-carousel-counter]');
+  if (slides.length < 2) return;
+  let index = 0;
+  function show(next) {{
+    index = (next + slides.length) % slides.length;
+    slides.forEach(function(slide, i) {{
+      const active = i === index;
+      slide.classList.toggle('is-active', active);
+      slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+    }});
+    dots.forEach(function(dot, i) {{
+      const active = i === index;
+      dot.classList.toggle('is-active', active);
+      dot.setAttribute('aria-current', active ? 'true' : 'false');
+    }});
+    if (counter) counter.textContent = (index + 1) + ' / ' + slides.length;
+  }}
+  const prev = root.querySelector('[data-carousel-prev]');
+  const next = root.querySelector('[data-carousel-next]');
+  if (prev) prev.addEventListener('click', function() {{ show(index - 1); }});
+  if (next) next.addEventListener('click', function() {{ show(index + 1); }});
+  dots.forEach(function(dot, i) {{ dot.addEventListener('click', function() {{ show(i); }}); }});
+  root.addEventListener('keydown', function(event) {{
+    if (event.key === 'ArrowLeft') {{ event.preventDefault(); show(index - 1); }}
+    if (event.key === 'ArrowRight') {{ event.preventDefault(); show(index + 1); }}
+  }});
+  let touchStartX = null;
+  root.addEventListener('touchstart', function(event) {{
+    if (event.touches && event.touches.length === 1) touchStartX = event.touches[0].clientX;
+  }}, {{ passive: true }});
+  root.addEventListener('touchend', function(event) {{
+    if (touchStartX === null || !event.changedTouches || !event.changedTouches.length) return;
+    const delta = event.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(delta) < 45) return;
+    show(index + (delta < 0 ? 1 : -1));
+  }}, {{ passive: true }});
+}});
 
 function tctShare() {{
   const data = {{ title: document.title, text: {headline_js}, url: window.location.href }};
@@ -20867,6 +21090,7 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
             "article_type", "products", "product_count", "has_affiliate_links",
             "custom_body_hash", "custom_headline_key", "custom_id",
             "custom_publication_key", "custom_series_key", "custom_edition_key",
+            "sponsored", "sponsor_name", "sponsor_url", "carousel_images",
         ):
             value = canonical.get(key)
             if value not in (None, ""):
@@ -26100,6 +26324,10 @@ def _refresh_current_manual_custom_metadata(existing, hero, headline):
     explicit_id = slugify(str(hero.get("custom_id") or hero.get("article_id") or ""))
     if explicit_id:
         existing["custom_id"] = explicit_id
+    existing["sponsored"] = bool(hero.get("sponsored") or hero.get("is_sponsored"))
+    existing["sponsor_name"] = str(hero.get("sponsor_name") or "")
+    existing["sponsor_url"] = str(hero.get("sponsor_url") or "")
+    existing["carousel_images"] = copy.deepcopy(hero.get("carousel_images") or [])
     return True
 
 
@@ -36133,6 +36361,10 @@ def write_archives(all_categories, top_cat):
                 "custom_edition_key": _custom_edition_marker(hero) if hero.get("is_custom") else "",
                 "custom_id": slugify(str(hero.get("custom_id") or hero.get("article_id") or "")) if hero.get("is_custom") else "",
                 "custom_publication_key": _custom_publication_key(hero) if hero.get("is_custom") else "",
+                "sponsored": bool(hero.get("sponsored") or hero.get("is_sponsored")) if hero.get("is_custom") else False,
+                "sponsor_name": str(hero.get("sponsor_name") or "") if hero.get("is_custom") else "",
+                "sponsor_url": str(hero.get("sponsor_url") or "") if hero.get("is_custom") else "",
+                "carousel_images": copy.deepcopy(hero.get("carousel_images") or []) if hero.get("is_custom") else [],
                 "article_word_count": _word_count(hero.get("body", "")),
                 "article_paragraph_count": _paragraph_count(hero.get("body", "")),
                 "event_url": hero.get("event_url", ""),

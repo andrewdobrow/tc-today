@@ -51,6 +51,6 @@ def test_polling_place_article_preserves_supplied_election_details():
         assert value in body
 
 
-def test_polling_place_article_uses_early_voting_image():
+def test_polling_place_article_uses_final_early_voting_image():
     article = _article()
     assert article["image_url"] == "https://treasurecoast.today/images/early-voting.webp"
