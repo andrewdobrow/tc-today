@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-07T22:50:19Z",
+  "generated_at": "2026-10-08T01:50:46Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,51 +15,61 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
-      "generated_live": 2,
-      "quality_gate_archive_recovery": 2
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 3,
+      "generation_failed_archive_recovery": 1,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 5,
-      "publication_quality_rejected": 2
+      "missing_or_null_hero": 1,
+      "no_category_eligible_sources": 4,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 100.125,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 125.604,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 11,
-    "published_story_duplicate_suppression_count": 17,
-    "story_aware_update_context_count": 8,
+    "category_eligibility_rejection_count": 10,
+    "published_story_duplicate_suppression_count": 23,
+    "story_aware_update_context_count": 2,
     "material_update_promotion_evaluation_count": 5,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 5,
-    "material_update_promotion_model_call_count": 0
+    "material_update_promotion_cache_hit_count": 4,
+    "material_update_promotion_model_call_count": 1
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "quality_gate_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 12,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 11,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.314,
-          "result": "success"
+          "elapsed_seconds": 12.968,
+          "result": "missing_or_null_hero",
+          "error_summary": "Model response did not contain a usable hero after normalization"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 12.908,
+          "result": "missing_or_null_hero",
+          "error_summary": "Model response did not contain a usable hero after normalization"
         }
       ],
-      "model_elapsed_seconds": 11.314,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 25.875,
+      "failure_code": "missing_or_null_hero",
+      "failure_summary": "Model response did not contain a usable hero after normalization",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -68,8 +78,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 8,
-      "category_eligibility_rejection_count": 7,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -96,8 +106,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Treasure Coast HS student critically injured after being struck while walking to school - cw34.com",
-          "source_url": "https://cw34.com/news/local/treasure-coast-hs-student-critically-injured-after-being-struck-while-walking-to-school-port-st-lucie-port-st-lucie-news-treasure-coast-high-school-treasure-coast-high-14-year-old-teen-pedestrian-pedestrian-crash-pedestrian-accident-suv-crash"
+          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/07/st-lucie-county-fire-board-continues-law-firm-search-effort-create-complaint-policy-amid-hazing-fallout/?outputType=amp"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -112,34 +122,6 @@
           "local_nexus_signals": [],
           "headline": "Port St. Lucie flooding problem renews focus on city's stormwater spending - cw34.com",
           "source_url": "https://cw34.com/news/local/port-st-lucie-flooding-problem-renews-focus-on-citys-stormwater-spending-30-million-through-2031-reduce-flooding-public-works"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -170,7 +152,7 @@
           "source_url": "https://cw34.com/news/local/crash-in-martin-county-i95-south-blocks-2-right-lanes-bring-heavy-delays-snarls-traffic-florida-511-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -181,57 +163,40 @@
           "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_019789",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_019789,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "publisher": "www.wptv.com",
+          "category_key": "local_gov",
+          "source_headline": "Student hit by vehicle in St. Lucie County, school district confirms - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNcmhnMDZzdmg0ZEtuSzlXamQ5QkNTYXhMZVhpQ3d6d3lQZlRWLVY3WDNHZFA2RTdmUEtBM3llRE5mTEFfcjFJb0NPWTNHNEdNNHlTelNJdzZhMHlNRXUyUkVxSUZkVUxUUHl5UXVrV1NRYWJhQ2VkQWVabzZWNWZfTlpHMGpLR2dicmg3TFhrLWZSYnZ4R0p1OEFkOUU",
+          "editorial_story_id": "story_019789",
           "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
           "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_019789",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_019789,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "editorial_story_id": "story_019789",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "editorial_story_id": "story_019789",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -251,21 +216,66 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Student hit by vehicle in St. Lucie County, school district confirms - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNcmhnMDZzdmg0ZEtuSzlXamQ5QkNTYXhMZVhpQ3d6d3lQZlRWLVY3WDNHZFA2RTdmUEtBM3llRE5mTEFfcjFJb0NPWTNHNEdNNHlTelNJdzZhMHlNRXUyUkVxSUZkVUxUUHl5UXVrV1NRYWJhQ2VkQWVabzZWNWZfTlpHMGpLR2dicmg3TFhrLWZSYnZ4R0p1OEFkOUU",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 40.176
+      "elapsed_seconds": 50.022
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 24,
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 9,
-      "selected_source_count": 4,
+      "publishable_source_count": 10,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -273,11 +283,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 29.82,
+          "elapsed_seconds": 16.809,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 29.82,
+      "model_elapsed_seconds": 16.809,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -288,8 +298,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -304,30 +314,72 @@
           "local_nexus_signals": [],
           "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "UF study finds dengue-linked mosquito common in Indian River County yards - cw34.com",
+          "source_url": "https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-"
         }
       ],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "editorial_story_id": "story_019789",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_url",
+          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - cw34.com",
+          "source_url": "https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
+          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
           "identity_keys": [
-            "story:story_019789",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
+            "story:story_019822",
+            "source:https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-"
           ],
-          "match_confidence": 0.99,
+          "match_confidence": 0.95,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_019789,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['indian-river', 'indian-river-county', 'miami-dade', 'palm-beach-county', 'st-lucie', 'st-lucie-county', 'vero-beach']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['does not mean']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['dengue-link-mosquito', 'dengue-link-mosquito-common', 'find-dengue-link', 'find-dengue-link-mosquito', 'link-mosquito-common', 'link-mosquito-common-yard', 'mosquito-common-yard', 'study-find-dengue', 'study-find-dengue-link']",
+            "shared_headline_topic_core=['common', 'dengue', 'find', 'link', 'mosquito', 'study', 'yard']",
+            "shared_distinctive_token_count=155",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -369,14 +421,29 @@
           ],
           "reason": "Same arrests, same suspects, same charges, same date and location already covered in the canonical article; incoming only adds narrative detail without new accountability development.",
           "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "18-Year-Old Charged With Attempted Homicide in Fort Pierce Shooting",
-      "generated_card_count": 1,
-      "elapsed_seconds": 50.694
+      "live_hero_headline": "Fort Pierce Police Arrest Two After Woman Shot At During South Sixth Street Attack",
+      "generated_card_count": 0,
+      "elapsed_seconds": 37.254
     },
     {
       "category_key": "business",
@@ -401,7 +468,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -446,6 +513,16 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "editorial_story_id": "story_019789",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
           "source_headline": "5 years after Gabriella Hanley's unsolved killing, family and police still calling on community for answers",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/5-years-after-gabriella-hanleys-unsolved-killing-family-and-police-still-calling-on-community-for-answers",
           "editorial_story_id": "story_019716",
@@ -453,44 +530,10 @@
           "canonical_headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Gov. Ron DeSantis announces removal of 220 Medicaid providers amid fraud, abuse investigation",
-          "source_url": "https://www.wptv.com/news/state/gov-ron-desantis-announces-removal-of-220-medicaid-providers-amid-fraud-abuse-investigation",
-          "editorial_story_id": "story_019608",
-          "canonical_slug": "2026-10-06-florida-terminates-220-medicaid-providers-projects-1-billion-in-savings",
-          "canonical_headline": "Florida Terminates 220+ Medicaid Providers, Projects $1 Billion in Savings",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_019789",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_019789,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -498,10 +541,10 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
-          "source_headline": "5 years after Gabriella Hanley's unsolved killing, family and police still calling on community for answers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/5-years-after-gabriella-hanleys-unsolved-killing-family-and-police-still-calling-on-community-for-answers",
-          "canonical_slug": "2026-10-07-5-years-after-gabriella-hanleys-killing-on-green-river-parkway-case-remains-unso",
-          "canonical_headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -513,10 +556,10 @@
         },
         {
           "category_key": "business",
-          "source_headline": "Gov. Ron DeSantis announces removal of 220 Medicaid providers amid fraud, abuse investigation",
-          "source_url": "https://www.wptv.com/news/state/gov-ron-desantis-announces-removal-of-220-medicaid-providers-amid-fraud-abuse-investigation",
-          "canonical_slug": "2026-10-06-florida-terminates-220-medicaid-providers-projects-1-billion-in-savings",
-          "canonical_headline": "Florida Terminates 220+ Medicaid Providers, Projects $1 Billion in Savings",
+          "source_headline": "5 years after Gabriella Hanley's unsolved killing, family and police still calling on community for answers",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/5-years-after-gabriella-hanleys-unsolved-killing-family-and-police-still-calling-on-community-for-answers",
+          "canonical_slug": "2026-10-07-5-years-after-gabriella-hanleys-killing-on-green-river-parkway-case-remains-unso",
+          "canonical_headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -528,7 +571,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.849
+      "elapsed_seconds": 18.941
     },
     {
       "category_key": "sports",
@@ -617,8 +660,8 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 4,
-      "elapsed_seconds": 14.758
+      "new_publication_stale_rejected_count": 5,
+      "elapsed_seconds": 11.621
     },
     {
       "category_key": "things_to_do",
@@ -673,7 +716,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.587
+      "elapsed_seconds": 13.136
     },
     {
       "category_key": "florida",
@@ -711,7 +754,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.592
+      "elapsed_seconds": 15.408
     },
     {
       "category_key": "martin",
@@ -728,11 +771,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 19.316,
+          "elapsed_seconds": 21.171,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 19.316,
+      "model_elapsed_seconds": 21.171,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -758,16 +801,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 38.781
+      "elapsed_seconds": 43.259
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 11,
-      "selected_source_count": 10,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 8,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -775,11 +818,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 39.675,
+          "elapsed_seconds": 50.47,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 39.675,
+      "model_elapsed_seconds": 50.47,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -790,10 +833,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 11,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -817,11 +860,21 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "FOUND SAFE: Missing endangered 82-year-old Port St. Lucie woman located - WPBF",
-          "source_url": "https://www.wpbf.com/article/missing-endangered-woman-port-st-lucie/74063768",
-          "editorial_story_id": "story_019851",
-          "canonical_slug": "2026-10-07-missing-82-year-old-port-st-lucie-woman-found-safe",
-          "canonical_headline": "Missing 82-Year-Old Port St. Lucie Woman Found Safe",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "editorial_story_id": "story_019789",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "editorial_story_id": "story_019789",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -854,83 +907,44 @@
           "canonical_headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 3,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_019789",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_019789,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_019789",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_019789,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "category_key": "st_lucie",
+          "source_headline": "I-TEAM: A widow maps brain cancer cases in St. Lucie County - some just doors apart - WPEC",
+          "source_url": "https://cbs12.com/news/cbs12-news-i-team/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
+          "editorial_story_id": "story_019281",
+          "canonical_slug": "2026-10-05-states-updated-data-shows-no-elevated-brain-cancer-rates-in-st-lucie-families-st",
+          "canonical_headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         },
         {
-          "source_headline": "Two arrested in Fort Pierce shooting incident - WPBF",
-          "source_url": "https://www.wpbf.com/article/two-arrested-in-fort-pierce-shooting-incident/74040790",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
-          "canonical_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_019900",
-            "source:https://www.wpbf.com/article/two-arrested-in-fort-pierce-shooting-incident/74040790"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=source:https://www.wpbf.com/article/two-arrested-in-fort-pierce-shooting-incident/74040790",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "category_key": "st_lucie",
+          "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
+          "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident?teaserSource=trending",
+          "editorial_story_id": "story_017306",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County teen wins Boys & Girls Clubs' top honor - WPBF",
+          "source_url": "https://www.wpbf.com/article/st-lucie-county-teen-boys-girls-clubs-honor/73994029",
+          "editorial_story_id": "story_018864",
+          "canonical_slug": "2026-10-02-st-lucie-county-teen-wins-national-youth-of-the-year-set-for-hometown-welcome",
+          "canonical_headline": "St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "material_update_promotion_evaluation_count": 2,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -995,10 +1009,25 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "FOUND SAFE: Missing endangered 82-year-old Port St. Lucie woman located - WPBF",
-          "source_url": "https://www.wpbf.com/article/missing-endangered-woman-port-st-lucie/74063768",
-          "canonical_slug": "2026-10-07-missing-82-year-old-port-st-lucie-woman-found-safe",
-          "canonical_headline": "Missing 82-Year-Old Port St. Lucie Woman Found Safe",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1067,30 +1096,93 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "I-TEAM: A widow maps brain cancer cases in St. Lucie County - some just doors apart - WPEC",
+          "source_url": "https://cbs12.com/news/cbs12-news-i-team/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
+          "canonical_slug": "2026-10-05-states-updated-data-shows-no-elevated-brain-cancer-rates-in-st-lucie-families-st",
+          "canonical_headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Vehicle fire closes all southbound lanes on Florida's Turnpike in St. Lucie County - cw34.com",
+          "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-major-incident?teaserSource=trending",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [],
+          "novel_facts": [
+            "Vehicle fire on Florida's Turnpike southbound in St. Lucie County near mile marker 162, reported ~10:56 a.m."
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County teen wins Boys & Girls Clubs' top honor - WPBF",
+          "source_url": "https://www.wpbf.com/article/st-lucie-county-teen-boys-girls-clubs-honor/73994029",
+          "canonical_slug": "2026-10-02-st-lucie-county-teen-wins-national-youth-of-the-year-set-for-hometown-welcome",
+          "canonical_headline": "St. Lucie County Teen Enrique Rosario Liz Named National Youth of the Year",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie's $30M Oak Hammock Flood Fix Still Years Off as More Rain Looms",
-      "generated_card_count": 1,
-      "elapsed_seconds": 65.693
+      "live_hero_headline": "Port St. Lucie's $30 Million Oak Hammock Flood Project Still Years Away",
+      "generated_card_count": 3,
+      "elapsed_seconds": 70.361
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 9,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 7,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Indian River County category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.279,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 11.279,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1099,28 +1191,18 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
-          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
-          "source_url": "https://cbs12.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
-          "editorial_story_id": "story_019822",
-          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "5 years after Gabriella Hanley's unsolved killing, family and police still calling on community for answers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/5-years-after-gabriella-hanleys-unsolved-killing-family-and-police-still-calling-on-community-for-answers",
-          "editorial_story_id": "story_019716",
-          "canonical_slug": "2026-10-07-5-years-after-gabriella-hanleys-killing-on-green-river-parkway-case-remains-unso",
-          "canonical_headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "editorial_story_id": "story_019789",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1153,70 +1235,62 @@
           "canonical_headline": "Man Booked in Indian River County Jail in Vero Beach Ex-Girlfriend's Killing",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "New I-95 Oslo Road interchange opens in Indian River County over a year ahead of schedule - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/05/new-i-95-oslo-road-interchange-opens-indian-river-county-over-year-ahead-schedule",
-          "editorial_story_id": "story_019349",
-          "canonical_slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
-          "canonical_headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_url",
+          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
+          "source_url": "https://cbs12.com/news/health/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
+          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
           "identity_keys": [
-            "story:story_019789",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms"
+            "story:story_019822",
+            "source:https://cbs12.com/news/health/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-"
           ],
-          "match_confidence": 0.99,
+          "match_confidence": 0.95,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_019789,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['indian-river', 'indian-river-county', 'miami-dade', 'palm-beach-county', 'st-lucie', 'st-lucie-county', 'vero-beach']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['does not mean']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['common-yard-wpec', 'dengue-link-mosquito', 'dengue-link-mosquito-common', 'find-dengue-link', 'find-dengue-link-mosquito', 'link-mosquito-common', 'link-mosquito-common-yard', 'mosquito-common-yard', 'mosquito-common-yard-wpec', 'study-find-dengue', 'study-find-dengue-link']",
+            "shared_headline_topic_core=['common', 'dengue', 'find', 'link', 'mosquito', 'study', 'wpec', 'yard']",
+            "shared_distinctive_token_count=156",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
-          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
-          "source_url": "https://cbs12.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-",
-          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Thriving in Indian River County Yards",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "5 years after Gabriella Hanley's unsolved killing, family and police still calling on community for answers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/5-years-after-gabriella-hanleys-unsolved-killing-family-and-police-still-calling-on-community-for-answers",
-          "canonical_slug": "2026-10-07-5-years-after-gabriella-hanleys-killing-on-green-river-parkway-case-remains-unso",
-          "canonical_headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
+          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1283,45 +1357,14 @@
           "novel_facts": [],
           "reason": "Same source article (identical URL) covering the same booking of Matthew Waggle for the murder of Dawn Kriskewic, with no new facts beyond additional background already covered in the canonical version.",
           "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "New I-95 Oslo Road interchange opens in Indian River County over a year ahead of schedule - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/05/new-i-95-oslo-road-interchange-opens-indian-river-county-over-year-ahead-schedule",
-          "canonical_slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
-          "canonical_headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Oslo Road interchange",
-            "Indian River County",
-            "Governor Ron DeSantis",
-            "October 5 opening event",
-            "$100 million cost",
-            "one year/400 days ahead of schedule",
-            "first new I-95 interchange in ~50 years"
-          ],
-          "novel_facts": [
-            "additional quotes from DeSantis and FDOT Secretary Jared Perdue",
-            "gopher tortoise relocation habitat detail",
-            "Moving Florida Forward acceleration program detail",
-            "projected emergency response time improvement of 56%"
-          ],
-          "reason": "Both articles cover the same DeSantis press event opening the same Oslo Road I-95 interchange on the same date with the same cost and schedule details. The incoming article adds more quotes and background color (tortoise habitat, acceleration program mechanics) but no material update like a new consequence, ruling, or casualty change that would warrant a new canonical or update.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.054
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
+      "generated_card_count": 0,
+      "elapsed_seconds": 30.919
     }
   ]
 }
