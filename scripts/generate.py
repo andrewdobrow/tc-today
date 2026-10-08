@@ -5767,7 +5767,7 @@ def _archive_article_metrics(entry):
     try:
         html_text = path.read_text(encoding="utf-8", errors="ignore")
         match = re.search(
-            r'<div class="article-body">(.*?)</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
+            r'<div class="article-body">(.*?)</div>\s*(?:<p class="article-sponsored-partnership"[^>]*>.*?</p>\s*)?(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
             html_text, re.IGNORECASE | re.DOTALL,
         )
         if not match:
@@ -5799,7 +5799,7 @@ def _archive_article_body(entry):
     try:
         html_text = path.read_text(encoding="utf-8", errors="ignore")
         match = re.search(
-            r'<div class="article-body">(.*?)</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
+            r'<div class="article-body">(.*?)</div>\s*(?:<p class="article-sponsored-partnership"[^>]*>.*?</p>\s*)?(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
             html_text, re.IGNORECASE | re.DOTALL,
         )
         if not match:
@@ -18538,8 +18538,13 @@ def validate_custom_body_fidelity(hero, page_html):
     if str(hero.get("article_type") or "") == "product_guide":
         return validate_product_guide_fidelity(hero, page_html)
     import html as _html
+    # Body fidelity is about the submitted article payload itself. Do not couple
+    # extraction to whatever modules happen to follow the body (sponsorship
+    # disclosure, newsletter, event box, share tools, membership chrome, etc.).
+    # Those surfaces evolve independently and must never make a complete custom
+    # article look as though its body is missing.
     match = re.search(
-        r'<div class="article-body">(.*?)</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
+        r'<div\b[^>]*class=["\'][^"\']*\barticle-body\b[^"\']*["\'][^>]*>(.*?)</div>',
         str(page_html or ""),
         flags=re.IGNORECASE | re.DOTALL,
     )
@@ -25968,7 +25973,7 @@ def _repair_exact_headline_incident_duplicates(archive, articles_dir, output_roo
 
 def _plain_article_paragraphs_from_html(html_text):
     match = re.search(
-        r'(<div class="article-body">)(.*?)(</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">)',
+        r'(<div class="article-body">)(.*?)(</div>\s*(?:<p class="article-sponsored-partnership"[^>]*>.*?</p>\s*)?(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">)',
         str(html_text or ""),
         re.I | re.S,
     )

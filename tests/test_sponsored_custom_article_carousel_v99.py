@@ -122,3 +122,39 @@ def test_non_sponsored_article_keeps_standard_byline_and_single_hero():
     assert 'By <a href="/author/andrew-dobrow.html" rel="author">Andrew Dobrow</a>' in page
     assert '<figure class="article-hero-image article-image-carousel"' not in page
     assert '<figure class="article-hero-image"><img src="https://treasurecoast.today/images/example.jpg"' in page
+
+
+def test_packard_render_passes_custom_body_fidelity_gate():
+    g = _load_generate()
+    item = _packard_item(g)
+    page = g.render_article_page(
+        item,
+        "Business & Development",
+        "business",
+        "2026-10-04",
+        item["slug"],
+    )
+    assert g.validate_custom_body_fidelity(item, page) is True
+
+
+def test_packard_fidelity_is_independent_of_post_body_modules_and_extra_body_class():
+    g = _load_generate()
+    item = _packard_item(g)
+    page = g.render_article_page(
+        item,
+        "Business & Development",
+        "business",
+        "2026-10-04",
+        item["slug"],
+    )
+    page = page.replace(
+        '<div class="article-body">',
+        '<div class="article-body tct-member-preview">',
+        1,
+    )
+    page = page.replace(
+        '<p class="article-sponsored-partnership">',
+        '<div class="tct-post-body-module" data-production-compat="true"></div>\n          <p class="article-sponsored-partnership">',
+        1,
+    )
+    assert g.validate_custom_body_fidelity(item, page) is True
