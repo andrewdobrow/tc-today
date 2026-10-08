@@ -58,6 +58,24 @@ _OUTREACH_ABSENCE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Reader-facing prose should report confirmed facts, not narrate what an official
+# source failed to identify, explain, specify, disclose, or clarify. These
+# information-gap constructions are source-process boilerplate even when copied
+# verbatim from an otherwise valid news source. Keep this subject-scoped so
+# substantive negatives such as "the commission did not approve the measure" are
+# not removed.
+_OFFICIAL_INFORMATION_GAP_RE = re.compile(
+    r"\b(?:"
+    r"officials?|authorities|investigators|police|deputies|"
+    r"the\s+(?:county|city|state|agency|department|office|district|"
+    r"sheriff(?:'s\s+office)?|school\s+district|government|company)"
+    r")\s+(?:did\s+not|has\s+not|have\s+not)\s+(?:immediately\s+)?(?:"
+    r"identify|explain|specify|disclose|clarify|detail|"
+    r"provide(?:\s+(?:details|information))?|say\s+whether|state\s+whether"
+    r")\b",
+    re.IGNORECASE,
+)
+
 _TAG_RE = re.compile(r"<[^>]+>")
 _P_RE = re.compile(r"<p\b([^>]*)>(.*?)</p>", re.IGNORECASE | re.DOTALL)
 
@@ -269,6 +287,8 @@ def sentence_violates_article_prose_policy(
     if not sentence:
         return False
     if _OUTREACH_ABSENCE_RE.search(sentence):
+        return True
+    if _OFFICIAL_INFORMATION_GAP_RE.search(sentence):
         return True
     return bool(
         _has_outlet_marker(sentence, source_url, source_headline)
