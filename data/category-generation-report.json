@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-09T20:51:49Z",
+  "generated_at": "2026-10-09T22:50:17Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,44 +15,50 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 6,
-      "generated_live": 2,
-      "generation_failed_archive_recovery": 1
+      "cache_hit": 1,
+      "category_eligibility_archive_recovery": 3,
+      "generated_live": 5
     },
     "failures": {
-      "copydesk_integrity": 1,
-      "no_category_eligible_sources": 6
+      "no_category_eligible_sources": 3
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 173.909,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 91.419,
+    "archive_recovery_requested_count": 3,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 3,
-    "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 4,
-    "published_story_duplicate_suppression_count": 38,
+    "contextual_update_lead_rejection_count": 0,
+    "article_framing_rejection_count": 0,
+    "category_eligibility_rejection_count": 5,
+    "published_story_duplicate_suppression_count": 34,
     "story_aware_update_context_count": 1,
-    "material_update_promotion_evaluation_count": 7,
-    "material_update_promotion_count": 1,
-    "material_update_promotion_cache_hit_count": 7,
+    "material_update_promotion_evaluation_count": 3,
+    "material_update_promotion_count": 0,
+    "material_update_promotion_cache_hit_count": 3,
     "material_update_promotion_model_call_count": 0
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 5,
-      "selected_source_count": 0,
+      "publishable_source_count": 6,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 10.543,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 10.543,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -61,8 +67,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -71,34 +77,42 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:victim"
+          ],
           "local_nexus_signals": [],
-          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/07/st-lucie-county-fire-board-continues-law-firm-search-effort-create-complaint-policy-amid-hazing-fallout/"
+          "headline": "Police searching for driver in hit-and-run crash that injured 63-year-old man in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/police-searching-for-driver-in-hit-and-run-crash-that-injured-63-year-old-man-in-port-st-lucie"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:police say"
+          ],
+          "local_nexus_signals": [],
+          "headline": "'It's not safe': Treasure Coast neighbors raise concerns after teen hit walking to school - WPEC",
+          "source_url": "https://cbs12.com/news/local/its-not-safe-treasure-coast-neighbors-raise-concerns-after-teen-hit-walking-to-school-port-st-lucie-boulevard-squirrel-ave-sidewalks-roadwork-construction-fdot-oct-8-2026"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "editorial_story_id": "story_018296",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -111,7 +125,7 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
@@ -123,54 +137,35 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.692
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Port St. Lucie Tests Water Sensors as California, Savona Flooding Drains Business",
+      "generated_card_count": 0,
+      "elapsed_seconds": 33.835
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 6,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 5,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 22.253,
-          "result": "copydesk_integrity",
-          "error_type": "CopyDeskIntegrityError",
-          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 30.343,
+          "elapsed_seconds": 16.95,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 52.596,
+      "model_elapsed_seconds": 16.95,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -181,15 +176,25 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
           "source_headline": "Deputies hear cries underground, rescue 2 kittens buried alive in Hobe Sound - WPEC",
           "source_url": "https://cbs12.com/news/local/martin-county-deputies-hear-crying-cat-cries-rescues-2-kittens-buried-alive-hobe-sound-martin-county-sheriffs-office-florida-news",
+          "editorial_story_id": "story_018296",
+          "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
+          "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/09/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "editorial_story_id": "story_018296",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
@@ -208,7 +213,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "editorial_story_id": "story_018296",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
@@ -234,6 +239,16 @@
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
           "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-police-two-women-charged-after-neglected-dog-died-at-pine-creek-apartments-florida-news-local-news-fort-pierce-dog-dies-animal-cruelty",
+          "editorial_story_id": "story_020123",
+          "canonical_slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "canonical_headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -291,6 +306,21 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/09/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+          "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
+          "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons - WPTV",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
@@ -306,7 +336,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
@@ -368,6 +398,21 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-police-two-women-charged-after-neglected-dog-died-at-pine-creek-apartments-florida-news-local-news-fort-pierce-dog-dies-animal-cruelty",
+          "canonical_slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "canonical_headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -415,25 +460,32 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie Police Seek Driver Who Struck Man on NW University Boulevard",
-      "generated_card_count": 2,
-      "elapsed_seconds": 74.328
+      "live_hero_headline": "Port St. Lucie Police Search for Driver Who Critically Injured Man in Hit-and-Run",
+      "generated_card_count": 1,
+      "elapsed_seconds": 36.083
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 10,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 11,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Business & Development category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.873,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 11.873,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -442,7 +494,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -480,11 +532,11 @@
           "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "editorial_story_id": "story_018296",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
@@ -534,16 +586,6 @@
         },
         {
           "category_key": "business",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "editorial_story_id": "story_020029",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
           "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
           "editorial_story_id": "story_019058",
@@ -588,7 +630,7 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
@@ -663,21 +705,6 @@
         },
         {
           "category_key": "business",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
           "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -693,7 +720,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.801
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Port St. Lucie Rolls Out Flood Sensors as California-Savona Drainage Fix Awaits",
+      "generated_card_count": 0,
+      "elapsed_seconds": 33.267
     },
     {
       "category_key": "sports",
@@ -718,7 +749,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -730,15 +761,15 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 9,
-      "elapsed_seconds": 18.758
+      "new_publication_stale_rejected_count": 8,
+      "elapsed_seconds": 15.757
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -813,7 +844,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.955
+      "elapsed_seconds": 18.424
     },
     {
       "category_key": "florida",
@@ -851,40 +882,30 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.0
+      "elapsed_seconds": 17.583
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "status": "generated_live",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 21.952,
-          "result": "copydesk_integrity",
-          "error_type": "CopyDeskIntegrityError",
-          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 23.887,
-          "result": "copydesk_integrity",
-          "error_type": "CopyDeskIntegrityError",
-          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+          "elapsed_seconds": 9.572,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 45.839,
-      "failure_code": "copydesk_integrity",
-      "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
+      "model_elapsed_seconds": 9.572,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -893,10 +914,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -920,21 +941,11 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "editorial_story_id": "story_018296",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-woman-arrested-after-cats-buried-alive-in-her-yard-in-hobe-sound/74085778",
-          "editorial_story_id": "story_020183",
-          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-          "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -961,9 +972,9 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -998,7 +1009,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
@@ -1010,38 +1021,6 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-woman-arrested-after-cats-buried-alive-in-her-yard-in-hobe-sound/74085778",
-          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-          "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
-          "shared_anchors": [
-            "Alba Chavez, 37",
-            "Hobe Sound Mobile Home Park / Southeast Federal Highway",
-            "Martin County Sheriff's Office",
-            "cats buried alive because believed to be demons",
-            "same source_url"
-          ],
-          "novel_facts": [
-            "two cats rescued, two found deceased",
-            "eight more cats found alive inside home",
-            "charges will be multiple counts of aggravated animal cruelty"
-          ],
-          "reason": "Same incident, same suspect, same agency, same source article. Additional details (rescue outcome, charge count, cats found inside) are incremental facts that update the existing canonical rather than constituting a new, independently newsworthy event.",
-          "validation_errors": []
         },
         {
           "category_key": "martin",
@@ -1075,384 +1054,46 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 66.297
+      "live_hero_headline": "MARTY Bus Service Suspended in Martin County, No Timeline for Restart",
+      "generated_card_count": 0,
+      "elapsed_seconds": 31.355
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 8,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 11,
+      "selected_source_count": 10,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 38.263,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing — Police searching for driver in hit-and-run crash that injured 63-year-old man in Port St. Lucie"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 37.21,
+          "elapsed_seconds": 42.481,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 75.474,
+      "model_elapsed_seconds": 42.481,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 2,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 76,
-          "baseline_anchor": "fire",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "assisted",
-            "cleanup",
-            "living",
-            "lucie",
-            "near",
-            "petroleum",
-            "port",
-            "residents",
-            "site"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Residents seek halt to Port St. Lucie assisted living project near petroleum cleanup site",
-          "novelty_anchor": "semantic_gate_novel_fact",
-          "novelty_present": true,
-          "novelty_token_hits": [],
-          "semantic_novel_fact_hits": [
-            "approved",
-            "council",
-            "letter",
-            "major",
-            "plan"
-          ],
-          "semantic_novel_fact_token_count": 29,
-          "missing": [
-            "original_event_context_missing"
-          ],
-          "source_title": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
-          "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination"
-        },
-        {
-          "surface": "card_after_enrichment",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 76,
-          "baseline_anchor": "fire",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "assisted",
-            "cleanup",
-            "living",
-            "lucie",
-            "near",
-            "petroleum",
-            "port",
-            "residents",
-            "site"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Residents seek halt to Port St. Lucie assisted living project near petroleum cleanup site",
-          "novelty_anchor": "semantic_gate_novel_fact",
-          "novelty_present": true,
-          "novelty_token_hits": [],
-          "semantic_novel_fact_hits": [
-            "approved",
-            "council",
-            "letter",
-            "major",
-            "plan"
-          ],
-          "semantic_novel_fact_token_count": 29,
-          "missing": [
-            "original_event_context_missing"
-          ],
-          "source_title": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
-          "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination"
-        }
-      ],
-      "article_framing_rejection_count": 2,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination",
-          "missing": [
-            "original_event_context_missing"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": false,
-            "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination",
-            "lead": "Port St. Lucie City Council approved the major site plan in September for PSL Westmoreland ALF, a proposed 150-unit assisted-living facility planned for 7.1 acres within the Rivella planned unit development along Southeast Morningside Boulevard near Southeast Westmoreland Boulevard. Now residents are demanding answers from city officials after obtaining an engineering letter showing that cleanup plans for a neighboring petroleum-contaminated property had to be altered specifically because of the planned senior facility.",
-            "lead_word_count": 76,
-            "headline_overlap_ratio": 0.6,
-            "new_context_token_count": 44,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "update",
-            "surname_first_reference": {
-              "required": false,
-              "passed": true,
-              "missing": [],
-              "candidates": []
-            },
-            "update_diagnostics": {
-              "required": true,
-              "passed": false,
-              "story_form": "update",
-              "lead_word_count": 76,
-              "baseline_anchor": "fire",
-              "baseline_present": false,
-              "baseline_anchor_present": false,
-              "baseline_details_present": true,
-              "baseline_context_hits": [
-                "assisted",
-                "cleanup",
-                "living",
-                "lucie",
-                "near",
-                "petroleum",
-                "port",
-                "residents",
-                "site"
-              ],
-              "baseline_context_required": 2,
-              "canonical_context_available": true,
-              "canonical_context_headline": "Residents seek halt to Port St. Lucie assisted living project near petroleum cleanup site",
-              "novelty_anchor": "semantic_gate_novel_fact",
-              "novelty_present": true,
-              "novelty_token_hits": [],
-              "semantic_novel_fact_hits": [
-                "approved",
-                "council",
-                "letter",
-                "major",
-                "plan"
-              ],
-              "semantic_novel_fact_token_count": 29,
-              "missing": [
-                "original_event_context_missing"
-              ],
-              "source_title": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
-              "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination"
-            },
-            "missing": [
-              "original_event_context_missing"
-            ]
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination",
-            "lead": "Port St. Lucie City Council approved the major site plan in September for PSL Westmoreland ALF, a proposed 150-unit assisted-living facility planned for 7.1 acres within the Rivella planned unit development along Southeast Morningside Boulevard near Southeast Westmoreland Boulevard. Now residents are demanding answers from city officials after obtaining an engineering letter showing that cleanup plans for a neighboring petroleum-contaminated property had to be altered specifically because of the planned senior facility.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "missing_jurisdictions": [],
-            "headline_judge_claims": [],
-            "lead_judge_claims": [],
-            "missing_judge_claims": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination",
-            "generated_lead": "Port St. Lucie City Council approved the major site plan in September for PSL Westmoreland ALF, a proposed 150-unit assisted-living facility planned for 7.1 acres within the Rivella planned unit development along Southeast Morningside Boulevard near Southeast Westmoreland Boulevard.",
-            "source_title": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
-            "source_lead": "A proposed 150-unit assisted-living facility in Port St. Lucie is moving through the development process as nearby residents question whether enough is known about the environmental history of a neighboring property with petroleum contamination.",
-            "title_similarity": {
-              "score": 0.3255,
-              "overlap": 0.1111,
-              "jaccard": 0.0556,
-              "sorted_sequence": 0.4384,
-              "ordered_sequence": 0.3699,
-              "shared_token_count": 1.0
-            },
-            "lead_token_overlap": 0.385,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          },
-          "official_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          },
-          "temporal_integrity": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card_after_enrichment",
-          "required": true,
-          "passed": false,
-          "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination",
-          "missing": [
-            "original_event_context_missing"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": false,
-            "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination",
-            "lead": "Port St. Lucie City Council approved the major site plan in September for PSL Westmoreland ALF, a proposed 150-unit assisted-living facility planned for 7.1 acres within the Rivella planned unit development along Southeast Morningside Boulevard near Southeast Westmoreland Boulevard. Now residents are demanding answers from city officials after obtaining an engineering letter showing that cleanup plans for a neighboring petroleum-contaminated property had to be altered specifically because of the planned senior facility.",
-            "lead_word_count": 76,
-            "headline_overlap_ratio": 0.6,
-            "new_context_token_count": 44,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "update",
-            "surname_first_reference": {
-              "required": false,
-              "passed": true,
-              "missing": [],
-              "candidates": []
-            },
-            "update_diagnostics": {
-              "required": true,
-              "passed": false,
-              "story_form": "update",
-              "lead_word_count": 76,
-              "baseline_anchor": "fire",
-              "baseline_present": false,
-              "baseline_anchor_present": false,
-              "baseline_details_present": true,
-              "baseline_context_hits": [
-                "assisted",
-                "cleanup",
-                "living",
-                "lucie",
-                "near",
-                "petroleum",
-                "port",
-                "residents",
-                "site"
-              ],
-              "baseline_context_required": 2,
-              "canonical_context_available": true,
-              "canonical_context_headline": "Residents seek halt to Port St. Lucie assisted living project near petroleum cleanup site",
-              "novelty_anchor": "semantic_gate_novel_fact",
-              "novelty_present": true,
-              "novelty_token_hits": [],
-              "semantic_novel_fact_hits": [
-                "approved",
-                "council",
-                "letter",
-                "major",
-                "plan"
-              ],
-              "semantic_novel_fact_token_count": 29,
-              "missing": [
-                "original_event_context_missing"
-              ],
-              "source_title": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
-              "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination"
-            },
-            "missing": [
-              "original_event_context_missing"
-            ]
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination",
-            "lead": "Port St. Lucie City Council approved the major site plan in September for PSL Westmoreland ALF, a proposed 150-unit assisted-living facility planned for 7.1 acres within the Rivella planned unit development along Southeast Morningside Boulevard near Southeast Westmoreland Boulevard. Now residents are demanding answers from city officials after obtaining an engineering letter showing that cleanup plans for a neighboring petroleum-contaminated property had to be altered specifically because of the planned senior facility.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "missing_jurisdictions": [],
-            "headline_judge_claims": [],
-            "lead_judge_claims": [],
-            "missing_judge_claims": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Engineering letter fuels new questions on PSL Westmoreland site near contamination",
-            "generated_lead": "Port St. Lucie City Council approved the major site plan in September for PSL Westmoreland ALF, a proposed 150-unit assisted-living facility planned for 7.1 acres within the Rivella planned unit development along Southeast Morningside Boulevard near Southeast Westmoreland Boulevard.",
-            "source_title": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
-            "source_lead": "A proposed 150-unit assisted-living facility in Port St. Lucie is moving through the development process as nearby residents question whether enough is known about the environmental history of a neighboring property with petroleum contamination.",
-            "title_similarity": {
-              "score": 0.3255,
-              "overlap": 0.1111,
-              "jaccard": 0.0556,
-              "sorted_sequence": 0.4384,
-              "ordered_sequence": 0.3699,
-              "shared_token_count": 1.0
-            },
-            "lead_token_overlap": 0.385,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          },
-          "official_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          },
-          "temporal_integrity": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 11,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1460,7 +1101,7 @@
           "source_url": "https://www.wpbf.com/article/st-lucie-county-injured-man-found-roadway/74091585",
           "editorial_story_id": "story_020322",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Seek Help Identifying Critically Injured Man Found on Roadway",
+          "canonical_headline": "Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1476,22 +1117,22 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+          "editorial_story_id": "story_020235",
+          "canonical_slug": "2026-09-29-residents-seek-halt-port-st-lucie-assisted-living-project-petroleum-cleanup-site",
+          "canonical_headline": "Port St. Lucie approves assisted-living site plan despite contamination concerns",
+          "basis": "durable_custom_incident_identity:custom-project|westmoreland-alf|petroleum-remediation",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Former Fort Pierce city manager convicted of official misconduct, not guilty of bid tampering - WPBF",
           "source_url": "https://www.wpbf.com/article/former-fort-pierce-city-manager-bid-tampering-trial/74079917",
           "editorial_story_id": "story_017375",
           "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
           "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
-          "source_url": "https://cbs12.com/news/local/fort-pierce-police-two-women-charged-after-neglected-dog-died-at-pine-creek-apartments-florida-news-local-news-fort-pierce-dog-dies-animal-cruelty",
-          "editorial_story_id": "story_020123",
-          "canonical_slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
-          "canonical_headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1503,33 +1144,13 @@
           "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie Teen walking to school critically injured after being hit by SUV - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-treasure-coast-high-school-student-suffers-life-threatening-port-st-lucie-crash/74069215",
-          "editorial_story_id": "story_019789",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "'Just insanity': Port St. Lucie residents reacting to heavy rain and flooding - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-rain-swales-storms-flooding/74069863",
-          "editorial_story_id": "story_019779",
-          "canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
-          "canonical_headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 4,
-      "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -1537,9 +1158,9 @@
           "source_headline": "Police seek help identifying man found critically injured in Port St. Lucie roadway - WPBF",
           "source_url": "https://www.wpbf.com/article/st-lucie-county-injured-man-found-roadway/74091585",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Seek Help Identifying Critically Injured Man Found on Roadway",
+          "canonical_headline": "Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:exact_source_url",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1567,32 +1188,15 @@
           "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
           "canonical_slug": "2026-09-29-residents-seek-halt-port-st-lucie-assisted-living-project-petroleum-cleanup-site",
-          "canonical_headline": "Residents seek halt to Port St. Lucie assisted living project near petroleum cleanup site",
+          "canonical_headline": "Port St. Lucie approves assisted-living site plan despite contamination concerns",
           "canonical_is_custom": true,
           "identity_basis": "durable_custom_incident_identity:custom-project|westmoreland-alf|petroleum-remediation",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": true,
-          "cache_hit": true,
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
           "model_call": false,
-          "action": "update_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "update_existing_canonical",
-          "confidence": 0.82,
-          "shared_anchors": [
-            "PSL Westmoreland ALF / assisted-living project",
-            "Southeast Morningside Boulevard / Westmoreland Boulevard",
-            "neighboring petroleum-contaminated property",
-            "resident opposition and concerns about vapor remediation"
-          ],
-          "novel_facts": [
-            "City Council approved the project's major site plan on Sept.",
-            "BTEX Engineering letter about March 2026 meeting recommending remediation approach change due to surrounding properties including the ALF",
-            "residents have contacted EPA and Florida Department of Health",
-            "next steps include construction plan technical review and South Florida Water Management District review"
-          ],
-          "reason": "Same contested assisted-living development and contamination dispute as the candidate; incoming article adds material procedural updates (site plan approval, specific engineering letter details, agency involvement) that update the existing story rather than constituting a separate newsworthy event.",
-          "validation_errors": []
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -1628,21 +1232,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
-          "source_url": "https://cbs12.com/news/local/fort-pierce-police-two-women-charged-after-neglected-dog-died-at-pine-creek-apartments-florida-news-local-news-fort-pierce-dog-dies-animal-cruelty",
-          "canonical_slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
-          "canonical_headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Jury convicts former Fort Pierce city manager Nick Mimms of official misconduct - WPEC",
           "source_url": "https://cbs12.com/news/local/jury-convicts-former-fort-pierce-city-manager-nick-mimms-of-official-misconduct-improperly-obstructed-delayed-prevented-information-felony-communicated-rfp-lincoln-park-lots-allegedly-steered-contracts",
           "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
@@ -1655,108 +1244,30 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie Teen walking to school critically injured after being hit by SUV - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-treasure-coast-high-school-student-suffers-life-threatening-port-st-lucie-crash/74069215",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.9,
-          "shared_anchors": [
-            "14-year-old Treasure Coast High School student",
-            "struck while walking to school Wednesday morning",
-            "Port St. Lucie",
-            "Port St. Lucie Police Department",
-            "SUV driver"
-          ],
-          "novel_facts": [
-            "Vehicle identified as 2002 Ford Excursion driven by 72-year-old man",
-            "Specific intersection: Southwest Port St. Lucie Boulevard and Southwest Squirrel Avenue",
-            "Driver initially thought he hit a construction barrel, made U-turn, found teen unconscious"
-          ],
-          "reason": "Same incident as the canonical: same victim age/school, same crash circumstances, same morning walk-to-school setting, same agency. Incoming adds more granular detail (vehicle type, exact intersection, driver's account) but these are elaborations of the same ongoing crash investigation, not a material status change like an arrest, death, or official finding.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police arrest 2 people after woman attacked, shot at in Fort Pierce - cw34.com",
-          "source_url": "https://cw34.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news?teaserSource=trending",
-          "canonical_slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
-          "canonical_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Keibin Lopez-Godoy",
-            "Kailee Yurubi",
-            "South 6th Street",
-            "Fort Pierce Police",
-            "Oct. 3 arrest",
-            "same charges"
-          ],
-          "novel_facts": [
-            "Additional narrative detail about the attack and chase sequence, but no new arrests, charges, or outcomes"
-          ],
-          "reason": "Same two named suspects, same charges, same date and location already reported in the canonical article. The incoming piece adds narrative color about the attack sequence but no material new development.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "'Just insanity': Port St. Lucie residents reacting to heavy rain and flooding - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-rain-swales-storms-flooding/74069863",
-          "canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
-          "canonical_headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie Police Hunt Driver Who Hit Man Near NW University, NW California Boulevards",
+      "live_hero_headline": "Port St. Lucie Targets California-Savona Flooding With Drainage Project, Sensor Alerts",
       "generated_card_count": 2,
-      "elapsed_seconds": 110.55
+      "elapsed_seconds": 68.93
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "category_eligibility_archive_recovery",
+      "status": "cache_hit",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 4,
-      "selected_source_count": 0,
-      "cache_hit": false,
-      "archive_recovery_requested": true,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 6,
+      "selected_source_count": 1,
+      "cache_hit": true,
+      "archive_recovery_requested": false,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Indian River County category eligibility contract",
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1765,39 +1276,19 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "editorial_story_id": "story_018296",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
-          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
-          "editorial_story_id": "story_020113",
-          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
-          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1818,6 +1309,16 @@
           "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
           "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
           "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1850,43 +1351,13 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
-          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+          "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
           "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
-          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
-          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
-          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1937,6 +1408,21 @@
         },
         {
           "category_key": "indian_river",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "Hundreds gather in Vero Beach to remember 17-year-old Sulliman Bah and call for justice - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-vero-beach-sulliman-bah-shooting/74071870",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -1967,7 +1453,8 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.916
+      "live_hero_headline": "Man Arrested in Vero Beach Shooting Death of Former Girlfriend",
+      "elapsed_seconds": 21.298
     }
   ]
 }
