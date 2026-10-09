@@ -22486,6 +22486,40 @@ def _durable_custom_near_term_subject_identity_match(candidate, authority):
 
 
 
+def _westmoreland_alf_project_identity(item):
+    """Conservative identity for the already-published Westmoreland ALF dispute.
+
+    Different publishers describe the same development as a site-plan approval,
+    pollution dispute, or neighborhood objection. Require the unusual intersection
+    of geography, facility, contamination type, and a project-specific marker.
+    Do not match ordinary Port St. Lucie senior-housing developments.
+    """
+    if not isinstance(item, dict):
+        return False
+    text = " ".join(str(item.get(key) or "") for key in (
+        "headline", "source_headline", "teaser", "article_text", "body",
+        "summary", "description", "slug", "source_url",
+    )).lower()
+    folded = re.sub(r"[^a-z0-9]+", " ", text)
+    return bool(
+        re.search(r"\bport st lucie\b", folded)
+        and re.search(r"\bassisted living\b|\bsenior facility\b", folded)
+        and re.search(r"\bpetroleum\b", folded)
+        and re.search(r"\bwestmoreland\b|\bsandpiper bay\b|\b150 unit\b", folded)
+    )
+
+
+def _westmoreland_alf_custom_authority_match(candidate, authority):
+    """Only the established TCT custom canonical can own this project identity."""
+    if not isinstance(authority, dict):
+        return False
+    if authority.get("slug") != WESTMORELAND_ALF_CANONICAL_SLUG:
+        return False
+    if not (authority.get("is_custom") or authority.get("authoritative_custom")):
+        return False
+    return _westmoreland_alf_project_identity(candidate) and _westmoreland_alf_project_identity(authority)
+
+
 def _durable_custom_extended_subject_identity_match(candidate, authority):
     """Bind delayed publisher re-reporting to a manually published custom canonical.
 
@@ -22584,6 +22618,9 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
         return False, ""
     if not (authority.get("is_custom") or authority.get("authoritative_custom")):
         return False, ""
+
+    if _westmoreland_alf_custom_authority_match(candidate, authority):
+        return True, "custom-project|westmoreland-alf|petroleum-remediation"
 
     precomputed = precomputed if isinstance(precomputed, dict) else {}
     alpr_match, alpr_key = _durable_custom_local_alpr_policy_identity_match(
@@ -26051,6 +26088,7 @@ WESTMORELAND_ALF_CANONICAL_SLUG = (
 )
 WESTMORELAND_ALF_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-10-09-port-st-lucie-residents-question-contamination-near-approved-assisted-living-sit",
+    "2026-10-09-port-st-lucie-approves-assisted-living-project-amid-contamination-concerns",
 })
 
 # Permanent general-registry regression for the Big Taste of Martin County event.
@@ -33000,7 +33038,16 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
         westmoreland_canonical.pop("identity_quarantine_reason", None)
         westmoreland_canonical["legacy_identity_status"] = "identified"
         westmoreland_canonical["ranking_eligible"] = True
-        for source_slug in sorted(WESTMORELAND_ALF_REDIRECT_SOURCE_SLUGS):
+        # Reconcile not only previously observed duplicate slugs, but future
+        # rewordings whose published article facts identify the same project.
+        # Do not touch the manual canonical itself or a different ALF project.
+        westmoreland_duplicates = set(WESTMORELAND_ALF_REDIRECT_SOURCE_SLUGS)
+        westmoreland_duplicates.update(
+            str(e.get("slug")) for e in archive
+            if e.get("slug") and e.get("slug") != WESTMORELAND_ALF_CANONICAL_SLUG
+            and _westmoreland_alf_custom_authority_match(e, westmoreland_canonical)
+        )
+        for source_slug in sorted(westmoreland_duplicates):
             duplicate = next((e for e in archive if e.get("slug") == source_slug), None)
             if duplicate:
                 _merge_category_memberships(

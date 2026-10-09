@@ -121,3 +121,49 @@ def test_existing_oct9_duplicate_is_permanently_redirected(tmp_path):
     redirect = next(row for row in redirects if row.get("source_slug") == duplicate_slug)
     assert redirect["target_slug"] == g.WESTMORELAND_ALF_CANONICAL_SLUG
     assert redirect["canonical_is_custom"] is True
+
+
+def test_oct9_third_headline_binds_to_original_custom_project():
+    g = _load_generate()
+    repeat = {
+        "headline": "Port St. Lucie Approves Assisted-Living Project Amid Contamination Concerns",
+        "article_text": (
+            "Port St. Lucie City Council approved the major site plan for a 150-unit "
+            "assisted-living facility next to a property with a history of petroleum "
+            "contamination, despite objections from nearby residents."
+        ),
+        "date": "2026-10-09",
+        "source_url": "https://publisher.example/news/psl-westmoreland-alf",
+    }
+    assert g._westmoreland_alf_project_identity(repeat)
+    match, confidence, basis = g._find_authoritative_custom_incident_match(
+        repeat, archived_customs=[_canonical(g)], current_customs=[]
+    )
+    assert match["slug"] == g.WESTMORELAND_ALF_CANONICAL_SLUG
+    assert confidence == 100
+    assert "durable_custom_incident_identity" in basis
+
+
+def test_third_duplicate_permalink_gets_permanent_redirect(tmp_path):
+    g = _load_generate()
+    (tmp_path / "articles").mkdir()
+    (tmp_path / "data").mkdir()
+    slug = "2026-10-09-port-st-lucie-approves-assisted-living-project-amid-contamination-concerns"
+    archive = [
+        _canonical(g),
+        {"slug": slug, "headline": "Port St. Lucie Approves Assisted-Living Project Amid Contamination Concerns",
+         "date": "2026-10-09", "category_key": "st_lucie", "category_keys": ["st_lucie"]},
+    ]
+    cleaned, redirects = g.apply_canonical_story_cleanup(archive, tmp_path / "articles", tmp_path)
+    assert slug not in {row.get("slug") for row in cleaned}
+    assert any(r.get("source_slug") == slug and r.get("target_slug") == g.WESTMORELAND_ALF_CANONICAL_SLUG for r in redirects)
+
+
+def test_unrelated_project_in_same_city_is_not_captured_by_specific_lock():
+    g = _load_generate()
+    candidate = {
+        "headline": "Port St. Lucie approves assisted living center in Tradition",
+        "article_text": "A 150-unit assisted-living development in Tradition will be built near a hospital.",
+        "date": "2026-10-09",
+    }
+    assert g._durable_custom_identity_match(candidate, _canonical(g))[0] is False
