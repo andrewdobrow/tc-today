@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-08T18:52:44Z",
+  "generated_at": "2026-10-09T00:08:03Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,63 +15,43 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 3,
-      "generated_live": 2,
-      "generation_failed_archive_recovery": 3,
-      "no_publishable_sources": 1
+      "cache_hit": 1,
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 4
     },
     "failures": {
-      "article_framing_integrity": 1,
-      "generation_exception": 1,
-      "missing_or_null_hero": 1,
-      "no_category_eligible_sources": 3
+      "no_category_eligible_sources": 4
     },
-    "model_attempt_count": 10,
-    "model_elapsed_seconds": 233.903,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 131.633,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 3,
-    "category_eligibility_rejection_count": 9,
-    "published_story_duplicate_suppression_count": 28,
-    "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 7,
+    "article_framing_rejection_count": 1,
+    "category_eligibility_rejection_count": 12,
+    "published_story_duplicate_suppression_count": 27,
+    "story_aware_update_context_count": 4,
+    "material_update_promotion_evaluation_count": 5,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 6,
+    "material_update_promotion_cache_hit_count": 4,
     "material_update_promotion_model_call_count": 1
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 13,
-      "selected_source_count": 1,
+      "status": "category_eligibility_archive_recovery",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 10,
+      "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.18,
-          "result": "copydesk_integrity",
-          "error_type": "CopyDeskIntegrityError",
-          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.829,
-          "result": "missing_or_null_hero",
-          "error_summary": "Model response did not contain a usable hero after normalization"
-        }
-      ],
-      "model_elapsed_seconds": 29.009,
-      "failure_code": "missing_or_null_hero",
-      "failure_summary": "Model response did not contain a usable hero after normalization",
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Local Government category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -80,9 +60,39 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -96,8 +106,8 @@
             "crime_incident:shooting"
           ],
           "local_nexus_signals": [],
-          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice/?outputType=amp"
+          "headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
+          "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -110,64 +120,36 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Martin County Public Transit riders left without service after transit provider suspends operations - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/08/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations/"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Port St. Lucie streets flood after downpour, stranding vehicles and disrupting commutes - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-roads-face-reroutes-as-flooding-leaves-cars-partially-submerged-port-st-lucie-flooding-port-st-lucie-flooding-florida-flooding-flooded-roads-road-closures-road-reroutes-traffic-traffic-safety-partially-submerged-cars-flooded-car"
+          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/07/st-lucie-county-fire-board-continues-law-firm-search-effort-create-complaint-policy-amid-hazing-fallout/"
         }
       ],
       "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "editorial_story_id": "story_020029",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Treasure Coast HS student critically injured after being struck while walking to school - cw34.com",
-          "source_url": "https://cw34.com/news/local/treasure-coast-hs-student-critically-injured-after-being-struck-while-walking-to-school-port-st-lucie-port-st-lucie-news-treasure-coast-high-school-treasure-coast-high-14-year-old-teen-pedestrian-pedestrian-crash-pedestrian-accident-suv-crash?teaserSource=trending",
-          "editorial_story_id": "story_019789",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
+          "editorial_story_id": "story_020070",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "editorial_story_id": "story_020073",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
           "editorial_story_id": "story_019058",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
           "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
@@ -195,19 +177,60 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
+          "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:william-reaves",
+            "story:story_020070",
+            "source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:william-reaves,story:story_020070,source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -219,45 +242,13 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Treasure Coast HS student critically injured after being struck while walking to school - cw34.com",
-          "source_url": "https://cw34.com/news/local/treasure-coast-hs-student-critically-injured-after-being-struck-while-walking-to-school-port-st-lucie-port-st-lucie-news-treasure-coast-high-school-treasure-coast-high-14-year-old-teen-pedestrian-pedestrian-crash-pedestrian-accident-suv-crash?teaserSource=trending",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.9,
-          "shared_anchors": [
-            "14-year-old Treasure Coast High School student",
-            "struck by SUV while walking to school Wednesday morning",
-            "Port St. Lucie Police Department",
-            "critical condition"
-          ],
-          "novel_facts": [
-            "Exact intersection (SW Port St. Lucie Blvd and SW Squirrel Ave)",
-            "Driver was 72-year-old man in 2002 Ford Excursion",
-            "Driver initially thought he hit a construction barrel, made a U-turn and called 911",
-            "No signs of impairment observed"
-          ],
-          "reason": "This is the same crash involving the same victim, location, date, and vehicle type already covered by the canonical article. The additional details (exact intersection, driver description, sequence of events, lack of impairment signs) are elaboration and investigative color rather than a material status change like an arrest, charge, death, or official cause finding, so the existing canonical should be updated rather than creating a new URL duplicate without update rationale—however since this is being evaluated as duplicate due to lack of a distinct new headline-worthy consequence, it is treated as duplicate with routine added detail.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
           "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -296,50 +287,166 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
-      "budget_seconds": 180.0,
-      "elapsed_seconds": 70.636
+      "elapsed_seconds": 34.348
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 11,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 13,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 31.387,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Indian River Deputy's Killer Pleads for Clemency Before Oct. 20 Execution"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 29.771,
+          "elapsed_seconds": 44.826,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 61.159,
+      "model_elapsed_seconds": 44.826,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
+          "missing": [
+            "scheduled_execution_reported_as_completed"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
+            "lead": "William Reaves is scheduled to be executed Oct. 20 for the 1986 murder of Indian River County Sheriff's Deputy Richard Raczkowski, and for the first time his family is speaking publicly to ask Gov. Ron DeSantis to spare his life. Reaves, now 77, has spent nearly four decades on death row. His nephew, Meredith Farrington, is asking DeSantis to commute the death sentence to life in prison rather than seeking a pardon or release.",
+            "lead_word_count": 75,
+            "headline_overlap_ratio": 0.583,
+            "new_context_token_count": 40,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "update",
+            "surname_first_reference": {
+              "required": true,
+              "passed": true,
+              "missing": [],
+              "candidates": [
+                {
+                  "full": "William Reaves",
+                  "first": "William",
+                  "last": "Reaves"
+                }
+              ]
+            },
+            "update_diagnostics": {
+              "required": true,
+              "passed": true,
+              "story_form": "update",
+              "lead_word_count": 75,
+              "baseline_anchor": "fatality",
+              "baseline_present": true,
+              "baseline_anchor_present": true,
+              "baseline_details_present": true,
+              "baseline_context_hits": [
+                "20",
+                "death",
+                "deputy",
+                "family",
+                "reaves"
+              ],
+              "baseline_context_required": 2,
+              "canonical_context_available": true,
+              "canonical_context_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+              "novelty_anchor": "source_distinctive_detail",
+              "novelty_present": true,
+              "novelty_token_hits": [
+                "william"
+              ],
+              "semantic_novel_fact_hits": [],
+              "semantic_novel_fact_token_count": 0,
+              "missing": [],
+              "source_title": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
+              "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": true,
+            "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
+            "lead": "William Reaves is scheduled to be executed Oct. 20 for the 1986 murder of Indian River County Sheriff's Deputy Richard Raczkowski, and for the first time his family is speaking publicly to ask Gov. Ron DeSantis to spare his life. Reaves, now 77, has spent nearly four decades on death row. His nephew, Meredith Farrington, is asking DeSantis to commute the death sentence to life in prison rather than seeking a pardon or release.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [],
+            "lead_jurisdictions": [
+              "indian_river_county"
+            ],
+            "missing_jurisdictions": [],
+            "headline_judge_claims": [],
+            "lead_judge_claims": [],
+            "missing_judge_claims": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": []
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
+            "generated_lead": "William Reaves is scheduled to be executed Oct. 20 for the 1986 murder of Indian River County Sheriff's Deputy Richard Raczkowski, and for the first time his family is speaking publicly to ask Gov.",
+            "source_title": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
+            "source_lead": "For the first time, the family of a man set to be executed for the 1986 murder of an Indian River County sheriff's deputy is speaking publicly about their effort to save his life.William Reaves has spent nearly four decades on death row for shooting and killing 29-year-old Deputy Richard Raczkowski. Reaves' execution is scheduled for Oct.",
+            "title_similarity": {
+              "score": 0.5092,
+              "overlap": 0.4545,
+              "jaccard": 0.25,
+              "sorted_sequence": 0.6289,
+              "ordered_sequence": 0.5786,
+              "shared_token_count": 5.0
+            },
+            "lead_token_overlap": 0.87,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "official_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "temporal_integrity": {
+            "required": true,
+            "passed": false,
+            "future_execution_evidence": true,
+            "source_confirms_completion": false,
+            "generated_claims_completion": true,
+            "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
+            "lead": "William Reaves is scheduled to be executed Oct. 20 for the 1986 murder of Indian River County Sheriff's Deputy Richard Raczkowski, and for the first time his family is speaking publicly to ask Gov. Ron DeSantis to spare his life. Reaves, now 77, has spent nearly four decades on death row. His nephew, Meredith Farrington, is asking DeSantis to commute the death sentence to life in prison rather than seeking a pardon or release.",
+            "missing": [
+              "scheduled_execution_reported_as_completed"
+            ]
+          }
+        }
+      ],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 7,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -352,30 +459,44 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations"
+          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages"
         }
       ],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "editorial_story_id": "story_020029",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
+          "editorial_story_id": "story_020070",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "editorial_story_id": "story_020073",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -387,54 +508,50 @@
           "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "'Sully was a kind soul’: Loved ones remember teen killed at large party in Fellsmere - WPEC",
-          "source_url": "https://cbs12.com/news/local/sully-was-a-kind-soul-loved-ones-remember-teen-killed-in-at-large-party-in-fellsmere-garcia-boat-ramp-self-defense-meetup-oct-7-2026",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown",
-          "editorial_story_id": "story_019959",
-          "canonical_slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
-          "canonical_headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
+          "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:william-reaves",
+            "story:story_020070",
+            "source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:william-reaves,story:story_020070,source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -443,13 +560,13 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -470,82 +587,6 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "'Sully was a kind soul’: Loved ones remember teen killed at large party in Fellsmere - WPEC",
-          "source_url": "https://cbs12.com/news/local/sully-was-a-kind-soul-loved-ones-remember-teen-killed-in-at-large-party-in-fellsmere-garcia-boat-ramp-self-defense-meetup-oct-7-2026",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown",
-          "canonical_slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
-          "canonical_headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fort Pierce police arrest 2 people after woman attacked, shot at in Fort Pierce - cw34.com",
-          "source_url": "https://cw34.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news?teaserSource=trending",
-          "canonical_slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
-          "canonical_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Keibin Lopez-Godoy",
-            "Kailee Yurubi",
-            "South 6th Street",
-            "Fort Pierce Police",
-            "Oct. 3 arrest",
-            "same charges"
-          ],
-          "novel_facts": [
-            "Additional narrative detail about the attack and chase sequence, but no new arrests, charges, or outcomes"
-          ],
-          "reason": "Same two named suspects, same charges, same date and location already reported in the canonical article. The incoming piece adds narrative color about the attack sequence but no material new development.",
-          "validation_errors": []
         },
         {
           "category_key": "crime",
@@ -582,9 +623,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
-      "generated_card_count": 1,
-      "elapsed_seconds": 84.778
+      "live_hero_headline": "Ex-Fort Pierce City Manager Nick Mimms Convicted of Official Misconduct",
+      "generated_card_count": 2,
+      "elapsed_seconds": 71.836
     },
     {
       "category_key": "business",
@@ -592,7 +633,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 12,
+      "publishable_source_count": 14,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -609,9 +650,44 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:vero beach"
+          ],
+          "headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "local_nexus_signals": [
+            "source_locality:st lucie county",
+            "source_locality:fort pierce"
+          ],
+          "headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -638,16 +714,20 @@
           "eligible": false,
           "would_reject": true,
           "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
+          "positive_signals": [
+            "commercial_real_estate:restaurant"
+          ],
           "competing_signals": [
-            "election_political_process:candidate"
+            "crime_public_safety:arrested"
           ],
           "local_nexus_signals": [
-            "source_locality:martin county",
-            "source_locality:stuart"
+            "source_locality:treasure coast",
+            "source_locality:indian river county",
+            "source_locality:vero beach",
+            "source_locality:sebastian"
           ],
-          "headline": "Trump proposes Camp David-style presidential retreat at West Palm Beach golf course",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/trump-seeks-to-turn-his-palm-beach-co-golf-club-into-permanent-presidential-golf-club-camp-david-style-retreat"
+          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -672,22 +752,22 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "editorial_story_id": "story_020073",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
           "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
           "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
           "editorial_story_id": "story_020029",
           "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
           "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -711,8 +791,34 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
+          "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:william-reaves",
+            "story:story_020070",
+            "source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:william-reaves,story:story_020070,source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -720,10 +826,10 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -735,13 +841,13 @@
         },
         {
           "category_key": "business",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
+          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
+          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
+          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -780,15 +886,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 18.11
+      "elapsed_seconds": 20.298
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
+      "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 5,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -805,47 +911,20 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "sports",
-          "source_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-teen-dies-after-shooting-near-garcias-boat-ramp-in-indian-river-county/74005820",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "sports",
-          "source_headline": "Teen dies after shooting near Garcia's Boat Ramp in Indian River County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-teen-dies-after-shooting-near-garcias-boat-ramp-in-indian-river-county/74005820",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
-      "new_publication_stale_rejected_count": 3,
-      "elapsed_seconds": 14.473
+      "material_update_promotion_decisions": [],
+      "new_publication_stale_rejected_count": 10,
+      "elapsed_seconds": 15.534
     },
     {
       "category_key": "things_to_do",
@@ -900,18 +979,18 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.387
+      "elapsed_seconds": 16.122
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "cache_hit",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
-      "cache_hit": false,
-      "archive_recovery_requested": true,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 2,
+      "selected_source_count": 1,
+      "cache_hit": true,
+      "archive_recovery_requested": false,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
@@ -925,87 +1004,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "editorial_story_id": "story_020029",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
-          "source_url": "https://www.wptv.com/news/political/elections-local/amendments-1-2-lesser-known-florida-ballot-amendments-focus-on-state-reserves-farm-tax-breaks",
-          "canonical_slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "canonical_headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.3
-    },
-    {
-      "category_key": "martin",
-      "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 28,
-      "publishable_source_count": 4,
-      "selected_source_count": 3,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.404,
-          "result": "copydesk_integrity",
-          "error_type": "CopyDeskIntegrityError",
-          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.811,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 29.215,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -1018,44 +1017,107 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
-      "generated_card_count": 0,
-      "elapsed_seconds": 51.85
+      "live_hero_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+      "elapsed_seconds": 26.571
     },
     {
-      "category_key": "st_lucie",
-      "category_label": "St. Lucie County",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 8,
-      "selected_source_count": 8,
+      "category_key": "martin",
+      "category_label": "Martin County",
+      "status": "generated_live",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 5,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 46.052,
-          "result": "copydesk_integrity",
-          "error_type": "CopyDeskIntegrityError",
-          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 43.762,
-          "result": "generation_exception",
-          "error_type": "TypeError",
-          "error_summary": "'<' not supported between instances of 'int' and 'NoneType'"
+          "elapsed_seconds": 16.444,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 89.814,
-      "failure_code": "generation_exception",
-      "failure_summary": "'<' not supported between instances of 'int' and 'NoneType'",
+      "model_elapsed_seconds": 16.444,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "editorial_story_id": "story_020073",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "MARTY Bus Service Halted Across Martin County, Leaving Riders Stranded",
+      "generated_card_count": 0,
+      "elapsed_seconds": 46.22
+    },
+    {
+      "category_key": "st_lucie",
+      "category_label": "St. Lucie County",
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 8,
+      "selected_source_count": 7,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 34.662,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 34.662,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1067,8 +1129,18 @@
       "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Crash blocks two left lanes on southbound I-95 in St. Lucie County - cw34.com",
+          "source_url": "https://cw34.com/news/local/crash-blocks-two-left-lanes-on-southbound-i-95-three-vehicle-crash-overturned-vehicle-traffic-snarled-morning-commute-florida-news",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie Teen walking to school critically injured after being hit by SUV - WPBF",
@@ -1118,15 +1190,52 @@
           "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
           "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|temporary-poll-place",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "I-TEAM: A widow maps brain cancer cases in St. Lucie County - some just doors apart - WPEC",
+          "source_url": "https://cbs12.com/news/cbs12-news-i-team/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
+          "editorial_story_id": "story_019281",
+          "canonical_slug": "2026-10-05-states-updated-data-shows-no-elevated-brain-cancer-rates-in-st-lucie-families-st",
+          "canonical_headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Crash blocks two left lanes on southbound I-95 in St. Lucie County - cw34.com",
+          "source_url": "https://cw34.com/news/local/crash-blocks-two-left-lanes-on-southbound-i-95-three-vehicle-crash-overturned-vehicle-traffic-snarled-morning-commute-florida-news",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [],
+          "novel_facts": [
+            "A separate three-vehicle crash on southbound I-95 near Exit 138/Indrio Road in St. Lucie County",
+            "Crash reported Thursday morning, blocking two left lanes, involving an overturned vehicle"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie Teen walking to school critically injured after being hit by SUV - WPBF",
@@ -1173,37 +1282,6 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police arrest 2 people after woman attacked, shot at in Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news",
-          "canonical_slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
-          "canonical_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Keibin Lopez-Godoy",
-            "Kailee Yurubi",
-            "South 6th Street",
-            "Fort Pierce Police",
-            "Oct. 3 arrest",
-            "attempted first-degree homicide and accessory after the fact charges"
-          ],
-          "novel_facts": [
-            "Additional narrative detail about the victim going to speak with boyfriend and being attacked before fleeing"
-          ],
-          "reason": "Same arrests, same suspects, same charges, same date and location already covered in the canonical article; incoming only adds narrative detail without new accountability development.",
-          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1264,45 +1342,52 @@
           ],
           "reason": "Both articles report the identical polling place change for the same precincts, same old and new locations, same reason (renovations), and same election. The incoming article adds routine early voting/vote-by-mail logistical details, which is background explanation, not a material update to the core event.",
           "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "I-TEAM: A widow maps brain cancer cases in St. Lucie County - some just doors apart - WPEC",
+          "source_url": "https://cbs12.com/news/cbs12-news-i-team/widow-maps-brain-cancer-cases-in-st-lucie-county-some-just-doors-apart-glioblastoma-treasure-coast-matt-elliott-stephanie-ankiel-",
+          "canonical_slug": "2026-10-05-states-updated-data-shows-no-elevated-brain-cancer-rates-in-st-lucie-families-st",
+          "canonical_headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 107.156
+      "live_hero_headline": "Jury Convicts Former Fort Pierce City Manager Nick Mimms of Official Misconduct",
+      "generated_card_count": 1,
+      "elapsed_seconds": 60.08
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 27,
+      "status": "generated_live",
+      "fetched_candidate_count": 28,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 8,
-      "selected_source_count": 1,
+      "publishable_source_count": 12,
+      "selected_source_count": 4,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.389,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Indian River Deputy's Killer Seeks Clemency Before Oct. 20 Execution"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.316,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Indian River death row inmate William Reaves asks DeSantis for clemency"
+          "elapsed_seconds": 35.701,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 24.706,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Indian River death row inmate William Reaves asks DeSantis for clemency",
+      "model_elapsed_seconds": 35.701,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1311,11 +1396,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 12,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNLUVEX2JieWx4d0NwZUk4REk4NGpKdmE5M1JjZmhvMElzYzB1TDFRT1ZnLUw5U09PNE14ZzRRWHhhZEVGU1FiWGlyeUpHZnBhbDVUR0FmektPa2p2YXNHZ1J5YmlqZmVZbGE1NmJtQnZmWWp6OE1KYmVDNWsxUWpONExmaVN2cHdwSkxnNmQzbFBpYm92V1BsWHV2VVVJLWhDVlJ2SnJtTE9sV3RLZEwtYTgyTWV3SDdEVm5PVDlWU05ZS09McnpxQUFHS1U0MUZ2TDhz",
+          "editorial_story_id": "story_020070",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "editorial_story_id": "story_020073",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
@@ -1328,22 +1433,22 @@
         },
         {
           "category_key": "indian_river",
+          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxNMkZwNkkwUzdZRXZCYjZ4b0JHWXMyMWpvbmtaZlFGbmJ5cHk0T1RtTkM4QlJfRDhwcll5eDlUT0Nfbk92aEQ5WUdNcV94NUZMa2RlT0tKNmIwVk9tWDllX2VLeXFLeWxoX1Z4SDlXMTFmeVl0WE96ci12WVdLRy1pRnRBdjVMTlZiZ3kxbjhDUmVJSTQyRThQbUxpbFpEblpHU2s2T3BaamZVWm1hZXo2Qm9qamVGekE1aVNmNWpUcFdYOVAzSEZZLWxmdkY5eER3d05EVFo0RDVhVm5PZkgtRFlmeWRiOVhzWXVUdUNfQm5FVHlnaWxRc1pZdzIzN0VV",
+          "editorial_story_id": "story_019822",
+          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
+          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - cw34.com",
           "source_url": "https://cw34.com/news/local/uf-university-florida-study-finds-dengue-linked-mosquito-aedes-aegypti-common-in-indian-river-county-yards-dengue-fever-?teaserSource=trending",
           "editorial_story_id": "story_019822",
           "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
           "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
           "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1365,25 +1470,71 @@
           "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
+          "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:william-reaves",
+            "story:story_020070",
+            "source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:william-reaves,story:story_020070,source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNLUVEX2JieWx4d0NwZUk4REk4NGpKdmE5M1JjZmhvMElzYzB1TDFRT1ZnLUw5U09PNE14ZzRRWHhhZEVGU1FiWGlyeUpHZnBhbDVUR0FmektPa2p2YXNHZ1J5YmlqZmVZbGE1NmJtQnZmWWp6OE1KYmVDNWsxUWpONExmaVN2cHdwSkxnNmQzbFBpYm92V1BsWHV2VVVJLWhDVlJ2SnJtTE9sV3RLZEwtYTgyTWV3SDdEVm5PVDlWU05ZS09McnpxQUFHS1U0MUZ2TDhz",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Amendments 1 & 2: Lesser-known Florida ballot amendments focus on state reserves, farm tax breaks",
@@ -1393,6 +1544,21 @@
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxNMkZwNkkwUzdZRXZCYjZ4b0JHWXMyMWpvbmtaZlFGbmJ5cHk0T1RtTkM4QlJfRDhwcll5eDlUT0Nfbk92aEQ5WUdNcV94NUZMa2RlT0tKNmIwVk9tWDllX2VLeXFLeWxoX1Z4SDlXMTFmeVl0WE96ci12WVdLRy1pRnRBdjVMTlZiZ3kxbjhDUmVJSTQyRThQbUxpbFpEblpHU2s2T3BaamZVWm1hZXo2Qm9qamVGekE1aVNmNWpUcFdYOVAzSEZZLWxmdkY5eER3d05EVFo0RDVhVm5PZkgtRFlmeWRiOVhzWXVUdUNfQm5FVHlnaWxRc1pZdzIzN0VV",
+          "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
+          "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1428,21 +1594,6 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
           "source_headline": "Hundreds gather in Vero Beach to remember 17-year-old Sulliman Bah and call for justice - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-vero-beach-sulliman-bah-shooting/74071870",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -1470,27 +1621,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 44.754
+      "live_hero_headline": "Vero Beach Mourns Teen Sulli Bah as Family Seeks Accountability in Shooting",
+      "generated_card_count": 2,
+      "elapsed_seconds": 58.689
     }
   ]
 }
