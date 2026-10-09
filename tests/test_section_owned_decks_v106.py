@@ -14,7 +14,8 @@ def test_category_views_render_dedicated_section_owned_cards():
     assert 'data-section-owner="{_section_key}"' in render
     assert '_section_cards = [' in render
     assert '_section.get("cards")' in render
-    assert '_section_cards.sort(' in render
+    assert '_section_view.get("cards")' in render
+    assert '_rank_section_editorial_candidates(' in render
     assert 'card_section_timestamp(card)' in render
 
 
@@ -51,4 +52,4 @@ def test_more_stories_excludes_dedicated_section_cards():
 
 def test_asset_version_bumped_for_new_filter_behavior():
     audience = Path("scripts/build_audience_features.py").read_text(encoding="utf-8")
-    assert 'ASSET_VERSION = "1.13.9.106"' in audience
+    assert 'ASSET_VERSION = "1.13.9.108"' in audience

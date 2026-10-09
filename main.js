@@ -163,9 +163,9 @@ document.querySelectorAll(".category-nav [data-cat], .mobile-nav-panel [data-cat
           ? "block" : "none";
       });
 
-      // Category/county views are strict publication chronology. Top News keeps its
-      // separate importance/freshness ranking. Use CSS grid order so switching back
-      // to Top News restores the original server-rendered Top Stories order.
+      // County/category decks arrive from the server in editorial order: freshness
+      // eligibility first, then urgency/importance + recency. Never re-sort them in
+      // the browser by timestamp or they collapse back into blog chronology.
       const grid        = document.getElementById("articlesGrid");
       const supportCard = grid ? grid.querySelector(".support-grid-card") : null;
       const allStoryCards = grid
@@ -176,13 +176,9 @@ document.querySelectorAll(".category-nav [data-cat], .mobile-nav-panel [data-cat
 
       const visible = allStoryCards.filter(c => c.style.display !== "none");
       if (cat !== "all" && visible.length) {
-        visible.sort((a, b) => {
-          const bTs = Number(b.dataset.sectionTs || 0);
-          const aTs = Number(a.dataset.sectionTs || 0);
-          return bTs - aTs;
-        });
         visible.forEach((card, index) => {
-          // Leave visual slot five open for the membership/support card.
+          // Preserve server editorial rank while leaving visual slot five open for
+          // the membership/support card.
           card.style.order = String(index < 4 ? index : index + 1);
         });
         if (supportCard) supportCard.style.order = String(Math.min(4, visible.length));

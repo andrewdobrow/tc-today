@@ -15685,6 +15685,142 @@ def _top_story_priority(card, age_hours):
     return round(score, 2), urgency
 
 
+SECTION_EDITORIAL_DECK_LIMIT = 7  # hero + six cards
+SECTION_EDITORIAL_FRESH_WINDOW_HOURS = 7 * 24.0
+SECTION_EDITORIAL_EXTENDED_WINDOW_HOURS = 14 * 24.0
+SECTION_EDITORIAL_EXTENDED_URGENCY_MIN = 8
+SECTION_EDITORIAL_TRANSIENT_MAX_HOURS = 48.0
+SECTION_EDITORIAL_SPORTS_MAX_HOURS = 72.0
+SECTION_EDITORIAL_RANKING_SCHEMA_VERSION = 1
+
+
+def _section_editorial_freshness_points(age_hours):
+    """Freshness weight for county/topic editorial decks.
+
+    Section pages should behave like edited news fronts, not reverse-chronological
+    blogs. Freshness is therefore a strong ranking input, but urgency can still
+    outrank a newer routine story inside the active-news window. The score decays
+    to zero over seven days; stories older than that need exceptional urgency to
+    remain eligible at all.
+    """
+    if age_hours is None:
+        return 0.0
+    try:
+        age = max(0.0, float(age_hours))
+    except (TypeError, ValueError):
+        return 0.0
+    return round(70.0 * (1.0 - min(age, SECTION_EDITORIAL_FRESH_WINDOW_HOURS) / SECTION_EDITORIAL_FRESH_WINDOW_HOURS), 2)
+
+
+def _section_editorial_priority(card, age_hours):
+    try:
+        urgency = max(0, min(10, int((card or {}).get("urgency_score", 0) or 0)))
+    except (TypeError, ValueError):
+        urgency = 0
+    score = urgency * 10.0 + _section_editorial_freshness_points(age_hours)
+    if (card or {}).get("is_breaking"):
+        score += 12.0
+    if (card or {}).get("meaningful_update_validated"):
+        score += 6.0
+    return round(score, 2), urgency
+
+
+def _rank_section_editorial_candidates(cards, archive_entries=(), *, category_key="", limit=SECTION_EDITORIAL_DECK_LIMIT, now=None):
+    """Rank one county/topic deck by editorial importance *and* canonical freshness.
+
+    Normal stories may compete for seven days. Exceptionally urgent stories can
+    survive up to 14 days, but receive no freshness points after day seven, so a
+    genuinely new routine story normally outranks a stale high-urgency holdover.
+    Routine ``lastmod`` never refreshes age; only a validated material update can.
+    Explicit ``force_hero`` remains an editor override.
+    """
+    try:
+        limit = max(0, int(limit))
+    except (TypeError, ValueError):
+        limit = SECTION_EDITORIAL_DECK_LIMIT
+    now = now or datetime.now(timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+    else:
+        now = now.astimezone(timezone.utc)
+
+    archive_by_slug = {}
+    for entry in archive_entries or []:
+        if not isinstance(entry, dict):
+            continue
+        slug = _normalize_existing_article_slug(entry.get("canonical_slug") or entry.get("slug"))
+        if slug:
+            archive_by_slug[slug] = entry
+
+    rows, excluded = [], []
+    for position, card in enumerate(cards or [], start=1):
+        if not isinstance(card, dict) or not card.get("headline") or card.get("_section_placeholder"):
+            continue
+        published_at, timestamp_basis = _top_story_effective_datetime(card, archive_by_slug)
+        age_hours = None
+        if published_at is not None:
+            age_hours = max(0.0, (now - published_at).total_seconds() / 3600.0)
+        priority, urgency = _section_editorial_priority(card, age_hours)
+        forced = bool(card.get("force_hero"))
+        transient = _top_story_is_transient(card)
+        eligible = True
+        reason = "fresh_editorial_window"
+        if forced:
+            reason = "manual_force_hero"
+        elif age_hours is None:
+            eligible = False
+            reason = "undated"
+        elif age_hours > SECTION_EDITORIAL_EXTENDED_WINDOW_HOURS:
+            eligible = False
+            reason = "older_than_14_days"
+        elif transient and age_hours > SECTION_EDITORIAL_TRANSIENT_MAX_HOURS:
+            eligible = False
+            reason = "expired_transient_story"
+        elif category_key == "sports" and age_hours > SECTION_EDITORIAL_SPORTS_MAX_HOURS and urgency < 9:
+            eligible = False
+            reason = "routine_sports_story_older_than_72_hours"
+        elif age_hours > SECTION_EDITORIAL_FRESH_WINDOW_HOURS:
+            eligible = urgency >= SECTION_EDITORIAL_EXTENDED_URGENCY_MIN
+            reason = "high_urgency_extended_window" if eligible else "older_than_7_days_not_urgent_enough"
+
+        row = {
+            "card": card,
+            "headline": str(card.get("headline") or ""),
+            "input_position": position,
+            "urgency_score": urgency,
+            "age_hours": round(age_hours, 2) if age_hours is not None else None,
+            "priority_score": priority,
+            "timestamp_basis": timestamp_basis,
+            "eligibility_reason": reason,
+            "forced": forced,
+        }
+        if eligible or forced:
+            rows.append(row)
+        else:
+            excluded.append({k: v for k, v in row.items() if k != "card"})
+
+    rows.sort(key=lambda row: (
+        0 if row["forced"] else 1,
+        -float(row["priority_score"]),
+        float(row["age_hours"]) if row["age_hours"] is not None else 999999.0,
+        -int(row["urgency_score"]),
+        row["input_position"],
+        row["headline"].lower(),
+    ))
+    selected = rows[:limit]
+    report = {
+        "schema_version": SECTION_EDITORIAL_RANKING_SCHEMA_VERSION,
+        "category_key": category_key,
+        "policy": "freshness_gate_then_urgency_plus_recency_editorial_rank",
+        "fresh_window_hours": SECTION_EDITORIAL_FRESH_WINDOW_HOURS,
+        "extended_window_hours": SECTION_EDITORIAL_EXTENDED_WINDOW_HOURS,
+        "extended_urgency_min": SECTION_EDITORIAL_EXTENDED_URGENCY_MIN,
+        "selected": [{k: v for k, v in row.items() if k != "card"} for row in selected],
+        "excluded": excluded,
+    }
+    return [row["card"] for row in selected], report
+
+
 def _apply_top_story_pins(selected, eligible_rows, limit):
     """Preserve explicit editor pin positions without making normal stale cards top."""
     by_id = {id(row["card"]): row for row in eligible_rows}
@@ -16184,9 +16320,181 @@ def render_index(all_categories, top_cat):
       </a>
     </section>"""
 
+    # Build each county/topic front from its own recent canonical candidate pool,
+    # then rank by editorial urgency + freshness. This intentionally differs from
+    # both a pure reverse-chronological blog and the tiny 48-hour Top Stories deck:
+    # sections get a seven-day active-news window, with only exceptional urgency
+    # surviving to 14 days. Older stories remain available under More Stories.
+    _section_archive_by_slug = {
+        _normalize_existing_article_slug(e.get("canonical_slug") or e.get("slug")): e
+        for e in archive
+        if isinstance(e, dict) and _normalize_existing_article_slug(e.get("canonical_slug") or e.get("slug"))
+    }
+    _section_now = datetime.now(timezone.utc)
+
+    def _section_archive_matches(entry, section_key):
+        if not isinstance(entry, dict) or not entry.get("headline") or not entry.get("slug"):
+            return False
+        if not _latest_news_entry_eligible(entry):
+            return False
+        if section_key == "sports" and _archive_sports_event_window_expired(entry):
+            return False
+        contract = _category_eligibility_contract_assessment(section_key, entry)
+        if contract.get("mode") == "enforce" and not contract.get("eligible"):
+            return False
+        if section_key in COUNTY_KEYS:
+            authority = _county_membership_authority_assessment(entry, section_key)
+            return section_key in authority.get("supported_counties", ())
+        return _category_membership_contains(entry, section_key)
+
+    def _section_archive_projection(entry, section_key, section_label):
+        memberships = _item_category_memberships(entry, section_key)
+        try:
+            urgency = int(entry.get("urgency_score", 4) or 4)
+        except (TypeError, ValueError):
+            urgency = 4
+        urgency = max(0, min(10, urgency))
+        return {
+            "headline": entry.get("headline", ""),
+            "teaser": entry.get("teaser", ""),
+            "body": entry.get("teaser", ""),
+            "image_url": entry.get("image_url", ""),
+            "image_credit": entry.get("image_credit", ""),
+            "published": _section_publication_value(entry),
+            "published_raw": _section_publication_value(entry),
+            "first_published": entry.get("first_published", ""),
+            "date": entry.get("date", ""),
+            "lastmod": entry.get("lastmod", ""),
+            "last_meaningful_update_at": entry.get("last_meaningful_update_at", ""),
+            "meaningful_update_validated": bool(entry.get("meaningful_update_validated")),
+            "urgency_score": urgency,
+            "is_breaking": bool(entry.get("is_breaking")),
+            "enriched": True,
+            "source_quality": "archive",
+            "category_key": section_key,
+            "category_label": section_label,
+            "cat_key": section_key,
+            "cat_label": section_label,
+            "category_keys": memberships,
+            "county_keys": [key for key in memberships if key in COUNTY_KEYS],
+            "link": f"{SITE_URL}/articles/{entry['slug']}.html",
+            "_archived_slug": entry["slug"],
+            "_section_archive_projection": True,
+            "is_custom": bool(entry.get("is_custom") or entry.get("authoritative_custom")),
+            "authoritative_custom": bool(entry.get("is_custom") or entry.get("authoritative_custom")),
+        }
+
+    _section_views = {}
+    _section_ranking_reports = []
+    for _section in all_categories:
+        _section_key = str(_section.get("category_key") or "").strip()
+        if not _section_key:
+            continue
+        _section_label = str(
+            _section.get("category_label")
+            or CATEGORIES.get(_section_key, {}).get("label")
+            or _section_key.replace("_", " ").title()
+        ).strip()
+
+        _candidate_by_identity = {}
+        _live_candidates = []
+        if isinstance(_section.get("hero"), dict):
+            _live_candidates.append(_section["hero"])
+        _live_candidates.extend(
+            card for card in list(_section.get("cards") or [])
+            if isinstance(card, dict)
+        )
+        for _candidate in _live_candidates:
+            if _candidate.get("_section_placeholder") or not _candidate.get("headline"):
+                continue
+            _candidate_permalink = _raw_surface_permalink(_candidate, allow_fallback=False)
+            _candidate_identity = (
+                _homepage_permalink_key(_candidate_permalink)
+                or "headline:" + " ".join(str(_candidate.get("headline") or "").lower().split())
+            )
+            if _candidate_identity not in _candidate_by_identity:
+                _candidate_by_identity[_candidate_identity] = _candidate
+
+        # Add recent canonical archive stories even when the current model/generation
+        # pass did not select them. This prevents section fronts from being limited to
+        # a small stale recovery deck while newer valid reporting exists in archive.
+        for _entry in archive:
+            if not _section_archive_matches(_entry, _section_key):
+                continue
+            _published_at, _ = _top_story_effective_datetime(_entry, _section_archive_by_slug)
+            if _published_at is None:
+                continue
+            _age_hours = max(0.0, (_section_now - _published_at).total_seconds() / 3600.0)
+            if _age_hours > SECTION_EDITORIAL_EXTENDED_WINDOW_HOURS:
+                continue
+            _projection = _section_archive_projection(_entry, _section_key, _section_label)
+            _projection_permalink = _raw_surface_permalink(_projection, allow_fallback=False)
+            _projection_identity = (
+                _homepage_permalink_key(_projection_permalink)
+                or "headline:" + " ".join(str(_projection.get("headline") or "").lower().split())
+            )
+            # Prefer the live placement when it exists because it carries the current
+            # run's richer urgency/editorial metadata. Archive only expands the pool.
+            _candidate_by_identity.setdefault(_projection_identity, _projection)
+
+        _ranked_section, _ranking_report = _rank_section_editorial_candidates(
+            list(_candidate_by_identity.values()),
+            archive,
+            category_key=_section_key,
+            limit=SECTION_EDITORIAL_DECK_LIMIT,
+            now=_section_now,
+        )
+        _ranking_report["category_label"] = _section_label
+        _ranking_report["candidate_count"] = len(_candidate_by_identity)
+        _section_ranking_reports.append(_ranking_report)
+
+        if _ranked_section:
+            _section_hero = _ranked_section[0]
+            _section_cards = _ranked_section[1:]
+        else:
+            _existing_placeholder = _section.get("hero") if isinstance(_section.get("hero"), dict) and _section.get("hero", {}).get("_section_placeholder") else None
+            if _existing_placeholder:
+                _section_hero = _existing_placeholder
+            else:
+                _fallback_img, _fallback_credit = get_fallback_image(
+                    _section_key, _section_label, item={"headline": _section_label}
+                )
+                _section_hero = {
+                    "headline": f"{_section_label} coverage",
+                    "teaser": f"Browse Treasure Coast Today's latest {_section_label.lower()} reporting.",
+                    "body": f"Browse Treasure Coast Today's latest {_section_label.lower()} reporting and archived stories.",
+                    "image_url": _fallback_img,
+                    "image_credit": _fallback_credit,
+                    "published": "",
+                    "published_raw": "",
+                    "urgency_score": 0,
+                    "category_key": _section_key,
+                    "category_label": _section_label,
+                    "link": f"{SITE_URL}/archive.html",
+                    "_section_placeholder": True,
+                }
+            _section_cards = []
+
+        _section_views[_section_key] = {
+            "hero": _section_hero,
+            "cards": _section_cards,
+            "category_label": _section_label,
+        }
+
+    _section_ranking_path = OUTPUT_DIR / "data" / "section-editorial-ranking.json"
+    _section_ranking_path.parent.mkdir(parents=True, exist_ok=True)
+    _section_ranking_path.write_text(json.dumps({
+        "schema_version": SECTION_EDITORIAL_RANKING_SCHEMA_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": "section_owned_fresh_candidate_pool_then_urgency_plus_recency_rank",
+        "sections": _section_ranking_reports,
+    }, indent=2, ensure_ascii=False), encoding="utf-8")
+
     heroes_html = hero_section("all", top_cat["category_label"], top_cat["hero"], visible=True)
     for cat in all_categories:
-        heroes_html += hero_section(cat["category_key"], cat["category_label"], cat["hero"], visible=False)
+        _view = _section_views.get(cat["category_key"], {})
+        _view_hero = _view.get("hero") or cat["hero"]
+        heroes_html += hero_section(cat["category_key"], cat["category_label"], _view_hero, visible=False)
 
     all_cards_pool = []
     for cat in all_categories:
@@ -16602,24 +16910,20 @@ def render_index(all_categories, top_cat):
             or CATEGORIES.get(_section_key, {}).get("label")
             or ""
         ).strip()
-        _section_hero = _section.get("hero") if isinstance(_section.get("hero"), dict) else {}
+        _section_view = _section_views.get(_section_key, {})
+        _section_hero = _section_view.get("hero") if isinstance(_section_view.get("hero"), dict) else {}
         _section_seen_permalinks = set()
         _section_hero_permalink = _raw_surface_permalink(_section_hero, allow_fallback=False)
         _section_hero_key = _homepage_permalink_key(_section_hero_permalink)
         if _section_hero_key:
             _section_seen_permalinks.add(_section_hero_key)
 
+        # Server ranking already applied freshness eligibility and urgency/importance.
+        # Preserve that editorial order exactly; the browser must not re-sort by date.
         _section_cards = [
-            card for card in list(_section.get("cards") or [])
+            card for card in list(_section_view.get("cards") or [])
             if isinstance(card, dict) and card.get("headline")
         ]
-        _section_cards.sort(
-            key=lambda card: (
-                card_section_timestamp(card),
-                str(card.get("headline") or "").lower(),
-            ),
-            reverse=True,
-        )
 
         for card in _section_cards:
             permalink = card_permalink(card)
@@ -16690,11 +16994,16 @@ def render_index(all_categories, top_cat):
     # -- OLDER: per-category archived stories no longer shown as current cards --
     # Top News ("all") gets no Older section. Each category gets up to 10 of its
     # own older stories that aren't currently displayed.
+    # Exclude only stories that are actually live on Top News or an active section
+    # front. Stale recovery candidates that lost editorial ranking should remain
+    # eligible for the chronological More Stories/archive surface.
     current_headlines = {top_cat["hero"].get("headline", "").strip().lower()}
-    for cat in all_categories:
-        current_headlines.add(cat["hero"].get("headline", "").strip().lower())
-    for card in all_cards_display:
+    for card in topnews:
         current_headlines.add(card.get("headline", "").strip().lower())
+    for _view in _section_views.values():
+        _hero = _view.get("hero") if isinstance(_view, dict) else None
+        if isinstance(_hero, dict):
+            current_headlines.add((_hero.get("headline", "") or "").strip().lower())
     current_headlines.update(_section_rendered_headlines)
 
     older_archive = load_archive(OUTPUT_DIR / "archive.json")

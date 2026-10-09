@@ -105,16 +105,20 @@ def test_permanent_archive_recovery_uses_publication_chronology(tmp_path, monkey
     assert business['hero']['published_raw'] == newer['first_published']
 
 
-def test_render_and_client_contract_make_category_tabs_newest_first():
+def test_render_and_client_contract_use_server_editorial_section_rank():
     source = Path('scripts/generate.py').read_text(encoding='utf-8')
     render = source[source.index('def render_index('):source.index('\ndef slugify', source.index('def render_index('))]
+    # Chronology remains authoritative for archive candidate discovery / More Stories,
+    # but the active section deck is selected by the editorial ranker.
     assert '_bf_archive.sort(key=_section_publication_sort_key, reverse=True)' in render
     assert 'older_archive.sort(key=_section_publication_sort_key, reverse=True)' in render
-    assert 'data-section-ts="{card_section_timestamp(card)}"' in render
+    assert '_rank_section_editorial_candidates(' in render
+    assert '_section_view.get("cards")' in render
 
     js = Path('main.js').read_text(encoding='utf-8')
     assert 'if (cat !== "all" && visible.length)' in js
-    assert 'Number(b.dataset.sectionTs || 0)' in js
+    assert 'visible.sort(' not in js
+    assert 'Never re-sort them' in js
     assert 'card.style.order = String(index < 4 ? index : index + 1)' in js
     assert 'allStoryCards.forEach(card => { card.style.order = ""; });' in js
 
