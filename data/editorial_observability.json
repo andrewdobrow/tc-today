@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-09T15:54:37Z",
+  "generated_at": "2026-10-09T18:32:17Z",
   "mode": "shadow",
   "publication_behavior_changed": false,
   "activation": {
@@ -21,15 +21,35 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
     "placements_before": 7,
     "placements_after": 7,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
-    "recommendations": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://cw34.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news?teaserSource=trending",
+        "headline": "Fort Pierce Police Arrest Two After Woman Attacked, Shot At on South Sixth Street",
+        "source_title_key": "fort pierce police arrest two after woman attacked shot at on south sixth street",
+        "incoming_article_id": "",
+        "target_article_id": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
+        "story_id": "story-18-year-olds-arrest-arrested-connection-dispute-ccd36d03",
+        "canonical_is_custom": false,
+        "canonical_title": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
+        "canonical_source": "",
+        "canonical_url": "https://treasurecoast.today/articles/2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting.html",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "card"
+      }
+    ],
     "applied_actions": [],
     "enforcement_allowlist": [
       "custom_canonical_protection",
@@ -51,24 +71,24 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 191,
+    "candidates_processed": 189,
     "routes": {
-      "generate_new": 14,
-      "skip": 176,
-      "update_existing": 1
+      "generate_new": 39,
+      "skip": 147,
+      "update_existing": 3
     },
     "eligibility": {
-      "listing": 4,
-      "low_value": 129,
-      "publishable": 58
+      "listing": 5,
+      "low_value": 122,
+      "publishable": 62
     },
     "source_classes": {
-      "aggregator": 133,
-      "local_news": 32,
-      "regional_news": 20,
-      "unknown": 6
+      "aggregator": 127,
+      "local_news": 33,
+      "regional_news": 21,
+      "unknown": 8
     },
-    "rejected_count": 4,
+    "rejected_count": 5,
     "rejected_examples": [
       {
         "headline": "1201 SE Palm Beach Rd Apt C101, Stuart, FL 34994 - Realtor.com",
@@ -98,6 +118,15 @@
         "source_class": "aggregator"
       },
       {
+        "headline": "103 SW Pilsner Cir, Port Saint Lucie, FL 34953 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQWVdtX0pyNjNKRFNmQUJLSVlfTHFMaGItZ1l2b3ZXeTJYeHVqdmhDY3lMVVFBQ2dTWTZSUVVJTVlXV25RNjY5eUM2UExIbXpuMm5nMU80TDRHUXktWENrdzdGbmxkOWZycWxOMEdXUjEtVVJWM3BCZUpSb0hsVE1WNFMtdDNWQXExbWJqRExsQ2Y5MlFuZC1hcDFn?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
         "headline": "4245 Diamond Sq, Vero Beach, FL 32967 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQTzJCNGRvaHV2UWJfdWlPWXBjcTFaYzhVbGlwREx6UDZPakU2RjdTV2NGX2l0ejRZaVRTc2luWkNobTRKQnIwZDFkMTh1TlhnYVF5SXdoUU9ZR0NZdzJrUGNndzZOYTB0N0ltUVcxSDN2TUtidURsWFZMdGU5cGNsVnRQTjVWaE9EX1VTcjcxOUJiQQ?oc=5",
         "status": "listing",
@@ -110,33 +139,71 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 10,
-      "same_event": 181
+      "new_story": 36,
+      "same_event": 153
     },
     "examples": [
       {
-        "story_id": "story_020249",
-        "title": "Hillsborough schools advance plan for employee affordable housing - Tampa Bay Times",
-        "event_key": "unknown-event-17dc1fe581",
+        "story_id": "story_020297",
+        "title": "Appeals court sets aside Florida manatee ruling, sends Indian River Lagoon case back for review - TalkOfTitusville.com",
+        "event_key": "unknown-event-d8b7b8cb41",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020298",
+        "title": "Dengue cases continue to rise after heavy rain in Tampa Bay - Tampa Bay Times",
+        "event_key": "unknown-event-d9f6da021f",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020299",
+        "title": "Palm Beach Post Editorial Board's endorsements for Congress - The Palm Beach Post",
+        "event_key": "unknown-event-5a8d149cad",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020200",
+        "title": "Guide to Palm Beach County’s 2026 election races, candidates and questions - Sun Sentinel",
+        "event_key": "unknown-event-89f0fed04b",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_018296",
-        "title": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
-        "event_key": "missing-person-hobe-sound-6715b724de",
+        "title": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+        "event_key": "animal-rescue-hobe-sound-cats",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -164,9 +231,9 @@
         "decision_trace": []
       },
       {
-        "story_id": "story_020200",
-        "title": "Guide to Palm Beach County’s 2026 election races, candidates and questions - Sun Sentinel",
-        "event_key": "unknown-event-89f0fed04b",
+        "story_id": "story_020249",
+        "title": "Hillsborough schools advance plan for employee affordable housing - Yahoo",
+        "event_key": "unknown-event-c6ef2657e5",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -274,12 +341,14 @@
         "story_id": "story_020288",
         "title": "Gadsden County under Level 2 hurricane watch; Red Cross shelters open Friday noon - wtwcfox",
         "event_key": "unknown-event-37e40c5e02",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -337,76 +406,75 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_020111",
-        "title": "Joint county/city effort will spruce up historic Gifford Dock Park - Vero News",
-        "event_key": "unknown-event-1d2c1ad7c5",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_020113",
-        "title": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle - WFLX",
-        "event_key": "unknown-event-2cf16f69d0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_020113",
-        "title": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
-        "event_key": "unknown-event-02bcaa5569",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_020249",
-        "title": "Hillsborough schools advance plan for employee affordable housing - Tampa Bay Times",
-        "event_key": "unknown-event-17dc1fe581",
+        "story_id": "story_020297",
+        "title": "Appeals court sets aside Florida manatee ruling, sends Indian River Lagoon case back for review - TalkOfTitusville.com",
+        "event_key": "unknown-event-d8b7b8cb41",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020298",
+        "title": "Dengue cases continue to rise after heavy rain in Tampa Bay - Tampa Bay Times",
+        "event_key": "unknown-event-d9f6da021f",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020299",
+        "title": "Palm Beach Post Editorial Board's endorsements for Congress - The Palm Beach Post",
+        "event_key": "unknown-event-5a8d149cad",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020200",
+        "title": "Guide to Palm Beach County’s 2026 election races, candidates and questions - Sun Sentinel",
+        "event_key": "unknown-event-89f0fed04b",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_018296",
-        "title": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
-        "event_key": "missing-person-hobe-sound-6715b724de",
+        "title": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+        "event_key": "animal-rescue-hobe-sound-cats",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -426,9 +494,9 @@
         ]
       },
       {
-        "story_id": "story_020200",
-        "title": "Guide to Palm Beach County’s 2026 election races, candidates and questions - Sun Sentinel",
-        "event_key": "unknown-event-89f0fed04b",
+        "story_id": "story_020249",
+        "title": "Hillsborough schools advance plan for employee affordable housing - Yahoo",
+        "event_key": "unknown-event-c6ef2657e5",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -534,13 +602,15 @@
         "story_id": "story_020288",
         "title": "Gadsden County under Level 2 hurricane watch; Red Cross shelters open Friday noon - wtwcfox",
         "event_key": "unknown-event-37e40c5e02",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -632,51 +702,6 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_020113",
-        "title": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
-        "event_key": "unknown-event-02bcaa5569",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_020115",
-        "title": "'Alligator Alcatraz' is closed, but a $600 million question remains: Will Florida taxpayers get the bill?",
-        "event_key": "unknown-event-3f44a4a818",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_020116",
-        "title": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-        "event_key": "unknown-event-c816188f14",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
@@ -697,8 +722,8 @@
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
       "stories_with_timelines": 930,
-      "timeline_entries_examined": 2656,
-      "transitions_examined": 1630,
+      "timeline_entries_examined": 2658,
+      "transitions_examined": 1632,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 12,
       "high_confidence_candidate_count": 7,
@@ -2059,27 +2084,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 671,
-      "treasure_coast_local": 447,
-      "treasure_coast_region": 158,
-      "unknown": 1250
+      "florida": 673,
+      "treasure_coast_local": 445,
+      "treasure_coast_region": 159,
+      "unknown": 1258
     },
-    "average_score": 58.22
+    "average_score": 58.14
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 671,
-      "treasure_coast_local": 447,
-      "treasure_coast_region": 158,
-      "unknown": 1250
+      "florida": 673,
+      "treasure_coast_local": 445,
+      "treasure_coast_region": 159,
+      "unknown": 1258
     },
-    "average_priority": 4.55
+    "average_priority": 4.56
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1516,
-      "developing": 141,
-      "ongoing": 868,
+      "active": 1498,
+      "developing": 128,
+      "ongoing": 908,
       "resolved": 1
     }
   },
@@ -2087,8 +2112,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2519,
-    "active_stories_after": 2519,
+    "active_stories_before": 2503,
+    "active_stories_after": 2503,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2117,35 +2142,35 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-09T15:44:13Z",
-    "quarantined_story_records_retained": 4335,
-    "active_story_count": 2526
+    "generated_at": "2026-10-09T18:21:44Z",
+    "quarantined_story_records_retained": 4338,
+    "active_story_count": 2535
   },
   "stories": {
-    "total": 2526,
+    "total": 2535,
     "importance_levels": {
       "breaking": 1,
       "high": 56,
-      "normal": 456,
-      "low": 2013,
+      "normal": 462,
+      "low": 2016,
       "archived": 0
     },
-    "average_importance": 11.16,
+    "average_importance": 11.21,
     "top": [
       {
         "story_id": "story_019058",
         "title": "No arrests after 17-year-old shot, killed at meetup in Indian River County, self-defense claim expected - WPTV",
         "score": 75,
-        "editorial_priority": 85,
-        "editorial_score": 85,
+        "editorial_priority": 81,
+        "editorial_score": 81,
         "score_breakdown": {
-          "score": 85,
+          "score": 81,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 5.01
+          "age_hours": 7.64
         },
         "level": "high",
         "importance_reasons": [
@@ -2190,7 +2215,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 5.01,
+          "hours_since_update": 7.64,
           "event_count": 27,
           "timeline_entries": 27
         }
@@ -2199,16 +2224,16 @@
         "story_id": "story_020196",
         "title": "Fort Pierce brothers, ages 11 and 12, killed in Georgia shooting - wpbf.com",
         "score": 75,
-        "editorial_priority": 84,
-        "editorial_score": 84,
+        "editorial_priority": 80,
+        "editorial_score": 80,
         "score_breakdown": {
-          "score": 84,
+          "score": 80,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 5.0
+          "age_hours": 7.62
         },
         "level": "high",
         "importance_reasons": [
@@ -2251,7 +2276,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 5.0,
+          "hours_since_update": 7.62,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2269,7 +2294,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 125.02
+          "age_hours": 127.64
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2331,65 +2356,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-04T10:44:28.549866+00:00",
-          "hours_since_update": 125.02,
+          "hours_since_update": 127.64,
           "event_count": 59,
           "timeline_entries": 39
-        }
-      },
-      {
-        "story_id": "story_020230",
-        "title": "Jensen Beach man riding motorcycle dies in crash with van in Loxahatchee Groves - WPBF",
-        "score": 65,
-        "editorial_priority": 73,
-        "editorial_score": 73,
-        "score_breakdown": {
-          "score": 73,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 5.05
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Jensen Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 5.05,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -2405,7 +2374,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.81
+          "age_hours": 3.44
         },
         "level": "high",
         "importance_reasons": [
@@ -2443,7 +2412,63 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-09T14:57:10.229807+00:00",
-          "hours_since_update": 0.81,
+          "hours_since_update": 3.44,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_020230",
+        "title": "Jensen Beach man riding motorcycle dies in crash with van in Loxahatchee Groves - WPBF",
+        "score": 65,
+        "editorial_priority": 70,
+        "editorial_score": 70,
+        "score_breakdown": {
+          "score": 70,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 7.68
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Jensen Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-10-09T10:45:03.212946+00:00",
+          "hours_since_update": 7.68,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2461,7 +2486,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 65.0
+          "age_hours": 67.62
         },
         "level": "high",
         "importance_reasons": [
@@ -2499,7 +2524,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T22:45:22.065683+00:00",
-          "hours_since_update": 65.0,
+          "hours_since_update": 67.62,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2517,7 +2542,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 77.01
+          "age_hours": 79.63
         },
         "level": "high",
         "importance_reasons": [
@@ -2562,7 +2587,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 77.01,
+          "hours_since_update": 79.63,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2580,7 +2605,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.02
+          "age_hours": 26.65
         },
         "level": "high",
         "importance_reasons": [
@@ -2616,7 +2641,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-08T15:44:00.204545+00:00",
-          "hours_since_update": 24.02,
+          "hours_since_update": 26.65,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2634,7 +2659,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 77.01
+          "age_hours": 79.63
         },
         "level": "high",
         "importance_reasons": [
@@ -2672,7 +2697,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 77.01,
+          "hours_since_update": 79.63,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2690,7 +2715,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 86.02
+          "age_hours": 88.64
         },
         "level": "high",
         "importance_reasons": [
@@ -2726,59 +2751,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T01:44:20.146901+00:00",
-          "hours_since_update": 86.02,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_019582",
-        "title": "Florida man dies after fatal box truck crash on State Road A1A - Treasure Coast News",
-        "score": 65,
-        "editorial_priority": 52,
-        "editorial_score": 52,
-        "score_breakdown": {
-          "score": 52,
-          "importance": 65,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 72.0
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-10-06T15:45:27.113429+00:00",
-          "hours_since_update": 72.0,
+          "hours_since_update": 88.64,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2796,7 +2769,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 91.0
+          "age_hours": 93.62
         },
         "level": "high",
         "importance_reasons": [
@@ -2834,7 +2807,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 91.0,
+          "hours_since_update": 93.62,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2852,7 +2825,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.86
+          "age_hours": 3.5
         },
         "level": "normal",
         "importance_reasons": [
@@ -2895,7 +2868,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-09T14:57:10.229807+00:00",
-          "hours_since_update": 0.86,
+          "hours_since_update": 3.5,
           "event_count": 30,
           "timeline_entries": 30
         }
@@ -2913,7 +2886,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 137.01
+          "age_hours": 139.64
         },
         "level": "high",
         "importance_reasons": [
@@ -2952,7 +2925,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-03T22:44:32.452692+00:00",
-          "hours_since_update": 137.01,
+          "hours_since_update": 139.64,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -2970,7 +2943,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 15.0
+          "age_hours": 17.64
         },
         "level": "normal",
         "importance_reasons": [
@@ -3019,7 +2992,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-09T00:48:40.833069+00:00",
-          "hours_since_update": 15.0,
+          "hours_since_update": 17.64,
           "event_count": 17,
           "timeline_entries": 9
         }
@@ -3037,7 +3010,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 182.02
+          "age_hours": 184.64
         },
         "level": "high",
         "importance_reasons": [
@@ -3080,7 +3053,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 182.02,
+          "hours_since_update": 184.64,
           "event_count": 28,
           "timeline_entries": 28
         }
@@ -3098,7 +3071,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 233.7
+          "age_hours": 236.32
         },
         "level": "high",
         "importance_reasons": [
@@ -3139,7 +3112,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-29T22:03:25.542264+00:00",
-          "hours_since_update": 233.7,
+          "hours_since_update": 236.32,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -3157,7 +3130,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 182.02
+          "age_hours": 184.65
         },
         "level": "high",
         "importance_reasons": [
@@ -3198,7 +3171,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 182.02,
+          "hours_since_update": 184.65,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -3216,7 +3189,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 90.99
+          "age_hours": 93.62
         },
         "level": "high",
         "importance_reasons": [
@@ -3259,7 +3232,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 90.99,
+          "hours_since_update": 93.62,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3277,7 +3250,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 255.49
+          "age_hours": 258.11
         },
         "level": "high",
         "importance_reasons": [
@@ -3318,9 +3291,70 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-29T00:16:06.837370+00:00",
-          "hours_since_update": 255.49,
+          "hours_since_update": 258.11,
           "event_count": 4,
           "timeline_entries": 4
+        }
+      },
+      {
+        "story_id": "story_018269",
+        "title": "DeSantis signs death warrant for man who killed Indian River County deputy in 1986 - cbs12.com",
+        "score": 75,
+        "editorial_priority": 46,
+        "editorial_score": 46,
+        "score_breakdown": {
+          "score": 46,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 170.64
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 7,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-10-02T15:44:32.039306+00:00",
+          "hours_since_update": 170.64,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       }
     ]
@@ -3328,7 +3362,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-09T15:49:47Z",
+    "generated_at": "2026-10-09T18:28:16Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3343,27 +3377,28 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 1,
         "category_eligibility_archive_recovery": 4,
         "generated_live": 3,
+        "generation_failed_archive_recovery": 1,
         "no_publishable_sources": 1
       },
       "failures": {
+        "contextless_update_lead": 1,
         "no_category_eligible_sources": 4
       },
-      "model_attempt_count": 3,
-      "model_elapsed_seconds": 89.63,
-      "archive_recovery_requested_count": 5,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 130.612,
+      "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 6,
-      "published_story_duplicate_suppression_count": 43,
-      "story_aware_update_context_count": 7,
-      "material_update_promotion_evaluation_count": 6,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 5,
-      "material_update_promotion_model_call_count": 1
+      "contextual_update_lead_rejection_count": 5,
+      "article_framing_rejection_count": 2,
+      "category_eligibility_rejection_count": 7,
+      "published_story_duplicate_suppression_count": 36,
+      "story_aware_update_context_count": 13,
+      "material_update_promotion_evaluation_count": 11,
+      "material_update_promotion_count": 4,
+      "material_update_promotion_cache_hit_count": 8,
+      "material_update_promotion_model_call_count": 3
     },
     "categories": [
       {
@@ -3371,7 +3406,7 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3405,7 +3440,7 @@
               "crime_incident:arrested"
             ],
             "local_nexus_signals": [],
-            "headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+            "headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
           },
           {
@@ -3423,7 +3458,7 @@
             "source_url": "https://www.wflx.com/2026/10/07/st-lucie-county-fire-board-continues-law-firm-search-effort-create-complaint-policy-amid-hazing-fallout/"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3442,16 +3477,6 @@
             "editorial_story_id": "story_020113",
             "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
             "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-            "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
-            "editorial_story_id": "story_020116",
-            "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
-            "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3489,11 +3514,11 @@
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "publisher": "www.wptv.com",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
-            "canonical_headline": "Two Cats Rescued Alive, Two Found Dead in Hobe Sound Burial Case",
+            "canonical_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
             "basis": "exact_source_url",
             "identity_keys": [
               "incident:named-person-death:hobe-sound",
@@ -3551,21 +3576,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-            "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
-            "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
-            "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
             "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
             "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -3611,16 +3621,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 20.005
+        "elapsed_seconds": 21.439
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 6,
-        "selected_source_count": 3,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 8,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -3628,25 +3638,220 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 27.266,
+            "elapsed_seconds": 35.286,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 27.266,
+        "model_elapsed_seconds": 35.286,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 0,
-        "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 0,
-        "article_framing_rejections": [],
+        "contextual_update_lead_rejection_count": 1,
+        "contextual_update_lead_rejections": [
+          {
+            "surface": "hero",
+            "required": true,
+            "passed": false,
+            "story_form": "update",
+            "lead_word_count": 74,
+            "baseline_anchor": "abuse_or_neglect",
+            "baseline_present": false,
+            "baseline_anchor_present": false,
+            "baseline_details_present": true,
+            "baseline_context_hits": [
+              "alive",
+              "buried",
+              "deputies",
+              "hobe",
+              "sound",
+              "woman"
+            ],
+            "baseline_context_required": 2,
+            "canonical_context_available": true,
+            "canonical_context_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
+            "novelty_anchor": "semantic_gate_novel_fact",
+            "novelty_present": true,
+            "novelty_token_hits": [
+              "kittens",
+              "underground"
+            ],
+            "semantic_novel_fact_hits": [
+              "heard",
+              "sheriff",
+              "underground"
+            ],
+            "semantic_novel_fact_token_count": 28,
+            "missing": [
+              "original_event_context_missing"
+            ],
+            "source_title": "Deputies hear cries underground, rescue 2 kittens buried alive in Hobe Sound - WPEC",
+            "headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Case"
+          }
+        ],
+        "article_framing_rejection_count": 1,
+        "article_framing_rejections": [
+          {
+            "surface": "hero",
+            "required": true,
+            "passed": false,
+            "headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Case",
+            "missing": [
+              "original_event_context_missing"
+            ],
+            "lead_independence": {
+              "required": true,
+              "passed": false,
+              "headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Case",
+              "lead": "Martin County Sheriff John Budensiek on Friday revealed new details about the arrest of a Hobe Sound woman accused of burying kittens alive, saying deputies heard the animals crying from underground as they dug through a rain-soaked backyard. Alba Chavez, 36, faces four felony counts of animal torture involving pain, serious injury or death after deputies said she killed two kittens and buried two others alive at the Hobe Sound Mobile Home Park.",
+              "lead_word_count": 74,
+              "headline_overlap_ratio": 0.889,
+              "new_context_token_count": 46,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "update",
+              "surname_first_reference": {
+                "required": false,
+                "passed": true,
+                "missing": [],
+                "candidates": []
+              },
+              "update_diagnostics": {
+                "required": true,
+                "passed": false,
+                "story_form": "update",
+                "lead_word_count": 74,
+                "baseline_anchor": "abuse_or_neglect",
+                "baseline_present": false,
+                "baseline_anchor_present": false,
+                "baseline_details_present": true,
+                "baseline_context_hits": [
+                  "alive",
+                  "buried",
+                  "deputies",
+                  "hobe",
+                  "sound",
+                  "woman"
+                ],
+                "baseline_context_required": 2,
+                "canonical_context_available": true,
+                "canonical_context_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
+                "novelty_anchor": "semantic_gate_novel_fact",
+                "novelty_present": true,
+                "novelty_token_hits": [
+                  "kittens",
+                  "underground"
+                ],
+                "semantic_novel_fact_hits": [
+                  "heard",
+                  "sheriff",
+                  "underground"
+                ],
+                "semantic_novel_fact_token_count": 28,
+                "missing": [
+                  "original_event_context_missing"
+                ],
+                "source_title": "Deputies hear cries underground, rescue 2 kittens buried alive in Hobe Sound - WPEC",
+                "headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Case"
+              },
+              "missing": [
+                "original_event_context_missing"
+              ]
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": true,
+              "headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Case",
+              "lead": "Martin County Sheriff John Budensiek on Friday revealed new details about the arrest of a Hobe Sound woman accused of burying kittens alive, saying deputies heard the animals crying from underground as they dug through a rain-soaked backyard. Alba Chavez, 36, faces four felony counts of animal torture involving pain, serious injury or death after deputies said she killed two kittens and buried two others alive at the Hobe Sound Mobile Home Park.",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [
+                "hobe_sound"
+              ],
+              "lead_jurisdictions": [
+                "hobe_sound",
+                "martin_county"
+              ],
+              "missing_jurisdictions": [],
+              "headline_judge_claims": [],
+              "lead_judge_claims": [],
+              "missing_judge_claims": [],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": []
+            },
+            "source_focus": {
+              "required": true,
+              "passed": true,
+              "generated_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Case",
+              "generated_lead": "Martin County Sheriff John Budensiek on Friday revealed new details about the arrest of a Hobe Sound woman accused of burying kittens alive, saying deputies heard the animals crying from underground as they dug through a rain-soaked backyard. Alba Chavez, 36, faces four felony counts of animal torture involving pain, serious injury or death after deputies said she killed two kittens and buried two others alive at the Hobe Sound Mobile Home Park.",
+              "source_title": "Deputies hear cries underground, rescue 2 kittens buried alive in Hobe Sound - WPEC",
+              "source_lead": "Deputies digging through a rain-soaked backyard in Martin County heard the cries of kittens buried up to 3 feet underground, leading to the rescue of two animals while two others were found dead, the sheriff revealed Friday. During a news conference, Martin County Sheriff John Budensiek provided new details about the arrest of 36-year-old Alba Chavez, who is accused of killing two kittens and burying two others alive at a mobile home park in Hobe Sound.",
+              "title_similarity": {
+                "score": 0.5236,
+                "overlap": 0.5556,
+                "jaccard": 0.3125,
+                "sorted_sequence": 0.7606,
+                "ordered_sequence": 0.5915,
+                "shared_token_count": 5.0
+              },
+              "lead_token_overlap": 0.667,
+              "missing": []
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "official_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "temporal_integrity": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
+          }
+        ],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "category_eligibility_assessed_count": 6,
+        "category_eligibility_rejection_count": 2,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons - WPTV",
+            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+          },
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - cw34.com",
+            "source_url": "https://cw34.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive"
+          }
+        ],
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3660,32 +3865,12 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Jury convicts former Fort Pierce city manager Nick Mimms of official misconduct - cw34.com",
-            "source_url": "https://cw34.com/news/local/jury-convicts-former-fort-pierce-city-manager-nick-mimms-of-official-misconduct-improperly-obstructed-delayed-prevented-information-felony-communicated-rfp-lincoln-park-lots-allegedly-steered-contracts",
-            "editorial_story_id": "story_017375",
-            "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-            "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
             "source_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQNGRBWHlNSldiNnNNaThnWWpBbFE2ZTZ0T1IwekxqYU9VUGlHckJDZk5XR3ljdHJKd2l4VF9pMWxkVnVMZThvb0pqdDU0OWxWdGVucDgxNnNvTmpETWxnZUEzWENZcUpHZGRablk2MFNxdmx5S2t1dHJfUk94TkJ0R19fR2k1bkNuRkpENkRfck1kWTFQdDRncEhId1BUWUgyZ1VObTVSTGoyczRibEVwLUF4bnNBTVZ1a0t2TGNR0gHSAUFVX3lxTE9ZTUhESnpwVkV6TGNXdk1XSGxkR2lzeUlWTm9tV3ZfeFprdmNyTmFSdHJfQTNncWpPZzhpa051UnBWUExFSUF3RTMyeDVzeXZqbGlHOFBqc3VyelhBdG5zRkZKYnl5cE8tSTdSbE1PTHdQeGZ5OTNSbkd6TmxLaHJwdHhpVDdKQjVBaVBYWUV1aUVldTgzVUtnZ2FiUE4yZW80LVZwSWtXY01DTDhrT1FSc2RodFVfOVBkZVlkX29NVDBMdFNYRkExbnV3UG9Zdko1Zw",
             "editorial_story_id": "story_020070",
             "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
             "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
-            "source_url": "https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
-            "basis": "same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3710,16 +3895,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-            "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
-            "editorial_story_id": "story_020116",
-            "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
-            "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Hundreds gather in Vero Beach to remember 17-year-old Sulliman Bah and call for justice - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-vero-beach-sulliman-bah-shooting/74071870",
             "editorial_story_id": "story_019058",
@@ -3739,14 +3914,14 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
+        "story_aware_update_context_count": 3,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "publisher": "www.wptv.com",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
-            "canonical_headline": "Two Cats Rescued Alive, Two Found Dead in Hobe Sound Burial Case",
+            "canonical_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
             "basis": "exact_source_url",
             "identity_keys": [
               "incident:named-person-death:hobe-sound",
@@ -3765,13 +3940,96 @@
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
+          },
+          {
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
+            "canonical_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "incident:named-person-death:hobe-sound",
+              "story:story_018296",
+              "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "incident",
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=incident:named-person-death:hobe-sound,story:story_018296,source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          },
+          {
+            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - cw34.com",
+            "source_url": "https://cw34.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
+            "publisher": "cw34.com",
+            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
+            "basis": "exact_structured_incident_key",
+            "identity_keys": [
+              "incident:named-person-death:ron-desantis",
+              "story:story_018268",
+              "source:https://cw34.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "incident"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=incident:named-person-death:ron-desantis",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
           }
         ],
         "material_update_promotion_evaluation_count": 2,
-        "material_update_promotion_count": 0,
+        "material_update_promotion_count": 1,
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Deputies hear cries underground, rescue 2 kittens buried alive in Hobe Sound - WPEC",
+            "source_url": "https://cbs12.com/news/local/martin-county-deputies-hear-crying-cat-cries-rescues-2-kittens-buried-alive-hobe-sound-martin-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
+            "canonical_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": true,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "update_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "update_existing_canonical",
+            "confidence": 0.85,
+            "shared_anchors": [
+              "Alba Chavez / Alba Luz Chavez",
+              "Hobe Sound, Martin County",
+              "Martin County Sheriff's Office",
+              "burying kittens alive, belief kittens were demons",
+              "four counts of animal cruelty/torture charges"
+            ],
+            "novel_facts": [
+              "New details from sheriff's press conference: deputies heard cries underground while digging",
+              "Children locked kittens in bedroom to protect them, called 911",
+              "Fifth kitten remains missing",
+              "Immigration hold noted",
+              "Prior mental health calls but no prior animal cruelty complaints",
+              "DCF involvement and children released to father"
+            ],
+            "reason": "This is the same arrest/incident involving Alba Chavez and buried kittens in Hobe Sound previously reported on July 3. The incoming article adds substantial new material from a sheriff's press conference, including the rescue details, missing fifth kitten, immigration hold, and DCF involvement, which should update the existing canonical rather than mint a new story since it doesn't introduce a distinct accountability or consequence angle beyond elaborating on the same case facts.",
+            "validation_errors": []
+          },
           {
             "category_key": "crime",
             "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
@@ -3806,39 +4064,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Jury convicts former Fort Pierce city manager Nick Mimms of official misconduct - cw34.com",
-            "source_url": "https://cw34.com/news/local/jury-convicts-former-fort-pierce-city-manager-nick-mimms-of-official-misconduct-improperly-obstructed-delayed-prevented-information-felony-communicated-rfp-lincoln-park-lots-allegedly-steered-contracts",
-            "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-            "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.9,
-            "shared_anchors": [
-              "Nick Mimms",
-              "Fort Pierce city manager",
-              "official misconduct conviction",
-              "bid tampering acquittal",
-              "Lincoln Park lots",
-              "St. Lucie County trial"
-            ],
-            "novel_facts": [
-              "Judge denied state's request to take Mimms into custody pending sentencing",
-              "sentencing scheduled detail",
-              "FDLE Agent Derek Brisky testimony detail"
-            ],
-            "reason": "This is the same trial and verdict already covered by the canonical article (conviction on official misconduct, acquittal on bid tampering, same defendant and case). The additional details about bond status and sentencing scheduling are routine proceeding updates, not a material new development like a sentence or new charge.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "crime",
             "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
             "source_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQNGRBWHlNSldiNnNNaThnWWpBbFE2ZTZ0T1IwekxqYU9VUGlHckJDZk5XR3ljdHJKd2l4VF9pMWxkVnVMZThvb0pqdDU0OWxWdGVucDgxNnNvTmpETWxnZUEzWENZcUpHZGRablk2MFNxdmx5S2t1dHJfUk94TkJ0R19fR2k1bkNuRkpENkRfck1kWTFQdDRncEhId1BUWUgyZ1VObTVSTGoyczRibEVwLUF4bnNBTVZ1a0t2TGNR0gHSAUFVX3lxTE9ZTUhESnpwVkV6TGNXdk1XSGxkR2lzeUlWTm9tV3ZfeFprdmNyTmFSdHJfQTNncWpPZzhpa051UnBWUExFSUF3RTMyeDVzeXZqbGlHOFBqc3VyelhBdG5zRkZKYnl5cE8tSTdSbE1PTHdQeGZ5OTNSbkd6TmxLaHJwdHhpVDdKQjVBaVBYWUV1aUVldTgzVUtnZ2FiUE4yZW80LVZwSWtXY01DTDhrT1FSc2RodFVfOVBkZVlkX29NVDBMdFNYRkExbnV3UG9Zdko1Zw",
             "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
@@ -3846,21 +4071,6 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
-            "source_url": "https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -3891,21 +4101,6 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-            "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
-            "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
-            "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -3946,25 +4141,42 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
+        "live_hero_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Case",
         "generated_card_count": 1,
-        "elapsed_seconds": 49.381
+        "elapsed_seconds": 68.227
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 17,
+        "fresh_candidate_count": 18,
         "publishable_source_count": 11,
-        "selected_source_count": 0,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Business & Development category eligibility contract",
+        "attempt_count": 2,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 8.576,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie assisted-living project raises contamination concerns - WPEC"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 8.906,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie assisted-living project raises contamination concerns - WPEC"
+          }
+        ],
+        "model_elapsed_seconds": 17.482,
+        "failure_code": "contextless_update_lead",
+        "failure_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie assisted-living project raises contamination concerns - WPEC",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3974,7 +4186,7 @@
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
         "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-business-development-primary-focus",
@@ -3993,7 +4205,7 @@
               "source_locality:martin county",
               "source_locality:hobe sound"
             ],
-            "headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+            "headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
           },
           {
@@ -4013,27 +4225,9 @@
             ],
             "headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
             "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
-          },
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [
-              "source_locality:treasure coast",
-              "source_locality:st lucie county",
-              "source_locality:fort pierce"
-            ],
-            "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -4094,26 +4288,16 @@
             "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown",
-            "editorial_story_id": "story_019959",
-            "canonical_slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
-            "canonical_headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 3,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "publisher": "www.wptv.com",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
-            "canonical_headline": "Two Cats Rescued Alive, Two Found Dead in Hobe Sound Burial Case",
+            "canonical_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
             "basis": "exact_source_url",
             "identity_keys": [
               "incident:named-person-death:hobe-sound",
@@ -4128,6 +4312,28 @@
             ],
             "decision_trace": [
               "deterministic_identity_keys=incident:named-person-death:hobe-sound,story:story_018296,source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          },
+          {
+            "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-10-09-port-st-lucie-approves-assisted-living-project-amid-contamination-concerns",
+            "canonical_headline": "Port St. Lucie Approves Assisted-Living Project Amid Contamination Concerns",
+            "basis": "event-identity-authority:exact_source_url",
+            "identity_keys": [
+              "story:custom:304b4221d99d6569f6410e3c0c7ad4c0",
+              "source:https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-"
+            ],
+            "match_confidence": 1.0,
+            "evidence_dimensions": [
+              "source_url"
+            ],
+            "decision_trace": [
+              "exact_source_url=True",
               "write_authorized=True"
             ],
             "relationship": "same_event_verified",
@@ -4159,11 +4365,43 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 0,
-        "material_update_promotion_count": 0,
+        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_count": 1,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "business",
+            "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+            "canonical_slug": "2026-09-29-residents-seek-halt-port-st-lucie-assisted-living-project-petroleum-cleanup-site",
+            "canonical_headline": "Residents seek halt to Port St. Lucie assisted living project near petroleum cleanup site",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:custom-project|westmoreland-alf|petroleum-remediation",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": true,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "update_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "update_existing_canonical",
+            "confidence": 0.82,
+            "shared_anchors": [
+              "PSL Westmoreland ALF / assisted-living project",
+              "Southeast Morningside Boulevard / Westmoreland Boulevard",
+              "neighboring petroleum-contaminated property",
+              "resident opposition and concerns about vapor remediation"
+            ],
+            "novel_facts": [
+              "City Council approved the project's major site plan on Sept.",
+              "BTEX Engineering letter about March 2026 meeting recommending remediation approach change due to surrounding properties including the ALF",
+              "residents have contacted EPA and Florida Department of Health",
+              "next steps include construction plan technical review and South Florida Water Management District review"
+            ],
+            "reason": "Same contested assisted-living development and contamination dispute as the candidate; incoming article adds material procedural updates (site plan approval, specific engineering letter details, agency involvement) that update the existing story rather than constituting a separate newsworthy event.",
+            "validation_errors": []
+          },
           {
             "category_key": "business",
             "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
@@ -4253,25 +4491,12 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown",
-            "canonical_slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
-            "canonical_headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.68
+        "generation_status": "failed",
+        "budget_seconds": 180.0,
+        "elapsed_seconds": 39.567
       },
       {
         "category_key": "sports",
@@ -4279,7 +4504,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 2,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4308,15 +4533,15 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 12,
-        "elapsed_seconds": 13.046
+        "new_publication_stale_rejected_count": 11,
+        "elapsed_seconds": 14.733
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 19,
         "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4367,8 +4592,32 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Port St. Lucie veterans home raises money for WiFi, Medal of Honor Museum trip",
+            "source_url": "https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-09-22-port-st-lucie-veterans-home-raises-funds-for-wifi-medal-of-honor-museum-trip",
+            "canonical_headline": "Port St. Lucie veterans home raises funds for WiFi, Medal of Honor Museum trip",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "story:story_019629",
+              "source:https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=story:story_019629,source:https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -4391,7 +4640,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.758
+        "elapsed_seconds": 19.432
       },
       {
         "category_key": "florida",
@@ -4429,7 +4678,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.98
+        "elapsed_seconds": 17.471
       },
       {
         "category_key": "martin",
@@ -4437,8 +4686,8 @@
         "status": "generated_live",
         "fetched_candidate_count": 26,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 5,
-        "selected_source_count": 4,
+        "publishable_source_count": 7,
+        "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4446,22 +4695,188 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 27.819,
+            "elapsed_seconds": 27.983,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 27.819,
+        "model_elapsed_seconds": 27.983,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 0,
-        "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 0,
-        "article_framing_rejections": [],
+        "contextual_update_lead_rejection_count": 1,
+        "contextual_update_lead_rejections": [
+          {
+            "surface": "hero",
+            "required": true,
+            "passed": false,
+            "story_form": "update",
+            "lead_word_count": 77,
+            "baseline_anchor": "abuse_or_neglect",
+            "baseline_present": false,
+            "baseline_anchor_present": false,
+            "baseline_details_present": true,
+            "baseline_context_hits": [
+              "alive",
+              "demons",
+              "deputies",
+              "hobe",
+              "sound",
+              "woman"
+            ],
+            "baseline_context_required": 2,
+            "canonical_context_available": true,
+            "canonical_context_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
+            "novelty_anchor": "semantic_gate_novel_fact",
+            "novelty_present": true,
+            "novelty_token_hits": [
+              "kittens",
+              "underground"
+            ],
+            "semantic_novel_fact_hits": [
+              "heard",
+              "sheriff",
+              "underground"
+            ],
+            "semantic_novel_fact_token_count": 28,
+            "missing": [
+              "original_event_context_missing"
+            ],
+            "source_title": "Deputies hear cries underground, rescue 2 kittens buried alive in Hobe Sound - WPEC",
+            "headline": "Sheriff: Deputies Heard Kittens' Cries While Digging in Hobe Sound Backyard"
+          }
+        ],
+        "article_framing_rejection_count": 1,
+        "article_framing_rejections": [
+          {
+            "surface": "hero",
+            "required": true,
+            "passed": false,
+            "headline": "Sheriff: Deputies Heard Kittens' Cries While Digging in Hobe Sound Backyard",
+            "missing": [
+              "original_event_context_missing"
+            ],
+            "lead_independence": {
+              "required": true,
+              "passed": false,
+              "headline": "Sheriff: Deputies Heard Kittens' Cries While Digging in Hobe Sound Backyard",
+              "lead": "Martin County Sheriff John Budensiek on Friday revealed new details about the arrest of 36-year-old Alba Chavez, the Hobe Sound woman accused of burying kittens alive because she believed they had demons. Chavez faces four felony animal torture charges after deputies said they heard kittens crying from nearly 3 feet underground as they dug through a rain-soaked backyard at the Hobe Sound Mobile Home Park Thursday night, recovering two kittens alive and two dead.",
+              "lead_word_count": 77,
+              "headline_overlap_ratio": 0.7,
+              "new_context_token_count": 49,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "update",
+              "surname_first_reference": {
+                "required": false,
+                "passed": true,
+                "missing": [],
+                "candidates": []
+              },
+              "update_diagnostics": {
+                "required": true,
+                "passed": false,
+                "story_form": "update",
+                "lead_word_count": 77,
+                "baseline_anchor": "abuse_or_neglect",
+                "baseline_present": false,
+                "baseline_anchor_present": false,
+                "baseline_details_present": true,
+                "baseline_context_hits": [
+                  "alive",
+                  "demons",
+                  "deputies",
+                  "hobe",
+                  "sound",
+                  "woman"
+                ],
+                "baseline_context_required": 2,
+                "canonical_context_available": true,
+                "canonical_context_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
+                "novelty_anchor": "semantic_gate_novel_fact",
+                "novelty_present": true,
+                "novelty_token_hits": [
+                  "kittens",
+                  "underground"
+                ],
+                "semantic_novel_fact_hits": [
+                  "heard",
+                  "sheriff",
+                  "underground"
+                ],
+                "semantic_novel_fact_token_count": 28,
+                "missing": [
+                  "original_event_context_missing"
+                ],
+                "source_title": "Deputies hear cries underground, rescue 2 kittens buried alive in Hobe Sound - WPEC",
+                "headline": "Sheriff: Deputies Heard Kittens' Cries While Digging in Hobe Sound Backyard"
+              },
+              "missing": [
+                "original_event_context_missing"
+              ]
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": true,
+              "headline": "Sheriff: Deputies Heard Kittens' Cries While Digging in Hobe Sound Backyard",
+              "lead": "Martin County Sheriff John Budensiek on Friday revealed new details about the arrest of 36-year-old Alba Chavez, the Hobe Sound woman accused of burying kittens alive because she believed they had demons. Chavez faces four felony animal torture charges after deputies said they heard kittens crying from nearly 3 feet underground as they dug through a rain-soaked backyard at the Hobe Sound Mobile Home Park Thursday night, recovering two kittens alive and two dead.",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [
+                "hobe_sound"
+              ],
+              "lead_jurisdictions": [
+                "hobe_sound",
+                "martin_county"
+              ],
+              "missing_jurisdictions": [],
+              "headline_judge_claims": [],
+              "lead_judge_claims": [],
+              "missing_judge_claims": [],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": []
+            },
+            "source_focus": {
+              "required": true,
+              "passed": true,
+              "generated_headline": "Sheriff: Deputies Heard Kittens' Cries While Digging in Hobe Sound Backyard",
+              "generated_lead": "Martin County Sheriff John Budensiek on Friday revealed new details about the arrest of 36-year-old Alba Chavez, the Hobe Sound woman accused of burying kittens alive because she believed they had demons. Chavez faces four felony animal torture charges after deputies said they heard kittens crying from nearly 3 feet underground as they dug through a rain-soaked backyard at the Hobe Sound Mobile Home Park Thursday night, recovering two kittens alive and two dead.",
+              "source_title": "Deputies hear cries underground, rescue 2 kittens buried alive in Hobe Sound - WPEC",
+              "source_lead": "Deputies digging through a rain-soaked backyard in Martin County heard the cries of kittens buried up to 3 feet underground, leading to the rescue of two animals while two others were found dead, the sheriff revealed Friday. During a news conference, Martin County Sheriff John Budensiek provided new details about the arrest of 36-year-old Alba Chavez, who is accused of killing two kittens and burying two others alive at a mobile home park in Hobe Sound.",
+              "title_similarity": {
+                "score": 0.5029,
+                "overlap": 0.5,
+                "jaccard": 0.2941,
+                "sorted_sequence": 0.6531,
+                "ordered_sequence": 0.5714,
+                "shared_token_count": 5.0
+              },
+              "lead_token_overlap": 0.686,
+              "missing": []
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "official_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "temporal_integrity": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
+          }
+        ],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 3,
@@ -4488,46 +4903,23 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
-            "source_url": "https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
-            "basis": "same_event_and_persistent_story_skip",
+            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - cw34.com",
+            "source_url": "https://cw34.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive?teaserSource=trending",
+            "editorial_story_id": "story_007016",
+            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 3,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say - WPTV",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "publisher": "www.wptv.com",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
-            "canonical_headline": "Two Cats Rescued Alive, Two Found Dead in Hobe Sound Burial Case",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_018296",
-              "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_018296,source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
-            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
-            "canonical_headline": "Two Cats Rescued Alive, Two Found Dead in Hobe Sound Burial Case",
+            "canonical_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
             "basis": "exact_source_url",
             "identity_keys": [
               "incident:named-person-death:hobe-sound",
@@ -4546,13 +4938,92 @@
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
+          },
+          {
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
+            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
+            "canonical_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "incident:named-person-death:hobe-sound",
+              "story:story_018296",
+              "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "incident",
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=incident:named-person-death:hobe-sound,story:story_018296,source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          },
+          {
+            "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-10-09-port-st-lucie-approves-assisted-living-project-amid-contamination-concerns",
+            "canonical_headline": "Port St. Lucie Approves Assisted-Living Project Amid Contamination Concerns",
+            "basis": "event-identity-authority:exact_source_url",
+            "identity_keys": [
+              "story:custom:304b4221d99d6569f6410e3c0c7ad4c0",
+              "source:https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-"
+            ],
+            "match_confidence": 1.0,
+            "evidence_dimensions": [
+              "source_url"
+            ],
+            "decision_trace": [
+              "exact_source_url=True",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
-        "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_evaluation_count": 3,
+        "material_update_promotion_count": 1,
+        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+            "canonical_slug": "2026-09-29-residents-seek-halt-port-st-lucie-assisted-living-project-petroleum-cleanup-site",
+            "canonical_headline": "Residents seek halt to Port St. Lucie assisted living project near petroleum cleanup site",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:custom-project|westmoreland-alf|petroleum-remediation",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": true,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "update_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "update_existing_canonical",
+            "confidence": 0.82,
+            "shared_anchors": [
+              "PSL Westmoreland ALF / assisted-living project",
+              "Southeast Morningside Boulevard / Westmoreland Boulevard",
+              "neighboring petroleum-contaminated property",
+              "resident opposition and concerns about vapor remediation"
+            ],
+            "novel_facts": [
+              "City Council approved the project's major site plan on Sept.",
+              "BTEX Engineering letter about March 2026 meeting recommending remediation approach change due to surrounding properties including the ALF",
+              "residents have contacted EPA and Florida Department of Health",
+              "next steps include construction plan technical review and South Florida Water Management District review"
+            ],
+            "reason": "Same contested assisted-living development and contamination dispute as the candidate; incoming article adds material procedural updates (site plan approval, specific engineering letter details, agency involvement) that update the existing story rather than constituting a separate newsworthy event.",
+            "validation_errors": []
+          },
           {
             "category_key": "martin",
             "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
@@ -4602,26 +5073,39 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
-            "source_url": "https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - cw34.com",
+            "source_url": "https://cw34.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive?teaserSource=trending",
+            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
             "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.97,
+            "shared_anchors": [],
+            "novel_facts": [
+              "Alba Chavez accused of burying cats alive in Hobe Sound Mobile Home Park",
+              "Martin County Sheriff's Office animal cruelty investigation",
+              "Two cats saved, two found deceased"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "MARTY Bus Service Halted Countywide After Martin County Contract Dispute",
+        "live_hero_headline": "Sheriff: Deputies Heard Kittens' Cries While Digging in Hobe Sound Backyard",
         "generated_card_count": 1,
-        "elapsed_seconds": 41.411
+        "elapsed_seconds": 52.625
       },
       {
         "category_key": "st_lucie",
@@ -4629,8 +5113,8 @@
         "status": "generated_live",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 22,
-        "publishable_source_count": 7,
-        "selected_source_count": 6,
+        "publishable_source_count": 9,
+        "selected_source_count": 8,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4638,22 +5122,55 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 34.545,
+            "elapsed_seconds": 49.861,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 34.545,
+        "model_elapsed_seconds": 49.861,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 0,
-        "contextual_update_lead_rejections": [],
+        "contextual_update_lead_rejection_count": 1,
+        "contextual_update_lead_rejections": [
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "story_form": "update",
+            "lead_word_count": 108,
+            "baseline_anchor": "government_matter",
+            "baseline_present": true,
+            "baseline_anchor_present": true,
+            "baseline_details_present": true,
+            "baseline_context_hits": [
+              "assisted",
+              "contamination",
+              "living",
+              "lucie",
+              "port",
+              "project"
+            ],
+            "baseline_context_required": 2,
+            "canonical_context_available": true,
+            "canonical_context_headline": "Port St. Lucie Approves Assisted-Living Project Amid Contamination Concerns",
+            "novelty_anchor": "source_distinctive_detail",
+            "novelty_present": false,
+            "novelty_token_hits": [],
+            "semantic_novel_fact_hits": [],
+            "semantic_novel_fact_token_count": 0,
+            "missing": [
+              "new_development_missing"
+            ],
+            "source_title": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+            "headline": "Residents Press Port St. Lucie Over Contamination Near Approved ALF Project"
+          }
+        ],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 9,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 8,
@@ -4739,11 +5256,34 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
-        "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-10-09-port-st-lucie-approves-assisted-living-project-amid-contamination-concerns",
+            "canonical_headline": "Port St. Lucie Approves Assisted-Living Project Amid Contamination Concerns",
+            "basis": "event-identity-authority:exact_source_url",
+            "identity_keys": [
+              "story:custom:304b4221d99d6569f6410e3c0c7ad4c0",
+              "source:https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-"
+            ],
+            "match_confidence": 1.0,
+            "evidence_dimensions": [
+              "source_url"
+            ],
+            "decision_trace": [
+              "exact_source_url=True",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_count": 1,
+        "material_update_promotion_cache_hit_count": 4,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -4760,6 +5300,38 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+            "canonical_slug": "2026-09-29-residents-seek-halt-port-st-lucie-assisted-living-project-petroleum-cleanup-site",
+            "canonical_headline": "Residents seek halt to Port St. Lucie assisted living project near petroleum cleanup site",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:custom-project|westmoreland-alf|petroleum-remediation",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": true,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "update_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "update_existing_canonical",
+            "confidence": 0.82,
+            "shared_anchors": [
+              "PSL Westmoreland ALF / assisted-living project",
+              "Southeast Morningside Boulevard / Westmoreland Boulevard",
+              "neighboring petroleum-contaminated property",
+              "resident opposition and concerns about vapor remediation"
+            ],
+            "novel_facts": [
+              "City Council approved the project's major site plan on Sept.",
+              "BTEX Engineering letter about March 2026 meeting recommending remediation approach change due to surrounding properties including the ALF",
+              "residents have contacted EPA and Florida Department of Health",
+              "next steps include construction plan technical review and South Florida Water Management District review"
+            ],
+            "reason": "Same contested assisted-living development and contamination dispute as the candidate; incoming article adds material procedural updates (site plan approval, specific engineering letter details, agency involvement) that update the existing story rather than constituting a separate newsworthy event.",
+            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -4887,6 +5459,37 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Fort Pierce police arrest 2 people after woman attacked, shot at in Fort Pierce - cw34.com",
+            "source_url": "https://cw34.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news?teaserSource=trending",
+            "canonical_slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
+            "canonical_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Keibin Lopez-Godoy",
+              "Kailee Yurubi",
+              "South 6th Street",
+              "Fort Pierce Police",
+              "Oct. 3 arrest",
+              "same charges"
+            ],
+            "novel_facts": [
+              "Additional narrative detail about the attack and chase sequence, but no new arrests, charges, or outcomes"
+            ],
+            "reason": "Same two named suspects, same charges, same date and location already reported in the canonical article. The incoming piece adds narrative color about the attack sequence but no material new development.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "'Just insanity': Port St. Lucie residents reacting to heavy rain and flooding - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-rain-swales-storms-flooding/74069863",
             "canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
@@ -4904,25 +5507,25 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Port St. Lucie Approves Assisted-Living Project Amid Contamination Concerns",
-        "generated_card_count": 0,
-        "elapsed_seconds": 55.075
+        "live_hero_headline": "Port St. Lucie Police Seek Help Identifying Critically Injured Man Found on Roadway",
+        "generated_card_count": 1,
+        "elapsed_seconds": 68.541
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "cache_hit",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 7,
-        "selected_source_count": 1,
-        "cache_hit": true,
-        "archive_recovery_requested": false,
+        "status": "category_eligibility_archive_recovery",
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 5,
+        "selected_source_count": 0,
+        "cache_hit": false,
+        "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "",
-        "failure_summary": "",
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Indian River County category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4931,10 +5534,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -4964,26 +5567,6 @@
             "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
             "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
-            "editorial_story_id": "story_017375",
-            "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-            "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxNMkZwNkkwUzdZRXZCYjZ4b0JHWXMyMWpvbmtaZlFGbmJ5cHk0T1RtTkM4QlJfRDhwcll5eDlUT0Nfbk92aEQ5WUdNcV94NUZMa2RlT0tKNmIwVk9tWDllX2VLeXFLeWxoX1Z4SDlXMTFmeVl0WE96ci12WVdLRy1pRnRBdjVMTlZiZ3kxbjhDUmVJSTQyRThQbUxpbFpEblpHU2s2T3BaamZVWm1hZXo2Qm9qamVGekE1aVNmNWpUcFdYOVAzSEZZLWxmdkY5eER3d05EVFo0RDVhVm5PZkgtRFlmeWRiOVhzWXVUdUNfQm5FVHlnaWxRc1pZdzIzN0VV",
-            "editorial_story_id": "story_019822",
-            "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-            "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5030,11 +5613,11 @@
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "publisher": "www.wptv.com",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
-            "canonical_headline": "Two Cats Rescued Alive, Two Found Dead in Hobe Sound Burial Case",
+            "canonical_headline": "Hobe Sound Woman Charged After Deputies Say She Buried Cats Alive, Calling Them Demons",
             "basis": "exact_source_url",
             "identity_keys": [
               "incident:named-person-death:hobe-sound",
@@ -5099,36 +5682,6 @@
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
-            "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-            "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "UF study finds dengue-linked mosquito common in Indian River County yards - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxNMkZwNkkwUzdZRXZCYjZ4b0JHWXMyMWpvbmtaZlFGbmJ5cHk0T1RtTkM4QlJfRDhwcll5eDlUT0Nfbk92aEQ5WUdNcV94NUZMa2RlT0tKNmIwVk9tWDllX2VLeXFLeWxoX1Z4SDlXMTFmeVl0WE96ci12WVdLRy1pRnRBdjVMTlZiZ3kxbjhDUmVJSTQyRThQbUxpbFpEblpHU2s2T3BaamZVWm1hZXo2Qm9qamVGekE1aVNmNWpUcFdYOVAzSEZZLWxmdkY5eER3d05EVFo0RDVhVm5PZkgtRFlmeWRiOVhzWXVUdUNfQm5FVHlnaWxRc1pZdzIzN0VV",
-            "canonical_slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-            "canonical_headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -5209,8 +5762,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "live_hero_headline": "Man Arrested in Vero Beach Shooting Death of Former Girlfriend",
-        "elapsed_seconds": 21.54
+        "elapsed_seconds": 18.63
       }
     ]
   }
