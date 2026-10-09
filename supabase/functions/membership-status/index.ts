@@ -81,6 +81,9 @@ export default {
 
     const active = (subscriptions ?? []).find((row) => ACTIVE_STATUSES.has(String(row.status || '')))
     const entitled = isAdmin || Boolean(active)
+    // Return a non-sensitive status for the most recent subscription even when it
+    // is not entitled, so a declined renewal is not mistaken for sign-out.
+    const latestSubscriptionStatus = String(active?.status || subscriptions?.[0]?.status || )
 
     return Response.json({
       authenticated: true,
@@ -91,6 +94,7 @@ export default {
       entitled,
       entitlement_source: isAdmin ? 'admin' : active ? 'stripe_subscription' : 'none',
       subscription: active ?? null,
+      subscription_status: latestSubscriptionStatus || null,
     })
   }),
 }

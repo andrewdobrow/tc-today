@@ -179,7 +179,9 @@ async function membershipStatus(){
       document.body.classList.remove('tct-member-entitled')
       return { authenticated:false, entitled:false }
     }
-    const { data, error } = await supabase.functions.invoke('membership-status')
+    const { data, error } = await supabase.functions.invoke('membership-status', {
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    })
     if (error) {
       // A transport/backend failure is not an entitlement decision. Reveal the
       // normal paywall so its error state is visible, but keep the stored hint so
@@ -203,6 +205,44 @@ function statusWithArticleAuthority(status, articleResult){
   return status
 }
 
+function inactiveMembershipMessage(status){
+  if (!status?.authenticated || status.entitled || status.error) return ''
+  const subscriptionState = String(status.subscription_status || '').toLowerCase()
+  if (['past_due', 'unpaid', 'incomplete'].includes(subscriptionState)) {
+    return 'You are signed in, but your membership is inactive because a payment needs attention. Update your payment method in Manage billing to restore subscriber access.'
+  }
+  if (subscriptionState === 'incomplete_expired') {
+    return 'You are signed in, but your initial subscription payment was not completed. Visit your account to update billing and restore access.'
+  }
+  if (subscriptionState === 'canceled' || subscriptionState === 'paused') {
+    return 'You are signed in, but your subscription is no longer active. Visit your account to manage billing or renew.'
+  }
+  return 'You are signed in, but this account does not currently have an active membership. Visit your account to review billing or subscribe.'
+}
+
+function showInactiveMembershipNotice(status){
+  const notice = inactiveMembershipMessage(status)
+  qsa('[data-tct-paywall]').forEach(paywall => {
+    let element = qs('[data-inactive-membership-notice]', paywall)
+    if (!notice) { element?.remove(); return }
+    if (!element) {
+      element = document.createElement('p')
+      element.setAttribute('data-inactive-membership-notice', '')
+      element.setAttribute('role', 'status')
+      element.className = 'membership-inactive-notice'
+      paywall.insertAdjacentElement('afterbegin', element)
+    }
+    element.textContent = notice
+    if (!qs('[data-inactive-billing-link]', element)) {
+      const link = document.createElement('a')
+      link.href = '/subscribe.html'
+      link.textContent = 'Go to my account'
+      link.setAttribute('data-inactive-billing-link', '')
+      element.append(' ', link)
+    }
+  })
+}
+
 function applySubscriberChrome(status){
   const entitled = Boolean(status?.authenticated && status?.entitled)
   const firstName = String(status?.first_name || '').trim()
@@ -210,7 +250,12 @@ function applySubscriberChrome(status){
     el.textContent = entitled && firstName ? `Welcome, ${firstName}` : 'Welcome, subscriber'
   })
   document.body.classList.toggle('tct-member-entitled', entitled)
+  document.body.classList.toggle('tct-member-authenticated', Boolean(status?.authenticated))
   document.body.classList.toggle('mv-no-ads', entitled)
+  showInactiveMembershipNotice(status)
+  qsa('[data-membership-welcome]').forEach(el => {
+    if (!entitled) el.textContent = status?.authenticated ? 'My account' : 'Welcome, subscriber'
+  })
 }
 
 async function refreshSubscribeAccount(statusOverride=null){
@@ -237,7 +282,7 @@ async function refreshSubscribeAccount(statusOverride=null){
     if (statusEl) statusEl.textContent = status.is_admin ? 'Administrator access is active.' : 'Your Treasure Coast Today membership is active.'
   } else {
     plans?.classList.remove('hidden')
-    if (statusEl) statusEl.textContent = status.error ? `Membership check failed: ${status.error}` : 'No active membership is attached to this account.'
+    if (statusEl) statusEl.textContent = status.error ? `We could not verify your membership: ${status.error}` : inactiveMembershipMessage(status)
   }
 }
 
@@ -510,6 +555,7 @@ async function unlockArticle(statusPromise=null){
   if (session) setMessage(message, 'Unlocking article…')
   const { data, error } = await supabase.functions.invoke('protected-article', {
     body: { slug, meter_token: existingMeterToken },
+    ...(session?.access_token ? { headers: { Authorization: `Bearer ${session.access_token}` } } : {}),
   })
 
   // protected-article checks paid/admin entitlement before the monthly meter. A

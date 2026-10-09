@@ -7276,3 +7276,20 @@ html.tct-nextdoor-ios header.site-masthead {
     line-height: 1.72;
   }
 }
+
+/* A logged-in reader must not be prompted to sign in again, even if their paid entitlement is being checked. */
+body.tct-member-authenticated .membership-header-signin { display: none !important; }
+body.tct-member-authenticated .membership-header-welcome { display: inline-flex; }
+
+/* Explicitly distinguish an authenticated account with inactive billing. */
+.membership-inactive-notice {
+  padding: 14px 16px;
+  border: 1px solid #b7863d;
+  border-radius: 8px;
+  background: #fff8e9;
+  color: #453218;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.membership-inactive-notice a { color: inherit; text-decoration: underline; }

@@ -85,7 +85,7 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
     assert "membership-landing-value-grid" in page
     assert "membership-faq-grid" in page
     assert '/membership.css?v=1.13.9.36' in page
-    assert '/membership.js?v=1.13.9.38' in page
+    assert '/membership.js?v=1.13.9.109' in page
     assert "Create account" not in page
     assert 'type="password"' not in page
     assert "Limited time &middot; $1 first month" in page
