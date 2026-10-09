@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-09T00:08:03Z",
+  "generated_at": "2026-10-09T00:53:58Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -17,19 +17,22 @@
     "statuses": {
       "cache_hit": 1,
       "category_eligibility_archive_recovery": 4,
-      "generated_live": 4
+      "generation_failed_archive_recovery": 3,
+      "no_publishable_sources": 1
     },
     "failures": {
+      "article_framing_integrity": 2,
+      "copydesk_integrity": 1,
       "no_category_eligible_sources": 4
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 131.633,
-    "archive_recovery_requested_count": 4,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 137.505,
+    "archive_recovery_requested_count": 8,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 1,
-    "category_eligibility_rejection_count": 12,
-    "published_story_duplicate_suppression_count": 27,
+    "article_framing_rejection_count": 4,
+    "category_eligibility_rejection_count": 5,
+    "published_story_duplicate_suppression_count": 49,
     "story_aware_update_context_count": 4,
     "material_update_promotion_evaluation_count": 5,
     "material_update_promotion_count": 0,
@@ -42,8 +45,8 @@
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -60,39 +63,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 4,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrested"
-          ],
-          "local_nexus_signals": [],
-          "headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering"
-        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -120,30 +93,60 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/07/st-lucie-county-fire-board-continues-law-firm-search-effort-create-complaint-policy-amid-hazing-fallout/"
+          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPZ1FnU0FFaUVNNzhCODZUdlJFUUF0b1VqZEJsZVZOcUttYXRyQ3FtaGx0Vy1hSHo5QUFqTThBVzJHakpzUnQtR1FEMVU0WHctamhHc3lhRWhXc3BwR2ROandJR2Z0VTI4TVNNNHNESTJyOVR2cHZTSmcyREU2cU5NWGZoRkxjWkNUVy03bnA4NndKQmlRcFB5QjlhWXp1a25rcW1TcE5PbExnalZFakJsWlBFdDRFdVREZGfSAboBQVVfeXFMT2dRZ1NBRWlFTTc4Qjg2VHZSRVFBdG9VamRCbGVWTnFLbWF0ckNxbWhsdFctYUh6OUFBak04QVcyR2pKc1J0LUdRRDFVNFh3LWpoR3N5YUVoV3NwcEdkTmp3SUdmdFUyOE1TTTRzREkycjlUdnB2U0pnMkRFNnFOTVhmaEZMY1pDVFctN25wODZ3SkJpUXBQeUI5YVl6dWtua3FtU3BOT2xMZ2pWRWpCbFpQRXQ0RXVURGRn",
+          "editorial_story_id": "story_020113",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "editorial_story_id": "story_020113",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "editorial_story_id": "story_020116",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "editorial_story_id": "story_017375",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
           "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
           "editorial_story_id": "story_020070",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
-          "editorial_story_id": "story_020073",
-          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -184,7 +187,7 @@
           "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "exact_source_url",
           "identity_keys": [
             "incident:named-person-death:william-reaves",
@@ -212,10 +215,10 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
-          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPZ1FnU0FFaUVNNzhCODZUdlJFUUF0b1VqZEJsZVZOcUttYXRyQ3FtaGx0Vy1hSHo5QUFqTThBVzJHakpzUnQtR1FEMVU0WHctamhHc3lhRWhXc3BwR2ROandJR2Z0VTI4TVNNNHNESTJyOVR2cHZTSmcyREU2cU5NWGZoRkxjWkNUVy03bnA4NndKQmlRcFB5QjlhWXp1a25rcW1TcE5PbExnalZFakJsWlBFdDRFdVREZGfSAboBQVVfeXFMT2dRZ1NBRWlFTTc4Qjg2VHZSRVFBdG9VamRCbGVWTnFLbWF0ckNxbWhsdFctYUh6OUFBak04QVcyR2pKc1J0LUdRRDFVNFh3LWpoR3N5YUVoV3NwcEdkTmp3SUdmdFUyOE1TTTRzREkycjlUdnB2U0pnMkRFNnFOTVhmaEZMY1pDVFctN25wODZ3SkJpUXBQeUI5YVl6dWtua3FtU3BOT2xMZ2pWRWpCbFpQRXQ0RXVURGRn",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
@@ -227,13 +230,58 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
-          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -287,205 +335,110 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 34.348
+      "elapsed_seconds": 20.824
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 13,
-      "selected_source_count": 5,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 10,
+      "selected_source_count": 4,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 44.826,
-          "result": "success"
+          "elapsed_seconds": 33.103,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family Pleads With DeSantis for Clemency in Deputy Raczkowski's 1986 Murder"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 27.488,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Death Row Inmate Pleads With DeSantis for Clemency in Deputy's 1986 Murder"
         }
       ],
-      "model_elapsed_seconds": 44.826,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 60.591,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Death Row Inmate Pleads With DeSantis for Clemency in Deputy's 1986 Murder",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
-          "missing": [
-            "scheduled_execution_reported_as_completed"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
-            "lead": "William Reaves is scheduled to be executed Oct. 20 for the 1986 murder of Indian River County Sheriff's Deputy Richard Raczkowski, and for the first time his family is speaking publicly to ask Gov. Ron DeSantis to spare his life. Reaves, now 77, has spent nearly four decades on death row. His nephew, Meredith Farrington, is asking DeSantis to commute the death sentence to life in prison rather than seeking a pardon or release.",
-            "lead_word_count": 75,
-            "headline_overlap_ratio": 0.583,
-            "new_context_token_count": 40,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "update",
-            "surname_first_reference": {
-              "required": true,
-              "passed": true,
-              "missing": [],
-              "candidates": [
-                {
-                  "full": "William Reaves",
-                  "first": "William",
-                  "last": "Reaves"
-                }
-              ]
-            },
-            "update_diagnostics": {
-              "required": true,
-              "passed": true,
-              "story_form": "update",
-              "lead_word_count": 75,
-              "baseline_anchor": "fatality",
-              "baseline_present": true,
-              "baseline_anchor_present": true,
-              "baseline_details_present": true,
-              "baseline_context_hits": [
-                "20",
-                "death",
-                "deputy",
-                "family",
-                "reaves"
-              ],
-              "baseline_context_required": 2,
-              "canonical_context_available": true,
-              "canonical_context_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
-              "novelty_anchor": "source_distinctive_detail",
-              "novelty_present": true,
-              "novelty_token_hits": [
-                "william"
-              ],
-              "semantic_novel_fact_hits": [],
-              "semantic_novel_fact_token_count": 0,
-              "missing": [],
-              "source_title": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
-              "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
-            "lead": "William Reaves is scheduled to be executed Oct. 20 for the 1986 murder of Indian River County Sheriff's Deputy Richard Raczkowski, and for the first time his family is speaking publicly to ask Gov. Ron DeSantis to spare his life. Reaves, now 77, has spent nearly four decades on death row. His nephew, Meredith Farrington, is asking DeSantis to commute the death sentence to life in prison rather than seeking a pardon or release.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [
-              "indian_river_county"
-            ],
-            "missing_jurisdictions": [],
-            "headline_judge_claims": [],
-            "lead_judge_claims": [],
-            "missing_judge_claims": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
-            "generated_lead": "William Reaves is scheduled to be executed Oct. 20 for the 1986 murder of Indian River County Sheriff's Deputy Richard Raczkowski, and for the first time his family is speaking publicly to ask Gov.",
-            "source_title": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
-            "source_lead": "For the first time, the family of a man set to be executed for the 1986 murder of an Indian River County sheriff's deputy is speaking publicly about their effort to save his life.William Reaves has spent nearly four decades on death row for shooting and killing 29-year-old Deputy Richard Raczkowski. Reaves' execution is scheduled for Oct.",
-            "title_similarity": {
-              "score": 0.5092,
-              "overlap": 0.4545,
-              "jaccard": 0.25,
-              "sorted_sequence": 0.6289,
-              "ordered_sequence": 0.5786,
-              "shared_token_count": 5.0
-            },
-            "lead_token_overlap": 0.87,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          },
-          "official_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          },
-          "temporal_integrity": {
-            "required": true,
-            "passed": false,
-            "future_execution_evidence": true,
-            "source_confirms_completion": false,
-            "generated_claims_completion": true,
-            "headline": "Family of Indian River Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution",
-            "lead": "William Reaves is scheduled to be executed Oct. 20 for the 1986 murder of Indian River County Sheriff's Deputy Richard Raczkowski, and for the first time his family is speaking publicly to ask Gov. Ron DeSantis to spare his life. Reaves, now 77, has spent nearly four decades on death row. His nephew, Meredith Farrington, is asking DeSantis to commute the death sentence to life in prison rather than seeking a pardon or release.",
-            "missing": [
-              "scheduled_execution_reported_as_completed"
-            ]
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 7,
-      "category_eligibility_rejection_count": 2,
-      "category_eligibility_rejections": [
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppressions": [
         {
-          "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice"
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "editorial_story_id": "story_020113",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         },
         {
-          "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages"
-        }
-      ],
-      "published_story_duplicate_suppression_count": 3,
-      "published_story_duplicate_suppressions": [
+          "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-police-two-women-charged-after-neglected-dog-died-at-pine-creek-apartments-florida-news-local-news-fort-pierce-dog-dies-animal-cruelty",
+          "editorial_story_id": "story_020123",
+          "canonical_slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "canonical_headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "editorial_story_id": "story_020116",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "editorial_story_id": "story_017375",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
           "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
           "editorial_story_id": "story_020070",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -495,7 +448,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
           "editorial_story_id": "story_020073",
           "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -503,6 +456,16 @@
           "category_key": "crime",
           "source_headline": "Hundreds gather in Vero Beach to remember 17-year-old Sulliman Bah and call for justice - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-vero-beach-sulliman-bah-shooting/74071870",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "'Sully was a kind soul’: Loved ones remember teen killed at large party in Fellsmere - WPEC",
+          "source_url": "https://cbs12.com/news/local/sully-was-a-kind-soul-loved-ones-remember-teen-killed-in-at-large-party-in-fellsmere-garcia-boat-ramp-self-defense-meetup-oct-7-2026",
           "editorial_story_id": "story_019058",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
           "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
@@ -517,7 +480,7 @@
           "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "exact_source_url",
           "identity_keys": [
             "incident:named-person-death:william-reaves",
@@ -545,10 +508,85 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-police-two-women-charged-after-neglected-dog-died-at-pine-creek-apartments-florida-news-local-news-fort-pierce-dog-dies-animal-cruelty",
+          "canonical_slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "canonical_headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
           "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWU1IREp6cFZFekxjV3ZNV0hsZEdpc3lJVk5vbVd2X3haa3Zjck5hUnRyX0EzZ3FqT2c4aWtOdVJwVlBMRUlBd0UzMng1c3l2amxpRzhQanN1cnpYQXRuc0ZGSmJ5eXBPLUk3UmxNT0x3UHhmeTkzUm5Hek5sS2hycHR4aVQ3SkI1QWlQWFlFdWlFZXU4M1VLZ2dhYlBOMmVvNC1WcElrV2NNQ0w4a09RUnNkaHRVXzlQZGVZZF9vTVQwTHRTWEZBMW51d1BvWXZKNWfSAdIBQVVfeXFMT1lNSERKenBWRXpMY1d2TVdIbGRHaXN5SVZOb21Xdl94Wmt2Y3JOYVJ0cl9BM2dxak9nOGlrTnVScFZQTEVJQXdFMzJ4NXN5dmpsaUc4UGpzdXJ6WEF0bnNGRkpieXlwTy1JN1JsTU9Md1B4Znk5M1JuR3pObEtocnB0eGlUN0pCNUFpUFhZRXVpRWV1ODNVS2dnYWJQTjJlbzQtVnBJa1djTUNMOGtPUVJzZGh0VV85UGRlWWRfb01UMEx0U1hGQTFudXdQb1l2SjVn",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
@@ -563,7 +601,7 @@
           "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
           "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -582,6 +620,21 @@
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "'Sully was a kind soul’: Loved ones remember teen killed at large party in Fellsmere - WPEC",
+          "source_url": "https://cbs12.com/news/local/sully-was-a-kind-soul-loved-ones-remember-teen-killed-in-at-large-party-in-fellsmere-garcia-boat-ramp-self-defense-meetup-oct-7-2026",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -621,19 +674,17 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Ex-Fort Pierce City Manager Nick Mimms Convicted of Official Misconduct",
-      "generated_card_count": 2,
-      "elapsed_seconds": 71.836
+      "elapsed_seconds": 77.787
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 14,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 11,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -650,44 +701,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 5,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:vero beach"
-          ],
-          "headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "local_nexus_signals": [
-            "source_locality:st lucie county",
-            "source_locality:fort pierce"
-          ],
-          "headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering"
-        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -713,29 +729,6 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [
-            "commercial_real_estate:restaurant"
-          ],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:indian river county",
-            "source_locality:vero beach",
-            "source_locality:sebastian"
-          ],
-          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
           "reason": "missing_primary_business_development_focus",
           "positive_signals": [],
           "competing_signals": [],
@@ -748,15 +741,45 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "editorial_story_id": "story_020113",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "editorial_story_id": "story_020116",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "editorial_story_id": "story_017375",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
           "editorial_story_id": "story_020073",
           "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -772,21 +795,21 @@
         },
         {
           "category_key": "business",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
           "source_headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
           "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown",
           "editorial_story_id": "story_019959",
           "canonical_slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
           "canonical_headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "editorial_story_id": "story_019789",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -798,7 +821,7 @@
           "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "exact_source_url",
           "identity_keys": [
             "incident:named-person-death:william-reaves",
@@ -826,10 +849,55 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
           "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
           "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -856,6 +924,21 @@
         },
         {
           "category_key": "business",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
           "source_headline": "New ammunition primer facility brings jobs and economic growth to Indiantown",
           "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-ammunition-primer-facility-brings-jobs-and-economic-growth-to-indiantown",
           "canonical_slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
@@ -868,25 +951,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.298
+      "elapsed_seconds": 20.308
     },
     {
       "category_key": "sports",
@@ -894,7 +962,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
+      "publishable_source_count": 4,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -923,8 +991,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 10,
-      "elapsed_seconds": 15.534
+      "new_publication_stale_rejected_count": 7,
+      "elapsed_seconds": 11.963
     },
     {
       "category_key": "things_to_do",
@@ -932,7 +1000,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 8,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -979,18 +1047,18 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.122
+      "elapsed_seconds": 13.381
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "cache_hit",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 2,
-      "selected_source_count": 1,
-      "cache_hit": true,
-      "archive_recovery_requested": false,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
@@ -1004,64 +1072,28 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
-      "elapsed_seconds": 26.571
-    },
-    {
-      "category_key": "martin",
-      "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 5,
-      "selected_source_count": 3,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.444,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 16.444,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
-          "category_key": "martin",
-          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
-          "editorial_story_id": "story_020073",
-          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "category_key": "florida",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNZ0I4RmJaV3NSa0lKMFpwNGZWMkFhMDQxdEZMN0RKMWVTSVVIbEZObzdiMGJBaFl3VDBRdV8xTExoTE1DSEtTeVFFUWphc0ZqbXU0dzVLRHMzWndnZGpqREFYZjVJVzRxZ3gxUGN1dndHSXVEWDR3NzFoMXdoaGRJUVRkSTJWWGZDd2Ezc0NvU0hpWkUySFRER2pXaldWQWNKSHdHUERaU3hoRDlfQ1oxbXd6QURZYTBGNjVvaQ",
+          "editorial_story_id": "story_020113",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "florida",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "editorial_story_id": "story_020113",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1074,11 +1106,26 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
-          "category_key": "martin",
-          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
-          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "category_key": "florida",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNZ0I4RmJaV3NSa0lKMFpwNGZWMkFhMDQxdEZMN0RKMWVTSVVIbEZObzdiMGJBaFl3VDBRdV8xTExoTE1DSEtTeVFFUWphc0ZqbXU0dzVLRHMzWndnZGpqREFYZjVJVzRxZ3gxUGN1dndHSXVEWDR3NzFoMXdoaGRJUVRkSTJWWGZDd2Ezc0NvU0hpWkUySFRER2pXaldWQWNKSHdHUERaU3hoRDlfQ1oxbXd6QURZYTBGNjVvaQ",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "florida",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1090,32 +1137,21 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "MARTY Bus Service Halted Across Martin County, Leaving Riders Stranded",
-      "generated_card_count": 0,
-      "elapsed_seconds": 46.22
+      "elapsed_seconds": 10.185
     },
     {
-      "category_key": "st_lucie",
-      "category_label": "St. Lucie County",
-      "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 8,
-      "selected_source_count": 7,
-      "cache_hit": false,
+      "category_key": "martin",
+      "category_label": "Martin County",
+      "status": "cache_hit",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 4,
+      "selected_source_count": 2,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 34.662,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 34.662,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1126,11 +1162,124 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/08/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations?outputType=amp",
+          "editorial_story_id": "story_020073",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/08/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations?outputType=amp",
+          "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
+      "new_publication_stale_rejected_count": 0,
+      "live_hero_headline": "MARTY Bus Service Suspended Without Warning Across Martin County",
+      "elapsed_seconds": 15.794
+    },
+    {
+      "category_key": "st_lucie",
+      "category_label": "St. Lucie County",
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 7,
+      "selected_source_count": 6,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 24.435,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 29.016,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+        }
+      ],
+      "model_elapsed_seconds": 53.451,
+      "failure_code": "copydesk_integrity",
+      "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 7,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-police-two-women-charged-after-neglected-dog-died-at-pine-creek-apartments-florida-news-local-news-fort-pierce-dog-dies-animal-cruelty",
+          "editorial_story_id": "story_020123",
+          "canonical_slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "canonical_headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "editorial_story_id": "story_017375",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxPeXZpWHVvM2xPaHhMRE9ZQl9tWTZlRXVadHZTQUpHVEd0emsyMVB4dXZmb0dZSnJzR1lZZTlfc1NmNXBNTmdzelpBcFBuLUplaTFfWTNZY2lwS3IzeEdnaTBfUUUtTUFMZnB0Qk1IOUUzUnRfSnZVbmlIYzFEQUZIem9YV2hfdVQwOUFoV19UWllDZFc0TjJfUlBUWG1tbGJzWGxJZHJHVDdxMmJfQmtRV0JrVU5IUjlwRDg0Mkx1cjJiUkhjeEFCOUxIWTFPQlozajdFZHoxY1dJZEdJS1drU2xzR0FhQjdMS0ZYV0RxUmk5dw",
+          "editorial_story_id": "story_017375",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Crash blocks two left lanes on southbound I-95 in St. Lucie County - cw34.com",
@@ -1211,6 +1360,51 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
+          "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-police-two-women-charged-after-neglected-dog-died-at-pine-creek-apartments-florida-news-local-news-fort-pierce-dog-dies-animal-cruelty",
+          "canonical_slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "canonical_headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxPeXZpWHVvM2xPaHhMRE9ZQl9tWTZlRXVadHZTQUpHVEd0emsyMVB4dXZmb0dZSnJzR1lZZTlfc1NmNXBNTmdzelpBcFBuLUplaTFfWTNZY2lwS3IzeEdnaTBfUUUtTUFMZnB0Qk1IOUUzUnRfSnZVbmlIYzFEQUZIem9YV2hfdVQwOUFoV19UWllDZFc0TjJfUlBUWG1tbGJzWGxJZHJHVDdxMmJfQmtRV0JrVU5IUjlwRDg0Mkx1cjJiUkhjeEFCOUxIWTFPQlozajdFZHoxY1dJZEdJS1drU2xzR0FhQjdMS0ZYV0RxUmk5dw",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Crash blocks two left lanes on southbound I-95 in St. Lucie County - cw34.com",
           "source_url": "https://cw34.com/news/local/crash-blocks-two-left-lanes-on-southbound-i-95-three-vehicle-crash-overturned-vehicle-traffic-snarled-morning-commute-florida-news",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -1225,11 +1419,10 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.95,
+          "confidence": 0.9,
           "shared_anchors": [],
           "novel_facts": [
-            "A separate three-vehicle crash on southbound I-95 near Exit 138/Indrio Road in St. Lucie County",
-            "Crash reported Thursday morning, blocking two left lanes, involving an overturned vehicle"
+            "Three-vehicle crash with overturned vehicle on southbound I-95 near Exit 138/Indrio Road in St. Lucie County, Thursday morning"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1360,34 +1553,42 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Jury Convicts Former Fort Pierce City Manager Nick Mimms of Official Misconduct",
-      "generated_card_count": 1,
-      "elapsed_seconds": 60.08
+      "elapsed_seconds": 70.028
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 12,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 16,
+      "publishable_source_count": 9,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 35.701,
-          "result": "success"
+          "elapsed_seconds": 11.857,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of William Reaves Asks DeSantis for Clemency Before Oct. 20 Execution"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.606,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Reaves Family Asks DeSantis for Clemency Before Oct. 20 Execution"
         }
       ],
-      "model_elapsed_seconds": 35.701,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 23.463,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Reaves Family Asks DeSantis for Clemency Before Oct. 20 Execution",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1396,18 +1597,68 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 12,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 12,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "editorial_story_id": "story_020113",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "editorial_story_id": "story_020116",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages - WPTV",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "editorial_story_id": "story_020116",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "editorial_story_id": "story_017375",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WPTV",
           "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNLUVEX2JieWx4d0NwZUk4REk4NGpKdmE5M1JjZmhvMElzYzB1TDFRT1ZnLUw5U09PNE14ZzRRWHhhZEVGU1FiWGlyeUpHZnBhbDVUR0FmektPa2p2YXNHZ1J5YmlqZmVZbGE1NmJtQnZmWWp6OE1KYmVDNWsxUWpONExmaVN2cHdwSkxnNmQzbFBpYm92V1BsWHV2VVVJLWhDVlJ2SnJtTE9sV3RLZEwtYTgyTWV3SDdEVm5PVDlWU05ZS09McnpxQUFHS1U0MUZ2TDhz",
           "editorial_story_id": "story_020070",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1417,7 +1668,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
           "editorial_story_id": "story_020073",
           "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1479,7 +1730,7 @@
           "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
           "publisher": "www.wptv.com",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "exact_source_url",
           "identity_keys": [
             "incident:named-person-death:william-reaves",
@@ -1507,10 +1758,85 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
+          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
+          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
+          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
+          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages - WPTV",
+          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
+          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e",
+          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Diving Skills Into Magical Underwater Experiences",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WPTV",
           "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNLUVEX2JieWx4d0NwZUk4REk4NGpKdmE5M1JjZmhvMElzYzB1TDFRT1ZnLUw5U09PNE14ZzRRWHhhZEVGU1FiWGlyeUpHZnBhbDVUR0FmektPa2p2YXNHZ1J5YmlqZmVZbGE1NmJtQnZmWWp6OE1KYmVDNWsxUWpONExmaVN2cHdwSkxnNmQzbFBpYm92V1BsWHV2VVVJLWhDVlJ2SnJtTE9sV3RLZEwtYTgyTWV3SDdEVm5PVDlWU05ZS09McnpxQUFHS1U0MUZ2TDhz",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's Death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
@@ -1525,7 +1851,7 @@
           "source_headline": "Martin County Public Transit riders left without service after transit provider suspends operations",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
           "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "canonical_headline": "MARTY Transit Service Halted in Martin County After Provider Cancels Contract",
+          "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1624,11 +1950,9 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Vero Beach Mourns Teen Sulli Bah as Family Seeks Accountability in Shooting",
-      "generated_card_count": 2,
-      "elapsed_seconds": 58.689
+      "elapsed_seconds": 41.757
     }
   ]
 }
