@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-09T10:50:56Z",
+  "generated_at": "2026-10-09T15:02:42Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,23 +16,21 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 4,
-      "generated_live": 2,
-      "generation_failed_archive_recovery": 2,
+      "generated_live": 4,
       "no_publishable_sources": 1
     },
     "failures": {
-      "article_framing_integrity": 2,
       "no_category_eligible_sources": 4
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 123.522,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 84.52,
+    "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 4,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 44,
-    "story_aware_update_context_count": 3,
+    "contextual_update_lead_rejection_count": 2,
+    "article_framing_rejection_count": 0,
+    "category_eligibility_rejection_count": 7,
+    "published_story_duplicate_suppression_count": 41,
+    "story_aware_update_context_count": 8,
     "material_update_promotion_evaluation_count": 5,
     "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 4,
@@ -43,9 +41,9 @@
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 28,
+      "fetched_candidate_count": 27,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 6,
+      "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -72,15 +70,17 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:deputies say"
+          ],
           "local_nexus_signals": [],
-          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
+          "headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -124,16 +124,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
-          "editorial_story_id": "story_017375",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
           "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
           "editorial_story_id": "story_019058",
@@ -163,8 +153,50 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+          "basis": "event-identity-authority:participant_plus_precise_location",
+          "identity_keys": [
+            "story:story_018296",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['alba chavez']",
+            "shared_precise_locations=['southeast-federal-highway']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['alive', 'buri', 'cats']",
+            "shared_distinctive_token_count=41",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -232,21 +264,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
           "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice?outputType=amp",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -292,40 +309,30 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 25.341
+      "elapsed_seconds": 23.993
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 10,
-      "selected_source_count": 3,
+      "status": "generated_live",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 6,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 21.56,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Death Row Inmate William Reaves Pleads for Clemency Ahead of Oct. 20 Execution"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 27.764,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Death Row Inmate William Reaves Pleads With DeSantis for Clemency"
+          "elapsed_seconds": 15.253,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 49.324,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Death Row Inmate William Reaves Pleads With DeSantis for Clemency",
+      "model_elapsed_seconds": 15.253,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -334,7 +341,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -348,22 +355,12 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice/"
+          "headline": "Jury convicts former Fort Pierce city manager Nick Mimms of official misconduct - cw34.com",
+          "source_url": "https://cw34.com/news/local/jury-convicts-former-fort-pierce-city-manager-nick-mimms-of-official-misconduct-improperly-obstructed-delayed-prevented-information-felony-communicated-rfp-lincoln-park-lots-allegedly-steered-contracts"
         }
       ],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQNGRBWHlNSldiNnNNaThnWWpBbFE2ZTZ0T1IwekxqYU9VUGlHckJDZk5XR3ljdHJKd2l4VF9pMWxkVnVMZThvb0pqdDU0OWxWdGVucDgxNnNvTmpETWxnZUEzWENZcUpHZGRablk2MFNxdmx5S2t1dHJfUk94TkJ0R19fR2k1bkNuRkpENkRfck1kWTFQdDRncEhId1BUWUgyZ1VObTVSTGoyczRibEVwLUF4bnNBTVZ1a0t2TGNR0gHSAUFVX3lxTE9ZTUhESnpwVkV6TGNXdk1XSGxkR2lzeUlWTm9tV3ZfeFprdmNyTmFSdHJfQTNncWpPZzhpa051UnBWUExFSUF3RTMyeDVzeXZqbGlHOFBqc3VyelhBdG5zRkZKYnl5cE8tSTdSbE1PTHdQeGZ5OTNSbkd6TmxLaHJwdHhpVDdKQjVBaVBYWUV1aUVldTgzVUtnZ2FiUE4yZW80LVZwSWtXY01DTDhrT1FSc2RodFVfOVBkZVlkX29NVDBMdFNYRkExbnV3UG9Zdko1Zw",
-          "editorial_story_id": "story_020070",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "crime",
           "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
@@ -372,6 +369,16 @@
           "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
           "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQNGRBWHlNSldiNnNNaThnWWpBbFE2ZTZ0T1IwekxqYU9VUGlHckJDZk5XR3ljdHJKd2l4VF9pMWxkVnVMZThvb0pqdDU0OWxWdGVucDgxNnNvTmpETWxnZUEzWENZcUpHZGRablk2MFNxdmx5S2t1dHJfUk94TkJ0R19fR2k1bkNuRkpENkRfck1kWTFQdDRncEhId1BUWUgyZ1VObTVSTGoyczRibEVwLUF4bnNBTVZ1a0t2TGNR0gHSAUFVX3lxTE9ZTUhESnpwVkV6TGNXdk1XSGxkR2lzeUlWTm9tV3ZfeFprdmNyTmFSdHJfQTNncWpPZzhpa051UnBWUExFSUF3RTMyeDVzeXZqbGlHOFBqc3VyelhBdG5zRkZKYnl5cE8tSTdSbE1PTHdQeGZ5OTNSbkd6TmxLaHJwdHhpVDdKQjVBaVBYWUV1aUVldTgzVUtnZ2FiUE4yZW80LVZwSWtXY01DTDhrT1FSc2RodFVfOVBkZVlkX29NVDBMdFNYRkExbnV3UG9Zdko1Zw",
+          "editorial_story_id": "story_020070",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -396,32 +403,22 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "editorial_story_id": "story_019058",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
           "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
           "editorial_story_id": "story_020116",
           "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
           "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxPeXZpWHVvM2xPaHhMRE9ZQl9tWTZlRXVadHZTQUpHVEd0emsyMVB4dXZmb0dZSnJzR1lZZTlfc1NmNXBNTmdzelpBcFBuLUplaTFfWTNZY2lwS3IzeEdnaTBfUUUtTUFMZnB0Qk1IOUUzUnRfSnZVbmlIYzFEQUZIem9YV2hfdVQwOUFoV19UWllDZFc0TjJfUlBUWG1tbGJzWGxJZHJHVDdxMmJfQmtRV0JrVU5IUjlwRDg0Mkx1cjJiUkhjeEFCOUxIWTFPQlozajdFZHoxY1dJZEdJS1drU2xzR0FhQjdMS0ZYV0RxUmk5dw",
-          "editorial_story_id": "story_017375",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
-          "editorial_story_id": "story_017375",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -448,51 +445,52 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
-          "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+          "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
-          "basis": "exact_source_url",
+          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+          "basis": "event-identity-authority:participant_plus_precise_location",
           "identity_keys": [
-            "incident:named-person-death:william-reaves",
-            "story:story_020070",
-            "source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
+            "story:story_020183",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
           ],
-          "match_confidence": 0.99,
+          "match_confidence": 0.95,
           "evidence_dimensions": [
-            "incident",
-            "story",
-            "source"
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:william-reaves,story:story_020070,source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['alba chavez']",
+            "shared_precise_locations=['southeast-federal-highway']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['alive', 'buri', 'cats']",
+            "shared_distinctive_token_count=41",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "crime",
-          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQNGRBWHlNSldiNnNNaThnWWpBbFE2ZTZ0T1IwekxqYU9VUGlHckJDZk5XR3ljdHJKd2l4VF9pMWxkVnVMZThvb0pqdDU0OWxWdGVucDgxNnNvTmpETWxnZUEzWENZcUpHZGRablk2MFNxdmx5S2t1dHJfUk94TkJ0R19fR2k1bkNuRkpENkRfck1kWTFQdDRncEhId1BUWUgyZ1VObTVSTGoyczRibEVwLUF4bnNBTVZ1a0t2TGNR0gHSAUFVX3lxTE9ZTUhESnpwVkV6TGNXdk1XSGxkR2lzeUlWTm9tV3ZfeFprdmNyTmFSdHJfQTNncWpPZzhpa051UnBWUExFSUF3RTMyeDVzeXZqbGlHOFBqc3VyelhBdG5zRkZKYnl5cE8tSTdSbE1PTHdQeGZ5OTNSbkd6TmxLaHJwdHhpVDdKQjVBaVBYWUV1aUVldTgzVUtnZ2FiUE4yZW80LVZwSWtXY01DTDhrT1FSc2RodFVfOVBkZVlkX29NVDBMdFNYRkExbnV3UG9Zdko1Zw",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "crime",
           "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
@@ -504,8 +502,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -524,6 +522,21 @@
           ],
           "reason": "Same incident, same suspect, same agency, same source article. Additional details (rescue outcome, charge count, cats found inside) are incremental facts that update the existing canonical rather than constituting a new, independently newsworthy event.",
           "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQNGRBWHlNSldiNnNNaThnWWpBbFE2ZTZ0T1IwekxqYU9VUGlHckJDZk5XR3ljdHJKd2l4VF9pMWxkVnVMZThvb0pqdDU0OWxWdGVucDgxNnNvTmpETWxnZUEzWENZcUpHZGRablk2MFNxdmx5S2t1dHJfUk94TkJ0R19fR2k1bkNuRkpENkRfck1kWTFQdDRncEhId1BUWUgyZ1VObTVSTGoyczRibEVwLUF4bnNBTVZ1a0t2TGNR0gHSAUFVX3lxTE9ZTUhESnpwVkV6TGNXdk1XSGxkR2lzeUlWTm9tV3ZfeFprdmNyTmFSdHJfQTNncWpPZzhpa051UnBWUExFSUF3RTMyeDVzeXZqbGlHOFBqc3VyelhBdG5zRkZKYnl5cE8tSTdSbE1PTHdQeGZ5OTNSbkd6TmxLaHJwdHhpVDdKQjVBaVBYWUV1aUVldTgzVUtnZ2FiUE4yZW80LVZwSWtXY01DTDhrT1FSc2RodFVfOVBkZVlkX29NVDBMdFNYRkExbnV3UG9Zdko1Zw",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "crime",
@@ -557,6 +570,21 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
+          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
           "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
           "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
@@ -564,36 +592,6 @@
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxPeXZpWHVvM2xPaHhMRE9ZQl9tWTZlRXVadHZTQUpHVEd0emsyMVB4dXZmb0dZSnJzR1lZZTlfc1NmNXBNTmdzelpBcFBuLUplaTFfWTNZY2lwS3IzeEdnaTBfUUUtTUFMZnB0Qk1IOUUzUnRfSnZVbmlIYzFEQUZIem9YV2hfdVQwOUFoV19UWllDZFc0TjJfUlBUWG1tbGJzWGxJZHJHVDdxMmJfQmtRV0JrVU5IUjlwRDg0Mkx1cjJiUkhjeEFCOUxIWTFPQlozajdFZHoxY1dJZEdJS1drU2xzR0FhQjdMS0ZYV0RxUmk5dw",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -629,43 +627,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fort Pierce police arrest 2 people after woman attacked, shot at in Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/local/2-people-arrested-after-woman-attacked-shot-at-near-south-6th-street-fort-pierce-police-department-florida-news",
-          "canonical_slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
-          "canonical_headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Keibin Lopez-Godoy",
-            "Kailee Yurubi",
-            "South 6th Street",
-            "Fort Pierce Police",
-            "Oct. 3 arrest",
-            "attempted first-degree homicide and accessory after the fact charges"
-          ],
-          "novel_facts": [
-            "Additional narrative detail about the victim going to speak with boyfriend and being attacked before fleeing"
-          ],
-          "reason": "Same arrests, same suspects, same charges, same date and location already covered in the canonical article; incoming only adds narrative detail without new accountability development.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 72.227
+      "live_hero_headline": "Vero Beach Man Arrested on Murder Charge in Ex-Girlfriend's Shooting Death",
+      "generated_card_count": 1,
+      "elapsed_seconds": 43.466
     },
     {
       "category_key": "business",
@@ -690,9 +659,28 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "animal_welfare:animal cruelty"
+          ],
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:hobe sound"
+          ],
+          "headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -803,8 +791,49 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+          "basis": "event-identity-authority:participant_plus_precise_location",
+          "identity_keys": [
+            "story:story_020183",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['alba chavez']",
+            "shared_precise_locations=['southeast-federal-highway']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['alive', 'buri', 'cats']",
+            "shared_distinctive_token_count=41",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
         {
           "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
           "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
@@ -943,7 +972,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.895
+      "elapsed_seconds": 21.092
     },
     {
       "category_key": "sports",
@@ -951,7 +980,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 4,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -980,8 +1009,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 6,
-      "elapsed_seconds": 19.239
+      "new_publication_stale_rejected_count": 12,
+      "elapsed_seconds": 13.896
     },
     {
       "category_key": "things_to_do",
@@ -1006,9 +1035,25 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "local_attendable_activity_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-attendable-activity-focus",
+          "category_key": "things_to_do",
+          "mode": "enforce",
+          "policy": "local_attendable_activity_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_attendable_activity_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "treasure_coast_locality"
+          ],
+          "headline": "Treasure Coast families invited to watch and try dog sports at kennel club's Pirate Cluster",
+          "source_url": "https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster"
+        },
         {
           "contract_version": "1.0-local-attendable-activity-focus",
           "category_key": "things_to_do",
@@ -1036,14 +1081,14 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.425
+      "elapsed_seconds": 16.806
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1064,53 +1109,26 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
-          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
-          "editorial_story_id": "story_020113",
-          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
-          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Hurricane deductibles now in effect across Florida as Isaias nears Panhandle",
-          "source_url": "https://www.wptv.com/money/real-estate-news/hurricane-deductibles-now-in-effect-across-florida-as-isaias-nears-panhandle",
-          "canonical_slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
-          "canonical_headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 24.031
+      "elapsed_seconds": 26.965
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 5,
-      "selected_source_count": 3,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1118,17 +1136,56 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.308,
+          "elapsed_seconds": 22.447,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 17.308,
+      "model_elapsed_seconds": 22.447,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 54,
+          "baseline_anchor": "criminal_case",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "alive",
+            "cats",
+            "demons",
+            "hobe",
+            "sound",
+            "were",
+            "woman"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "because",
+            "believed",
+            "buried",
+            "deputies"
+          ],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "original_event_context_missing"
+          ],
+          "source_title": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "headline": "Deputies Still Searching Hobe Sound Property After Cats Buried Alive"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
@@ -1136,7 +1193,7 @@
       "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -1145,6 +1202,16 @@
           "editorial_story_id": "story_020183",
           "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
           "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Jensen Beach man riding motorcycle dies in crash with van in Loxahatchee Groves - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-jensen-beach-man-riding-motorcycle-dies-in-crash-with-van-in-loxahatchee-groves/74086148",
+          "editorial_story_id": "story_020230",
+          "canonical_slug": "2026-10-09-jensen-beach-man-killed-in-loxahatchee-groves-motorcycle-crash",
+          "canonical_headline": "Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1159,8 +1226,91 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+          "basis": "event-identity-authority:participant_plus_precise_location",
+          "identity_keys": [
+            "story:story_020183",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['alba chavez']",
+            "shared_precise_locations=['southeast-federal-highway']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['alive', 'buri', 'cats']",
+            "shared_distinctive_token_count=43",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+          "basis": "event-identity-authority:participant_plus_precise_location",
+          "identity_keys": [
+            "story:story_020183",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['alba chavez']",
+            "shared_precise_locations=['southeast-federal-highway']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['alive', 'buri', 'cats']",
+            "shared_distinctive_token_count=41",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
@@ -1200,6 +1350,21 @@
         },
         {
           "category_key": "martin",
+          "source_headline": "Jensen Beach man riding motorcycle dies in crash with van in Loxahatchee Groves - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-jensen-beach-man-riding-motorcycle-dies-in-crash-with-van-in-loxahatchee-groves/74086148",
+          "canonical_slug": "2026-10-09-jensen-beach-man-killed-in-loxahatchee-groves-motorcycle-crash",
+          "canonical_headline": "Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
           "source_url": "https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
           "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
@@ -1217,9 +1382,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "MARTY Bus Service Suspended in Martin County, Riders Left Without Rides",
-      "generated_card_count": 1,
-      "elapsed_seconds": 33.814
+      "live_hero_headline": "MARTY Bus Service Halts Without Warning Across Martin County",
+      "generated_card_count": 0,
+      "elapsed_seconds": 42.603
     },
     {
       "category_key": "st_lucie",
@@ -1236,17 +1401,53 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 34.111,
+          "elapsed_seconds": 38.789,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 34.111,
+      "model_elapsed_seconds": 38.789,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 78,
+          "baseline_anchor": "infrastructure_issue",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "approved",
+            "assisted",
+            "contamination",
+            "living",
+            "lucie",
+            "near",
+            "port",
+            "residents",
+            "site"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Port St. Lucie Residents Question Contamination Near Approved Assisted-Living Site",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+          "headline": "PSL Westmoreland Residents Push for Answers on Nearby Petroleum Contamination"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
@@ -1256,6 +1457,16 @@
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former Fort Pierce city manager convicted of official misconduct, not guilty of bid tampering - WPBF",
+          "source_url": "https://www.wpbf.com/article/former-fort-pierce-city-manager-bid-tampering-trial/74079917",
+          "editorial_story_id": "story_017375",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
@@ -1315,25 +1526,71 @@
           "canonical_headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "editorial_story_id": "story_019789",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-10-09-port-st-lucie-residents-question-contamination-near-approved-assisted-living-sit",
+          "canonical_headline": "Port St. Lucie Residents Question Contamination Near Approved Assisted-Living Site",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_020235",
+            "source:https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_020235,source:https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former Fort Pierce city manager convicted of official misconduct, not guilty of bid tampering - WPBF",
+          "source_url": "https://www.wpbf.com/article/former-fort-pierce-city-manager-bid-tampering-trial/74079917",
+          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Nicholas Mimms",
+            "Fort Pierce city manager",
+            "bid tampering acquittal",
+            "official misconduct conviction",
+            "St. Lucie County Courthouse",
+            "Lincoln Park properties",
+            "niece Caleta Scott/Lincoln Park Young Professionals"
+          ],
+          "novel_facts": [
+            "Sentencing scheduled for December 11"
+          ],
+          "reason": "Both articles report the identical verdict (not guilty of bid tampering, guilty of official misconduct) for Nicholas Mimms in the same St. Lucie County trial. The existing canonical already reflects the conviction. The only new detail is a sentencing date, which is a minor scheduling update, not a material new fact like an actual sentence outcome.",
+          "validation_errors": []
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Fort Pierce police: Two women charged after neglected dog died at Pine Creek Apartments - WPEC",
@@ -1440,62 +1697,37 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Treasure Coast HS student critically injured after being struck by SUV on way to school in Port St. Lucie - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/student-hit-by-vehicle-in-st-lucie-county-school-district-confirms",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Treasure Coast High Student Critical After SUV Hits Him on Way to School in PSL",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Former Fort Pierce City Manager Convicted of Official Misconduct",
-      "generated_card_count": 1,
-      "elapsed_seconds": 59.218
+      "live_hero_headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
+      "generated_card_count": 0,
+      "elapsed_seconds": 70.051
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 9,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 8,
       "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.212,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Family of Deputy's Killer Asks DeSantis for Clemency Before Oct. 20 Execution"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.566,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's 1986 Murder"
+          "elapsed_seconds": 8.031,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 22.779,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: scheduled_execution_reported_as_completed — Reaves Family Pleads for Clemency Before Oct. 20 Execution in Deputy's 1986 Murder",
+      "model_elapsed_seconds": 8.031,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1504,10 +1736,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1546,16 +1778,6 @@
           "editorial_story_id": "story_017375",
           "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
           "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNLUVEX2JieWx4d0NwZUk4REk4NGpKdmE5M1JjZmhvMElzYzB1TDFRT1ZnLUw5U09PNE14ZzRRWHhhZEVGU1FiWGlyeUpHZnBhbDVUR0FmektPa2p2YXNHZ1J5YmlqZmVZbGE1NmJtQnZmWWp6OE1KYmVDNWsxUWpONExmaVN2cHdwSkxnNmQzbFBpYm92V1BsWHV2VVVJLWhDVlJ2SnJtTE9sV3RLZEwtYTgyTWV3SDdEVm5PVDlWU05ZS09McnpxQUFHS1U0MUZ2TDhz",
-          "editorial_story_id": "story_020070",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1613,25 +1835,41 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution",
-          "source_url": "https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+          "source_headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
           "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
-          "basis": "exact_source_url",
+          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+          "basis": "event-identity-authority:participant_plus_precise_location",
           "identity_keys": [
-            "incident:named-person-death:william-reaves",
-            "story:story_020070",
-            "source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution"
+            "story:story_020183",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
           ],
-          "match_confidence": 0.99,
+          "match_confidence": 0.95,
           "evidence_dimensions": [
-            "incident",
-            "story",
-            "source"
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:william-reaves,story:story_020070,source:https://www.wptv.com/wptv-investigates/i-love-him-family-of-death-row-inmate-william-reaves-pleads-for-clemency-ahead-of-oct-20-execution",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['alba chavez']",
+            "shared_precise_locations=['southeast-federal-highway']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['alive', 'buri', 'cats']",
+            "shared_distinctive_token_count=41",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1697,21 +1935,6 @@
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "'I love him': Family of death row inmate William Reaves pleads for clemency ahead of Oct. 20 execution - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNLUVEX2JieWx4d0NwZUk4REk4NGpKdmE5M1JjZmhvMElzYzB1TDFRT1ZnLUw5U09PNE14ZzRRWHhhZEVGU1FiWGlyeUpHZnBhbDVUR0FmektPa2p2YXNHZ1J5YmlqZmVZbGE1NmJtQnZmWWp6OE1KYmVDNWsxUWpONExmaVN2cHdwSkxnNmQzbFBpYm92V1BsWHV2VVVJLWhDVlJ2SnJtTE9sV3RLZEwtYTgyTWV3SDdEVm5PVDlWU05ZS09McnpxQUFHS1U0MUZ2TDhz",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "Family of Death Row Inmate Pleads for Clemency in Deputy's 1986 Murder",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1807,9 +2030,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 46.121
+      "live_hero_headline": "Man Arrested in Vero Beach Shooting Death of Former Girlfriend",
+      "generated_card_count": 0,
+      "elapsed_seconds": 33.529
     }
   ]
 }

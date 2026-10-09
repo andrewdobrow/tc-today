@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-09T10:50:56Z",
+  "generated_at": "2026-10-09T15:02:42Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -11,7 +11,7 @@
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
     "assessed_count": 31,
-    "rejected_count": 5,
+    "rejected_count": 7,
     "enforced_categories": [
       "business",
       "crime",
@@ -44,12 +44,14 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:deputies say"
+          ],
           "local_nexus_signals": [],
-          "headline": "St. Lucie County Fire Board continues law firm search in effort to create complaint policy amid hazing fallout - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-board-continues-law-firm-search-in-effort-to-create-complaint-policy-amid-hazing-fallout"
+          "headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
         }
       ]
     },
@@ -58,7 +60,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 1,
       "rejections": [
         {
@@ -72,8 +74,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/08/vero-beach-remembers-17-year-old-sulli-bah-family-seeks-justice/"
+          "headline": "Jury convicts former Fort Pierce city manager Nick Mimms of official misconduct - cw34.com",
+          "source_url": "https://cw34.com/news/local/jury-convicts-former-fort-pierce-city-manager-nick-mimms-of-official-misconduct-improperly-obstructed-delayed-prevented-information-felony-communicated-rfp-lincoln-park-lots-allegedly-steered-contracts"
         }
       ]
     },
@@ -82,9 +84,28 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 2,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "animal_welfare:animal cruelty"
+          ],
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:hobe sound"
+          ],
+          "headline": "Hobe Sound woman buried cats alive because she believed they were demons, deputies say",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -137,9 +158,25 @@
       "category_label": "Things To Do",
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
-      "assessed_count": 1,
-      "rejected_count": 1,
+      "assessed_count": 2,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-local-attendable-activity-focus",
+          "category_key": "things_to_do",
+          "mode": "enforce",
+          "policy": "local_attendable_activity_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_attendable_activity_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "treasure_coast_locality"
+          ],
+          "headline": "Treasure Coast families invited to watch and try dog sports at kennel club's Pirate Cluster",
+          "source_url": "https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster"
+        },
         {
           "contract_version": "1.0-local-attendable-activity-focus",
           "category_key": "things_to_do",
@@ -190,7 +227,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 9,
+      "assessed_count": 8,
       "rejected_count": 0,
       "rejections": []
     }
