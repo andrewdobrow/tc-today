@@ -22598,12 +22598,6 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     if missing_match:
         return True, missing_key
 
-    extended_match, extended_key = _durable_custom_extended_subject_identity_match(
-        candidate, authority
-    )
-    if extended_match:
-        return True, extended_key
-
     left = (
         precomputed.get("candidate_sports_award")
         if "candidate_sports_award" in precomputed
@@ -22621,6 +22615,13 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
         if left["team"] != right["team"] or left["award"] != right["award"]:
             return False, ""
     else:
+        # Recurring awards are resolved by their edition-specific identity above.
+        # Only unrelated subject families may use the extended custom-scoop fallback.
+        extended_match, extended_key = _durable_custom_extended_subject_identity_match(
+            candidate, authority
+        )
+        if extended_match:
+            return True, extended_key
         near_term_match, near_term_key = _durable_custom_near_term_subject_identity_match(
             candidate, authority
         )
