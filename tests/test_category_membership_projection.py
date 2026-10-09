@@ -23,7 +23,12 @@ def _load_generate_module():
         anthropic.Anthropic = _Anthropic
         sys.modules["anthropic"] = anthropic
     os.environ.setdefault("ANTHROPIC_API_KEY", "offline-test-key")
-    return importlib.import_module("scripts.generate")
+    path = Path("scripts/generate.py")
+    spec = importlib.util.spec_from_file_location("scripts.generate_category_membership_projection", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
 
 
 def _p1_entry():
@@ -71,10 +76,15 @@ def test_homepage_permalink_dedupe_unions_category_memberships():
     assert report["removed_count"] == 1
 
 
-def test_frontend_filters_use_multi_category_memberships():
+def test_frontend_preserves_membership_metadata_but_filters_with_section_owned_decks():
     root = Path(__file__).resolve().parents[1]
     generate_source = (root / "scripts" / "generate.py").read_text(encoding="utf-8")
     main_js = (root / "main.js").read_text(encoding="utf-8")
+    # Multi-category metadata remains available for identity/projection, but the
+    # interactive section view must not rebuild Martin/Business/etc. from those
+    # tags. Each section has its own dedicated server-rendered deck.
     assert 'data-cats="{data_cats}"' in generate_source
-    assert "card.dataset.cats || card.dataset.cat" in main_js
-    assert "memberships.includes(cat)" in main_js
+    assert 'data-section-owner="{_section_key}"' in generate_source
+    assert 'const sectionOwner = card.dataset.sectionOwner || "";' in main_js
+    assert 'show = sectionOwner === cat;' in main_js
+    assert "memberships.includes(cat)" not in main_js

@@ -9481,7 +9481,7 @@ Return ONLY valid JSON:
                 }.get(category_key, [])
                 try:
                     _arch = load_archive(OUTPUT_DIR / "archive.json")
-                    _arch.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
+                    _arch.sort(key=_section_publication_sort_key, reverse=True)
                     from datetime import timezone as _tzf
                     _nowf = datetime.now(_tzf.utc)
                     for e in _arch:
@@ -9494,9 +9494,11 @@ Return ONLY valid JSON:
                         else:
                             if e.get("category_key") != category_key:
                                 continue
-                        _d = e.get("lastmod") or e.get("date","")
+                        _d = _section_publication_value(e)
                         try:
-                            _dt = datetime.strptime(_d[:10], "%Y-%m-%d").replace(tzinfo=_tzf.utc)
+                            _dt = _section_publication_datetime(e)
+                            if _dt is None:
+                                raise ValueError("missing publication date")
                             # Topic categories may reach a little further back (7 days)
                             # than counties (4) — a recent crime or business story is
                             # still worth showing rather than an empty section.
@@ -9512,8 +9514,8 @@ Return ONLY valid JSON:
                             "summary": e.get("teaser",""),
                             "body": e.get("teaser",""),
                             "image_url": e.get("image_url",""),
-                            "published": e.get("lastmod") or e.get("date",""),
-                            "published_raw": e.get("lastmod") or e.get("date",""),
+                            "published": _section_publication_value(e),
+                            "published_raw": _section_publication_value(e),
                             "source_quality": "full",
                             "feed_url": e.get("feed_url", ""),
                             "enriched": True,
@@ -15416,6 +15418,31 @@ def _latest_news_publication_datetime(entry):
     return _slug_date(entry.get("slug"))
 
 
+def _section_publication_datetime(entry):
+    """Return immutable publication chronology for county/category surfaces.
+
+    County/category pages are chronological publication streams, not update feeds.
+    A routine rewrite, archive reconciliation, or even an in-place material update
+    must not make a month-old permalink leapfrog articles published more recently.
+    Top Stories has its own update-aware freshness ranking; section surfaces do not.
+    """
+    return _latest_news_publication_datetime(entry)
+
+
+def _section_publication_sort_key(entry):
+    dt = _section_publication_datetime(entry)
+    if dt is None:
+        return float("-inf")
+    return dt.timestamp()
+
+
+def _section_publication_value(entry):
+    """Return the best raw publication value for section cards and age checks."""
+    if not isinstance(entry, dict):
+        return ""
+    return str(entry.get("first_published") or entry.get("date") or "").strip()
+
+
 def _latest_news_entry_eligible(entry):
     """Return whether an archived publication may appear in Latest News.
 
@@ -16192,14 +16219,16 @@ def render_index(all_categories, top_cat):
         _current_hls.add(cat["hero"].get("headline", "").strip().lower())
 
     _bf_archive = load_archive(OUTPUT_DIR / "archive.json")
-    _bf_archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+    _bf_archive.sort(key=_section_publication_sort_key, reverse=True)
     for e in _bf_archive:
         hl = (e.get("headline", "") or "").strip()
         if not hl or hl.lower() in _current_hls:
             continue
-        date_str = e.get("lastmod") or e.get("date", "")
+        date_str = _section_publication_value(e)
         try:
-            edt = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=_tzbf.utc)
+            edt = _section_publication_datetime(e)
+            if edt is None:
+                raise ValueError("missing publication date")
             if (_now_bf - edt).days > 3:
                 continue  # Older than 3 days — leave for the Older section
         except Exception:
@@ -16214,8 +16243,8 @@ def render_index(all_categories, top_cat):
             "category_keys": _item_category_memberships(e, e.get("category_key", "")),
             "county_keys": list(e.get("county_keys") or []),
             "image_url":  e.get("image_url", ""),
-            "published":  e.get("lastmod") or e.get("date", ""),
-            "published_raw": e.get("lastmod") or e.get("date", ""),
+            "published":  _section_publication_value(e),
+            "published_raw": _section_publication_value(e),
             "enriched":   True,
             "urgency_score": 4,  # Backfill ranks below fresh cards
             "link":       f"{SITE_URL}/articles/{e['slug']}.html",
@@ -16474,6 +16503,13 @@ def render_index(all_categories, top_cat):
     def card_display_date(card):
         return _homepage_card_display_date(card, archive_for_links)
 
+    def card_section_timestamp(card):
+        matched = _homepage_card_archive_entry(card, archive_for_links)
+        dt = _section_publication_datetime(matched or card)
+        if dt is None:
+            return 0
+        return int(dt.timestamp())
+
     # Canonical category-hero identities are rendered as Top-News-only cards when
     # selected for the all-news deck.  This prevents a selected Martin/Crime/etc.
     # hero from appearing a second time beneath itself when the reader switches to
@@ -16539,7 +16575,7 @@ def render_index(all_categories, top_cat):
         _urgency_text = f"{cl} {card.get('headline','')}".strip().lower()
         urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if card.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
         cards_html += f"""
-      <a href="{permalink}" class="grid-card fade-in" data-cat="{_render_data_cat}" data-cats="{data_cats}"{topnews_attr}>
+      <a href="{permalink}" class="grid-card fade-in" data-cat="{_render_data_cat}" data-cats="{data_cats}" data-section-ts="{card_section_timestamp(card)}"{topnews_attr}>
         <div class="grid-card-image-wrap">
           <img class="grid-card-image" src="{img_url}" alt="" loading="lazy">
         </div>
@@ -16551,6 +16587,106 @@ def render_index(all_categories, top_cat):
       </a>"""
         rendered_card_count += 1
 
+    # Section views use their own server-built card decks. Do not reconstruct a
+    # county/category by filtering the global Top Stories deck: global permalink
+    # dedupe can retain one cross-category placement and discard another, while
+    # multi-category membership can leak an old topic card into a county view.
+    # Render a dedicated, hidden placement set for every section instead.
+    _section_rendered_headlines = set()
+    for _section in all_categories:
+        _section_key = str(_section.get("category_key") or "").strip()
+        if not _section_key:
+            continue
+        _section_label = str(
+            _section.get("category_label")
+            or CATEGORIES.get(_section_key, {}).get("label")
+            or ""
+        ).strip()
+        _section_hero = _section.get("hero") if isinstance(_section.get("hero"), dict) else {}
+        _section_seen_permalinks = set()
+        _section_hero_permalink = _raw_surface_permalink(_section_hero, allow_fallback=False)
+        _section_hero_key = _homepage_permalink_key(_section_hero_permalink)
+        if _section_hero_key:
+            _section_seen_permalinks.add(_section_hero_key)
+
+        _section_cards = [
+            card for card in list(_section.get("cards") or [])
+            if isinstance(card, dict) and card.get("headline")
+        ]
+        _section_cards.sort(
+            key=lambda card: (
+                card_section_timestamp(card),
+                str(card.get("headline") or "").lower(),
+            ),
+            reverse=True,
+        )
+
+        for card in _section_cards:
+            permalink = card_permalink(card)
+            _permalink_key = _homepage_permalink_key(permalink)
+            if not permalink or not _permalink_key or _permalink_key in _section_seen_permalinks:
+                continue
+            _section_seen_permalinks.add(_permalink_key)
+            _section_rendered_headlines.add((card.get("headline", "") or "").strip().lower())
+
+            cl = str(
+                card.get("cat_label")
+                or card.get("category_label")
+                or _section_label
+            ).strip()
+            category_keys = _apply_category_memberships(card, _section_key)
+            data_cats = " ".join(category_keys)
+            card_time = card_display_date(card)
+            _restore_archive_source_image(card, archive_for_links)
+            img_url = card.get("image_url", "")
+            if not img_url or (
+                (
+                    _is_legacy_or_branded_fallback_image(img_url)
+                    or _is_managed_editorial_fallback_image(img_url)
+                )
+                and not (card.get("is_custom") or card.get("authoritative_custom"))
+            ):
+                _restore_archive_source_image(card, archive_for_links)
+                img_url = card.get("image_url", "")
+            if not img_url or (
+                _is_legacy_or_branded_fallback_image(img_url)
+                and not (card.get("is_custom") or card.get("authoritative_custom"))
+            ):
+                fb_img, _ = get_fallback_image(
+                    _section_key,
+                    card.get("headline", ""),
+                    sequential=True,
+                    item=card,
+                )
+                if not fb_img:
+                    fb_img, _ = get_fallback_image(
+                        "top_news",
+                        card.get("headline", ""),
+                        sequential=True,
+                        item=card,
+                    )
+                img_url = fb_img or f"{SITE_URL}/og-image.png"
+
+            _urgency_text = f"{cl} {card.get('headline','')}".strip().lower()
+            urgency_cls = " live" if _urgency_text.startswith("live") else (
+                " developing" if _urgency_text.startswith("developing") else (
+                    " breaking"
+                    if card.get("is_breaking") or _urgency_text.startswith("breaking")
+                    else ""
+                )
+            )
+            cards_html += f'''
+      <a href="{permalink}" class="grid-card fade-in section-grid-card" data-cat="{_section_key}" data-cats="{data_cats}" data-section-owner="{_section_key}" data-section-ts="{card_section_timestamp(card)}" style="display:none">
+        <div class="grid-card-image-wrap">
+          <img class="grid-card-image" src="{img_url}" alt="" loading="lazy">
+        </div>
+        <div class="grid-card-body">
+          <span class="grid-card-tag{urgency_cls}">{cl}</span>
+          <h2 class="grid-card-headline">{card["headline"]}</h2>
+          <span class="grid-card-time">{card_time}</span>
+        </div>
+      </a>'''
+
     # -- OLDER: per-category archived stories no longer shown as current cards --
     # Top News ("all") gets no Older section. Each category gets up to 10 of its
     # own older stories that aren't currently displayed.
@@ -16559,9 +16695,10 @@ def render_index(all_categories, top_cat):
         current_headlines.add(cat["hero"].get("headline", "").strip().lower())
     for card in all_cards_display:
         current_headlines.add(card.get("headline", "").strip().lower())
+    current_headlines.update(_section_rendered_headlines)
 
     older_archive = load_archive(OUTPUT_DIR / "archive.json")
-    older_archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+    older_archive.sort(key=_section_publication_sort_key, reverse=True)
 
     # Group older stories by category, up to 10 each, excluding current headlines
     older_by_cat = {}
@@ -37227,7 +37364,7 @@ def ensure_all_category_sections(all_categories, min_cards=6):
     archive, _ = _backfill_archive_editorial_story_ids(
         archive, _load_publication_identity_index(), output_root=None
     )
-    archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+    archive.sort(key=_section_publication_sort_key, reverse=True)
 
     # Repair current live metadata and remove unsupported county placements before any
     # archive recovery. Recovery then runs through the same authority contract.
@@ -37278,8 +37415,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             "body": body,
             "image_url": image_url,
             "image_credit": image_credit,
-            "published": e.get("lastmod") or e.get("date", ""),
-            "published_raw": e.get("lastmod") or e.get("date", ""),
+            "published": _section_publication_value(e),
+            "published_raw": _section_publication_value(e),
             "urgency_score": 2,
             "enriched": True,
             "source_quality": "archive",

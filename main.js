@@ -144,14 +144,15 @@ document.querySelectorAll(".category-nav [data-cat], .mobile-nav-panel [data-cat
       // Filter grid cards
       document.querySelectorAll(".grid-card").forEach(card => {
         if (card.classList.contains("support-grid-card")) return;
+        const sectionOwner = card.dataset.sectionOwner || "";
         let show;
         if (cat === "all") {
-          show = card.dataset.topnews === "true";
+          // Top News uses the globally deduped editorial deck only.
+          show = !sectionOwner && card.dataset.topnews === "true";
         } else {
-          const memberships = (card.dataset.cats || card.dataset.cat || "")
-            .split(/\s+/)
-            .filter(Boolean);
-          show = memberships.includes(cat);
+          // County/category views use their own dedicated server-built deck.
+          // Never reconstruct a section from cross-category membership tags.
+          show = sectionOwner === cat;
         }
         card.style.display = show ? "flex" : "none";
       });
@@ -162,12 +163,33 @@ document.querySelectorAll(".category-nav [data-cat], .mobile-nav-panel [data-cat
           ? "block" : "none";
       });
 
-      // Reposition support card to 5th visible slot
+      // Category/county views are strict publication chronology. Top News keeps its
+      // separate importance/freshness ranking. Use CSS grid order so switching back
+      // to Top News restores the original server-rendered Top Stories order.
       const grid        = document.getElementById("articlesGrid");
       const supportCard = grid ? grid.querySelector(".support-grid-card") : null;
+      const allStoryCards = grid
+        ? Array.from(grid.querySelectorAll(".grid-card:not(.support-grid-card)"))
+        : [];
+      allStoryCards.forEach(card => { card.style.order = ""; });
+      if (supportCard) supportCard.style.order = "";
+
+      const visible = allStoryCards.filter(c => c.style.display !== "none");
+      if (cat !== "all" && visible.length) {
+        visible.sort((a, b) => {
+          const bTs = Number(b.dataset.sectionTs || 0);
+          const aTs = Number(a.dataset.sectionTs || 0);
+          return bTs - aTs;
+        });
+        visible.forEach((card, index) => {
+          // Leave visual slot five open for the membership/support card.
+          card.style.order = String(index < 4 ? index : index + 1);
+        });
+        if (supportCard) supportCard.style.order = String(Math.min(4, visible.length));
+      }
+
+      // Reposition support card to 5th visible slot for DOM/accessibility order too.
       if (supportCard && grid) {
-        const visible = Array.from(grid.querySelectorAll(".grid-card:not(.support-grid-card)"))
-          .filter(c => c.style.display !== "none");
         const insertAfter = visible.length >= 4 ? visible[3] : visible[visible.length - 1];
         if (insertAfter) insertAfter.insertAdjacentElement("afterend", supportCard);
         supportCard.style.display = "flex";
@@ -182,7 +204,8 @@ document.querySelectorAll(".category-nav [data-cat], .mobile-nav-panel [data-cat
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".grid-card").forEach(card => {
     if (card.classList.contains("support-grid-card")) return;
-    card.style.display = card.dataset.topnews === "true" ? "flex" : "none";
+    const sectionOwner = card.dataset.sectionOwner || "";
+    card.style.display = (!sectionOwner && card.dataset.topnews === "true") ? "flex" : "none";
   });
 
   const params = new URLSearchParams(window.location.search);
