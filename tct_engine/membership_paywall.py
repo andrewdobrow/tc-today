@@ -37,6 +37,18 @@ def _sentences(text: str) -> list[str]:
 PREVIEW_MAX_CHARS = 340
 PREVIEW_MIN_CHARS = 150
 PREVIEW_MIN_HIDDEN_CHARS = 90
+
+# Sponsored Packard feature is advertiser-funded public content and must never
+# enter the membership paywall/protected-content pipeline. Keep this exact-slug
+# scoped so ordinary editorial and future sponsored-content policy remain
+# unchanged unless explicitly configured.
+PAYWALL_EXEMPT_SLUGS = frozenset({
+    "2026-10-04-three-generations-later-packard-roofing-remains-rooted-on-the-treasure-coast",
+})
+
+
+def is_paywall_exempt_slug(slug: str) -> bool:
+    return str(slug or "").strip() in PAYWALL_EXEMPT_SLUGS
 FULL_BODY_MARKER = "<!--tct-full-article-v2-->"
 
 

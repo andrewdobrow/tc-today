@@ -15,7 +15,7 @@ if str(ROOT) not in sys.path:
 
 import requests
 
-from tct_engine.membership_paywall import split_article_body
+from tct_engine.membership_paywall import is_paywall_exempt_slug, split_article_body
 BODY_RE = re.compile(r'<div class="article-body">(.*?)</div>', re.I | re.S)
 # Keep this exact: data-tct-paywall-newsletter is a dormant newsletter slot,
 # not the membership paywall itself.
@@ -28,6 +28,8 @@ SNAPSHOT_MIN_BATCH_SIZE = 1
 def scan_public_articles() -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     for path in sorted((ROOT / "articles").glob("*.html")):
+        if is_paywall_exempt_slug(path.stem):
+            continue
         text = path.read_text(encoding="utf-8", errors="ignore")
         if (
             'http-equiv="refresh"' in text

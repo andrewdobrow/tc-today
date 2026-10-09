@@ -25,6 +25,7 @@ from tct_engine.membership_paywall import (
     FULL_BODY_MARKER,
     add_paywall_schema,
     inject_membership_assets,
+    is_paywall_exempt_slug,
     paywall_html,
     split_article_body,
 )
@@ -220,6 +221,25 @@ def _rehydrate_paywalled_page(page_html: str, protected_body: str, slug: str = "
     return page_html[:match.start()] + replacement + page_html[match.end():]
 
 
+def _restore_free_article_schema(page_html: str) -> str:
+    """Restore free-access Article/NewsArticle schema after paywall rehydration."""
+    pattern = re.compile(r'(<script\s+type="application/ld\+json">)(.*?)(</script>)', re.I | re.S)
+    for match in pattern.finditer(page_html):
+        try:
+            data = json.loads(match.group(2))
+        except Exception:
+            continue
+        if data.get("@type") not in {"NewsArticle", "Article"}:
+            continue
+        data["isAccessibleForFree"] = True
+        has_part = data.get("hasPart")
+        if isinstance(has_part, dict) and has_part.get("cssSelector") == ".tct-paywalled-content":
+            data.pop("hasPart", None)
+        replacement = match.group(1) + json.dumps(data, separators=(",", ":")) + match.group(3)
+        return page_html[:match.start()] + replacement + page_html[match.end():]
+    return page_html
+
+
 def main() -> None:
     if not enabled():
         print("Membership paywall preparation skipped: UI disabled")
@@ -246,6 +266,26 @@ def main() -> None:
             continue
 
         slug = path.stem
+
+        # Exact public-access exception for the advertiser-funded Packard feature.
+        # If an earlier run already protected it, rehydrate the complete article
+        # first; then restore free-access schema and skip the splitter entirely.
+        if is_paywall_exempt_slug(slug):
+            if ACTUAL_PAYWALL_MARKER_RE.search(text):
+                stored = snapshot.get(slug)
+                if not stored:
+                    raise RuntimeError(
+                        f"Paywall-exempt article is protected but cannot be rehydrated: {slug}"
+                    )
+                text = _rehydrate_paywalled_page(text, stored, slug=slug)
+                rehydrated += 1
+            text = PAYWALL_NEWSLETTER_SLOT_RE.sub("", text)
+            text = _restore_free_article_schema(text)
+            text = inject_membership_assets(text, slug)
+            if text != original_text:
+                path.write_text(text, encoding="utf-8")
+            continue
+
         if ACTUAL_PAYWALL_MARKER_RE.search(text):
             stored = snapshot.get(slug)
             if stored:
