@@ -37,7 +37,9 @@ def _queue(_g=None):
 
 
 def _packard_item(g):
-    item = next(row for row in _queue(g) if row.get("custom_id") == "packard-roofing-sponsored-2026-10-04")
+    # A historic sponsored release is an immutable regression fixture, not a
+    # required member of the rotating live custom-article publication queue.
+    item = json.loads((ROOT / "tests" / "fixtures" / "packard_sponsored_2026_10_04.json").read_text(encoding="utf-8"))
     item = dict(item)
     g._normalize_custom_presentation_fields(item)
     item["is_custom"] = True
@@ -46,9 +48,9 @@ def _packard_item(g):
     return item
 
 
-def test_current_custom_queue_contains_only_packard():
+def test_current_custom_queue_contains_only_weekend_article():
     queue = _queue()
-    assert [row.get("custom_id") for row in queue] == ["packard-roofing-sponsored-2026-10-04"]
+    assert [row.get("custom_id") for row in queue] == ["treasure-coast-top-five-weekend-2026-10-10-11"]
 
 
 def test_packard_article_is_scheduled_for_october_4_eastern():
