@@ -22176,6 +22176,91 @@ def _durable_custom_near_term_subject_identity_match(candidate, authority):
     return True, f"near-term-custom-subject|{authority_date.isoformat()}|{subject}"
 
 
+
+def _durable_custom_extended_subject_identity_match(candidate, authority):
+    """Bind delayed publisher re-reporting to a manually published custom canonical.
+
+    Manual TCT scoops can be re-reported days or weeks later with completely different
+    lifecycle wording.  When the custom article has no person/street/agency incident
+    anchor, the ordinary cross-source authority boundary can otherwise see only topic
+    similarity and mint a second URL.  This fallback is deliberately strict and only
+    applies within 45 days: the same jurisdiction is required, structured identity may
+    not conflict, at least four headline concepts must overlap, and at least ten
+    distinctive facts (including four facts beyond those headline concepts) must agree.
+    """
+    if not isinstance(candidate, dict) or not isinstance(authority, dict):
+        return False, ""
+    if not (authority.get("is_custom") or authority.get("authoritative_custom")):
+        return False, ""
+
+    candidate_date = _cross_source_date_value(candidate)
+    authority_date = _cross_source_date_value(authority)
+    if candidate_date is None or authority_date is None:
+        return False, ""
+    day_gap = abs((candidate_date - authority_date).days)
+    if day_gap <= 3 or day_gap > 45:
+        return False, ""
+
+    candidate_features = _cross_source_feature_bundle(candidate)
+    # For manual custom work, the published TCT article is authoritative reporting.
+    # Use its final-copy facts as corroboration without rewriting the immutable source
+    # identity snapshot that protects other generated stories.
+    authority_features = _final_publication_identity_features(
+        authority, include_archive_body=True
+    )
+
+    route_only = {"i-95"}
+    candidate_locality = set(candidate_features.get("locality") or ()) - route_only
+    authority_locality = set(authority_features.get("locality") or ()) - route_only
+    shared_locality = candidate_locality & authority_locality
+    if not shared_locality:
+        return False, ""
+
+    candidate_families = set(candidate_features.get("event_families") or ())
+    authority_families = set(authority_features.get("event_families") or ())
+    if candidate_families and authority_families and not (candidate_families & authority_families):
+        return False, ""
+
+    candidate_anchor = str(candidate_features.get("incident_anchor") or "")
+    authority_anchor = str(authority_features.get("incident_anchor") or "")
+    if candidate_anchor and authority_anchor and candidate_anchor != authority_anchor:
+        return False, ""
+
+    candidate_known = str(candidate_features.get("known_event_key") or "")
+    authority_known = str(authority_features.get("known_event_key") or "")
+    if candidate_known and authority_known and candidate_known != authority_known:
+        return False, ""
+
+    shared_topics = set(candidate_features.get("headline_topic_tokens") or ()) & set(
+        authority_features.get("headline_topic_tokens") or ()
+    )
+    generic_topics = {
+        "2026", "approv", "board", "city", "commission", "county",
+        "district", "meet", "new", "project", "site", "year",
+    }
+    topic_core = shared_topics - generic_topics
+    shared_distinctive = set(candidate_features.get("distinctive_tokens") or ()) & set(
+        authority_features.get("distinctive_tokens") or ()
+    )
+    supporting_facts = shared_distinctive - shared_topics - {
+        "after", "before", "city", "county", "local", "new", "said", "say",
+    }
+
+    if len(shared_topics) < 4 or len(topic_core) < 2:
+        return False, ""
+    if len(shared_distinctive) < 10 or len(supporting_facts) < 4:
+        return False, ""
+    if _story_match_confidence(candidate, authority) < 80:
+        return False, ""
+
+    key = str(
+        authority.get("custom_publication_key")
+        or authority.get("custom_id")
+        or authority.get("slug")
+        or "custom-authority"
+    )
+    return True, f"extended-custom-subject|{key}"
+
 def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     """Return a deterministic cross-origin match for archived custom authority.
 
@@ -22203,6 +22288,12 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     )
     if missing_match:
         return True, missing_key
+
+    extended_match, extended_key = _durable_custom_extended_subject_identity_match(
+        candidate, authority
+    )
+    if extended_match:
+        return True, extended_key
 
     left = (
         precomputed.get("candidate_sports_award")
@@ -22423,7 +22514,10 @@ def _find_authoritative_custom_incident_match(item, archived_customs=None, curre
     best_confidence = 0
     best_basis = ""
     for authority_row, authority in authorities:
-        durable_match, durable_key = _durable_custom_identity_match(candidate, authority)
+        # Durable custom identity needs the richest source/custom evidence.  The
+        # audit projection intentionally strips fetched publisher article text, which
+        # can erase the very facts needed to protect an earlier manual scoop.
+        durable_match, durable_key = _durable_custom_identity_match(item, authority_row)
         if durable_match:
             authority_row["durable_custom_identity_key"] = durable_key
             authority_row.setdefault(
@@ -25635,6 +25729,18 @@ ST_LUCIE_POLLING_CHANGE_CANONICAL_SLUG = (
 )
 ST_LUCIE_POLLING_CHANGE_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-10-07-st-lucie-precincts-39-52-move-to-lakewood-park-church-for-nov-3-vote",
+})
+
+# Permanent custom-authority regression for TCT's Sept. 29, 2026 Westmoreland
+# assisted-living/petroleum-contamination scoop. A later publisher report on the
+# same dispute escaped as a second URL on Oct. 9. The Sept. 29 manual article is
+# the permanent canonical; later reporting may update it in place but may not mint
+# another public permalink for the same project dispute.
+WESTMORELAND_ALF_CANONICAL_SLUG = (
+    "2026-09-29-residents-seek-halt-port-st-lucie-assisted-living-project-petroleum-cleanup-site"
+)
+WESTMORELAND_ALF_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-10-09-port-st-lucie-residents-question-contamination-near-approved-assisted-living-sit",
 })
 
 # Permanent general-registry regression for the Big Taste of Martin County event.
@@ -32565,6 +32671,49 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                 "reason": (
                     "One-off exact-slug migration for the Oct. 7 publisher reprint "
                     "of TCT's authoritative Precincts 39/52 polling-place article."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
+
+    # Permanent cleanup for the Oct. 9 Westmoreland ALF duplicate. The generalized
+    # extended custom-authority matcher is the prevention layer; this exact-slug
+    # migration repairs the public URL that already escaped.
+    westmoreland_canonical = next(
+        (e for e in archive if e.get("slug") == WESTMORELAND_ALF_CANONICAL_SLUG),
+        None,
+    )
+    if westmoreland_canonical:
+        westmoreland_canonical["is_custom"] = True
+        westmoreland_canonical["authoritative_custom"] = True
+        westmoreland_canonical.pop("exclude_from_live_recovery", None)
+        westmoreland_canonical.pop("identity_quarantine_reason", None)
+        westmoreland_canonical["legacy_identity_status"] = "identified"
+        westmoreland_canonical["ranking_eligible"] = True
+        for source_slug in sorted(WESTMORELAND_ALF_REDIRECT_SOURCE_SLUGS):
+            duplicate = next((e for e in archive if e.get("slug") == source_slug), None)
+            if duplicate:
+                _merge_category_memberships(
+                    westmoreland_canonical,
+                    duplicate,
+                    westmoreland_canonical.get("category_key")
+                    or duplicate.get("category_key")
+                    or "local_gov",
+                )
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "Port St. Lucie Residents Question Contamination Near Approved Assisted-Living Site"
+                ),
+                "target_slug": WESTMORELAND_ALF_CANONICAL_SLUG,
+                "target_headline": westmoreland_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": True,
+                "editorial_story_id": westmoreland_canonical.get("editorial_story_id", ""),
+                "reason": (
+                    "Permanent regression migration for the Oct. 9 publisher re-report "
+                    "of TCT's authoritative Westmoreland ALF contamination scoop."
                 ),
             })
             removed_slugs.add(source_slug)
