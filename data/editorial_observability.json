@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-09T22:55:41Z",
+  "generated_at": "2026-10-10T01:54:40Z",
   "mode": "shadow",
   "publication_behavior_changed": false,
   "activation": {
@@ -21,15 +21,35 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 10,
-    "placements_after": 10,
+    "placements_before": 8,
+    "placements_after": 8,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
-    "recommendations": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/police-searching-for-driver-in-hit-and-run-crash-that-injured-63-year-old-man-in-port-st-lucie",
+        "headline": "Port St. Lucie Police Search for Driver in Hit-and-Run That Critically Injured Man, 63",
+        "source_title_key": "port st lucie police search for driver in hit and run that critically injured man 63",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-12-56-63-year-old-772-871-5000-a-m-about-ab85d4c5",
+        "canonical_is_custom": false,
+        "canonical_title": "Port St. Lucie Police Search for Driver Who Critically Injured Man in Hit-and-Run",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/police-searching-for-driver-in-hit-and-run-crash-that-injured-63-year-old-man-in-port-st-lucie",
+        "reason": "Same story and safe normalized stage 'investigation' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "hero"
+      }
+    ],
     "applied_actions": [],
     "enforcement_allowlist": [
       "custom_canonical_protection",
@@ -51,22 +71,22 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 191,
+    "candidates_processed": 190,
     "routes": {
-      "generate_new": 32,
-      "skip": 157,
-      "update_existing": 2
+      "generate_new": 37,
+      "skip": 152,
+      "update_existing": 1
     },
     "eligibility": {
       "listing": 4,
-      "low_value": 129,
-      "publishable": 58
+      "low_value": 130,
+      "publishable": 56
     },
     "source_classes": {
-      "aggregator": 133,
-      "local_news": 34,
+      "aggregator": 134,
+      "local_news": 33,
       "regional_news": 21,
-      "unknown": 3
+      "unknown": 2
     },
     "rejected_count": 4,
     "rejected_examples": [
@@ -110,44 +130,49 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 28,
-      "same_event": 163
+      "follow_up": 1,
+      "new_story": 27,
+      "same_event": 162
     },
     "examples": [
       {
         "story_id": "story_020375",
         "title": "Florida property tax increases explained ahead of Amendment 3 vote - WPTV",
         "event_key": "unknown-event-f84b20e87c",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_020376",
         "title": "Port St. Lucie intersection floods so badly a pizza shop 'lost thousands'; city says fix will take time",
         "event_key": "unknown-event-9c5da77ce9",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_020375",
-        "title": "Florida property tax increases explained ahead of Amendment 3 vote",
-        "event_key": "fire-3086262b3a-3086262b3a",
+        "title": "Palm Beach County officials explain what's driving Florida property tax increases ahead of Amendment 3 vote",
+        "event_key": "fire-db4cddcab6-db4cddcab6",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://www.wptv.com/money/real-estate-news/florida-property-tax-increases-explained-ahead-of-amendment-3-vote",
           "Confidence: 1.00"
         ]
       },
@@ -155,16 +180,32 @@
         "story_id": "story_020377",
         "title": "King's Landing developer says it's $15 million short, asks Fort Pierce for six more months - WPEC",
         "event_key": "unknown-event-bf60bf4deb",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_020322",
+        "story_id": "story_020298",
+        "title": "Dengue cases continue to rise after heavy rain in Tampa Bay - Tampa Bay Times",
+        "event_key": "unknown-event-d9f6da021f",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_020395",
         "title": "Police searching for driver in hit-and-run crash that injured 63-year-old man in Port St. Lucie",
         "event_key": "traffic-crash-port-st-lucie-367d9fe31b",
         "relationship": "same_event",
@@ -181,12 +222,14 @@
         "story_id": "story_020378",
         "title": "Martin County student thought bomb threat couldn’t be traced, investigators say - WPEC",
         "event_key": "unknown-event-c797ec5e1a",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -209,10 +252,11 @@
         "event_key": "unknown-event-986b13c9ee",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -248,34 +292,6 @@
         "story_id": "story_020297",
         "title": "Appeals court sets aside Florida manatee ruling, sends Indian River Lagoon case back for review - TalkOfTitusville.com",
         "event_key": "unknown-event-d8b7b8cb41",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_020298",
-        "title": "Dengue cases continue to rise after heavy rain in Tampa Bay - Tampa Bay Times",
-        "event_key": "unknown-event-d9f6da021f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_020299",
-        "title": "Palm Beach Post Editorial Board's endorsements for Congress - The Palm Beach Post",
-        "event_key": "unknown-event-5a8d149cad",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -378,6 +394,20 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "story_020241",
+        "title": "Mosquito research yields ‘unexpected discovery’ in Florida backyards - WKMG",
+        "event_key": "unknown-event-c9e0405afd",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
       }
     ],
     "decision_trace_examples": [
@@ -385,39 +415,43 @@
         "story_id": "story_020375",
         "title": "Florida property tax increases explained ahead of Amendment 3 vote - WPTV",
         "event_key": "unknown-event-f84b20e87c",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_020376",
         "title": "Port St. Lucie intersection floods so badly a pizza shop 'lost thousands'; city says fix will take time",
         "event_key": "unknown-event-9c5da77ce9",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_020375",
-        "title": "Florida property tax increases explained ahead of Amendment 3 vote",
-        "event_key": "fire-3086262b3a-3086262b3a",
+        "title": "Palm Beach County officials explain what's driving Florida property tax increases ahead of Amendment 3 vote",
+        "event_key": "fire-db4cddcab6-db4cddcab6",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://www.wptv.com/money/real-estate-news/florida-property-tax-increases-explained-ahead-of-amendment-3-vote",
           "Confidence: 1.00"
         ]
       },
@@ -425,17 +459,34 @@
         "story_id": "story_020377",
         "title": "King's Landing developer says it's $15 million short, asks Fort Pierce for six more months - WPEC",
         "event_key": "unknown-event-bf60bf4deb",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_020322",
+        "story_id": "story_020298",
+        "title": "Dengue cases continue to rise after heavy rain in Tampa Bay - Tampa Bay Times",
+        "event_key": "unknown-event-d9f6da021f",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_020395",
         "title": "Police searching for driver in hit-and-run crash that injured 63-year-old man in Port St. Lucie",
         "event_key": "traffic-crash-port-st-lucie-367d9fe31b",
         "relationship": "same_event",
@@ -453,13 +504,15 @@
         "story_id": "story_020378",
         "title": "Martin County student thought bomb threat couldn’t be traced, investigators say - WPEC",
         "event_key": "unknown-event-c797ec5e1a",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -484,10 +537,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -525,36 +579,6 @@
         "story_id": "story_020297",
         "title": "Appeals court sets aside Florida manatee ruling, sends Indian River Lagoon case back for review - TalkOfTitusville.com",
         "event_key": "unknown-event-d8b7b8cb41",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_020298",
-        "title": "Dengue cases continue to rise after heavy rain in Tampa Bay - Tampa Bay Times",
-        "event_key": "unknown-event-d9f6da021f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_020299",
-        "title": "Palm Beach Post Editorial Board's endorsements for Congress - The Palm Beach Post",
-        "event_key": "unknown-event-5a8d149cad",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -670,72 +694,128 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "story_020202",
+        "title": "Indian River Co. teachers using A.I. strategically, student must still master coursework - WPEC",
+        "event_key": "unknown-event-726b5399cf",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
       }
     ]
   },
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
-    "high_confidence_candidate_count": 0,
+    "candidate_count": 2,
+    "high_confidence_candidate_count": 2,
     "unanchored_candidate_suppressed_count": 0,
     "current_relationships": {
+      "follow_up": 1,
       "new_story": 1
     },
     "milestones": {
-      "arrest": 1
+      "death": 2,
+      "identified": 1
     },
     "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1
+      "agency_match": 1,
+      "enforced_follow_up": 2,
+      "entity_match": 2,
+      "event_type_match": 2,
+      "fact_continuity": 2,
+      "identity_anchor_qualified": 2,
+      "location_match": 2
     },
     "examples": [
       {
-        "headline": "St. Lucie County Fire District crews battle Carmelite Street structure fire; cause unknown - WPEC",
-        "event_key": "fire-hobe-sound-7f83f7eb66",
-        "current_story_id": "story_020392",
+        "headline": "14-year-old pedestrian dies days after being hit by SUV near SW Port St. Lucie Blvd - WPEC",
+        "event_key": "fire-port-st-lucie-19ad5648cd",
+        "current_story_id": "story_020422",
         "current_relationship": "new_story",
-        "candidate_story_id": "story_019893",
-        "candidate_confidence": 0.609091,
+        "candidate_story_id": "story_020392",
+        "candidate_confidence": 1.0,
         "candidate_milestones": [
-          "arrest"
+          "death"
         ],
         "candidate_reason_codes": [
-          "novel_milestone",
+          "enforced_follow_up",
           "location_match",
+          "agency_match",
+          "event_type_match",
           "entity_match",
+          "fact_continuity",
           "identity_anchor_qualified"
         ],
         "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_019893",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.09",
+          "Relationship: follow_up",
+          "Distinctive facts overlap: 1.00",
+          "Identity anchor qualified: True",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: True",
+          "Entity match: True",
+          "Lifecycle signal: True",
+          "Novel milestones: death",
+          "Novel fact ratio: 0.40",
+          "Confidence: 1.00",
+          "Threshold: 0.68"
+        ]
+      },
+      {
+        "headline": "Port St. Lucie student dies after being struck by vehicle on Wednesday - WPBF",
+        "event_key": "named-person-death:ford-excursion",
+        "current_story_id": "story_020403",
+        "current_relationship": "follow_up",
+        "candidate_story_id": "story_020403",
+        "candidate_confidence": 1.0,
+        "candidate_milestones": [
+          "death",
+          "identified"
+        ],
+        "candidate_reason_codes": [
+          "enforced_follow_up",
+          "location_match",
+          "event_type_match",
+          "entity_match",
+          "fact_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Relationship: follow_up",
+          "Distinctive facts overlap: 1.00",
+          "Identity anchor qualified: True",
           "Location match: True",
           "Agency match: False",
-          "Event type match: False",
+          "Event type match: True",
           "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.61"
+          "Lifecycle signal: True",
+          "Novel milestones: death, identified",
+          "Novel fact ratio: 0.00",
+          "Confidence: 1.00",
+          "Threshold: 0.68"
         ]
       }
     ],
-    "retrospective_candidate_count": 11,
+    "retrospective_candidate_count": 12,
     "retrospective_high_confidence_candidate_count": 6,
     "retrospective_activation_eligible_candidate_count": 3,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 908,
-      "timeline_entries_examined": 2587,
-      "transitions_examined": 1584,
+      "stories_with_timelines": 911,
+      "timeline_entries_examined": 2599,
+      "transitions_examined": 1594,
       "candidate_scope": "distinct_article_transitions",
-      "candidate_count": 11,
+      "candidate_count": 12,
       "high_confidence_candidate_count": 6,
       "activation_eligible_candidate_count": 3,
       "same_source_evolution_count": 9,
@@ -855,6 +935,40 @@
           }
         },
         {
+          "story_id": "story_020073",
+          "story_title": "Martin County's MARTY bus transit abruptly shuts down, leaving riders stranded and 29 workers jobless",
+          "milestones": [
+            "closure"
+          ],
+          "matched_phrases": {
+            "closure": [
+              "shuts down"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-d39671b016fbe1356de9",
+            "event_key": "unknown-event-466ed65b26",
+            "published_at": "2026-10-08T18:45:01.419836+00:00",
+            "title": "Martin County Public Transit riders left without service after transit provider suspends operations",
+            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations"
+          },
+          "newer_article": {
+            "article_id": "rss-ba117a72df7ae4a15d69",
+            "event_key": "unknown-event-b1fdd845d9",
+            "published_at": "2026-10-09T01:45:11.147567+00:00",
+            "title": "Martin County's MARTY bus transit abruptly shuts down, leaving riders stranded and 29 workers jobless",
+            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations"
+          }
+        },
+        {
           "story_id": "story_018845",
           "story_title": "Suspect arrested after Bell County woman found killed, investigators recover fetal remains - LEX 18 News",
           "milestones": [
@@ -887,40 +1001,6 @@
             "title": "Suspect arrested after Bell County woman found killed, investigators recover fetal remains - LEX 18 News",
             "source": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQenc2WkktcHNKZmw2cTR6cE9mN2llYVNXOWxsd2VWM2dXeWFSeFd0UlY4WlVxVUl4Vkw5Q0xRVnZOTFlLSExsSEZqQTRiVGlkOTVzd0R6aDhzeUFHbEx4LVc4LVRHdmVlbHFKRGtNYlcyRXUyVUZwNjZ2V1JHOWJxR1UxdnNsc1RtWWFXMmc0alhNeFVMT0ZPTEpvLWxkZ1J3ckdmWE5QbjRqTGd6dDZRazBEUlZtYkJKVFhpTVMxOUNiMmxmM3JNOVpoQ3hMQQ?oc=5",
             "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQenc2WkktcHNKZmw2cTR6cE9mN2llYVNXOWxsd2VWM2dXeWFSeFd0UlY4WlVxVUl4Vkw5Q0xRVnZOTFlLSExsSEZqQTRiVGlkOTVzd0R6aDhzeUFHbEx4LVc4LVRHdmVlbHFKRGtNYlcyRXUyVUZwNjZ2V1JHOWJxR1UxdnNsc1RtWWFXMmc0alhNeFVMT0ZPTEpvLWxkZ1J3ckdmWE5QbjRqTGd6dDZRazBEUlZtYkJKVFhpTVMxOUNiMmxmM3JNOVpoQ3hMQQ?oc=5"
-          }
-        },
-        {
-          "story_id": "story_020073",
-          "story_title": "Martin County's MARTY bus transit abruptly shuts down, leaving riders stranded and 29 workers jobless",
-          "milestones": [
-            "closure"
-          ],
-          "matched_phrases": {
-            "closure": [
-              "shuts down"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "shared_discriminative_title_tokens",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-d39671b016fbe1356de9",
-            "event_key": "unknown-event-466ed65b26",
-            "published_at": "2026-10-08T18:45:01.419836+00:00",
-            "title": "Martin County Public Transit riders left without service after transit provider suspends operations",
-            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
-            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations"
-          },
-          "newer_article": {
-            "article_id": "rss-ba117a72df7ae4a15d69",
-            "event_key": "unknown-event-b1fdd845d9",
-            "published_at": "2026-10-09T01:45:11.147567+00:00",
-            "title": "Martin County's MARTY bus transit abruptly shuts down, leaving riders stranded and 29 workers jobless",
-            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
-            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations"
           }
         },
         {
@@ -1064,9 +1144,9 @@
           }
         }
       ],
-      "identity_anchor_rejected_count": 4,
-      "incoherent_transition_count": 4,
-      "incoherent_story_count": 4,
+      "identity_anchor_rejected_count": 5,
+      "incoherent_transition_count": 5,
+      "incoherent_story_count": 5,
       "incoherent_stories": [
         {
           "story_id": "story_016993",
@@ -1213,11 +1293,47 @@
               "prior_title_overlap": 0.333333
             }
           ]
+        },
+        {
+          "story_id": "story_020403",
+          "story_title": "Port St. Lucie student dies after being struck by vehicle on Wednesday - WPBF",
+          "transition_count": 1,
+          "blocking_reasons": {
+            "timeline_identity_unanchored": 1
+          },
+          "examples": [
+            {
+              "prior_article": {
+                "article_id": "rss-e0315d45f4e8780835f9",
+                "event_key": "traffic-crash-port-st-lucie-8d0e9794d4",
+                "published_at": "2026-10-10T01:45:11.675852+00:00",
+                "title": "'It's not safe': Treasure Coast neighbors raise concerns after teen hit walking to school - WPEC",
+                "source": "https://cbs12.com/news/local/its-not-safe-treasure-coast-neighbors-raise-concerns-after-teen-hit-walking-to-school-port-st-lucie-boulevard-squirrel-ave-sidewalks-roadwork-construction-fdot-oct-8-2026",
+                "url": "https://cbs12.com/news/local/its-not-safe-treasure-coast-neighbors-raise-concerns-after-teen-hit-walking-to-school-port-st-lucie-boulevard-squirrel-ave-sidewalks-roadwork-construction-fdot-oct-8-2026"
+              },
+              "newer_article": {
+                "article_id": "rss-fb904f8c0d247d3786e6",
+                "event_key": "named-person-death:ford-excursion",
+                "published_at": "2026-10-10T01:45:11.675852+00:00",
+                "title": "Port St. Lucie student dies after being struck by vehicle on Wednesday - WPBF",
+                "source": "https://www.wpbf.com/article/florida-port-st-lucie-student-dies-car-crash/74096648",
+                "url": "https://www.wpbf.com/article/florida-port-st-lucie-student-dies-car-crash/74096648"
+              },
+              "milestones": [
+                "death"
+              ],
+              "identity_anchor_codes": [
+                "event_family_conflict",
+                "identity_anchor_missing"
+              ],
+              "prior_title_overlap": 0.0
+            }
+          ]
         }
       ],
       "milestones": {
         "arrest": 4,
-        "death": 2,
+        "death": 3,
         "identified": 2,
         "investigation": 1,
         "opening": 1,
@@ -1225,12 +1341,13 @@
         "resolution": 1
       },
       "blocking_conflicts": {
-        "same_timestamp_order_uncertain": 4,
-        "timeline_identity_unanchored": 4
+        "event_family_conflict": 1,
+        "same_timestamp_order_uncertain": 5,
+        "timeline_identity_unanchored": 5
       },
-      "excluded_entry_count": 104,
+      "excluded_entry_count": 102,
       "exclusion_reasons": {
-        "insufficient_title_detail": 31,
+        "insufficient_title_detail": 29,
         "low_value_title": 2,
         "social_source": 71
       },
@@ -2020,6 +2137,74 @@
             "Candidate confidence: 0.74",
             "Activation eligible: False"
           ]
+        },
+        {
+          "story_id": "story_020403",
+          "story_title": "Port St. Lucie student dies after being struck by vehicle on Wednesday - WPBF",
+          "milestones": [
+            "death"
+          ],
+          "matched_phrases": {
+            "death": [
+              "death",
+              "dies"
+            ]
+          },
+          "confidence": 0.74,
+          "activation_eligible": false,
+          "timeline_incoherent": true,
+          "identity_anchor_qualified": false,
+          "identity_anchor_codes": [
+            "event_family_conflict",
+            "identity_anchor_missing"
+          ],
+          "shared_title_tokens": [],
+          "blocking_conflicts": [
+            "same_timestamp_order_uncertain",
+            "timeline_identity_unanchored",
+            "event_family_conflict"
+          ],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "event_family_conflict",
+            "identity_anchor_missing",
+            "canonical_title_continuity_context_only",
+            "timeline_incoherent",
+            "activation_blocked_event_family_conflict"
+          ],
+          "prior_title_overlap": 0.0,
+          "canonical_title_overlap": 1.0,
+          "prior_article": {
+            "article_id": "rss-e0315d45f4e8780835f9",
+            "event_key": "traffic-crash-port-st-lucie-8d0e9794d4",
+            "published_at": "2026-10-10T01:45:11.675852+00:00",
+            "title": "'It's not safe': Treasure Coast neighbors raise concerns after teen hit walking to school - WPEC",
+            "source": "https://cbs12.com/news/local/its-not-safe-treasure-coast-neighbors-raise-concerns-after-teen-hit-walking-to-school-port-st-lucie-boulevard-squirrel-ave-sidewalks-roadwork-construction-fdot-oct-8-2026",
+            "url": "https://cbs12.com/news/local/its-not-safe-treasure-coast-neighbors-raise-concerns-after-teen-hit-walking-to-school-port-st-lucie-boulevard-squirrel-ave-sidewalks-roadwork-construction-fdot-oct-8-2026"
+          },
+          "newer_article": {
+            "article_id": "rss-fb904f8c0d247d3786e6",
+            "event_key": "named-person-death:ford-excursion",
+            "published_at": "2026-10-10T01:45:11.675852+00:00",
+            "title": "Port St. Lucie student dies after being struck by vehicle on Wednesday - WPBF",
+            "source": "https://www.wpbf.com/article/florida-port-st-lucie-student-dies-car-crash/74096648",
+            "url": "https://www.wpbf.com/article/florida-port-st-lucie-student-dies-car-crash/74096648"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_020403",
+            "Novel milestones: death",
+            "Identity anchor qualified: False",
+            "Identity anchor codes: event_family_conflict, identity_anchor_missing",
+            "Prior title overlap: 0.00",
+            "Canonical title overlap (context only): 1.00",
+            "Same timestamp: True",
+            "Blocking conflicts: same_timestamp_order_uncertain, timeline_identity_unanchored, event_family_conflict",
+            "Candidate confidence: 0.74",
+            "Activation eligible: False"
+          ]
         }
       ],
       "review_ready": true,
@@ -2031,27 +2216,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 678,
-      "treasure_coast_local": 446,
+      "florida": 679,
+      "treasure_coast_local": 451,
       "treasure_coast_region": 145,
-      "unknown": 1269
+      "unknown": 1276
     },
-    "average_score": 57.86
+    "average_score": 57.89
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 678,
-      "treasure_coast_local": 446,
+      "florida": 679,
+      "treasure_coast_local": 451,
       "treasure_coast_region": 145,
-      "unknown": 1269
+      "unknown": 1276
     },
-    "average_priority": 4.61
+    "average_priority": 4.71
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1495,
-      "developing": 129,
-      "ongoing": 913,
+      "active": 1507,
+      "developing": 128,
+      "ongoing": 915,
       "resolved": 1
     }
   },
@@ -2059,8 +2244,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2514,
-    "active_stories_after": 2514,
+    "active_stories_before": 2525,
+    "active_stories_after": 2525,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2089,21 +2274,146 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-09T22:44:18Z",
-    "quarantined_story_records_retained": 4348,
-    "active_story_count": 2538
+    "generated_at": "2026-10-10T01:44:31Z",
+    "quarantined_story_records_retained": 4351,
+    "active_story_count": 2551
   },
   "stories": {
-    "total": 2538,
+    "total": 2551,
     "importance_levels": {
       "breaking": 1,
-      "high": 57,
-      "normal": 476,
-      "low": 2004,
+      "high": 60,
+      "normal": 485,
+      "low": 2005,
       "archived": 0
     },
-    "average_importance": 11.32,
+    "average_importance": 11.47,
     "top": [
+      {
+        "story_id": "story_020403",
+        "title": "Port St. Lucie student dies after being struck by vehicle on Wednesday - WPBF",
+        "score": 75,
+        "editorial_priority": 84,
+        "editorial_score": 84,
+        "score_breakdown": {
+          "score": 84,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 0.06
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie",
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-10T01:45:11.675852+00:00",
+          "hours_since_update": 0.06,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_020422",
+        "title": "14-year-old pedestrian dies days after being hit by SUV near SW Port St. Lucie Blvd - WPEC",
+        "score": 75,
+        "editorial_priority": 84,
+        "editorial_score": 84,
+        "score_breakdown": {
+          "score": 84,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 0.06
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County"
+          ],
+          "places": [
+            "Hobe Sound",
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-10-10T01:45:11.675852+00:00",
+          "hours_since_update": 0.06,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
       {
         "story_id": "story_019058",
         "title": "No arrests after 17-year-old shot, killed at meetup in Indian River County, self-defense claim expected - WPTV",
@@ -2117,7 +2427,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 12.08
+          "age_hours": 15.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2162,7 +2472,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 12.08,
+          "hours_since_update": 15.08,
           "event_count": 27,
           "timeline_entries": 27
         }
@@ -2180,7 +2490,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 12.0
+          "age_hours": 15.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2223,7 +2533,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 12.0,
+          "hours_since_update": 15.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2241,7 +2551,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 132.02
+          "age_hours": 135.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2303,7 +2613,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-04T10:44:28.549866+00:00",
-          "hours_since_update": 132.02,
+          "hours_since_update": 135.02,
           "event_count": 59,
           "timeline_entries": 39
         }
@@ -2321,7 +2631,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 12.06
+          "age_hours": 15.05
         },
         "level": "high",
         "importance_reasons": [
@@ -2359,7 +2669,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 12.06,
+          "hours_since_update": 15.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2377,7 +2687,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 7.82
+          "age_hours": 10.82
         },
         "level": "high",
         "importance_reasons": [
@@ -2415,7 +2725,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-09T14:57:10.229807+00:00",
-          "hours_since_update": 7.82,
+          "hours_since_update": 10.82,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2433,7 +2743,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 84.01
+          "age_hours": 87.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2478,7 +2788,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 84.01,
+          "hours_since_update": 87.01,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2496,7 +2806,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 12.06
+          "age_hours": 15.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2548,9 +2858,83 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 12.06,
+          "hours_since_update": 15.06,
           "event_count": 3,
           "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_020183",
+        "title": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
+        "score": 55,
+        "editorial_priority": 59,
+        "editorial_score": 59,
+        "score_breakdown": {
+          "score": 59,
+          "importance": 55,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 7.42
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Stuart",
+            "Jensen Beach",
+            "Palm City",
+            "Hobe Sound",
+            "Port St. Lucie",
+            "Vero Beach",
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 9,
+        "timeline_entries": 8,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 12,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-09T18:22:24.219730+00:00",
+          "hours_since_update": 7.42,
+          "event_count": 9,
+          "timeline_entries": 8
         }
       },
       {
@@ -2566,7 +2950,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 31.03
+          "age_hours": 34.03
         },
         "level": "high",
         "importance_reasons": [
@@ -2602,7 +2986,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-08T15:44:00.204545+00:00",
-          "hours_since_update": 31.03,
+          "hours_since_update": 34.03,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2620,7 +3004,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 84.01
+          "age_hours": 87.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2658,7 +3042,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 84.01,
+          "hours_since_update": 87.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2676,7 +3060,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 93.02
+          "age_hours": 96.02
         },
         "level": "high",
         "importance_reasons": [
@@ -2712,7 +3096,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T01:44:20.146901+00:00",
-          "hours_since_update": 93.02,
+          "hours_since_update": 96.02,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2730,7 +3114,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 72.0
+          "age_hours": 75.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2768,7 +3152,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T22:45:22.065683+00:00",
-          "hours_since_update": 72.0,
+          "hours_since_update": 75.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2786,7 +3170,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 98.0
+          "age_hours": 101.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2824,78 +3208,9 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 98.0,
+          "hours_since_update": 101.0,
           "event_count": 1,
           "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_020183",
-        "title": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
-        "score": 45,
-        "editorial_priority": 51,
-        "editorial_score": 51,
-        "score_breakdown": {
-          "score": 51,
-          "importance": 45,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 4.43
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Stuart",
-            "Jensen Beach",
-            "Palm City",
-            "Hobe Sound",
-            "Port St. Lucie",
-            "Vero Beach",
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 8,
-        "timeline_entries": 8,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 12,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-09T18:22:24.219730+00:00",
-          "hours_since_update": 4.43,
-          "event_count": 8,
-          "timeline_entries": 8
         }
       },
       {
@@ -2911,7 +3226,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 144.01
+          "age_hours": 147.02
         },
         "level": "high",
         "importance_reasons": [
@@ -2950,7 +3265,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-03T22:44:32.452692+00:00",
-          "hours_since_update": 144.01,
+          "hours_since_update": 147.02,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -2968,7 +3283,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 7.86
+          "age_hours": 10.86
         },
         "level": "normal",
         "importance_reasons": [
@@ -3011,76 +3326,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-09T14:57:10.229807+00:00",
-          "hours_since_update": 7.86,
+          "hours_since_update": 10.86,
           "event_count": 30,
           "timeline_entries": 30
-        }
-      },
-      {
-        "story_id": "story_019775",
-        "title": "Crash blocks all southbound Turnpike lanes in St. Lucie County - WPEC",
-        "score": 45,
-        "editorial_priority": 48,
-        "editorial_score": 48,
-        "score_breakdown": {
-          "score": 48,
-          "importance": 45,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 22.0
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Stuart",
-            "Hobe Sound",
-            "Port St. Lucie",
-            "Fort Pierce",
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 18,
-        "timeline_entries": 9,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 9,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-09T00:48:40.833069+00:00",
-          "hours_since_update": 22.0,
-          "event_count": 18,
-          "timeline_entries": 9
         }
       },
       {
@@ -3096,7 +3344,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 189.02
+          "age_hours": 192.03
         },
         "level": "high",
         "importance_reasons": [
@@ -3139,7 +3387,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 189.02,
+          "hours_since_update": 192.03,
           "event_count": 28,
           "timeline_entries": 28
         }
@@ -3157,7 +3405,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 240.7
+          "age_hours": 243.7
         },
         "level": "high",
         "importance_reasons": [
@@ -3198,7 +3446,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-09-29T22:03:25.542264+00:00",
-          "hours_since_update": 240.7,
+          "hours_since_update": 243.7,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -3216,7 +3464,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 189.03
+          "age_hours": 192.03
         },
         "level": "high",
         "importance_reasons": [
@@ -3257,70 +3505,9 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-02T01:43:58.365246+00:00",
-          "hours_since_update": 189.03,
+          "hours_since_update": 192.03,
           "event_count": 12,
           "timeline_entries": 12
-        }
-      },
-      {
-        "story_id": "story_019396",
-        "title": "Former Fox News producer Jennifer Eckhart dies by suicide in Martin County - wpbf.com",
-        "score": 60,
-        "editorial_priority": 47,
-        "editorial_score": 47,
-        "score_breakdown": {
-          "score": 47,
-          "importance": 60,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 97.99
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Hobe Sound"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 8,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-10-05T20:45:26.984992+00:00",
-          "hours_since_update": 97.99,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       }
     ]
@@ -3328,7 +3515,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-09T22:50:17Z",
+    "generated_at": "2026-10-10T01:50:20Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3343,22 +3530,22 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 1,
-        "category_eligibility_archive_recovery": 3,
-        "generated_live": 5
+        "cache_hit": 3,
+        "category_eligibility_archive_recovery": 4,
+        "generated_live": 2
       },
       "failures": {
-        "no_category_eligible_sources": 3
+        "no_category_eligible_sources": 4
       },
-      "model_attempt_count": 5,
-      "model_elapsed_seconds": 91.419,
-      "archive_recovery_requested_count": 3,
+      "model_attempt_count": 3,
+      "model_elapsed_seconds": 86.216,
+      "archive_recovery_requested_count": 4,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejection_count": 1,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 34,
-      "story_aware_update_context_count": 1,
+      "published_story_duplicate_suppression_count": 33,
+      "story_aware_update_context_count": 2,
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 3,
@@ -3368,23 +3555,16 @@
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 6,
+        "publishable_source_count": 7,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 10.543,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 10.543,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3468,32 +3648,22 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Port St. Lucie Tests Water Sensors as California, Savona Flooding Drains Business",
-        "generated_card_count": 0,
-        "elapsed_seconds": 33.835
+        "elapsed_seconds": 15.881
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 5,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 6,
         "selected_source_count": 2,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 16.95,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 16.95,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3507,7 +3677,7 @@
         "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 10,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3531,7 +3701,7 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons - WPTV",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "editorial_story_id": "story_018296",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
@@ -3546,16 +3716,6 @@
             "editorial_story_id": "story_018296",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
             "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-woman-arrested-after-cats-buried-alive-in-her-yard-in-hobe-sound/74085778",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3612,9 +3772,9 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -3649,7 +3809,7 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons - WPTV",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
             "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
@@ -3676,38 +3836,6 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-woman-arrested-after-cats-buried-alive-in-her-yard-in-hobe-sound/74085778",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.97,
-            "shared_anchors": [
-              "Alba Chavez, 37",
-              "Hobe Sound Mobile Home Park / Southeast Federal Highway",
-              "Martin County Sheriff's Office",
-              "cats buried alive because believed to be demons",
-              "same source_url"
-            ],
-            "novel_facts": [
-              "two cats rescued, two found deceased",
-              "eight more cats found alive inside home",
-              "charges will be multiple counts of aggravated animal cruelty"
-            ],
-            "reason": "Same incident, same suspect, same agency, same source article. Additional details (rescue outcome, charge count, cats found inside) are incremental facts that update the existing canonical rather than constituting a new, independently newsworthy event.",
-            "validation_errors": []
           },
           {
             "category_key": "crime",
@@ -3786,32 +3914,22 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Port St. Lucie Police Search for Driver Who Critically Injured Man in Hit-and-Run",
-        "generated_card_count": 1,
-        "elapsed_seconds": 36.083
+        "elapsed_seconds": 19.602
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 18,
         "publishable_source_count": 11,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.873,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 11.873,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4048,11 +4166,8 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Port St. Lucie Rolls Out Flood Sensors as California-Savona Drainage Fix Awaits",
-        "generated_card_count": 0,
-        "elapsed_seconds": 33.267
+        "elapsed_seconds": 20.009
       },
       {
         "category_key": "sports",
@@ -4089,15 +4204,15 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 8,
-        "elapsed_seconds": 15.757
+        "new_publication_stale_rejected_count": 5,
+        "elapsed_seconds": 18.479
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4172,7 +4287,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.424
+        "elapsed_seconds": 20.396
       },
       {
         "category_key": "florida",
@@ -4180,7 +4295,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 1,
+        "publishable_source_count": 2,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4197,7 +4312,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -4210,16 +4325,16 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.583
+        "elapsed_seconds": 20.466
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4227,25 +4342,62 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 9.572,
+            "elapsed_seconds": 19.903,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 9.572,
+        "model_elapsed_seconds": 19.903,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 0,
-        "contextual_update_lead_rejections": [],
+        "contextual_update_lead_rejection_count": 1,
+        "contextual_update_lead_rejections": [
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "story_form": "update",
+            "lead_word_count": 65,
+            "baseline_anchor": "criminal_case",
+            "baseline_present": false,
+            "baseline_anchor_present": false,
+            "baseline_details_present": true,
+            "baseline_context_hits": [
+              "alive",
+              "cats",
+              "demons",
+              "hobe",
+              "sound",
+              "were"
+            ],
+            "baseline_context_required": 2,
+            "canonical_context_available": true,
+            "canonical_context_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+            "novelty_anchor": "source_distinctive_detail",
+            "novelty_present": true,
+            "novelty_token_hits": [
+              "home",
+              "mobile",
+              "park"
+            ],
+            "semantic_novel_fact_hits": [],
+            "semantic_novel_fact_token_count": 0,
+            "missing": [
+              "original_event_context_missing"
+            ],
+            "source_title": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
+            "headline": "MCSO Keeps Digging at Hobe Sound Mobile Home Park in Cat Burial Case"
+          }
+        ],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -4259,7 +4411,7 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons - WPTV",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "editorial_story_id": "story_018296",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
@@ -4279,6 +4431,16 @@
           },
           {
             "category_key": "martin",
+            "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-woman-arrested-after-cats-buried-alive-in-her-yard-in-hobe-sound/74085778",
+            "editorial_story_id": "story_020183",
+            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Jensen Beach man riding motorcycle dies in crash with van in Loxahatchee Groves - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-jensen-beach-man-riding-motorcycle-dies-in-crash-with-van-in-loxahatchee-groves/74086148",
             "editorial_story_id": "story_020230",
@@ -4289,20 +4451,62 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
-            "source_url": "https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
-            "basis": "same_event_and_persistent_story_skip",
+            "source_headline": "Martin County's MARTY bus transit abruptly shuts down, leaving riders stranded and 29 workers jobless - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+            "editorial_story_id": "story_020073",
+            "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+            "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
+            "source_url": "https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+            "basis": "event-identity-authority:participant_plus_precise_location",
+            "identity_keys": [
+              "story:story_020183",
+              "source:https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_named_people",
+              "shared_precise_location",
+              "shared_agency",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=1",
+              "shared_locality=['hobe-sound', 'martin-county']",
+              "shared_event_families=['animal-case']",
+              "shared_named_people=['alba chavez']",
+              "shared_precise_locations=['southeast-federal-highway']",
+              "shared_agencies=['martin-county-sheriff']",
+              "shared_subject_phrases=[]",
+              "shared_headline_topic_core=['alive', 'cats']",
+              "shared_distinctive_token_count=42",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -4322,7 +4526,7 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buries kittens alive, believes they were demons - WPTV",
+            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
             "canonical_slug": "2026-07-03-hobe-sound-community-raises-funds-for-man-whose-fiancee-died-in-monday-house-fir",
             "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
@@ -4352,6 +4556,38 @@
           },
           {
             "category_key": "martin",
+            "source_headline": "Woman arrested after cats found buried alive in her yard in Hobe Sound - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-woman-arrested-after-cats-buried-alive-in-her-yard-in-hobe-sound/74085778",
+            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.97,
+            "shared_anchors": [
+              "Alba Chavez, 37",
+              "Hobe Sound Mobile Home Park / Southeast Federal Highway",
+              "Martin County Sheriff's Office",
+              "cats buried alive because believed to be demons",
+              "same source_url"
+            ],
+            "novel_facts": [
+              "two cats rescued, two found deceased",
+              "eight more cats found alive inside home",
+              "charges will be multiple counts of aggravated animal cruelty"
+            ],
+            "reason": "Same incident, same suspect, same agency, same source article. Additional details (rescue outcome, charge count, cats found inside) are incremental facts that update the existing canonical rather than constituting a new, independently newsworthy event.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Jensen Beach man riding motorcycle dies in crash with van in Loxahatchee Groves - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-jensen-beach-man-riding-motorcycle-dies-in-crash-with-van-in-loxahatchee-groves/74086148",
             "canonical_slug": "2026-10-09-jensen-beach-man-killed-in-loxahatchee-groves-motorcycle-crash",
@@ -4367,12 +4603,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Woman accused of burying cats alive at Hobe Sound Mobile Home Park - WPEC",
-            "source_url": "https://cbs12.com/news/local/woman-accused-of-burying-cats-alive-at-hobe-sound-mobile-home-park-florida-news-florida-crime-local-news-local-crime-cats-buried-alive",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Hobe Sound Woman Accused of Burying Cats Alive, Says She Thought They Were Demons",
+            "source_headline": "Martin County's MARTY bus transit abruptly shuts down, leaving riders stranded and 29 workers jobless - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-public-transit-riders-left-without-service-after-transit-provider-suspends-operations",
+            "canonical_slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+            "canonical_headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
             "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -4384,30 +4620,38 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "MARTY Bus Service Suspended in Martin County, No Timeline for Restart",
+        "live_hero_headline": "MARTY Bus Service Halts Abruptly in Martin County, No Restart Date Set",
         "generated_card_count": 0,
-        "elapsed_seconds": 31.355
+        "elapsed_seconds": 40.399
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 25,
+        "fresh_candidate_count": 26,
         "publishable_source_count": 11,
         "selected_source_count": 10,
         "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 42.481,
+            "elapsed_seconds": 28.043,
+            "result": "copydesk_integrity",
+            "error_type": "CopyDeskIntegrityError",
+            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 38.27,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 42.481,
+        "model_elapsed_seconds": 66.313,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4421,13 +4665,13 @@
         "category_eligibility_assessed_count": 11,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
             "source_headline": "Police seek help identifying man found critically injured in Port St. Lucie roadway - WPBF",
             "source_url": "https://www.wpbf.com/article/st-lucie-county-injured-man-found-roadway/74091585",
-            "editorial_story_id": "story_020322",
+            "editorial_story_id": "story_020394",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd",
             "basis": "exact_source_and_persistent_story_skip",
@@ -4441,16 +4685,6 @@
             "canonical_slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
             "canonical_headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
-            "editorial_story_id": "story_020235",
-            "canonical_slug": "2026-09-29-residents-seek-halt-port-st-lucie-assisted-living-project-petroleum-cleanup-site",
-            "canonical_headline": "Port St. Lucie approves assisted-living site plan despite contamination concerns",
-            "basis": "durable_custom_incident_identity:custom-project|westmoreland-alf|petroleum-remediation",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4488,7 +4722,7 @@
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd",
             "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:exact_source_url",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -4505,21 +4739,6 @@
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie assisted-living project raises contamination concerns - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-assisted-living-project-raises-contamination-concerns-gas-station-morningside-boulevard-",
-            "canonical_slug": "2026-09-29-residents-seek-halt-port-st-lucie-assisted-living-project-petroleum-cleanup-site",
-            "canonical_headline": "Port St. Lucie approves assisted-living site plan despite contamination concerns",
-            "canonical_is_custom": true,
-            "identity_basis": "durable_custom_incident_identity:custom-project|westmoreland-alf|petroleum-remediation",
-            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4577,25 +4796,25 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Port St. Lucie Targets California-Savona Flooding With Drainage Project, Sensor Alerts",
-        "generated_card_count": 2,
-        "elapsed_seconds": 68.93
+        "live_hero_headline": "Port St. Lucie Police Search for Driver in Hit-and-Run That Critically Injured Man, 63",
+        "generated_card_count": 1,
+        "elapsed_seconds": 95.737
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "cache_hit",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 6,
-        "selected_source_count": 1,
-        "cache_hit": true,
-        "archive_recovery_requested": false,
+        "publishable_source_count": 5,
+        "selected_source_count": 0,
+        "cache_hit": false,
+        "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "",
-        "failure_summary": "",
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Indian River County category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4604,7 +4823,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 6,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 6,
@@ -4781,8 +5000,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "live_hero_headline": "Man Arrested in Vero Beach Shooting Death of Former Girlfriend",
-        "elapsed_seconds": 21.298
+        "elapsed_seconds": 18.011
       }
     ]
   }
