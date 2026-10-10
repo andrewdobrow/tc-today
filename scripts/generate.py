@@ -31209,6 +31209,17 @@ def _stamp_canonical_write_authorization(
     slug = str(canonical.get("slug") or "").strip()
     if not slug:
         return None
+    # A verified source-to-canonical binding is immutable for this publication
+    # candidate. No later matcher may silently retarget its write authority.
+    prior = item.get("_canonical_write_authorization")
+    if isinstance(prior, dict) and prior.get("write_authorized"):
+        prior_slug = str(prior.get("canonical_slug") or "").strip()
+        if prior_slug and prior_slug != slug:
+            item["_canonical_destination_conflict"] = {
+                "locked_slug": prior_slug, "attempted_slug": slug,
+                "reason": "verified_canonical_retarget_attempt",
+            }
+            return None
     authorization = {
         "schema_version": "1.0",
         "outcome": str(payload.get("outcome") or payload.get("identity_outcome") or ""),
@@ -31228,6 +31239,31 @@ def _stamp_canonical_write_authorization(
     ).hexdigest()[:24]
     item["_canonical_write_authorization"] = authorization
     return authorization
+
+
+def _replace_publication_payload_preserving_authority(item, replacement):
+    """Replace composed copy without dropping the earlier target-bound decision.
+
+    Never let a reconstituted article clear a recorded conflict. A replacement may
+    legitimately be a refreshed story, but it may not silently acquire a new URL.
+    """
+    lock = copy.deepcopy(item.get("_canonical_write_authorization"))
+    conflict = copy.deepcopy(item.get("_canonical_destination_conflict"))
+    item.clear()
+    item.update(replacement)
+    if lock and lock.get("write_authorized"):
+        new_lock = item.get("_canonical_write_authorization")
+        if (isinstance(new_lock, dict) and new_lock.get("write_authorized")
+                and str(new_lock.get("canonical_slug") or "") != str(lock.get("canonical_slug") or "")):
+            conflict = conflict or {
+                "locked_slug": str(lock.get("canonical_slug") or ""),
+                "attempted_slug": str(new_lock.get("canonical_slug") or ""),
+                "reason": "composition_retarget_attempt",
+            }
+        item["_canonical_write_authorization"] = lock
+    if conflict:
+        item["_canonical_destination_conflict"] = conflict
+    return not bool(conflict)
 
 
 def _canonical_write_authorized(item, canonical):
@@ -35186,6 +35222,13 @@ def _persistent_story_independent_identity_evidence(item, entry):
 
 
 def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
+    if item.get("_canonical_destination_conflict"):
+        return False, "canonical_destination_conflict"
+    lock = item.get("_canonical_write_authorization") or {}
+    if lock.get("write_authorized") and (
+        entry is None or str(entry.get("slug") or "") != str(lock.get("canonical_slug") or "")
+    ):
+        return False, "verified_canonical_destination_mismatch"
     if entry is None:
         return True, "new_publication"
     if item.get("is_custom") or item.get("authoritative_custom"):
@@ -35265,9 +35308,10 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     if same_persistent_story:
         evidence = _persistent_story_independent_identity_evidence(item, entry)
         if evidence:
-            _stamp_canonical_write_authorization(
+            if not _stamp_canonical_write_authorization(
                 item, entry, evidence, basis="persistent_story_id_independently_verified"
-            )
+            ):
+                return False, "canonical_destination_conflict"
             return True, "persistent_story_id_independently_verified"
         return False, "uncorroborated_persistent_story_id"
     # Evaluate the row as it would exist after this update. A changed headline and
@@ -36117,8 +36161,7 @@ def write_archives(all_categories, top_cat):
                     ) or 0
                 ) + int(bool(_late_materiality.get("promoted")))
             if _late_update is not None:
-                hero.clear()
-                hero.update(_late_update)
+                _replace_publication_payload_preserving_authority(hero, _late_update)
                 headline = str(hero.get("headline") or headline)
                 existing = _skip_canonical
                 _editorial_story_id = str(
@@ -36513,8 +36556,7 @@ def write_archives(all_categories, top_cat):
                     )
                     continue
 
-                hero.clear()
-                hero.update(_merged_update)
+                _replace_publication_payload_preserving_authority(hero, _merged_update)
                 headline = str(hero.get("headline") or headline)
                 existing = _semantic_canonical
                 _editorial_story_id = _apply_semantic_gate_update_identity(
@@ -36666,8 +36708,7 @@ def write_archives(all_categories, top_cat):
                     )
                     continue
 
-                hero.clear()
-                hero.update(_terminal_merged_update)
+                _replace_publication_payload_preserving_authority(hero, _terminal_merged_update)
                 headline = str(hero.get("headline") or headline)
                 existing = _terminal_canonical
                 _editorial_story_id = _apply_semantic_gate_update_identity(
@@ -36718,6 +36759,30 @@ def write_archives(all_categories, top_cat):
                 hero["_terminal_permalink_gate_version"] = TERMINAL_PERMALINK_GATE_VERSION
 
 
+
+        # Final destination integrity barrier. A verified canonical cannot be
+        # displaced by registry membership, archive recovery, or a late fallback.
+        # Hold rather than overwrite the wrong page or mint a parallel URL.
+        if not (hero.get("is_custom") or hero.get("authoritative_custom")):
+            _lock = hero.get("_canonical_write_authorization") or {}
+            _locked_slug = str(_lock.get("canonical_slug") or "").strip() if _lock.get("write_authorized") else ""
+            _final_slug = str((existing or {}).get("slug") or "").strip()
+            _lock_conflict = hero.get("_canonical_destination_conflict")
+            if _lock_conflict or (_locked_slug and _final_slug != _locked_slug):
+                _forward_identity_report["publication_holds"].append({
+                    "headline": headline,
+                    "source_url": normalized_source_url,
+                    "reason": "verified_canonical_destination_conflict",
+                    "locked_slug": _locked_slug,
+                    "attempted_slug": _final_slug,
+                    "conflict": _lock_conflict or {},
+                    "action": "hold_without_overwrite_or_new_permalink",
+                })
+                hero["_publication_skip_reason"] = "verified_canonical_destination_conflict"
+                _finalize_cross_source_identity_observation(hero, "hold_canonical_destination_conflict")
+                print("  VERIFIED CANONICAL DESTINATION HOLD: "
+                      f"'{headline[:60]}' locked to '{_locked_slug}', attempted '{_final_slug}'")
+                continue
 
         if (
             existing
