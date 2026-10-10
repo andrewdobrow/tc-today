@@ -28,8 +28,12 @@ def _assert_contract(page):
     doc = BeautifulSoup(page, 'html.parser')
     assert 'Sponsored business features' in page
     assert 'Morning Brief sponsorships' in page
-    assert '30,000' in page and '550' in page
-    assert 'Approximate audience figures as of October 2026' in page
+    # Audience metrics change frequently: the public sponsor page must stay evergreen.
+    assert not doc.select('.adv-stats, .adv-stat, .adv-audience-note')
+    for stale_claim in ('~30,000', '~550', 'Monthly local users', 'Morning Brief subscribers',
+                        'Approximate audience figures', 'as of October 2026'):
+        assert stale_claim not in page
+    assert 'Martin, St. Lucie and Indian River counties' in page
     assert 'No paywall. Every reader sees your ad' not in page
     assert '706K+' not in page
     assert 'Top 5</span><span class="adv-stat-label">' not in page
