@@ -172,6 +172,14 @@ def _clean_description(value: Any) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def _clean_venue(value: Any) -> str:
+    """Strip calendar HTML and embedded address suffixes from venue fields."""
+    raw = str(value or "")
+    if re.search(r"</(?:p|div)>\s*-", raw, re.I):
+        raw = re.split(r"</(?:p|div)>\s*-", raw, maxsplit=1, flags=re.I)[0]
+    return _clean_description(raw)
+
+
 def _clip(value: Any, limit: int = 260, *, plain_html: bool = False) -> str:
     text = _clean_description(value) if plain_html else _clean(value)
     if len(text) <= limit:
@@ -533,7 +541,7 @@ def _normalize_event(raw: dict[str, Any], source: dict[str, Any], window: Window
         "all_day": all_day,
         "time_known": time_known,
         "time_source": _clean(raw.get("time_source")) or ("source" if time_known else "unknown"),
-        "venue": _clean(raw.get("venue") or source.get("venue")),
+        "venue": _clean_venue(raw.get("venue") or source.get("venue")),
         "address": address,
         "city": city,
         "county": county,
@@ -1544,33 +1552,81 @@ def _dedupe_exact(events: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
     return list(out.values())
 
 
+def _event_title_identity(value: str) -> str:
+    """Conservative normalization for calendar syndication title variants."""
+    title = _slug_text(value)
+    title = re.sub(r"^20\d{2}\s+", "", title)
+    title = re.sub(r"\b(?:annual|fall|autumn)\b", " ", title)
+    title = re.sub(r"\b(?:art and craft|arts and crafts)\b", "craft", title)
+    return re.sub(r"\s+", " ", title).strip()
+
+
+def _event_venue_identity(value: str) -> str:
+    venue = _slug_text(_clean_venue(value))
+    # Municipal feeds sometimes append the city, state and ZIP to a venue name.
+    venue = re.sub(r"\s+(?:stuart|vero beach|fort pierce|port st lucie)\s+fl\s+\d{5}$", "", venue)
+    return venue
+
+
+def _repair_explicit_clock_conflict(event: dict[str, Any]) -> None:
+    """Fix obvious erroneous calendar clock data using the listing's own range.
+
+    Never infer a start time when the copy does not give a single explicit range.
+    A four-hour discrepancy can be caused by a publisher treating Eastern local
+    time as UTC; prefer explicit event copy only when this is unambiguous.
+    """
+    if not event.get("time_known") or event.get("all_day"):
+        return
+    start = _parse_iso_datetime(event.get("starts_at"))
+    if start is None:
+        return
+    evidence = _clock_range_from_text(event.get("description", ""))
+    if evidence is None:
+        return
+    proposed = start.replace(hour=evidence[0][0], minute=evidence[0][1])
+    if proposed == start or abs((proposed - start).total_seconds()) != 4 * 3600:
+        return
+    _apply_time_evidence(event, evidence, source="description_clock_correction")
+
+
 def _dedupe_cross_source(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
     from difflib import SequenceMatcher
 
-    ordered = sorted(events, key=lambda e: (e["starts_at"], int(e.get("source_priority", 50)), e["title"]))
+    ordered = sorted((dict(event) for event in events), key=lambda e: (e["starts_at"], int(e.get("source_priority", 50)), e["title"]))
+    # Repair a demonstrable calendar timezone shift before candidate comparison,
+    # including rows read from an older source cache.
+    for event in ordered:
+        event["venue"] = _clean_venue(event.get("venue", ""))
+        _repair_explicit_clock_conflict(event)
+    ordered.sort(key=lambda e: (e["starts_at"], int(e.get("source_priority", 50)), e["title"]))
     kept: list[dict[str, Any]] = []
     for event in ordered:
         start_day = event["starts_at"][:10]
-        title_key = _slug_text(re.sub(r"\b(?:at|@)\s+.+$", "", event["title"], flags=re.I))
+        title_key = _event_title_identity(re.sub(r"\b(?:at|@)\s+.+$", "", event["title"], flags=re.I))
         merged_into = None
         for existing in reversed(kept):
             if existing["starts_at"][:10] != start_day:
                 if existing["starts_at"][:10] < start_day:
                     break
                 continue
-            existing_key = _slug_text(re.sub(r"\b(?:at|@)\s+.+$", "", existing["title"], flags=re.I))
+            existing_key = _event_title_identity(re.sub(r"\b(?:at|@)\s+.+$", "", existing["title"], flags=re.I))
             ratio = SequenceMatcher(None, title_key, existing_key).ratio()
-            venue_match = bool(_slug_text(event.get("venue", "")) and _slug_text(event.get("venue", "")) == _slug_text(existing.get("venue", "")))
-            city_match = event.get("city") and event.get("city") == existing.get("city")
+            e_venue = _event_venue_identity(event.get("venue", ""))
+            old_venue = _event_venue_identity(existing.get("venue", ""))
+            venue_match = bool(e_venue and old_venue and (e_venue == old_venue or
+                               (min(len(e_venue), len(old_venue)) >= 9 and
+                                (e_venue.startswith(old_venue + " ") or old_venue.startswith(e_venue + " ")))))
+            city_match = bool(event.get("city") and event.get("city") == existing.get("city"))
             event_start = _parse_iso_datetime(event.get("starts_at"))
             existing_start = _parse_iso_datetime(existing.get("starts_at"))
-            time_match = bool(
-                event_start and existing_start
-                and abs(event_start - existing_start) <= timedelta(minutes=45)
-            )
+            time_match = bool(event_start and existing_start and abs(event_start - existing_start) <= timedelta(minutes=45))
             if event.get("all_day") or existing.get("all_day"):
                 time_match = True
-            if ratio >= 0.91 and time_match and (venue_match or city_match or ratio >= 0.97):
+            # Never merge substantially different titles on a shared city alone.
+            # Year and festival-season variants require a shared physical venue.
+            same_title = bool(title_key and title_key == existing_key)
+            if time_match and ((same_title and (venue_match or (city_match and len(title_key) >= 16))) or
+                               (ratio >= 0.91 and (venue_match or city_match or ratio >= 0.97))):
                 merged_into = existing
                 break
         if merged_into is None:
@@ -1585,6 +1641,11 @@ def _dedupe_cross_source(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for field in ("description", "price", "ticket_url", "venue", "address", "city"):
             if not merged_into.get(field) and other.get(field):
                 merged_into[field] = other[field]
+        # Replace source boilerplate with fuller syndicated text where possible.
+        if len(other.get("description", "")) > len(merged_into.get("description", "")) + 35:
+            merged_into["description"] = other["description"]
+        if len(other.get("venue", "")) >= 8 and len(other["venue"]) < len(merged_into.get("venue", "")) and _event_venue_identity(other["venue"]) == _event_venue_identity(merged_into["venue"]):
+            merged_into["venue"] = other["venue"]
         sources = set(merged_into.get("also_listed_by", []))
         sources.add(other.get("source_name", ""))
         sources.discard(merged_into.get("source_name", ""))
