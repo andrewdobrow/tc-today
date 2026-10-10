@@ -1589,6 +1589,29 @@ def _repair_explicit_clock_conflict(event: dict[str, Any]) -> None:
     _apply_time_evidence(event, evidence, source="description_clock_correction")
 
 
+def _same_named_festival(event: dict[str, Any], existing: dict[str, Any], title_key: str, existing_key: str) -> bool:
+    """Match abbreviated festival listings with a distinctive shared venue brand.
+
+    Do not use same city or generic 'festival' language by itself: two separate
+    festivals can run simultaneously. Require the same *named* venue token in
+    both listings and that the shorter title is a true suffix of the longer.
+    """
+    if not (title_key and existing_key and event.get("city") and event.get("city") == existing.get("city")):
+        return False
+    shorter, longer = sorted((title_key, existing_key), key=len)
+    if not (shorter.endswith("festival") and longer.endswith("festival") and
+            longer.endswith(" " + shorter) and len(shorter.split()) >= 2):
+        return False
+    venues = [_event_venue_identity(row.get("venue", "")) for row in (event, existing)]
+    if not all(venues):
+        return False
+    # The shared brand must appear in the longer event title and in each venue,
+    # avoiding false merges among generic market/festival events in one town.
+    ignored = {"fields", "field", "farm", "park", "center", "the", "at", "and", "event", "events"}
+    shared = set(venues[0].split()) & set(venues[1].split()) & set(longer.split())
+    return any(len(token) >= 5 and token not in ignored for token in shared)
+
+
 def _dedupe_cross_source(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
     from difflib import SequenceMatcher
 
@@ -1626,7 +1649,8 @@ def _dedupe_cross_source(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
             # Year and festival-season variants require a shared physical venue.
             same_title = bool(title_key and title_key == existing_key)
             if time_match and ((same_title and (venue_match or (city_match and len(title_key) >= 16))) or
-                               (ratio >= 0.91 and (venue_match or city_match or ratio >= 0.97))):
+                               (ratio >= 0.91 and (venue_match or city_match or ratio >= 0.97)) or
+                               _same_named_festival(event, existing, title_key, existing_key)):
                 merged_into = existing
                 break
         if merged_into is None:
