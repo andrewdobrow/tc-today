@@ -5,40 +5,40 @@
 ## Hero
 
 - Current: **Grease Fire Sparks Propane Explosion at Port St. Lucie Home**
-- Recommended: **Grease Fire Sparks Propane Explosion at Port St. Lucie Home**
-- Recommendation: KEEP (not enforced)
+- Recommended: **Port St. Lucie Crash: Driver Thought Teen Was Construction Barrel, No Charges Yet**
+- Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt | Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case | 59 | importance 0; freshness 83.91; urgency 6/10; validated material update |
-| 2 | Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case | Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case | 57 | importance 0; freshness 77.25; urgency 6/10; validated material update |
-| 3 | Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case | Port St. Lucie Crash: Driver Thought Teen Was Construction Barrel, No Charges Yet | 56 | importance 0; freshness 90.24; urgency 4/10; validated material update |
-| 4 | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt | 56 | importance 0; freshness 52.37; urgency 8/10; validated material update |
-| 5 | Port St. Lucie Crash: Driver Thought Teen Was Construction Barrel, No Charges Yet | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | 55 | importance 0; freshness 99.95; urgency 5/10 |
-| 6 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11 | Port St. Lucie approves assisted-living site plan despite contamination concerns | 50 | importance 0; freshness 86.96; urgency 2/10; validated material update |
-| 7 | Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11 | 45 | importance 0; freshness 82.94; urgency 4/10 |
-| 8 | Port St. Lucie approves assisted-living site plan despite contamination concerns | Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd | 51 | importance 0; freshness 86.94; urgency 2/10; validated material update; -6 category saturation; -4 county saturation |
-| 9 | Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd | Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business | 37 | importance 0; freshness 55.21; urgency 2/10 |
-| 10 | Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds | Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash | 45 | importance 0; freshness 70.22; urgency 4/10; -6 category saturation; -4 county saturation |
-| 11 | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds | 43 | importance 0; freshness 77.25; urgency 2/10; -8 county saturation |
-| 12 | Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business | Three generations later, Packard Roofing remains rooted on the Treasure Coast | 33 | importance 0; freshness 52.38; urgency 2/10 |
+| 1 | Port St. Lucie Crash: Driver Thought Teen Was Construction Barrel, No Charges Yet | Port St. Lucie Crash: Driver Thought Teen Was Construction Barrel, No Charges Yet | 54 | importance 0; freshness 80.0; urgency 4/10; validated material update |
+| 2 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11 | Port St. Lucie approves assisted-living site plan despite contamination concerns | 48 | importance 0; freshness 76.72; urgency 2/10; validated material update |
+| 3 | Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash | Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd | 48 | importance 0; freshness 76.7; urgency 2/10; validated material update |
+| 4 | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case | 48 | importance 0; freshness 73.67; urgency 2/10; validated material update |
+| 5 | Port St. Lucie approves assisted-living site plan despite contamination concerns | Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash | 43 | importance 0; freshness 59.98; urgency 4/10 |
+| 6 | Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11 | 42 | importance 0; freshness 72.7; urgency 4/10 |
+| 7 | Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | 46 | importance 0; freshness 89.71; urgency 2/10; -6 category saturation |
+| 8 | Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds | Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt | 40 | importance 0; freshness 42.13; urgency 2/10; validated material update; -4 county saturation |
+| 9 | Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer | Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business | 35 | importance 0; freshness 44.97; urgency 2/10 |
+| 10 | Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt | Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds | 40 | importance 0; freshness 67.01; urgency 2/10; -8 county saturation |
+| 11 | Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business | Three generations later, Packard Roofing remains rooted on the Treasure Coast | 31 | importance 0; freshness 42.14; urgency 2/10 |
+| 12 | Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments | Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle | 30 | importance 0; freshness 42.14; urgency 2/10 |
 
 ## Recommended moves
 
-- **Three generations later, Packard Roofing remains rooted on the Treasure Coast**: 18 → 12 — importance 0; freshness 52.38; urgency 2/10
-- **Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt**: 1 → 4 — importance 0; freshness 52.37; urgency 8/10; validated material update
-- **Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash**: 7 → 10 — importance 0; freshness 70.22; urgency 4/10; -6 category saturation; -4 county saturation
-- **Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business**: 12 → 9 — importance 0; freshness 55.21; urgency 2/10
-- **Port St. Lucie Crash: Driver Thought Teen Was Construction Barrel, No Charges Yet**: 5 → 3 — importance 0; freshness 90.24; urgency 4/10; validated material update
-- **Port St. Lucie approves assisted-living site plan despite contamination concerns**: 8 → 6 — importance 0; freshness 86.96; urgency 2/10; validated material update
-- **Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case**: 2 → 1 — importance 0; freshness 83.91; urgency 6/10; validated material update
-- **Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case**: 3 → 2 — importance 0; freshness 77.25; urgency 6/10; validated material update
-- **Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach**: 4 → 5 — importance 0; freshness 99.95; urgency 5/10
-- **Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd**: 9 → 8 — importance 0; freshness 86.94; urgency 2/10; validated material update; -6 category saturation; -4 county saturation
-- **Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11**: 6 → 7 — importance 0; freshness 82.94; urgency 4/10
-- **Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds**: 10 → 11 — importance 0; freshness 77.25; urgency 2/10; -8 county saturation
+- **Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle**: 17 → 12 — importance 0; freshness 42.14; urgency 2/10
+- **Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11**: 2 → 6 — importance 0; freshness 72.7; urgency 4/10
+- **Three generations later, Packard Roofing remains rooted on the Treasure Coast**: 15 → 11 — importance 0; freshness 42.14; urgency 2/10
+- **Port St. Lucie approves assisted-living site plan despite contamination concerns**: 5 → 2 — importance 0; freshness 76.72; urgency 2/10; validated material update
+- **Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd**: 6 → 3 — importance 0; freshness 76.7; urgency 2/10; validated material update
+- **Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case**: 7 → 4 — importance 0; freshness 73.67; urgency 2/10; validated material update
+- **Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach**: 4 → 7 — importance 0; freshness 89.71; urgency 2/10; -6 category saturation
+- **Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash**: 3 → 5 — importance 0; freshness 59.98; urgency 4/10
+- **Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt**: 10 → 8 — importance 0; freshness 42.13; urgency 2/10; validated material update; -4 county saturation
+- **Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds**: 8 → 10 — importance 0; freshness 67.01; urgency 2/10; -8 county saturation
+- **Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business**: 11 → 9 — importance 0; freshness 44.97; urgency 2/10
+- **Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments**: 12 → 14 — importance 0; freshness 42.15; urgency 2/10
 
 ## Guardrails
 
