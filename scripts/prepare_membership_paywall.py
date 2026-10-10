@@ -310,6 +310,26 @@ def main() -> None:
             continue
         body_html = body_match.group(1)
 
+        # This October 9 report was mistakenly published into an unrelated July
+        # permalink. The full verified body is retained in a durable incident
+        # repair ledger; an older Supabase snapshot must not overwrite it when
+        # the October 8 canonical is rehydrated. Do not freeze later updates.
+        incident_file = ROOT / "data" / "cat-incident-canonical-repair.json"
+        if incident_file.is_file():
+            incident = json.loads(incident_file.read_text(encoding="utf-8"))
+            if slug == incident.get("target_slug"):
+                archive = json.loads((ROOT / "archive.json").read_text(encoding="utf-8"))
+                current = next((r for r in archive if r.get("slug") == slug), {})
+                stamp = str(current.get("canonical_last_material_update_at") or "")
+                verified = str(current.get("meaningful_update_validated", "")).lower() in ("true", "1")
+                if not (verified and stamp > incident["updated"]):
+                    paragraphs = [v.strip() for v in incident["body"].split("\n\n") if v.strip()]
+                    assert len(paragraphs) >= 3 and "Budensiek" in incident["body"]
+                    body_html = "".join(f"<p>{html.escape(v)}</p>" for v in paragraphs)
+                    text = text[:body_match.start(1)] + body_html + text[body_match.end(1):]
+                    body_match = BODY_RE.search(text)
+                    assert body_match, "Incident repair invalidated protected body boundary"
+
         # The protected Supabase snapshot is authoritative for hidden member copy,
         # but it can predate a later editorial copy edit. Reapply the same durable,
         # slug-scoped replacement ledger *after* rehydration and before re-splitting

@@ -91,7 +91,10 @@ def test_production_archive_and_article_files_use_ascii_canonicals():
     archive = json.loads((ROOT / "archive.json").read_text(encoding="utf-8"))
     slugs = {row.get("slug") for row in archive}
     assert POKEMON_SLUG in slugs
-    assert FIANCEE_SLUG in slugs
+    # This historically valid permalink was later contaminated by an unrelated
+    # animal-cruelty update; it is intentionally now a permanent redirect.
+    assert FIANCEE_SLUG not in slugs
+    assert "noindex,follow" in (ROOT / "articles" / f"{FIANCEE_SLUG}.html").read_text()
     assert POKEMON_UNICODE not in slugs
     assert all(slug == slug.encode("ascii").decode("ascii") for slug in slugs if slug)
 

@@ -21447,6 +21447,36 @@ def _prospective_archive_update_alignment(item, entry, now=None):
         proposed["lastmod"] = prospective_lastmod
         alignment = _archive_headline_slug_alignment(proposed)
         timestamp_evidence = "stored_archive_timestamp"
+    # A prior publication may never be rewritten into an unrelated incident just
+    # because a source, locality or persistent registry ID overlaps. Once the
+    # original permalink is >30 days old, fuzzy headline drift needs more than
+    # a shared place name to qualify as an update. Exact external source and
+    # authoritative custom editions retain their separate identity contracts.
+    try:
+        original_day = datetime.strptime(str(entry.get("slug") or "")[:10], "%Y-%m-%d").date()
+        old_days = (now.date() - original_day).days
+    except (ValueError, TypeError):
+        old_days = None
+    if (
+        old_days is not None and old_days > FORWARD_IDENTITY_RECENT_DAYS
+        and incoming_headline
+        and not (entry.get("is_custom") or entry.get("authoritative_custom"))
+    ):
+        origin = str(entry.get("permalink_origin_headline") or entry.get("headline") or "")
+        weak = {"hobe", "sound", "martin", "county", "lucie", "stuart", "port", "vero", "beach",
+                "sheriff", "police", "officials", "says", "said", "reports", "report", "new", "update"}
+        baseline = {w for w in re.findall(r"[a-z0-9]{4,}", origin.lower()) if w not in weak}
+        incoming = {w for w in re.findall(r"[a-z0-9]{4,}", incoming_headline.lower()) if w not in weak}
+        source_a = _normalized_external_source_url(entry.get("source_url") or "")
+        source_b = _normalized_external_source_url(item.get("source_url") or item.get("_source_url") or "")
+        exact_source = bool(source_a and source_b and source_a == source_b)
+        if baseline and incoming and not (baseline & incoming) and not exact_source:
+            alignment = {
+                **alignment,
+                "aligned": False,
+                "reason": "historical_permanent_permalink_incident_conflict",
+                "historical_target_age_days": old_days,
+            }
     return {
         **alignment,
         "prospective": True,
@@ -40918,6 +40948,9 @@ def main():
     SEMANTIC_PUBLICATION_SOURCE_OUTCOMES.clear()
     ASSIGNMENT_SHADOW_SEMANTIC_PAIR_CACHE.clear()
     print("Treasure Coast Today — building site...")
+    # Keep the July house-fire permalink out of all canonical matching inputs.
+    from scripts.repair_cat_incident_permalink import repair as _repair_cat_permalink
+    _repair_cat_permalink(OUTPUT_DIR)
     _slug_migration = _migrate_unsafe_article_slugs(OUTPUT_DIR)
     if _slug_migration.get("migrated"):
         print(
@@ -42519,6 +42552,9 @@ def main():
             "live publication unchanged"
         )
 
+    # Final authority: after all archive / article output stages, recover the
+    # Oct. 9 kitten update on the Oct. 8 permalink and restore the July redirect.
+    _repair_cat_permalink(OUTPUT_DIR)
     print(f"Done. {len(all_categories)} categories written.")
 
 

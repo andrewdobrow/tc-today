@@ -329,8 +329,10 @@ def test_semantic_material_update_still_rejects_unrelated_overwrite_after_headli
     })
     merged, result = g._semantic_material_update_composition(canonical, incoming, {"confidence": 0.9}, g._new_semantic_publication_gate_report(), phase="forward_publication")
     assert merged is None
-    assert result["status"] == "context_contract_failed"
-    assert "original_event_context_missing" in result["validation_errors"]
+    # Both context rejection and the stronger historical-permalink barrier are
+    # valid fail-closed outcomes for an unrelated proposed overwrite.
+    assert result["status"] in {"context_contract_failed", "permalink_alignment_failed"}
+    assert any(code in result["validation_errors"] for code in ("original_event_context_missing", "historical_permanent_permalink_incident_conflict"))
 
 
 def test_byron_donalds_running_mate_terminal_hold_resolves_new_when_no_candidate_is_same_event(monkeypatch):
