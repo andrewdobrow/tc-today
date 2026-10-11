@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-11T12:52:39.743600+00:00",
+  "generated_at": "2026-10-11T15:52:20.389958+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,31 +62,31 @@
     }
   },
   "summary": {
-    "evaluations": 40,
-    "candidate_pairs": 1,
+    "evaluations": 39,
+    "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
-    "model_calls": 1,
+    "model_calls": 0,
     "cache_hits": 0,
     "no_candidate_passes": 39,
-    "duplicates_preserved": 1,
+    "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
     "new_stories_allowed": 1,
     "retroactive_rows_retained": 38,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 1,
-    "registry_aliases_written": 1,
+    "registry_story_records_merged": 0,
+    "registry_aliases_written": 0,
     "material_update_composer_calls": 0,
     "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 0,
-    "material_update_replays_suppressed": 1,
+    "material_update_replays_suppressed": 2,
     "pre_generation_materiality_evaluations": 6,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 5,
     "pre_generation_materiality_holds": 1,
-    "pre_generation_materiality_model_calls": 2,
-    "pre_generation_materiality_cache_hits": 4,
+    "pre_generation_materiality_model_calls": 1,
+    "pre_generation_materiality_cache_hits": 5,
     "terminal_permalink_evaluations": 1,
     "terminal_permalink_candidate_pairs": 12,
     "terminal_permalink_model_calls": 1,
@@ -230,8 +230,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -269,19 +269,20 @@
       "semantic_action": "hold",
       "confidence": 0.78,
       "shared_anchors": [
-        "PSL Westmoreland ALF / Rivella PUD project",
-        "Southeast Morningside Boulevard / Southeast Westmoreland Boulevard location",
+        "PSL Westmoreland ALF project",
+        "Rivella planned unit development",
+        "Southeast Morningside Boulevard / Southeast Westmoreland Boulevard",
         "City Council approval of major site plan",
         "neighboring petroleum-contaminated property",
-        "resident opposition over contamination concerns"
+        "resident opposition to project"
       ],
       "novel_facts": [
-        "BTEX Engineering letter details from a March 2026 meeting recommending remediation approach changes due to vapor concerns",
-        "Residents contacted EPA and Florida Department of Health",
-        "Specific next steps: construction plan technical review and South Florida Water Management District review",
-        "Resident quotes from David Lipps and Charlie D'Agata specifying two years of objections"
+        "BTEX Engineering letter discussing March 2026 meeting with environmental officials recommending change to remediation approach",
+        "concern that vapors need to be captured during remediation",
+        "residents contacting EPA and Florida Department of Health",
+        "project must still go through construction plan technical review and South Florida Water Management District review"
       ],
-      "reason": "This is the same contamination dispute over the same assisted-living project already covered by the canonical story, but it adds material new details including the specific engineering letter findings, named regulatory agencies contacted, and concrete next procedural steps, which update readers' understanding without constituting a separate newsworthy accountability event.",
+      "reason": "Same project, location, and contamination dispute as the existing canonical about the Westmoreland ALF site plan approval. The new engineering letter detail and additional regulatory steps/agency contacts represent a material update on the ongoing contamination concern rather than a distinct new newsworthy angle, so it should update the existing canonical.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
@@ -1202,25 +1203,25 @@
       "initial_decision": {
         "status": "invalid_model_response",
         "action": "hold",
-        "recommended_action": "update_existing_canonical",
+        "recommended_action": "new_story",
         "selected_candidate_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
         "same_real_world_event": true,
         "material_new_update": true,
-        "independently_newsworthy_followup": false,
+        "independently_newsworthy_followup": true,
         "confidence": 0.72,
         "shared_anchors": [
-          "California Boulevard flooding",
-          "Port St. Lucie",
-          "same rain event/recurring intersection flooding",
-          "city response to flooding"
+          "Port St. Lucie flooding",
+          "California Boulevard",
+          "recent heavy rain flooding event"
         ],
         "novel_facts": [
-          "pizza shop losing thousands in revenue",
-          "specific intersection California and Savona boulevards",
-          "city pilot program installing water level sensors",
-          "Oak Hammock drainage project details with retention ponds and raised roadway"
+          "Specific intersection: California and Savona boulevards flooding, dubbed 'California River'",
+          "Estella Pizzaria business lost thousands of dollars in revenue due to flooding",
+          "City pilot program installing water level sensors at flood-prone areas to alert Public Works/police",
+          "Planned Oak Hammock drainage project with two retention ponds, baffle boxes, and raised roadway sections",
+          "City official Scott Samples named as spokesperson describing capital investment priority"
         ],
-        "reason": "This continues the same California Boulevard flooding event covered in the candidate, now with new specifics: the exact intersection, a business financial impact, and the city's sensor pilot program and long-term drainage project plans. These are material updates to the ongoing flooding story rather than a standalone newsworthy follow-up, so the existing canonical should be updated.",
+        "reason": "This is a follow-up to the same general Port St. Lucie flooding event referenced in the candidate article (shared location California Boulevard, same rain event), but introduces material new facts: quantified business economic harm, and a distinct city accountability/policy response (sensor pilot program and drainage infrastructure plans) that constitutes an independently newsworthy follow-up meriting its own story rather than a simple update to the prior flood-recede article.",
         "validation_errors": [
           "same_event_confidence_below_threshold"
         ],
@@ -1230,124 +1231,28 @@
       "decision": {
         "status": "invalid_model_response",
         "action": "hold",
-        "recommended_action": "update_existing_canonical",
+        "recommended_action": "new_story",
         "selected_candidate_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
         "same_real_world_event": true,
         "material_new_update": true,
-        "independently_newsworthy_followup": false,
+        "independently_newsworthy_followup": true,
         "confidence": 0.72,
         "shared_anchors": [
-          "California Boulevard flooding",
-          "Port St. Lucie",
-          "same rain event/recurring intersection flooding",
-          "city response to flooding"
+          "Port St. Lucie flooding",
+          "California Boulevard",
+          "recent heavy rain flooding event"
         ],
         "novel_facts": [
-          "pizza shop losing thousands in revenue",
-          "specific intersection California and Savona boulevards",
-          "city pilot program installing water level sensors",
-          "Oak Hammock drainage project details with retention ponds and raised roadway"
+          "Specific intersection: California and Savona boulevards flooding, dubbed 'California River'",
+          "Estella Pizzaria business lost thousands of dollars in revenue due to flooding",
+          "City pilot program installing water level sensors at flood-prone areas to alert Public Works/police",
+          "Planned Oak Hammock drainage project with two retention ponds, baffle boxes, and raised roadway sections",
+          "City official Scott Samples named as spokesperson describing capital investment priority"
         ],
-        "reason": "This continues the same California Boulevard flooding event covered in the candidate, now with new specifics: the exact intersection, a business financial impact, and the city's sensor pilot program and long-term drainage project plans. These are material updates to the ongoing flooding story rather than a standalone newsworthy follow-up, so the existing canonical should be updated.",
+        "reason": "This is a follow-up to the same general Port St. Lucie flooding event referenced in the candidate article (shared location California Boulevard, same rain event), but introduces material new facts: quantified business economic harm, and a distinct city accountability/policy response (sensor pilot program and drainage infrastructure plans) that constitutes an independently newsworthy follow-up meriting its own story rather than a simple update to the prior flood-recede article.",
         "validation_errors": [
           "same_event_confidence_below_threshold"
         ],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Martin County Employee Rescues Teen in Rip Current at Unguarded Bob Graham Beach",
-      "incoming_source_url": "https://cw34.com/news/local/martin-county-employee-rescues-teen-caught-in-rip-current-at-unguarded-beach-bob-graham-beach-growth-management-department-employee-hero-rescue-surfer-commandeers-surfboard-saves-teen?teaserSource=trending",
-      "incoming_story_id": "story_020508",
-      "candidates": [
-        {
-          "slug": "2026-10-10-martin-county-employee-rescues-three-girls-from-rip-current-at-bob-graham-beach",
-          "headline": "Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach",
-          "retrieval_score": 1.0,
-          "headline_similarity": 0.7906,
-          "similarity_basis": "final_headline",
-          "shared_headline_tokens": [
-            "beach",
-            "bob",
-            "county",
-            "current",
-            "employee",
-            "graham",
-            "martin",
-            "rescues",
-            "rip"
-          ],
-          "shared_topic_tokens": [
-            "bob",
-            "current",
-            "employee",
-            "graham",
-            "rescues",
-            "rip"
-          ],
-          "content_similarity": {
-            "score": 0.5029,
-            "overlap": 0.6296,
-            "jaccard": 0.1771,
-            "shared_token_count": 17,
-            "shared_tokens": [
-              "3",
-              "bob",
-              "caught",
-              "current",
-              "drove",
-              "employee",
-              "girl",
-              "girls",
-              "graham",
-              "help",
-              "jensen",
-              "one",
-              "rescues",
-              "rip",
-              "then",
-              "three",
-              "unguarded"
-            ]
-          },
-          "strong_content_event_continuity": true,
-          "day_gap": 0,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
-          "reasons": [
-            "strong_fuzzy_headline",
-            "shared_locality_and_event_family",
-            "strong_content_event_continuity",
-            "publication_gap_0_days"
-          ]
-        }
-      ],
-      "decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-10-10-martin-county-employee-rescues-three-girls-from-rip-current-at-bob-graham-beach",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Amy Offenbach",
-          "Bob Graham Beach",
-          "Jensen Beach, Martin County",
-          "rip current rescue on Thursday afternoon",
-          "Martin County Growth Management employee/surfer"
-        ],
-        "novel_facts": [
-          "Girl lost consciousness after choking on water",
-          "Offenbach commandeered a surfboard",
-          "Transported to Jensen Beach where Ocean Rescue provided care before hospital transport"
-        ],
-        "reason": "Both articles describe the identical rescue incident: same employee (Amy Offenbach), same beach, same date, same rip current rescue of teen girls. Additional details like the surfboard and unconsciousness are elaboration, not a material update changing the story's stakes.",
-        "validation_errors": [],
         "consistency_repairs": []
       }
     }
@@ -1356,11 +1261,11 @@
   "material_update_compositions": [],
   "material_updates": [],
   "registry_consolidation": {
-    "status": "consolidated",
-    "directives_considered": 8,
-    "story_records_merged": 1,
-    "aliases_written": 1,
-    "already_consolidated": 0,
+    "status": "no_changes",
+    "directives_considered": 9,
+    "story_records_merged": 0,
+    "aliases_written": 0,
+    "already_consolidated": 1,
     "skipped": [
       {
         "source_story_id": "story_019789",
@@ -1736,30 +1641,6 @@
       }
     ],
     "rejected_directives": [],
-    "merges": [
-      {
-        "source_story_id": "story_020508",
-        "target_story_id": "story_020431",
-        "target_slug": "2026-10-10-martin-county-employee-rescues-three-girls-from-rip-current-at-bob-graham-beach",
-        "incoming_headline": "Martin County Employee Rescues Teen in Rip Current at Unguarded Bob Graham Beach",
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Amy Offenbach",
-          "Bob Graham Beach",
-          "Jensen Beach, Martin County",
-          "rip current rescue on Thursday afternoon",
-          "Martin County Growth Management employee/surfer"
-        ],
-        "reason": "Both articles describe the identical rescue incident: same employee (Amy Offenbach), same beach, same date, same rip current rescue of teen girls. Additional details like the surfboard and unconsciousness are elaboration, not a material update changing the story's stakes.",
-        "relationship_type": "duplicate",
-        "novel_facts": [
-          "Girl lost consciousness after choking on water",
-          "Offenbach commandeered a surfboard",
-          "Transported to Jensen Beach where Ocean Rescue provided care before hospital transport"
-        ],
-        "resolved_source_story_id": "story_020508",
-        "resolved_target_story_id": "story_020431"
-      }
-    ]
+    "merges": []
   }
 }
