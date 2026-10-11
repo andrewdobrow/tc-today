@@ -1,0 +1,92 @@
+name: TCT iOS News Alert (manual preview or send)
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Preview only (safe), or send (separately gated in Supabase)"
+        required: true
+        type: choice
+        default: preview
+        options:
+          - preview
+          - send
+      audience:
+        description: "Reader preference group"
+        required: true
+        type: choice
+        default: breaking
+        options:
+          - breaking
+          - martin
+          - st_lucie
+          - indian_river
+      slug:
+        description: "Published article URL slug (without /articles/ and .html)"
+        required: true
+        type: string
+      title:
+        description: "Notification headline (100 characters max)"
+        required: true
+        type: string
+      body:
+        description: "Notification body (180 characters max)"
+        required: true
+        type: string
+      confirm:
+        description: "Only for send: type SEND (preview ignores this)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tct-ios-manual-news-alerts
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PROJECT_ID: ${{ vars.SUPABASE_PROJECT_REF }}
+      DISPATCH_KEY: ${{ secrets.TCT_PUSH_DISPATCH_KEY }}
+      MODE: ${{ inputs.action }}
+      AUDIENCE: ${{ inputs.audience }}
+      SLUG: ${{ inputs.slug }}
+      ALERT_TITLE: ${{ inputs.title }}
+      ALERT_BODY: ${{ inputs.body }}
+      CONFIRM: ${{ inputs.confirm }}
+    steps:
+      - name: Validate operator inputs and prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$PROJECT_ID" || { echo '::error::Missing SUPABASE_PROJECT_REF'; exit 1; }
+          [[ "$DISPATCH_KEY" =~ ^[0-9a-f]{64}$ ]] || { echo '::error::Missing valid TCT_PUSH_DISPATCH_KEY secret'; exit 1; }
+          if [[ "$MODE" == "send" && "$CONFIRM" != "SEND" ]]; then
+            echo '::error::To send, the confirmation input must equal SEND'
+            exit 1
+          fi
+      - name: Preview audience or request a manually approved alert
+        shell: bash
+        run: |
+          set -euo pipefail
+          payload=$(jq -n --arg action "$MODE" --arg audience "$AUDIENCE" \
+            --arg slug "$SLUG" --arg title "$ALERT_TITLE" --arg body "$ALERT_BODY" \
+            --arg confirm "$CONFIRM" \
+            '{action:$action,audience:$audience,slug:$slug,title:$title,body:$body,confirm:$confirm}')
+          response_file=$(mktemp)
+          trap 'rm -f "$response_file"' EXIT
+          http_status=$(curl --silent --show-error --max-time 150 --output "$response_file" \
+            --write-out '%{http_code}' --request POST \
+            --header 'Content-Type: application/json' \
+            --header "x-tct-push-dispatch-key: $DISPATCH_KEY" \
+            --data-raw "$payload" \
+            "https://${PROJECT_ID}.supabase.co/functions/v1/push-dispatch")
+          jq . "$response_file"
+          if [[ "$http_status" != '200' ]]; then
+            echo "::error::Push dispatcher returned HTTP $http_status; nothing should be retried blindly."
+            exit 1
+          fi
