@@ -24519,6 +24519,7 @@ def _primary_navigation_html(active="", homepage_filters=False):
         ("missing_persons", "Missing Persons", "/missing-persons.html"),
         ("archive", "Archive", "/archive.html"),
         ("newsroom", "Newsroom", "/newsroom.html"),
+        ("advertise", "Advertise", "/advertise.html"),
     ]
     section_keys = {key for key, _label, _href in news_items + more_items}
 
@@ -24830,6 +24831,7 @@ def _normalize_primary_navigation_sitewide(output_root):
         "Archive": "archive",
         "Newsroom": "newsroom",
         "Missing Persons": "missing_persons",
+        "Advertise": "advertise",
     }
 
     def detect_active(nav, path):
@@ -24841,6 +24843,7 @@ def _normalize_primary_navigation_sitewide(output_root):
                 "archive.html": "archive",
                 "newsroom.html": "newsroom",
                 "missing-persons.html": "missing_persons",
+                "advertise.html": "advertise",
             }
             if path.name.lower() in by_name:
                 return by_name[path.name.lower()]
@@ -24951,6 +24954,12 @@ def _normalize_primary_navigation_sitewide(output_root):
         news_heading = final.find('class="nav-sections-heading">News</span>')
         more_heading = final.find('class="nav-sections-heading">More</span>')
         missing_persons_pos = final.find('href="/missing-persons.html"')
+        advertise_pos = final.find('href="/advertise.html"')
+        mobile_more = re.search(
+            r'<section\b[^>]*class=["\'][^"\']*\bmobile-nav-group--more\b[^"\']*["\'][^>]*>.*?</section>',
+            final_header,
+            re.I | re.S,
+        )
         masthead_ok = (
             len(final_headers) == 1
             and final_header.count('class="masthead-newsletter"') == 1
@@ -24965,6 +24974,9 @@ def _normalize_primary_navigation_sitewide(output_root):
             and final_header.count('class="mobile-nav-heading">Categories</h2>') == 1
             and final_header.count('class="mobile-nav-heading">More</h2>') == 1
             and final_header.count('href="/missing-persons.html"') == 2
+            and advertise_pos > more_heading
+            and mobile_more is not None
+            and mobile_more.group(0).count('href="/advertise.html"') == 1
             and 'class="newsroom-strip"' not in normalized
         )
         if (
