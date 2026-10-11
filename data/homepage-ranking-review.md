@@ -4,29 +4,31 @@
 
 ## Hero
 
-- Current: **Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case**
-- Recommended: **Port St. Lucie Fire Victim Identified as Church Helps Family Recover**
-- Recommendation: CHANGE (not enforced)
+- Current: **Flooding at Port St. Lucie's California and Savona costs pizza shop thousands**
+- Recommended: **Flooding at Port St. Lucie's California and Savona costs pizza shop thousands**
+- Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | 55 | importance 0; freshness 76.63; urgency 5/10; validated material update |
-| 2 | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue | 43 | importance 0; freshness 54.94; urgency 2/10; validated material update |
-| 3 | Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | 42 | importance 0; freshness 68.29; urgency 2/10; validated material update |
-| 4 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11 | Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd | 37 | importance 0; freshness 28.37; urgency 2/10; validated material update |
-| 5 | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | 34 | importance 0; freshness 41.37; urgency 2/10 |
-| 6 | Port St. Lucie approves assisted-living site plan despite contamination concerns | Port St. Lucie approves assisted-living site plan despite contamination concerns | 36 | importance 0; freshness 28.38; urgency 2/10; validated material update; -4 county saturation |
-| 7 | Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11 | 31 | importance 0; freshness 24.37; urgency 4/10 |
-| 8 | Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case | Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case | 36 | importance 0; freshness 25.33; urgency 2/10; validated material update; -6 category saturation |
+| 1 | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 54 | importance 0; freshness 99.97; urgency 2/10; validated material update |
+| 2 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | 51 | importance 0; freshness 71.75; urgency 4/10; validated material update |
+| 3 | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue | 42 | importance 0; freshness 50.06; urgency 2/10; validated material update |
+| 4 | Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | 41 | importance 0; freshness 63.41; urgency 2/10; validated material update |
+| 5 | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case | 35 | importance 0; freshness 20.46; urgency 2/10; validated material update |
+| 6 | Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | 33 | importance 0; freshness 36.49; urgency 2/10; -6 category saturation |
+| 7 | Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case | Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd | 35 | importance 0; freshness 23.49; urgency 2/10; validated material update; -12 category saturation; -8 county saturation |
 
 ## Recommended moves
 
-- **Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd**: 7 → 4 — importance 0; freshness 28.37; urgency 2/10; validated material update
-- **Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11**: 4 → 7 — importance 0; freshness 24.37; urgency 4/10
-- **Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue**: 3 → 2 — importance 0; freshness 54.94; urgency 2/10; validated material update
-- **DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida**: 2 → 3 — importance 0; freshness 68.29; urgency 2/10; validated material update
+- **Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case**: 7 → 5 — importance 0; freshness 20.46; urgency 2/10; validated material update
+- **Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site**: 2 → 1 — importance 0; freshness 99.97; urgency 2/10; validated material update
+- **Port St. Lucie Fire Victim Identified as Church Helps Family Recover**: 1 → 2 — importance 0; freshness 71.75; urgency 4/10; validated material update
+- **Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue**: 4 → 3 — importance 0; freshness 50.06; urgency 2/10; validated material update
+- **DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida**: 3 → 4 — importance 0; freshness 63.41; urgency 2/10; validated material update
+- **Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd**: 6 → 7 — importance 0; freshness 23.49; urgency 2/10; validated material update; -12 category saturation; -8 county saturation
+- **Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach**: 5 → 6 — importance 0; freshness 36.49; urgency 2/10; -6 category saturation
 
 ## Guardrails
 
