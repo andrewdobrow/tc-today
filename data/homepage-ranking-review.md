@@ -4,24 +4,22 @@
 
 ## Hero
 
-- Current: **Flash Flood Warning Hits Stuart, Hobe Sound, Palm City and Coastal Martin County**
-- Recommended: **Flash Flood Warning Hits Stuart, Hobe Sound, Palm City and Coastal Martin County**
+- Current: **Port St. Lucie Man Fights City's 126-Camera Network in Federal Court**
+- Recommended: **Port St. Lucie Man Fights City's 126-Camera Network in Federal Court**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | 47 | importance 0; freshness 96.65; urgency 2/10 |
-| 2 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 46 | importance 0; freshness 69.85; urgency 2/10; validated material update |
-| 3 | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | 41 | importance 0; freshness 69.85; urgency 2/10 |
-| 4 | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | 34 | importance 0; freshness 33.29; urgency 2/10; validated material update |
-| 5 | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | 40 | importance 0; freshness 41.63; urgency 2/10; validated material update; -6 category saturation; -4 county saturation |
+| 1 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 46 | importance 0; freshness 67.83; urgency 2/10; validated material update |
+| 2 | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | 40 | importance 0; freshness 67.83; urgency 2/10 |
+| 3 | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | 39 | importance 0; freshness 39.61; urgency 2/10; validated material update |
+| 4 | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | 33 | importance 0; freshness 31.28; urgency 2/10; validated material update |
 
 ## Recommended moves
 
-- **Port St. Lucie Fire Victim Identified as Church Helps Family Recover**: 4 → 5 — importance 0; freshness 41.63; urgency 2/10; validated material update; -6 category saturation; -4 county saturation
-- **DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida**: 5 → 4 — importance 0; freshness 33.29; urgency 2/10; validated material update
+No top-deck moves recommended.
 
 ## Guardrails
 
