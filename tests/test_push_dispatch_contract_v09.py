@@ -7,10 +7,12 @@ WORKFLOW = (ROOT / '.github/workflows/send-ios-news-alert.yml').read_text()
 DEPLOY = (ROOT / '.github/workflows/deploy-ios-push-dispatch.yml').read_text()
 
 
-def test_no_publish_pipeline_or_other_function_mutations():
-    # Scope invariant: these are the only files allowed in this overlay.
-    files = {str(p.relative_to(ROOT)) for p in ROOT.rglob('*') if p.is_file() and not any(part.startswith('.') and part != '.github' or part == '__pycache__' for part in p.relative_to(ROOT).parts)}
-    assert files == {
+def test_manual_sender_files_present_without_restricting_existing_tct_files():
+    # CI runs inside the full TCT repository, not the small delta overlay.
+    # Verify the sender's required files exist; do not compare the entire
+    # repository to the overlay manifest (the previous test did this and failed
+    # on every legitimate article, asset, workflow, and existing test).
+    required = {
         '.github/workflows/deploy-ios-push-dispatch.yml',
         '.github/workflows/send-ios-news-alert.yml',
         'supabase/functions/push-dispatch/index.ts',
@@ -20,6 +22,16 @@ def test_no_publish_pipeline_or_other_function_mutations():
         'tests/test_push_dispatch_contract_v09.py',
         'tests/test_push_dispatch_runtime_v09.mjs',
     }
+    missing = sorted(path for path in required if not (ROOT / path).is_file())
+    assert not missing, f"Missing push sender files: {missing}"
+
+    # Both delivery and deployment workflows must remain manual-only.  They
+    # should never launch automatically from editorial publishing or a timer.
+    for content in (WORKFLOW, DEPLOY):
+        assert '\non:\n  workflow_dispatch:' in '\n' + content
+        assert '\n  push:' not in content
+        assert '\n  schedule:' not in content
+        assert '\n  workflow_run:' not in content
 
 
 def test_send_requires_secret_flag_and_confirmation():
