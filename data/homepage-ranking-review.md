@@ -4,24 +4,26 @@
 
 ## Hero
 
-- Current: **Flooding at Port St. Lucie's California and Savona costs pizza shop thousands**
-- Recommended: **Flooding at Port St. Lucie's California and Savona costs pizza shop thousands**
+- Current: **Flash Flood Warning Hits Stuart, Hobe Sound, Palm City and Coastal Martin County**
+- Recommended: **Flash Flood Warning Hits Stuart, Hobe Sound, Palm City and Coastal Martin County**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 50 | importance 0; freshness 84.96; urgency 2/10; validated material update |
-| 2 | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | 43 | importance 0; freshness 56.74; urgency 2/10; validated material update |
-| 3 | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue | 38 | importance 0; freshness 35.04; urgency 2/10; validated material update |
-| 4 | Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | 37 | importance 0; freshness 48.4; urgency 2/10; validated material update |
-| 5 | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach | 29 | importance 0; freshness 21.48; urgency 2/10 |
+| 1 | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | 59 | importance 0; freshness 99.94; urgency 7/10 |
+| 2 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 47 | importance 0; freshness 73.14; urgency 2/10; validated material update |
+| 3 | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | 42 | importance 0; freshness 73.14; urgency 2/10 |
+| 4 | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | 35 | importance 0; freshness 36.58; urgency 2/10; validated material update |
+| 5 | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue | 36 | importance 0; freshness 23.23; urgency 2/10; validated material update; -4 county saturation |
+| 6 | Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | 41 | importance 0; freshness 44.92; urgency 2/10; validated material update; -6 category saturation; -8 county saturation |
 
 ## Recommended moves
 
-- **Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue**: 4 → 3 — importance 0; freshness 35.04; urgency 2/10; validated material update
-- **DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida**: 3 → 4 — importance 0; freshness 48.4; urgency 2/10; validated material update
+- **Port St. Lucie Fire Victim Identified as Church Helps Family Recover**: 4 → 6 — importance 0; freshness 44.92; urgency 2/10; validated material update; -6 category saturation; -8 county saturation
+- **Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue**: 6 → 5 — importance 0; freshness 23.23; urgency 2/10; validated material update; -4 county saturation
+- **DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida**: 5 → 4 — importance 0; freshness 36.58; urgency 2/10; validated material update
 
 ## Guardrails
 
