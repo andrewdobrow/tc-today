@@ -32,11 +32,22 @@ def _fixture_root(tmp_path):
 
 def test_exact_slug_is_retired_and_prior_editor_policies_remain():
     generate = _generate()
-    policies = generate._source_retirement_policy_by_slug()
+    # Other editorial tests may temporarily repoint the generator output directory.
+    # The policy contract must read from the repository, not leaked test state.
+    repo_root = Path(__file__).resolve().parents[1]
+    policies = generate._source_retirement_policy_by_slug(output_root=repo_root)
     assert policies[TARGET]["action"] == "retire"
     assert policies[TARGET]["target_path"] == "/archive.html"
     assert not policies[TARGET].get("source_domain")  # no accidental domain-wide exclusion
     assert "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e" in policies
+
+def test_retirement_policy_lookup_ignores_leaked_output_dir(tmp_path, monkeypatch):
+    """Regression: earlier tests can repoint OUTPUT_DIR without restoring it."""
+    generate = _generate()
+    monkeypatch.setattr(generate, "OUTPUT_DIR", tmp_path)
+    repo_root = Path(__file__).resolve().parents[1]
+    policies = generate._source_retirement_policy_by_slug(output_root=repo_root)
+    assert policies[TARGET]["action"] == "retire"
 
 def test_archive_retirement_removes_only_expired_warning_and_preserves_other_articles(tmp_path):
     generate = _generate()
