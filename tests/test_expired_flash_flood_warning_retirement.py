@@ -1,0 +1,76 @@
+"""Editorial correction: Oct. 11 NWS warning expired before TCT publication."""
+import importlib
+import json
+import os
+import sys
+import types
+from pathlib import Path
+
+TARGET = "2026-10-11-flash-flood-warning-hits-stuart-hobe-sound-palm-city-and-coastal-martin-county"
+
+def _generate():
+    if "feedparser" not in sys.modules:
+        feedparser = types.ModuleType("feedparser")
+        feedparser.parse = lambda *args, **kwargs: types.SimpleNamespace(entries=[])
+        sys.modules["feedparser"] = feedparser
+    if "anthropic" not in sys.modules:
+        anthropic = types.ModuleType("anthropic")
+        class _Anthropic:
+            def __init__(self, *args, **kwargs):
+                self.messages = types.SimpleNamespace(create=lambda **kwargs: None)
+        anthropic.Anthropic = _Anthropic
+        sys.modules["anthropic"] = anthropic
+    os.environ.setdefault("ANTHROPIC_API_KEY", "offline-test-key")
+    return importlib.import_module("scripts.generate")
+
+def _fixture_root(tmp_path):
+    source = Path(__file__).resolve().parents[1] / "data/source-retirement-editor-overrides.json"
+    dest = tmp_path / "data/source-retirement-editor-overrides.json"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(source.read_bytes())
+    return tmp_path
+
+def test_exact_slug_is_retired_and_prior_editor_policies_remain():
+    generate = _generate()
+    policies = generate._source_retirement_policy_by_slug()
+    assert policies[TARGET]["action"] == "retire"
+    assert policies[TARGET]["target_path"] == "/archive.html"
+    assert not policies[TARGET].get("source_domain")  # no accidental domain-wide exclusion
+    assert "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-diving-skills-into-magical-underwater-e" in policies
+
+def test_archive_retirement_removes_only_expired_warning_and_preserves_other_articles(tmp_path):
+    generate = _generate()
+    root = _fixture_root(tmp_path)
+    unaffected = "2026-10-11-valid-martin-county-story"
+    archive = [
+        {"slug":TARGET,"headline":"Flash Flood Warning Hits Stuart, Hobe Sound, Palm City and Coastal Martin County","category_key":"martin"},
+        {"slug":unaffected,"headline":"Unrelated legitimate news","category_key":"martin"},
+    ]
+    kept, redirects, report = generate.apply_source_retirement_cleanup_to_archive(
+        archive, root / "articles", output_root=root
+    )
+    assert [e["slug"] for e in kept] == [unaffected]
+    assert redirects == []
+    assert report["retired_count"] == 1
+    page = (root / "articles" / f"{TARGET}.html").read_text(encoding="utf8")
+    assert 'name="robots" content="noindex,nofollow"' in page
+    assert 'This article has been retired' in page
+    assert 'https://treasurecoast.today/archive.html' in page
+    assert unaffected not in page
+
+def test_live_cards_and_hero_remove_only_expired_slug(tmp_path):
+    generate = _generate()
+    root = _fixture_root(tmp_path)
+    good = {"slug":"2026-10-11-valid-martin-county-story","headline":"Valid local story"}
+    gone = {"link":f"https://treasurecoast.today/articles/{TARGET}.html","headline":"Expired warning"}
+    cats = [{"category_key":"martin","hero":gone,"cards":[good,dict(gone)]}]
+    removed = generate.apply_source_retirements_to_live(cats,output_root=root)
+    assert removed == 2
+    assert cats[0]["hero"] == good
+    assert cats[0]["cards"] == []
+
+def test_recovery_and_feed_archive_views_filter_exact_slug(tmp_path):
+    generate = _generate()
+    root = _fixture_root(tmp_path)
+    rows = [{"slug":TARGET},{"slug":"2026-10-11-other-story"}]
+    assert generate._filter_source_retirement_archive_view(rows,root)==[rows[1]]
