@@ -4,18 +4,18 @@
 
 ## Hero
 
-- Current: **Port St. Lucie Man Fights City's 126-Camera Network in Federal Court**
-- Recommended: **Port St. Lucie Man Fights City's 126-Camera Network in Federal Court**
+- Current: **Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition**
+- Recommended: **Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 46 | importance 0; freshness 67.83; urgency 2/10; validated material update |
-| 2 | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | 40 | importance 0; freshness 67.83; urgency 2/10 |
-| 3 | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | 39 | importance 0; freshness 39.61; urgency 2/10; validated material update |
-| 4 | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | DeSantis: 2 Dead in Escambia County as Isaias Power Outages Persist Across Florida | 33 | importance 0; freshness 31.28; urgency 2/10; validated material update |
+| 1 | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | 46 | importance 0; freshness 91.62; urgency 2/10 |
+| 2 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 45 | importance 0; freshness 64.82; urgency 2/10; validated material update |
+| 3 | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | 40 | importance 0; freshness 64.82; urgency 2/10 |
+| 4 | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | Port St. Lucie Fire Victim Identified as Church Helps Family Recover | 39 | importance 0; freshness 36.6; urgency 2/10; validated material update; -6 category saturation; -4 county saturation |
 
 ## Recommended moves
 
