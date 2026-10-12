@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-12T18:55:10.610817+00:00",
+  "generated_at": "2026-10-12T20:54:29.870470+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,16 +62,16 @@
     }
   },
   "summary": {
-    "evaluations": 42,
+    "evaluations": 43,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 42,
+    "no_candidate_passes": 43,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 3,
-    "retroactive_rows_retained": 39,
+    "new_stories_allowed": 1,
+    "retroactive_rows_retained": 42,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 8,
+    "pre_generation_materiality_evaluations": 18,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 8,
-    "pre_generation_materiality_holds": 0,
-    "pre_generation_materiality_model_calls": 1,
-    "pre_generation_materiality_cache_hits": 7,
-    "terminal_permalink_evaluations": 3,
-    "terminal_permalink_candidate_pairs": 36,
-    "terminal_permalink_model_calls": 3,
+    "pre_generation_materiality_duplicates": 13,
+    "pre_generation_materiality_holds": 5,
+    "pre_generation_materiality_model_calls": 8,
+    "pre_generation_materiality_cache_hits": 10,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 3,
+    "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -103,6 +103,36 @@
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "local_gov",
+      "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+      "canonical_is_custom": false,
+      "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Leslie Pope",
+        "Cleveland Clinic Tradition Hospital",
+        "Port St. Lucie Police Department",
+        "fentanyl diverted from critically ill patient's IV",
+        "arrest on Oct. 8 in Jupiter"
+      ],
+      "novel_facts": [
+        "Additional detail that a second incident the following evening was interrupted by a family member and reviewed via surveillance footage"
+      ],
+      "reason": "Both articles report the same arrest of nurse Leslie Pope for diverting fentanyl from a patient at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail but no new material fact like a status change, additional charge, or court action, so it should update the existing canonical rather than create a new one, and since no new material update is substantive enough per decision criteria, duplicate status applies.",
+      "validation_errors": []
+    },
     {
       "category_key": "local_gov",
       "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school",
@@ -187,15 +217,73 @@
         "Leslie Pope",
         "Cleveland Clinic Tradition Hospital",
         "Port St. Lucie Police Department",
-        "fentanyl IV diversion allegation",
-        "same source_url (WPBF article)"
+        "fentanyl IV diversion charges",
+        "same source URL (WPBF)"
+      ],
+      "novel_facts": [],
+      "reason": "Identical source article and incident involving the same named suspect, hospital, agency, and charges. No new material facts beyond additional quotes and procedural detail already covered by the canonical story.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+      "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Port St. Lucie location",
+        "missing-person event family"
       ],
       "novel_facts": [
-        "Additional detail on arrest affidavit length (15 pages)",
-        "Bond amount ($150,000) and release date",
-        "Second incident detail where family member intervened"
+        "New missing person: Cassandra Cerron, 15-year-old girl",
+        "Last seen October 11, 2026",
+        "Different case from the 47-year-old Robert La Polla missing since January"
       ],
-      "reason": "This is the same arrest and charges against Leslie Pope reported by the same outlet (WPBF) with the same source URL as the existing canonical. The incoming article adds procedural detail (bond, affidavit specifics, second incident) but these are elaborations of the same already-reported event, not material new developments like a new charge, death, or ruling.",
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Leslie Pope, 54, Jupiter",
+        "Cleveland Clinic Tradition Hospital",
+        "Port St. Lucie Police Department",
+        "fentanyl diverted from ICU patient's IV infusion",
+        "arrest on Oct. 8/Thursday in Jupiter"
+      ],
+      "novel_facts": [
+        "Additional detail on second incident with surveillance footage review",
+        "Family member intervened during second approach"
+      ],
+      "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
       "validation_errors": []
     },
     {
@@ -233,6 +321,37 @@
     },
     {
       "category_key": "business",
+      "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Leslie Pope, 54, Jupiter",
+        "Cleveland Clinic Tradition Hospital",
+        "Port St. Lucie Police Department",
+        "fentanyl diverted from ICU patient's IV infusion",
+        "arrest on Oct. 8/Thursday in Jupiter"
+      ],
+      "novel_facts": [
+        "Additional detail on second incident with surveillance footage review",
+        "Family member intervened during second approach"
+      ],
+      "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "business",
       "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school",
       "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/treasure-coast-high-school-freshman-dies-after-being-hit-by-car-while-walking-to-school",
       "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
@@ -265,6 +384,38 @@
       "validation_errors": []
     },
     {
+      "category_key": "martin",
+      "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Okeechobee Road general corridor",
+        "St. Lucie County area"
+      ],
+      "novel_facts": [
+        "Sunday night hit-and-run involving cargo van striking gas scooter rider",
+        "crash near Okeechobee Road and 25th Street in Fort Pierce",
+        "van crashed into Kings Queens Unisex Salon",
+        "suspect fled on foot, search ongoing with K-9 and aerial units"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
       "category_key": "st_lucie",
       "source_headline": "Port St. Lucie ICU nurse arrested on charges involving patient's IV - WPBF",
       "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-icu-nurse-arrested-on/74107952",
@@ -285,16 +436,130 @@
         "Leslie Pope",
         "Cleveland Clinic Tradition Hospital",
         "Port St. Lucie Police Department",
-        "fentanyl IV diversion allegation",
-        "same source_url (WPBF article)"
+        "fentanyl IV diversion charges",
+        "same source URL (WPBF)"
+      ],
+      "novel_facts": [],
+      "reason": "Identical source article and incident involving the same named suspect, hospital, agency, and charges. No new material facts beyond additional quotes and procedural detail already covered by the canonical story.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+      "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.97,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Missing person is Cassandra Cerron, a 15-year-old girl, last seen Oct 11 at her home",
+        "Case handled by Port St. Lucie Police Detective H. Nieves, distinct from St. Lucie County Sheriff case"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
+      "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Okeechobee Road location in St. Lucie County area"
       ],
       "novel_facts": [
-        "Additional detail on arrest affidavit length (15 pages)",
-        "Bond amount ($150,000) and release date",
-        "Second incident detail where family member intervened"
+        "Hit-and-run of scooter rider on Okeechobee Road west of South 25th Street",
+        "Van crashed into Kings & Queens Unisex Salon",
+        "Driver fled on foot",
+        "Search for suspect ongoing",
+        "Date October 11-12, 2026"
       ],
-      "reason": "This is the same arrest and charges against Leslie Pope reported by the same outlet (WPBF) with the same source URL as the existing canonical. The incoming article adds procedural detail (bond, affidavit specifics, second incident) but these are elaborations of the same already-reported event, not material new developments like a new charge, death, or ruling.",
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Leslie Pope, 54, Jupiter",
+        "Cleveland Clinic Tradition Hospital",
+        "Port St. Lucie Police Department",
+        "fentanyl diverted from ICU patient's IV infusion",
+        "arrest on Oct. 8/Thursday in Jupiter"
+      ],
+      "novel_facts": [
+        "Additional detail on second incident with surveillance footage review",
+        "Family member intervened during second approach"
+      ],
+      "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
       "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Fatal hit-and-run involving a gas scooter rider struck by a cargo van on Okeechobee Road and 25th Street in Fort Pierce",
+        "Suspect fled on foot after crashing into Kings Queens Unisex Salon",
+        "Incident occurred Sunday around 9 p.m., different date and location than candidate's Turnpike box truck crash"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "st_lucie",
@@ -360,6 +625,37 @@
         "school providing grief counseling"
       ],
       "reason": "This is the same crash and death already reported in the canonical article. The organ donation detail and counseling information are grief/color follow-up details, not a material update changing what readers need to know (death was already reported), and do not rise to an independently newsworthy accountability angle.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "indian_river",
+      "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Leslie Pope, 54, Jupiter",
+        "Cleveland Clinic Tradition Hospital",
+        "Port St. Lucie Police Department",
+        "fentanyl diverted from ICU patient's IV infusion",
+        "arrest on Oct. 8/Thursday in Jupiter"
+      ],
+      "novel_facts": [
+        "Additional detail on second incident with surveillance footage review",
+        "Family member intervened during second approach"
+      ],
+      "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
       "validation_errors": []
     }
   ],
@@ -1145,10 +1441,70 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
       "incoming_source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data",
       "incoming_story_id": "story_020844",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
+      "incoming_story_id": "story_020840",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-us-coast-guard-asists-4-aboard-a-disabled-15-foot-vessel-near-florida-point-inlet/74110645",
+      "incoming_story_id": "story_017960",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Flash Flood Warning Hits Coastal Martin County Until 7 p.m.",
+      "incoming_source_url": "https://cbs12.com/news/local/flash-flood-warning-for-coastal-martin-county",
+      "incoming_story_id": "story_020688",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1169,326 +1525,126 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
-      "incoming_source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data",
-      "incoming_story_id": "story_020844",
+      "incoming_headline": "Flash Flood Warning Hits Coastal Martin County Until 7 p.m.",
+      "incoming_source_url": "https://cbs12.com/news/local/flash-flood-warning-for-coastal-martin-county",
+      "incoming_story_id": "story_020688",
       "candidates": [
         {
-          "slug": "2026-09-29-new-calculator-estimates-amendment-3-would-cut-7-million-in-st-lucie-county-road",
-          "headline": "New calculator estimates Amendment 3 would cut $7 million in St. Lucie County road funding",
+          "slug": "2026-10-01-martin-county-issues-advisory-after-sentinel-chickens-test-positive-for-west-nil",
+          "headline": "Martin County Issues Advisory After Sentinel Chickens Test Positive for West Nile Virus",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4127,
-          "retrieval_score": 0.4117,
+          "terminal_recall_score": 0.5412,
+          "retrieval_score": 0.5312,
           "reasons": [
-            "publication_gap_13_days"
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
+          "headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4972,
+          "retrieval_score": 0.4902,
+          "reasons": [
+            "publication_gap_11_days"
           ]
         },
         {
           "slug": "2026-10-05-indiantown-flooding-persists-despite-2m-booker-park-drainage-project",
           "headline": "Indiantown Flooding Persists Despite $2M Booker Park Drainage Project",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.397,
-          "retrieval_score": 0.378,
+          "terminal_recall_score": 0.4832,
+          "retrieval_score": 0.4612,
           "reasons": [
-            "publication_gap_7_days"
+            "publication_gap_6_days"
           ]
         },
         {
-          "slug": "2026-09-28-construction-truck-crashes-through-guardrail-bursts-into-flames-on-floridas-turn",
-          "headline": "Construction truck crashes through guardrail, bursts into flames on Florida's Turnpike in St. Lucie County",
+          "slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
+          "headline": "Martin County toddler drowned in family pond after being out of sight no more than 10 minutes",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3897,
-          "retrieval_score": 0.3897,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-port-st-lucie-man-fights-citys-126-camera-network-in-federal-court",
-          "headline": "Port St. Lucie Man Fights City's 126-Camera Network in Federal Court",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.381,
-          "retrieval_score": 0.341,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
-          "headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3713,
-          "retrieval_score": 0.3433,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-states-updated-data-shows-no-elevated-brain-cancer-rates-in-st-lucie-families-st",
-          "headline": "State's Updated Data Shows No Elevated Brain Cancer Rates in St. Lucie, Families Still Pushing for Answers",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3601,
-          "retrieval_score": 0.3411,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-florida-realtors-18-million-gives-amendment-3-a-26-to-1-spending-edge-over-oppon",
-          "headline": "Florida Realtors' $18 Million Gives Amendment 3 a 26-to-1 Spending Edge Over Opponents",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3583,
-          "retrieval_score": 0.3393,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-08-florida-amendments-1-and-2-would-boost-state-reserves-cut-farm-taxes",
-          "headline": "Florida Amendments 1 and 2 Would Boost State Reserves, Cut Farm Taxes",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3566,
-          "retrieval_score": 0.3286,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
-          "headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.35,
-          "retrieval_score": 0.331,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-fort-pierce-seniors-push-back-as-orange-avenue-center-sale-nears",
-          "headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3489,
-          "retrieval_score": 0.3299,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
-          "headline": "Two Port St. Lucie Hit-and-Run Suspects Arrested, Released on Bond",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3488,
-          "retrieval_score": 0.3418,
+          "terminal_recall_score": 0.47,
+          "retrieval_score": 0.46,
           "reasons": [
             "publication_gap_11_days"
           ]
         },
         {
-          "slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
-          "headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
+          "slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
+          "headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3485,
-          "retrieval_score": 0.3385,
+          "terminal_recall_score": 0.4641,
+          "retrieval_score": 0.4271,
           "reasons": [
-            "publication_gap_11_days"
+            "publication_gap_1_days"
           ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Indiantown"
-        ],
-        "novel_facts": [
-          "Silver Fox 606 LLC lawsuit",
-          "$25 million data center plat dispute",
-          "13820 SW Silver Fox Lane property",
-          "September 17 administrative plat approval",
-          "September 1 emergency council meeting ousting village manager and attorney",
-          "Sunshine Law allegations"
-        ],
-        "reason": "No candidate concerns the Silver Fox 606 LLC data center lawsuit, the specific plat approval, or the village council personnel shakeup. Candidates about Indiantown cover unrelated flooding and ammunition plant stories; this is a distinct real-world dispute with no shared participants, case, or governing action.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Indiantown"
-        ],
-        "novel_facts": [
-          "Silver Fox 606 LLC lawsuit",
-          "$25 million data center plat dispute",
-          "13820 SW Silver Fox Lane property",
-          "September 17 administrative plat approval",
-          "September 1 emergency council meeting ousting village manager and attorney",
-          "Sunshine Law allegations"
-        ],
-        "reason": "No candidate concerns the Silver Fox 606 LLC data center lawsuit, the specific plat approval, or the village council personnel shakeup. Candidates about Indiantown cover unrelated flooding and ammunition plant stories; this is a distinct real-world dispute with no shared participants, case, or governing action.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
-      "incoming_story_id": "story_020840",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
-      "incoming_story_id": "story_020840",
-      "candidates": [
+        },
         {
-          "slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4642,
-          "retrieval_score": 0.3862,
+          "terminal_recall_score": 0.4592,
+          "retrieval_score": 0.4432,
           "reasons": [
             "publication_gap_9_days"
           ]
         },
         {
-          "slug": "2026-09-29-driver-crashes-into-patrol-vehicle-in-indian-river-county-nearly-hits-deputy",
-          "headline": "Driver crashes into patrol vehicle in Indian River County, nearly hits deputy",
+          "slug": "2026-09-30-rabies-alert-issued-in-stuart-after-raccoon-tests-positive",
+          "headline": "60-Day Rabies Alert Covers Part of Stuart After Raccoon Tests Positive",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4458,
-          "retrieval_score": 0.3948,
+          "terminal_recall_score": 0.4353,
+          "retrieval_score": 0.4253,
           "reasons": [
-            "publication_gap_13_days"
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
+          "headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4306,
+          "retrieval_score": 0.4026,
+          "reasons": [
+            "publication_gap_4_days"
           ]
         },
         {
           "slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
           "headline": "Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4428,
-          "retrieval_score": 0.3618,
+          "terminal_recall_score": 0.4298,
+          "retrieval_score": 0.3958,
           "reasons": [
-            "publication_gap_7_days"
+            "publication_gap_6_days"
           ]
         },
         {
-          "slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
-          "headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
+          "slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
+          "headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4336,
-          "retrieval_score": 0.4146,
+          "terminal_recall_score": 0.4159,
+          "retrieval_score": 0.3849,
           "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-breeze-airways-launches-4-nonstop-routes-from-vero-beach-to-east-coast-cities",
-          "headline": "Breeze Airways launches nonstop Vero Beach flights to Trenton, Baltimore, Pittsburgh, Atlantic City",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4091,
-          "retrieval_score": 0.4051,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
-          "headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4058,
-          "retrieval_score": 0.3838,
-          "reasons": [
-            "publication_gap_7_days"
+            "publication_gap_3_days"
           ]
         },
         {
           "slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
           "headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4002,
-          "retrieval_score": 0.3752,
+          "terminal_recall_score": 0.4146,
+          "retrieval_score": 0.3866,
           "reasons": [
-            "publication_gap_5_days"
+            "publication_gap_4_days"
           ]
         },
         {
-          "slug": "2026-10-07-missing-82-year-old-port-st-lucie-woman-found-safe",
-          "headline": "Missing 82-Year-Old Port St. Lucie Woman Found Safe",
+          "slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
+          "headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3727,
-          "retrieval_score": 0.3477,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-10-grease-fire-sparks-propane-explosion-at-port-st-lucie-home",
-          "headline": "Port St. Lucie Fire Victim Identified as Church Helps Family Recover",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3575,
-          "retrieval_score": 0.3235,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-fort-pierce-man-gets-probation-for-hiding-gun-used-in-june-shooting",
-          "headline": "Fort Pierce man gets probation for hiding gun used in June shooting",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3526,
-          "retrieval_score": 0.3486,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
-          "headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.339,
-          "retrieval_score": 0.339,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-10-06-port-st-lucie-woman-pleads-guilty-in-palm-beach-county-apartment-theft-scheme",
-          "headline": "Port St. Lucie Woman Pleads Guilty in Palm Beach County Apartment Theft Scheme",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3378,
-          "retrieval_score": 0.3158,
+          "terminal_recall_score": 0.411,
+          "retrieval_score": 0.386,
           "reasons": [
             "publication_gap_6_days"
           ]
@@ -1502,207 +1658,14 @@
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Cellphone left in cafeteria at Vero Beach High School sparked a false weapon rumor",
-          "Principal Serra Finnegan notified families",
-          "Indian River County School District confirmed threat was not credible"
-        ],
-        "reason": "None of the candidates involve Vero Beach High School, a lost cellphone, or a false weapon rumor; they cover unrelated incidents (a fatal shooting, a murder case, a crash, an airport launch, etc.). This is a distinct, unrelated event with no shared participants, location, or incident anchor.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Cellphone left in cafeteria at Vero Beach High School sparked a false weapon rumor",
-          "Principal Serra Finnegan notified families",
-          "Indian River County School District confirmed threat was not credible"
-        ],
-        "reason": "None of the candidates involve Vero Beach High School, a lost cellphone, or a false weapon rumor; they cover unrelated incidents (a fatal shooting, a murder case, a crash, an airport launch, etc.). This is a distinct, unrelated event with no shared participants, location, or incident anchor.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-us-coast-guard-asists-4-aboard-a-disabled-15-foot-vessel-near-florida-point-inlet/74110645",
-      "incoming_story_id": "story_017960",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-us-coast-guard-asists-4-aboard-a-disabled-15-foot-vessel-near-florida-point-inlet/74110645",
-      "incoming_story_id": "story_017960",
-      "candidates": [
-        {
-          "slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
-          "headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.709,
-          "retrieval_score": 0.578,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-10-02-st-lucie-mosquito-crews-treat-standing-water-near-us-1-in-fort-pierce",
-          "headline": "St. Lucie Mosquito Crews Treat Standing Water Near U.S. 1 in Fort Pierce",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.686,
-          "retrieval_score": 0.576,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
-          "headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.4827,
-          "retrieval_score": 0.3547,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
-          "headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.467,
-          "retrieval_score": 0.448,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-          "headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4576,
-          "retrieval_score": 0.4506,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-02-indian-river-county-rabies-alert-follows-positive-bat-near-fellsmere-apartments",
-          "headline": "Fellsmere Rabies Alert Issued After Positive Bat Near Sonrise Apartments",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4134,
-          "retrieval_score": 0.4034,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
-          "headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4056,
-          "retrieval_score": 0.3956,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-09-28-construction-truck-crashes-through-guardrail-bursts-into-flames-on-floridas-turn",
-          "headline": "Construction truck crashes through guardrail, bursts into flames on Florida's Turnpike in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4049,
-          "retrieval_score": 0.4049,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-10-07-missing-82-year-old-port-st-lucie-woman-found-safe",
-          "headline": "Missing 82-Year-Old Port St. Lucie Woman Found Safe",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4031,
-          "retrieval_score": 0.3781,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-port-st-lucie-mayor-shannon-martin-challenger-steven-giordano-clash-in-debate",
-          "headline": "Port St. Lucie Mayor Shannon Martin, Challenger Steven Giordano Clash in Debate",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3939,
-          "retrieval_score": 0.3749,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-fort-pierce-seniors-push-back-as-orange-avenue-center-sale-nears",
-          "headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3934,
-          "retrieval_score": 0.3744,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-fort-pierce-man-charged-after-ramming-two-tow-trucks-with-u-haul",
-          "headline": "Fort Pierce Man Charged After Ramming Two Tow Trucks With U-Haul",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3879,
-          "retrieval_score": 0.3689,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
         "confidence": 0.95,
         "shared_anchors": [],
         "novel_facts": [
-          "Coast Guard Station Fort Pierce towed a disabled 15-foot vessel with four aboard near Fort Pierce Inlet on Sunday",
-          "Engine failure during rainy conditions, manual bilge pump provided, towed to Stan Blum Boat Ramp",
-          "Separate Miami hydrofoil rescue near Flagler Memorial Island mentioned as context"
+          "Flash Flood Warning issued for coastal Martin County until 7 p.m. on 2026-10-11",
+          "2-3 inches of rain already fallen with 1-2 more expected",
+          "Specific warning area: Stuart, Port Salerno, Hobe Sound, Palm City, Jupiter Island, Sewall's Point, Witham Field, Hobe Sound Wildlife Refuge"
         ],
-        "reason": "None of the candidates involve this Coast Guard vessel assist near Fort Pierce Inlet. The candidates cover unrelated events (kennel club event, mosquito control, dog neglect case, shooting arrest, missing person, rabies alert, road erosion, turnpike crash, mayoral debate, senior center sale, U-Haul assault) sharing only locality/category tokens, not the same real-world incident.",
+        "reason": "This is a distinct, time-bound weather warning (flash flood warning until 7 p.m. on Oct 11) for a specific geographic area. None of the candidates cover this same warning or date; the closest weather-related candidates (Indiantown flooding Oct 5, Port St. Lucie flooding Oct 7) describe different prior flooding events in different locations without any shared warning, date, or specific fact pattern. No candidate shares the same real-world event.",
         "validation_errors": [],
         "consistency_repairs": []
       },
@@ -1718,11 +1681,11 @@
         "confidence": 0.95,
         "shared_anchors": [],
         "novel_facts": [
-          "Coast Guard Station Fort Pierce towed a disabled 15-foot vessel with four aboard near Fort Pierce Inlet on Sunday",
-          "Engine failure during rainy conditions, manual bilge pump provided, towed to Stan Blum Boat Ramp",
-          "Separate Miami hydrofoil rescue near Flagler Memorial Island mentioned as context"
+          "Flash Flood Warning issued for coastal Martin County until 7 p.m. on 2026-10-11",
+          "2-3 inches of rain already fallen with 1-2 more expected",
+          "Specific warning area: Stuart, Port Salerno, Hobe Sound, Palm City, Jupiter Island, Sewall's Point, Witham Field, Hobe Sound Wildlife Refuge"
         ],
-        "reason": "None of the candidates involve this Coast Guard vessel assist near Fort Pierce Inlet. The candidates cover unrelated events (kennel club event, mosquito control, dog neglect case, shooting arrest, missing person, rabies alert, road erosion, turnpike crash, mayoral debate, senior center sale, U-Haul assault) sharing only locality/category tokens, not the same real-world incident.",
+        "reason": "This is a distinct, time-bound weather warning (flash flood warning until 7 p.m. on Oct 11) for a specific geographic area. None of the candidates cover this same warning or date; the closest weather-related candidates (Indiantown flooding Oct 5, Port St. Lucie flooding Oct 7) describe different prior flooding events in different locations without any shared warning, date, or specific fact pattern. No candidate shares the same real-world event.",
         "validation_errors": [],
         "consistency_repairs": []
       }
@@ -1733,10 +1696,10 @@
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 9,
+    "directives_considered": 8,
     "story_records_merged": 0,
     "aliases_written": 0,
-    "already_consolidated": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_019789",
@@ -2113,5 +2076,21 @@
     ],
     "rejected_directives": [],
     "merges": []
-  }
+  },
+  "late_published_skip_materiality_decisions": [
+    {
+      "phase": "late_published_skip_write_barrier",
+      "source_headline": "Misplaced cellphone sparks false weapon rumor at Vero Beach High School - WPEC",
+      "source_url": "https://cbs12.com/news/local/misplaced-cellphone-leads-false-weapon-rumor-vero-beach-high-school-school-district-of-indian-river-county-indian-river-county-sheriffs-office-crisis-in-the-classroom-florida-news",
+      "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+      "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "incoming_not_newer_than_canonical",
+      "evaluated": false,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": false,
+      "action": "preserve_existing_canonical"
+    }
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-12T18:51:19Z",
+  "generated_at": "2026-10-12T20:50:54Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,51 +15,44 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 4,
-      "generated_live": 4,
-      "quality_gate_archive_recovery": 1
+      "category_eligibility_archive_recovery": 5,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 2
     },
     "failures": {
-      "no_category_eligible_sources": 4,
-      "publication_quality_rejected": 1
+      "copydesk_integrity": 2,
+      "no_category_eligible_sources": 5
     },
-    "model_attempt_count": 5,
-    "model_elapsed_seconds": 88.116,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 76.423,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 1,
+    "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 8,
-    "published_story_duplicate_suppression_count": 22,
-    "story_aware_update_context_count": 8,
-    "material_update_promotion_evaluation_count": 8,
+    "category_eligibility_rejection_count": 7,
+    "published_story_duplicate_suppression_count": 36,
+    "story_aware_update_context_count": 6,
+    "material_update_promotion_evaluation_count": 18,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 7,
-    "material_update_promotion_model_call_count": 1
+    "material_update_promotion_cache_hit_count": 10,
+    "material_update_promotion_model_call_count": 8
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 8,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 7,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 10.417,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 10.417,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Local Government category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -68,23 +61,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274"
-        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -95,11 +74,11 @@
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
-            "crime_incident:arrested"
+            "crime_incident:homicide"
           ],
           "local_nexus_signals": [],
-          "headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital"
+          "headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -116,8 +95,38 @@
           "source_url": "https://cbs12.com/news/local/misplaced-cellphone-leads-false-weapon-rumor-vero-beach-high-school-school-district-of-indian-river-county-indian-river-county-sheriffs-office-crisis-in-the-classroom-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
+          "editorial_story_id": "story_020840",
+          "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "editorial_story_id": "story_020811",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Indiantown’s data center war escalates as developer takes village to court - WPEC",
+          "source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data",
+          "editorial_story_id": "story_020844",
+          "canonical_slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
+          "canonical_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school",
@@ -172,38 +181,37 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
           "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
-            "story:story_020842",
-            "source:https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital"
+            "story:story_020881",
+            "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
             "bounded_time_window",
             "shared_locality",
             "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
+            "shared_precise_location",
             "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['leslie pope']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['port-st-lucie-police']",
+            "publication_gap_days=35",
+            "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['crash']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['okeechobee-road']",
+            "shared_agencies=[]",
             "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['icu', 'nurse', 'patient']",
-            "shared_distinctive_token_count=63",
+            "shared_headline_topic_core=['crash', 'driv']",
+            "shared_distinctive_token_count=38",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -212,11 +220,71 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
+          "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Leslie Pope",
+            "Cleveland Clinic Tradition Hospital",
+            "Port St. Lucie Police Department",
+            "fentanyl diverted from critically ill patient's IV",
+            "arrest on Oct. 8 in Jupiter"
+          ],
+          "novel_facts": [
+            "Additional detail that a second incident the following evening was interrupted by a family member and reviewed via surveillance footage"
+          ],
+          "reason": "Both articles report the same arrest of nurse Leslie Pope for diverting fentanyl from a patient at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail but no new material fact like a status change, additional charge, or court action, so it should update the existing canonical rather than create a new one, and since no new material update is substantive enough per decision criteria, duplicate status applies.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Indiantown’s data center war escalates as developer takes village to court - WPEC",
+          "source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data",
+          "canonical_slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
+          "canonical_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school",
@@ -326,35 +394,41 @@
           "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 2,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
-      "generated_card_count": 0,
-      "elapsed_seconds": 44.651
+      "new_publication_stale_rejected_count": 1,
+      "elapsed_seconds": 30.81
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 7,
-      "selected_source_count": 3,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 6,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.768,
-          "result": "success"
+          "elapsed_seconds": 14.31,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 17.904,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
         }
       ],
-      "model_elapsed_seconds": 17.768,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 32.214,
+      "failure_code": "copydesk_integrity",
+      "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -363,7 +437,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -377,8 +451,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Indiantown’s data center war escalates as developer takes village to court - WPEC",
-          "source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data"
+          "headline": "Misplaced cellphone sparks false weapon rumor at Vero Beach High School - cw34.com",
+          "source_url": "https://cw34.com/news/crisis-in-the-classroom/misplaced-cellphone-leads-false-weapon-rumor-vero-beach-high-school-school-district-of-indian-river-county-indian-river-county-sheriffs-office-crisis-in-the-classroom-florida-news"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -395,7 +469,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/treasure-coast-travelers-say-limited-transportation-options-make-it-difficult-to-get-around"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -404,6 +478,36 @@
           "editorial_story_id": "story_020811",
           "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
           "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+          "editorial_story_id": "story_017306",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "editorial_story_id": "story_020811",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Indiantown’s data center war escalates as developer takes village to court - WPEC",
+          "source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data",
+          "editorial_story_id": "story_020844",
+          "canonical_slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
+          "canonical_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -421,38 +525,37 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
           "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
-            "story:story_020811",
-            "source:https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital"
+            "story:story_009348",
+            "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
             "bounded_time_window",
             "shared_locality",
             "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
+            "shared_precise_location",
             "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['leslie pope']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['port-st-lucie-police']",
+            "publication_gap_days=35",
+            "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['crash']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['okeechobee-road']",
+            "shared_agencies=[]",
             "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['icu', 'nurse', 'patient']",
-            "shared_distinctive_token_count=63",
+            "shared_headline_topic_core=['crash', 'driv']",
+            "shared_distinctive_token_count=38",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -461,10 +564,10 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
@@ -487,16 +590,89 @@
             "Leslie Pope",
             "Cleveland Clinic Tradition Hospital",
             "Port St. Lucie Police Department",
-            "fentanyl IV diversion allegation",
-            "same source_url (WPBF article)"
+            "fentanyl IV diversion charges",
+            "same source URL (WPBF)"
+          ],
+          "novel_facts": [],
+          "reason": "Identical source article and incident involving the same named suspect, hospital, agency, and charges. No new material facts beyond additional quotes and procedural detail already covered by the canonical story.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Port St. Lucie location",
+            "missing-person event family"
           ],
           "novel_facts": [
-            "Additional detail on arrest affidavit length (15 pages)",
-            "Bond amount ($150,000) and release date",
-            "Second incident detail where family member intervened"
+            "New missing person: Cassandra Cerron, 15-year-old girl",
+            "Last seen October 11, 2026",
+            "Different case from the 47-year-old Robert La Polla missing since January"
           ],
-          "reason": "This is the same arrest and charges against Leslie Pope reported by the same outlet (WPBF) with the same source URL as the existing canonical. The incoming article adds procedural detail (bond, affidavit specifics, second incident) but these are elaborations of the same already-reported event, not material new developments like a new charge, death, or ruling.",
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Leslie Pope, 54, Jupiter",
+            "Cleveland Clinic Tradition Hospital",
+            "Port St. Lucie Police Department",
+            "fentanyl diverted from ICU patient's IV infusion",
+            "arrest on Oct. 8/Thursday in Jupiter"
+          ],
+          "novel_facts": [
+            "Additional detail on second incident with surveillance footage review",
+            "Family member intervened during second approach"
+          ],
+          "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
           "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Indiantown’s data center war escalates as developer takes village to court - WPEC",
+          "source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data",
+          "canonical_slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
+          "canonical_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "crime",
@@ -533,18 +709,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Jupiter Nurse Charged With Stealing Fentanyl From Tradition Hospital Patient",
-      "generated_card_count": 0,
-      "elapsed_seconds": 52.002
+      "elapsed_seconds": 60.94
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
+      "fresh_candidate_count": 18,
       "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -575,13 +749,15 @@
           "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [],
           "competing_signals": [
-            "crime_public_safety:arrested"
+            "crime_public_safety:homicide"
           ],
           "local_nexus_signals": [
-            "source_locality:port st lucie"
+            "source_locality:treasure coast",
+            "source_locality:st lucie county",
+            "source_locality:fort pierce"
           ],
-          "headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital"
+          "headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -602,8 +778,18 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/treasure-coast-travelers-say-limited-transportation-options-make-it-difficult-to-get-around"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "editorial_story_id": "story_020811",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school",
@@ -653,63 +839,42 @@
           "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
-          "editorial_story_id": "story_020116",
-          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
-          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
-          "editorial_story_id": "story_017375",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
           "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
-            "story:story_020811",
-            "source:https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital"
+            "story:story_009348",
+            "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
             "bounded_time_window",
             "shared_locality",
             "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
+            "shared_precise_location",
             "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['leslie pope']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['port-st-lucie-police']",
+            "publication_gap_days=35",
+            "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['crash']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['okeechobee-road']",
+            "shared_agencies=[]",
             "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['icu', 'nurse', 'patient']",
-            "shared_distinctive_token_count=63",
+            "shared_headline_topic_core=['crash', 'driv']",
+            "shared_distinctive_token_count=38",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -718,11 +883,42 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "business",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Leslie Pope, 54, Jupiter",
+            "Cleveland Clinic Tradition Hospital",
+            "Port St. Lucie Police Department",
+            "fentanyl diverted from ICU patient's IV infusion",
+            "arrest on Oct. 8/Thursday in Jupiter"
+          ],
+          "novel_facts": [
+            "Additional detail on second incident with surveillance footage review",
+            "Family member intervened during second approach"
+          ],
+          "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
+          "validation_errors": []
+        },
         {
           "category_key": "business",
           "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school",
@@ -815,48 +1011,18 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Vero Beach Mermaid offers magical underwater experiences for all ages",
-          "source_url": "https://www.wptv.com/finding-florida/vero-beach-mermaid-offers-magical-underwater-experiences-for-all-ages",
-          "canonical_slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
-          "canonical_headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Former city manager Nick Mimms found guilty of misconduct charge, not guilty of bid tampering",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-city-manager-nick-mimms-was-found-guilty-of-misconduct-charge-not-guility-of-bid-tampering",
-          "canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
-          "canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 3,
-      "elapsed_seconds": 22.967
+      "elapsed_seconds": 19.7
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 2,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -873,11 +1039,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "sports",
+          "source_headline": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
+          "editorial_story_id": "story_020840",
+          "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "sports",
           "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
@@ -898,6 +1074,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "sports",
+          "source_headline": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
+          "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "sports",
           "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
           "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
@@ -912,8 +1103,8 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 12,
-      "elapsed_seconds": 15.413
+      "new_publication_stale_rejected_count": 11,
+      "elapsed_seconds": 14.762
     },
     {
       "category_key": "things_to_do",
@@ -995,14 +1186,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.506
+      "elapsed_seconds": 19.661
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1023,67 +1214,40 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Hurricane Isaias response: Power restored for 200K customers, DeSantis says",
-          "source_url": "https://www.wptv.com/news/state/hurricane-isaias-response-power-restored-for-200k-customers-desantis-says",
-          "editorial_story_id": "story_020512",
-          "canonical_slug": "2026-10-10-nearly-450000-without-power-in-florida-after-hurricane-isaias-no-confirmed-death",
-          "canonical_headline": "Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Hurricane Isaias response: Power restored for 200K customers, DeSantis says",
-          "source_url": "https://www.wptv.com/news/state/hurricane-isaias-response-power-restored-for-200k-customers-desantis-says",
-          "canonical_slug": "2026-10-10-nearly-450000-without-power-in-florida-after-hurricane-isaias-no-confirmed-death",
-          "canonical_headline": "Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.433
+      "elapsed_seconds": 19.49
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "quality_gate_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 28,
-      "publishable_source_count": 2,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 1,
       "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
+      "archive_recovery_requested": false,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.799,
+          "elapsed_seconds": 6.788,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 7.799,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 6.788,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1092,134 +1256,113 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
         {
+          "category_key": "martin",
           "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
-          "publisher": "www.wpbf.com",
+          "editorial_story_id": "story_009348",
           "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
           "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_020864",
-            "source:https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=35",
-            "shared_locality=['fort-pierce']",
-            "shared_event_families=['crash']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['okeechobee-road']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['crash', 'driv']",
-            "shared_distinctive_token_count=27",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Okeechobee Road general corridor",
+            "St. Lucie County area"
+          ],
+          "novel_facts": [
+            "Sunday night hit-and-run involving cargo van striking gas scooter rider",
+            "crash near Okeechobee Road and 25th Street in Fort Pierce",
+            "van crashed into Kings Queens Unisex Salon",
+            "suspect fled on foot, search ongoing with K-9 and aerial units"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 28.605
+      "live_hero_headline": "Flash Flood Warning Hits Coastal Martin County Until 7 p.m.",
+      "generated_card_count": 0,
+      "elapsed_seconds": 33.134
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 8,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 5,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 35.821,
-          "result": "success"
+          "elapsed_seconds": 15.207,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 15.371,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
         }
       ],
-      "model_elapsed_seconds": 35.821,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 30.578,
+      "failure_code": "copydesk_integrity",
+      "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 50,
-          "baseline_anchor": "fatality",
-          "baseline_present": false,
-          "baseline_anchor_present": true,
-          "baseline_details_present": false,
-          "baseline_context_hits": [
-            "crash"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "crashed",
-            "driver",
-            "fort",
-            "killed",
-            "pierce",
-            "police",
-            "salon",
-            "scooter"
-          ],
-          "semantic_novel_fact_hits": [],
-          "semantic_novel_fact_token_count": 0,
-          "missing": [
-            "original_event_details_missing"
-          ],
-          "source_title": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
-          "headline": "Fort Pierce Police Search for Van Driver Who Killed Scooter Rider, Fled on Foot"
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1229,6 +1372,56 @@
           "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
           "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+          "editorial_story_id": "story_017306",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
+          "editorial_story_id": "story_009348",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "U.S. Coast Guard assists 4 aboard a disabled 15-foot vessel in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-us-coast-guard-asists-4-aboard-a-disabled-15-foot-vessel-near-florida-point-inlet/74110645",
+          "editorial_story_id": "story_017960",
+          "canonical_slug": "2026-10-12-coast-guard-tows-disabled-boat-with-four-aboard-near-fort-pierce-inlet",
+          "canonical_headline": "Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "editorial_story_id": "story_020811",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+          "editorial_story_id": "story_009348",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1272,18 +1465,18 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 3,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
-          "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
-          "publisher": "cbs12.com",
+          "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
+          "publisher": "www.wptv.com",
           "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
           "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
           "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
-            "story:story_020868",
-            "source:https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026"
+            "story:story_009348",
+            "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -1304,8 +1497,8 @@
             "shared_precise_locations=['okeechobee-road']",
             "shared_agencies=[]",
             "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['crash', 'driv', 'kill', 'wpec']",
-            "shared_distinctive_token_count=39",
+            "shared_headline_topic_core=['crash', 'driv']",
+            "shared_distinctive_token_count=38",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -1314,55 +1507,15 @@
           "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
           "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_020811",
-            "source:https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['leslie pope']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['port-st-lucie-police']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['icu', 'nurse', 'patient']",
-            "shared_distinctive_token_count=63",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
-          "publisher": "www.wpbf.com",
           "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
           "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
           "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
             "story:story_009348",
-            "source:https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868"
+            "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -1377,14 +1530,14 @@
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
             "publication_gap_days=35",
-            "shared_locality=['fort-pierce']",
+            "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
             "shared_event_families=['crash']",
             "shared_named_people=[]",
             "shared_precise_locations=['okeechobee-road']",
             "shared_agencies=[]",
             "shared_subject_phrases=[]",
             "shared_headline_topic_core=['crash', 'driv']",
-            "shared_distinctive_token_count=27",
+            "shared_distinctive_token_count=38",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -1393,10 +1546,10 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 7,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1419,16 +1572,145 @@
             "Leslie Pope",
             "Cleveland Clinic Tradition Hospital",
             "Port St. Lucie Police Department",
-            "fentanyl IV diversion allegation",
-            "same source_url (WPBF article)"
+            "fentanyl IV diversion charges",
+            "same source URL (WPBF)"
+          ],
+          "novel_facts": [],
+          "reason": "Identical source article and incident involving the same named suspect, hospital, agency, and charges. No new material facts beyond additional quotes and procedural detail already covered by the canonical story.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.97,
+          "shared_anchors": [],
+          "novel_facts": [
+            "Missing person is Cassandra Cerron, a 15-year-old girl, last seen Oct 11 at her home",
+            "Case handled by Port St. Lucie Police Detective H. Nieves, distinct from St. Lucie County Sheriff case"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
+          "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Okeechobee Road location in St. Lucie County area"
           ],
           "novel_facts": [
-            "Additional detail on arrest affidavit length (15 pages)",
-            "Bond amount ($150,000) and release date",
-            "Second incident detail where family member intervened"
+            "Hit-and-run of scooter rider on Okeechobee Road west of South 25th Street",
+            "Van crashed into Kings & Queens Unisex Salon",
+            "Driver fled on foot",
+            "Search for suspect ongoing",
+            "Date October 11-12, 2026"
           ],
-          "reason": "This is the same arrest and charges against Leslie Pope reported by the same outlet (WPBF) with the same source URL as the existing canonical. The incoming article adds procedural detail (bond, affidavit specifics, second incident) but these are elaborations of the same already-reported event, not material new developments like a new charge, death, or ruling.",
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "U.S. Coast Guard assists 4 aboard a disabled 15-foot vessel in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-us-coast-guard-asists-4-aboard-a-disabled-15-foot-vessel-near-florida-point-inlet/74110645",
+          "canonical_slug": "2026-10-12-coast-guard-tows-disabled-boat-with-four-aboard-near-fort-pierce-inlet",
+          "canonical_headline": "Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Leslie Pope, 54, Jupiter",
+            "Cleveland Clinic Tradition Hospital",
+            "Port St. Lucie Police Department",
+            "fentanyl diverted from ICU patient's IV infusion",
+            "arrest on Oct. 8/Thursday in Jupiter"
+          ],
+          "novel_facts": [
+            "Additional detail on second incident with surveillance footage review",
+            "Family member intervened during second approach"
+          ],
+          "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
           "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [],
+          "novel_facts": [
+            "Fatal hit-and-run involving a gas scooter rider struck by a cargo van on Okeechobee Road and 25th Street in Fort Pierce",
+            "Suspect fled on foot after crashing into Kings Queens Unisex Salon",
+            "Incident occurred Sunday around 9 p.m., different date and location than candidate's Turnpike box truck crash"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
         },
         {
           "category_key": "st_lucie",
@@ -1528,20 +1810,18 @@
         }
       ],
       "new_publication_stale_rejected_count": 2,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Jupiter Nurse Arrested, Charged With Stealing Fentanyl at Tradition Hospital",
-      "generated_card_count": 1,
-      "elapsed_seconds": 65.12
+      "elapsed_seconds": 59.603
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 6,
-      "selected_source_count": 2,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 5,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1549,11 +1829,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.31,
+          "elapsed_seconds": 6.843,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 16.311,
+      "model_elapsed_seconds": 6.843,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1564,46 +1844,76 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
+          "editorial_story_id": "story_020840",
+          "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "editorial_story_id": "story_020811",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Indiantown’s data center war escalates as developer takes village to court - WPEC",
+          "source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data",
+          "editorial_story_id": "story_020844",
+          "canonical_slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
+          "canonical_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
           "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
-            "story:story_020811",
-            "source:https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital"
+            "story:story_009348",
+            "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
             "bounded_time_window",
             "shared_locality",
             "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
+            "shared_precise_location",
             "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['leslie pope']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['port-st-lucie-police']",
+            "publication_gap_days=35",
+            "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['crash']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['okeechobee-road']",
+            "shared_agencies=[]",
             "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['icu', 'nurse', 'patient']",
-            "shared_distinctive_token_count=63",
+            "shared_headline_topic_core=['crash', 'driv']",
+            "shared_distinctive_token_count=38",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -1612,17 +1922,79 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-misplaced-cellphone-leads-to-false-weapon-rumor-at-vero-beach-high/74110274",
+          "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Leslie Pope, 54, Jupiter",
+            "Cleveland Clinic Tradition Hospital",
+            "Port St. Lucie Police Department",
+            "fentanyl diverted from ICU patient's IV infusion",
+            "arrest on Oct. 8/Thursday in Jupiter"
+          ],
+          "novel_facts": [
+            "Additional detail on second incident with surveillance footage review",
+            "Family member intervened during second approach"
+          ],
+          "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Indiantown’s data center war escalates as developer takes village to court - WPEC",
+          "source_url": "https://cbs12.com/news/local/data-center-developer-sues-indiantown-alleges-village-is-illegally-blocking-25m-project-indiantown-martin-county-data-center-silver-fox-606-llc-data-center-lawsuit-25-million-project-village-of-indiantown-village-council-planning-board-data",
+          "canonical_slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
+          "canonical_headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+      "live_hero_headline": "Misplaced Cellphone Sparks False Weapon Rumor at Vero Beach High School",
       "generated_card_count": 0,
-      "elapsed_seconds": 35.579
+      "elapsed_seconds": 29.844
     }
   ]
 }
