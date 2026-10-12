@@ -16991,6 +16991,24 @@ def render_index(all_categories, top_cat):
         </div>
       </a>'''
 
+    # Native Top News follows the FINAL homepage hero + visible Top Stories,
+    # never the shadow ranker or a newest-first archive fallback. Below that,
+    # recent eligible archive stories fill the quieter days in a separate section.
+    from tct_engine.top_news_app_feed import write_top_news_app_feed, slug_from_url
+    _native_top_feed = write_top_news_app_feed(
+        OUTPUT_DIR,
+        hero_slug=slug_from_url(_hero_permalink),
+        top_story_slugs=[slug_from_url(card_permalink(c)) for c in topnews],
+        homepage_other_slugs=[slug_from_url(card_permalink(c)) for c in all_cards_display],
+        archive=archive_for_links,
+        is_publishable=_archive_entry_publishable,
+    )
+    print(
+        "  iOS Top News: homepage hero + "
+        f"{len(_native_top_feed['top_stories'])} Top Stories; "
+        f"{len(_native_top_feed['more_news'])} supplemental recent stories"
+    )
+
     # -- OLDER: per-category archived stories no longer shown as current cards --
     # Top News ("all") gets no Older section. Each category gets up to 10 of its
     # own older stories that aren't currently displayed.
