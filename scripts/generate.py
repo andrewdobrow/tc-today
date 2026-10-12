@@ -17844,6 +17844,47 @@ def _source_retirement_policy_by_slug(output_root=None):
     }
 
 
+def _source_retirement_policy_for_slug(slug, policies):
+    """Resolve an explicit retirement, including opt-in short-lived repeats.
+
+    Some cached third-party feeds reintroduce a *previously retired* incident
+    with an identical headline under tomorrow's date. A one-slug tombstone is
+    insufficient: a new dated permalink would bypass it. Only editor-approved
+    retirements marked ``block_date_shifted_republication`` can match the same
+    exact dated slug stem for a bounded number of subsequent days. This does
+    not blacklist the topic, the source, or a genuinely different headline.
+    """
+    slug = _normalize_existing_article_slug(slug)
+    if not slug:
+        return None
+    if slug in policies:
+        return policies[slug]
+    shifted = re.fullmatch(r"(\d{4}-\d{2}-\d{2})-(.+)", slug)
+    if not shifted:
+        return None
+    try:
+        shifted_date = datetime.strptime(shifted.group(1), "%Y-%m-%d").date()
+    except ValueError:
+        return None
+    for retired_slug, policy in policies.items():
+        if (policy.get("action") != "retire"
+                or policy.get("block_date_shifted_republication") is not True):
+            continue
+        original = re.fullmatch(r"(\d{4}-\d{2}-\d{2})-(.+)", retired_slug)
+        if not original or shifted.group(2) != original.group(2):
+            continue
+        try:
+            original_date = datetime.strptime(original.group(1), "%Y-%m-%d").date()
+            window_days = int(policy.get("republish_window_days", 7))
+        except (TypeError, ValueError):
+            continue
+        # An explicit, bounded window limits the chance of suppressing a
+        # legitimately new weather event that receives a similar headline.
+        if 1 <= window_days <= 30 and 0 <= (shifted_date - original_date).days <= window_days:
+            return policy
+    return None
+
+
 def _source_retirement_item_slugs(item):
     if not isinstance(item, dict):
         return set()
@@ -17865,8 +17906,9 @@ def _source_retirement_item_slugs(item):
 def _source_retirement_policy_for_item(item, output_root=None):
     policies = _source_retirement_policy_by_slug(output_root)
     for slug in _source_retirement_item_slugs(item):
-        if slug in policies:
-            return policies[slug]
+        policy = _source_retirement_policy_for_slug(slug, policies)
+        if policy:
+            return policy
     return None
 
 
@@ -17878,7 +17920,7 @@ def _filter_source_retirement_archive_view(archive, output_root=None):
     return [
         row for row in list(archive or [])
         if not isinstance(row, dict)
-        or _normalize_existing_article_slug(row.get("slug")) not in policies
+        or _source_retirement_policy_for_slug(row.get("slug"), policies) is None
     ]
 
 
@@ -18070,7 +18112,7 @@ def apply_source_retirement_cleanup_to_archive(archive, articles_dir, output_roo
             kept.append(entry)
             continue
         slug = _normalize_existing_article_slug(entry.get("slug"))
-        policy = policies.get(slug)
+        policy = _source_retirement_policy_for_slug(slug, policies)
         if not policy:
             kept.append(entry)
             continue

@@ -85,3 +85,47 @@ def test_recovery_and_feed_archive_views_filter_exact_slug(tmp_path):
     root = _fixture_root(tmp_path)
     rows = [{"slug":TARGET},{"slug":"2026-10-11-other-story"}]
     assert generate._filter_source_retirement_archive_view(rows,root)==[rows[1]]
+
+
+def test_repeated_expired_warning_blocked_under_a_new_daily_slug(tmp_path):
+    generate = _generate()
+    root = _fixture_root(tmp_path)
+    policies = generate._source_retirement_policy_by_slug(output_root=root)
+    oct12 = TARGET.replace("2026-10-11", "2026-10-12")
+    oct13 = TARGET.replace("2026-10-11", "2026-10-13")
+    oct25 = TARGET.replace("2026-10-11", "2026-10-25")
+    oct26 = TARGET.replace("2026-10-11", "2026-10-26")
+    assert generate._source_retirement_policy_for_slug(TARGET, policies)
+    assert generate._source_retirement_policy_for_slug(oct12, policies)
+    assert generate._source_retirement_policy_for_slug(oct13, policies)
+    assert generate._source_retirement_policy_for_slug(oct25, policies)
+    assert generate._source_retirement_policy_for_slug(oct26, policies) is None
+    assert generate._source_retirement_policy_for_slug(
+        "2026-10-12-flooding-damages-homes-after-martin-county-storm", policies
+    ) is None
+    assert generate._source_retirement_policy_for_slug(
+        "2026-10-12-new-flash-flood-warning-issued-for-saint-lucie-county", policies
+    ) is None
+
+    entry = {"slug": oct12, "headline": "Flash Flood Warning Hits Stuart, Hobe Sound, Palm City and Coastal Martin County"}
+    new_entry = {"slug": "2026-10-12-martin-county-recovery-efforts-after-flooding", "headline": "Cleanup continues"}
+    kept, redirects, report = generate.apply_source_retirement_cleanup_to_archive(
+        [entry, new_entry], root / "articles", output_root=root
+    )
+    assert kept == [new_entry]
+    assert redirects == []
+    assert report["retired_count"] == 1
+    assert 'name="robots" content="noindex,nofollow"' in (root / "articles" / (oct12 + ".html")).read_text()
+    assert generate._filter_source_retirement_archive_view([entry,new_entry],root) == [new_entry]
+
+
+def test_repeated_warning_removed_from_live_cards_even_without_slug(tmp_path):
+    generate = _generate()
+    root = _fixture_root(tmp_path)
+    oct13 = TARGET.replace("2026-10-11", "2026-10-13")
+    old = {"headline":"Expired warning", "link":f"https://treasurecoast.today/articles/{oct13}.html"}
+    followup = {"headline":"Legitimate flood follow-up", "slug":"2026-10-13-evacuation-centers-update"}
+    categories=[{"category_key":"martin", "hero":old, "cards":[followup,dict(old)]}]
+    assert generate.apply_source_retirements_to_live(categories,output_root=root)==2
+    assert categories[0]["hero"] == followup
+    assert categories[0]["cards"] == []
