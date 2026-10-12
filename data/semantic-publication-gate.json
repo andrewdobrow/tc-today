@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-12T20:54:29.870470+00:00",
+  "generated_at": "2026-10-12T21:46:41.247511+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 43,
+    "evaluations": 42,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 43,
+    "no_candidate_passes": 42,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
+    "new_stories_allowed": 0,
     "retroactive_rows_retained": 42,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 18,
+    "pre_generation_materiality_evaluations": 23,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 13,
-    "pre_generation_materiality_holds": 5,
-    "pre_generation_materiality_model_calls": 8,
-    "pre_generation_materiality_cache_hits": 10,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_duplicates": 12,
+    "pre_generation_materiality_holds": 11,
+    "pre_generation_materiality_model_calls": 11,
+    "pre_generation_materiality_cache_hits": 12,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -103,6 +103,38 @@
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "local_gov",
+      "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Okeechobee Road location",
+        "St. Lucie County/Fort Pierce area crash"
+      ],
+      "novel_facts": [
+        "Hit-and-run motorcycle fatality at South 25th Street and Okeechobee Road",
+        "White box van fled and crashed into a salon",
+        "Driver fled on foot, manhunt with K-9 and aviation units",
+        "Date of incident is Sunday Oct. 2026, distinct from Sept. 7 Turnpike box truck crash"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
     {
       "category_key": "local_gov",
       "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
@@ -114,8 +146,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -207,8 +239,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -223,6 +255,39 @@
       "novel_facts": [],
       "reason": "Identical source article and incident involving the same named suspect, hospital, agency, and charges. No new material facts beyond additional quotes and procedural detail already covered by the canonical story.",
       "validation_errors": []
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Okeechobee Road",
+        "St. Lucie County area crash"
+      ],
+      "novel_facts": [
+        "Hit-and-run involving box van and motorcycle",
+        "Occurred at South 25th Street and Okeechobee Road, Fort Pierce",
+        "Sunday night crash at 8:52 p.m.",
+        "Driver fled on foot, crashed into a salon building",
+        "Fort Pierce Police searching for suspect"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "crime",
@@ -241,14 +306,10 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.97,
-      "shared_anchors": [
-        "Port St. Lucie location",
-        "missing-person event family"
-      ],
+      "shared_anchors": [],
       "novel_facts": [
-        "New missing person: Cassandra Cerron, 15-year-old girl",
-        "Last seen October 11, 2026",
-        "Different case from the 47-year-old Robert La Polla missing since January"
+        "Missing 15-year-old girl Cassandra Cerron, last seen October 11 in Port St. Lucie",
+        "Distinct from Robert La Polla, 47-year-old missing man case"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -266,8 +327,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -287,37 +348,36 @@
       "validation_errors": []
     },
     {
-      "category_key": "crime",
-      "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school",
-      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/treasure-coast-high-school-freshman-dies-after-being-hit-by-car-while-walking-to-school",
-      "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-      "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+      "category_key": "business",
+      "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
       "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "identity_basis": "same_event_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.9,
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
       "shared_anchors": [
-        "14-year-old Treasure Coast High School student",
-        "struck while walking to school",
-        "Port St. Lucie Police Department",
-        "Southwest Squirrel Avenue",
-        "death from injuries after crash"
+        "Okeechobee Road",
+        "St. Lucie County area"
       ],
       "novel_facts": [
-        "Organ donation decision by family",
-        "Exact death time (Oct. 9, ~4 p.m.)",
-        "Driver described as 72-year-old man in a 2002 Ford Excursion",
-        "School grief counseling services mentioned"
+        "Hit-and-run involving motorcycle fatality",
+        "White box van crashed into salon at 2508 Okeechobee Road",
+        "Driver fled on foot, search by K-9 and Aviation units",
+        "Crash at South 25th Street and Okeechobee Road, Oct 12"
       ],
-      "reason": "This is the same crash and death already captured in the canonical article, which already reports the student's death from injuries. The incoming article adds color (organ donation, counseling, driver age/vehicle detail) but the core material fact—the student died—was already established in the canonical. These additional details are supportive/emotional context, not a new accountability or consequence finding, so they belong as an update rather than a new story, but since the canonical already states the death, there's no new material fact that changes what readers need to know beyond already-known death confirmation.",
-      "validation_errors": []
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "business",
@@ -401,14 +461,12 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road general corridor",
-        "St. Lucie County area"
+        "Okeechobee Road general area in St. Lucie/Fort Pierce region"
       ],
       "novel_facts": [
-        "Sunday night hit-and-run involving cargo van striking gas scooter rider",
-        "crash near Okeechobee Road and 25th Street in Fort Pierce",
-        "van crashed into Kings Queens Unisex Salon",
-        "suspect fled on foot, search ongoing with K-9 and aerial units"
+        "Hit-and-run cargo van driver fled fatal crash involving gas scooter near 25th Street and Okeechobee Road in Fort Pierce on a Sunday night in October",
+        "Van crashed into Kings Queens Unisex Salon and also struck a Toyota pickup truck",
+        "Suspect fled on foot and remains at large; K-9 and aerial units unable to locate him"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -445,6 +503,70 @@
     },
     {
       "category_key": "st_lucie",
+      "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Okeechobee Road location",
+        "St. Lucie County"
+      ],
+      "novel_facts": [
+        "Hit-and-run fatal motorcycle crash near S 25th St and Okeechobee Rd",
+        "White box van fled, crashed into Kings and Queens Unisex Salon",
+        "Driver fled on foot, search ongoing with K-9 and Aviation units",
+        "Occurred Sunday night, distinct from Sept 7 Turnpike box truck crash"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say - WPTV",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Okeechobee Road location",
+        "St. Lucie County area"
+      ],
+      "novel_facts": [
+        "fatal hit-and-run involving motorcycle on Oct 11-12",
+        "white box van fled scene after crash into salon",
+        "driver fled on foot",
+        "distinct date and vehicle type from candidate's Sept 7 Turnpike box truck crash"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
       "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
       "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
       "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
@@ -460,10 +582,13 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.97,
-      "shared_anchors": [],
+      "shared_anchors": [
+        "Port St. Lucie area",
+        "missing-person event family"
+      ],
       "novel_facts": [
-        "Missing person is Cassandra Cerron, a 15-year-old girl, last seen Oct 11 at her home",
-        "Case handled by Port St. Lucie Police Detective H. Nieves, distinct from St. Lucie County Sheriff case"
+        "Missing 15-year-old girl Cassandra Cerron, last seen Oct. 11",
+        "Different missing person case entirely from Robert La Polla, a 47-year-old man missing since January"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -486,16 +611,15 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.97,
+      "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road location in St. Lucie County area"
+        "Okeechobee Road location in St. Lucie County"
       ],
       "novel_facts": [
-        "Hit-and-run of scooter rider on Okeechobee Road west of South 25th Street",
-        "Van crashed into Kings & Queens Unisex Salon",
-        "Driver fled on foot",
-        "Search for suspect ongoing",
-        "Date October 11-12, 2026"
+        "Scooter rider killed by hit-and-run van driver on Oct 11",
+        "Van crashed into Kings & Queens Unisex Salon in Fort Pierce",
+        "Driver fled on foot, police searching with K-9 and aviation units",
+        "Registered owner identified but not confirmed as driver"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -550,11 +674,11 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.95,
-      "shared_anchors": [],
+      "shared_anchors": [
+        "Okeechobee Road location mentioned in both"
+      ],
       "novel_facts": [
-        "Fatal hit-and-run involving a gas scooter rider struck by a cargo van on Okeechobee Road and 25th Street in Fort Pierce",
-        "Suspect fled on foot after crashing into Kings Queens Unisex Salon",
-        "Incident occurred Sunday around 9 p.m., different date and location than candidate's Turnpike box truck crash"
+        "Separate incident: hit-and-run van driver fleeing after striking gas scooter rider on Okeechobee Road/25th Street near Lawnwood Hospital, Sunday ~9pm, Fort Pierce Police investigation, different date and different vehicles/victim than the Turnpike box truck crash"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -626,6 +750,38 @@
       ],
       "reason": "This is the same crash and death already reported in the canonical article. The organ donation detail and counseling information are grief/color follow-up details, not a material update changing what readers need to know (death was already reported), and do not rise to an independently newsworthy accountability angle.",
       "validation_errors": []
+    },
+    {
+      "category_key": "indian_river",
+      "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Okeechobee Road corridor",
+        "St. Lucie County area"
+      ],
+      "novel_facts": [
+        "fatal motorcycle crash near South 25th Street and Okeechobee Road",
+        "white box van fled after striking motorcycle, crashed into salon",
+        "driver fled on foot, still at large",
+        "K-9 and Aviation units searching for suspect"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "indian_river",
@@ -1499,196 +1655,6 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Flash Flood Warning Hits Coastal Martin County Until 7 p.m.",
-      "incoming_source_url": "https://cbs12.com/news/local/flash-flood-warning-for-coastal-martin-county",
-      "incoming_story_id": "story_020688",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Flash Flood Warning Hits Coastal Martin County Until 7 p.m.",
-      "incoming_source_url": "https://cbs12.com/news/local/flash-flood-warning-for-coastal-martin-county",
-      "incoming_story_id": "story_020688",
-      "candidates": [
-        {
-          "slug": "2026-10-01-martin-county-issues-advisory-after-sentinel-chickens-test-positive-for-west-nil",
-          "headline": "Martin County Issues Advisory After Sentinel Chickens Test Positive for West Nile Virus",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5412,
-          "retrieval_score": 0.5312,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
-          "headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4972,
-          "retrieval_score": 0.4902,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-indiantown-flooding-persists-despite-2m-booker-park-drainage-project",
-          "headline": "Indiantown Flooding Persists Despite $2M Booker Park Drainage Project",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4832,
-          "retrieval_score": 0.4612,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-          "headline": "Martin County toddler drowned in family pond after being out of sight no more than 10 minutes",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.47,
-          "retrieval_score": 0.46,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
-          "headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4641,
-          "retrieval_score": 0.4271,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
-          "headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4592,
-          "retrieval_score": 0.4432,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-rabies-alert-issued-in-stuart-after-raccoon-tests-positive",
-          "headline": "60-Day Rabies Alert Covers Part of Stuart After Raccoon Tests Positive",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4353,
-          "retrieval_score": 0.4253,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
-          "headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4306,
-          "retrieval_score": 0.4026,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-          "headline": "Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4298,
-          "retrieval_score": 0.3958,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-10-08-new-ikonick-energetics-primer-plant-in-indiantown-adds-100-plus-jobs-to-martin-c",
-          "headline": "New Ikonick Energetics Primer Plant in Indiantown Adds 100-Plus Jobs to Martin County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4159,
-          "retrieval_score": 0.3849,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
-          "headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4146,
-          "retrieval_score": 0.3866,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
-          "headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.411,
-          "retrieval_score": 0.386,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Flash Flood Warning issued for coastal Martin County until 7 p.m. on 2026-10-11",
-          "2-3 inches of rain already fallen with 1-2 more expected",
-          "Specific warning area: Stuart, Port Salerno, Hobe Sound, Palm City, Jupiter Island, Sewall's Point, Witham Field, Hobe Sound Wildlife Refuge"
-        ],
-        "reason": "This is a distinct, time-bound weather warning (flash flood warning until 7 p.m. on Oct 11) for a specific geographic area. None of the candidates cover this same warning or date; the closest weather-related candidates (Indiantown flooding Oct 5, Port St. Lucie flooding Oct 7) describe different prior flooding events in different locations without any shared warning, date, or specific fact pattern. No candidate shares the same real-world event.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Flash Flood Warning issued for coastal Martin County until 7 p.m. on 2026-10-11",
-          "2-3 inches of rain already fallen with 1-2 more expected",
-          "Specific warning area: Stuart, Port Salerno, Hobe Sound, Palm City, Jupiter Island, Sewall's Point, Witham Field, Hobe Sound Wildlife Refuge"
-        ],
-        "reason": "This is a distinct, time-bound weather warning (flash flood warning until 7 p.m. on Oct 11) for a specific geographic area. None of the candidates cover this same warning or date; the closest weather-related candidates (Indiantown flooding Oct 5, Port St. Lucie flooding Oct 7) describe different prior flooding events in different locations without any shared warning, date, or specific fact pattern. No candidate shares the same real-world event.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
     }
   ],
   "archive_repairs": [],
@@ -2076,21 +2042,5 @@
     ],
     "rejected_directives": [],
     "merges": []
-  },
-  "late_published_skip_materiality_decisions": [
-    {
-      "phase": "late_published_skip_write_barrier",
-      "source_headline": "Misplaced cellphone sparks false weapon rumor at Vero Beach High School - WPEC",
-      "source_url": "https://cbs12.com/news/local/misplaced-cellphone-leads-false-weapon-rumor-vero-beach-high-school-school-district-of-indian-river-county-indian-river-county-sheriffs-office-crisis-in-the-classroom-florida-news",
-      "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
-      "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
-      "identity_basis": "same_event_and_persistent_story_skip",
-      "eligibility_reason": "incoming_not_newer_than_canonical",
-      "evaluated": false,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": false,
-      "action": "preserve_existing_canonical"
-    }
-  ]
+  }
 }
