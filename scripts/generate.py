@@ -17885,6 +17885,80 @@ def _source_retirement_policy_for_slug(slug, policies):
     return None
 
 
+# SAFETY BARRIER FOR AUTOMATED EMERGENCY-ALERT HEADLINES
+# Historical reporting ABOUT a warning is allowed. A generated headline that
+# announces an active warning is not: the RSS/editorial route has no verified
+# NWS alert ID, issued/expiry timestamps, cancellation state, or coverage proof.
+# Never infer alert validity from the date of our own newly minted URL.
+_AUTOMATED_ACTIVE_ALERT_START = re.compile(
+    r"^(?:breaking(?:\s+news)?\s*[:\-]\s*)?"
+    r"(?:(?:nws|national\s+weather\s+service)\s+)?"
+    r"(?:flash[\s-]+flood|tornado|severe[\s-]+thunderstorm)\s+"
+    r"(?:warnings?|watches?|advisories)\b",
+    flags=re.I,
+)
+_AUTOMATED_ACTIVE_ALERT_ISSUED = re.compile(
+    r"^(?:breaking(?:\s+news)?\s*[:\-]\s*)?"
+    r"(?:nws|national\s+weather\s+service)\s+"
+    r"(?:issues?|extends?|renews?|updates?)\s+(?:a|an|the)?\s*"
+    r"(?:flash[\s-]+flood|tornado|severe[\s-]+thunderstorm)\s+"
+    r"(?:warnings?|watches?|advisories)\b",
+    flags=re.I,
+)
+_AUTOMATED_ACTIVE_ALERT_UNDER = re.compile(
+    r"\b(?:under|faces?|hit\s+by)\s+(?:a|an|the)?\s*"
+    r"(?:flash[\s-]+flood|tornado|severe[\s-]+thunderstorm)\s+"
+    r"(?:warnings?|watches?|advisories)\b",
+    flags=re.I,
+)
+_AUTOMATED_ACTIVE_ALERT_POLICY = {
+    "action": "retire", "target_path": "/archive.html",
+    "reason": "automatic active emergency-alert claim lacks verified NWS alert identity and validity interval",
+}
+
+
+def _unverified_automated_live_alert_policy(item):
+    """Fail closed for unverified *current warning* claims, not weather reporting.
+
+    The site's dedicated NWS publisher is disabled; generic feed/LLM output
+    cannot assert that a warning is in effect without an authoritative current
+    alert ID, issue/expiry times and cancellation status. New alert headlines
+    remain held for editorial review until a verified NWS pathway exists.
+    """
+    if not isinstance(item, dict) or item.get("is_custom") or item.get("authoritative_custom"):
+        return None
+    # Only newly published automated content; do not rewrite historical archives.
+    stamp = str(item.get("date") or item.get("permalink_origin_date") or "")[:10]
+    if not stamp:
+        for slug in _source_retirement_item_slugs(item):
+            found = re.match(r"(\d{4}-\d{2}-\d{2})-", slug)
+            if found:
+                stamp = found.group(1)
+                break
+    if stamp and stamp < "2026-10-11":
+        return None
+    title = str(item.get("headline") or "").strip()
+    if not title:
+        for slug in _source_retirement_item_slugs(item):
+            title = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", slug).replace("-", " ")
+            break
+    if not title:
+        return None
+    # A genuine retrospective ("warning expired/lifted/ended") is not an
+    # announcement that an active warning is currently in force.
+    if re.match(
+        r"^(?:flash[\s-]+flood|tornado|severe[\s-]+thunderstorm)\s+"
+        r"(?:warnings?|watches?|advisories)\s+"
+        r"(?:expired|lifted|cancelled|canceled|ended)\b", title, flags=re.I
+    ):
+        return None
+    if (_AUTOMATED_ACTIVE_ALERT_START.search(title)
+            or _AUTOMATED_ACTIVE_ALERT_ISSUED.search(title)
+            or _AUTOMATED_ACTIVE_ALERT_UNDER.search(title)):
+        return _AUTOMATED_ACTIVE_ALERT_POLICY
+    return None
+
+
 def _source_retirement_item_slugs(item):
     if not isinstance(item, dict):
         return set()
@@ -17909,26 +17983,23 @@ def _source_retirement_policy_for_item(item, output_root=None):
         policy = _source_retirement_policy_for_slug(slug, policies)
         if policy:
             return policy
-    return None
+    return _unverified_automated_live_alert_policy(item)
 
 
 def _filter_source_retirement_archive_view(archive, output_root=None):
     """Return an in-memory archive view with explicit source tombstones removed."""
     policies = _source_retirement_policy_by_slug(output_root)
-    if not policies:
-        return list(archive or [])
     return [
         row for row in list(archive or [])
         if not isinstance(row, dict)
-        or _source_retirement_policy_for_slug(row.get("slug"), policies) is None
+        or (_source_retirement_policy_for_slug(row.get("slug"), policies) is None
+            and _unverified_automated_live_alert_policy(row) is None)
     ]
 
 
 def apply_source_retirements_to_live(all_categories, top_cat=None, output_root=None):
     """Remove explicitly retired source pages from every live placement surface."""
     policies = _source_retirement_policy_by_slug(output_root)
-    if not policies:
-        return 0
 
     def retired(item):
         return bool(_source_retirement_policy_for_item(item, output_root))
@@ -17963,6 +18034,32 @@ def apply_source_retirements_to_live(all_categories, top_cat=None, output_root=N
     if removed:
         print(f"  Source-retirement cleanup removed {removed} stale live placement(s)")
     return removed
+
+
+def validate_no_unverified_active_alerts(archive=None, all_categories=None, top_cat=None):
+    """Hard stop: publication must never succeed with a current unverified alert.
+
+    This is a final independent invariant after all cleanup, canonical rebinds,
+    archive recovery, and hero selection. It prevents a future pipeline change
+    from bypassing the publication-time guard without failing the workflow.
+    """
+    offenders = []
+    for row in archive or []:
+        if _unverified_automated_live_alert_policy(row):
+            offenders.append(('archive', str(row.get('headline') or row.get('slug') or 'unknown')))
+    for category in list(all_categories or []) + ([top_cat] if isinstance(top_cat, dict) else []):
+        if not isinstance(category, dict):
+            continue
+        for item in [category.get('hero')] + list(category.get('cards') or []):
+            if _unverified_automated_live_alert_policy(item):
+                offenders.append((str(category.get('category_key') or 'top_news'), str(item.get('headline') or item.get('slug') or 'unknown')))
+    if offenders:
+        preview = '; '.join(f"{scope}: {headline[:90]}" for scope, headline in offenders[:8])
+        raise RuntimeError(
+            'EMERGENCY ALERT PUBLICATION BLOCKED: unverified active NWS warning '
+            'remains after safety cleanup: ' + preview
+        )
+    return True
 
 
 def _source_retirement_domain_matches(entry, expected_domain):
@@ -18112,7 +18209,8 @@ def apply_source_retirement_cleanup_to_archive(archive, articles_dir, output_roo
             kept.append(entry)
             continue
         slug = _normalize_existing_article_slug(entry.get("slug"))
-        policy = _source_retirement_policy_for_slug(slug, policies)
+        policy = (_source_retirement_policy_for_slug(slug, policies)
+                  or _unverified_automated_live_alert_policy(entry))
         if not policy:
             kept.append(entry)
             continue
@@ -35972,6 +36070,16 @@ def write_archives(all_categories, top_cat):
         headline = hero.get("headline", "").strip()
         if not headline:
             continue
+        if _unverified_automated_live_alert_policy(hero):
+            hero["_publication_skip_reason"] = "unverified_automated_active_emergency_alert"
+            _forward_identity_report["publication_holds"].append({
+                "headline": headline,
+                "source_url": str(hero.get("source_url") or ""),
+                "reason": "unverified_automated_active_emergency_alert",
+                "action": "held_before_article_page_write",
+            })
+            print(f"  EMERGENCY ALERT SAFETY HOLD: '{headline[:85]}' (no verified NWS validity)")
+            continue
         if not (
             _publishable_article(hero, hero=bool(hero.get("_is_hero_copy")))
             or _protected_material_update_pending_recomposition(hero)
@@ -37385,6 +37493,7 @@ def write_archives(all_categories, top_cat):
     _detail_started = time.perf_counter()
 
     recover_recent_archive_source_images(archive, articles_dir, max_age_days=3)
+    validate_no_unverified_active_alerts(archive=archive)
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     _save_semantic_publication_gate_cache(_semantic_gate_cache)
     _write_semantic_publication_gate_report(_semantic_gate_report, OUTPUT_DIR)
@@ -42519,6 +42628,10 @@ def main():
             f"{_final_live_content_override_count} placement(s)"
         )
 
+    # Last live-surface safety barrier: rebinding and recovery can reintroduce
+    # cached feed articles after the earlier retirement sweeps.
+    apply_source_retirements_to_live(all_categories, top_cat, output_root=OUTPUT_DIR)
+    validate_no_unverified_active_alerts(all_categories=all_categories, top_cat=top_cat)
     ensure_final_live_visual_images(all_categories, top_cat, OUTPUT_DIR)
     validate_live_county_membership_authority(all_categories, top_cat, OUTPUT_DIR)
     validate_live_category_canonical_uniqueness(all_categories, top_cat, OUTPUT_DIR)
