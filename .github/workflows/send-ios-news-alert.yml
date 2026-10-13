@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: "Preview only (safe), or send (separately gated in Supabase)"
+        description: "Diagnose APNs keys (no send), preview, or send (separately gated)"
         required: true
         type: choice
         default: preview
         options:
           - preview
+          - diagnose
           - send
       audience:
         description: "Reader preference group"
@@ -34,7 +35,7 @@ on:
         required: true
         type: string
       confirm:
-        description: "Only for send: type SEND (preview ignores this)"
+        description: "Only for send: type SEND (diagnose and preview ignore this)"
         required: false
         type: string
 
@@ -69,7 +70,7 @@ jobs:
             echo '::error::To send, the confirmation input must equal SEND'
             exit 1
           fi
-      - name: Preview audience or request a manually approved alert
+      - name: Diagnose credentials, preview, or request an approved alert
         shell: bash
         run: |
           set -euo pipefail
