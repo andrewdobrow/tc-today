@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-13T10:53:37.960711+00:00",
+  "generated_at": "2026-10-13T12:51:01.252961+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 35,
+    "evaluations": 36,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 35,
+    "no_candidate_passes": 36,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 35,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 23,
+    "pre_generation_materiality_evaluations": 26,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 13,
-    "pre_generation_materiality_holds": 10,
-    "pre_generation_materiality_model_calls": 10,
+    "pre_generation_materiality_duplicates": 14,
+    "pre_generation_materiality_holds": 12,
+    "pre_generation_materiality_model_calls": 12,
     "pre_generation_materiality_cache_hits": 13,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -151,12 +151,13 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road, St. Lucie County"
+        "st-lucie-county",
+        "okeechobee-road corridor"
       ],
       "novel_facts": [
-        "Fatal motorcycle crash on Oct 12 at South 25th St and Okeechobee Road",
-        "White box van fled scene and crashed into a salon",
-        "Driver fled on foot, search ongoing"
+        "Fatal motorcycle hit-and-run near South 25th Street and Okeechobee Road",
+        "White box van struck motorcyclist, fled, crashed into a salon",
+        "Driver fled on foot, active manhunt with K-9 and Aviation units"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -195,6 +196,34 @@
     },
     {
       "category_key": "crime",
+      "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+      "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "New missing person: Cassandra Cerron, 15-year-old girl",
+        "Last seen October 11 in Port St. Lucie",
+        "Different case from Robert La Polla, a 47-year-old man missing since January"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "crime",
       "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
       "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
       "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
@@ -211,13 +240,14 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road",
-        "St. Lucie County"
+        "Okeechobee Road location",
+        "St. Lucie area"
       ],
       "novel_facts": [
-        "Oct 11 scooter rider fatally struck by fleeing white van",
-        "van crashed into Kings & Queens Unisex Salon at 2508 Okeechobee Road",
-        "driver fled on foot, ongoing manhunt with K-9 and aviation unit"
+        "scooter rider killed by hit-and-run van driver",
+        "van crashed into Kings & Queens Unisex Salon",
+        "driver fled on foot",
+        "K-9 and aviation unit search for suspect"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -298,15 +328,16 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 0.97,
       "shared_anchors": [
-        "st-lucie-county",
-        "okeechobee-road corridor"
+        "Okeechobee Road",
+        "St. Lucie County"
       ],
       "novel_facts": [
-        "Hit-and-run fatal motorcycle crash at South 25th Street and Okeechobee Road",
-        "White box van fleeing into Kings and Queens Unisex Salon",
-        "Driver fled on foot, K-9 and Aviation units searching"
+        "Hit-and-run fatal motorcycle crash near South 25th Street and Okeechobee Road",
+        "White box van fled after striking motorcycle",
+        "Van crashed into Kings and Queens Unisex Salon",
+        "Driver fled on foot, search ongoing with K-9 and Aviation units"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -332,11 +363,11 @@
       "confidence": 0.97,
       "shared_anchors": [
         "missing-person event family",
-        "St. Lucie area"
+        "Port St. Lucie / St. Lucie area"
       ],
       "novel_facts": [
-        "Different missing person entirely: Cassandra Cerron, 15-year-old girl, last seen Oct. 11",
-        "Different case from Robert La Polla, 47-year-old man missing since January"
+        "Missing person is Cassandra Cerron, a 15-year-old girl last seen Oct. 11",
+        "Different case entirely from Robert La Polla, a 47-year-old man missing since January"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -392,12 +423,12 @@
       "confidence": 0.95,
       "shared_anchors": [
         "Okeechobee Road",
-        "St. Lucie County area"
+        "St. Lucie County"
       ],
       "novel_facts": [
-        "Hit-and-run fatal motorcycle crash near South 25th Street and Okeechobee Road",
+        "Hit-and-run fatal motorcycle crash near South 25th Street and Okeechobee Road on Sunday night at 8:52 p.m.",
         "White box van fled and crashed into a salon",
-        "Driver fled on foot, still at large as of Monday"
+        "Driver fled on foot, search ongoing with K-9 and Aviation units"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -487,22 +518,48 @@
       "confidence": 0.78,
       "shared_anchors": [
         "14-year-old Treasure Coast High School student",
-        "Port St. Lucie Boulevard/Squirrel Avenue",
-        "struck by SUV while walking to school",
-        "death from injuries"
+        "struck by SUV near Southwest Port St. Lucie Boulevard/Squirrel Avenue",
+        "walking to school",
+        "died from injuries"
       ],
       "novel_facts": [
-        "Neighbor advocacy for pedestrian safety near construction zone",
-        "Lack of sidewalks and flooded shoulders cited as contributing hazards",
-        "FDOT widening project details and $25.6 million cost, completion winter 2028",
-        "FDOT did not respond to questions about interim pedestrian safety measures",
-        "Driver's statement that he believed he struck a construction barrel",
-        "Family donated organs; mother's comments on son's personality",
-        "Unclear whether charges will be filed"
+        "Neighbor-led pedestrian safety advocacy following the death",
+        "Details on lack of sidewalks and ongoing FDOT construction/widening project with cost ($25.6M) and completion timeline (winter 2028)",
+        "Family's decision to donate organs",
+        "Driver's statement that he believed he struck a construction barrel, and status of possible charges",
+        "FDOT declined to answer questions about interim pedestrian safety measures during construction"
       ],
-      "reason": "This is the same underlying crash/death as the canonical article, but it introduces a distinct public-accountability angle: community demands for pedestrian safety, FDOT's non-response on interim safety measures during construction, and new case details (driver's barrel claim, organ donation, uncertain charges). This goes beyond a routine update and merits independent newsworthy treatment as a policy/accountability follow-up.",
+      "reason": "This is the same underlying crash/death as the canonical article, but it introduces a distinct accountability angle: community members and family demanding pedestrian safety improvements, scrutiny of FDOT's construction project and lack of sidewalks, and new details about the investigation (driver's account, possible charges). This raises a public-interest/accountability question beyond simply restating the death, meeting the bar for an independently newsworthy follow-up.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+      "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Missing person is Cassandra Cerron, a 15-year-old girl",
+        "Last seen October 11 at her home in Port St. Lucie",
+        "Different case from Robert La Polla, a 47-year-old man missing since January"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
       ]
     },
     {
@@ -536,6 +593,34 @@
     },
     {
       "category_key": "st_lucie",
+      "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - cw34.com",
+      "source_url": "https://cw34.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
+      "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+      "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Becker Road",
+        "I-95 North Exit 114",
+        "Florida's Turnpike North Mile Marker 134/Exit 138",
+        "Sunday afternoon crashes",
+        "Florida 511 source"
+      ],
+      "novel_facts": [],
+      "reason": "Both articles describe the identical Sunday afternoon crashes near Becker Road blocking I-95 North lane and Turnpike shoulder, citing the same Florida 511 details. The incoming article is a syndicated re-run with no new facts, just additional unrelated traffic blurbs appended.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
       "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
       "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
       "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
@@ -552,48 +637,19 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road, St. Lucie County"
+        "Okeechobee Road",
+        "St. Lucie County area"
       ],
       "novel_facts": [
-        "Scooter rider hit and killed by fleeing white van driver",
+        "Scooter rider killed by hit-and-run van driver on Okeechobee Rd near 25th St",
         "Van crashed into Kings & Queens Unisex Salon at 2508 Okeechobee Road",
         "Driver fled on foot, ongoing manhunt with K-9 and aviation units",
-        "Crash occurred October 11 near South 25th Street"
+        "Incident occurred October 11, 2026"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy",
-      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
-      "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-      "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.85,
-      "shared_anchors": [
-        "Port St. Lucie Boulevard/Squirrel Avenue location",
-        "14-year-old struck while walking to school on Oct. 7",
-        "died from injuries",
-        "Port St. Lucie Police"
-      ],
-      "novel_facts": [
-        "Family chose organ donation",
-        "advocacy commentary from Donate Life Florida and transplant recipient"
-      ],
-      "reason": "This is the same crash/death already covered in the canonical story. The organ donation angle is human-interest/emotional framing that does not change the core facts readers need (victim ID, cause, death already reported). It's not an accountability, investigation, or policy follow-up that merits a separate headline.",
-      "validation_errors": []
     },
     {
       "category_key": "st_lucie",
@@ -624,6 +680,36 @@
         "Advocacy commentary on organ donation need from Donate Life Florida and transplant recipients"
       ],
       "reason": "This is the same crash and death already covered in the canonical story. The organ donation angle is a human-interest/community follow-up rather than an accountability, investigation, or consequential development (e.g., no charges, cause finding, or policy change). It reads as emotional/legacy framing, which per guidelines should update the existing canonical rather than mint a new story, but since the death was already reported, the organ donation detail is additive color, not a material update to the canonical facts (crash, victim, death). This leans toward duplicate rather than update, as it doesn't change what readers need to know about the incident itself.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
+      "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+      "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.85,
+      "shared_anchors": [
+        "Port St. Lucie Boulevard/Squirrel Avenue location",
+        "14-year-old struck while walking to school on Oct. 7",
+        "died from injuries",
+        "Port St. Lucie Police"
+      ],
+      "novel_facts": [
+        "Family chose organ donation",
+        "advocacy commentary from Donate Life Florida and transplant recipient"
+      ],
+      "reason": "This is the same crash/death already covered in the canonical story. The organ donation angle is human-interest/emotional framing that does not change the core facts readers need (victim ID, cause, death already reported). It's not an accountability, investigation, or policy follow-up that merits a separate headline.",
       "validation_errors": []
     },
     {
@@ -672,12 +758,14 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road general area"
+        "Okeechobee Road general area in St. Lucie County region"
       ],
       "novel_facts": [
-        "Sunday night hit-and-run involving cargo van striking gas scooter rider at Okeechobee Road and 25th Street",
-        "van crashed into Kings Queens Unisex Salon and also struck a Toyota pickup",
-        "driver fled on foot and is being sought by Fort Pierce police with K-9 and aviation assistance"
+        "Fatal hit-and-run involving a scooter rider and cargo van on Sunday near Okeechobee Road and 25th Street in Fort Pierce",
+        "Van crashed into Kings Queens Unisex Salon after fleeing",
+        "Second vehicle (Toyota pickup) also struck",
+        "Driver fled on foot, described as Hispanic man",
+        "K-9 and Aviation units searching for suspect"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -700,16 +788,15 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.97,
+      "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road",
-        "St. Lucie County area crash"
+        "St. Lucie County",
+        "Okeechobee Road corridor"
       ],
       "novel_facts": [
-        "Hit-and-run motorcycle fatality at South 25th Street and Okeechobee Road",
-        "White box van fled after striking motorcycle and crashing into a salon",
-        "Driver fled on foot, K-9 and aviation units searching",
-        "Occurred Sunday night Oct. 11-12, 2026"
+        "Fatal hit-and-run involving motorcycle on Sunday night at South 25th Street and Okeechobee Road",
+        "White box van fled scene, crashed into a salon, driver fled on foot",
+        "K-9 and Aviation units searching for driver"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -758,23 +845,16 @@
       "evaluated": true,
       "promoted": false,
       "cache_hit": false,
-      "model_call": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_status": "pre_generation_materiality_budget_exhausted",
       "semantic_action": "hold",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "Okeechobee Road",
-        "St. Lucie County area"
-      ],
-      "novel_facts": [
-        "Hit-and-run of motorcyclist Sunday night near South 25th Street and Okeechobee Road",
-        "White box van fled, crashed into Kings and Queens Unisex Salon",
-        "Driver fled on foot, search ongoing with K-9 and Aviation units"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "confidence": 0.0,
+      "shared_anchors": [],
+      "novel_facts": [],
+      "reason": "Pre-generation material-update model-call budget exhausted; preserve existing canonical.",
       "validation_errors": [
-        "known_canonical_identity_conflict"
+        "pre_generation_materiality_budget_exhausted"
       ]
     },
     {
@@ -1509,6 +1589,201 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Port St. Lucie Family Seeks Animal Cruelty Charges After Dog Killed on Goodman Avenue",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-port-st-lucie-dog-killed-hit-and-run/74113560",
+      "incoming_story_id": "story_020997",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Port St. Lucie Family Seeks Animal Cruelty Charges After Dog Killed on Goodman Avenue",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-port-st-lucie-dog-killed-hit-and-run/74113560",
+      "incoming_story_id": "story_020997",
+      "candidates": [
+        {
+          "slug": "2026-10-12-port-st-lucie-man-fights-citys-126-camera-network-in-federal-court",
+          "headline": "Port St. Lucie Man Fights City's 126-Camera Network in Federal Court",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6374,
+          "retrieval_score": 0.5004,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-10-02-st-lucie-mosquito-crews-treat-standing-water-near-us-1-in-fort-pierce",
+          "headline": "St. Lucie Mosquito Crews Treat Standing Water Near U.S. 1 in Fort Pierce",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6359,
+          "retrieval_score": 0.5289,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
+          "headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6022,
+          "retrieval_score": 0.4742,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-10-02-port-st-lucie-man-gets-37-12-years-in-stuart-vape-shop-shooting",
+          "headline": "Port St. Lucie Man Gets 37 1/2 Years in Stuart Vape Shop Shooting",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5889,
+          "retrieval_score": 0.4819,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-10-07-5-years-after-gabriella-hanleys-killing-on-green-river-parkway-case-remains-unso",
+          "headline": "5 Years After Gabriella Hanley's Killing on Green River Parkway, Case Remains Unsolved",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5871,
+          "retrieval_score": 0.4651,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5913,
+          "retrieval_score": 0.5543,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5542,
+          "retrieval_score": 0.5232,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-port-st-lucie-mayor-shannon-martin-challenger-steven-giordano-clash-in-debate",
+          "headline": "Port St. Lucie Mayor Shannon Martin, Challenger Steven Giordano Clash in Debate",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5505,
+          "retrieval_score": 0.5345,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+          "headline": "Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5389,
+          "retrieval_score": 0.5109,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5359,
+          "retrieval_score": 0.5109,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-10-grease-fire-sparks-propane-explosion-at-port-st-lucie-home",
+          "headline": "Port St. Lucie Fire Victim Identified as Church Helps Family Recover",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5293,
+          "retrieval_score": 0.4983,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-09-30-port-st-lucie-man-arrested-on-sexual-battery-charges-involving-16-year-old-relat",
+          "headline": "Port St. Lucie man arrested on sexual battery charges involving 16-year-old relative",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5282,
+          "retrieval_score": 0.5272,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "German shepherd named Titus killed on Goodman Avenue in hit-and-run",
+          "Owners Michelle and Dillon Baker seeking animal cruelty charges",
+          "Surveillance footage shows silver truck dragging dog"
+        ],
+        "reason": "No candidate shares the specific incident: a dog named Titus killed on Goodman Avenue. Other animal-related candidates involve different dogs, different locations (Pine Creek Apartments, kennel club event, mosquito control), and different facts. This is a distinct real-world incident with no matching candidate.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "German shepherd named Titus killed on Goodman Avenue in hit-and-run",
+          "Owners Michelle and Dillon Baker seeking animal cruelty charges",
+          "Surveillance footage shows silver truck dragging dog"
+        ],
+        "reason": "No candidate shares the specific incident: a dog named Titus killed on Goodman Avenue. Other animal-related candidates involve different dogs, different locations (Pine Creek Apartments, kennel club event, mosquito control), and different facts. This is a distinct real-world incident with no matching candidate.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
     }
   ],
   "archive_repairs": [],
@@ -1896,5 +2171,21 @@
     ],
     "rejected_directives": [],
     "merges": []
-  }
+  },
+  "late_published_skip_materiality_decisions": [
+    {
+      "phase": "late_published_skip_write_barrier",
+      "source_headline": "Port St. Lucie moves forward with plans for new Costco store - WPBF",
+      "source_url": "https://www.wpbf.com/article/port-st-lucie-plans-new-costco-store-florida/74114070",
+      "canonical_slug": "2026-10-13-port-st-lucie-approves-costco-entertainment-district-rehab-hospital-in-southern",
+      "canonical_headline": "Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove",
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "incoming_not_newer_than_canonical",
+      "evaluated": false,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": false,
+      "action": "preserve_existing_canonical"
+    }
+  ]
 }
