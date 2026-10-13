@@ -85,7 +85,7 @@ function environment({ live = false, devices = [], articleLive = true, appleStat
   })
   vm.runInContext(code, context)
   async function request(args, opts={}) {
-    const body = JSON.stringify({ action: 'preview', audience: 'martin', slug, title: 'Stuart City Council', body: 'A local government update.', ...args })
+    const body = JSON.stringify(opts.rawPayload ?? { action: 'preview', audience: 'martin', slug, title: 'Stuart City Council', body: 'A local government update.', ...args })
     const response = await handler(new Request('https://example.test/', {
       method: opts.method ?? 'POST',
       headers: { 'content-type': 'application/json', 'x-tct-push-dispatch-key': opts.key ?? secret },
@@ -236,4 +236,44 @@ test('send surfaces the safe diagnostic before claiming a dispatch', async () =>
   assert.equal(response.body.diagnostic_code,'APNS_P8_BASE64_INVALID')
   assert.equal(system.calls.apple.length,0)
   assert.equal(system.dbRows.size,0)
+})
+
+test('diagnose with ONLY the action succeeds without article, audience, or message', async () => {
+  const system = environment({ live: false, articleLive: false, devices: [oneDevice()] })
+  const response = await system.request({}, { rawPayload: { action: 'diagnose' } })
+  assert.equal(response.status, 200)
+  assert.equal(response.body.diagnostic, true)
+  assert.equal(response.body.apns_signing, 'ok')
+  assert.equal(system.calls.head.length, 0)
+  assert.equal(system.calls.apple.length, 0)
+  assert.equal(system.calls.inserts.length, 0)
+  assert.equal(system.calls.updates.length, 0)
+  assert.equal(system.dbRows.size, 0)
+})
+
+test('diagnose ignores invalid story and audience fields without touching article or recipients', async () => {
+  const system = environment({ live: true, devices: [oneDevice()] })
+  const response = await system.request({}, { rawPayload: {
+    action: 'diagnose', slug: 'not a story', audience: 'other', title: '', body: ''
+  } })
+  assert.equal(response.status, 200)
+  assert.equal(response.body.apns_signing, 'ok')
+  assert.equal(system.calls.head.length, 0)
+  assert.equal(system.calls.apple.length, 0)
+  assert.equal(system.calls.inserts.length, 0)
+})
+
+test('preview and send still require valid fields and never reserve bad input', async () => {
+  const system = environment({ live: true, devices: [oneDevice()] })
+  for (const action of ['preview', 'send']) {
+    for (const [field, value] of [['slug', 'bad slug'], ['audience', 'everybody'],
+      ['title', ''], ['body', '']]) {
+      const response = await system.request({ action, [field]: value, confirm: 'SEND' })
+      assert.equal(response.status, 400)
+      assert.equal(response.body.field, field)
+    }
+  }
+  assert.equal(system.calls.head.length, 0)
+  assert.equal(system.calls.apple.length, 0)
+  assert.equal(system.dbRows.size, 0)
 })

@@ -163,22 +163,14 @@ Deno.serve(async request => {
     if (raw.length > 3000) throw Error('large')
     input = JSON.parse(raw)
   } catch { return respond({ error: 'Invalid JSON input' }, 400) }
+  // Authenticate first, then handle credential-only diagnostics before the
+  // article, audience or message fields. Diagnostics intentionally require
+  // only {action:"diagnose"}; they must not validate publication inputs.
   if (!input || typeof input !== 'object' || Array.isArray(input) ||
-      !['preview', 'diagnose', 'send'].includes(input.action) ||
-      typeof input.slug !== 'string' || input.slug.length > 180 || !slugPattern.test(input.slug) ||
-      typeof input.audience !== 'string' || !allowedAudiences.includes(input.audience) ||
-      typeof input.title !== 'string' || !input.title.trim() || input.title.length > 100 ||
-      typeof input.body !== 'string' || !input.body.trim() || input.body.length > 180) {
-    return respond({ error: 'Invalid story, audience, or message. Use a published story slug, title and short body.' }, 400)
+      !['preview', 'diagnose', 'send'].includes(input.action)) {
+    return respond({ error: 'Invalid action. Use diagnose, preview, or send.' }, 400)
   }
-  const { action, slug, audience } = input
-  const title = input.title.trim()
-  const body = input.body.trim()
-
-  // Authorized, side-effect-free check of the server's APNs configuration.
-  // No device lookup, live flag, article existence check, APNs network call,
-  // dispatch reservation, or private credential is involved in the response.
-  if (action === 'diagnose') {
+  if (input.action === 'diagnose') {
     try {
       await makeAppleToken()
       return respond({ diagnostic: true, apns_signing: 'ok', sent: false,
@@ -188,6 +180,24 @@ Deno.serve(async request => {
         diagnostic_code: apnsDiagnosticCode(error), sent: false }, 503)
     }
   }
+
+  // Only preview and send require live-story and message fields.
+  // Return a field-specific safe error, never echo supplied content.
+  if (typeof input.slug !== 'string' || input.slug.length > 180 || !slugPattern.test(input.slug)) {
+    return respond({ error: 'Invalid story slug: use the article filename without .html.', field: 'slug' }, 400)
+  }
+  if (typeof input.audience !== 'string' || !allowedAudiences.includes(input.audience)) {
+    return respond({ error: 'Invalid audience: choose breaking or a supported county.', field: 'audience' }, 400)
+  }
+  if (typeof input.title !== 'string' || !input.title.trim() || input.title.length > 100) {
+    return respond({ error: 'Invalid notification title: enter 1–100 characters.', field: 'title' }, 400)
+  }
+  if (typeof input.body !== 'string' || !input.body.trim() || input.body.length > 180) {
+    return respond({ error: 'Invalid notification body: enter 1–180 characters.', field: 'body' }, 400)
+  }
+  const { action, slug, audience } = input
+  const title = input.title.trim()
+  const body = input.body.trim()
 
   if (!(await articleExists(slug))) {
     return respond({ error: 'Story is not a live, non-redirecting TCT article. Check its URL before alerting readers.' }, 422)

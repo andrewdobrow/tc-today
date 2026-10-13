@@ -10,7 +10,7 @@ news publishing, or Supabase database configuration for this diagnostic.
 1. Copy the overlay files into your **website** repository at their supplied paths. Review changes if `main` has advanced; do not discard any more recent `push-dispatch` edits.
 2. Commit and push to `main`.
 3. Run **Deploy TCT iOS Push Sender (manual)** in the website repository's GitHub Actions. This is a separate workflow and must run before the new behavior is available in Supabase. Normal website publishing will not deploy Edge Function changes.
-4. In the existing **TCT iOS News Alert (manual preview or send)** workflow select `action = diagnose`. Use the same syntactically valid article slug, title, body, and audience as before; `confirm` can be empty. This mode **does not check the article, select recipients, call Apple, or write to the dispatch ledger**, and does not require `TCT_PUSH_SENDING_ENABLED=true`.
+4. In the existing **TCT iOS News Alert (manual preview or send)** workflow select `action = diagnose`. Leave the article slug, title, body, and confirmation **empty**. The workflow uses a default audience but the diagnostic ignores it. No article is needed; only the `diagnose` action is required. This mode **does not check the article, select recipients, call Apple, or write to the dispatch ledger**, and does not require `TCT_PUSH_SENDING_ENABLED=true`.
 5. Look at the JSON printed in the workflow run. Share **only** `diagnostic_code`, if present. Never share secrets or `.p8` key contents.
 
 ## Example safe results
@@ -49,3 +49,15 @@ An `ok` result validates local JWT creation only. It **does not** verify that th
 ## Safeguards
 
 The endpoint is authenticated with the existing `TCT_PUSH_DISPATCH_KEY`. It never returns private key content, decoded key bytes, Key ID or Team ID values, APNs device tokens, or low-level crypto exception strings. The `diagnose` path has no external network calls or database writes, never sends an APNs notification, and does not consume an article's once-only send slot. Existing live-send switch, confirmation requirements, recipient filtering, and ledger logic remain unchanged.
+
+## Fix for 400 on `diagnose`
+
+A previous version accidentally validated the article slug, audience, title and message
+*before* entering `diagnose`, returning HTTP 400 even though diagnosis needs none of
+these values. This version checks operator authorization, then executes diagnostic
+signing **before** any story validation. GitHub Actions makes those fields optional;
+`preview` and `send` still require them and return field-specific errors when invalid.
+
+After pushing this update, **redeploy** `push-dispatch` through the manual deployment
+workflow before rerunning `diagnose`. A green repository commit without an Edge
+Function deployment will leave the old HTTP 400 behavior in Supabase.
