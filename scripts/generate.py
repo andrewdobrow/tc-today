@@ -20470,6 +20470,11 @@ def validate_rss_social_image_contract(output_root=None):
     if not item_blocks:
         raise RuntimeError("RSS social image contract FAILED: feed contains no items")
     if issues:
+        print(
+            "RSS SOCIAL IMAGE VALIDATION DETAILS: "
+            + json.dumps(issues, indent=2, ensure_ascii=False),
+            flush=True,
+        )
         raise RuntimeError(
             "RSS social image contract FAILED: "
             f"{len(issues)} image policy violation(s); see {report_path}"
