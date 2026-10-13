@@ -23,16 +23,16 @@ on:
           - st_lucie
           - indian_river
       slug:
-        description: "Published article URL slug (without /articles/ and .html)"
-        required: true
+        description: "Required for preview/send only: published article filename without .html"
+        required: false
         type: string
       title:
-        description: "Notification headline (100 characters max)"
-        required: true
+        description: "Required for preview/send only: notification headline (100 characters max)"
+        required: false
         type: string
       body:
-        description: "Notification body (180 characters max)"
-        required: true
+        description: "Required for preview/send only: notification body (180 characters max)"
+        required: false
         type: string
       confirm:
         description: "Only for send: type SEND (diagnose and preview ignore this)"
@@ -66,6 +66,11 @@ jobs:
           set -euo pipefail
           test -n "$PROJECT_ID" || { echo '::error::Missing SUPABASE_PROJECT_REF'; exit 1; }
           [[ "$DISPATCH_KEY" =~ ^[0-9a-f]{64}$ ]] || { echo '::error::Missing valid TCT_PUSH_DISPATCH_KEY secret'; exit 1; }
+          if [[ "$MODE" != "diagnose" ]]; then
+            test -n "$SLUG" || { echo '::error::Published story slug required for preview/send'; exit 1; }
+            test -n "$ALERT_TITLE" || { echo '::error::Notification title required for preview/send'; exit 1; }
+            test -n "$ALERT_BODY" || { echo '::error::Notification body required for preview/send'; exit 1; }
+          fi
           if [[ "$MODE" == "send" && "$CONFIRM" != "SEND" ]]; then
             echo '::error::To send, the confirmation input must equal SEND'
             exit 1
