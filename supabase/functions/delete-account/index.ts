@@ -68,20 +68,6 @@ export default {
       }
     }
 
-    // Persist irreversible digests BEFORE Stripe calls or Auth deletion. This
-    // prevents delayed checkout-complete/webhook events resurrecting the account.
-    // No email, customer ID, or user UUID is stored in plaintext here.
-    try {
-      const identifiers = [await deletedIdentifierHash('user', userId),
-        ...(await Promise.all(customers.map((id) => deletedIdentifierHash('customer', id))))]
-      const { error: markerError } = await admin.from('membership_deleted_identifiers')
-        .upsert(identifiers.map((identifier_hash) => ({ identifier_hash })), { onConflict: 'identifier_hash', ignoreDuplicates: true })
-      if (markerError) throw markerError
-    } catch (error) {
-      console.error('delete-account could not persist replay protection', error)
-      return Response.json({ error: 'Could not safely start deletion. No account data was deleted.' }, { status: 503 })
-    }
-
     const isTCTSubscription = (sub: Stripe.Subscription) =>
       knownSubscriptionIds.has(sub.id) ||
       sub.items.data.some((item) => tctPriceIds.has(item.price.id)) ||
@@ -115,6 +101,23 @@ export default {
         error: 'We could not verify that all renewals were stopped. Your account has not been deleted. Please retry or contact support.',
         retryable: true,
       }, { status: 502 })
+    }
+
+    // Stripe cancellation and final renewal verification must succeed BEFORE
+    // writing deletion replay markers. A failed billing lookup must not mark an
+    // account that still exists as deleted (and block its webhook updates).
+    // These digests are still persisted BEFORE Auth deletion so delayed events
+    // cannot resurrect an identity after its account is removed.
+    // No email, customer ID, or user UUID is stored in plaintext here.
+    try {
+      const identifiers = [await deletedIdentifierHash('user', userId),
+        ...(await Promise.all(customers.map((id) => deletedIdentifierHash('customer', id))))]
+      const { error: markerError } = await admin.from('membership_deleted_identifiers')
+        .upsert(identifiers.map((identifier_hash) => ({ identifier_hash })), { onConflict: 'identifier_hash', ignoreDuplicates: true })
+      if (markerError) throw markerError
+    } catch (error) {
+      console.error('delete-account could not persist replay protection', error)
+      return Response.json({ error: 'Billing was verified, but account deletion could not safely finish. Please retry or contact support.' }, { status: 503 })
     }
 
     try {
