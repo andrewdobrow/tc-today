@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-13T06:16:04Z",
+  "generated_at": "2026-10-13T10:54:24Z",
   "mode": "shadow",
   "publication_behavior_changed": false,
   "activation": {
@@ -25,8 +25,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 2,
-    "placements_after": 2,
+    "placements_before": 1,
+    "placements_after": 1,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -51,24 +51,34 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 172,
+    "candidates_processed": 174,
     "routes": {
-      "generate_new": 13,
-      "skip": 159
+      "generate_new": 37,
+      "skip": 136,
+      "update_existing": 1
     },
     "eligibility": {
-      "listing": 5,
-      "low_value": 113,
-      "publishable": 54
+      "listing": 6,
+      "low_value": 116,
+      "publishable": 52
     },
     "source_classes": {
-      "aggregator": 118,
-      "local_news": 34,
-      "regional_news": 18,
+      "aggregator": 122,
+      "local_news": 31,
+      "regional_news": 19,
       "unknown": 2
     },
-    "rejected_count": 5,
+    "rejected_count": 6,
     "rejected_examples": [
+      {
+        "headline": "2202 SE Trillo St, Port Saint Lucie, FL 34952 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPOEVlWV9xLWFwajN2bERrcTVEUl9VbzBVdmhKMGdJTXFhbTZHYlhZcTFJaVFPalJoLWZyUm13UWZZRkx6N3hxU1FkQ0RHV2xDTEJpWVpPdnFSQXVNOEpfWW01bHJKT1pMZUdFcV9iejA3TjM3el9xcER5ZmZlZHFSRVFsOVNlbGJhUnRVX2tlOS1hNFZGcHRLSQ?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "5838 NW Gillespie Ave, Port Saint Lucie, FL 34986 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPWmw2ZEFBalczbmJQMk5SelJSamJfbWczTUxpS085N0l4U3FuZEhYcU03UWJxVVJ6aDViNHJQbHFBRTdQNWtvNkVUWWpBOU5YS0c3c3djYmFMaTl3Mmh0bDBKZV9hclZXUlpHOFZDUHlQUTgtdWZ0YUQ3U0tpWDNUNmxMUjhxYkg2dW9KYjlfcTFRRUZ2dlI1eE90QUtlQQ?oc=5",
@@ -88,8 +98,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "407 Willows Ave, Port Saint Lucie, FL 34952 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPM1RncGZJS3ZjLTFPamlKa3A1ZzFsQ3dPYlRhZEZlUVAySGxGcldRZThjc0g5VnBvNElDTlZxNFVzOGpjdmpQNVRJYUNLTnhoLVNYSlBjd2l5X29XdzJCZVpSTGpuRVBQUmJTcXgtRVk5Wi0wWUNhTXpwQlpIdUpCR3FsU2NmYy1FcDI1Z2R2em5wbjRpWXc?oc=5",
+        "headline": "Florida Could Cut Property Taxes to Zero for Millions—but Experts Warn of a Big Catch for Buyers - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNRVl4bUVNOF84UFZiSHBOZWJKbUJFWkh6Mk1ZcndkbXBNeDVIR1ByZzdFcUwxY2NvbWxPYWxERXV1U0ZjV0VrTUpuV0dmWjBmYjE3Wk94RlVfT1FxQUJmRkpRSElodTd6Y1hkSlBWSDNYSDhNaDFvY1ptaDBUZVlmUWtZZ2VPUWNEOUFtYndrUmJXeWV2QlJ2dkR3WHg?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -118,10 +128,31 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 13,
-      "same_event": 159
+      "new_story": 27,
+      "same_event": 147
     },
     "examples": [
+      {
+        "story_id": "story_020978",
+        "title": "Costco gets early OK from Florida city council for new retail store - Treasure Coast News",
+        "event_key": "unknown-event-7ecc19464a",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "",
+        "title": "2202 SE Trillo St, Port Saint Lucie, FL 34952 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
+      },
       {
         "story_id": "",
         "title": "5838 NW Gillespie Ave, Port Saint Lucie, FL 34986 - Realtor.com",
@@ -267,15 +298,6 @@
         ]
       },
       {
-        "story_id": "",
-        "title": "407 Willows Ave, Port Saint Lucie, FL 34952 - Realtor.com",
-        "event_key": "",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
-      },
-      {
         "story_id": "story_013476",
         "title": "Florida sheriff's agent, former teacher, coach, killed in I-95 crash - Bradenton Herald",
         "event_key": "named-person-death:bradenton-herald",
@@ -372,23 +394,22 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_020843",
-        "title": "Florida city runs out of patience, votes to terminate restaurant lease - Yahoo",
-        "event_key": "unknown-event-d4b40bf0a0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
+      {
+        "story_id": "story_020978",
+        "title": "Costco gets early OK from Florida city council for new retail store - Treasure Coast News",
+        "event_key": "unknown-event-7ecc19464a",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_020942",
         "title": "Port St. Lucie city council approves site plan for Costco",
@@ -673,43 +694,70 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_020808",
-        "title": "'I had the flu': Talarico returns to campaign trail, dismisses online rumors",
-        "event_key": "unknown-event-03996b7817",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 1,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
+    "current_relationships": {
+      "new_story": 1
+    },
+    "milestones": {
+      "death": 1
+    },
+    "reason_codes": {
+      "entity_match": 1,
+      "identity_anchor_qualified": 1,
+      "location_match": 1,
+      "novel_milestone": 1
+    },
+    "examples": [
+      {
+        "headline": "Port St. Lucie family demands answers after dog killed in hit-and-run - WPBF",
+        "event_key": "named-person-death:dillon-baker",
+        "current_story_id": "story_020997",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_020160",
+        "candidate_confidence": 0.653333,
+        "candidate_milestones": [
+          "death"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "entity_match",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_020160",
+          "Novel milestones: death",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.33",
+          "Title overlap: 0.20",
+          "Location match: True",
+          "Agency match: False",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.65"
+        ]
+      }
+    ],
     "retrospective_candidate_count": 11,
     "retrospective_high_confidence_candidate_count": 5,
     "retrospective_activation_eligible_candidate_count": 3,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 782,
-      "timeline_entries_examined": 2297,
-      "transitions_examined": 1431,
+      "stories_with_timelines": 786,
+      "timeline_entries_examined": 2310,
+      "transitions_examined": 1440,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 11,
       "high_confidence_candidate_count": 5,
@@ -971,41 +1019,6 @@
           }
         },
         {
-          "story_id": "story_019311",
-          "story_title": "Florida governor DeSantis visits future I-95 interchange at Oslo Road - Treasure Coast News",
-          "milestones": [
-            "opening"
-          ],
-          "matched_phrases": {
-            "opening": [
-              "opens"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "strong_pair_title_continuity",
-            "shared_discriminative_title_tokens",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-5fdd5ff12ec960489f53",
-            "event_key": "unknown-event-51baa1e12a",
-            "published_at": "2026-10-05T12:43:43.037438+00:00",
-            "title": "Florida governor DeSantis visits future I-95 interchange at Oslo Road - Bradenton Herald",
-            "source": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9GMV9pTE1Ra1c2dFJUbU5Dd2R1VG5NOG5QcUlVa1hlSXMxOWdISzRUdlpzYmJheklZUXV2ZjFoZDNuQ3J2UnJDb242Xzc0d0NQV3dyLTBmQnl0S0hOcEdyNFpB?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9GMV9pTE1Ra1c2dFJUbU5Dd2R1VG5NOG5QcUlVa1hlSXMxOWdISzRUdlpzYmJheklZUXV2ZjFoZDNuQ3J2UnJDb242Xzc0d0NQV3dyLTBmQnl0S0hOcEdyNFpB?oc=5"
-          },
-          "newer_article": {
-            "article_id": "rss-a8e1a54aec799eadd49d",
-            "event_key": "unknown-event-a048bd7821",
-            "published_at": "2026-10-05T18:44:16.301669+00:00",
-            "title": "Florida governor DeSantis opens I-95 interchange at Oslo Road - Bradenton Herald",
-            "source": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9GMV9pTE1Ra1c2dFJUbU5Dd2R1VG5NOG5QcUlVa1hlSXMxOWdISzRUdlpzYmJheklZUXV2ZjFoZDNuQ3J2UnJDb242Xzc0d0NQV3dyLTBmQnl0S0hOcEdyNFpB?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9GMV9pTE1Ra1c2dFJUbU5Dd2R1VG5NOG5QcUlVa1hlSXMxOWdISzRUdlpzYmJheklZUXV2ZjFoZDNuQ3J2UnJDb242Xzc0d0NQV3dyLTBmQnl0S0hOcEdyNFpB?oc=5"
-          }
-        },
-        {
           "story_id": "story_019845",
           "story_title": "Martin County to close Hobe Sound bridge while it's being replaced - Treasure Coast News",
           "milestones": [
@@ -1038,6 +1051,41 @@
             "title": "Martin County to close bridge while it's being replaced - Treasure Coast News",
             "source": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPRkN6VEtUUFoyMHo0ZUltNGdPZFFkMkpiYjFVcTZwRnVtVzBVcVN2MkNpRnpNTjUyeUFPWTlmOURuQXdaUWl6eWl6ZHlDRTFKb1FUbl82YVRrSXJ4My01Nkw1TmpCOHJpZ2Q2Mm9MVDBfSzRkT2hfR0NfM3h6SGF5M2pfWm1nYUw4RW9vYWU4cl92TFpKWFpsSE54ZGU1aWdRR0VGS3kwdEhVdTJIU0tSWjVoQ0F2NllmSUdCNG1JclQtd3dU?oc=5",
             "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPRkN6VEtUUFoyMHo0ZUltNGdPZFFkMkpiYjFVcTZwRnVtVzBVcVN2MkNpRnpNTjUyeUFPWTlmOURuQXdaUWl6eWl6ZHlDRTFKb1FUbl82YVRrSXJ4My01Nkw1TmpCOHJpZ2Q2Mm9MVDBfSzRkT2hfR0NfM3h6SGF5M2pfWm1nYUw4RW9vYWU4cl92TFpKWFpsSE54ZGU1aWdRR0VGS3kwdEhVdTJIU0tSWjVoQ0F2NllmSUdCNG1JclQtd3dU?oc=5"
+          }
+        },
+        {
+          "story_id": "story_019311",
+          "story_title": "Florida governor DeSantis visits future I-95 interchange at Oslo Road - Treasure Coast News",
+          "milestones": [
+            "opening"
+          ],
+          "matched_phrases": {
+            "opening": [
+              "opens"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-5fdd5ff12ec960489f53",
+            "event_key": "unknown-event-51baa1e12a",
+            "published_at": "2026-10-05T12:43:43.037438+00:00",
+            "title": "Florida governor DeSantis visits future I-95 interchange at Oslo Road - Bradenton Herald",
+            "source": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9GMV9pTE1Ra1c2dFJUbU5Dd2R1VG5NOG5QcUlVa1hlSXMxOWdISzRUdlpzYmJheklZUXV2ZjFoZDNuQ3J2UnJDb242Xzc0d0NQV3dyLTBmQnl0S0hOcEdyNFpB?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9GMV9pTE1Ra1c2dFJUbU5Dd2R1VG5NOG5QcUlVa1hlSXMxOWdISzRUdlpzYmJheklZUXV2ZjFoZDNuQ3J2UnJDb242Xzc0d0NQV3dyLTBmQnl0S0hOcEdyNFpB?oc=5"
+          },
+          "newer_article": {
+            "article_id": "rss-a8e1a54aec799eadd49d",
+            "event_key": "unknown-event-a048bd7821",
+            "published_at": "2026-10-05T18:44:16.301669+00:00",
+            "title": "Florida governor DeSantis opens I-95 interchange at Oslo Road - Bradenton Herald",
+            "source": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9GMV9pTE1Ra1c2dFJUbU5Dd2R1VG5NOG5QcUlVa1hlSXMxOWdISzRUdlpzYmJheklZUXV2ZjFoZDNuQ3J2UnJDb242Xzc0d0NQV3dyLTBmQnl0S0hOcEdyNFpB?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9GMV9pTE1Ra1c2dFJUbU5Dd2R1VG5NOG5QcUlVa1hlSXMxOWdISzRUdlpzYmJheklZUXV2ZjFoZDNuQ3J2UnJDb242Xzc0d0NQV3dyLTBmQnl0S0hOcEdyNFpB?oc=5"
           }
         },
         {
@@ -2113,28 +2161,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 692,
-      "treasure_coast_local": 447,
-      "treasure_coast_region": 142,
-      "unknown": 1289
+      "florida": 699,
+      "treasure_coast_local": 453,
+      "treasure_coast_region": 143,
+      "unknown": 1296
     },
-    "average_score": 57.7
+    "average_score": 57.77
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 692,
-      "treasure_coast_local": 447,
-      "treasure_coast_region": 142,
-      "unknown": 1289
+      "florida": 699,
+      "treasure_coast_local": 453,
+      "treasure_coast_region": 143,
+      "unknown": 1296
     },
-    "average_priority": 4.53
+    "average_priority": 4.51
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1537,
-      "breaking": 1,
-      "developing": 90,
-      "ongoing": 941,
+      "active": 1576,
+      "developing": 95,
+      "ongoing": 919,
       "resolved": 1
     }
   },
@@ -2142,8 +2189,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2561,
-    "active_stories_after": 2561,
+    "active_stories_before": 2569,
+    "active_stories_after": 2569,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2172,20 +2219,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-13T06:08:06Z",
-    "quarantined_story_records_retained": 4429,
-    "active_story_count": 2570
+    "generated_at": "2026-10-13T10:44:54Z",
+    "quarantined_story_records_retained": 4431,
+    "active_story_count": 2591
   },
   "stories": {
-    "total": 2570,
+    "total": 2591,
     "importance_levels": {
       "breaking": 2,
       "high": 65,
-      "normal": 516,
-      "low": 1987,
+      "normal": 519,
+      "low": 2005,
       "archived": 0
     },
-    "average_importance": 11.53,
+    "average_importance": 11.5,
     "top": [
       {
         "story_id": "story_017306",
@@ -2200,7 +2247,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 11.4
+          "age_hours": 16.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2259,10 +2306,10 @@
         "relationship_decisions": 0,
         "canonical_source_candidates": 43,
         "lifecycle": {
-          "state": "breaking",
-          "reason": "Breaking importance with a current or undated update",
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 11.4,
+          "hours_since_update": 16.02,
           "event_count": 61,
           "timeline_entries": 41
         }
@@ -2280,7 +2327,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 1.25
+          "age_hours": 5.87
         },
         "level": "high",
         "importance_reasons": [
@@ -2325,7 +2372,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-13T04:56:43.050633+00:00",
-          "hours_since_update": 1.25,
+          "hours_since_update": 5.87,
           "event_count": 16,
           "timeline_entries": 15
         }
@@ -2343,7 +2390,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 65.42
+          "age_hours": 70.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2393,7 +2440,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-10T12:44:08.138949+00:00",
-          "hours_since_update": 65.42,
+          "hours_since_update": 70.03,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2411,7 +2458,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 9.4
+          "age_hours": 14.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2454,7 +2501,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-12T20:45:23.189599+00:00",
-          "hours_since_update": 9.4,
+          "hours_since_update": 14.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2472,7 +2519,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 11.4
+          "age_hours": 16.02
         },
         "level": "high",
         "importance_reasons": [
@@ -2516,7 +2563,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 11.4,
+          "hours_since_update": 16.02,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2534,7 +2581,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 11.45
+          "age_hours": 16.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2577,7 +2624,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 11.45,
+          "hours_since_update": 16.08,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2595,7 +2642,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 11.44
+          "age_hours": 16.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2633,7 +2680,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 11.44,
+          "hours_since_update": 16.06,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2651,7 +2698,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 9.45
+          "age_hours": 14.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2690,7 +2737,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-12T20:45:23.189599+00:00",
-          "hours_since_update": 9.45,
+          "hours_since_update": 14.08,
           "event_count": 16,
           "timeline_entries": 16
         }
@@ -2708,7 +2755,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 11.44
+          "age_hours": 16.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2747,7 +2794,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 11.44,
+          "hours_since_update": 16.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2765,7 +2812,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 11.44
+          "age_hours": 16.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2803,7 +2850,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 11.44,
+          "hours_since_update": 16.06,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2821,7 +2868,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 14.42
+          "age_hours": 19.04
         },
         "level": "high",
         "importance_reasons": [
@@ -2859,7 +2906,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-12T15:45:16.714794+00:00",
-          "hours_since_update": 14.42,
+          "hours_since_update": 19.04,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2877,7 +2924,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 91.43
+          "age_hours": 96.05
         },
         "level": "high",
         "importance_reasons": [
@@ -2922,72 +2969,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 91.43,
+          "hours_since_update": 96.05,
           "event_count": 27,
           "timeline_entries": 27
-        }
-      },
-      {
-        "story_id": "story_019464",
-        "title": "Driver dies in crash involving two trucks on A1A in Indian River County - WPBF",
-        "score": 75,
-        "editorial_priority": 59,
-        "editorial_score": 59,
-        "score_breakdown": {
-          "score": 59,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 163.4
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Fort Pierce",
-            "Vero Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 163.4,
-          "event_count": 3,
-          "timeline_entries": 3
         }
       },
       {
@@ -3003,7 +2987,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 91.39
+          "age_hours": 96.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3046,7 +3030,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 91.39,
+          "hours_since_update": 96.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3064,7 +3048,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 52.41
+          "age_hours": 57.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3116,65 +3100,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-11T01:45:33.490008+00:00",
-          "hours_since_update": 52.41,
+          "hours_since_update": 57.01,
           "event_count": 10,
           "timeline_entries": 9
-        }
-      },
-      {
-        "story_id": "story_019424",
-        "title": "Boca Raton PD releases video, 911 calls in 2024 fatal officer-involved shooting after ruling of justification",
-        "score": 65,
-        "editorial_priority": 52,
-        "editorial_score": 52,
-        "score_breakdown": {
-          "score": 52,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 163.4
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Jensen Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-10-06T10:44:57.163134+00:00",
-          "hours_since_update": 163.4,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -3190,7 +3118,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 151.39
+          "age_hours": 156.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3228,7 +3156,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-06T22:45:22.065683+00:00",
-          "hours_since_update": 151.39,
+          "hours_since_update": 156.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3246,7 +3174,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 52.39
+          "age_hours": 57.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3298,7 +3226,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-11T01:45:33.490008+00:00",
-          "hours_since_update": 52.39,
+          "hours_since_update": 57.01,
           "event_count": 4,
           "timeline_entries": 3
         }
@@ -3316,7 +3244,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 91.4
+          "age_hours": 96.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3354,7 +3282,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 91.4,
+          "hours_since_update": 96.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3372,7 +3300,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 87.2
+          "age_hours": 91.81
         },
         "level": "high",
         "importance_reasons": [
@@ -3410,9 +3338,129 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-09T14:57:10.229807+00:00",
-          "hours_since_update": 87.2,
+          "hours_since_update": 91.81,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_013207",
+        "title": "41-year-old man holding shotgun fatally shot by Sebastian police",
+        "score": 75,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 273.03
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 28,
+        "timeline_entries": 28,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 29,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-10-02T01:43:58.365246+00:00",
+          "hours_since_update": 273.03,
+          "event_count": 28,
+          "timeline_entries": 28
+        }
+      },
+      {
+        "story_id": "story_017379",
+        "title": "I-95 North in Martin County reopens after deadly crash involving sedan, box truck - WPTV",
+        "score": 75,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 324.7
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 11,
+        "timeline_entries": 11,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 11,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-09-29T22:03:25.542264+00:00",
+          "hours_since_update": 324.7,
+          "event_count": 11,
+          "timeline_entries": 11
         }
       }
     ]
@@ -3420,7 +3468,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-13T06:12:37Z",
+    "generated_at": "2026-10-13T10:50:36Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3436,27 +3484,28 @@
       "category_count": 9,
       "statuses": {
         "category_eligibility_archive_recovery": 5,
-        "generated_live": 1,
+        "generation_failed_archive_recovery": 2,
         "no_publishable_sources": 1,
-        "quality_gate_archive_recovery": 2
+        "quality_gate_archive_recovery": 1
       },
       "failures": {
+        "contextless_update_lead": 2,
         "no_category_eligible_sources": 5,
-        "publication_quality_rejected": 2
+        "publication_quality_rejected": 1
       },
-      "model_attempt_count": 3,
-      "model_elapsed_seconds": 24.118,
-      "archive_recovery_requested_count": 8,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 74.162,
+      "archive_recovery_requested_count": 9,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejection_count": 4,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 2,
-      "published_story_duplicate_suppression_count": 53,
-      "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 28,
+      "category_eligibility_rejection_count": 3,
+      "published_story_duplicate_suppression_count": 47,
+      "story_aware_update_context_count": 3,
+      "material_update_promotion_evaluation_count": 23,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 14,
-      "material_update_promotion_model_call_count": 12
+      "material_update_promotion_cache_hit_count": 13,
+      "material_update_promotion_model_call_count": 10
     },
     "categories": [
       {
@@ -3663,15 +3712,12 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "Okeechobee Road corridor",
-              "St. Lucie/Fort Pierce area"
+              "Okeechobee Road, St. Lucie County"
             ],
             "novel_facts": [
-              "Hit-and-run involving a white box van striking a motorcycle on Sunday night",
-              "Crash occurred near South 25th Street and Okeechobee Road at 8:52 p.m.",
-              "Driver fled on foot and remains at large",
-              "Van crashed into Kings and Queens Unisex Salon",
-              "K-9 and Aviation units searching for suspect"
+              "Fatal motorcycle crash on Oct 12 at South 25th St and Okeechobee Road",
+              "White box van fled scene and crashed into a salon",
+              "Driver fled on foot, search ongoing"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -3770,30 +3816,40 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 20.473
+        "elapsed_seconds": 22.978
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "quality_gate_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 15,
-        "publishable_source_count": 5,
+        "status": "generation_failed_archive_recovery",
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 6,
         "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 1,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.073,
-            "result": "success"
+            "elapsed_seconds": 12.684,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing — Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 12.203,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing — Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC"
           }
         ],
-        "model_elapsed_seconds": 8.073,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 24.888,
+        "failure_code": "contextless_update_lead",
+        "failure_summary": "Contextless update lead for hero: original_event_context_missing — Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3802,10 +3858,25 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 10,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 1,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Dutch Bros brewing up Treasure Coast debut in early 2027 - WPEC",
+            "source_url": "https://cbs12.com/news/local/dutch-bros-coffee-plans-to-open-first-treasure-coast-location-in-early-2027-dutch-bros-coffee-dutch-bros-fort-pierce-fort-pierce-news-treasure-coast-st-lucie-county-florida-coffee-shops-dutch-bros-opening-2027-dutch-bros-florida-dutch-bros-east"
+          }
+        ],
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3815,16 +3886,6 @@
             "canonical_slug": "2026-10-13-port-st-lucie-approves-costco-entertainment-district-rehab-hospital-in-southern",
             "canonical_headline": "Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
-            "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
-            "editorial_story_id": "story_017306",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3889,16 +3950,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
-            "editorial_story_id": "story_020811",
-            "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-            "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Misplaced cellphone sparks false weapon rumor at Vero Beach High School - WPEC",
             "source_url": "https://cbs12.com/news/local/misplaced-cellphone-leads-false-weapon-rumor-vero-beach-high-school-school-district-of-indian-river-county-indian-river-county-sheriffs-office-crisis-in-the-classroom-florida-news",
             "editorial_story_id": "story_020840",
@@ -3910,10 +3961,10 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 7,
+        "material_update_promotion_evaluation_count": 5,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 3,
-        "material_update_promotion_model_call_count": 4,
+        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_model_call_count": 3,
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
@@ -3929,36 +3980,6 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
-            "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.97,
-            "shared_anchors": [
-              "Port St. Lucie location",
-              "missing-person event family"
-            ],
-            "novel_facts": [
-              "New missing person Cassandra Cerron, 15-year-old girl, last seen Oct. 11",
-              "Different case from Robert La Polla, 47-year-old man missing since January"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
           },
           {
             "category_key": "crime",
@@ -3982,10 +4003,9 @@
               "St. Lucie County"
             ],
             "novel_facts": [
-              "scooter rider killed by hit-and-run van driver",
-              "crash at 2508 Okeechobee Road near South 25th Street",
-              "van crashed into Kings & Queens Unisex Salon",
-              "driver fled on foot, ongoing manhunt"
+              "Oct 11 scooter rider fatally struck by fleeing white van",
+              "van crashed into Kings & Queens Unisex Salon at 2508 Okeechobee Road",
+              "driver fled on foot, ongoing manhunt with K-9 and aviation unit"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4083,13 +4103,13 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "Okeechobee Road",
-              "St. Lucie County"
+              "st-lucie-county",
+              "okeechobee-road corridor"
             ],
             "novel_facts": [
-              "Hit-and-run fatal motorcycle crash near South 25th Street and Okeechobee Road",
-              "White box van struck motorcycle then crashed into Kings and Queens Unisex Salon",
-              "Driver fled on foot, search involving K-9 and Aviation units"
+              "Hit-and-run fatal motorcycle crash at South 25th Street and Okeechobee Road",
+              "White box van fleeing into Kings and Queens Unisex Salon",
+              "Driver fled on foot, K-9 and Aviation units searching"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4114,49 +4134,17 @@
             "semantic_action": "hold",
             "confidence": 0.97,
             "shared_anchors": [
-              "Port St. Lucie location",
-              "missing-person event family"
+              "missing-person event family",
+              "St. Lucie area"
             ],
             "novel_facts": [
-              "Missing 15-year-old girl Cassandra Cerron",
-              "last seen Oct 11 at her home",
-              "distinct from Robert La Polla, a 47-year-old man missing since January"
+              "Different missing person entirely: Cassandra Cerron, 15-year-old girl, last seen Oct. 11",
+              "Different case from Robert La Polla, 47-year-old man missing since January"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
               "known_canonical_identity_conflict"
             ]
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
-            "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-            "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Leslie Pope, 54, Jupiter",
-              "Cleveland Clinic Tradition Hospital",
-              "Port St. Lucie Police Department",
-              "fentanyl diverted from ICU patient's IV infusion",
-              "arrest on Oct. 8/Thursday in Jupiter"
-            ],
-            "novel_facts": [
-              "Additional detail on second incident with surveillance footage review",
-              "Family member intervened during second approach"
-            ],
-            "reason": "Both articles report the identical arrest of Leslie Pope for stealing fentanyl from a patient's IV at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail about the second incident but does not introduce a new material development like a court outcome, additional charges, or new accountability angle.",
-            "validation_errors": []
           },
           {
             "category_key": "crime",
@@ -4175,16 +4163,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 40.414
+        "elapsed_seconds": 52.212
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 15,
+        "fresh_candidate_count": 18,
         "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4224,7 +4212,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/treasure-coast-travelers-say-limited-transportation-options-make-it-difficult-to-get-around"
           }
         ],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -4284,36 +4272,6 @@
             "canonical_slug": "2026-10-10-martin-county-employee-rescues-three-girls-from-rip-current-at-bob-graham-beach",
             "canonical_headline": "Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Port St. Lucie intersection floods so badly a pizza shop 'lost thousands'; city says fix will take time",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-intersection-floods-so-badly-a-pizza-shop-lost-thousands-city-says-fix-will-take-time",
-            "editorial_story_id": "story_020376",
-            "canonical_slug": "2026-10-11-flooding-at-port-st-lucies-california-and-savona-costs-pizza-shop-thousands",
-            "canonical_headline": "Flooding at Port St. Lucie's California and Savona costs pizza shop thousands",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Police searching for driver in hit-and-run crash that injured 63-year-old man in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/police-searching-for-driver-in-hit-and-run-crash-that-injured-63-year-old-man-in-port-st-lucie",
-            "editorial_story_id": "story_020402",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
-            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
-            "basis": "same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -4391,9 +4349,9 @@
               "St. Lucie County area"
             ],
             "novel_facts": [
-              "Hit-and-run motorcycle fatality near South 25th Street and Okeechobee Road",
-              "white box van fled and crashed into a salon",
-              "driver fled on foot, still at large as of Monday"
+              "Hit-and-run fatal motorcycle crash near South 25th Street and Okeechobee Road",
+              "White box van fled and crashed into a salon",
+              "Driver fled on foot, still at large as of Monday"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4478,55 +4436,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Port St. Lucie intersection floods so badly a pizza shop 'lost thousands'; city says fix will take time",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-intersection-floods-so-badly-a-pizza-shop-lost-thousands-city-says-fix-will-take-time",
-            "canonical_slug": "2026-10-11-flooding-at-port-st-lucies-california-and-savona-costs-pizza-shop-thousands",
-            "canonical_headline": "Flooding at Port St. Lucie's California and Savona costs pizza shop thousands",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Police searching for driver in hit-and-run crash that injured 63-year-old man in Port St. Lucie",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/police-searching-for-driver-in-hit-and-run-crash-that-injured-63-year-old-man-in-port-st-lucie",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "'EXTREMELY ALARMING': Hobe Sound woman buried kittens alive, believing they were demons",
-            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/hobe-sound-woman-buried-cats-alive-because-she-believed-they-were-demons-deputies-say",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 19.712
+        "elapsed_seconds": 22.743
       },
       {
         "category_key": "sports",
@@ -4640,15 +4553,15 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 7,
-        "elapsed_seconds": 14.761
+        "new_publication_stale_rejected_count": 2,
+        "elapsed_seconds": 14.8
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
+        "fresh_candidate_count": 16,
         "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4686,7 +4599,7 @@
             "source_url": "https://www.wptv.com/shining-a-light/jupiter-fire-rescue-answers-first-calls-unveils-ladder-truck-honoring-fdny-heroes"
           }
         ],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "things_to_do",
@@ -4697,9 +4610,19 @@
             "canonical_headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "things_to_do",
+            "source_headline": "2026 General Election: County-by-county guide for Florida voters - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNGoteThTd2prLVllWjJSWGc5blJwdlAtbWMtd2xfMkZrcHJsWVFIR19Ra1hUV0g1TWVpT2xKNGl0NVJUc3lvTUlIN2pwTkIxV0NOVDcwME83VzlJMVFLWkR5R01WenItcWFIYkNyMTlTeWFUajVTamZzRXJ2RmFYSmdSWWxXbVhoM3FDRHZKa2lBSFFqZGNIU3pHSzk",
+            "editorial_story_id": "story_018384",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
+        "story_aware_update_context_count": 2,
         "story_aware_update_context_bindings": [
           {
             "source_headline": "Port St. Lucie veterans home raises money for WiFi, Medal of Honor Museum trip",
@@ -4719,6 +4642,29 @@
             ],
             "decision_trace": [
               "deterministic_identity_keys=story:story_019629,source:https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          },
+          {
+            "source_headline": "Molly's House marks 30 years of helping Treasure Coast families during medical treatment",
+            "source_url": "https://www.wptv.com/shining-a-light/mollys-house-marks-30-years-of-helping-treasure-coast-families-during-medical-treatment",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-09-21-mollys-house-open-house-monday-marks-30-years-helping-treasure-coast-families",
+            "canonical_headline": "Molly's House open house Monday marks 30 years helping Treasure Coast families",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "story:story_019630",
+              "source:https://www.wptv.com/shining-a-light/mollys-house-marks-30-years-of-helping-treasure-coast-families-during-medical-treatment"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=story:story_019630,source:https://www.wptv.com/shining-a-light/mollys-house-marks-30-years-of-helping-treasure-coast-families-during-medical-treatment",
               "write_authorized=True"
             ],
             "relationship": "same_event_verified",
@@ -4744,10 +4690,25 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "things_to_do",
+            "source_headline": "2026 General Election: County-by-county guide for Florida voters - WPBF",
+            "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNGoteThTd2prLVllWjJSWGc5blJwdlAtbWMtd2xfMkZrcHJsWVFIR19Ra1hUV0g1TWVpT2xKNGl0NVJUc3lvTUlIN2pwTkIxV0NOVDcwME83VzlJMVFLWkR5R01WenItcWFIYkNyMTlTeWFUajVTamZzRXJ2RmFYSmdSWWxXbVhoM3FDRHZKa2lBSFFqZGNIU3pHSzk",
+            "canonical_slug": "2026-10-05-st-lucie-county-changes-polling-location-for-precincts-39-and-52-for-nov-3-election",
+            "canonical_headline": "St. Lucie County changes polling location for Precincts 39 and 52 for Nov. 3 election",
+            "canonical_is_custom": true,
+            "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-05|2026-general-election",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.226
+        "elapsed_seconds": 20.417
       },
       {
         "category_key": "florida",
@@ -4785,7 +4746,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 9.344
+        "elapsed_seconds": 13.356
       },
       {
         "category_key": "martin",
@@ -4802,11 +4763,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 9.234,
+            "elapsed_seconds": 8.664,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 9.234,
+        "model_elapsed_seconds": 8.664,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -4832,30 +4793,40 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 26.099
+        "elapsed_seconds": 30.642
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 15,
-        "publishable_source_count": 3,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 17,
+        "publishable_source_count": 6,
+        "selected_source_count": 4,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.811,
-            "result": "success"
+            "elapsed_seconds": 20.19,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing — Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 20.421,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing — Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC"
           }
         ],
-        "model_elapsed_seconds": 6.811,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 40.61,
+        "failure_code": "contextless_update_lead",
+        "failure_summary": "Contextless update lead for hero: original_event_context_missing — Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4864,21 +4835,11 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 15,
+        "published_story_duplicate_suppression_count": 13,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - WPEC",
-            "source_url": "https://cbs12.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
-            "editorial_story_id": "story_020870",
-            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "st_lucie",
             "source_headline": "Neighbors call for pedestrian safety after Port St. Lucie teen’s death - WPEC",
@@ -4887,6 +4848,16 @@
             "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
             "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
             "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - WPEC",
+            "source_url": "https://cbs12.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
+            "editorial_story_id": "story_020870",
+            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+            "basis": "same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4901,16 +4872,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
-            "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
-            "editorial_story_id": "story_017306",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
             "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
             "editorial_story_id": "story_009348",
@@ -4921,7 +4882,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy - WPTV",
+            "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
             "editorial_story_id": "story_020402",
             "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
@@ -4931,7 +4892,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy",
+            "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
             "editorial_story_id": "story_020402",
             "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
@@ -4971,16 +4932,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
-            "editorial_story_id": "story_009348",
-            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
             "editorial_story_id": "story_009348",
@@ -5001,61 +4952,72 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxOd2hOTmpDRU5IYlBlTlp0Mk9OMHhDTWhaZmJoTllISnJHRVVqcWJSTy15MWVnUWpWQXI5YkR1Yy1rQVNZd3JQa0ZCanJSNzBTOEtLb0RSTmIxUUdJSS1xbXdxWWEybmpsNGZRLTBoRUNyX0pkRENGb2M3RE5tS3FJek81eWplMWNpRV9uM2JiMFdsRm5RZThoX25rbVNCbkRjQm1fNDRfUmo2OHJYS3NhRTZVU1F5eDRsa21oQncxZ21nN2JPY3dqdFhYeVd4ZXA3N01WNjNQU2x0TU44a0VOR0J5ajBkU2czcGtwaDl6ay1IbWdNcUNPckd2Um1Ydw",
-            "editorial_story_id": "story_020870",
-            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "No lawyer, no law degree: Port St. Lucie man takes on Flock cameras in federal court - WPEC",
+            "source_url": "https://cbs12.com/news/cbs12-news-i-team/no-lawyer-no-law-degree-port-st-lucie-man-takes-on-flock-cameras-in-federal-court",
+            "editorial_story_id": "story_020733",
+            "canonical_slug": "2026-10-12-port-st-lucie-man-fights-citys-126-camera-network-in-federal-court",
+            "canonical_headline": "Port St. Lucie Man Fights City's 126-Camera Network in Federal Court",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/treasure-coast-high-school-freshman-dies-after-being-hit-by-car-while-walking-to-school",
-            "editorial_story_id": "story_020402",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "Explosion inside Port St. Lucie home leaves family with little to salvage - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-home-explosion/74096638",
+            "editorial_story_id": "story_020454",
+            "canonical_slug": "2026-10-10-grease-fire-sparks-propane-explosion-at-port-st-lucie-home",
+            "canonical_headline": "Port St. Lucie Fire Victim Identified as Church Helps Family Recover",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 11,
-        "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 4,
-        "material_update_promotion_model_call_count": 6,
-        "material_update_promotion_decisions": [
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
           {
-            "category_key": "st_lucie",
-            "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - WPEC",
-            "source_url": "https://cbs12.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
+            "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - cw34.com",
+            "source_url": "https://cw34.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
+            "publisher": "cw34.com",
             "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
             "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Becker Road",
-              "I-95 North Exit 114",
-              "Florida's Turnpike North Mile Marker 134/Exit 138",
-              "Sunday afternoon crashes",
-              "St. Lucie County",
-              "Florida 511 report"
+            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+            "identity_keys": [
+              "story:story_020870"
             ],
-            "novel_facts": [],
-            "reason": "This is the same traffic incident reported a day later with identical crash details (same locations, lane/shoulder blockages, same source). No new material facts like injuries, arrests, or causes are introduced; it is a republished/rehashed traffic alert with extraneous unrelated content appended.",
-            "validation_errors": []
-          },
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_precise_location",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=1",
+              "shared_locality=['palm-beach-county', 'st-lucie', 'st-lucie-county']",
+              "shared_event_families=['crash']",
+              "shared_named_people=[]",
+              "shared_precise_locations=['becker-road', 'county-i95-florida-turnpike-becker-road', 'exit-114-for-becker-road', 'i95-lane']",
+              "shared_agencies=[]",
+              "shared_subject_phrases=['beck-road-turnpike', 'block-lane-should', 'block-lane-should-near', 'crash-block-lane', 'crash-block-lane-should', 'lane-should-near', 'lane-should-near-beck', 'near-beck-road', 'near-beck-road-turnpike', 'should-near-beck', 'should-near-beck-road']",
+              "shared_headline_topic_core=['beck', 'block', 'crash', 'lane', 'near', 'road', 'should', 'turnpike']",
+              "shared_distinctive_token_count=58",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 8,
+        "material_update_promotion_count": 0,
+        "material_update_promotion_cache_hit_count": 4,
+        "material_update_promotion_model_call_count": 4,
+        "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
             "source_headline": "Neighbors call for pedestrian safety after Port St. Lucie teen’s death - WPEC",
@@ -5074,24 +5036,53 @@
             "semantic_action": "hold",
             "confidence": 0.78,
             "shared_anchors": [
-              "same 14-year-old Treasure Coast High School student",
-              "Squirrel Avenue/Port St. Lucie Boulevard crash location",
-              "Oct. 7 crash date",
+              "14-year-old Treasure Coast High School student",
+              "Port St. Lucie Boulevard/Squirrel Avenue",
+              "struck by SUV while walking to school",
               "death from injuries"
             ],
             "novel_facts": [
-              "Neighbors publicly demanding pedestrian safety improvements",
-              "lack of sidewalks and ongoing FDOT construction cited as contributing factor",
-              "FDOT $25.6M widening/sidewalk project details and 2028 completion timeline",
-              "FDOT declined to answer about interim safety measures during construction",
-              "driver's statement that he believed he hit a construction barrel",
-              "organ donation by family",
-              "uncertain charging decision"
+              "Neighbor advocacy for pedestrian safety near construction zone",
+              "Lack of sidewalks and flooded shoulders cited as contributing hazards",
+              "FDOT widening project details and $25.6 million cost, completion winter 2028",
+              "FDOT did not respond to questions about interim pedestrian safety measures",
+              "Driver's statement that he believed he struck a construction barrel",
+              "Family donated organs; mother's comments on son's personality",
+              "Unclear whether charges will be filed"
             ],
-            "reason": "This follow-up goes beyond restating the death; it introduces a distinct public-interest/accountability angle—community pressure on FDOT and the city over inadequate pedestrian infrastructure during an active construction project, with specific project cost/timeline details and FDOT's non-response—plus new case facts (driver's barrel claim, organ donation, open charging question). This constitutes an independently newsworthy follow-up meriting its own story rather than a silent update to the original death report.",
+            "reason": "This is the same underlying crash/death as the canonical article, but it introduces a distinct public-accountability angle: community demands for pedestrian safety, FDOT's non-response on interim safety measures during construction, and new case details (driver's barrel claim, organ donation, uncertain charges). This goes beyond a routine update and merits independent newsworthy treatment as a policy/accountability follow-up.",
             "validation_errors": [
               "same_event_confidence_below_threshold"
             ]
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - WPEC",
+            "source_url": "https://cbs12.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
+            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Becker Road",
+              "I-95 North Exit 114",
+              "Florida's Turnpike North Mile Marker 134/Exit 138",
+              "Sunday afternoon crashes",
+              "St. Lucie County",
+              "Florida 511 report"
+            ],
+            "novel_facts": [],
+            "reason": "This is the same traffic incident reported a day later with identical crash details (same locations, lane/shoulder blockages, same source). No new material facts like injuries, arrests, or causes are introduced; it is a republished/rehashed traffic alert with extraneous unrelated content appended.",
+            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -5110,36 +5101,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
-            "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
-            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.97,
-            "shared_anchors": [
-              "Port St. Lucie area",
-              "missing-person event family"
-            ],
-            "novel_facts": [
-              "Different missing person: Cassandra Cerron, 15-year-old girl, last seen Oct. 11",
-              "Different case entirely from Robert La Polla, 47-year-old man missing since January"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
             "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
             "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
@@ -5154,21 +5115,50 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.97,
+            "confidence": 0.95,
             "shared_anchors": [
-              "Okeechobee Road location",
-              "St. Lucie County area"
+              "Okeechobee Road, St. Lucie County"
             ],
             "novel_facts": [
-              "scooter rider killed by hit-and-run van driver",
-              "crash into Kings & Queens Unisex Salon",
-              "driver fled on foot and remains at large",
-              "October 11 date, different from candidate's September 7 Turnpike box truck crash"
+              "Scooter rider hit and killed by fleeing white van driver",
+              "Van crashed into Kings & Queens Unisex Salon at 2508 Okeechobee Road",
+              "Driver fled on foot, ongoing manhunt with K-9 and aviation units",
+              "Crash occurred October 11 near South 25th Street"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
               "known_canonical_identity_conflict"
             ]
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
+            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+            "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.85,
+            "shared_anchors": [
+              "Port St. Lucie Boulevard/Squirrel Avenue location",
+              "14-year-old struck while walking to school on Oct. 7",
+              "died from injuries",
+              "Port St. Lucie Police"
+            ],
+            "novel_facts": [
+              "Family chose organ donation",
+              "advocacy commentary from Donate Life Florida and transplant recipient"
+            ],
+            "reason": "This is the same crash/death already covered in the canonical story. The organ donation angle is human-interest/emotional framing that does not change the core facts readers need (victim ID, cause, death already reported). It's not an accountability, investigation, or policy follow-up that merits a separate headline.",
+            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -5199,36 +5189,6 @@
               "Advocacy commentary on organ donation need from Donate Life Florida and transplant recipients"
             ],
             "reason": "This is the same crash and death already covered in the canonical story. The organ donation angle is a human-interest/community follow-up rather than an accountability, investigation, or consequential development (e.g., no charges, cause finding, or policy change). It reads as emotional/legacy framing, which per guidelines should update the existing canonical rather than mint a new story, but since the death was already reported, the organ donation detail is additive color, not a material update to the canonical facts (crash, victim, death). This leans toward duplicate rather than update, as it doesn't change what readers need to know about the incident itself.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.85,
-            "shared_anchors": [
-              "Port St. Lucie Boulevard/Squirrel Avenue location",
-              "14-year-old struck while walking to school on Oct. 7",
-              "died from injuries",
-              "Port St. Lucie Police"
-            ],
-            "novel_facts": [
-              "Family chose organ donation",
-              "advocacy commentary from Donate Life Florida and transplant recipient"
-            ],
-            "reason": "This is the same crash/death already covered in the canonical story. The organ donation angle is human-interest/emotional framing that does not change the core facts readers need (victim ID, cause, death already reported). It's not an accountability, investigation, or policy follow-up that merits a separate headline.",
             "validation_errors": []
           },
           {
@@ -5292,44 +5252,12 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "Okeechobee Road location mentioned in both"
+              "Okeechobee Road general area"
             ],
             "novel_facts": [
-              "Hit-and-run cargo van fatally striking scooter rider",
-              "Crash into Kings Queens Unisex Salon",
-              "Fort Pierce police searching for fleeing driver",
-              "Occurred Sunday near 25th Street and Lawnwood Hospital"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Driver flees after fatal motorcycle crash in Fort Pierce, police say",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/driver-flees-after-fatal-motorcycle-crash-in-fort-pierce-police-say",
-            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-            "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.97,
-            "shared_anchors": [
-              "Okeechobee Road",
-              "St. Lucie County area"
-            ],
-            "novel_facts": [
-              "Hit-and-run of motorcyclist Sunday night at S 25th St/Okeechobee Rd",
-              "White box van fled, crashed into Kings and Queens salon",
-              "Driver fled on foot, search by K-9 and Aviation units"
+              "Sunday night hit-and-run involving cargo van striking gas scooter rider at Okeechobee Road and 25th Street",
+              "van crashed into Kings Queens Unisex Salon and also struck a Toyota pickup",
+              "driver fled on foot and is being sought by Fort Pierce police with K-9 and aviation assistance"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -5348,16 +5276,24 @@
             "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
+            "model_call": true,
             "action": "preserve_existing_canonical",
-            "semantic_status": "pre_generation_materiality_budget_exhausted",
+            "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.0,
-            "shared_anchors": [],
-            "novel_facts": [],
-            "reason": "Pre-generation material-update model-call budget exhausted; preserve existing canonical.",
+            "confidence": 0.97,
+            "shared_anchors": [
+              "Okeechobee Road",
+              "St. Lucie County area crash"
+            ],
+            "novel_facts": [
+              "Hit-and-run motorcycle fatality at South 25th Street and Okeechobee Road",
+              "White box van fled after striking motorcycle and crashing into a salon",
+              "Driver fled on foot, K-9 and aviation units searching",
+              "Occurred Sunday night Oct. 11-12, 2026"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
-              "pre_generation_materiality_budget_exhausted"
+              "known_canonical_identity_conflict"
             ]
           },
           {
@@ -5377,13 +5313,13 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxOd2hOTmpDRU5IYlBlTlp0Mk9OMHhDTWhaZmJoTllISnJHRVVqcWJSTy15MWVnUWpWQXI5YkR1Yy1rQVNZd3JQa0ZCanJSNzBTOEtLb0RSTmIxUUdJSS1xbXdxWWEybmpsNGZRLTBoRUNyX0pkRENGb2M3RE5tS3FJek81eWplMWNpRV9uM2JiMFdsRm5RZThoX25rbVNCbkRjQm1fNDRfUmo2OHJYS3NhRTZVU1F5eDRsa21oQncxZ21nN2JPY3dqdFhYeVd4ZXA3N01WNjNQU2x0TU44a0VOR0J5ajBkU2czcGtwaDl6ay1IbWdNcUNPckd2Um1Ydw",
-            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+            "source_headline": "No lawyer, no law degree: Port St. Lucie man takes on Flock cameras in federal court - WPEC",
+            "source_url": "https://cbs12.com/news/cbs12-news-i-team/no-lawyer-no-law-degree-port-st-lucie-man-takes-on-flock-cameras-in-federal-court",
+            "canonical_slug": "2026-10-12-port-st-lucie-man-fights-citys-126-camera-network-in-federal-court",
+            "canonical_headline": "Port St. Lucie Man Fights City's 126-Camera Network in Federal Court",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -5392,51 +5328,31 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Treasure Coast High School freshman dies after being hit by car while walking to school - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/treasure-coast-high-school-freshman-dies-after-being-hit-by-car-while-walking-to-school",
-            "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-            "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+            "source_headline": "Explosion inside Port St. Lucie home leaves family with little to salvage - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-home-explosion/74096638",
+            "canonical_slug": "2026-10-10-grease-fire-sparks-propane-explosion-at-port-st-lucie-home",
+            "canonical_headline": "Port St. Lucie Fire Victim Identified as Church Helps Family Recover",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
             "promoted": false,
-            "cache_hit": true,
+            "cache_hit": false,
             "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.9,
-            "shared_anchors": [
-              "14-year-old Treasure Coast High School student",
-              "Port St. Lucie Police Department",
-              "struck while walking to school Oct. 7",
-              "near SW Squirrel Avenue/Port St. Lucie Blvd",
-              "death from injuries"
-            ],
-            "novel_facts": [
-              "Exact date/time of death (Oct. 9, ~4 p.m.)",
-              "Vehicle details: 2002 Ford Excursion driven by 72-year-old man",
-              "Family decision to donate organs",
-              "School grief counseling services"
-            ],
-            "reason": "This is the same crash and student death already captured in the canonical article, which states the student died from his injuries. While the incoming article adds some details (vehicle type, organ donation, exact time of death), the canonical already reports the core material fact: the student died. These additional details are supportive color/background rather than a new material development that changes what readers need to know.",
-            "validation_errors": []
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Port St. Lucie Council Approves Site Plan for New Costco in Southern Grove",
-        "generated_card_count": 0,
-        "elapsed_seconds": 45.867
+        "elapsed_seconds": 75.619
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 20,
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5525,7 +5441,7 @@
         "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
@@ -5584,16 +5500,23 @@
             "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
+            "model_call": true,
             "action": "preserve_existing_canonical",
-            "semantic_status": "pre_generation_materiality_budget_exhausted",
+            "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.0,
-            "shared_anchors": [],
-            "novel_facts": [],
-            "reason": "Pre-generation material-update model-call budget exhausted; preserve existing canonical.",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Okeechobee Road",
+              "St. Lucie County area"
+            ],
+            "novel_facts": [
+              "Hit-and-run of motorcyclist Sunday night near South 25th Street and Okeechobee Road",
+              "White box van fled, crashed into Kings and Queens Unisex Salon",
+              "Driver fled on foot, search ongoing with K-9 and Aviation units"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
-              "pre_generation_materiality_budget_exhausted"
+              "known_canonical_identity_conflict"
             ]
           },
           {
@@ -5659,7 +5582,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.772
+        "elapsed_seconds": 19.829
       }
     ]
   }
