@@ -36,25 +36,55 @@ async function sha256(value) {
   return encoded(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))
 }
 
+// Stable, non-sensitive error codes for operator-only diagnostics. Never
+// surface a credential, PEM body, underlying crypto error, or Apple token.
+function apnsConfigurationError(code) {
+  const error = new Error('APNs credential check failed')
+  error.diagnosticCode = code
+  return error
+}
+function apnsDiagnosticCode(error) {
+  const code = error?.diagnosticCode
+  return typeof code === 'string' && /^APNS_[A-Z0-9_]+$/.test(code)
+    ? code : 'APNS_UNEXPECTED_ERROR'
+}
+function strictBase64Decode(input, code) {
+  const compact = input.replace(/\s/g, '')
+  if (!compact || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(compact)) {
+    throw apnsConfigurationError(code)
+  }
+  try { return atob(compact) }
+  catch { throw apnsConfigurationError(code) }
+}
+
 async function makeAppleToken() {
   const keyID = Deno.env.get('TCT_APNS_KEY_ID') ?? ''
   const teamID = Deno.env.get('TCT_APNS_TEAM_ID') ?? ''
   const fileB64 = Deno.env.get('TCT_APNS_P8_BASE64') ?? ''
-  if (!/^[A-Z0-9]{10}$/.test(keyID) || !/^[A-Z0-9]{10}$/.test(teamID) || !fileB64) {
-    throw Error('APNs credentials have not been configured')
-  }
-  let pem
-  try { pem = atob(fileB64.replace(/\s/g, '')) } catch { throw Error('APNs key is not valid base64') }
-  if (!pem.includes('-----BEGIN PRIVATE KEY-----') || !pem.includes('-----END PRIVATE KEY-----')) {
-    throw Error('APNs key is not a valid private key PEM file')
+  if (!keyID) throw apnsConfigurationError('APNS_KEY_ID_MISSING')
+  if (!/^[A-Z0-9]{10}$/.test(keyID)) throw apnsConfigurationError('APNS_KEY_ID_FORMAT')
+  if (!teamID) throw apnsConfigurationError('APNS_TEAM_ID_MISSING')
+  if (!/^[A-Z0-9]{10}$/.test(teamID)) throw apnsConfigurationError('APNS_TEAM_ID_FORMAT')
+  if (!fileB64) throw apnsConfigurationError('APNS_P8_MISSING')
+
+  const pem = strictBase64Decode(fileB64, 'APNS_P8_BASE64_INVALID')
+  if (!/^\s*-----BEGIN PRIVATE KEY-----[\s\S]*-----END PRIVATE KEY-----\s*$/.test(pem)) {
+    throw apnsConfigurationError('APNS_P8_PEM_INVALID')
   }
   const raw = pem.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\s/g, '')
-  const bytes = Uint8Array.from(atob(raw), char => char.charCodeAt(0))
-  const key = await crypto.subtle.importKey('pkcs8', bytes, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign'])
+  const der = strictBase64Decode(raw, 'APNS_P8_BODY_INVALID')
+  const bytes = Uint8Array.from(der, char => char.charCodeAt(0))
+  let key
+  try {
+    key = await crypto.subtle.importKey('pkcs8', bytes, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign'])
+  } catch { throw apnsConfigurationError('APNS_P8_IMPORT_FAILED') }
   const header = textEncoded(JSON.stringify({ alg: 'ES256', kid: keyID }))
   const payload = textEncoded(JSON.stringify({ iss: teamID, iat: Math.floor(Date.now() / 1000) }))
   const content = `${header}.${payload}`
-  const signature = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, key, new TextEncoder().encode(content))
+  let signature
+  try {
+    signature = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, key, new TextEncoder().encode(content))
+  } catch { throw apnsConfigurationError('APNS_SIGN_FAILED') }
   return `${content}.${encoded(signature)}`
 }
 
@@ -134,7 +164,7 @@ Deno.serve(async request => {
     input = JSON.parse(raw)
   } catch { return respond({ error: 'Invalid JSON input' }, 400) }
   if (!input || typeof input !== 'object' || Array.isArray(input) ||
-      !['preview', 'send'].includes(input.action) ||
+      !['preview', 'diagnose', 'send'].includes(input.action) ||
       typeof input.slug !== 'string' || input.slug.length > 180 || !slugPattern.test(input.slug) ||
       typeof input.audience !== 'string' || !allowedAudiences.includes(input.audience) ||
       typeof input.title !== 'string' || !input.title.trim() || input.title.length > 100 ||
@@ -144,6 +174,20 @@ Deno.serve(async request => {
   const { action, slug, audience } = input
   const title = input.title.trim()
   const body = input.body.trim()
+
+  // Authorized, side-effect-free check of the server's APNs configuration.
+  // No device lookup, live flag, article existence check, APNs network call,
+  // dispatch reservation, or private credential is involved in the response.
+  if (action === 'diagnose') {
+    try {
+      await makeAppleToken()
+      return respond({ diagnostic: true, apns_signing: 'ok', sent: false,
+        note: 'Local APNs JWT signing succeeded. Apple key/account matching and network delivery are not tested.' })
+    } catch (error) {
+      return respond({ diagnostic: true, apns_signing: 'failed',
+        diagnostic_code: apnsDiagnosticCode(error), sent: false }, 503)
+    }
+  }
 
   if (!(await articleExists(slug))) {
     return respond({ error: 'Story is not a live, non-redirecting TCT article. Check its URL before alerting readers.' }, 422)
@@ -168,7 +212,10 @@ Deno.serve(async request => {
   // Validate APNs key BEFORE claiming the one-time story dispatch.
   let jwt
   try { jwt = await makeAppleToken() }
-  catch { return respond({ error: 'APNs provider credentials could not be loaded.' }, 503) }
+  catch (error) {
+    return respond({ error: 'APNs provider credentials could not be loaded.',
+      diagnostic_code: apnsDiagnosticCode(error) }, 503)
+  }
 
   // Unique slug is a database-enforced lock across concurrent requests, including
   // calls for different audiences. We never auto-retry an uncertain delivery.

@@ -178,3 +178,62 @@ test('invalid slug and audience never reach API or database', async () => {
   assert.equal(system.calls.head.length,0)
   assert.equal(system.dbRows.size,0)
 })
+
+test('diagnose validates local APNs JWT signing but never sends, queries devices, or reserves an article', async () => {
+  const system = environment({live:true,articleLive:false,devices:[oneDevice()]})
+  const response = await system.request({action:'diagnose'})
+  assert.equal(response.status,200)
+  assert.equal(response.body.apns_signing,'ok')
+  assert.equal(response.body.sent,false)
+  assert.equal(system.calls.head.length,0)
+  assert.equal(system.calls.apple.length,0)
+  assert.equal(system.calls.inserts.length,0)
+  assert.equal(system.dbRows.size,0)
+})
+
+test('diagnose returns distinct non-sensitive codes for missing and malformed identifiers', async () => {
+  for (const [override,code] of [
+    [{TCT_APNS_KEY_ID:''},'APNS_KEY_ID_MISSING'],
+    [{TCT_APNS_KEY_ID:'invalid'},'APNS_KEY_ID_FORMAT'],
+    [{TCT_APNS_TEAM_ID:''},'APNS_TEAM_ID_MISSING'],
+    [{TCT_APNS_TEAM_ID:'bad team ID'},'APNS_TEAM_ID_FORMAT'],
+    [{TCT_APNS_P8_BASE64:''},'APNS_P8_MISSING'],
+  ]) {
+    const system = environment({live:true,devices:[oneDevice()],envOverrides:override})
+    const response = await system.request({action:'diagnose'})
+    assert.equal(response.status,503)
+    assert.equal(response.body.diagnostic_code,code)
+    assert.equal(response.body.sent,false)
+    assert.equal(system.calls.apple.length,0)
+    assert.equal(system.dbRows.size,0)
+    assert.doesNotMatch(JSON.stringify(response.body),/server-only-placeholder|c{64}|BEGIN PRIVATE KEY/)
+  }
+})
+
+test('diagnose separates outer base64, PEM wrapper, PEM body, and PKCS8 import failures', async () => {
+  const fixtures = [
+    ['not base64@@','APNS_P8_BASE64_INVALID'],
+    [Buffer.from('not a PEM file').toString('base64'),'APNS_P8_PEM_INVALID'],
+    [Buffer.from('-----BEGIN PRIVATE KEY-----\nnot-base64!\n-----END PRIVATE KEY-----').toString('base64'),'APNS_P8_BODY_INVALID'],
+    [Buffer.from('-----BEGIN PRIVATE KEY-----\nYWJjZA==\n-----END PRIVATE KEY-----').toString('base64'),'APNS_P8_IMPORT_FAILED'],
+  ]
+  for (const [value, code] of fixtures) {
+    const system = environment({live:true,devices:[oneDevice()],envOverrides:{TCT_APNS_P8_BASE64:value}})
+    const response = await system.request({action:'diagnose'})
+    assert.equal(response.status,503)
+    assert.equal(response.body.diagnostic_code,code)
+    assert.equal(system.calls.apple.length,0)
+    assert.equal(system.dbRows.size,0)
+    assert.doesNotMatch(JSON.stringify(response.body),/BEGIN PRIVATE KEY|server-only-placeholder/)
+  }
+})
+
+test('send surfaces the safe diagnostic before claiming a dispatch', async () => {
+  const system = environment({live:true,devices:[oneDevice()],envOverrides:{TCT_APNS_P8_BASE64:'bad@@'}})
+  const response = await system.request({action:'send',confirm:'SEND'})
+  assert.equal(response.status,503)
+  assert.equal(response.body.error,'APNs provider credentials could not be loaded.')
+  assert.equal(response.body.diagnostic_code,'APNS_P8_BASE64_INVALID')
+  assert.equal(system.calls.apple.length,0)
+  assert.equal(system.dbRows.size,0)
+})
