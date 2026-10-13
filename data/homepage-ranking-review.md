@@ -4,30 +4,29 @@
 
 ## Hero
 
-- Current: **Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School**
-- Recommended: **Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School**
+- Current: **Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove**
+- Recommended: **Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt | Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt | 46 | importance 0; freshness 94.65; urgency 2/10 |
-| 2 | Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County | Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County | 46 | importance 0; freshness 93.54; urgency 2/10 |
-| 3 | Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates | Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates | 46 | importance 0; freshness 83.06; urgency 2/10; validated material update |
-| 4 | Developer Sues Indiantown Over Stalled $25 Million Data Center Plat | Developer Sues Indiantown Over Stalled $25 Million Data Center Plat | 45 | importance 0; freshness 88.09; urgency 2/10 |
-| 5 | Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet | Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition | 44 | importance 0; freshness 83.04; urgency 2/10 |
-| 6 | Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition | Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet | 45 | importance 0; freshness 88.1; urgency 2/10; -6 category saturation |
-| 7 | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 41 | importance 0; freshness 47.92; urgency 2/10; validated material update; -8 county saturation |
-| 8 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | 42 | importance 0; freshness 74.73; urgency 2/10; -12 category saturation; -12 county saturation |
-| 9 | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | 36 | importance 0; freshness 47.92; urgency 2/10; -18 category saturation; -12 county saturation |
+| 1 | Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt | Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt | 45 | importance 0; freshness 89.53; urgency 2/10 |
+| 2 | Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County | Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County | 45 | importance 0; freshness 88.42; urgency 2/10 |
+| 3 | Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates | Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates | 45 | importance 0; freshness 77.94; urgency 2/10; validated material update |
+| 4 | Developer Sues Indiantown Over Stalled $25 Million Data Center Plat | Developer Sues Indiantown Over Stalled $25 Million Data Center Plat | 44 | importance 0; freshness 82.98; urgency 2/10 |
+| 5 | Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School | Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School | 44 | importance 0; freshness 82.98; urgency 2/10 |
+| 6 | Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet | Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet | 44 | importance 0; freshness 82.98; urgency 2/10; -6 category saturation |
+| 7 | Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition | Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition | 42 | importance 0; freshness 77.93; urgency 2/10; -8 county saturation |
+| 8 | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | 40 | importance 0; freshness 42.81; urgency 2/10; validated material update; -12 county saturation |
+| 9 | Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site | Port St. Lucie Man Fights City's 126-Camera Network in Federal Court | 40 | importance 0; freshness 69.61; urgency 2/10; -12 category saturation; -12 county saturation |
+| 10 | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | Flooding at Port St. Lucie's California and Savona costs pizza shop thousands | 34 | importance 0; freshness 42.81; urgency 2/10; -18 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet**: 5 → 6 — importance 0; freshness 88.1; urgency 2/10; -6 category saturation
-- **Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition**: 6 → 5 — importance 0; freshness 83.04; urgency 2/10
-- **Port St. Lucie Man Fights City's 126-Camera Network in Federal Court**: 7 → 8 — importance 0; freshness 74.73; urgency 2/10; -12 category saturation; -12 county saturation
-- **Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site**: 8 → 7 — importance 0; freshness 47.92; urgency 2/10; validated material update; -8 county saturation
+- **Port St. Lucie Residents Escalate to EPA Over ALF Project Near Contaminated Site**: 9 → 8 — importance 0; freshness 42.81; urgency 2/10; validated material update; -12 county saturation
+- **Port St. Lucie Man Fights City's 126-Camera Network in Federal Court**: 8 → 9 — importance 0; freshness 69.61; urgency 2/10; -12 category saturation; -12 county saturation
 
 ## Guardrails
 
