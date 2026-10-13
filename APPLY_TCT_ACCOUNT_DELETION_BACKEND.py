@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+"""TCT App Store Step 1C - self-contained patcher. Never deploys itself.
+
+All changes are staged and checked against known file anchors before writing.
+Review `git diff` afterward. Requires only the Python standard library.
+"""
+import base64, json, zlib
+from pathlib import Path
+
+PAYLOAD_B64 = """eNrdW21z2zYS/itoJnMUpzLtuE3nTrlc6rPdaaZN4omd6dzYrgqTkISEIlWCtKMqut9+z+KFBCXKlls307l8icUXYLH77O6
+zC3DxKJ+Jgpcyz9SjATtfPBrJVOCvR6qa8SuuxO6oymJ9f3eoJrwQye5UTK9EoSZyFpXqUZ89ytOEXpHTWV6U7LQs5EywUZ
+FPWZDNpgOlL3z78/5+cJHR85m42fr5i2x3l70Vs5TP2bjiRcJGecESgd8ice+Ka5GVivFRKQrG4zivspKeESR4xH4SrBAll
+xnLs3SuR8zyrMBbhZJXqWCn3x/s7D/9hk24mgjF8hGbyPFkB4MW+WzO4kqV+RRD77KDqpwwmeCOHEm8Hl1k4qNeRpxypdgR
+TSqSAyPDMcnFxMdSZIlix0UB0RcXGWMx9FkWVVzmRS9kCwZti6IX2LdZo2E7VzkPwmesnEgVZXwq2HMWdMwUsOVFtqwl4mq
+exczZz+hDJC9r4b/HansfZJYMWFApUQTsEwvcWoM+u+ZpJQaMzJGNwwE7gYWkEv80F/7lrYQlcizw33PGb7iELor5rMwjVV
+2VqYjMzV5gtYyRAQB2BrUcZ3GeYOFhJPRfvV8eL0ig5eDxQs++/CUMaRaYryoydh5FEb37Tmbl3w+Kgs97ZvDwMpryWa93N
+S9FyJ7/i9EfUZmfalF7T74JoxlPTktelL39Pgv2gjCM3ucy6wVBeIvOYFJRlFbHr/PSKr1HMjkPOUimMhswns37dFkmagCL
+kkJfJi+c+qDarErTZzWW1u+xJd4PjVYJ4z2j2nNSSB/DXhIuz8+NqeiCiswkl3127tuN7jTTXF5iFcZMdnDIOGK9L2QS0uV
+SZpUwl82EDbqH5A+1UTfjh6YM/SEWLOEl7zOhEb+sh2ipLCKP7wUN1od2hqHnX4Edl7FI4W4MGK3IFwA8v65f7a+uIwRC5l
+fiFApPRS9sFKGFDOFcRX5jJUaAeE3RgY24TBlCZEZPlhNhQ1DMsywv2ZVg8UTEH0QSNcPRyt1ohNUOPzWzG199tOyzPxR1r
+TXFlET99ImZvyKZxWmVCNULvgXWPXl0FIIzmsh5SPLnFXlwwmhNsyK/huYYB4I5xUYzME+SQigVBaEXwD/31KQ1A6RNftkC
+GBTruRtbhg+ga0xjXRughpfGInlnfmL9iHcqxtp01pki4xAWXkRuoiG9CHDTo+TwLU0+5MC/Q09m6v6D60sDxAy+joRfXuf
+s1I6qJWAI4jOKiBT/LEz8tbPHi5YqZIIEsQ7IP3e+z6Zdw4N2bsTVJM8/7CLQio+djGvBRrJQ5Wswg+8QU4+kIrpEPykK0q
+XjjzOeJeRUfeRSlafX4lVtM8JZn52evX15cjx89ebouM/M1G+u3iPivuIlopx6hfzsbpyKGBm5fQN589RX3XKd6S02aazfF
+SX7f81V/XGrrTj7g0WNv2qU2EYj5l97OQj6tJI4lUDDsBAjUYAmCrsEd/ueGvszJ3JU5S69xuXH6LPqdgnGAlTXXGfhJCW6
+loOiCxMf26NRQo5p8RQgkYmFqb0eL3S5pYOhpXjhioo3zlfzLSbBEzmUDE7b4fveK4zY2EH8IctvIMEYAbrk4AYgDOB2sSl
+d2Y0sJ0QlEAVQUpHARNYsn9SqjZrxHEfVggzwTpwXyfEKVV2zkaWrRkVDq6KhqTwblqqZKtYGu/cWpi4FQAbMqaxvr5XzmX
+BX6W/YuhmCtORL9be/+UJGVCmxL56jBtz/6une0yB05RFlurdCzbA+0Qt+clakKleVhGhWZfwalqSQGQWEOiizrFCwPN3ba
+4lgR3SjRe9VnmFBEEPIa4EFoXqlODzOchCAmrnb2tvc9gZcPjjg7nKM2LLLnTifzki4B8ufU67A+I+Jm25MO4qPxFutwhNe
+Tj5Tcv3DOfSvsbIHsew9ol6wNqAFX/BZotsGT7PBKTibSOX3g1x36wZFPTx7yjMMmM5drIvYIUp6HutaW+MCQs3zik34tWC
+zqohRC8OvuA4WHm8P2NKPB18/2bvbfbfQXLcxMcxIjiPkudSz2Xlt4wg44aXYoQXw9PIiQy0uR/Ph+xvqMVFs8Uxyn9eon+
+g9b5S2Y3XaOc/yEjPRAqg/uujCY3uQBoy+a1J+qiuPpdfr/LYeEN6F2b/9+UlwkW3VGa0H72zMdHrmmgPWskRRdzHnOrBHt
+pnKgEZeIbliKngBUXfxcZbKWCLWyOlUJBJX+wwxBQijFgomHo9BqBJ2NWcKCYOiOzCjh4Wr4Coym8x4MW/XXjE5UJrqDI/s
+bbK2vw6Y6EhkeSSy62gsqMFoVnx6fPj2+Gz4w/F/kBpfvGBB0H6bKJ8/zAvtC0bZPf9OyAaW15nXIdGhFgoj6Fcw6XkAZ0N
+KBOQDvMpTLI/+nnFVDpNKX6+yGZeJuQouov+SmfOZ4DIkJdsGZCJGvEpL2wYUsNSghR6EBtJ/3bKFg5meJRjDr32iLbr/6T
+X6cJ246yRPDGk4eXN61nCGTXHnlXmD+jI8TfMbhJbVELH3tA4RRj81oybyRD8OUy6n6gUyt9d3dNX5HQIcNCgjNGAVlSy6p
+HhSS0GsXmazqqQGrI4xiI/0dtNqtZGsBNgW5tma8ZGetAxhHeEXdwn5MruGxRMtHTXAr/Jkvi4hhVI3M6lAzxv5AhrLHB3/
+eHx2fLdtDs2bTfxf3/PolIFgVpvB+gK17TYEh7YvbK4a2gEQwo8I5OCaxBVcEJtiwAGonBeVbC9liyR4sLI8ikKloPjHC4n
+k59NadpIKirJxOw+uauTp3lc1bpZOMQbGnOi+RXGrBFhvcQ+IslJ26DtZ7e/VcoJ7JYR9pLu33ZdqqB/u20rD1YMoI+pWNw
+KI9aJNTW1fjC3wVKXG1XVC99BUQqtqXXUNN0AMPyk0Pae3dMudpyiZ09FOIswWF9kLPOjs8CwAZamuUoncko13jZrd/la0J
+jvChlXFnQs4MaOKwg5qF6Bc1ACzzSrIVeOHOoPVeLIJHF9bcHQZvEmPqjZ6c+02u/vZrcv46wZ3GPDfbHBguw8NGBoVrgh0
+bwS0EvEWMDAqoho989n8y0R5qdKTSlFePr9sdKB374r8Ru+j6QyGH1H38sMI8ChF0etRZe2epyoaMEMwfk6x1MT7gGpnmWA
+gXpTqJ+RRbYZhEIYtycu4PClkLNoCn3fSi5O3Lw8pgL0++/5HMIw+u+Wpg9ev3x38GISXTuR/5wicPAs9W33hTR4p+Zsgmb
+/o0mV9t/aQdch4YXprm1OcRhS1G2ZzclV2JVOiMgz1Iojy7wuqjX4xFCrLQyumcun4/BLaPr9lNX0WRVEHbgxeVGN91aWKy
+xpeDWDCAUEE+cMSgvsgB2MTcurI91bEOVFc1C9tjwF2m54Ut6tvjhEUqJyJGU94Vo+loIGmkCPJeB3H6MmSTeV4QhQWhjHV
+HIeFAVXENUxD9SZY9DjyCI5bvrebTBsiWOu6Rv2SVLPGxv1a6GrvGNcYvsVb1zcAm56ClgcVKWBYI65z99cBqaXmeltZTxy
+14msE9BcSmal3i2iro3u91+cOFq2uem3CFlJebHho0H294cO1+rxTAV2IW1ehI55eZ6Ce1m5q+cpb8b9oVqlJr5l0tdDftn
+OywvziOqLY5hEClbiWeaVqFtjgru4R3DtcmSKdypIaM4UwdaIe+Q9HK6cYygXuyAnlgxUtuvhC/Wm3wNoIVyLNs7HuROdsi
+opOotgzx4coWwPxQiDZTCpQE0ZaEjfP6uFM6audASSmhWt2o/WQUwS5kVgkH40ErRGz5plgIlUCPAsmoT1zM6Ln/x7Cge16
+oSsmbtiOnqchOshJorgft22xW8tcOqitv/ERQuOrPDeVU1n2noS3iOlny0ZkX3tv7hJ/A0Xz1uBI130WskbU1lZDQcDT7cq
+W/5vWHWOSFxHyxRhocldaq3d3791prNO+saNFqaXPBqaANgAlOs7Zbed2X+/9Y721WJdgVFCYDQsmC++Injnnpdi/j7978/
+a4djcEAUVdJO1YjSS0lnq8WWHPB7pTg+sdZLcBYR9E+KoweVy6nSS71qge83VuTqc01mYvj/okiT5X8O7dyyNDMmh7hKEkA
+Y+SWSk+lgy2El1ZevX0lY4+tx29cifBLKj6HlpBmsyb9sxeBD3V8V4Z9kSpGexnw9it82Rgyw2ZWtk+m/Liw+1Ote0JL8hd
+zfTOmX/A0sraPstFggO6q0fVlmFISMsz6pCkMi4B646DYXrT6qiitiUvhVrbrdIVVLMsl369Sw+UJu3WHPCmz7fC6UqhC+b
+fnxwtl9ckwnMI4LX2V0RMvX3gtgy274xIhdLgtE3BeohUA+uPkX+PjOTE76xmYA56OSIgfvrkHtVXSjFVEQkaUV6D/XHBVH
+lerUTv041oRldoGH8cPXSzZ48XhzZaUytKEzivF0Vs/zyYInJN0jn1Z3lGIS+4bE6ztcejuohib6ALgqb/aFK3IAK5dzsVv
+zsVG2pRlfnOjINKcNf6Mp1/Tvus3Kd9c1MXIFrPqSbBtTYlbsYlMYyj9jp4NbHeLkqdAqu95kzdwFtCv4ZPgFADBeoMN2BP
+dJOgtSbbA12FUk+1sAN71O12h5SGSpvJVsdd0XX7MEbnioy1eiuHvMgb4Iso08SAjTgYFYJGdp0DZcOMehT6Wmu/3Pq9Nf6
+XX7bvbAwUvp1RAhJP5JkgwuzvfjB3vMNsbDEeOyTo9rzedKsK0TEoNG0zJeR2LXGlU1rL4rqfWiBk8zRaW5RFKxJiVm5Zc6
+0odE1RhIC2ee34jWW987gryvR/ej+WLbc5yrVyTIzTC3adRoYgKNOaQTidUDlh62n8KOicST6b1Ud7/6+8ZtORXNdcUHVvg
+agXtYP8cfyMvXyYyrGmcx7ovR2y7bJhI5VLiz8JL9naslH3UlrGvhGetdl/8qr5hsS0Juikt8iaLXbLcwnttHm5Tnj7LdJd
+zEmN9shMra92yt1fT7kd5LBO+EaUbtJF24OR+dM8Rgc3eq0WsT2p3gziIOFduoN5WGW4g0AtyA9dHBw06bBe3u8EiNs8r72
+4ENP8GsFw5cTBfSGizd2usHUS1RZ30vfZVbW+yeZhayQzqSZ/CjL22j2KJfH8pfmOqj47MJVj+xHX7v7e/jdP9p7s7+3t7Q
+895m2FHzrhh/pLBhWpX1M6qbCzw34QYsbI5SBwv118+UVJmVsCzeCn9fbeSgFlvsSq6edFhvFdyeQO9AvlFU8yUe3qqY7Bq
+/UTHQXQxzxYqaMTkEwWEB8llYd6fymObi85WM98qNMuHnRxBio5pZMIH8TcboWs1h7svyz4+Xxv5x98Z3S5+Obr5ePAlF5G
+qmSI8FLKKYpVPp2Vv2nh9Oc9bmcfmZh26sJnF8i2pCazju0kF5l+mHw1ha5pqw2ZE/6A0WCw/IPQsQ3g3G48ffqDZ3nWbx/
+rwHCAFMBu+h7Ef6gyQ7E5S0j3W08AuNDJFqJOBdz7GZ2lmE6JSdA23D1Wbgr64BU8bQq3d5/s2dKJHKwwB3XdV3z2O8ENH9
+RJoSJEB/oqEPch5Wx9G7MQ2qY05tW8+5vDKHhG3/As/wdvP9ry"""
+ROOT = Path.cwd()
+DATA = json.loads(zlib.decompress(base64.b64decode(PAYLOAD_B64)).decode('utf-8'))
+expected = ROOT / "supabase/functions/_shared/membership.ts"
+if not expected.exists():
+    raise SystemExit("Wrong directory. Run this in the tc-today repository root.")
+staged = {}
+for change in DATA['operations']:
+    filename = change['file']
+    path = ROOT / filename
+    current = staged.get(filename, path.read_text(encoding='utf-8'))
+    old, new = change['old'], change['new']
+    if new in current:
+        continue
+    if current.count(old) != 1:
+        raise SystemExit(f"Source mismatch at {filename}. No changes written; request a refreshed patch.")
+    staged[filename] = current.replace(old, new, 1)
+for filename, contents in DATA['files'].items():
+    path = ROOT / filename
+    if path.exists() and path.read_text(encoding='utf-8') != contents:
+        raise SystemExit(f"Unexpected existing {filename}. No changes written; request a refreshed patch.")
+for filename, contents in staged.items():
+    (ROOT/filename).write_text(contents, encoding='utf-8')
+for filename, contents in DATA['files'].items():
+    path=ROOT/filename
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(contents, encoding='utf-8')
+print("Step 1C backend patch applied locally; no live deployments were run.")
