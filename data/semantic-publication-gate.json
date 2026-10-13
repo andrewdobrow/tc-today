@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-13T18:52:59.315588+00:00",
+  "generated_at": "2026-10-13T22:28:48.171439+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -70,8 +70,8 @@
     "no_candidate_passes": 38,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 37,
+    "new_stories_allowed": 0,
+    "retroactive_rows_retained": 38,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 15,
+    "pre_generation_materiality_evaluations": 16,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 5,
-    "pre_generation_materiality_holds": 10,
-    "pre_generation_materiality_model_calls": 10,
+    "pre_generation_materiality_duplicates": 7,
+    "pre_generation_materiality_holds": 9,
+    "pre_generation_materiality_model_calls": 11,
     "pre_generation_materiality_cache_hits": 5,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -121,23 +121,86 @@
       "semantic_action": "hold",
       "confidence": 0.78,
       "shared_anchors": [
-        "14-year-old Treasure Coast High School student struck and killed",
-        "Southwest Port St. Lucie Boulevard near Squirrel Avenue",
-        "Oct. 7 crash while walking to school"
+        "14-year-old Treasure Coast High School student",
+        "Port St. Lucie Boulevard/Squirrel Avenue",
+        "struck by SUV while walking to school",
+        "death from injuries"
       ],
       "novel_facts": [
-        "Neighbors publicly calling for pedestrian safety improvements",
-        "Lack of sidewalks and ongoing FDOT construction on the corridor",
-        "FDOT widening project details, cost ($25.6M), and 2028 completion timeline",
-        "FDOT did not respond to questions about interim pedestrian safety measures",
-        "Driver initially told officers he believed he struck a construction barrel; no charges filed yet",
-        "Family donated the teen's organs",
-        "Community/accountability angle toward FDOT and road safety"
+        "Neighbor and community pushback on pedestrian safety",
+        "Details on FDOT widening/sidewalk project and $25.6M cost, winter 2028 completion",
+        "FDOT lack of response on interim safety measures during construction",
+        "Driver's statement that he thought he hit a construction barrel",
+        "Organ donation by family",
+        "Unclear charging decision"
       ],
-      "reason": "This is the same underlying crash/death already covered in the canonical article, but it introduces a distinct accountability and public-safety angle: community criticism of FDOT's handling of pedestrian safety during construction, new details about the ongoing road project, cost/timeline, and the driver's statement to police. This shifts from reporting the death to raising a public-interest question about infrastructure accountability, meriting a follow-up rather than a silent duplicate or minor update to the original spot story.",
+      "reason": "This is the same crash and victim as the canonical death story, but it introduces a distinct accountability angle: community criticism of FDOT/road safety during construction, specifics of the infrastructure project and cost, the driver's account, and an open charging question. This constitutes an independently newsworthy follow-up about public safety accountability rather than merely restating the death confirmation.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
+    },
+    {
+      "category_key": "local_gov",
+      "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy - WPTV",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
+      "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+      "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.85,
+      "shared_anchors": [
+        "14-year-old Port St. Lucie student struck by vehicle while walking to school",
+        "Port St. Lucie Boulevard near Squirrel Avenue",
+        "Oct. 7 crash date",
+        "Port St. Lucie Police Department",
+        "death of the student from injuries"
+      ],
+      "novel_facts": [
+        "Family chose to donate organs",
+        "Advocacy commentary on organ donation need from Donate Life Florida and transplant recipients"
+      ],
+      "reason": "This is the same crash and death already covered in the canonical story. The organ donation angle is a human-interest/community follow-up rather than an accountability, investigation, or consequential development (e.g., no charges, cause finding, or policy change). It reads as emotional/legacy framing, which per guidelines should update the existing canonical rather than mint a new story, but since the death was already reported, the organ donation detail is additive color, not a material update to the canonical facts (crash, victim, death). This leans toward duplicate rather than update, as it doesn't change what readers need to know about the incident itself.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "Port St. Lucie ICU nurse arrested on charges involving patient's IV - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-icu-nurse-arrested-on/74107952",
+      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Leslie Pope",
+        "Cleveland Clinic Tradition Hospital",
+        "Port St. Lucie Police Department",
+        "same arrest Thursday in Jupiter",
+        "same source_url"
+      ],
+      "novel_facts": [
+        "Bond amount of $150,000 and release details",
+        "Additional detail on second incident with family member intervention",
+        "Cleveland Clinic spokesperson statement"
+      ],
+      "reason": "This is the same arrest and case as the canonical article, same source URL, same suspect, same hospital and charges. The incoming version adds some procedural detail (bond, booking, hospital statement) but these are routine elaborations, not a material new development like a new charge, death, or court ruling.",
+      "validation_errors": []
     },
     {
       "category_key": "crime",
@@ -155,11 +218,13 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.97,
-      "shared_anchors": [],
+      "confidence": 0.95,
+      "shared_anchors": [
+        "port-st-lucie",
+        "missing-person event family"
+      ],
       "novel_facts": [
-        "Missing person is Cassandra Cerron, a 15-year-old girl last seen Oct 11 in Port St. Lucie",
-        "Distinct from candidate's missing person Robert La Polla, a 47-year-old man missing since January"
+        "Missing 15-year-old Cassandra Cerron, last seen Oct 11, distinct from Robert La Polla case"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -184,47 +249,19 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "st-lucie-county",
-        "okeechobee-road corridor"
+        "Okeechobee Road location",
+        "St. Lucie County"
       ],
       "novel_facts": [
-        "hit-and-run of scooter rider on Okeechobee Road near South 25th Street",
-        "van crashed into Kings & Queens Unisex Salon",
-        "driver fled on foot, search ongoing with K-9 and aviation unit",
-        "date October 11, 2026"
+        "scooter rider killed by hit-and-run van driver",
+        "crash into Kings & Queens Unisex Salon at 2508 Okeechobee Road",
+        "driver fled on foot, ongoing manhunt",
+        "occurred October 11 near South 25th Street"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
-    },
-    {
-      "category_key": "crime",
-      "source_headline": "Port St. Lucie ICU nurse arrested on charges involving patient's IV - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-icu-nurse-arrested-on/74107952",
-      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Leslie Pope",
-        "Cleveland Clinic Tradition Hospital",
-        "Port St. Lucie Police Department",
-        "fentanyl IV diversion charges",
-        "same source URL (WPBF)"
-      ],
-      "novel_facts": [],
-      "reason": "Identical source article and incident involving the same named suspect, hospital, agency, and charges. No new material facts beyond additional quotes and procedural detail already covered by the canonical story.",
-      "validation_errors": []
     },
     {
       "category_key": "crime",
@@ -242,19 +279,49 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 0.97,
       "shared_anchors": [
-        "Port St. Lucie location",
+        "port-st-lucie",
         "missing-person event family"
       ],
       "novel_facts": [
-        "Different missing person: 15-year-old Cassandra Cerron, last seen Oct. 11",
-        "Different case entirely from Robert La Polla, 47-year-old man missing since January"
+        "Missing person is Cassandra Cerron, a 15-year-old girl last seen Oct. 11",
+        "Distinct from Robert La Polla, a 47-year-old man missing since January"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
+    },
+    {
+      "category_key": "business",
+      "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
+      "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+      "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.85,
+      "shared_anchors": [
+        "14-year-old Port St. Lucie student struck while walking to school",
+        "Port St. Lucie Boulevard/Squirrel Avenue location",
+        "Port St. Lucie Police",
+        "death from injuries"
+      ],
+      "novel_facts": [
+        "Family chose organ donation",
+        "advocacy quotes from tax collector and transplant recipient about organ donation statistics"
+      ],
+      "reason": "This is the same underlying fatal pedestrian-struck incident already covered in the canonical story, with the new content being a human-interest/advocacy angle about the family's organ donation decision. This is color/context framing rather than an accountability, investigation, or consequence development (no arrest, charge, cause finding, or policy action), so it does not meet the bar for an independently newsworthy follow-up or material update warranting a new URL.",
+      "validation_errors": []
     },
     {
       "category_key": "business",
@@ -274,13 +341,13 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road location in St. Lucie County/Fort Pierce"
+        "Okeechobee Road corridor in St. Lucie County"
       ],
       "novel_facts": [
-        "Fatal motorcycle crash at South 25th Street and Okeechobee Road",
-        "White box van driver fled scene, crashed into salon, fled on foot",
-        "Occurred Sunday night around 8:52 p.m.",
-        "Active manhunt with K-9 and Aviation units"
+        "Fatal hit-and-run motorcycle crash at South 25th Street and Okeechobee Road",
+        "white box van fled after striking motorcyclist and crashed into a salon at 2508 Okeechobee Road",
+        "driver fled on foot and remains at large",
+        "K-9 and Aviation units searching for suspect"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -352,6 +419,38 @@
     },
     {
       "category_key": "st_lucie",
+      "source_headline": "Port St. Lucie ICU nurse arrested on charges involving patient's IV - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-icu-nurse-arrested-on/74107952",
+      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Leslie Pope",
+        "Cleveland Clinic Tradition Hospital",
+        "Port St. Lucie Police Department",
+        "same arrest Thursday in Jupiter",
+        "same source_url"
+      ],
+      "novel_facts": [
+        "Bond amount of $150,000 and release details",
+        "Additional detail on second incident with family member intervention",
+        "Cleveland Clinic spokesperson statement"
+      ],
+      "reason": "This is the same arrest and case as the canonical article, same source URL, same suspect, same hospital and charges. The incoming version adds some procedural detail (bond, booking, hospital statement) but these are routine elaborations, not a material new development like a new charge, death, or court ruling.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
       "source_headline": "Neighbors call for pedestrian safety after Port St. Lucie teen’s death - WPEC",
       "source_url": "https://cbs12.com/news/local/neighbors-call-for-pedestrian-safety-after-port-st-lucie-teens-death-boulevard-construction-roadwork-oct-12-2026",
       "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
@@ -364,24 +463,53 @@
       "cache_hit": false,
       "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_status": "invalid_model_response",
       "semantic_action": "hold",
-      "confidence": 0.82,
+      "confidence": 0.78,
       "shared_anchors": [
         "14-year-old Treasure Coast High School student",
-        "struck by SUV walking to school",
-        "Southwest Port St. Lucie Boulevard/Squirrel Avenue",
-        "Oct. 7 crash",
-        "death from injuries"
+        "struck by SUV while walking to school",
+        "Southwest Port St. Lucie Boulevard near Squirrel Avenue",
+        "died from injuries"
       ],
       "novel_facts": [
-        "Neighbor-led pedestrian safety advocacy and community response",
-        "Lack of sidewalks and ongoing FDOT construction tied to crash risk",
-        "FDOT $25.6M widening/sidewalk project details and 2028 completion timeline",
-        "FDOT declined to answer questions about interim pedestrian safety measures",
-        "Driver's statement that he believed he hit a construction barrel; unclear if charges will be filed",
+        "Neighbors publicly calling for pedestrian safety improvements, quoted resident Irene Ange",
+        "FDOT $25.6 million road widening/sidewalk project details and 2028 completion timeline",
+        "FDOT declined to answer questions about interim pedestrian safety measures during construction",
+        "Driver's account that he believed he struck a construction barrel, cooperating with investigators, unclear if charges will be filed",
         "Family's decision to donate organs",
         "Mother's on-record comments about her son"
+      ],
+      "reason": "This is the same underlying crash/death as the canonical article, but it introduces a distinct accountability angle: community pressure on FDOT over pedestrian safety during ongoing construction, FDOT's non-response, and open questions about potential criminal charges against the driver. This goes beyond a routine update (the death was already reported) and raises a public-interest/accountability question that merits its own story rather than folding into the original brief death notice.",
+      "validation_errors": [
+        "same_event_confidence_below_threshold"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
+      "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Port St. Lucie location",
+        "missing-person event family"
+      ],
+      "novel_facts": [
+        "Missing 15-year-old girl Cassandra Cerron",
+        "Last seen Oct. 11 at her home",
+        "Different missing person case entirely from Robert La Polla, a 47-year-old man missing since January"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -419,95 +547,6 @@
     },
     {
       "category_key": "st_lucie",
-      "source_headline": "Police search for missing, endangered 15-year-old girl in Port St. Lucie - WPEC",
-      "source_url": "https://cbs12.com/news/local/police-search-for-missing-endangered-15-year-old-girl-in-port-st-lucie",
-      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 0.97,
-      "shared_anchors": [
-        "port-st-lucie",
-        "missing-person event family"
-      ],
-      "novel_facts": [
-        "Different missing person: Cassandra Cerron, 15-year-old girl, last seen Oct 11, 2026, distinct from Robert La Polla, 47-year-old man missing since January"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
-      "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
-      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-      "canonical_headline": "One northbound lane reopens on Florida's Turnpike after fatal box truck crash in St. Lucie County",
-      "canonical_is_custom": false,
-      "identity_basis": "same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "Okeechobee Road",
-        "St. Lucie County area"
-      ],
-      "novel_facts": [
-        "Scooter rider killed by hit-and-run white van driver on October 11",
-        "Van crashed into Kings & Queens Unisex Salon at 2508 Okeechobee Road",
-        "Driver fled on foot, search ongoing with K-9 and aviation units",
-        "Registered owner identified but driver unconfirmed"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Port St. Lucie ICU nurse arrested on charges involving patient's IV - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-icu-nurse-arrested-on/74107952",
-      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Leslie Pope",
-        "Cleveland Clinic Tradition Hospital",
-        "Port St. Lucie Police Department",
-        "fentanyl IV diversion charges",
-        "same source URL (WPBF)"
-      ],
-      "novel_facts": [],
-      "reason": "Identical source article and incident involving the same named suspect, hospital, agency, and charges. No new material facts beyond additional quotes and procedural detail already covered by the canonical story.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "st_lucie",
       "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
       "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
       "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
@@ -524,13 +563,14 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Okeechobee Road location in general vicinity"
+        "Okeechobee Road",
+        "St. Lucie/Fort Pierce area crash"
       ],
       "novel_facts": [
-        "Hit-and-run cargo van fatally striking scooter rider near 25th Street/Okeechobee Road on a Sunday night in October",
-        "Van crashed into Kings Queens Unisex Salon and a Toyota pickup",
-        "Driver fled on foot, described as Hispanic man",
-        "Fort Pierce Police investigation with K-9 and Aviation unit search"
+        "Hit-and-run cargo van driver fled after fatally striking scooter rider",
+        "crash near 25th Street and Lawnwood Hospital",
+        "driver crashed into Kings Queens Unisex Salon and fled on foot",
+        "Sunday 9 p.m. incident, manhunt with K-9 and Aviation units"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -553,16 +593,15 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.97,
+      "confidence": 0.95,
       "shared_anchors": [
         "Okeechobee Road corridor",
-        "St. Lucie County area"
+        "St. Lucie County"
       ],
       "novel_facts": [
-        "Fatal motorcycle crash Sunday night at 8:52 p.m. near South 25th Street and Okeechobee Road",
-        "White box van driver fled scene after hitting motorcycle, crashed into a salon, then fled on foot",
-        "K-9 and Aviation units searching for suspect described as Hispanic man",
-        "Involves Fort Pierce Police Department, not a Turnpike box truck crash"
+        "Hit-and-run fatal motorcycle crash near South 25th Street and Okeechobee Road, Oct 12, 2026",
+        "White box van fled and crashed into a salon",
+        "Driver fled on foot, search by K-9 and aviation units"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -1195,7 +1234,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet",
       "incoming_source_url": "https://www.wpbf.com/article/florida-us-coast-guard-asists-4-aboard-a-disabled-15-foot-vessel-near-florida-point-inlet/74110645",
-      "incoming_story_id": "story_017960",
+      "incoming_story_id": "story_021047",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1312,7 +1351,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Martin County Commissioners Advance One-Year Moratorium on Data Centers",
       "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-commissioners-unanimously-move-forward-with-1-year-moratorium-on-data-centers",
       "incoming_story_id": "story_021050",
@@ -1329,178 +1368,6 @@
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Martin County Commissioners Advance One-Year Moratorium on Data Centers",
-      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-commissioners-unanimously-move-forward-with-1-year-moratorium-on-data-centers",
-      "incoming_story_id": "story_021050",
-      "candidates": [
-        {
-          "slug": "2026-09-29-martin-county-sets-oct-13-hearing-on-agricultural-enclave-claim-for-396-acre-wat",
-          "headline": "Martin County sets Oct. 13 hearing on agricultural enclave claim for 396-acre Waterside property",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.7099,
-          "retrieval_score": 0.5599,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-pratt-whitney-and-bridge-roads-intersection-backs-up-martin-county-commuters",
-          "headline": "Pratt Whitney and Bridge Roads intersection backs up Martin County commuters",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5165,
-          "retrieval_score": 0.4155,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-10-10-martin-county-employee-rescues-three-girls-from-rip-current-at-bob-graham-beach",
-          "headline": "Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.473,
-          "retrieval_score": 0.442,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-martin-county-hoarding-case-against-paige-odonnell-heads-to-dec-1-hearing",
-          "headline": "Palm City hoarding case: 72 charges against O'Donnell, dogs find homes",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4662,
-          "retrieval_score": 0.4592,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-23-month-old-drowns-in-pond-on-family-property-in-martin-county",
-          "headline": "Martin County toddler drowned in family pond after being out of sight no more than 10 minutes",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.447,
-          "retrieval_score": 0.443,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-martin-county-issues-advisory-after-sentinel-chickens-test-positive-for-west-nil",
-          "headline": "Martin County Issues Advisory After Sentinel Chickens Test Positive for West Nile Virus",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4358,
-          "retrieval_score": 0.4318,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
-          "headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4312,
-          "retrieval_score": 0.3942,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "headline": "Martin County Scrambles to Restore MARTY Bus Service After Abrupt Halt",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4202,
-          "retrieval_score": 0.3952,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-05-indiantown-flooding-persists-despite-2m-booker-park-drainage-project",
-          "headline": "Indiantown Flooding Persists Despite $2M Booker Park Drainage Project",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4163,
-          "retrieval_score": 0.4003,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-10-01-martin-county-deputies-search-for-missing-autistic-man-last-seen-in-jensen-beach",
-          "headline": "Missing Jensen Beach Man Nicklaus Cantor Found Safe",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3995,
-          "retrieval_score": 0.3925,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-          "headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3908,
-          "retrieval_score": 0.3898,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-          "headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3663,
-          "retrieval_score": 0.3383,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.93,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Martin County Commission unanimous vote to advance a one-year moratorium on data centers",
-          "First of two required hearings, second vote scheduled Oct. 27",
-          "County received a data center application the day before the vote"
-        ],
-        "reason": "None of the candidates concern the Martin County Commission's data center moratorium vote. The closest topical match (Indiantown data center lawsuit) involves a different jurisdiction (Village of Indiantown), different parties (Silver Fox 606 LLC vs. village), and a different governing action (litigation over a stalled plat, not a county-wide moratorium). No shared named participants, case, or specific governing action ties this to any candidate, so this is a new, distinct event.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.93,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Martin County Commission unanimous vote to advance a one-year moratorium on data centers",
-          "First of two required hearings, second vote scheduled Oct. 27",
-          "County received a data center application the day before the vote"
-        ],
-        "reason": "None of the candidates concern the Martin County Commission's data center moratorium vote. The closest topical match (Indiantown data center lawsuit) involves a different jurisdiction (Village of Indiantown), different parties (Silver Fox 606 LLC vs. village), and a different governing action (litigation over a stalled plat, not a county-wide moratorium). No shared named participants, case, or specific governing action ties this to any candidate, so this is a new, distinct event.",
-        "validation_errors": [],
-        "consistency_repairs": []
       }
     }
   ],
