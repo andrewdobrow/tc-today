@@ -1,5 +1,28 @@
 import Stripe from 'npm:stripe@^22'
 
+// Replay guard for delayed Stripe events after account deletion. We retain only
+// nonreversible SHA-256 hashes of high-entropy customer / Auth identifiers.
+export class DeletedAccountEvent extends Error {
+  constructor() { super('Deleted membership identity'); this.name = 'DeletedAccountEvent' }
+}
+export async function deletedIdentifierHash(kind: 'user' | 'customer', value: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${kind}:${value}`))
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('')
+}
+export async function assertAccountNotDeleted(
+  supabaseAdmin: any,
+  ids: { userId?: string | null; customerId?: string | null },
+) {
+  for (const [kind, id] of [['user', ids.userId], ['customer', ids.customerId]] as const) {
+    if (!id) continue
+    const identifier_hash = await deletedIdentifierHash(kind, id)
+    const { data, error } = await supabaseAdmin.from('membership_deleted_identifiers')
+      .select('identifier_hash').eq('identifier_hash', identifier_hash).maybeSingle()
+    if (error) throw error // Never fail open if the guard cannot be checked.
+    if (data) throw new DeletedAccountEvent()
+  }
+}
+
 export const ACTIVE_STATUSES = new Set(['active', 'trialing'])
 
 const rawStripeMode = (Deno.env.get('TCT_STRIPE_MODE') ?? 'test').trim().toLowerCase()
@@ -64,6 +87,7 @@ export async function resolveMembershipUser(
 ) {
   const email = normalizeEmail(emailValue)
   if (!email || !email.includes('@')) throw new Error('Stripe Checkout did not provide a usable email address.')
+  await assertAccountNotDeleted(supabaseAdmin, { customerId })
 
   const { data: profiles, error: profileError } = await supabaseAdmin
     .from('profiles')
@@ -118,6 +142,7 @@ export async function syncSubscription(
 ) {
   const customerId = idFromExpandable(subscription.customer as any)
   let userId = forcedUserId || subscription.metadata?.supabase_user_id || null
+  await assertAccountNotDeleted(supabaseAdmin, { userId, customerId })
 
   if (!userId && customerId) {
     const { data: profile, error } = await supabaseAdmin
@@ -130,6 +155,7 @@ export async function syncSubscription(
   }
 
   if (!userId) throw new Error(`No Supabase user mapping for Stripe subscription ${subscription.id}`)
+  await assertAccountNotDeleted(supabaseAdmin, { userId, customerId })
 
   if (customerId) {
     const { error: profileError } = await supabaseAdmin

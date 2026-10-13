@@ -1,6 +1,6 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import Stripe from 'npm:stripe@^22'
-import { firstNameFromDisplayName, idFromExpandable, resolveMembershipUser, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
+import { assertAccountNotDeleted, DeletedAccountEvent, firstNameFromDisplayName, idFromExpandable, resolveMembershipUser, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
 
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
 const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? ''
@@ -10,6 +10,7 @@ const cryptoProvider = Stripe.createSubtleCryptoProvider()
 async function syncSubscriptionEvent(subscription: Stripe.Subscription, supabaseAdmin: any) {
   const customerId = idFromExpandable(subscription.customer as any)
   let userId = subscription.metadata?.supabase_user_id || null
+  await assertAccountNotDeleted(supabaseAdmin, { userId, customerId })
 
   if (!userId && customerId) {
     const { data: profile, error } = await supabaseAdmin
@@ -80,6 +81,7 @@ export default {
         const customerId = idFromExpandable(session.customer as any)
         const email = session.customer_details?.email || session.customer_email
         let userId = session.client_reference_id || session.metadata?.supabase_user_id || null
+        await assertAccountNotDeleted(ctx.supabaseAdmin, { userId, customerId })
 
         if (!userId && email) {
           const resolved = await resolveMembershipUser(ctx.supabaseAdmin, email, customerId)
@@ -120,6 +122,13 @@ export default {
       if (recordError && recordError.code !== '23505') throw recordError
       return Response.json({ received: true })
     } catch (error) {
+      if (error instanceof DeletedAccountEvent) {
+        // Acknowledge stale notifications without restoring the deleted user.
+        const { error: recordError } = await ctx.supabaseAdmin.from('stripe_webhook_events')
+          .insert({ event_id: event.id, event_type: event.type })
+        if (recordError && recordError.code !== '23505') return new Response('Webhook persistence unavailable.', { status: 500 })
+        return Response.json({ received: true, ignored_deleted_account: true })
+      }
       console.error(`stripe-webhook processing failed for ${event.id}`, error)
       // Do not record the event as processed. Stripe can safely retry it.
       return new Response('Webhook processing failed.', { status: 500 })

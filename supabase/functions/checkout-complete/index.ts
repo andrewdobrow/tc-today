@@ -1,6 +1,6 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import Stripe from 'npm:stripe@^22'
-import { firstNameFromDisplayName, idFromExpandable, maskedEmail, resolveMembershipUser, safeReturnPath, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
+import { DeletedAccountEvent, firstNameFromDisplayName, idFromExpandable, maskedEmail, resolveMembershipUser, safeReturnPath, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
 
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
 const siteUrl = (Deno.env.get('SITE_URL') ?? 'https://treasurecoast.today').replace(/\/$/, '')
@@ -76,6 +76,9 @@ export default {
         partner_name: String(session.metadata?.partner_name || ''),
       })
     } catch (error) {
+      if (error instanceof DeletedAccountEvent) {
+        return Response.json({ error: 'This membership account was permanently deleted. Contact support if you have purchased a new membership.' }, { status: 410 })
+      }
       console.error('checkout-complete failed', error)
       return Response.json({ error: 'Unable to finish membership setup.' }, { status: 500 })
     }
