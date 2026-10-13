@@ -1,34 +1,16 @@
-# TCT Hurricane Product Guide Content Package
+# Step 1C — Fix account deletion marker order
 
-## Article
+The first deletion test failed because a legacy Stripe **test-mode** customer was queried using the site's **live-mode** Stripe key. This is a legitimate refusal to delete; however, the initial backend implementation wrote permanent replay-guard markers *before* Stripe verification, leaving an existing account incorrectly marked as deleted. This fix moves marker creation **after** all Stripe renewals have been cancelled and verified, but **before** the Supabase Auth user is deleted. Any new attempt that fails Stripe verification will not create new markers.
 
-**Hurricane Season Ready: 12 Treasure Coast Essentials to Stock Up On**
+**Scope:** `supabase/functions/delete-account/index.ts` only. No changes to the website publisher, Stripe settings, database schema, or iOS binary. Existing historical markers are not automatically removed by this patch.
 
-The prepared entry contains all 12 products, exact affiliate links and TCT-hosted transparent product image URLs supplied by Andrew.
+1. Upload `APPLY_TCT_DELETION_MARKER_ORDER_FIX.py` to repository root of **`tc-today`**, commit on `main`.
+2. In `tc-today` Codespace, `git status` and ensure clean; `git pull --ff-only origin main`.
+3. Run `python APPLY_TCT_DELETION_MARKER_ORDER_FIX.py`.
+4. Run `git diff --check`, `git diff -- supabase/functions/delete-account/index.ts`. Ensure **only** this Edge Function changed and that the replay marker is now after the catch block logging `delete-account Stripe cancellation incomplete` and before `admin.auth.admin.deleteUser`.
+5. `git add supabase/functions/delete-account/index.ts && git commit -m 'Avoid deletion markers when Stripe verification fails' && git pull --rebase origin main && git push origin main`.
+6. In GitHub Actions run **`tc-today` → `Deploy TCT Membership Backend`** manually on `main`. Verify overall green and the new `delete-account` function deployment in Supabase.
+7. Do not retry deletion of the original test-mode customer account. It already has replay markers created by the previous version. It needs a separate, **targeted cleanup** after inspecting exactly which hashes are present; do not clear all tombstones.
+8. No additional iOS build is necessary; future iOS delete-account requests use the deployed endpoint.
 
-## Installation
-
-This content package assumes the product-guide renderer from TCT v1.11.0+ and the incident-lock release v1.11.1.
-
-1. Apply `product-guide-image-containment.patch` after v1.11.1.
-2. Place the generated hero image at:
-   `images/hurricane-season-ready-treasure-coast-essentials.png`
-3. Preview the JSON merge:
-   `python scripts/install_hurricane_product_guide.py --target custom_articles.json --dry-run`
-4. Install it:
-   `python scripts/install_hurricane_product_guide.py --target custom_articles.json`
-5. Run **Test Editorial Engine**, then production.
-
-The installer only replaces an article with the exact headline `Hurricane Season Ready: 12 Treasure Coast Essentials to Stock Up On`. All other custom articles are preserved.
-
-## Image containment
-
-The patch changes product-image boxes to fixed-height, overflow-hidden containers with padding. Product PNGs use `max-width:100%`, `max-height:100%`, `width:auto`, `height:auto`, `object-fit:contain`, and centered positioning. This prevents transparent product images with unusual dimensions from stretching cards or overflowing on desktop or mobile.
-
-## Files
-
-- `content/hurricane-season-ready-product-guide.json` — publication-ready custom article entry
-- `scripts/install_hurricane_product_guide.py` — exact-headline merge installer
-- `preview/hurricane-season-ready-preview.html` — local visual preview
-- `product-guide-image-containment.patch` — renderer hardening against image overflow
-- `research-notes.md` — key claims and source notes
+This does **not** prove cancellation of paid subscriptions, which still needs a controlled test of the real Stripe billing flow.
