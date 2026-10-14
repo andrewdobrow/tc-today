@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-14T20:50:59Z",
+  "generated_at": "2026-10-14T22:50:25Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 26,
-    "rejected_count": 5,
+    "assessed_count": 27,
+    "rejected_count": 7,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,9 +34,23 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 3,
-      "rejected_count": 2,
+      "assessed_count": 4,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "$900 a month in fees: West Boca condo owner feels squeeze of rising HOA costs",
+          "source_url": "https://www.wptv.com/money/real-estate-news/900-a-month-in-fees-west-boca-condo-owner-feels-squeeze-of-rising-hoa-costs"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -47,11 +61,11 @@
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
-            "crime_incident:shooting"
+            "crime_incident:fatal crash"
           ],
           "local_nexus_signals": [],
-          "headline": "Former Melbourne police officer sentenced to death for killing Fort Pierce motorcycle mechanic",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-melbourne-police-officer-sentenced-to-death-for-killing-fort-pierce-motorcycle-mechanic"
+          "headline": "Neighbors ask for solutions on deadly roadway in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/neighbors-ask-for-solutions-on-deadly-roadway-in-port-st-lucie"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -74,9 +88,24 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 3,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 4,
+      "rejected_count": 1,
+      "rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "$900 a month in fees: West Boca condo owner feels squeeze of rising HOA costs",
+          "source_url": "https://www.wptv.com/money/real-estate-news/900-a-month-in-fees-west-boca-condo-owner-feels-squeeze-of-rising-hoa-costs"
+        }
+      ]
     },
     {
       "category_key": "business",
@@ -93,17 +122,16 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
+          "reason": "missing_primary_business_development_focus",
           "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:shooting"
-          ],
+          "competing_signals": [],
           "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:fort pierce"
+            "source_locality:port st lucie",
+            "source_locality:vero beach",
+            "source_locality:sebastian"
           ],
-          "headline": "Former Melbourne police officer sentenced to death for killing Fort Pierce motorcycle mechanic",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/former-melbourne-police-officer-sentenced-to-death-for-killing-fort-pierce-motorcycle-mechanic"
+          "headline": "$900 a month in fees: West Boca condo owner feels squeeze of rising HOA costs",
+          "source_url": "https://www.wptv.com/money/real-estate-news/900-a-month-in-fees-west-boca-condo-owner-feels-squeeze-of-rising-hoa-costs"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -113,17 +141,17 @@
           "eligible": false,
           "would_reject": true,
           "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
+          "positive_signals": [
+            "development_project:construction"
+          ],
           "competing_signals": [
-            "crime_public_safety:charged"
+            "crime_public_safety:fatal crash"
           ],
           "local_nexus_signals": [
-            "source_locality:port st lucie",
-            "source_locality:vero beach",
-            "source_locality:sebastian"
+            "source_locality:port st lucie"
           ],
-          "headline": "Palm Beach County leaders, advocates seek solutions as rising HOA fees squeeze condo owners",
-          "source_url": "https://www.wptv.com/money/real-estate-news/palm-beach-county-leaders-seek-solutions-as-rising-hoa-fees-squeeze-condo-owners"
+          "headline": "Neighbors ask for solutions on deadly roadway in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/neighbors-ask-for-solutions-on-deadly-roadway-in-port-st-lucie"
         }
       ]
     },
@@ -167,7 +195,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 1,
+      "assessed_count": 0,
       "rejected_count": 0,
       "rejections": []
     },
@@ -185,7 +213,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 5,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -194,7 +222,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 8,
+      "assessed_count": 9,
       "rejected_count": 0,
       "rejections": []
     }
