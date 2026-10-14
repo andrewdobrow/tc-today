@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-14T12:54:31.149385+00:00",
+  "generated_at": "2026-10-14T15:04:22.812774+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 39,
+    "evaluations": 41,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 39,
+    "no_candidate_passes": 41,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 2,
     "retroactive_rows_retained": 39,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -80,22 +80,22 @@
     "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 0,
-    "material_update_replays_suppressed": 2,
+    "material_update_replays_suppressed": 1,
     "pre_generation_materiality_evaluations": 12,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 7,
     "pre_generation_materiality_holds": 5,
     "pre_generation_materiality_model_calls": 6,
     "pre_generation_materiality_cache_hits": 6,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 2,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -114,8 +114,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -151,23 +151,52 @@
       "confidence": 0.78,
       "shared_anchors": [
         "14-year-old Treasure Coast High School student",
-        "struck near Southwest Port St. Lucie Boulevard/Squirrel Avenue",
-        "walking to school",
-        "death from injuries"
+        "struck near Squirrel Avenue/Port St. Lucie Boulevard",
+        "died from injuries",
+        "Oct. 7 crash"
       ],
       "novel_facts": [
-        "Neighbor/community calls for pedestrian safety reforms",
-        "Details on FDOT $25.6M road widening/sidewalk project and timeline",
-        "No sidewalks and flooded shoulders cited as contributing hazards",
-        "Driver's statement that he believed he hit a construction barrel",
-        "Organ donation by family",
-        "Unresolved question of charges against driver",
-        "FDOT declined to answer about interim safety measures during construction"
+        "Neighbor-led pedestrian safety advocacy following the death",
+        "Details on lack of sidewalks and ongoing FDOT construction/widening project with $25.6M cost and winter 2028 completion",
+        "Driver's account of believing he hit a construction barrel; cooperation with investigators and unresolved charging decision",
+        "Family's organ donation decision and mother's comments",
+        "FDOT's non-response on interim pedestrian safety measures during construction"
       ],
-      "reason": "This is the same underlying crash/death already canonicalized, but the incoming article introduces a distinct accountability and policy angle: community demands for pedestrian safety, scrutiny of FDOT's ongoing construction project and lack of interim safety measures, and the unresolved question of charges against the driver. This goes beyond routine update and constitutes an independently newsworthy follow-up meriting its own story rather than a silent edit to the original death report.",
+      "reason": "This is the same underlying crash/death as the canonical article, but it introduces a distinct accountability and public-safety angle: community demands for pedestrian infrastructure, FDOT's lack of response on safety measures during construction, and new details about the driver's statement and possible charges. These elements raise an independent public-interest question (road safety accountability) beyond merely restating the death, meeting the bar for an independently newsworthy follow-up.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
+    },
+    {
+      "category_key": "local_gov",
+      "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy - WPTV",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
+      "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+      "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.85,
+      "shared_anchors": [
+        "Port St. Lucie Boulevard/Squirrel Avenue location",
+        "14-year-old pedestrian struck while walking to school",
+        "Port St. Lucie Police Department",
+        "death of the teen from injuries"
+      ],
+      "novel_facts": [
+        "Family chose to donate organs",
+        "quotes from organ donation advocates and transplant recipient",
+        "national organ donation statistics"
+      ],
+      "reason": "This is the same crash/death already covered in the canonical story, now with a human-interest angle about the family's organ donation decision. While emotionally significant, this is color/follow-up framing rather than a material update to the core facts (victim ID, cause, charges, etc.) and does not raise a new accountability or policy question warranting a separate URL.",
+      "validation_errors": []
     },
     {
       "category_key": "crime",
@@ -218,13 +247,11 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.97,
-      "shared_anchors": [
-        "missing-person category",
-        "port-st-lucie locality"
-      ],
+      "shared_anchors": [],
       "novel_facts": [
-        "Missing 15-year-old Cassandra Cerron last seen Oct. 11",
-        "Different individual, age, and circumstances from Robert La Polla case"
+        "Missing person is Cassandra Cerron, a 15-year-old girl",
+        "Last seen Oct. 11 at her home in Port St. Lucie",
+        "Different agency contact (Detective H. Nieves)"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -259,36 +286,6 @@
         "advocacy quotes from tax collector and transplant recipient about organ donation statistics"
       ],
       "reason": "This is the same underlying fatal pedestrian-struck incident already covered in the canonical story, with the new content being a human-interest/advocacy angle about the family's organ donation decision. This is color/context framing rather than an accountability, investigation, or consequence development (no arrest, charge, cause finding, or policy action), so it does not meet the bar for an independently newsworthy follow-up or material update warranting a new URL.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "business",
-      "source_headline": "ICU nurse accused of stealing fentanyl from critically ill patient at Tradition hospital",
-      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/icu-nurse-accused-of-stealing-fentanyl-from-critically-ill-patient-at-tradition-hospital",
-      "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-      "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-      "canonical_is_custom": false,
-      "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "Leslie Pope",
-        "Cleveland Clinic Tradition Hospital",
-        "Port St. Lucie Police Department",
-        "fentanyl diverted from critically ill patient's IV",
-        "arrest on Oct. 8 in Jupiter"
-      ],
-      "novel_facts": [
-        "Additional detail that a second incident the following evening was interrupted by a family member and reviewed via surveillance footage"
-      ],
-      "reason": "Both articles report the same arrest of nurse Leslie Pope for diverting fentanyl from a patient at Cleveland Clinic Tradition Hospital, same charges and same police department. The incoming article adds narrative detail but no new material fact like a status change, additional charge, or court action, so it should update the existing canonical rather than create a new one, and since no new material update is substantive enough per decision criteria, duplicate status applies.",
       "validation_errors": []
     },
     {
@@ -399,18 +396,17 @@
       "semantic_action": "hold",
       "confidence": 0.78,
       "shared_anchors": [
-        "14-year-old Port St. Lucie student struck while walking to school",
+        "14-year-old struck while walking to school",
         "Port St. Lucie Boulevard/Squirrel Avenue location",
-        "Oct. 7 crash date",
-        "death from injuries"
+        "died from injuries",
+        "Port St. Lucie Police"
       ],
       "novel_facts": [
-        "family chose organ donation following the teen's death",
-        "statements from transplant recipient and advocacy organization (South Florida Donor Network)",
-        "St. Lucie County Tax Collector's involvement with Donate Life Florida",
-        "broader organ donation statistics and advocacy angle"
+        "Family chose to donate the teen's organs",
+        "Commentary from South Florida Donor Network and St. Lucie County Tax Collector on organ donation impact",
+        "Broader statistics on transplant waiting lists and donor advocacy"
       ],
-      "reason": "Same underlying crash/death as the canonical, but this article introduces a distinct, independently newsworthy follow-up: the family's organ donation decision and its public-interest impact, which goes beyond a routine update to the crash story and merits its own article rather than folding into the original incident report.",
+      "reason": "This is the same crash/death reported earlier, but the organ donation decision is a distinct, independently newsworthy human-interest follow-up involving new named participants (donor network official, tax collector) and a consequential family decision with broader public-interest impact (lifesaving transplants), rather than a routine update to the crash facts.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
@@ -434,18 +430,19 @@
       "confidence": 0.78,
       "shared_anchors": [
         "14-year-old Treasure Coast High School student",
-        "struck by SUV near Squirrel Avenue/Port St. Lucie Boulevard",
+        "struck near Squirrel Avenue/Port St. Lucie Boulevard",
         "Oct. 7 crash",
-        "death from injuries"
+        "died from injuries"
       ],
       "novel_facts": [
-        "Neighbor-led calls for pedestrian safety improvements and community reaction (Irene Ange)",
-        "Details on lack of sidewalks and ongoing FDOT construction/widening project with $25.6 million cost and winter 2028 completion",
-        "Driver's statement that he believed he struck a construction barrel; cooperation with investigators",
-        "Family chose to donate organs; mother's comments on son's character",
-        "Unclear whether charges will be filed; FDOT did not respond to safety questions during construction"
+        "Neighbor advocacy for pedestrian safety near construction zone",
+        "Details on FDOT widening/sidewalk project, cost ($25.6M), completion timeline (winter 2028)",
+        "Driver's statement that he believed he struck a construction barrel; cooperating with investigators",
+        "Unclear whether charges will be filed",
+        "Family's decision to donate organs",
+        "No sidewalks/flooded shoulders cited as contributing hazard"
       ],
-      "reason": "This is the same underlying crash/death already covered in the canonical, but it introduces a distinct, independently newsworthy accountability angle: community pressure on FDOT/pedestrian safety during construction, lack of sidewalks, project cost/timeline, and open questions about charges against the driver. These raise public-interest and accountability questions beyond simply updating the death confirmation, meriting a new story rather than folding into the original brief crash/death report.",
+      "reason": "This is the same underlying crash and death as the canonical article, but it introduces a distinct accountability angle: community criticism of FDOT's lack of pedestrian safety measures during construction, specifics of the infrastructure project and cost, and new driver/investigation details (barrel claim, uncertain charges) that raise public-interest questions beyond the original death report. This rises to an independently newsworthy follow-up rather than routine reaction color, warranting its own story while the original remains the initial death report.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
@@ -467,11 +464,14 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.97,
-      "shared_anchors": [],
+      "shared_anchors": [
+        "missing-person category",
+        "port-st-lucie locality"
+      ],
       "novel_facts": [
-        "New missing person: Cassandra Cerron, 15-year-old girl",
-        "Last seen October 11 in Port St. Lucie",
-        "Different missing person case entirely from Robert La Polla (47-year-old man missing since January)"
+        "Missing 15-year-old Cassandra Cerron",
+        "last seen October 11",
+        "distinct from 47-year-old Robert La Polla missing since January"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -1222,7 +1222,7 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Vero Beach Council Approves Lease for 116-Room Marriott at Regional Airport",
+      "incoming_headline": "Vero Beach Council Approves Lease for Marriott at Regional Airport",
       "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/city-council-approves-lease-agreement-to-bring-hotel-to-vero-beach-regional-airport-area",
       "incoming_story_id": "story_021126",
       "candidates": [],
@@ -1259,6 +1259,414 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/suspected-fentanyl-supplier-linked-to-overdose-death-arrested-after-chase-on-i-95",
+      "incoming_story_id": "story_021217",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/suspected-fentanyl-supplier-linked-to-overdose-death-arrested-after-chase-on-i-95",
+      "incoming_story_id": "story_021217",
+      "candidates": [
+        {
+          "slug": "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou",
+          "headline": "Two Miami Women Charged After Gunfire, Chase at Martin County Tow Yard",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6489,
+          "retrieval_score": 0.4919,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6235,
+          "retrieval_score": 0.4895,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+          "headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5168,
+          "retrieval_score": 0.3828,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-developer-sues-indiantown-over-stalled-25-million-data-center-plat",
+          "headline": "Developer Sues Indiantown Over Stalled $25 Million Data Center Plat",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.4677,
+          "retrieval_score": 0.3337,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-video-shows-suv-rollover-on-floridas-turnpike-ramp-near-bayshore-blvd",
+          "headline": "Video Shows SUV Rollover on Florida's Turnpike Ramp Near Bayshore Blvd",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.4616,
+          "retrieval_score": 0.3606,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-13-port-st-lucie-family-seeks-animal-cruelty-charges-after-dog-killed-on-goodman-av",
+          "headline": "Port St. Lucie Family Seeks Animal Cruelty Charges After Dog Killed on Goodman Avenue",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4877,
+          "retrieval_score": 0.4507,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4551,
+          "retrieval_score": 0.4151,
+          "reasons": [
+            "publication_gap_37_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-01-st-lucie-county-finds-13-unpermitted-license-plate-readers-gives-owners-30-days",
+          "headline": "St. Lucie County finds 13 unpermitted license plate readers, gives owners 30 days",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4471,
+          "retrieval_score": 0.3961,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4412,
+          "retrieval_score": 0.4192,
+          "reasons": [
+            "publication_gap_16_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
+          "headline": "Two Port St. Lucie Hit-and-Run Suspects Arrested, Released on Bond",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4324,
+          "retrieval_score": 0.4314,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-new-i-95-oslo-road-interchange-opens-a-year-early-in-indian-river-county",
+          "headline": "New I-95 Oslo Road Interchange Opens a Year Early in Indian River County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4188,
+          "retrieval_score": 0.4058,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4096,
+          "retrieval_score": 0.3346,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "James Arthur Green arrest",
+          "I-95/Kanner Highway chase on Oct 13",
+          "fentanyl trafficking tied to overdose death",
+          "St. Lucie County Sheriff's Office and Florida Highway Patrol charges"
+        ],
+        "reason": "None of the candidates share the named suspect, the specific I-95/Kanner Highway chase, or the fentanyl overdose supply investigation. Closest matches (tow yard chase, nurse fentanyl diversion, generic I-95 crashes) involve different people, locations, and fact patterns, so this is a distinct new event.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "James Arthur Green arrest",
+          "I-95/Kanner Highway chase on Oct 13",
+          "fentanyl trafficking tied to overdose death",
+          "St. Lucie County Sheriff's Office and Florida Highway Patrol charges"
+        ],
+        "reason": "None of the candidates share the named suspect, the specific I-95/Kanner Highway chase, or the fentanyl overdose supply investigation. Closest matches (tow yard chase, nurse fentanyl diversion, generic I-95 crashes) involve different people, locations, and fact patterns, so this is a distinct new event.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/first-of-many-attorney-general-discusses-nick-mimms-conviction-warns-of-more-corruption-cases",
+      "incoming_story_id": "story_021219",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/first-of-many-attorney-general-discusses-nick-mimms-conviction-warns-of-more-corruption-cases",
+      "incoming_story_id": "story_021219",
+      "candidates": [
+        {
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6003,
+          "retrieval_score": 0.5783,
+          "reasons": [
+            "publication_gap_16_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-09-30-fort-pierce-man-gets-probation-for-hiding-gun-used-in-june-shooting",
+          "headline": "Fort Pierce man gets probation for hiding gun used in June shooting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5303,
+          "retrieval_score": 0.5303,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-man-charged-after-ramming-two-tow-trucks-with-u-haul",
+          "headline": "Fort Pierce Man Charged After Ramming Two Tow Trucks With U-Haul",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.52,
+          "retrieval_score": 0.507,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4898,
+          "retrieval_score": 0.4678,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-09-30-st-lucie-fire-district-attorney-resigns-as-chief-faces-no-confidence-vote",
+          "headline": "St. Lucie Fire Board Member Urges Chief Jeff Lee to Resign After Vote",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4857,
+          "retrieval_score": 0.4457,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-fort-pierce-ends-crabbys-dockside-lease-over-nearly-334000-debt",
+          "headline": "Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.483,
+          "retrieval_score": 0.449,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
+          "headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4748,
+          "retrieval_score": 0.4618,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4615,
+          "retrieval_score": 0.4215,
+          "reasons": [
+            "publication_gap_37_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
+          "headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4559,
+          "retrieval_score": 0.4519,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-seniors-push-back-as-orange-avenue-center-sale-nears",
+          "headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4366,
+          "retrieval_score": 0.4236,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+          "headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4347,
+          "retrieval_score": 0.4337,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-06-port-st-lucie-woman-pleads-guilty-in-palm-beach-county-apartment-theft-scheme",
+          "headline": "Port St. Lucie Woman Pleads Guilty in Palm Beach County Apartment Theft Scheme",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4241,
+          "retrieval_score": 0.4081,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": true,
+        "confidence": 0.82,
+        "shared_anchors": [
+          "Nick Mimms",
+          "Fort Pierce city manager",
+          "official misconduct conviction",
+          "bid tampering acquittal",
+          "Lincoln Theater/Lincoln Park land deal"
+        ],
+        "novel_facts": [
+          "Florida AG James Uthmeier cites Mimms case as first result of new statewide public corruption unit",
+          "AG announces 25+ active public corruption investigations statewide",
+          "FDLE Commissioner Larry Keefe comments on corruption priority",
+          "AG says more charges against officials coming in weeks ahead",
+          "AG's office will continue investigating where grant money went"
+        ],
+        "reason": "This incoming article covers the same underlying Mimms conviction as the candidate but introduces a distinct, independently newsworthy follow-up: the state Attorney General publicly using the case to launch and justify a new statewide public corruption unit, with its own accountability implications (25+ ongoing investigations, promised future charges). This is a separate public-interest story about state-level enforcement policy, not merely an update to the original trial/verdict story, so it warrants its own URL rather than folding into the existing canonical.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": true,
+        "confidence": 0.82,
+        "shared_anchors": [
+          "Nick Mimms",
+          "Fort Pierce city manager",
+          "official misconduct conviction",
+          "bid tampering acquittal",
+          "Lincoln Theater/Lincoln Park land deal"
+        ],
+        "novel_facts": [
+          "Florida AG James Uthmeier cites Mimms case as first result of new statewide public corruption unit",
+          "AG announces 25+ active public corruption investigations statewide",
+          "FDLE Commissioner Larry Keefe comments on corruption priority",
+          "AG says more charges against officials coming in weeks ahead",
+          "AG's office will continue investigating where grant money went"
+        ],
+        "reason": "This incoming article covers the same underlying Mimms conviction as the candidate but introduces a distinct, independently newsworthy follow-up: the state Attorney General publicly using the case to launch and justify a new statewide public corruption unit, with its own accountability implications (25+ ongoing investigations, promised future charges). This is a separate public-interest story about state-level enforcement policy, not merely an update to the original trial/verdict story, so it warrants its own URL rather than folding into the existing canonical.",
+        "validation_errors": [],
+        "consistency_repairs": [],
+        "independent_followup_authorized": true
+      }
     }
   ],
   "archive_repairs": [],
@@ -1266,10 +1674,10 @@
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 9,
+    "directives_considered": 8,
     "story_records_merged": 0,
     "aliases_written": 0,
-    "already_consolidated": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_019789",
