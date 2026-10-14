@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-14T15:54:26.428234+00:00",
+  "generated_at": "2026-10-14T18:54:10.199866+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,16 +62,16 @@
     }
   },
   "summary": {
-    "evaluations": 42,
+    "evaluations": 44,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 42,
+    "no_candidate_passes": 44,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 41,
+    "new_stories_allowed": 2,
+    "retroactive_rows_retained": 42,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -80,58 +80,29 @@
     "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 0,
-    "material_update_replays_suppressed": 1,
+    "material_update_replays_suppressed": 0,
     "pre_generation_materiality_evaluations": 10,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 5,
     "pre_generation_materiality_holds": 5,
-    "pre_generation_materiality_model_calls": 5,
-    "pre_generation_materiality_cache_hits": 5,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_model_calls": 6,
+    "pre_generation_materiality_cache_hits": 4,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
     "terminal_permalink_cache_hits": 0,
-    "terminal_permalink_resolution_evaluations": 1,
-    "terminal_permalink_resolution_model_calls": 1,
+    "terminal_permalink_resolution_evaluations": 0,
+    "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
-    "terminal_permalink_holds_resolved": 1,
+    "terminal_permalink_holds_resolved": 0,
     "terminal_permalink_new_authorized": 1,
-    "terminal_permalink_duplicates_blocked": 0,
+    "terminal_permalink_duplicates_blocked": 1,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
     "late_published_skip_materiality_evaluations": 0,
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
-    {
-      "category_key": "local_gov",
-      "source_headline": "Port St. Lucie city council approves site plan for Costco - WFLX",
-      "source_url": "https://www.wflx.com/2026/10/13/port-st-lucie-city-council-approves-site-plan-costco",
-      "canonical_slug": "2026-10-13-port-st-lucie-approves-costco-entertainment-district-rehab-hospital-in-southern",
-      "canonical_headline": "Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Port St. Lucie City Council",
-        "Southern Grove jobs corridor",
-        "Costco site plan approval",
-        "Scott Samples quote",
-        "Tradition Entertainment District and rehab hospital site plans",
-        "same publication date 2026-10-13"
-      ],
-      "novel_facts": [],
-      "reason": "Both articles report the same Port St. Lucie City Council approval of three site plans (Costco, entertainment district, rehab hospital) in Southern Grove, same date, same quotes from Scott Samples and Wes McCurry, with no new facts beyond what the canonical already covers.",
-      "validation_errors": []
-    },
     {
       "category_key": "local_gov",
       "source_headline": "Neighbors call for pedestrian safety after Port St. Lucie teen’s death - WPEC",
@@ -146,28 +117,26 @@
       "cache_hit": false,
       "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "invalid_model_response",
+      "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.78,
+      "confidence": 0.82,
       "shared_anchors": [
         "14-year-old Treasure Coast High School student",
-        "struck by SUV while walking to school",
-        "Southwest Port St. Lucie Boulevard near Squirrel Avenue",
-        "Oct. 7 crash",
-        "death of student"
+        "struck while walking to school",
+        "Southwest Port St. Lucie Boulevard / Squirrel Avenue location",
+        "death from injuries"
       ],
       "novel_facts": [
-        "Neighbor-led calls for pedestrian safety improvements",
-        "Details on FDOT road widening/sidewalk project, cost ($25.6M), timeline (winter 2028)",
-        "No sidewalks and flooded shoulders during construction cited as contributing danger",
-        "Driver's statement that he believed he hit a construction barrel",
-        "Family donated organs",
-        "Unclear whether charges will be filed",
-        "FDOT did not respond to safety questions"
+        "Neighbor-led public accountability push for pedestrian safety during ongoing construction",
+        "FDOT $25.6M widening/sidewalk project details and 2028 completion timeline",
+        "FDOT declined to answer questions about interim pedestrian safety measures during construction",
+        "Driver's account that he believed he hit a construction barrel; cooperation with investigators and unresolved charging decision",
+        "Family's organ donation decision and mother's comments",
+        "Community criticism of lack of accountability following the death"
       ],
-      "reason": "This is the same underlying crash/death as the canonical article, but it introduces a distinct accountability angle: community criticism of FDOT/construction conditions, specifics of the road project and cost, driver's account and pending charge status, and calls for policy action. This goes beyond routine update and constitutes an independently newsworthy follow-up about infrastructure accountability, warranting its own story while the original remains the base incident report.",
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
-        "same_event_confidence_below_threshold"
+        "known_canonical_identity_conflict"
       ]
     },
     {
@@ -221,8 +190,9 @@
       "confidence": 0.97,
       "shared_anchors": [],
       "novel_facts": [
-        "Missing 15-year-old girl Cassandra Cerron, last seen October 11 in Port St. Lucie",
-        "Different missing person case from a different agency contact (Detective H. Nieves)"
+        "New missing person: Cassandra Cerron, 15-year-old girl",
+        "Last seen Oct. 11 in Port St. Lucie",
+        "Distinct from Robert La Polla case (47-year-old man missing since January)"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -337,17 +307,17 @@
       "semantic_action": "hold",
       "confidence": 0.78,
       "shared_anchors": [
-        "same 14-year-old Port St. Lucie teen",
-        "Port St. Lucie Boulevard near Squirrel Avenue",
-        "struck while walking to school Oct. 7",
-        "died from injuries"
+        "14-year-old Port St. Lucie student",
+        "struck while walking to school",
+        "Port St. Lucie Boulevard/Squirrel Avenue",
+        "death from injuries"
       ],
       "novel_facts": [
-        "family chose organ donation",
-        "commentary from organ donation advocates (Chris Craft, Tyre Gray)",
-        "national organ donation statistics and awareness messaging"
+        "family chose organ donation after his death",
+        "commentary from transplant advocates and a kidney recipient",
+        "broader organ donation awareness messaging tied to this family's decision"
       ],
-      "reason": "This follow-up covers the same crash/death but introduces a distinct, independently newsworthy angle: the family's decision to donate organs and broader community impact/advocacy, which is a new public-interest story beyond the original crash reporting rather than a routine update to the casualty report.",
+      "reason": "Same underlying crash/death as the canonical, but this article introduces a distinct, independently newsworthy follow-up: the family's organ donation decision and its public-interest impact, which is a new accountability/human-interest angle beyond the original crash/death report, warranting its own story rather than just updating the crash canonical.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
@@ -368,21 +338,20 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "invalid_model_response",
       "semantic_action": "hold",
-      "confidence": 0.78,
+      "confidence": 0.8,
       "shared_anchors": [
-        "14-year-old Treasure Coast High School student",
-        "struck by SUV while walking to school",
-        "Squirrel Avenue / Port St. Lucie Boulevard",
-        "death from injuries"
+        "Treasure Coast High School 14-year-old student death",
+        "Port St. Lucie Boulevard/Squirrel Avenue crash",
+        "struck by SUV while walking to school"
       ],
       "novel_facts": [
-        "Neighbor-led public outcry demanding pedestrian safety improvements",
-        "Details on lack of sidewalks and ongoing FDOT construction/widening project with $25.6M cost and 2028 completion",
-        "Driver's statement that he believed he struck a construction barrel, and unclear charging status",
-        "Organ donation by family",
-        "FDOT declined to answer questions about interim pedestrian safety measures during construction"
+        "Neighbor-led pedestrian safety advocacy following the death",
+        "Details on lack of sidewalks and ongoing FDOT construction/widening project with cost ($25.6M) and completion timeline (winter 2028)",
+        "FDOT declined to answer questions about interim pedestrian safety measures during construction",
+        "Driver's statement that he believed he struck a construction barrel, and unclear charging decision",
+        "Family's decision to donate organs and mother's comments"
       ],
-      "reason": "This is the same underlying crash and death as the canonical article, but it introduces a distinct, independently newsworthy accountability angle: community demands for pedestrian safety, FDOT's non-response on interim safety measures during construction, and new details about the driver's account and potential charges. This goes beyond routine update and raises a public-interest/accountability question meriting its own story.",
+      "reason": "This is the same crash/death reported earlier, but it introduces a distinct accountability angle: community demands for pedestrian safety, FDOT's non-response on interim safety measures during construction, and new details about the driver's account and potential charges. These elements raise a public-interest/accountability question beyond merely restating the death, meeting the bar for an independently newsworthy follow-up.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
@@ -405,17 +374,45 @@
       "semantic_action": "hold",
       "confidence": 0.97,
       "shared_anchors": [
-        "missing-person event family",
-        "Port St. Lucie/St. Lucie County locality"
+        "missing-person event type",
+        "Port St. Lucie / St. Lucie County locality"
       ],
       "novel_facts": [
-        "Missing person is Cassandra Cerron, 15-year-old girl, last seen Oct 11",
-        "Different case entirely from Robert La Polla, 47-year-old man missing since January"
+        "New missing person Cassandra Cerron, 15-year-old girl, last seen Oct 11, distinct from Robert La Polla case involving a 47-year-old man missing since January"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
+    },
+    {
+      "category_key": "indian_river",
+      "source_headline": "Misplaced cellphone sparks false weapon rumor at Vero Beach High School - cw34.com",
+      "source_url": "https://cw34.com/news/local/misplaced-cellphone-leads-false-weapon-rumor-vero-beach-high-school-school-district-of-indian-river-county-indian-river-county-sheriffs-office-crisis-in-the-classroom-florida-news?teaserSource=trending",
+      "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+      "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Vero Beach High School",
+        "Monday morning cellphone left in cafeteria",
+        "Indian River County School District statement",
+        "no credible weapon threat"
+      ],
+      "novel_facts": [
+        "Principal Serra Finnegan is named as having updated families"
+      ],
+      "reason": "Both articles report the identical incident: a misplaced cellphone in the Vero Beach High School cafeteria sparking a false weapon rumor on the same Monday, with the same district explanation. The only addition is the principal's name, which is incidental detail, not a material update like an arrest, injury, or official finding change.",
+      "validation_errors": []
     }
   ],
   "decisions": [
@@ -1240,10 +1237,30 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Vero Beach Airport Schedule Change Renews Focus On Treasure Coast Travel Options",
       "incoming_source_url": "https://www.wflx.com/2026/10/13/treasure-coast-travelers-say-limited-transportation-options-make-it-difficult-get-around?outputType=amp",
       "incoming_story_id": "story_020774",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce Ex-City Manager Mimms Convicted as AG Vows Corruption Crackdown",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428",
+      "incoming_story_id": "story_021219",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1264,155 +1281,339 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Vero Beach Airport Schedule Change Renews Focus On Treasure Coast Travel Options",
-      "incoming_source_url": "https://www.wflx.com/2026/10/13/treasure-coast-travelers-say-limited-transportation-options-make-it-difficult-get-around?outputType=amp",
-      "incoming_story_id": "story_020774",
+      "incoming_headline": "Fort Pierce Ex-City Manager Mimms Convicted as AG Vows Corruption Crackdown",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428",
+      "incoming_story_id": "story_021219",
       "candidates": [
         {
-          "slug": "2026-10-13-vero-beach-council-approves-lease-for-116-room-marriott-at-regional-airport",
-          "headline": "Vero Beach Council Approves Lease for Marriott at Regional Airport",
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4474,
-          "retrieval_score": 0.4104,
+          "terminal_recall_score": 0.7515,
+          "retrieval_score": 0.7295,
           "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-10-08-hurricane-deductibles-kick-in-statewide-including-treasure-coast-as-isaias-nears",
-          "headline": "Hurricane Deductibles Kick In Statewide, Including Treasure Coast, as Isaias Nears Panhandle",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4336,
-          "retrieval_score": 0.4086,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-breeze-airways-launches-4-nonstop-routes-from-vero-beach-to-east-coast-cities",
-          "headline": "Breeze Airways launches nonstop Vero Beach flights to Trenton, Baltimore, Pittsburgh, Atlantic City",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.426,
-          "retrieval_score": 0.425,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
-          "headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4214,
-          "retrieval_score": 0.3934,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
-          "headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4191,
-          "retrieval_score": 0.3941,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3862,
-          "retrieval_score": 0.3552,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
-          "headline": "Martin County Advances Data Center Moratorium, But New Project Would Be Exempt",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3732,
-          "retrieval_score": 0.3332,
-          "reasons": [
-            "publication_gap_0_days"
+            "moderate_fuzzy_headline",
+            "publication_gap_16_days",
+            "outside_recent_window"
           ]
         },
         {
           "slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
           "headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3728,
-          "retrieval_score": 0.3358,
+          "terminal_recall_score": 0.74,
+          "retrieval_score": 0.7,
           "reasons": [
-            "publication_gap_1_days"
+            "moderate_fuzzy_headline",
+            "publication_gap_0_days"
           ]
         },
         {
-          "slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
-          "headline": "Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case",
+          "slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3706,
-          "retrieval_score": 0.3426,
+          "terminal_recall_score": 0.5686,
+          "retrieval_score": 0.5466,
           "reasons": [
-            "publication_gap_8_days"
+            "publication_gap_6_days"
           ]
         },
         {
-          "slug": "2026-10-10-nearly-450000-without-power-in-florida-after-hurricane-isaias-no-confirmed-death",
-          "headline": "Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates",
+          "slug": "2026-09-30-fort-pierce-man-gets-probation-for-hiding-gun-used-in-june-shooting",
+          "headline": "Fort Pierce man gets probation for hiding gun used in June shooting",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3634,
-          "retrieval_score": 0.3264,
+          "terminal_recall_score": 0.478,
+          "retrieval_score": 0.478,
           "reasons": [
-            "publication_gap_3_days"
+            "publication_gap_14_days"
           ]
         },
         {
-          "slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
-          "headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
+          "slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3616,
-          "retrieval_score": 0.3246,
+          "terminal_recall_score": 0.462,
+          "retrieval_score": 0.422,
           "reasons": [
-            "publication_gap_1_days"
+            "publication_gap_37_days",
+            "outside_recent_window"
           ]
         },
         {
-          "slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-          "headline": "Sheriff: Deputies Heard Kittens Crying Underground in Hobe Sound Burial Case",
+          "slug": "2026-10-05-fort-pierce-man-charged-after-ramming-two-tow-trucks-with-u-haul",
+          "headline": "Fort Pierce Man Charged After Ramming Two Tow Trucks With U-Haul",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3582,
-          "retrieval_score": 0.3302,
+          "terminal_recall_score": 0.4612,
+          "retrieval_score": 0.4482,
           "reasons": [
-            "publication_gap_5_days"
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-returning-stuart-city-manager-michael-mortell-vows-more-structure-restored-trust",
+          "headline": "Returning Stuart City Manager Michael Mortell Vows More Structure, Restored Trust",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4554,
+          "retrieval_score": 0.4544,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-seniors-push-back-as-orange-avenue-center-sale-nears",
+          "headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4482,
+          "retrieval_score": 0.4352,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
+          "headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.447,
+          "retrieval_score": 0.434,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-fort-pierce-ends-crabbys-dockside-lease-over-nearly-334000-debt",
+          "headline": "Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4452,
+          "retrieval_score": 0.4112,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
+          "headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4369,
+          "retrieval_score": 0.4329,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-port-st-lucie-man-fights-citys-126-camera-network-in-federal-court",
+          "headline": "Port St. Lucie Man Fights City's 126-Camera Network in Federal Court",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4359,
+          "retrieval_score": 0.4019,
+          "reasons": [
+            "publication_gap_2_days"
           ]
         }
       ],
       "initial_decision": {
         "status": "validated",
-        "action": "hold",
-        "recommended_action": "new_story",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.97,
+        "shared_anchors": [
+          "Nicholas/Nick Mimms",
+          "Fort Pierce City Manager conviction for official misconduct",
+          "acquittal on bid tampering",
+          "AG James Uthmeier press conference",
+          "25+ active public corruption investigations",
+          "same publication date 2026-10-14"
+        ],
+        "novel_facts": [],
+        "reason": "This incoming article is identical in slug and event to the existing canonical candidate dated the same day, covering AG Uthmeier's press conference citing the Mimms conviction as the first case of the new corruption unit. Same participants, same quotes, same announcement, no new facts beyond what's already captured.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.97,
+        "shared_anchors": [
+          "Nicholas/Nick Mimms",
+          "Fort Pierce City Manager conviction for official misconduct",
+          "acquittal on bid tampering",
+          "AG James Uthmeier press conference",
+          "25+ active public corruption investigations",
+          "same publication date 2026-10-14"
+        ],
+        "novel_facts": [],
+        "reason": "This incoming article is identical in slug and event to the existing canonical candidate dated the same day, covering AG Uthmeier's press conference citing the Mimms conviction as the first case of the new corruption unit. Same participants, same quotes, same announcement, no new facts beyond what's already captured.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
+      "incoming_source_url": "https://cbs12.com/news/local/police-activity-draws-large-response-to-lincoln-park-in-fort-pierce-available-lincoln-park-fort-pierce-fort-pierce-police-department-fort-pierce-police-police-presence-police-activity-crime-scene-tape-police-cruisers-police",
+      "incoming_story_id": "story_021281",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.4,
-        "shared_anchors": [
-          "vero-beach-regional-airport",
-          "breeze-airways"
-        ],
-        "novel_facts": [
-          "Breeze Airways changed its Westchester-Vero Beach flight from evening to morning departure",
-          "Traveler complaints about disrupted schedules (physician, Westchester traveler)",
-          "Peter Masella quote on lack of Brightline station and transportation difficulty",
-          "Airport Director Brandon Dambeck comment on route monitoring"
-        ],
-        "reason": "This article is a distinct human-interest/transportation-access story centered on a Breeze Airways schedule change and traveler complaints, referencing the prior nonstop-route launch only as background. No candidate covers this specific schedule-change event or these travelers' complaints; the closest candidate (2026-09-30 nonstop routes launch) is a different, earlier event being referenced retrospectively, not updated with new facts about that launch itself.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
+      "incoming_source_url": "https://cbs12.com/news/local/police-activity-draws-large-response-to-lincoln-park-in-fort-pierce-available-lincoln-park-fort-pierce-fort-pierce-police-department-fort-pierce-police-police-presence-police-activity-crime-scene-tape-police-cruisers-police",
+      "incoming_story_id": "story_021281",
+      "candidates": [
+        {
+          "slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.679,
+          "retrieval_score": 0.589,
+          "reasons": [
+            "publication_gap_37_days",
+            "structured_identity_conflict",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6773,
+          "retrieval_score": 0.6053,
+          "reasons": [
+            "publication_gap_6_days",
+            "structured_identity_conflict"
+          ]
+        },
+        {
+          "slug": "2026-09-30-fort-pierce-man-gets-probation-for-hiding-gun-used-in-june-shooting",
+          "headline": "Fort Pierce man gets probation for hiding gun used in June shooting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6427,
+          "retrieval_score": 0.5927,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
+          "headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.641,
+          "retrieval_score": 0.578,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-man-charged-after-ramming-two-tow-trucks-with-u-haul",
+          "headline": "Fort Pierce Man Charged After Ramming Two Tow Trucks With U-Haul",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5943,
+          "retrieval_score": 0.5313,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
+          "headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4778,
+          "retrieval_score": 0.4408,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-fort-pierce-ends-crabbys-dockside-lease-over-nearly-334000-debt",
+          "headline": "Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4728,
+          "retrieval_score": 0.4388,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
+          "headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4607,
+          "retrieval_score": 0.4447,
+          "reasons": [
+            "publication_gap_9_days",
+            "structured_identity_conflict"
+          ]
+        },
+        {
+          "slug": "2026-10-01-fort-pierce-crews-repair-south-indian-river-drive-erosion-again",
+          "headline": "Fort Pierce Repairs South Indian River Drive Erosion for Second Time in a Week",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4599,
+          "retrieval_score": 0.4559,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-10-grease-fire-sparks-propane-explosion-at-port-st-lucie-home",
+          "headline": "Port St. Lucie Fire Victim Identified as Church Helps Family Recover",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4436,
+          "retrieval_score": 0.4156,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+          "headline": "Otto Lenke Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4425,
+          "retrieval_score": 0.4025,
+          "reasons": [
+            "publication_gap_75_days",
+            "structured_identity_conflict",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4423,
+          "retrieval_score": 0.4203,
+          "reasons": [
+            "publication_gap_16_days",
+            "outside_recent_window"
+          ]
+        }
+      ],
+      "initial_decision": {
         "status": "validated",
         "action": "new_story",
         "recommended_action": "new_story",
@@ -1420,22 +1621,18 @@
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.78,
-        "shared_anchors": [
-          "vero-beach-regional-airport",
-          "breeze-airways"
-        ],
+        "confidence": 0.95,
+        "shared_anchors": [],
         "novel_facts": [
-          "Breeze Airways changed Westchester-Vero Beach flight from evening to morning departure",
-          "Traveler complaints (physician rescheduling patients, Westchester traveler taxi burden)",
-          "Peter Masella quote on lack of Brightline station and transportation difficulty",
-          "Airport Director Brandon Dambeck comment on route monitoring and network management"
+          "Body of man in 30s found in Lincoln Park lake near North 13th Street",
+          "Discovered Wednesday morning by citizen who flagged down officer",
+          "No apparent signs of trauma, investigators awaiting autopsy/toxicology"
         ],
-        "reason": "This article centers on a distinct event: a schedule change to the Breeze Airways Westchester-Vero Beach route and resulting traveler complaints about regional transportation access. None of the candidates cover this schedule change or these complaints. The closest candidate (2026-09-30 nonstop routes launch) is a different event — the launch of four new destinations — referenced only as background context, not updated with new facts about that launch itself. No candidate shares the core incident anchor (the schedule shift and its impact on travelers).",
+        "reason": "No candidate covers this distinct incident of a man's body found in a Lincoln Park lake in Fort Pierce. Candidates involve unrelated events (hit-and-run death, dog neglect case, gun-hiding plea, shooting arrests, U-Haul incident, Mimms trial, etc.) with no shared victim, location, or case anchors. This is a new standalone event.",
         "validation_errors": [],
-        "consistency_repairs": [],
-        "resolution_pass": true
+        "consistency_repairs": []
       },
+      "resolution_decision": {},
       "decision": {
         "status": "validated",
         "action": "new_story",
@@ -1444,22 +1641,16 @@
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.78,
-        "shared_anchors": [
-          "vero-beach-regional-airport",
-          "breeze-airways"
-        ],
+        "confidence": 0.95,
+        "shared_anchors": [],
         "novel_facts": [
-          "Breeze Airways changed Westchester-Vero Beach flight from evening to morning departure",
-          "Traveler complaints (physician rescheduling patients, Westchester traveler taxi burden)",
-          "Peter Masella quote on lack of Brightline station and transportation difficulty",
-          "Airport Director Brandon Dambeck comment on route monitoring and network management"
+          "Body of man in 30s found in Lincoln Park lake near North 13th Street",
+          "Discovered Wednesday morning by citizen who flagged down officer",
+          "No apparent signs of trauma, investigators awaiting autopsy/toxicology"
         ],
-        "reason": "This article centers on a distinct event: a schedule change to the Breeze Airways Westchester-Vero Beach route and resulting traveler complaints about regional transportation access. None of the candidates cover this schedule change or these complaints. The closest candidate (2026-09-30 nonstop routes launch) is a different event — the launch of four new destinations — referenced only as background context, not updated with new facts about that launch itself. No candidate shares the core incident anchor (the schedule shift and its impact on travelers).",
+        "reason": "No candidate covers this distinct incident of a man's body found in a Lincoln Park lake in Fort Pierce. Candidates involve unrelated events (hit-and-run death, dog neglect case, gun-hiding plea, shooting arrests, U-Haul incident, Mimms trial, etc.) with no shared victim, location, or case anchors. This is a new standalone event.",
         "validation_errors": [],
-        "consistency_repairs": [],
-        "resolution_pass": true,
-        "resolved_from_initial_terminal_hold": true
+        "consistency_repairs": []
       }
     }
   ],
