@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-14T01:21:09Z",
+  "generated_at": "2026-10-14T01:50:05Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,26 +15,27 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
+      "cache_hit": 1,
+      "category_eligibility_archive_recovery": 4,
       "generated_live": 3,
       "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 5,
+      "no_category_eligible_sources": 4,
       "publication_quality_rejected": 1
     },
     "model_attempt_count": 4,
-    "model_elapsed_seconds": 75.274,
-    "archive_recovery_requested_count": 6,
+    "model_elapsed_seconds": 57.979,
+    "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 46,
-    "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 14,
+    "category_eligibility_rejection_count": 5,
+    "published_story_duplicate_suppression_count": 48,
+    "story_aware_update_context_count": 1,
+    "material_update_promotion_evaluation_count": 15,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 8,
+    "material_update_promotion_cache_hit_count": 9,
     "material_update_promotion_model_call_count": 6
   },
   "categories": [
@@ -43,9 +44,9 @@
       "category_label": "Local Government",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 12,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 11,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -53,11 +54,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 33.772,
+          "elapsed_seconds": 25.868,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 33.772,
+      "model_elapsed_seconds": 25.868,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -68,10 +69,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -100,6 +101,16 @@
           "editorial_story_id": "story_020402",
           "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
           "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "City council approves lease agreement to bring hotel to Vero Beach Regional Airport area - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/13/city-council-approves-lease-agreement-bring-hotel-vero-beach-regional-airport-area",
+          "editorial_story_id": "story_021126",
+          "canonical_slug": "2026-10-13-vero-beach-council-approves-lease-for-116-room-marriott-at-regional-airport",
+          "canonical_headline": "Vero Beach Council Approves Lease for 116-Room Marriott at Regional Airport",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -190,22 +201,36 @@
           "confidence": 0.78,
           "shared_anchors": [
             "14-year-old Treasure Coast High School student",
-            "struck by SUV near Squirrel Avenue/SW Port St. Lucie Boulevard",
-            "death from injuries",
-            "Port St. Lucie Boulevard location"
+            "struck by SUV near Squirrel Avenue/Port St. Lucie Boulevard",
+            "died from injuries"
           ],
           "novel_facts": [
-            "Neighbor advocacy for pedestrian safety (Irene Ange quotes)",
-            "Organ donation by family",
-            "FDOT $25.6 million widening/sidewalk project details and 2028 completion timeline",
-            "Lack of sidewalks and flooded shoulders cited as contributing hazards",
-            "Driver's statement that he believed he hit a construction barrel; cooperation with investigators; unclear charging decision",
-            "FDOT non-response to safety measures during construction"
+            "Neighbor-led calls for pedestrian safety improvements along the construction corridor",
+            "Details on FDOT widening project, sidewalk plans, timeline (winter 2028) and $25.6 million cost",
+            "FDOT declined to answer about interim pedestrian safety measures during construction",
+            "Driver's statement that he believed he hit a construction barrel; cooperating with investigators, charges undetermined",
+            "Family's decision to donate organs and mother's comments",
+            "Named neighbor Irene Ange's firsthand account and criticism of lack of accountability"
           ],
-          "reason": "Same underlying crash/death as the canonical, but this article introduces a distinct accountability and policy angle: community pressure on FDOT over pedestrian safety during ongoing construction, specific infrastructure spending/timeline details, and new driver/investigation facts (barrel claim, uncertain charges). This constitutes an independently newsworthy follow-up about public accountability rather than a mere repeat of the death report.",
+          "reason": "This is the same underlying crash/death as the canonical article, but it introduces a distinct accountability and policy angle: community demands for pedestrian safety given ongoing construction, FDOT's unresponsiveness, the driver's exculpatory statement about a construction barrel, and open questions about charges. These elements constitute an independently newsworthy follow-up beyond a routine update to the death confirmation, warranting its own article while the underlying event remains linked to the original incident.",
           "validation_errors": [
             "same_event_confidence_below_threshold"
           ]
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "City council approves lease agreement to bring hotel to Vero Beach Regional Airport area - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/13/city-council-approves-lease-agreement-bring-hotel-vero-beach-regional-airport-area",
+          "canonical_slug": "2026-10-13-vero-beach-council-approves-lease-for-116-room-marriott-at-regional-airport",
+          "canonical_headline": "Vero Beach Council Approves Lease for 116-Room Marriott at Regional Airport",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "local_gov",
@@ -272,18 +297,18 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County Terminates MARTY Bus Contract, Moves to Emergency Deal With MTM Transit",
-      "generated_card_count": 2,
-      "elapsed_seconds": 70.497
+      "live_hero_headline": "Martin County Terminates MARTY Bus Contract, Moves to Restore Service With MTM Transit",
+      "generated_card_count": 0,
+      "elapsed_seconds": 55.741
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 12,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 10,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 1,
@@ -291,11 +316,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.287,
+          "elapsed_seconds": 6.434,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 12.287,
+      "model_elapsed_seconds": 6.434,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -306,8 +331,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -322,23 +347,9 @@
           "local_nexus_signals": [],
           "headline": "St. Lucie County fire chief faces calls to resign after overwhelming no-confidence vote",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-chief-faces-calls-to-resign-after-overwhelming-no-confidence-vote"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - cw34.com",
-          "source_url": "https://cw34.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -348,6 +359,16 @@
           "canonical_slug": "2026-10-13-vero-beach-council-approves-lease-for-116-room-marriott-at-regional-airport",
           "canonical_headline": "Vero Beach Council Approves Lease for 116-Room Marriott at Regional Airport",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie nurse accused of stealing fentanyl from ICU patient’s IV bag - WPBF",
+          "source_url": "https://www.wpbf.com/article/port-st-lucie-nurse-accused-of-stealing-fentanyl-from-icu-patients-iv-bag/74124384",
+          "editorial_story_id": "story_020811",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -402,6 +423,16 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - cw34.com",
+          "source_url": "https://cw34.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
+          "editorial_story_id": "story_020870",
+          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Misplaced cellphone sparks false weapon rumor at Vero Beach High School - cw34.com",
           "source_url": "https://cw34.com/news/local/misplaced-cellphone-leads-false-weapon-rumor-vero-beach-high-school-school-district-of-indian-river-county-indian-river-county-sheriffs-office-crisis-in-the-classroom-florida-news",
           "editorial_story_id": "story_020840",
@@ -411,51 +442,11 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - cw34.com",
-          "source_url": "https://cw34.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_020870"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['palm-beach-county', 'st-lucie', 'st-lucie-county']",
-            "shared_event_families=['crash']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['becker-road', 'county-i95-florida-turnpike-becker-road', 'exit-114-for-becker-road', 'i95-lane']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['beck-road-turnpike', 'block-lane-should', 'block-lane-should-near', 'crash-block-lane', 'crash-block-lane-should', 'lane-should-near', 'lane-should-near-beck', 'near-beck-road', 'near-beck-road-turnpike', 'should-near-beck', 'should-near-beck-road']",
-            "shared_headline_topic_core=['beck', 'block', 'crash', 'lane', 'near', 'road', 'should', 'turnpike']",
-            "shared_distinctive_token_count=56",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 2,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
@@ -472,6 +463,38 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie nurse accused of stealing fentanyl from ICU patient’s IV bag - WPBF",
+          "source_url": "https://www.wpbf.com/article/port-st-lucie-nurse-accused-of-stealing-fentanyl-from-icu-patients-iv-bag/74124384",
+          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.9,
+          "shared_anchors": [
+            "Leslie Pope",
+            "Cleveland Clinic Tradition Hospital",
+            "Port St. Lucie",
+            "fentanyl diverted from ICU patient's IV",
+            "Port St. Lucie Police Department investigation"
+          ],
+          "novel_facts": [
+            "Additional narrative detail about second incident where family member intervened",
+            "Quotes from police PIO describing investigation timeline and video evidence",
+            "Cleveland Clinic statement that employee no longer works there"
+          ],
+          "reason": "This is the same arrest of Leslie Pope for diverting fentanyl from a patient's IV at Cleveland Clinic Tradition, already reported in the canonical article. The incoming piece adds narrative color, quotes, and a hospital statement, but no material new fact like a new charge, court action, or outcome that changes what readers need to know.",
+          "validation_errors": []
         },
         {
           "category_key": "crime",
@@ -536,13 +559,13 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.97,
+          "confidence": 0.95,
           "shared_anchors": [
-            "port-st-lucie-police involvement",
+            "Port St. Lucie location",
             "missing-person event family"
           ],
           "novel_facts": [
-            "Different missing person entirely: Cassandra Cerron, 15-year-old girl last seen Oct 11, distinct from Robert La Polla, 47-year-old man missing since January"
+            "Different missing person (Cassandra Cerron, 15-year-old girl) with distinct case details and timeline from Robert La Polla, a 47-year-old man missing since January"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -581,6 +604,21 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - cw34.com",
+          "source_url": "https://cw34.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
+          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Misplaced cellphone sparks false weapon rumor at Vero Beach High School - cw34.com",
           "source_url": "https://cw34.com/news/local/misplaced-cellphone-leads-false-weapon-rumor-vero-beach-high-school-school-district-of-indian-river-county-indian-river-county-sheriffs-office-crisis-in-the-classroom-florida-news",
           "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
@@ -598,7 +636,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 42.025
+      "elapsed_seconds": 36.164
     },
     {
       "category_key": "business",
@@ -917,15 +955,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 22.111
+      "elapsed_seconds": 22.037
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 3,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 4,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -942,7 +980,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
@@ -1032,7 +1070,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.003
+      "elapsed_seconds": 18.007
     },
     {
       "category_key": "things_to_do",
@@ -1138,7 +1176,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.222
+      "elapsed_seconds": 20.829
     },
     {
       "category_key": "florida",
@@ -1228,7 +1266,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.645
+      "elapsed_seconds": 11.602
     },
     {
       "category_key": "martin",
@@ -1236,8 +1274,8 @@
       "status": "generated_live",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "publishable_source_count": 4,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1245,11 +1283,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.601,
+          "elapsed_seconds": 19.47,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 17.601,
+      "model_elapsed_seconds": 19.47,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1260,7 +1298,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
@@ -1377,30 +1415,23 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County Terminates MARTY Bus Contractor, Moves to Rehire Drivers",
+      "live_hero_headline": "Martin County Moves to Hire MTM Transit for $3M Emergency MARTY Bus Deal",
       "generated_card_count": 0,
-      "elapsed_seconds": 38.009
+      "elapsed_seconds": 39.21
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 18,
-      "publishable_source_count": 1,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 2,
       "selected_source_count": 1,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.614,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 11.614,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1411,10 +1442,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 12,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1508,16 +1539,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce ends lease with Crabby's Dockside operator over unpaid bills - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-crabbys-dockside-lease-unpaid-bills/74111793",
-          "editorial_story_id": "story_020911",
-          "canonical_slug": "2026-10-12-fort-pierce-ends-crabbys-dockside-lease-over-nearly-334000-debt",
-          "canonical_headline": "Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
           "editorial_story_id": "story_020868",
@@ -1555,8 +1576,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1579,12 +1600,12 @@
           "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
           "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
           "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
+          "identity_basis": "same_event_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1592,16 +1613,13 @@
           "shared_anchors": [
             "Leslie Pope",
             "Cleveland Clinic Tradition Hospital",
-            "Port St. Lucie",
-            "fentanyl diverted from ICU patient's IV",
-            "Port St. Lucie Police Department investigation"
+            "Port St. Lucie Police Department",
+            "fentanyl IV diversion allegation"
           ],
           "novel_facts": [
-            "Additional narrative detail about second incident where family member intervened",
-            "Quotes from police PIO describing investigation timeline and video evidence",
-            "Cleveland Clinic statement that employee no longer works there"
+            "Additional narrative detail on timeline (June 24-25 incidents) and hospital statement confirming she no longer works there"
           ],
-          "reason": "This is the same arrest of Leslie Pope for diverting fentanyl from a patient's IV at Cleveland Clinic Tradition, already reported in the canonical article. The incoming piece adds narrative color, quotes, and a hospital statement, but no material new fact like a new charge, court action, or outcome that changes what readers need to know.",
+          "reason": "This is the same arrest/case already covered in the canonical article about Leslie Pope being charged with diverting fentanyl at Cleveland Clinic Tradition. The incoming piece adds narrative detail and quotes but no new material facts like additional charges, court outcomes, or new developments beyond the original arrest report.",
           "validation_errors": []
         },
         {
@@ -1650,9 +1668,9 @@
           "cache_hit": false,
           "model_call": true,
           "action": "preserve_existing_canonical",
-          "semantic_status": "invalid_model_response",
+          "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.78,
+          "confidence": 0.82,
           "shared_anchors": [
             "14-year-old Port St. Lucie teen struck while walking to school",
             "Port St. Lucie Boulevard near Squirrel Avenue",
@@ -1660,14 +1678,14 @@
             "death from injuries"
           ],
           "novel_facts": [
-            "family chose organ donation",
-            "advocacy commentary from Donate Life Florida and South Florida Donor Network",
-            "statistics on national transplant waiting lists",
-            "statements from Tax Collector Chris Craft and transplant recipient Tyre Gray"
+            "Family chose organ donation after his death",
+            "Commentary from St. Lucie County Tax Collector Chris Craft on Donate Life Florida",
+            "Perspective from kidney transplant recipient Tyre Gray of South Florida Donor Network",
+            "National organ donor waitlist statistics and advocacy angle"
           ],
-          "reason": "Same underlying crash and death as the canonical, but this article introduces a distinct, independently newsworthy follow-up: the family's organ donation decision and its broader public-interest angle on organ donation advocacy, which stands as its own story beyond the original crash/death report.",
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
-            "same_event_confidence_below_threshold"
+            "known_canonical_identity_conflict"
           ]
         },
         {
@@ -1689,20 +1707,19 @@
           "confidence": 0.78,
           "shared_anchors": [
             "14-year-old Treasure Coast High School student",
-            "struck near Squirrel Avenue/Port St. Lucie Boulevard",
-            "Oct. 7 crash",
+            "Port St. Lucie Boulevard near Squirrel Avenue",
+            "struck by SUV while walking to school",
             "death from injuries"
           ],
           "novel_facts": [
-            "neighbors and community members publicly demanding pedestrian safety improvements",
-            "detail that construction and lack of sidewalks contributed to hazard",
-            "FDOT $25.6M widening/sidewalk project details and 2028 completion timeline",
-            "FDOT declined to answer about interim safety measures during construction",
-            "driver's statement that he believed he hit a construction barrel, cooperating with investigators",
-            "organ donation by family",
-            "unclear whether charges will be filed"
+            "Neighbor-led pedestrian safety advocacy and quotes (Irene Ange)",
+            "Details on lack of sidewalks and ongoing road construction/widening project",
+            "FDOT project scope, cost ($25.6M), timeline (winter 2028)",
+            "FDOT declined to answer questions about interim pedestrian safety measures",
+            "Driver's statement that he believed he hit a construction barrel; unclear if charges will be filed",
+            "Family's decision to donate organs; mother's comments on son's personality"
           ],
-          "reason": "This is the same underlying crash/death as the canonical article, but it introduces a distinct accountability angle: community criticism of FDOT's construction-zone safety measures, specifics of the road project and cost, and the open question of potential charges against the driver. This goes beyond routine follow-up color and raises a public-interest/accountability question meriting its own story rather than a simple update.",
+          "reason": "Same underlying crash and death as the canonical story, but this article introduces a distinct accountability angle: community pushback on FDOT/construction safety gaps, specific infrastructure project details, lack of agency response, and new case details (driver's account, organ donation) that raise public-interest questions beyond the original death report, meriting independent coverage rather than a silent update.",
           "validation_errors": [
             "same_event_confidence_below_threshold"
           ]
@@ -1752,14 +1769,15 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.95,
+          "confidence": 0.97,
           "shared_anchors": [
-            "port-st-lucie",
-            "missing-person event family"
+            "missing-person event family",
+            "Port St. Lucie / St. Lucie County locality"
           ],
           "novel_facts": [
-            "Missing 15-year-old girl Cassandra Cerron, last seen Oct 11",
-            "Different missing person case, different victim, different circumstances"
+            "Missing 15-year-old Cassandra Cerron",
+            "last seen Oct 11",
+            "Port St. Lucie Police Detective H. Nieves investigating"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1787,21 +1805,6 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-city-council-approves-site-plan-for-costco",
           "canonical_slug": "2026-10-13-port-st-lucie-approves-costco-entertainment-district-rehab-hospital-in-southern",
           "canonical_headline": "Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce ends lease with Crabby's Dockside operator over unpaid bills - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-crabbys-dockside-lease-unpaid-bills/74111793",
-          "canonical_slug": "2026-10-12-fort-pierce-ends-crabbys-dockside-lease-over-nearly-334000-debt",
-          "canonical_headline": "Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1843,27 +1846,31 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "St. Lucie Fire Board Member Calls for Chief's Resignation After No-Confidence Vote",
-      "generated_card_count": 0,
-      "elapsed_seconds": 44.977
+      "elapsed_seconds": 32.256
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 9,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 10,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Indian River County category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 6.207,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 6.207,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1872,7 +1879,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
@@ -1987,7 +1994,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.985
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Misplaced Cellphone Sparks False Weapon Rumor at Vero Beach High School",
+      "generated_card_count": 0,
+      "elapsed_seconds": 31.085
     }
   ]
 }
