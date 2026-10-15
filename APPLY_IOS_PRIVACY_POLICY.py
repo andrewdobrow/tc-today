@@ -26,7 +26,7 @@ def updated_privacy(source: str) -> str:
     source = replace_once(
         source,
         'Treasure Coast Today is an independent local news website owned and operated by Andrew Dobrow. This policy explains what information is collected when you visit the site, how it is used, and your choices.',
-        'Treasure Coast Today is an independent local news website and iPhone app owned and operated by Andrew Dobrow. This policy explains what information is collected when you use the website or app, how it is used, and your choices.'
+        'Treasure Coast Today is an independent local news website and iPhone app owned and operated by Treasure Coast Today LLC, a Florida limited liability company founded and owned by Andrew Dobrow. This policy explains what information is collected when you use the website or app, how it is used, and your choices.'
     )
     source = replace_once(source, 'Last updated: September 17, 2026', 'Last updated: October 12, 2026')
     source = replace_once(source,

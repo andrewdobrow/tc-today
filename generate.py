@@ -17397,7 +17397,7 @@ def _page_footer():
       <div class="footer-column"><strong>Counties</strong><a href="/?cat=martin">Martin County</a><a href="/?cat=st_lucie">St. Lucie County</a><a href="/?cat=indian_river">Indian River County</a></div>
       {connect_column}
     </div>
-    <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
+    <div class="footer-bottom">© 2026 Treasure Coast Today. Operated by Treasure Coast Today LLC. All rights reserved.</div>
   </footer>
   <script src="/main.js"></script>"""
 
@@ -17553,7 +17553,7 @@ def render_editorial_standards_page():
         <p>We work to get things right, and when we get something wrong we correct it promptly and transparently. If you spot an error, please tell us. See our <a href="/corrections-policy.html">Corrections Policy</a> for how we handle mistakes.</p>
 
         <h2>Independence</h2>
-        <p>Treasure Coast Today is independently owned and personally funded, with no parent company and no outside investors. {"Reader memberships and advertising support the publication, but neither members nor advertisers influence coverage decisions." if MEMBERSHIP_UI_ENABLED else "Advertising and editorial are kept separate: advertisers do not receive coverage in exchange for their business, and paying for an ad does not influence how or whether we report a story."} See our <a href="/ownership.html">Ownership &amp; Funding</a> page for details.</p>
+        <p>Treasure Coast Today is operated by Treasure Coast Today LLC, an independent Florida company with no parent company or outside investors. {"Reader memberships, advertising, and clearly labeled sponsorships support the site, but commercial relationships do not determine independent editorial decisions." if MEMBERSHIP_UI_ENABLED else "Advertising and clearly labeled sponsored content remain separate from independent reporting. Commercial relationships do not determine editorial coverage."} See our <a href="/ownership.html">Ownership &amp; Funding</a> page for details.</p>
 
         <h2>Fairness</h2>
         <p>We aim to be fair to the people and institutions we cover, to give a reasonable opportunity for response where appropriate, and to distinguish clearly between news and opinion.</p>
@@ -17623,21 +17623,21 @@ def render_corrections_page():
 def render_ownership_page():
     head   = _page_head(
         "Ownership &amp; Funding | Treasure Coast Today",
-        "Treasure Coast Today is independently owned and personally funded by Andrew Dobrow, with no parent company and no outside investors.",
+        "Treasure Coast Today is operated by Treasure Coast Today LLC, an independent Florida company owned by founder and publisher Andrew Dobrow.",
         "/ownership.html",
     )
     header = _page_header()
     footer = _page_footer()
     funding_copy = (
-        "Treasure Coast Today is personally funded by its owner and supported by reader memberships and advertising. "
+        "Treasure Coast Today is supported by reader memberships, advertising, and clearly labeled sponsored content and partnerships, with additional funding from its owner. "
         "It has no outside investors, grants, or financial backers, and it is not funded by any political party, campaign, government agency or advocacy organization."
         if MEMBERSHIP_UI_ENABLED else
-        "Treasure Coast Today is personally funded by its owner and supported by advertising. It has no outside investors, grants, or financial backers, and it is not funded by any political party, campaign, government agency or advocacy organization."
+        "Treasure Coast Today is supported by advertising and clearly labeled sponsorships, with additional funding from its owner. It has no outside investors, grants, or financial backers, and it is not funded by any political party, campaign, government agency or advocacy organization."
     )
     independence_copy = (
-        "Reader memberships and advertising support Treasure Coast Today while remaining separate from editorial decisions. "
-        "Members do not receive influence over coverage, and advertisers do not receive news coverage in exchange for their business. "
-        "Buying an ad or membership does not influence whether or how we report on a person, business or organization. Advertisements are identified as such."
+        "Reader memberships, advertising, and clearly labeled sponsorships support Treasure Coast Today. "
+        "Sponsored content is identified as paid content and kept separate from independent reporting. "
+        "Subscribers, advertisers, and sponsors do not determine whether or how we report on a person, business, or organization."
         if MEMBERSHIP_UI_ENABLED else
         "Advertising revenue supports Treasure Coast Today and is kept separate from editorial decisions. Advertisers do not receive news coverage in exchange for their business, and buying an ad does not influence whether or how we report on a person, business or organization. Advertisements are identified as such."
     )
@@ -17656,7 +17656,7 @@ def render_ownership_page():
       <p class="policy-updated">Who owns Treasure Coast Today, and how it is funded.</p>
       <div class="policy-body">
         <h2>Ownership</h2>
-        <p>Treasure Coast Today is independently owned and operated by Andrew Dobrow, its founder and publisher. It is a sole proprietorship with a single owner. There is no parent company, no corporate group, and no outside ownership stake in the publication.</p>
+        <p>Treasure Coast Today is owned and operated by Treasure Coast Today LLC, a Florida single-member limited liability company. Andrew Dobrow is its founder, sole owner, and publisher. There is no parent company, corporate group, or outside ownership stake in the site.</p>
 
         <h2>Funding</h2>
         <p>{funding_copy}</p>
@@ -17711,7 +17711,7 @@ def render_about_page():
       <div class="about-body">
         <p>Treasure Coast Today is an independent local news outlet covering Martin County, St. Lucie County, and Indian River County, Florida. We bring residents the stories that matter most close to home.</p>
         <p>Our focus is simple: the news that actually affects the people who live and work here. From county commission decisions in Stuart to development in Port St. Lucie, school district news in Vero Beach to public safety in Fort Pierce.</p>
-        <p>Treasure Coast Today was founded by Andrew Dobrow, who serves as its publisher. It is independently owned and personally funded, with no parent company and no outside investors, so our coverage decisions answer only to our readers.</p>
+        <p>Treasure Coast Today was founded by Andrew Dobrow, who serves as its publisher. The site is owned and operated by Treasure Coast Today LLC, an independent Florida limited liability company with no parent company or outside investors. Editorial decisions remain independent of advertisers and sponsors.</p>
         <h2>Coverage area</h2>
         <p><strong>Martin County:</strong> Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno.</p>
         <p><strong>St. Lucie County:</strong> Port St. Lucie, Fort Pierce, St. Lucie West.</p>
