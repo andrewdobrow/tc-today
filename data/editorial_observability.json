@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-15T12:55:12Z",
+  "generated_at": "2026-10-15T15:55:28Z",
   "mode": "shadow",
   "publication_behavior_changed": false,
   "activation": {
@@ -21,15 +21,35 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 3,
-    "placements_after": 3,
+    "placements_before": 4,
+    "placements_after": 4,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
-    "recommendations": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wpbf.com/article/florida-martin-county-bus-service-marty-shutdown/74124474",
+        "headline": "Martin County Commissioners Vote to Negotiate $3M Deal to Restore MARTY Bus Service",
+        "source_title_key": "martin county commissioners vote to negotiate 3m deal to restore marty bus service",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-i-m-abruptly-administration-administrator-allowed-b1281e24",
+        "canonical_is_custom": false,
+        "canonical_title": "Martin County Commission Votes to Negotiate Deal to Restore MARTY Bus Service",
+        "canonical_source": "",
+        "canonical_url": "https://www.wpbf.com/article/florida-martin-county-bus-service-marty-shutdown/74124474",
+        "reason": "Same story and safe normalized stage 'proposal-or-expected' at 98% confidence.",
+        "category": "martin",
+        "placement": "card"
+      }
+    ],
     "applied_actions": [],
     "enforcement_allowlist": [
       "custom_canonical_protection",
@@ -51,33 +71,25 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 178,
+    "candidates_processed": 176,
     "routes": {
-      "generate_new": 26,
-      "skip": 152
+      "generate_new": 29,
+      "skip": 146,
+      "update_existing": 1
     },
     "eligibility": {
-      "listing": 6,
+      "listing": 5,
       "low_value": 116,
-      "publishable": 56
+      "publishable": 55
     },
     "source_classes": {
-      "aggregator": 122,
-      "local_news": 37,
-      "regional_news": 17,
-      "unknown": 2
+      "aggregator": 121,
+      "local_news": 38,
+      "regional_news": 14,
+      "unknown": 3
     },
-    "rejected_count": 6,
+    "rejected_count": 5,
     "rejected_examples": [
-      {
-        "headline": "Social Security Benefits Will Rise 3.6% in 2027—but Some Key Costs Are Rising Faster - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQZkswYm1UZ2tOa1R5NXVQWWtLZDJtTkhMU2s5eEpoOVlla2RCT25lRFFhY0JxeHcyd25BazF4WUxJTXlnaXNmc3ptWE10S1dJOGNvR0VtVWhlaHpfd0loS1dBMUFidU0xSFBZYmRWbnRiTU5kYXhpeVoxYXNaR0t6amxERktId3prOVU3YnRJTHJ4UQ?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
       {
         "headline": "122 Coral Reef Ct N, Palm Coast, FL 32137 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxNRnZHalRkemNVM0YycXU5VE5DQWxMcWlfV3d5TE1vZUE2cEdFdXVEd2QxLWhENTdjY19Fb2NhblQxQWQ2SnpLU3ZfY0FxckF5aEQxVEloc3FvU0dqUXR6TTBOelFhcUo4cExpb1VfMENMb2xKd1BtNEhtTWFTelpfVGdpWGtsTkJDS0I0dWlPdExOZDZZOFNv?oc=5",
@@ -127,56 +139,126 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 23,
-      "same_event": 155
+      "new_story": 24,
+      "same_event": 152
     },
     "examples": [
       {
-        "story_id": "story_021407",
-        "title": "Trump warns Democrats ‘will take your guns away’ at Montana rally",
-        "event_key": "unknown-event-c7bdb90e8a",
+        "story_id": "story_021429",
+        "title": "Florida Jury Finds Former Fort Pierce City Manager Nicholas Mimms Guilty Of Official Misconduct - Tampa Free Press",
+        "event_key": "unknown-event-65dcb20d03",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_017306",
+        "title": "Martin County Sheriff’s Office investigates fatal shooting in Hobe Sound - WPBF",
+        "event_key": "named-person-death:hobe-sound",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_019349",
+        "title": "Crash involving 7 vehicles blocks southbound Florida's Turnpike in Delray Beach",
+        "event_key": "traffic-crash-285ae9197b-285ae9197b",
+        "relationship": "same_event",
+        "confidence": 0.94,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: traffic_crash",
+          "Shared people: state road",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: none",
+          "Shared distinctive tokens: 4",
+          "Distinctive-token overlap: 0.08",
+          "Title overlap: 0.00",
+          "Identity anchors qualified: True",
+          "Confidence: 0.94"
+        ]
+      },
+      {
+        "story_id": "story_021407",
+        "title": "Trump warns Democrats ‘will take your guns away’ at Montana rally",
+        "event_key": "unknown-event-c7bdb90e8a",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_021364",
+        "title": "Florida airport growth tricky with Breeze, American, JetBlue | Opinion - Coral Springs News",
+        "event_key": "unknown-event-d23ccd6b28",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_021408",
         "title": "WHERE'S WALTER? Getting into the fall spirit at Bedner's Farm Fresh Market",
         "event_key": "unknown-event-bbb0887d31",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_021409",
         "title": "Donate now to Project Thanksgiving - help families in need - cw34.com",
         "event_key": "unknown-event-0a876661b3",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_021410",
         "title": "Central Florida company, owned by congressional candidate, to inspect homes with possible subpar materials - Orlando Sentinel",
         "event_key": "unknown-event-1fbafad900",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -194,9 +276,9 @@
         ]
       },
       {
-        "story_id": "story_021362",
-        "title": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
-        "event_key": "unknown-event-5d2e349d4f",
+        "story_id": "story_017306",
+        "title": "1 dead after Hobe Sound shooting; another detained for questioning",
+        "event_key": "named-person-death:hobe-sound",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -211,20 +293,6 @@
         "story_id": "story_021363",
         "title": "Week 9 Preview: Eau Gallie-Titusville among six district games - Florida Today",
         "event_key": "unknown-event-18a998b196",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021364",
-        "title": "Florida airport growth tricky with Breeze, American, JetBlue | Opinion - Treasure Coast News",
-        "event_key": "unknown-event-9c9ff58280",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -334,20 +402,6 @@
         ]
       },
       {
-        "story_id": "story_021371",
-        "title": "Shooting in Hobe Sound critically injures one person - WPBF",
-        "event_key": "unknown-event-e2ebf7723c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_021373",
         "title": "West Palm Beach residents push back on high-rise development along Flagler Drive",
         "event_key": "unknown-event-d6532b41ba",
@@ -365,34 +419,6 @@
         "story_id": "story_021374",
         "title": "Florida ordered license plate readers off state roads. Why does Palm Beach County still have them?",
         "event_key": "unknown-event-28880a30a4",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021342",
-        "title": "Celebrities tee off for a cause at Par for the Culture golf tournament in Greenacres, Florida",
-        "event_key": "unknown-event-5da4a86bc5",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021257",
-        "title": "AG Uthmeier discusses public corruption crackdown after Nick Mimms verdict - WPEC",
-        "event_key": "unknown-event-dd05463d08",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -406,9 +432,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_021407",
-        "title": "Trump warns Democrats ‘will take your guns away’ at Montana rally",
-        "event_key": "unknown-event-c7bdb90e8a",
+        "story_id": "story_021429",
+        "title": "Florida Jury Finds Former Fort Pierce City Manager Nicholas Mimms Guilty Of Official Misconduct - Tampa Free Press",
+        "event_key": "unknown-event-65dcb20d03",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -416,45 +442,119 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_017306",
+        "title": "Martin County Sheriff’s Office investigates fatal shooting in Hobe Sound - WPBF",
+        "event_key": "named-person-death:hobe-sound",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_019349",
+        "title": "Crash involving 7 vehicles blocks southbound Florida's Turnpike in Delray Beach",
+        "event_key": "traffic-crash-285ae9197b-285ae9197b",
+        "relationship": "same_event",
+        "confidence": 0.94,
+        "matched_existing": true,
+        "reason": "Verified cross-source incident evidence belongs to an existing story",
+        "decision_trace": [
+          "Unified incident match: true",
+          "Compatible event family: True",
+          "Event family: traffic_crash",
+          "Shared people: state road",
+          "Shared person aliases: none",
+          "Shared locations: none",
+          "Shared agencies: none",
+          "Shared concepts: none",
+          "Shared distinctive tokens: 4",
+          "Distinctive-token overlap: 0.08",
+          "Title overlap: 0.00",
+          "Identity anchors qualified: True",
+          "Confidence: 0.94"
+        ]
+      },
+      {
+        "story_id": "story_021407",
+        "title": "Trump warns Democrats ‘will take your guns away’ at Montana rally",
+        "event_key": "unknown-event-c7bdb90e8a",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_021364",
+        "title": "Florida airport growth tricky with Breeze, American, JetBlue | Opinion - Coral Springs News",
+        "event_key": "unknown-event-d23ccd6b28",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_021408",
         "title": "WHERE'S WALTER? Getting into the fall spirit at Bedner's Farm Fresh Market",
         "event_key": "unknown-event-bbb0887d31",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_021409",
         "title": "Donate now to Project Thanksgiving - help families in need - cw34.com",
         "event_key": "unknown-event-0a876661b3",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_021410",
         "title": "Central Florida company, owned by congressional candidate, to inspect homes with possible subpar materials - Orlando Sentinel",
         "event_key": "unknown-event-1fbafad900",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -473,9 +573,9 @@
         ]
       },
       {
-        "story_id": "story_021362",
-        "title": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
-        "event_key": "unknown-event-5d2e349d4f",
+        "story_id": "story_017306",
+        "title": "1 dead after Hobe Sound shooting; another detained for questioning",
+        "event_key": "named-person-death:hobe-sound",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -491,21 +591,6 @@
         "story_id": "story_021363",
         "title": "Week 9 Preview: Eau Gallie-Titusville among six district games - Florida Today",
         "event_key": "unknown-event-18a998b196",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021364",
-        "title": "Florida airport growth tricky with Breeze, American, JetBlue | Opinion - Treasure Coast News",
-        "event_key": "unknown-event-9c9ff58280",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -623,21 +708,6 @@
         ]
       },
       {
-        "story_id": "story_021371",
-        "title": "Shooting in Hobe Sound critically injures one person - WPBF",
-        "event_key": "unknown-event-e2ebf7723c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_021373",
         "title": "West Palm Beach residents push back on high-rise development along Flagler Drive",
         "event_key": "unknown-event-d6532b41ba",
@@ -656,36 +726,6 @@
         "story_id": "story_021374",
         "title": "Florida ordered license plate readers off state roads. Why does Palm Beach County still have them?",
         "event_key": "unknown-event-28880a30a4",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021342",
-        "title": "Celebrities tee off for a cause at Par for the Culture golf tournament in Greenacres, Florida",
-        "event_key": "unknown-event-5da4a86bc5",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021257",
-        "title": "AG Uthmeier discusses public corruption crackdown after Nick Mimms verdict - WPEC",
-        "event_key": "unknown-event-dd05463d08",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -702,26 +742,72 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 1,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
-    "retrospective_candidate_count": 9,
-    "retrospective_high_confidence_candidate_count": 3,
-    "retrospective_activation_eligible_candidate_count": 1,
+    "current_relationships": {
+      "new_story": 1
+    },
+    "milestones": {
+      "death": 1,
+      "sentencing": 1
+    },
+    "reason_codes": {
+      "entity_match": 1,
+      "identity_anchor_qualified": 1,
+      "location_match": 1,
+      "novel_milestone": 1,
+      "title_continuity": 1
+    },
+    "examples": [
+      {
+        "headline": "Sebastian man, former Indian River County firefighter, sentenced to death in Fort Pierce killing - Sebastian Daily",
+        "event_key": "unknown-event-933b6ff912",
+        "current_story_id": "story_021447",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_021015",
+        "candidate_confidence": 0.636364,
+        "candidate_milestones": [
+          "death",
+          "sentencing"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "entity_match",
+          "title_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_021015",
+          "Novel milestones: death, sentencing",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.36",
+          "Location match: True",
+          "Agency match: False",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.64"
+        ]
+      }
+    ],
+    "retrospective_candidate_count": 8,
+    "retrospective_high_confidence_candidate_count": 2,
+    "retrospective_activation_eligible_candidate_count": 0,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 686,
-      "timeline_entries_examined": 2046,
-      "transitions_examined": 1286,
+      "stories_with_timelines": 667,
+      "timeline_entries_examined": 1988,
+      "transitions_examined": 1249,
       "candidate_scope": "distinct_article_transitions",
-      "candidate_count": 9,
-      "high_confidence_candidate_count": 3,
-      "activation_eligible_candidate_count": 1,
+      "candidate_count": 8,
+      "high_confidence_candidate_count": 2,
+      "activation_eligible_candidate_count": 0,
       "same_source_evolution_count": 13,
       "same_source_evolution_milestones": {
         "arrest": 4,
@@ -1378,7 +1464,6 @@
         "death": 3,
         "identified": 1,
         "investigation": 1,
-        "opening": 1,
         "recovery": 1,
         "sentencing": 1
       },
@@ -1387,79 +1472,13 @@
         "same_timestamp_order_uncertain": 4,
         "timeline_identity_unanchored": 5
       },
-      "excluded_entry_count": 78,
+      "excluded_entry_count": 76,
       "exclusion_reasons": {
-        "insufficient_title_detail": 17,
+        "insufficient_title_detail": 16,
         "low_value_title": 4,
-        "social_source": 57
+        "social_source": 56
       },
       "examples": [
-        {
-          "story_id": "story_019349",
-          "story_title": "New I-95 Oslo Road interchange opens in Indian River County over a year ahead of schedule",
-          "milestones": [
-            "opening"
-          ],
-          "matched_phrases": {
-            "opening": [
-              "opens"
-            ]
-          },
-          "confidence": 0.92,
-          "activation_eligible": true,
-          "timeline_incoherent": false,
-          "identity_anchor_qualified": true,
-          "identity_anchor_codes": [
-            "event_family_match",
-            "identity_anchor_qualified"
-          ],
-          "shared_title_tokens": [
-            "indian",
-            "river"
-          ],
-          "blocking_conflicts": [],
-          "reason_codes": [
-            "retrospective_timeline_transition",
-            "novel_milestone",
-            "persistent_story_identity_untrusted",
-            "event_family_match",
-            "identity_anchor_qualified",
-            "canonical_title_continuity_context_only",
-            "chronology_supported",
-            "activation_evidence_candidate"
-          ],
-          "prior_title_overlap": 0.25,
-          "canonical_title_overlap": 1.0,
-          "prior_article": {
-            "article_id": "rss-2a486cac06d0e88c54db",
-            "event_key": "traffic-crash-ee7fb5dcc6-ee7fb5dcc6",
-            "published_at": "2026-10-05T15:45:15.674468+00:00",
-            "title": "DeSantis to appear in Indian River County Monday with FDOT Secretary - WPEC",
-            "source": "https://cbs12.com/news/local/governor-ron-desantis-appear-indian-river-county-i95-olso-road-florida-department-of-transportation-secretary-jared-perdue-florida-news",
-            "url": "https://cbs12.com/news/local/governor-ron-desantis-appear-indian-river-county-i95-olso-road-florida-department-of-transportation-secretary-jared-perdue-florida-news"
-          },
-          "newer_article": {
-            "article_id": "rss-06cc8d18fa39052d4bea",
-            "event_key": "traffic-crash-5d8f718647-5d8f718647",
-            "published_at": "2026-10-05T18:44:16.301669+00:00",
-            "title": "New I-95 Oslo Road interchange opens in Indian River County over a year ahead of schedule",
-            "source": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-i-95-oslo-road-interchange-opens-in-indian-river-county-over-a-year-ahead-of-schedule",
-            "url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-i-95-oslo-road-interchange-opens-in-indian-river-county-over-a-year-ahead-of-schedule"
-          },
-          "candidate_trace": [
-            "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_019349",
-            "Novel milestones: opening",
-            "Identity anchor qualified: True",
-            "Identity anchor codes: event_family_match, identity_anchor_qualified",
-            "Prior title overlap: 0.25",
-            "Canonical title overlap (context only): 1.00",
-            "Same timestamp: False",
-            "Blocking conflicts: none",
-            "Candidate confidence: 0.92",
-            "Activation eligible: True"
-          ]
-        },
         {
           "story_id": "story_013207",
           "story_title": "41-year-old man holding shotgun fatally shot by Sebastian police",
@@ -2042,27 +2061,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 697,
-      "treasure_coast_local": 437,
+      "florida": 698,
+      "treasure_coast_local": 436,
       "treasure_coast_region": 154,
-      "unknown": 1306
+      "unknown": 1292
     },
-    "average_score": 57.57
+    "average_score": 57.68
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 697,
-      "treasure_coast_local": 437,
+      "florida": 698,
+      "treasure_coast_local": 436,
       "treasure_coast_region": 154,
-      "unknown": 1306
+      "unknown": 1292
     },
-    "average_priority": 4.28
+    "average_priority": 4.29
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1666,
+      "active": 1678,
       "developing": 102,
-      "ongoing": 825,
+      "ongoing": 799,
       "resolved": 1
     }
   },
@@ -2070,8 +2089,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2576,
-    "active_stories_after": 2576,
+    "active_stories_before": 2558,
+    "active_stories_after": 2558,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2100,20 +2119,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-15T12:44:37Z",
-    "quarantined_story_records_retained": 4469,
-    "active_story_count": 2594
+    "generated_at": "2026-10-15T15:44:27Z",
+    "quarantined_story_records_retained": 4472,
+    "active_story_count": 2580
   },
   "stories": {
-    "total": 2594,
+    "total": 2580,
     "importance_levels": {
       "breaking": 6,
-      "high": 66,
-      "normal": 504,
-      "low": 2018,
+      "high": 68,
+      "normal": 499,
+      "low": 2007,
       "archived": 0
     },
-    "average_importance": 11.01,
+    "average_importance": 11.0,
     "top": [
       {
         "story_id": "story_017306",
@@ -2128,7 +2147,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 66.01
+          "age_hours": 69.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2185,80 +2204,14 @@
         "event_count": 61,
         "timeline_entries": 41,
         "relationship_decisions": 0,
-        "canonical_source_candidates": 43,
+        "canonical_source_candidates": 47,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 66.01,
+          "hours_since_update": 69.04,
           "event_count": 61,
           "timeline_entries": 41
-        }
-      },
-      {
-        "story_id": "story_020881",
-        "title": "Driver flees after fatal motorcycle crash in Fort Pierce, police say - WPTV",
-        "score": 85,
-        "editorial_priority": 92,
-        "editorial_score": 92,
-        "score_breakdown": {
-          "score": 92,
-          "importance": 85,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 21.85
-        },
-        "level": "breaking",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-14T14:54:48.604761+00:00",
-          "hours_since_update": 21.85,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -2274,7 +2227,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 14.05
+          "age_hours": 17.07
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2323,7 +2276,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 14.05,
+          "hours_since_update": 17.07,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2341,7 +2294,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 2.09
+          "age_hours": 5.1
         },
         "level": "high",
         "importance_reasons": [
@@ -2385,9 +2338,75 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-15T10:43:23.074448+00:00",
-          "hours_since_update": 2.09,
+          "hours_since_update": 5.1,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_020881",
+        "title": "Driver flees after fatal motorcycle crash in Fort Pierce, police say - WPTV",
+        "score": 85,
+        "editorial_priority": 82,
+        "editorial_score": 82,
+        "score_breakdown": {
+          "score": 82,
+          "importance": 85,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.85,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 24.85
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-14T14:54:48.604761+00:00",
+          "hours_since_update": 24.85,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -2403,7 +2422,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 26.04
+          "age_hours": 29.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2452,7 +2471,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T10:43:25.080645+00:00",
-          "hours_since_update": 26.04,
+          "hours_since_update": 29.04,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2470,7 +2489,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 14.06
+          "age_hours": 17.07
         },
         "level": "high",
         "importance_reasons": [
@@ -2515,7 +2534,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 14.06,
+          "hours_since_update": 17.07,
           "event_count": 19,
           "timeline_entries": 18
         }
@@ -2533,7 +2552,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 14.02
+          "age_hours": 17.02
         },
         "level": "high",
         "importance_reasons": [
@@ -2562,8 +2581,8 @@
           "scope": "treasure_coast_local",
           "score": 100,
           "counties": [
-            "Martin County",
-            "St. Lucie County"
+            "St. Lucie County",
+            "Martin County"
           ],
           "places": []
         },
@@ -2580,9 +2599,72 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 14.02,
+          "hours_since_update": 17.02,
           "event_count": 3,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_021447",
+        "title": "Sebastian man, former Indian River County firefighter, sentenced to death in Fort Pierce killing - Sebastian Daily",
+        "score": 75,
+        "editorial_priority": 74,
+        "editorial_score": 74,
+        "score_breakdown": {
+          "score": 74,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.09
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Fort Pierce",
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-10-15T15:45:10.684448+00:00",
+          "hours_since_update": 0.09,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -2598,7 +2680,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 120.03
+          "age_hours": 123.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2648,7 +2730,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-10T12:44:08.138949+00:00",
-          "hours_since_update": 120.03,
+          "hours_since_update": 123.03,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2666,7 +2748,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 66.01
+          "age_hours": 69.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2709,7 +2791,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 66.01,
+          "hours_since_update": 69.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2727,7 +2809,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 66.04
+          "age_hours": 69.05
         },
         "level": "high",
         "importance_reasons": [
@@ -2765,7 +2847,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 66.04,
+          "hours_since_update": 69.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2783,7 +2865,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 64.01
+          "age_hours": 67.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2822,7 +2904,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-12T20:45:23.189599+00:00",
-          "hours_since_update": 64.01,
+          "hours_since_update": 67.01,
           "event_count": 16,
           "timeline_entries": 16
         }
@@ -2840,7 +2922,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 146.01
+          "age_hours": 149.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2885,7 +2967,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 146.01,
+          "hours_since_update": 149.01,
           "event_count": 27,
           "timeline_entries": 27
         }
@@ -2903,7 +2985,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 66.01
+          "age_hours": 69.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2942,7 +3024,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 66.01,
+          "hours_since_update": 69.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2960,7 +3042,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 38.01
+          "age_hours": 41.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2999,7 +3081,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-13T22:45:20.533812+00:00",
-          "hours_since_update": 38.01,
+          "hours_since_update": 41.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3017,7 +3099,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 146.01
+          "age_hours": 149.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3060,79 +3142,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-09T10:45:03.212946+00:00",
-          "hours_since_update": 146.01,
+          "hours_since_update": 149.0,
           "event_count": 2,
           "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_020840",
-        "title": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
-        "score": 55,
-        "editorial_priority": 59,
-        "editorial_score": 59,
-        "score_breakdown": {
-          "score": 59,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 21.0
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County",
-            "Indian River County",
-            "Martin County"
-          ],
-          "places": [
-            "Port St. Lucie",
-            "Fort Pierce",
-            "Vero Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 9,
-        "timeline_entries": 6,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 6,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-14T15:46:53.481373+00:00",
-          "hours_since_update": 21.0,
-          "event_count": 9,
-          "timeline_entries": 6
         }
       },
       {
@@ -3148,7 +3160,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 66.01
+          "age_hours": 69.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3186,7 +3198,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 66.01,
+          "hours_since_update": 69.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3204,7 +3216,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 11.01
+          "age_hours": 14.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3247,65 +3259,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-15T01:45:56.090763+00:00",
-          "hours_since_update": 11.01,
+          "hours_since_update": 14.01,
           "event_count": 3,
           "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_020814",
-        "title": "Former Sebastian River High School Teacher and Coach Kevin Morris Killed in Line of Duty - Sebastian Daily",
-        "score": 65,
-        "editorial_priority": 54,
-        "editorial_score": 54,
-        "score_breakdown": {
-          "score": 54,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 69.03
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-10-12T15:45:16.714794+00:00",
-          "hours_since_update": 69.03,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -3321,7 +3277,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 26.04
+          "age_hours": 29.04
         },
         "level": "high",
         "importance_reasons": [
@@ -3374,9 +3330,79 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T10:43:25.080645+00:00",
-          "hours_since_update": 26.04,
+          "hours_since_update": 29.04,
           "event_count": 11,
           "timeline_entries": 10
+        }
+      },
+      {
+        "story_id": "story_020840",
+        "title": "Misplaced cellphone leads to false weapon rumor at Vero Beach High - WPBF",
+        "score": 55,
+        "editorial_priority": 53,
+        "editorial_score": 53,
+        "score_breakdown": {
+          "score": 53,
+          "importance": 55,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.85,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 24.0
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County",
+            "Indian River County",
+            "Martin County"
+          ],
+          "places": [
+            "Port St. Lucie",
+            "Fort Pierce",
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 9,
+        "timeline_entries": 6,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 6,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-14T15:46:53.481373+00:00",
+          "hours_since_update": 24.0,
+          "event_count": 9,
+          "timeline_entries": 6
         }
       }
     ]
@@ -3384,7 +3410,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-15T12:50:23Z",
+    "generated_at": "2026-10-15T15:50:42Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3400,28 +3426,27 @@
       "category_count": 9,
       "statuses": {
         "cache_hit": 1,
-        "category_eligibility_archive_recovery": 5,
+        "category_eligibility_archive_recovery": 6,
         "generated_live": 1,
-        "generation_failed_archive_recovery": 1,
-        "no_publishable_sources": 1
+        "generation_failed_archive_recovery": 1
       },
       "failures": {
         "copydesk_integrity": 1,
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 6
       },
-      "model_attempt_count": 3,
-      "model_elapsed_seconds": 72.557,
+      "model_attempt_count": 4,
+      "model_elapsed_seconds": 76.425,
       "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 1,
-      "category_eligibility_rejection_count": 8,
-      "published_story_duplicate_suppression_count": 33,
+      "contextual_update_lead_rejection_count": 1,
+      "article_framing_rejection_count": 0,
+      "category_eligibility_rejection_count": 7,
+      "published_story_duplicate_suppression_count": 30,
       "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 11,
+      "material_update_promotion_evaluation_count": 15,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 8,
-      "material_update_promotion_model_call_count": 3
+      "material_update_promotion_cache_hit_count": 7,
+      "material_update_promotion_model_call_count": 8
     },
     "categories": [
       {
@@ -3429,8 +3454,8 @@
         "category_label": "Local Government",
         "status": "cache_hit",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 9,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 10,
         "selected_source_count": 2,
         "cache_hit": true,
         "archive_recovery_requested": false,
@@ -3460,15 +3485,14 @@
             "reason": "competing_story_form_without_government_action",
             "positive_signals": [],
             "competing_signals": [
-              "crime_incident:shooting",
-              "entertainment_event:festival"
+              "crime_incident:shooting"
             ],
             "local_nexus_signals": [],
-            "headline": "WHERE'S WALTER? Getting into the fall spirit at Bedner's Farm Fresh Market",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/wheres-walter-getting-into-the-fall-spirit-at-bedners-farm-fresh-market"
+            "headline": "Martin County Sheriff’s Office investigates fatal shooting in Hobe Sound - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-hobe-sound-shooting/74139183"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3482,22 +3506,12 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "editorial_story_id": "story_021362",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Shooting in Hobe Sound critically injures one person - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-hobe-sound-shooting/74139183",
-            "editorial_story_id": "story_021362",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "basis": "same_event_and_persistent_story_skip",
+            "editorial_story_id": "story_017306",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3523,10 +3537,10 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 2,
         "material_update_promotion_decisions": [
           {
             "category_key": "local_gov",
@@ -3547,10 +3561,10 @@
             "confidence": 0.97,
             "shared_anchors": [],
             "novel_facts": [
-              "New Hobe Sound shooting on SE Citrus Way",
+              "New shooting incident in Hobe Sound on SE Citrus Way",
               "Victim airlifted with life-threatening injuries",
               "One person detained for questioning",
-              "Incident occurred around 8 p.m. in Banner Lake neighborhood"
+              "Incident occurred around 8 p.m., distinct from Otto Lenke case"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -3559,33 +3573,31 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Shooting in Hobe Sound critically injures one person - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-hobe-sound-shooting/74139183",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.97,
+            "shared_anchors": [],
+            "novel_facts": [
+              "Shooting on SE Citrus Way in Banner Lake area of Hobe Sound",
+              "Victim died after being flown to hospital with life-threatening injuries",
+              "Another person detained for questioning by Martin County Sheriff's Office"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           },
           {
             "category_key": "local_gov",
@@ -3633,7 +3645,7 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Martin County Commission Votes to Negotiate Deal to Restore MARTY Bus Service",
-        "elapsed_seconds": 29.592
+        "elapsed_seconds": 27.534
       },
       {
         "category_key": "crime",
@@ -3658,7 +3670,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
@@ -3694,12 +3706,12 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "editorial_story_id": "story_021362",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "basis": "exact_source_and_persistent_story_skip",
+            "editorial_story_id": "story_017306",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3724,22 +3736,22 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Suspected fentanyl supplier linked to overdose death arrested after chase on I-95",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/suspected-fentanyl-supplier-linked-to-overdose-death-arrested-after-chase-on-i-95",
-            "editorial_story_id": "story_021217",
-            "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
-            "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Suspected fentanyl supplier linked to overdose death arrested after chase on I-95 - WPTV",
             "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQZTRaOUNqcGVCYVhpaXNZeS1QT21mejUwaGQ5d0lhc0F3UjFUQnVaNlAxWi1FMUNhZ3hoRUl5NXZzcDlwczFzRVV4N0QyRk9aa0g5VktaLTExZWk0QWtkdWJyTXlBTDJmbldBa0Zuc05tRVJKcjJhenZiRklzMXBKdmR3QmZsRlFTS2lvR1dPOThXRVFKaTJiVWtZU25mNlVwZ2FXcFNtbjAtTjJZM1U5UGpqekFqMWc0amRQSEd6WE1GbHBOUVBDZjNXNWktX3lsUk5NSC11NEVpNWpNaXc",
             "editorial_story_id": "story_021217",
             "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
             "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
             "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Suspected fentanyl supplier linked to overdose death arrested after chase on I-95",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/suspected-fentanyl-supplier-linked-to-overdose-death-arrested-after-chase-on-i-95",
+            "editorial_story_id": "story_021217",
+            "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
+            "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3755,25 +3767,38 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.97,
+            "shared_anchors": [],
+            "novel_facts": [
+              "Shooting on SE Citrus Way in Banner Lake area of Hobe Sound",
+              "Victim died after being flown to hospital with life-threatening injuries",
+              "Another person detained for questioning by Martin County Sheriff's Office"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           },
           {
             "category_key": "crime",
@@ -3825,13 +3850,13 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Suspected fentanyl supplier linked to overdose death arrested after chase on I-95",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/suspected-fentanyl-supplier-linked-to-overdose-death-arrested-after-chase-on-i-95",
+            "source_headline": "Suspected fentanyl supplier linked to overdose death arrested after chase on I-95 - WPTV",
+            "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQZTRaOUNqcGVCYVhpaXNZeS1QT21mejUwaGQ5d0lhc0F3UjFUQnVaNlAxWi1FMUNhZ3hoRUl5NXZzcDlwczFzRVV4N0QyRk9aa0g5VktaLTExZWk0QWtkdWJyTXlBTDJmbldBa0Zuc05tRVJKcjJhenZiRklzMXBKdmR3QmZsRlFTS2lvR1dPOThXRVFKaTJiVWtZU25mNlVwZ2FXcFNtbjAtTjJZM1U5UGpqekFqMWc0amRQSEd6WE1GbHBOUVBDZjNXNWktX3lsUk5NSC11NEVpNWpNaXc",
             "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
             "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -3840,13 +3865,13 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Suspected fentanyl supplier linked to overdose death arrested after chase on I-95 - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQZTRaOUNqcGVCYVhpaXNZeS1QT21mejUwaGQ5d0lhc0F3UjFUQnVaNlAxWi1FMUNhZ3hoRUl5NXZzcDlwczFzRVV4N0QyRk9aa0g5VktaLTExZWk0QWtkdWJyTXlBTDJmbldBa0Zuc05tRVJKcjJhenZiRklzMXBKdmR3QmZsRlFTS2lvR1dPOThXRVFKaTJiVWtZU25mNlVwZ2FXcFNtbjAtTjJZM1U5UGpqekFqMWc0amRQSEd6WE1GbHBOUVBDZjNXNWktX3lsUk5NSC11NEVpNWpNaXc",
+            "source_headline": "Suspected fentanyl supplier linked to overdose death arrested after chase on I-95",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/suspected-fentanyl-supplier-linked-to-overdose-death-arrested-after-chase-on-i-95",
             "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
             "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -3887,14 +3912,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.295
+        "elapsed_seconds": 24.05
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 23,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 13,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3912,28 +3937,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 4,
-        "category_eligibility_rejection_count": 4,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [
-              "crime_public_safety:shooting",
-              "entertainment_event:festival"
-            ],
-            "local_nexus_signals": [
-              "source_locality:hobe sound"
-            ],
-            "headline": "WHERE'S WALTER? Getting into the fall spirit at Bedner's Farm Fresh Market",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/wheres-walter-getting-into-the-fall-spirit-at-bedners-farm-fresh-market"
-          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -3994,12 +4000,12 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "editorial_story_id": "story_021362",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "basis": "exact_source_and_persistent_story_skip",
+            "editorial_story_id": "story_017306",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4015,25 +4021,38 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.97,
+            "shared_anchors": [],
+            "novel_facts": [
+              "Shooting on SE Citrus Way in Banner Lake area, Hobe Sound",
+              "Victim died after being flown to hospital with life-threatening injuries",
+              "Another person detained for questioning by Martin County Sheriff's Office"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           },
           {
             "category_key": "business",
@@ -4052,7 +4071,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.318
+        "elapsed_seconds": 20.008
       },
       {
         "category_key": "sports",
@@ -4117,15 +4136,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 14.324
+        "elapsed_seconds": 14.995
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 8,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4199,23 +4218,23 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.727
+        "elapsed_seconds": 25.92
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "no_publishable_sources",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
+        "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "",
-        "failure_summary": "",
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Florida category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4224,7 +4243,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -4237,190 +4256,79 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.519
+        "elapsed_seconds": 16.819
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 4,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 24.513,
+            "elapsed_seconds": 15.053,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: new_development_missing — 1 person dies after shooting in Hobe Sound, no arrest made - cw34.com"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 15.002,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 24.513,
+        "model_elapsed_seconds": 30.055,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "headline": "United Way of Martin County Seeks Help as Transit Demand Overwhelms Ride United Program",
-            "missing": [
-              "surname_only_first_reference"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": false,
-              "headline": "United Way of Martin County Seeks Help as Transit Demand Overwhelms Ride United Program",
-              "lead": "The United Way of Martin County is appealing to the community for support after its Ride United transportation program was overwhelmed by rising demand from two separate transit disruptions. The organization says last week's shutdown of the MARTY bus service added new pressure to a program already strained by state budget cuts made earlier this year.",
-              "lead_word_count": 57,
-              "headline_overlap_ratio": 0.727,
-              "new_context_token_count": 29,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "standard",
-              "surname_first_reference": {
-                "required": true,
-                "passed": false,
-                "missing": [
-                  "surname_only_first_reference"
-                ],
-                "person": {
-                  "full": "Ride United",
-                  "first": "Ride",
-                  "last": "United"
-                },
-                "surname_word_index": 1
-              },
-              "update_diagnostics": {
-                "required": false,
-                "passed": true,
-                "story_form": "standard"
-              },
-              "missing": [
-                "surname_only_first_reference"
-              ]
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": true,
-              "headline": "United Way of Martin County Seeks Help as Transit Demand Overwhelms Ride United Program",
-              "lead": "The United Way of Martin County is appealing to the community for support after its Ride United transportation program was overwhelmed by rising demand from two separate transit disruptions. The organization says last week's shutdown of the MARTY bus service added new pressure to a program already strained by state budget cuts made earlier this year.",
-              "headline_money_claims": [],
-              "lead_money_claims": [],
-              "missing_money_claims": [],
-              "headline_jurisdictions": [
-                "martin_county"
-              ],
-              "lead_jurisdictions": [
-                "martin_county"
-              ],
-              "missing_jurisdictions": [],
-              "headline_judge_claims": [],
-              "lead_judge_claims": [],
-              "missing_judge_claims": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": []
-            },
-            "source_focus": {
-              "required": true,
-              "passed": true,
-              "generated_headline": "United Way of Martin County Seeks Help as Transit Demand Overwhelms Ride United Program",
-              "generated_lead": "The United Way of Martin County is appealing to the community for support after its Ride United transportation program was overwhelmed by rising demand from two separate transit disruptions. The organization says last week's shutdown of the MARTY bus service added new pressure to a program already strained by state budget cuts made earlier this year.",
-              "source_title": "'We need help': Martin County transit cuts put strain on United Way's Ride United program",
-              "source_lead": "The United Way of Martin County is calling on the community for support as transit services for residents face mounting challenges.The organization says the MARTY bus shutdown last week was just the tip of the iceberg. The United Way has been seeing an increased need for transit services following state budget cuts earlier this year.WATCH BELOW: United Way's Ride United program strained by surge in transit requestsHenry Hayden relies on community transit services to get to and from work.",
-              "title_similarity": {
-                "score": 0.665,
-                "overlap": 0.7273,
-                "jaccard": 0.5,
-                "sorted_sequence": 0.7568,
-                "ordered_sequence": 0.6296,
-                "shared_token_count": 8.0
-              },
-              "lead_token_overlap": 0.595,
-              "missing": []
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "official_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "temporal_integrity": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 person dies after shooting in Hobe Sound, no arrest made - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxNRWUzRlB5Mkdhd2RIRGE0M2RKZTlGZE9YOVNuTFg0OVNXUHFDaTdBNHZiYnpLMnBTajZ0bHluSnZYc0w0VkY2aXZ3NEJxUDh1czJnVUV4eW1pT3lIaHAwa2dXVUVndVk0R19FRktOVmNfeHBiaWl2Nkw4bEI0QkxTdDNFUWtMVWVLbGJRSkNkVFFIRjBzRlhJQUpDai1HeEV2ei1ubGI1T1lPODRzd3dRSlg2ZS1CU00yUUpmWjdJUF9yd3htdk5jNlhxa1J5aHFKUmlDVVhUQmpUSmlPbkZiZGFjUVRqTHZ3R2NaLXVSUG93MHNLWUgwY0hWYmtiV0xs",
+            "editorial_story_id": "story_017306",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "editorial_story_id": "story_021362",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "basis": "exact_source_and_persistent_story_skip",
+            "editorial_story_id": "story_017306",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "martin",
             "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "editorial_story_id": "story_021362",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "MCSO investigates Hobe Sound shooting; victim airlifted, one detained - WPEC",
-            "source_url": "https://cbs12.com/news/local/mcso-investigates-hobe-sound-shooting-victim-airlifted-one-detained-florida-news-florida-crime-local-news-local-crime-shooting-martin-county",
-            "editorial_story_id": "story_021277",
-            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-            "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-            "basis": "authorized_canonical_identity_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Shooting in Hobe Sound critically injures one person - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-hobe-sound-shooting/74139183",
-            "editorial_story_id": "story_021362",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Death sentence handed down for 67-year-old Otto Lenke in Fort Pierce killing case - WPEC",
-            "source_url": "https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
-            "editorial_story_id": "story_021277",
-            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-            "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-            "basis": "exact_source_and_persistent_story_skip",
+            "editorial_story_id": "story_017306",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4442,34 +4350,24 @@
             "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County advances proposed data center moratorium - WPEC",
-            "source_url": "https://cbs12.com/news/local/martin-county-advances-proposed-data-center-moratorium-commissioners-meeting-data-center-electricity-consumption-environmental-impact-florida-data-center-regulations-florida-news",
-            "editorial_story_id": "story_021050",
-            "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
-            "canonical_headline": "Martin County Advances Data Center Moratorium, But New Project Would Be Exempt",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 2,
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
-            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
+            "source_headline": "1 person dies after shooting in Hobe Sound, no arrest made - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxNRWUzRlB5Mkdhd2RIRGE0M2RKZTlGZE9YOVNuTFg0OVNXUHFDaTdBNHZiYnpLMnBTajZ0bHluSnZYc0w0VkY2aXZ3NEJxUDh1czJnVUV4eW1pT3lIaHAwa2dXVUVndVk0R19FRktOVmNfeHBiaWl2Nkw4bEI0QkxTdDNFUWtMVWVLbGJRSkNkVFFIRjBzRlhJQUpDai1HeEV2ei1ubGI1T1lPODRzd3dRSlg2ZS1CU00yUUpmWjdJUF9yd3htdk5jNlhxa1J5aHFKUmlDVVhUQmpUSmlPbkZiZGFjUVRqTHZ3R2NaLXVSUG93MHNLWUgwY0hWYmtiV0xs",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4478,27 +4376,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound - WPTV",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "MCSO investigates Hobe Sound shooting; victim airlifted, one detained - WPEC",
-            "source_url": "https://cbs12.com/news/local/mcso-investigates-hobe-sound-shooting-victim-airlifted-one-detained-florida-news-florida-crime-local-news-local-crime-shooting-martin-county",
-            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-            "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
@@ -4507,13 +4390,12 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.95,
+            "confidence": 0.97,
             "shared_anchors": [],
             "novel_facts": [
-              "New shooting incident in Hobe Sound on SE Citrus Way in Banner Lake area",
-              "One victim airlifted with life-threatening injuries",
-              "One person detained for questioning",
-              "Incident is unrelated to Otto Lenke Fort Pierce murder case (only mentioned as a sidebar link)"
+              "Shooting on SE Citrus Way in Banner Lake area of Hobe Sound",
+              "Victim died after being flown to hospital with life-threatening injuries",
+              "Another person detained for questioning by Martin County Sheriff's Office"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4522,46 +4404,32 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Shooting in Hobe Sound critically injures one person - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-hobe-sound-shooting/74139183",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
+            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound - WPTV",
+            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Death sentence handed down for 67-year-old Otto Lenke in Fort Pierce killing case - WPEC",
-            "source_url": "https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
-            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-            "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
+            "cache_hit": false,
+            "model_call": true,
             "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Otto Lenke",
-              "Richard Benson",
-              "Fort Pierce motorcycle shop killing",
-              "death sentence handed down Wednesday by Circuit Court Judge Michael Linn",
-              "same source URL/article"
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.97,
+            "shared_anchors": [],
+            "novel_facts": [
+              "Shooting on SE Citrus Way in Banner Lake area, Hobe Sound",
+              "One victim with life-threatening injuries flown to hospital",
+              "Martin County Sheriff's Office investigation",
+              "One person detained for questioning"
             ],
-            "novel_facts": [],
-            "reason": "This is the same sentencing event already captured in the canonical article - same defendant, victim, judge, sentence, and even the identical source URL. No new facts such as an appeal ruling or further proceeding are present; this is a duplicate republish.",
-            "validation_errors": []
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           },
           {
             "category_key": "martin",
@@ -4605,36 +4473,21 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County advances proposed data center moratorium - WPEC",
-            "source_url": "https://cbs12.com/news/local/martin-county-advances-proposed-data-center-moratorium-commissioners-meeting-data-center-electricity-consumption-environmental-impact-florida-data-center-regulations-florida-news",
-            "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
-            "canonical_headline": "Martin County Advances Data Center Moratorium, But New Project Would Be Exempt",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Martin County Moves to Restore MARTY Bus Service With MTM Transit",
-        "generated_card_count": 0,
-        "elapsed_seconds": 49.394
+        "live_hero_headline": "Hobe Sound Shooting Victim Dies, No Arrest Made in Banner Lake Case",
+        "generated_card_count": 1,
+        "elapsed_seconds": 68.26
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 3,
         "selected_source_count": 3,
         "cache_hit": false,
@@ -4644,7 +4497,7 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 22.435,
+            "elapsed_seconds": 23.983,
             "result": "copydesk_integrity",
             "error_type": "CopyDeskIntegrityError",
             "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
@@ -4652,13 +4505,13 @@
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 25.609,
+            "elapsed_seconds": 22.387,
             "result": "copydesk_integrity",
             "error_type": "CopyDeskIntegrityError",
             "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
           }
         ],
-        "model_elapsed_seconds": 48.044,
+        "model_elapsed_seconds": 46.37,
         "failure_code": "copydesk_integrity",
         "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
         "sports_expired_event_preview_count": 0,
@@ -4672,7 +4525,7 @@
         "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4706,11 +4559,21 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie woman pleads guilty to exploiting elderly Boca Raton client - WPBF",
-            "source_url": "https://www.wpbf.com/article/rachel-r-albert-boca-raton-pleads-guilty-exploiting-elderly-client/74135843",
-            "editorial_story_id": "story_021311",
-            "canonical_slug": "2026-10-14-port-st-lucie-woman-pleads-guilty-to-exploiting-elderly-boca-raton-client",
-            "canonical_headline": "Port St. Lucie Woman Pleads Guilty to Exploiting Elderly Boca Raton Client",
+            "source_headline": "Florida judges sentences Otto Lenke to death for murder of Richard Benson - Treasure Coast News",
+            "source_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPVGdtbDVHZnR6blA0YmkzLU9sd3ZmVVpuaVRRMjR1eUN3XzNYMGxoc1ZzbTlMa1Nlb0Jhdi01N3l5NVRkTkFhbXowNGFNYl96MXZ2SXpDVWd0am55aUQtMnVQRHEyQkpPWFdISkZJS056c3RydTVybXNhUEdqOHBmY243eno3SF91VnRtcUhoSUIydkFyN1BTbXl3QnNLV3pMNThtTmxGbHpNenluRldZX09Balp1ekEwOVJ6RzB3SVFWa3JZYmwwQ09LWVVfRUxnT1otQ0RKVlNldldSNzYyLWJ0S0dqS0Zpb3gyNGxxcXhWS3pKYkE",
+            "editorial_story_id": "story_021277",
+            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+            "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+            "editorial_story_id": "story_020868",
+            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+            "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4778,18 +4641,18 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.78,
+            "confidence": 0.72,
             "shared_anchors": [
-              "references the same 14-year-old Treasure Coast High School student's death as context/motivation"
+              "references the same fatal crash involving the 14-year-old Treasure Coast High School student in Port St. Lucie",
+              "same locality (Port St. Lucie / St. Lucie County)"
             ],
             "novel_facts": [
-              "Resident Green's advocacy campaign for sidewalks, pedestrian stop signs, and crosswalks",
-              "Specific unsafe conditions at Southwest Paar Drive bus stop",
-              "City's Capital Improvement Projects and Sidewalk Master Plan details",
-              "List of active, completed, and upcoming sidewalk projects citywide",
-              "City's engagement with St. Lucie County School Board on bus stop safety",
-              "Federal accessibility requirements affecting crosswalk installation",
-              "Timeline for updated sidewalk master plan presentation to City Council in 2027"
+              "resident-led advocacy campaign (Green) for sidewalks, pedestrian stop signs, and safer bus stops",
+              "specific unsafe conditions near Southwest Paar Drive bus stop",
+              "city's Capital Improvement Projects and Sidewalk Master Plan details, active/completed/upcoming sidewalk projects",
+              "city meetings with St. Lucie County School Board on bus stop locations",
+              "federal accessibility requirements limiting standalone crosswalk installation",
+              "timeline for updated sidewalk master plan presentation to City Council in 2027"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4841,10 +4704,25 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie woman pleads guilty to exploiting elderly Boca Raton client - WPBF",
-            "source_url": "https://www.wpbf.com/article/rachel-r-albert-boca-raton-pleads-guilty-exploiting-elderly-client/74135843",
-            "canonical_slug": "2026-10-14-port-st-lucie-woman-pleads-guilty-to-exploiting-elderly-boca-raton-client",
-            "canonical_headline": "Port St. Lucie Woman Pleads Guilty to Exploiting Elderly Boca Raton Client",
+            "source_headline": "Florida judges sentences Otto Lenke to death for murder of Richard Benson - Treasure Coast News",
+            "source_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPVGdtbDVHZnR6blA0YmkzLU9sd3ZmVVpuaVRRMjR1eUN3XzNYMGxoc1ZzbTlMa1Nlb0Jhdi01N3l5NVRkTkFhbXowNGFNYl96MXZ2SXpDVWd0am55aUQtMnVQRHEyQkpPWFdISkZJS056c3RydTVybXNhUEdqOHBmY243eno3SF91VnRtcUhoSUIydkFyN1BTbXl3QnNLV3pMNThtTmxGbHpNenluRldZX09Balp1ekEwOVJ6RzB3SVFWa3JZYmwwQ09LWVVfRUxnT1otQ0RKVlNldldSNzYyLWJ0S0dqS0Zpb3gyNGxxcXhWS3pKYkE",
+            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+            "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+            "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+            "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -4945,10 +4823,10 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 1,
+        "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 72.629
+        "elapsed_seconds": 70.151
       },
       {
         "category_key": "indian_river",
@@ -4956,7 +4834,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 27,
         "fresh_candidate_count": 25,
-        "publishable_source_count": 10,
+        "publishable_source_count": 11,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4973,19 +4851,19 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 10,
+        "category_eligibility_assessed_count": 11,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "editorial_story_id": "story_021362",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
-            "basis": "exact_source_and_persistent_story_skip",
+            "editorial_story_id": "story_017306",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5001,25 +4879,38 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
-            "source_headline": "1 hospitalized with life-threatening injuries after shooting in Hobe Sound",
+            "source_headline": "1 dead after Hobe Sound shooting; another detained for questioning",
             "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting Leaves One With Life-Threatening Injuries, One Detained",
+            "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+            "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.97,
+            "shared_anchors": [],
+            "novel_facts": [
+              "Shooting occurred on SE Citrus Way in Banner Lake area of Hobe Sound",
+              "Victim died after being flown to hospital with life-threatening injuries",
+              "Another person detained for questioning by Martin County Sheriff's Office"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           },
           {
             "category_key": "indian_river",
@@ -5038,7 +4929,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.541
+        "elapsed_seconds": 21.189
       }
     ]
   }
