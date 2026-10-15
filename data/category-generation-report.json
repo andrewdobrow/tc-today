@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-14T22:50:25Z",
+  "generated_at": "2026-10-15T01:51:17Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,44 +15,52 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 2,
       "category_eligibility_archive_recovery": 4,
-      "generated_live": 1,
+      "generated_live": 2,
       "generation_failed_archive_recovery": 1,
-      "no_publishable_sources": 1
+      "no_publishable_sources": 1,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "contextless_update_lead": 1,
-      "no_category_eligible_sources": 4
+      "copydesk_integrity": 1,
+      "no_category_eligible_sources": 4,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 3,
-    "model_elapsed_seconds": 64.866,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 70.076,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 2,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 7,
+    "contextual_update_lead_rejection_count": 0,
+    "article_framing_rejection_count": 1,
+    "category_eligibility_rejection_count": 8,
     "published_story_duplicate_suppression_count": 37,
-    "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 8,
+    "story_aware_update_context_count": 1,
+    "material_update_promotion_evaluation_count": 13,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 4,
-    "material_update_promotion_model_call_count": 4
+    "material_update_promotion_cache_hit_count": 5,
+    "material_update_promotion_model_call_count": 8
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "cache_hit",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 25,
+      "status": "generated_live",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 14,
-      "selected_source_count": 1,
-      "cache_hit": true,
+      "selected_source_count": 2,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 13.122,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 13.123,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -64,7 +72,7 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
       "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -95,23 +103,9 @@
           "local_nexus_signals": [],
           "headline": "Neighbors ask for solutions on deadly roadway in Port St. Lucie",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/neighbors-ask-for-solutions-on-deadly-roadway-in-port-st-lucie"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Florida AG vows public corruption crackdown after Fort Pierce city manager Nicholas Mimms conviction - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -120,6 +114,16 @@
           "editorial_story_id": "story_021277",
           "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
           "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida AG vows public corruption crackdown after Fort Pierce city manager Nicholas Mimms conviction - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428",
+          "editorial_story_id": "story_021219",
+          "canonical_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+          "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -146,10 +150,10 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
@@ -165,6 +169,34 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida AG vows public corruption crackdown after Fort Pierce city manager Nicholas Mimms conviction - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428",
+          "canonical_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+          "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Nicholas/Nick Mimms",
+            "Fort Pierce city manager conviction",
+            "AG James Uthmeier press conference",
+            "25 active corruption investigations",
+            "same date 2026-10-14"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles cover the same press conference where AG Uthmeier discusses Mimms' conviction and the state's corruption crackdown, citing identical facts (25 investigations, nonprofit grant, niece's board role). No new material facts in the incoming article beyond what's already reported in the canonical.",
+          "validation_errors": []
         },
         {
           "category_key": "local_gov",
@@ -198,41 +230,34 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Martin County Moves to Restore MARTY Bus Service Through MTM Transit Deal",
-      "elapsed_seconds": 31.768
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Martin County Commission Votes to Negotiate Deal to Restore MARTY Bus Service",
+      "generated_card_count": 0,
+      "elapsed_seconds": 46.945
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 28,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 27,
       "fresh_candidate_count": 21,
       "publishable_source_count": 13,
-      "selected_source_count": 2,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.065,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Suspected fentanyl trafficker arrested after 115 mph chase on I-95 in St. Lucie County - WPBF"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.888,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Suspected fentanyl trafficker arrested after 115 mph chase on I-95 in St. Lucie County - WPBF"
+          "elapsed_seconds": 8.219,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 33.952,
-      "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: new_development_missing — Suspected fentanyl trafficker arrested after 115 mph chase on I-95 in St. Lucie County - WPBF",
+      "model_elapsed_seconds": 8.219,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -242,8 +267,22 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
       "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "'We need help': Martin County transit cuts put strain on United Way's Ride United program",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-transit-cuts-put-strain-on-united-ways-ride-united-program"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -259,8 +298,18 @@
           "source_url": "https://www.wptv.com/money/real-estate-news/900-a-month-in-fees-west-boca-condo-owner-feels-squeeze-of-rising-hoa-costs"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Suspected fentanyl trafficker arrested after 115 mph chase on I-95 in St. Lucie County - WPBF",
+          "source_url": "https://www.wpbf.com/article/st-lucie-county-fentanyl-trafficker-chase/74136078",
+          "editorial_story_id": "story_021217",
+          "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
+          "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Former Melbourne police officer sentenced to death for killing Fort Pierce motorcycle mechanic",
@@ -293,16 +342,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "'FIRST OF MANY': Attorney General discusses Nick Mimms conviction, warns of more corruption cases",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/first-of-many-attorney-general-discusses-nick-mimms-conviction-warns-of-more-corruption-cases",
-          "editorial_story_id": "story_021219",
-          "canonical_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
-          "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Port St. Lucie ICU nurse arrested on charges involving patient's IV - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-icu-nurse-arrested-on/74107952",
           "editorial_story_id": "story_020811",
@@ -320,67 +359,48 @@
           "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
-          "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
-          "editorial_story_id": "story_020868",
-          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-          "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Suspected fentanyl trafficker arrested after 115 mph chase on I-95 in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/st-lucie-county-fentanyl-trafficker-chase/74136078",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
-          "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_021217",
-            "source:https://www.wpbf.com/article/st-lucie-county-fentanyl-trafficker-chase/74136078"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county', 'st-lucie', 'st-lucie-county']",
-            "shared_event_families=['drug-case', 'vehicle-chase']",
-            "shared_named_people=['james arthur green']",
-            "shared_precise_locations=['kanner-highway']",
-            "shared_agencies=['st-lucie-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['chase', 'fentanyl', 'suspect']",
-            "shared_distinctive_token_count=64",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 2,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Suspected fentanyl trafficker arrested after 115 mph chase on I-95 in St. Lucie County - WPBF",
+          "source_url": "https://www.wpbf.com/article/st-lucie-county-fentanyl-trafficker-chase/74136078",
+          "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
+          "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "James Arthur Green, 43",
+            "I-95 chase into Martin County",
+            "Kanner Highway stop",
+            "fentanyl overdose death investigation",
+            "St. Lucie County Sheriff's Office"
+          ],
+          "novel_facts": [
+            "Sheriff Del Toro's quotes about operation details",
+            "specific chase speed of 115 mph",
+            "$440,000 bond amount",
+            "picture sent to victim's phone showing drug location"
+          ],
+          "reason": "Both articles report the identical arrest of James Arthur Green following the same fentanyl overdose investigation, undercover operation, and I-95 chase ending at Kanner Highway in Martin County. The incoming article adds some color details (bond amount, specific speed, direct quotes) but these are routine elaborations of the same incident, not a material new development like a new charge type, death, or ruling.",
+          "validation_errors": []
+        },
         {
           "category_key": "crime",
           "source_headline": "Former Melbourne police officer sentenced to death for killing Fort Pierce motorcycle mechanic",
@@ -420,21 +440,6 @@
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "'FIRST OF MANY': Attorney General discusses Nick Mimms conviction, warns of more corruption cases",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/first-of-many-attorney-general-discusses-nick-mimms-conviction-warns-of-more-corruption-cases",
-          "canonical_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
-          "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -490,44 +495,29 @@
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
           "confidence": 0.97,
-          "shared_anchors": [
-            "Both involve missing persons in Port St. Lucie/St. Lucie area"
-          ],
+          "shared_anchors": [],
           "novel_facts": [
-            "Missing 15-year-old girl Cassandra Cerron, last seen Oct. 11, distinct from missing adult male Robert La Polla case"
+            "Missing person is Cassandra Cerron, a 15-year-old girl",
+            "Last seen October 11 in Port St. Lucie",
+            "Different case from Robert La Polla, a 47-year-old man missing since January"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Police search for driver who killed scooter rider, crashed van into Fort Pierce salon - WPEC",
-          "source_url": "https://cbs12.com/news/local/police-search-for-driver-who-killed-scooter-rider-crashed-van-into-fort-pierce-salon-october-12-2026",
-          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-          "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 58.056
+      "elapsed_seconds": 40.903
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -546,8 +536,25 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
       "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county"
+          ],
+          "headline": "'We need help': Martin County transit cuts put strain on United Way's Ride United program",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-transit-cuts-put-strain-on-united-ways-ride-united-program"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -587,7 +594,7 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/neighbors-ask-for-solutions-on-deadly-roadway-in-port-st-lucie"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -618,16 +625,6 @@
           "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County fire chief faces calls to resign after overwhelming no-confidence vote",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-chief-faces-calls-to-resign-after-overwhelming-no-confidence-vote",
-          "editorial_story_id": "story_018462",
-          "canonical_slug": "2026-09-30-st-lucie-fire-district-attorney-resigns-as-chief-faces-no-confidence-vote",
-          "canonical_headline": "St. Lucie Fire Board Member Urges Chief Jeff Lee to Resign After Vote",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -681,31 +678,16 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County fire chief faces calls to resign after overwhelming no-confidence vote",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-chief-faces-calls-to-resign-after-overwhelming-no-confidence-vote",
-          "canonical_slug": "2026-09-30-st-lucie-fire-district-attorney-resigns-as-chief-faces-no-confidence-vote",
-          "canonical_headline": "St. Lucie Fire Board Member Urges Chief Jeff Lee to Resign After Vote",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.496
+      "elapsed_seconds": 20.513
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 27,
+      "fetched_candidate_count": 26,
       "fresh_candidate_count": 25,
       "publishable_source_count": 5,
       "selected_source_count": 0,
@@ -727,7 +709,7 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
@@ -736,16 +718,6 @@
           "editorial_story_id": "story_020840",
           "canonical_slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
           "canonical_headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "sports",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "editorial_story_id": "story_019058",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -771,32 +743,17 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "sports",
-          "source_headline": "Vero Beach remembers 17-year-old Sulli Bah as family seeks justice - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/vero-beach-remembers-17-year-old-sulli-bah-as-family-seeks-justice",
-          "canonical_slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
-          "canonical_headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 18.019
+      "elapsed_seconds": 15.222
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 18,
+      "fresh_candidate_count": 17,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -847,8 +804,32 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Port St. Lucie veterans home raises money for WiFi, Medal of Honor Museum trip",
+          "source_url": "https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-09-22-port-st-lucie-veterans-home-raises-funds-for-wifi-medal-of-honor-museum-trip",
+          "canonical_headline": "Port St. Lucie veterans home raises funds for WiFi, Medal of Honor Museum trip",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_019629",
+            "source:https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_019629,source:https://www.wptv.com/shining-a-light/port-st-lucie-veterans-home-raises-money-for-wifi-medal-of-honor-museum-trip",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -871,14 +852,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.244
+      "elapsed_seconds": 22.155
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -899,73 +880,162 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Hurricane Isaias death toll rises to 6 in Florida as storm recovery continues - New York Post",
-          "source_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPb2dyaXIwR1lmbWFLTjdCTFo0U0cwd1I0U0x3dkNLZHI3T1dRLU16SnFMdnFtNVRyMWgwZFd3VVhFaGoyRmdGT083TlRxNlJsV2dBOEhxWmpQZFVRdHI4MWZFMEc2UWUyZE4tX0trMUw0dDk2bmlUYzNobS1aak9KSzVFeURadGp4WC13WEVRN2MtQmw4NTFuRGxSTUN5bThqbV9HU2dB",
-          "editorial_story_id": "story_020512",
-          "canonical_slug": "2026-10-10-nearly-450000-without-power-in-florida-after-hurricane-isaias-no-confirmed-death",
-          "canonical_headline": "Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Hurricane Isaias death toll rises to 6 in Florida as storm recovery continues - New York Post",
-          "source_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPb2dyaXIwR1lmbWFLTjdCTFo0U0cwd1I0U0x3dkNLZHI3T1dRLU16SnFMdnFtNVRyMWgwZFd3VVhFaGoyRmdGT083TlRxNlJsV2dBOEhxWmpQZFVRdHI4MWZFMEc2UWUyZE4tX0trMUw0dDk2bmlUYzNobS1aak9KSzVFeURadGp4WC13WEVRN2MtQmw4NTFuRGxSTUN5bThqbV9HU2dB",
-          "canonical_slug": "2026-10-10-nearly-450000-without-power-in-florida-after-hurricane-isaias-no-confirmed-death",
-          "canonical_headline": "Escambia County Death Toll Holds at 2 as Florida Panhandle Power Restoration Accelerates",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.239
+      "elapsed_seconds": 19.615
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "cache_hit",
-      "fetched_candidate_count": 26,
+      "status": "generated_live",
+      "fetched_candidate_count": 27,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 2,
-      "selected_source_count": 1,
-      "cache_hit": true,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 21.871,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 21.871,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "United Way's Ride United Program Strained as Martin County Transit Options Shrink",
+          "missing": [
+            "surname_only_first_reference"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": false,
+            "headline": "United Way's Ride United Program Strained as Martin County Transit Options Shrink",
+            "lead": "The United Way of Martin County says its Ride United transportation program is being strained by a surge in demand following last week's MARTY bus shutdown and earlier state budget cuts to Community Coach, a transit service for disabled riders. Carol Houwaart-Diez, president and CEO of the United Way of Martin County, said the organization needs community and funding support to keep up.",
+            "lead_word_count": 65,
+            "headline_overlap_ratio": 0.8,
+            "new_context_token_count": 31,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "surname_first_reference": {
+              "required": true,
+              "passed": false,
+              "missing": [
+                "surname_only_first_reference"
+              ],
+              "person": {
+                "full": "Ride United",
+                "first": "Ride",
+                "last": "United"
+              },
+              "surname_word_index": 1
+            },
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": [
+              "surname_only_first_reference"
+            ]
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": true,
+            "headline": "United Way's Ride United Program Strained as Martin County Transit Options Shrink",
+            "lead": "The United Way of Martin County says its Ride United transportation program is being strained by a surge in demand following last week's MARTY bus shutdown and earlier state budget cuts to Community Coach, a transit service for disabled riders. Carol Houwaart-Diez, president and CEO of the United Way of Martin County, said the organization needs community and funding support to keep up.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "martin_county"
+            ],
+            "lead_jurisdictions": [
+              "martin_county"
+            ],
+            "missing_jurisdictions": [],
+            "headline_judge_claims": [],
+            "lead_judge_claims": [],
+            "missing_judge_claims": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": []
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "United Way's Ride United Program Strained as Martin County Transit Options Shrink",
+            "generated_lead": "The United Way of Martin County says its Ride United transportation program is being strained by a surge in demand following last week's MARTY bus shutdown and earlier state budget cuts to Community Coach, a transit service for disabled riders. Carol Houwaart-Diez, president and CEO of the United Way of Martin County, said the organization needs community and funding support to keep up.",
+            "source_title": "'We need help': Martin County transit cuts put strain on United Way's Ride United program",
+            "source_lead": "The United Way of Martin County is calling on the community for support as transit services for residents face mounting challenges.The organization says the MARTY bus shutdown last week was just the tip of the iceberg. The United Way has been seeing an increased need for transit services following state budget cuts earlier this year.WATCH BELOW: United Way's Ride United program strained by surge in transit requestsHenry Hayden relies on community transit services to get to and from work.",
+            "title_similarity": {
+              "score": 0.6323,
+              "overlap": 0.7,
+              "jaccard": 0.4375,
+              "sorted_sequence": 0.7552,
+              "ordered_sequence": 0.3822,
+              "shared_token_count": 7.0
+            },
+            "lead_token_overlap": 0.59,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "official_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "temporal_integrity": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Florida AG vows public corruption crackdown after Fort Pierce city manager Nicholas Mimms conviction - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428",
+          "editorial_story_id": "story_021219",
+          "canonical_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+          "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
@@ -989,11 +1059,39 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Florida AG vows public corruption crackdown after Fort Pierce city manager Nicholas Mimms conviction - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428",
+          "canonical_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+          "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Nicholas/Nick Mimms",
+            "Fort Pierce city manager conviction",
+            "AG James Uthmeier press conference",
+            "25 active corruption investigations",
+            "same date 2026-10-14"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles cover the same press conference where AG Uthmeier discusses Mimms' conviction and the state's corruption crackdown, citing identical facts (25 investigations, nonprofit grant, niece's board role). No new material facts in the incoming article beyond what's already reported in the canonical.",
+          "validation_errors": []
+        },
         {
           "category_key": "martin",
           "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
@@ -1026,31 +1124,44 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Martin County commissioners vote to restore MARTY bus service with $3 million contract",
-      "elapsed_seconds": 14.551
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Martin County Moves to Restore MARTY Bus Service With $3M Contract",
+      "generated_card_count": 0,
+      "elapsed_seconds": 40.203
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 16,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 14,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 30.914,
-          "result": "success"
+          "elapsed_seconds": 14.886,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.977,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
         }
       ],
-      "model_elapsed_seconds": 30.914,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 26.863,
+      "failure_code": "copydesk_integrity",
+      "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1059,10 +1170,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 14,
+      "published_story_duplicate_suppression_count": 16,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1072,6 +1183,16 @@
           "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
           "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Death sentence handed down for 67-year-old Otto Lenke in Fort Pierce killing case - WPEC",
+          "source_url": "https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
+          "editorial_story_id": "story_021277",
+          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+          "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1106,11 +1227,11 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Florida judges sentences Otto Lenke to death for murder of Richard Benson - Treasure Coast News",
-          "source_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPVGdtbDVHZnR6blA0YmkzLU9sd3ZmVVpuaVRRMjR1eUN3XzNYMGxoc1ZzbTlMa1Nlb0Jhdi01N3l5NVRkTkFhbXowNGFNYl96MXZ2SXpDVWd0am55aUQtMnVQRHEyQkpPWFdISkZJS056c3RydTVybXNhUEdqOHBmY243eno3SF91VnRtcUhoSUIydkFyN1BTbXl3QnNLV3pMNThtTmxGbHpNenluRldZX09Balp1ekEwOVJ6RzB3SVFWa3JZYmwwQ09LWVVfRUxnT1otQ0RKVlNldldSNzYyLWJ0S0dqS0Zpb3gyNGxxcXhWS3pKYkE",
-          "editorial_story_id": "story_021277",
-          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-          "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "source_headline": "Florida AG vows public corruption crackdown after Fort Pierce city manager Nicholas Mimms conviction - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428",
+          "editorial_story_id": "story_021219",
+          "canonical_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+          "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1156,12 +1277,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie nurse accused of stealing fentanyl from ICU patient’s IV bag - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-nurse-accused-of-stealing-fentanyl-from-icu-patients-iv-bag/74124384",
-          "editorial_story_id": "story_020811",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "basis": "same_event_and_persistent_story_skip",
+          "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+          "editorial_story_id": "story_020868",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1186,6 +1307,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/13/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy?outputType=amp",
+          "editorial_story_id": "story_020402",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Neighbors call for pedestrian safety after Port St. Lucie teen’s death - WPEC",
           "source_url": "https://cbs12.com/news/local/neighbors-call-for-pedestrian-safety-after-port-st-lucie-teens-death-boulevard-construction-roadwork-oct-12-2026",
           "editorial_story_id": "story_020402",
@@ -1205,38 +1336,12 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Death sentence handed down for 67-year-old Otto Lenke in Fort Pierce killing case - WPEC",
-          "source_url": "https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-          "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "incident:named-person-death:otto-lenke",
-            "story:story_021277",
-            "source:https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident",
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:otto-lenke,story:story_021277,source:https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 6,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 8,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 3,
+      "material_update_promotion_model_call_count": 5,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1256,21 +1361,49 @@
           "semantic_action": "hold",
           "confidence": 0.72,
           "shared_anchors": [
-            "Port St. Lucie",
-            "reference to the 14-year-old Treasure Coast High School student's death as motivating context"
+            "references the 14-year-old Treasure Coast High School student's death as background context",
+            "Port St. Lucie location"
           ],
           "novel_facts": [
-            "Resident Green's advocacy campaign for sidewalks, pedestrian stop signs, and crosswalks",
-            "Specific unsafe conditions on Southwest Paar Drive bus stop crossing",
-            "City's Capital Improvement Projects and Sidewalk Master Plan details with list of active/completed/upcoming sidewalk projects",
-            "City meeting with St. Lucie County School Board on bus stop safety",
-            "Federal accessibility requirements limiting standalone crosswalk installation",
-            "Updated sidewalk master plan expected to go to City Council in 2027"
+            "Resident Green's advocacy campaign for safer bus stops, pedestrian signs, and crosswalks",
+            "Specific unsafe crossing conditions near Southwest Paar Drive",
+            "City's Capital Improvement Projects and Sidewalk Master Plan details with specific street names",
+            "City meetings with St. Lucie County School Board on bus stop safety",
+            "Federal accessibility requirements affecting crosswalk installation",
+            "Updated sidewalk master plan timeline expected for 2027 City Council approval"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Death sentence handed down for 67-year-old Otto Lenke in Fort Pierce killing case - WPEC",
+          "source_url": "https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
+          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+          "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Otto Lenke",
+            "Richard Benson",
+            "Fort Pierce motorcycle shop killing",
+            "death sentence handed down Wednesday by Circuit Court Judge Michael Linn",
+            "same source URL/article"
+          ],
+          "novel_facts": [],
+          "reason": "This is the same sentencing event already captured in the canonical article - same defendant, victim, judge, sentence, and even the identical source URL. No new facts such as an appeal ruling or further proceeding are present; this is a duplicate republish.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1319,18 +1452,31 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Florida judges sentences Otto Lenke to death for murder of Richard Benson - Treasure Coast News",
-          "source_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPVGdtbDVHZnR6blA0YmkzLU9sd3ZmVVpuaVRRMjR1eUN3XzNYMGxoc1ZzbTlMa1Nlb0Jhdi01N3l5NVRkTkFhbXowNGFNYl96MXZ2SXpDVWd0am55aUQtMnVQRHEyQkpPWFdISkZJS056c3RydTVybXNhUEdqOHBmY243eno3SF91VnRtcUhoSUIydkFyN1BTbXl3QnNLV3pMNThtTmxGbHpNenluRldZX09Balp1ekEwOVJ6RzB3SVFWa3JZYmwwQ09LWVVfRUxnT1otQ0RKVlNldldSNzYyLWJ0S0dqS0Zpb3gyNGxxcXhWS3pKYkE",
-          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-          "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "source_headline": "Florida AG vows public corruption crackdown after Fort Pierce city manager Nicholas Mimms conviction - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-public-corruption-mimms-conviction/74133428",
+          "canonical_slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+          "canonical_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Nicholas/Nick Mimms",
+            "Fort Pierce city manager conviction",
+            "AG James Uthmeier press conference",
+            "25 active corruption investigations",
+            "same date 2026-10-14"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles cover the same press conference where AG Uthmeier discusses Mimms' conviction and the state's corruption crackdown, citing identical facts (25 investigations, nonprofit grant, niece's board role). No new material facts in the incoming article beyond what's already reported in the canonical.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1394,33 +1540,18 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie nurse accused of stealing fentanyl from ICU patient’s IV bag - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-nurse-accused-of-stealing-fentanyl-from-icu-patients-iv-bag/74124384",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "source_headline": "Van driver sought after fleeing fatal crash involving scooter in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
+          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
           "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
           "promoted": false,
-          "cache_hit": true,
+          "cache_hit": false,
           "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.9,
-          "shared_anchors": [
-            "Leslie Pope",
-            "Cleveland Clinic Tradition Hospital",
-            "fentanyl IV diversion",
-            "Port St. Lucie Police Department investigation"
-          ],
-          "novel_facts": [
-            "Additional narrative detail on June 24-25 incidents and video evidence",
-            "Cleveland Clinic statement that employee no longer works there"
-          ],
-          "reason": "This article covers the same arrest/case of nurse Leslie Pope already reported in the canonical article, adding narrative detail and a hospital statement but no new charge, death, ruling, or other material development.",
-          "validation_errors": []
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -1484,6 +1615,38 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/13/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy?outputType=amp",
+          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "invalid_model_response",
+          "semantic_action": "hold",
+          "confidence": 0.78,
+          "shared_anchors": [
+            "14-year-old Port St. Lucie student struck while walking to school",
+            "Port St. Lucie Boulevard near Squirrel Avenue",
+            "Oct. 7 crash and subsequent death"
+          ],
+          "novel_facts": [
+            "Family's decision to donate the teen's organs",
+            "Commentary from South Florida Donor Network and St. Lucie County Tax Collector on organ donation impact",
+            "Broader context on organ donor shortage and advocacy"
+          ],
+          "reason": "Same underlying crash/death as the canonical, but this article introduces a distinct, independently newsworthy development: the family's choice to donate organs, which carries its own public-interest angle (lives saved, donor advocacy) beyond merely updating the crash facts. This is more than routine color and supports a new story rather than folding into the original crash canonical.",
+          "validation_errors": [
+            "same_event_confidence_below_threshold"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Neighbors call for pedestrian safety after Port St. Lucie teen’s death - WPEC",
           "source_url": "https://cbs12.com/news/local/neighbors-call-for-pedestrian-safety-after-port-st-lucie-teens-death-boulevard-construction-roadwork-oct-12-2026",
           "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
@@ -1501,18 +1664,18 @@
           "confidence": 0.78,
           "shared_anchors": [
             "14-year-old Treasure Coast High School student",
-            "Port St. Lucie Boulevard/Squirrel Avenue crash",
-            "struck by SUV while walking to school",
-            "death from injuries"
+            "struck near Squirrel Avenue/Port St. Lucie Boulevard",
+            "died from injuries after being hit while walking to school"
           ],
           "novel_facts": [
-            "Neighbor-led pedestrian safety advocacy following the death",
-            "Details on lack of sidewalks and ongoing FDOT construction project ($25.6M, completion winter 2028)",
-            "Organ donation by family",
-            "Driver's statement that he believed he hit a construction barrel; unclear if charges will be filed",
-            "FDOT declined to answer questions about interim pedestrian safety measures during construction"
+            "Neighbor/community reaction calling for pedestrian safety improvements",
+            "Details on ongoing FDOT road widening/sidewalk construction project, cost ($25.6M) and timeline (winter 2028)",
+            "Lack of sidewalks and flooded shoulders cited as contributing hazard",
+            "Driver's statement that he believed he hit a construction barrel; cooperation with investigators; unclear if charges will be filed",
+            "Family's decision to donate organs",
+            "FDOT declined to answer questions about interim safety measures"
           ],
-          "reason": "This is the same underlying crash/death as the canonical story, but it introduces a distinct accountability angle: community criticism of FDOT/road safety conditions, lack of sidewalks, construction hazards, and questions about potential charges against the driver. This goes beyond routine updates and raises a public-interest/accountability question (road safety infrastructure failures contributing to a death) that merits independent coverage beyond the original death report.",
+          "reason": "This is the same underlying crash/death already covered in the canonical article, but it introduces a distinct accountability angle: community criticism of FDOT's construction zone safety, lack of sidewalks, the cost/timeline of the widening project, and the open question of charges against the driver. These elements raise a public-interest/accountability question beyond the original death report, meeting the bar for an independently newsworthy follow-up rather than a simple duplicate or routine update.",
           "validation_errors": [
             "same_event_confidence_below_threshold"
           ]
@@ -1535,11 +1698,13 @@
           "semantic_action": "hold",
           "confidence": 0.97,
           "shared_anchors": [
-            "missing-person event type",
-            "st-lucie county area"
+            "missing-person category",
+            "port-st-lucie locality"
           ],
           "novel_facts": [
-            "Cassandra Cerron, 15-year-old girl missing since Oct 11, 2026, Port St. Lucie"
+            "Missing 15-year-old Cassandra Cerron",
+            "Last seen Oct 11 at her home",
+            "Different missing person case entirely from Robert La Polla"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1548,11 +1713,9 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "AG Vows Broader Corruption Crackdown After Fort Pierce Mimms Conviction",
-      "generated_card_count": 3,
-      "elapsed_seconds": 68.338
+      "elapsed_seconds": 65.539
     },
     {
       "category_key": "indian_river",
@@ -1560,7 +1723,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 27,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 9,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1577,7 +1740,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 12,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
@@ -1667,7 +1830,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 22.702
+      "elapsed_seconds": 18.974
     }
   ]
 }
