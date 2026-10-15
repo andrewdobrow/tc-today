@@ -73,14 +73,18 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Preflight pinned Supabase CLI
+      - name: Install pinned Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+
+      - name: Verify Supabase CLI
         run: |
-          cli_root="$RUNNER_TEMP/tct-supabase-cli"
-          rm -rf "$cli_root"
-          mkdir -p "$cli_root"
-          npm install --prefix "$cli_root" --no-save --no-package-lock --no-audit --no-fund "supabase@${SUPABASE_CLI_VERSION}"
-          echo "$cli_root/node_modules/.bin" >> "$GITHUB_PATH"
-          "$cli_root/node_modules/.bin/supabase" --version
+          set -euo pipefail
+          actual="$(supabase --version)"
+          expected="${SUPABASE_CLI_VERSION#v}"
+          echo "Installed Supabase CLI: $actual"
+          test "$actual" = "$expected"
 
       - name: Sanitize persistent generation cache
         run: python scripts/sanitize_generation_cache.py
