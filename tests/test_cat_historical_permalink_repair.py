@@ -15,15 +15,37 @@ def test_contaminated_july_url_is_redirect_and_not_archive_story():
     assert OLD not in {a.get('slug') for a in json.loads((ROOT/'archive.json').read_text())}
     assert f'/articles/{OLD}.html /articles/{NEW}.html 301!' in (ROOT/'_redirects').read_text()
 
-def test_updated_october_article_keeps_published_date_and_full_body():
+def test_updated_october_article_preserves_date_and_validated_evolution():
+    from datetime import datetime
+    from html import escape
+
     page=(ROOT/'articles'/f'{NEW}.html').read_text()
-    assert DATA['headline'] in page
-    assert 'article:published_time" content="Thu, 08 Oct 2026' in page
     archive=json.loads((ROOT/'archive.json').read_text())
     row=next(a for a in archive if a.get('slug')==NEW)
-    assert row['body']==DATA['body']
-    assert row['canonical_last_material_update_at']==DATA['updated']
+
+    # The October 8 permalink, initial publication date and article shell are immutable.
     assert row['canonical_first_published_at']==DATA['published']
+    assert 'article:published_time" content="Thu, 08 Oct 2026' in page
+    assert f'/articles/{NEW}.html' in page
+    assert f'<h1 class="article-headline">{escape(row["headline"])}</h1>' in page
+    assert 'data-tct-paywall' in page
+
+    def instant(value):
+        return datetime.fromisoformat(value.replace('Z','+00:00'))
+
+    current_update=instant(row['canonical_last_material_update_at'])
+    repair_update=instant(DATA['updated'])
+    if current_update > repair_update:
+        # A later *validated* material update may legitimately evolve headline/body.
+        # Do not resurrect the October 9 headline and clobber subsequent reporting.
+        assert row.get('meaningful_update_validated') is True
+        assert row.get('editorial_story_id') == 'story_020183'
+        assert 'Alba Chavez' in row['body']
+    else:
+        # Without a newer validated update, the historical repair remains required.
+        assert current_update == repair_update
+        assert row['headline'] == DATA['headline']
+        assert row['body'] == DATA['body']
 
 def test_repair_is_idempotent_and_preserves_redirect_history():
     import shutil
