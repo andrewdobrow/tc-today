@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-16T20:15:55Z",
+  "generated_at": "2026-10-16T22:53:11Z",
   "mode": "shadow",
   "publication_behavior_changed": false,
   "activation": {
@@ -25,8 +25,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 5,
-    "placements_after": 5,
+    "placements_before": 7,
+    "placements_after": 7,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -51,27 +51,28 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 169,
+    "candidates_processed": 171,
     "routes": {
-      "generate_new": 19,
-      "skip": 145,
-      "update_existing": 5
+      "generate_new": 38,
+      "skip": 130,
+      "update_existing": 3
     },
     "eligibility": {
       "listing": 1,
-      "low_value": 118,
-      "publishable": 50
+      "low_value": 119,
+      "publishable": 51
     },
     "source_classes": {
-      "aggregator": 119,
-      "local_news": 32,
-      "regional_news": 18
+      "aggregator": 120,
+      "local_news": 31,
+      "regional_news": 19,
+      "unknown": 1
     },
     "rejected_count": 1,
     "rejected_examples": [
       {
-        "headline": "6874 NW Kestrel Ln, Port Saint Lucie, FL 34987 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQQnNNTFZCX2twUlpTcnZ3MlZranB4UTRTaEEtTEhtUUR2YjA3aFBaQm9WQTgwUktOQmc5R3psM0R0TFpWMWR0S1FCUDI3d1I0Z1hZbmZ1LWstQjJiN25nalMzV0Q5SWJOQ0hPS3VDSkllNVdkSTJoYzN0TGY2WExNQlphN185Q2RQN1BHVU9TWVpiOEFHWjU0dzZn?oc=5",
+        "headline": "2108 SE Harrison St, Stuart, FL 34997 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOdi02VTFqaUVtUk5SX1RuaFNTYkdKSFNEZXZEMEhlV2RsRFJYZEdWaHU0TE1NVG15RXRlLWlPM2R6VVlTYjE4UC1SMGRhNS1TS1FJeWVCTVVvcUo4Q0RXQXFSXzdWeVMtWk9KNk9CQ3RJUTR4WGZUTU5zSFhFTnpEUmh1LW1FbnlCdzRldE0yaXdsUQ?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -82,38 +83,64 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 14,
-      "same_event": 155
+      "follow_up": 1,
+      "new_story": 30,
+      "same_event": 140
     },
     "examples": [
       {
-        "story_id": "story_021671",
-        "title": "Will Port St. Lucie see more floods this weekend? - WPEC",
-        "event_key": "unknown-event-1da69dbd0c",
+        "story_id": "story_021686",
+        "title": "Amendment 3 could bring rush of Florida homebuyers, impact property values",
+        "event_key": "unknown-event-89bcb032b6",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_021687",
+        "title": "33 years after uncle's murder, family asks Gov. Ron DeSantis to sign killer's death warrant",
+        "event_key": "named-person-death:ron-desantis",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: conservative merge requirements were not met",
+        "decision_trace": [
+          "No sufficiently supported match",
+          "Threshold: 0.78"
+        ]
+      },
+      {
+        "story_id": "story_021688",
+        "title": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas",
+        "event_key": "unknown-event-e4e36c156c",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_021671",
+        "title": "Will Port St. Lucie see more floods this weekend? - cw34.com",
+        "event_key": "unknown-event-f8d97ca53b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_021672",
         "title": "2026 Voter’s Guide - Here’s what to know about Brevard County’s proposed charter amendments - WKMG",
         "event_key": "unknown-event-8401d3ba1b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_021662",
-        "title": "Man accused of brutally beating Palm Beach County nurse appears in court for bond hearing - WPEC",
-        "event_key": "unknown-event-3c680981d4",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -122,6 +149,18 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_021689",
+        "title": "2026 Voter’s Guide - Florida House District 34 - WKMG",
+        "event_key": "unknown-event-988eaad57c",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -139,16 +178,15 @@
         ]
       },
       {
-        "story_id": "story_021645",
-        "title": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
-        "event_key": "unknown-event-23f814f7a8",
+        "story_id": "story_021647",
+        "title": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WFLX",
+        "event_key": "traffic-crash-8ef04d239a-8ef04d239a",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -310,48 +348,6 @@
         "story_id": "story_021584",
         "title": "Florida project to bring Italian, Thai, Mexican restaurants here - Yahoo",
         "event_key": "unknown-event-fc4e325a2f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021579",
-        "title": "Insurance and inflation top issues for Brevard legislative candidates - Florida Today",
-        "event_key": "unknown-event-a6db10b86c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021580",
-        "title": "Florida city prepares to repair hurricane-ravaged beach boardwalk - Treasure Coast News",
-        "event_key": "unknown-event-f1d0ff99d2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021581",
-        "title": "Manatee County School Board sues two charter schools over tax share - WMNF",
-        "event_key": "unknown-event-5b49a4c5dc",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -365,9 +361,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_021671",
-        "title": "Will Port St. Lucie see more floods this weekend? - WPEC",
-        "event_key": "unknown-event-1da69dbd0c",
+        "story_id": "story_021686",
+        "title": "Amendment 3 could bring rush of Florida homebuyers, impact property values",
+        "event_key": "unknown-event-89bcb032b6",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -375,25 +371,52 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_021687",
+        "title": "33 years after uncle's murder, family asks Gov. Ron DeSantis to sign killer's death warrant",
+        "event_key": "named-person-death:ron-desantis",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: conservative merge requirements were not met",
+        "decision_trace": [
+          "No sufficiently supported match",
+          "Threshold: 0.78"
+        ]
+      },
+      {
+        "story_id": "story_021688",
+        "title": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas",
+        "event_key": "unknown-event-e4e36c156c",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_021671",
+        "title": "Will Port St. Lucie see more floods this weekend? - cw34.com",
+        "event_key": "unknown-event-f8d97ca53b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_021672",
         "title": "2026 Voter’s Guide - Here’s what to know about Brevard County’s proposed charter amendments - WKMG",
         "event_key": "unknown-event-8401d3ba1b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_021662",
-        "title": "Man accused of brutally beating Palm Beach County nurse appears in court for bond hearing - WPEC",
-        "event_key": "unknown-event-3c680981d4",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -403,6 +426,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_021689",
+        "title": "2026 Voter’s Guide - Florida House District 34 - WKMG",
+        "event_key": "unknown-event-988eaad57c",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -421,17 +457,16 @@
         ]
       },
       {
-        "story_id": "story_021645",
-        "title": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
-        "event_key": "unknown-event-23f814f7a8",
+        "story_id": "story_021647",
+        "title": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WFLX",
+        "event_key": "traffic-crash-8ef04d239a-8ef04d239a",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -604,51 +639,6 @@
         "story_id": "story_021584",
         "title": "Florida project to bring Italian, Thai, Mexican restaurants here - Yahoo",
         "event_key": "unknown-event-fc4e325a2f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021579",
-        "title": "Insurance and inflation top issues for Brevard legislative candidates - Florida Today",
-        "event_key": "unknown-event-a6db10b86c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021580",
-        "title": "Florida city prepares to repair hurricane-ravaged beach boardwalk - Treasure Coast News",
-        "event_key": "unknown-event-f1d0ff99d2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_021581",
-        "title": "Manatee County School Board sues two charter schools over tax share - WMNF",
-        "event_key": "unknown-event-5b49a4c5dc",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -665,27 +655,68 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
-    "high_confidence_candidate_count": 0,
+    "candidate_count": 3,
+    "high_confidence_candidate_count": 1,
     "unanchored_candidate_suppressed_count": 0,
     "current_relationships": {
-      "new_story": 1
+      "follow_up": 1,
+      "new_story": 2
     },
     "milestones": {
-      "arrest": 1,
-      "death": 1
+      "arrest": 2,
+      "death": 1,
+      "investigation": 1
     },
     "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1
+      "agency_match": 1,
+      "enforced_follow_up": 1,
+      "entity_match": 3,
+      "event_type_match": 1,
+      "fact_continuity": 1,
+      "identity_anchor_qualified": 3,
+      "location_match": 3,
+      "novel_milestone": 2,
+      "structured_incident_continuity": 1,
+      "title_continuity": 1
     },
     "examples": [
       {
+        "headline": "'He just tried to ram me': Port St. Lucie man arrested after a chase ends on South Hutchinson Island - WPBF",
+        "event_key": "unknown-event-834b5350c4",
+        "current_story_id": "story_021690",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_021538",
+        "candidate_confidence": 0.715385,
+        "candidate_milestones": [
+          "arrest"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
+          "entity_match",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_021538",
+          "Novel milestones: arrest",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.15",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.72"
+        ]
+      },
+      {
         "headline": "Grandson arrested in Indian River County after veteran found dead, cross-county chase with deputies",
         "event_key": "unknown-event-5ae3995a1f",
-        "current_story_id": "story_021675",
+        "current_story_id": "story_021700",
         "current_relationship": "new_story",
         "candidate_story_id": "story_021015",
         "candidate_confidence": 0.62,
@@ -714,6 +745,41 @@
           "Event type conflict: False",
           "Candidate confidence: 0.62"
         ]
+      },
+      {
+        "headline": "Northbound Florida Turnpike lanes reopen in Martin County after semi crash - WPEC",
+        "event_key": "traffic-crash-port-st-lucie-584a2bca8c",
+        "current_story_id": "story_021659",
+        "current_relationship": "follow_up",
+        "candidate_story_id": "story_021659",
+        "candidate_confidence": 0.961778,
+        "candidate_milestones": [
+          "investigation"
+        ],
+        "candidate_reason_codes": [
+          "enforced_follow_up",
+          "location_match",
+          "event_type_match",
+          "entity_match",
+          "title_continuity",
+          "fact_continuity",
+          "structured_incident_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Relationship: follow_up",
+          "Distinctive facts overlap: 1.00",
+          "Identity anchor qualified: True",
+          "Location match: True",
+          "Agency match: False",
+          "Event type match: True",
+          "Entity match: True",
+          "Lifecycle signal: True",
+          "Novel milestones: investigation",
+          "Novel fact ratio: 0.00",
+          "Confidence: 0.96",
+          "Threshold: 0.68"
+        ]
       }
     ],
     "retrospective_candidate_count": 7,
@@ -722,21 +788,21 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 579,
-      "timeline_entries_examined": 1689,
-      "transitions_examined": 1046,
+      "stories_with_timelines": 574,
+      "timeline_entries_examined": 1679,
+      "transitions_examined": 1040,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 7,
       "high_confidence_candidate_count": 1,
       "activation_eligible_candidate_count": 0,
-      "same_source_evolution_count": 13,
+      "same_source_evolution_count": 14,
       "same_source_evolution_milestones": {
         "arrest": 4,
         "closure": 3,
         "death": 1,
         "identified": 1,
         "opening": 3,
-        "resolution": 1
+        "resolution": 2
       },
       "same_source_evolution_examples": [
         {
@@ -808,6 +874,42 @@
             "title": "No arrests after 17-year-old shot, killed at meetup in Indian River County, self-defense claim expected",
             "source": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-give-update-on-shooting-death-of-17-year-old-boy",
             "url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-sheriffs-office-to-give-update-on-shooting-death-of-17-year-old-boy"
+          }
+        },
+        {
+          "story_id": "story_021659",
+          "story_title": "Major crash blocks all northbound lanes of Florida's Turnpike in Martin County - WPEC",
+          "milestones": [
+            "resolution"
+          ],
+          "matched_phrases": {
+            "resolution": [
+              "lanes reopen"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "event_family_match",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-4a77b750e1237f1682e4",
+            "event_key": "traffic-crash-3a3fbbba57-3a3fbbba57",
+            "published_at": "2026-10-16T18:43:17.465760+00:00",
+            "title": "Major crash blocks all northbound lanes of Florida's Turnpike in Martin County - WPEC",
+            "source": "https://cbs12.com/news/local/major-crash-blocks-all-northbound-lanes-floridas-turnpike-martin-county-mile-markers-122-125-traffic-florida-news",
+            "url": "https://cbs12.com/news/local/major-crash-blocks-all-northbound-lanes-floridas-turnpike-martin-county-mile-markers-122-125-traffic-florida-news"
+          },
+          "newer_article": {
+            "article_id": "rss-e1c338f8f92fe8cd1244",
+            "event_key": "traffic-crash-port-st-lucie-584a2bca8c",
+            "published_at": "2026-10-16T22:45:01.622041+00:00",
+            "title": "Northbound Florida Turnpike lanes reopen in Martin County after semi crash - WPEC",
+            "source": "https://cbs12.com/news/local/major-crash-blocks-all-northbound-lanes-floridas-turnpike-martin-county-mile-markers-122-125-traffic-florida-news",
+            "url": "https://cbs12.com/news/local/major-crash-blocks-all-northbound-lanes-floridas-turnpike-martin-county-mile-markers-122-125-traffic-florida-news"
           }
         },
         {
@@ -1392,11 +1494,11 @@
         "same_timestamp_order_uncertain": 3,
         "timeline_identity_unanchored": 5
       },
-      "excluded_entry_count": 67,
+      "excluded_entry_count": 68,
       "exclusion_reasons": {
         "insufficient_title_detail": 14,
         "low_value_title": 2,
-        "social_source": 51
+        "social_source": 52
       },
       "examples": [
         {
@@ -1901,27 +2003,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 673,
-      "treasure_coast_local": 426,
-      "treasure_coast_region": 146,
-      "unknown": 1268
+      "florida": 675,
+      "treasure_coast_local": 427,
+      "treasure_coast_region": 147,
+      "unknown": 1278
     },
-    "average_score": 57.54
+    "average_score": 57.49
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 673,
-      "treasure_coast_local": 426,
-      "treasure_coast_region": 146,
-      "unknown": 1268
+      "florida": 675,
+      "treasure_coast_local": 427,
+      "treasure_coast_region": 147,
+      "unknown": 1278
     },
-    "average_priority": 4.23
+    "average_priority": 4.2
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1602,
-      "developing": 107,
-      "ongoing": 803,
+      "active": 1618,
+      "developing": 108,
+      "ongoing": 800,
       "resolved": 1
     }
   },
@@ -1959,20 +2061,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-16T20:05:48Z",
-    "quarantined_story_records_retained": 4504,
-    "active_story_count": 2513
+    "generated_at": "2026-10-16T22:44:30Z",
+    "quarantined_story_records_retained": 4508,
+    "active_story_count": 2527
   },
   "stories": {
-    "total": 2513,
+    "total": 2527,
     "importance_levels": {
       "breaking": 7,
       "high": 65,
-      "normal": 494,
-      "low": 1947,
+      "normal": 497,
+      "low": 1958,
       "archived": 0
     },
-    "average_importance": 10.88,
+    "average_importance": 10.84,
     "top": [
       {
         "story_id": "story_021480",
@@ -1987,7 +2089,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 20.76
+          "age_hours": 23.41
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2053,75 +2155,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-15T23:23:40.828417+00:00",
-          "hours_since_update": 20.76,
+          "hours_since_update": 23.41,
           "event_count": 56,
           "timeline_entries": 43
-        }
-      },
-      {
-        "story_id": "story_021512",
-        "title": "Martin County Sheriff's Office investigates deadly Hobe Sound shooting among friends",
-        "score": 85,
-        "editorial_priority": 92,
-        "editorial_score": 92,
-        "score_breakdown": {
-          "score": 92,
-          "importance": 85,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 21.42
-        },
-        "level": "breaking",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Hobe Sound"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 10,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-15T22:44:30.827001+00:00",
-          "hours_since_update": 21.42,
-          "event_count": 3,
-          "timeline_entries": 3
         }
       },
       {
@@ -2137,7 +2173,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 53.2
+          "age_hours": 55.84
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2185,7 +2221,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T14:54:48.604761+00:00",
-          "hours_since_update": 53.2,
+          "hours_since_update": 55.84,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2203,7 +2239,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 45.42
+          "age_hours": 48.0
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2252,9 +2288,75 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 45.42,
+          "hours_since_update": 48.0,
           "event_count": 4,
           "timeline_entries": 4
+        }
+      },
+      {
+        "story_id": "story_021512",
+        "title": "Martin County Sheriff's Office investigates deadly Hobe Sound shooting among friends",
+        "score": 85,
+        "editorial_priority": 82,
+        "editorial_score": 82,
+        "score_breakdown": {
+          "score": 82,
+          "importance": 85,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.85,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 24.06
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Hobe Sound"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 10,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-15T22:44:30.827001+00:00",
+          "hours_since_update": 24.06,
+          "event_count": 3,
+          "timeline_entries": 3
         }
       },
       {
@@ -2270,7 +2372,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 57.39
+          "age_hours": 60.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2319,68 +2421,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T10:43:25.080645+00:00",
-          "hours_since_update": 57.39,
+          "hours_since_update": 60.03,
           "event_count": 3,
           "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_021570",
-        "title": "Sheriff: Suspect dead after shooting at officers in Martin County - reflector.com",
-        "score": 75,
-        "editorial_priority": 74,
-        "editorial_score": 74,
-        "score_breakdown": {
-          "score": 74,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.86
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-16T14:15:09.845672+00:00",
-          "hours_since_update": 5.86,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -2396,7 +2439,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 45.36
+          "age_hours": 48.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2441,7 +2484,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 45.36,
+          "hours_since_update": 48.0,
           "event_count": 19,
           "timeline_entries": 18
         }
@@ -2459,7 +2502,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 33.39
+          "age_hours": 36.03
         },
         "level": "high",
         "importance_reasons": [
@@ -2503,7 +2546,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-15T10:43:23.074448+00:00",
-          "hours_since_update": 33.39,
+          "hours_since_update": 36.03,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2521,7 +2564,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 33.39
+          "age_hours": 36.03
         },
         "level": "high",
         "importance_reasons": [
@@ -2566,9 +2609,68 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-15T10:43:23.074448+00:00",
-          "hours_since_update": 33.39,
+          "hours_since_update": 36.03,
           "event_count": 5,
           "timeline_entries": 4
+        }
+      },
+      {
+        "story_id": "story_021570",
+        "title": "Sheriff: Suspect dead after shooting at officers in Martin County - reflector.com",
+        "score": 75,
+        "editorial_priority": 70,
+        "editorial_score": 70,
+        "score_breakdown": {
+          "score": 70,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 8.5
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-10-16T14:15:09.845672+00:00",
+          "hours_since_update": 8.5,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -2584,7 +2686,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 45.37
+          "age_hours": 48.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2613,8 +2715,8 @@
           "scope": "treasure_coast_local",
           "score": 100,
           "counties": [
-            "St. Lucie County",
-            "Martin County"
+            "Martin County",
+            "St. Lucie County"
           ],
           "places": []
         },
@@ -2631,7 +2733,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 45.37,
+          "hours_since_update": 48.0,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2649,7 +2751,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 151.38
+          "age_hours": 154.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2699,7 +2801,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-10T12:44:08.138949+00:00",
-          "hours_since_update": 151.38,
+          "hours_since_update": 154.02,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2717,7 +2819,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 28.43
+          "age_hours": 31.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2762,7 +2864,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-15T15:45:10.684448+00:00",
-          "hours_since_update": 28.43,
+          "hours_since_update": 31.08,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2780,7 +2882,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 18.36
+          "age_hours": 21.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2816,7 +2918,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-16T01:45:26.393536+00:00",
-          "hours_since_update": 18.36,
+          "hours_since_update": 21.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2834,7 +2936,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 69.36
+          "age_hours": 72.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2873,7 +2975,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-13T22:45:20.533812+00:00",
-          "hours_since_update": 69.36,
+          "hours_since_update": 72.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2891,7 +2993,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 57.4
+          "age_hours": 60.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2944,7 +3046,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T10:43:25.080645+00:00",
-          "hours_since_update": 57.4,
+          "hours_since_update": 60.06,
           "event_count": 11,
           "timeline_entries": 10
         }
@@ -2962,7 +3064,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 52.36
+          "age_hours": 55.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3015,7 +3117,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-14T15:46:53.481373+00:00",
-          "hours_since_update": 52.36,
+          "hours_since_update": 55.01,
           "event_count": 10,
           "timeline_entries": 6
         }
@@ -3033,7 +3135,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 97.36
+          "age_hours": 100.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3076,7 +3178,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 97.36,
+          "hours_since_update": 100.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3094,7 +3196,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 97.36
+          "age_hours": 100.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3132,7 +3234,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 97.36,
+          "hours_since_update": 100.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3150,7 +3252,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 42.35
+          "age_hours": 44.99
         },
         "level": "high",
         "importance_reasons": [
@@ -3193,7 +3295,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-15T01:45:56.090763+00:00",
-          "hours_since_update": 42.35,
+          "hours_since_update": 44.99,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3211,7 +3313,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 95.36
+          "age_hours": 98.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3250,7 +3352,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-12T20:45:23.189599+00:00",
-          "hours_since_update": 95.36,
+          "hours_since_update": 98.0,
           "event_count": 16,
           "timeline_entries": 16
         }
@@ -3260,7 +3362,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-16T20:10:56Z",
+    "generated_at": "2026-10-16T22:49:58Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3275,26 +3377,26 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 6,
-        "category_exception_archive_recovery": 1,
-        "generated_live": 2
+        "category_eligibility_archive_recovery": 5,
+        "generated_live": 3,
+        "generation_failed_archive_recovery": 1
       },
       "failures": {
-        "contextless_update_lead": 1,
-        "no_category_eligible_sources": 6
+        "article_framing_integrity": 1,
+        "no_category_eligible_sources": 5
       },
-      "model_attempt_count": 3,
-      "model_elapsed_seconds": 50.923,
-      "archive_recovery_requested_count": 7,
+      "model_attempt_count": 6,
+      "model_elapsed_seconds": 136.522,
+      "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 1,
-      "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 12,
-      "published_story_duplicate_suppression_count": 31,
-      "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 8,
+      "contextual_update_lead_rejection_count": 0,
+      "article_framing_rejection_count": 2,
+      "category_eligibility_rejection_count": 16,
+      "published_story_duplicate_suppression_count": 22,
+      "story_aware_update_context_count": 4,
+      "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 4
     },
     "categories": [
@@ -3303,8 +3405,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 29,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 11,
+        "fresh_candidate_count": 27,
+        "publishable_source_count": 15,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3321,8 +3423,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 7,
-        "category_eligibility_rejection_count": 5,
+        "category_eligibility_assessed_count": 9,
+        "category_eligibility_rejection_count": 7,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-local-government-central-action",
@@ -3335,8 +3437,22 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
-            "source_url": "https://cbs12.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather"
+            "headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-prepares-for-weekend-rain-as-businesses-brace-for-more-flooding"
+          },
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
+            "source_url": "https://cw34.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather"
           },
           {
             "contract_version": "1.0-local-government-central-action",
@@ -3351,6 +3467,20 @@
             "local_nexus_signals": [],
             "headline": "South Florida fitness company brings personal trainers directly to clients",
             "source_url": "https://www.wptv.com/news/health/south-florida-fitness-company-brings-personal-trainers-directly-to-clients"
+          },
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WFLX",
+            "source_url": "https://www.wflx.com/2026/10/16/jackknifed-semi-truck-blocks-northbound-lanes-floridas-turnpike-martin-county/?outputType=amp"
           },
           {
             "contract_version": "1.0-local-government-central-action",
@@ -3397,28 +3527,8 @@
             "source_url": "https://www.wptv.com/news/political/elections-local/whats-on-my-ballot-palm-beach-county-and-treasure-coast-voter-guide-2026"
           }
         ],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "local_gov",
-            "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
-            "source_url": "https://cbs12.com/news/local/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
-            "editorial_story_id": "story_021645",
-            "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
-            "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Rescued Hobe Sound kittens recover with foster family after being buried alive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/rescued-hobe-sound-kittens-recover-with-foster-family-after-being-buried-alive",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "local_gov",
             "source_headline": "AmeriCorps returns to Martin County with renewed focus on boosting students' reading skills - WFLX",
@@ -3440,43 +3550,37 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "33 years after uncle's murder, family asks Gov. Ron DeSantis to sign killer's death warrant",
+            "source_url": "https://www.wptv.com/wptv-investigates/33-years-after-uncles-murder-family-asks-gov-ron-desantis-to-sign-killers-death-warrant",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
+            "basis": "exact_structured_incident_key",
+            "identity_keys": [
+              "incident:named-person-death:ron-desantis",
+              "story:story_021687",
+              "source:https://www.wptv.com/wptv-investigates/33-years-after-uncles-murder-family-asks-gov-ron-desantis-to-sign-killers-death-warrant"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "incident"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=incident:named-person-death:ron-desantis",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "local_gov",
-            "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
-            "source_url": "https://cbs12.com/news/local/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
-            "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
-            "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Rescued Hobe Sound kittens recover with foster family after being buried alive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/rescued-hobe-sound-kittens-recover-with-foster-family-after-being-buried-alive",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "local_gov",
             "source_headline": "AmeriCorps returns to Martin County with renewed focus on boosting students' reading skills - WFLX",
@@ -3524,73 +3628,63 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 24.818
+        "elapsed_seconds": 20.802
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "category_exception_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 9,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 12,
+        "selected_source_count": 4,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 1,
+        "archive_recovery_requested": false,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 18.258,
+            "elapsed_seconds": 22.907,
+            "result": "invalid_json",
+            "error_type": "ValueError",
+            "error_summary": "Shadow model returned no JSON object (0 chars)"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 34.062,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 18.258,
-        "failure_code": "contextless_update_lead",
-        "failure_summary": "Contextless update lead after enrichment: new_development_missing — Hobe Sound Shooting Victim Identified as 21-Year-Old Jarvis Preston, No Charges Yet",
+        "model_elapsed_seconds": 56.969,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 42,
-            "baseline_anchor": "crash",
-            "baseline_present": true,
-            "baseline_anchor_present": true,
-            "baseline_details_present": true,
-            "baseline_context_hits": [],
-            "baseline_context_required": 0,
-            "canonical_context_available": false,
-            "canonical_context_headline": "",
-            "novelty_anchor": "status_change",
-            "novelty_present": false,
-            "novelty_token_hits": [
-              "florida",
-              "lanes",
-              "martin",
-              "semi",
-              "turnpike"
-            ],
-            "semantic_novel_fact_hits": [],
-            "semantic_novel_fact_token_count": 0,
-            "missing": [
-              "new_development_missing"
-            ],
-            "source_title": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County",
-            "headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes"
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 5,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 8,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-prepares-for-weekend-rain-as-businesses-brace-for-more-flooding"
+          },
           {
             "contract_version": "1.0-primary-crime-safety-focus",
             "category_key": "crime",
@@ -3620,7 +3714,7 @@
             "source_url": "https://www.wptv.com/news/political/elections-local/how-to-report-voting-problems-in-palm-beach-county-and-the-treasure-coast"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3631,53 +3725,38 @@
             "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Rescued Hobe Sound kittens recover with foster family after being buried alive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/rescued-hobe-sound-kittens-recover-with-foster-family-after-being-buried-alive",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams",
-            "source_url": "https://www.wptv.com/sports/local-sports/young-stuart-divers-take-a-leap-toward-college-scholarships-international-competition-and-olympic-dreams",
-            "editorial_story_id": "story_021537",
-            "canonical_slug": "2026-10-15-stuarts-atlantic-diving-team-trains-young-divers-toward-scholarships-and-olympic",
-            "canonical_headline": "Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
-            "editorial_story_id": "story_021538",
-            "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
-            "canonical_headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Suspected fentanyl trafficker arrested after 115 mph chase on I-95 in St. Lucie County - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-fentanyl-trafficker-chase/74136078",
-            "editorial_story_id": "story_021217",
-            "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
-            "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 1,
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "33 years after uncle's murder, family asks Gov. Ron DeSantis to sign killer's death warrant",
+            "source_url": "https://www.wptv.com/wptv-investigates/33-years-after-uncles-murder-family-asks-gov-ron-desantis-to-sign-killers-death-warrant",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
+            "basis": "exact_structured_incident_key",
+            "identity_keys": [
+              "incident:named-person-death:ron-desantis",
+              "story:story_007016",
+              "source:https://www.wptv.com/wptv-investigates/33-years-after-uncles-murder-family-asks-gov-ron-desantis-to-sign-killers-death-warrant"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "incident",
+              "story"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=incident:named-person-death:ron-desantis,story:story_007016",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -3694,90 +3773,14 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Rescued Hobe Sound kittens recover with foster family after being buried alive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/rescued-hobe-sound-kittens-recover-with-foster-family-after-being-buried-alive",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams",
-            "source_url": "https://www.wptv.com/sports/local-sports/young-stuart-divers-take-a-leap-toward-college-scholarships-international-competition-and-olympic-dreams",
-            "canonical_slug": "2026-10-15-stuarts-atlantic-diving-team-trains-young-divers-toward-scholarships-and-olympic",
-            "canonical_headline": "Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
-            "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
-            "canonical_headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Suspected fentanyl trafficker arrested after 115 mph chase on I-95 in St. Lucie County - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-fentanyl-trafficker-chase/74136078",
-            "canonical_slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
-            "canonical_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "James Arthur Green, 43",
-              "I-95 chase into Martin County",
-              "Kanner Highway stop",
-              "fentanyl overdose death investigation",
-              "St. Lucie County Sheriff's Office"
-            ],
-            "novel_facts": [
-              "Sheriff Del Toro's quotes about operation details",
-              "specific chase speed of 115 mph",
-              "$440,000 bond amount",
-              "picture sent to victim's phone showing drug location"
-            ],
-            "reason": "Both articles report the identical arrest of James Arthur Green following the same fentanyl overdose investigation, undercover operation, and I-95 chase ending at Kanner Highway in Martin County. The incoming article adds some color details (bond amount, specific speed, direct quotes) but these are routine elaborations of the same incident, not a material new development like a new charge type, death, or ruling.",
-            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 44.947
+        "live_hero_headline": "Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island",
+        "generated_card_count": 1,
+        "elapsed_seconds": 75.483
       },
       {
         "category_key": "business",
@@ -3802,9 +3805,26 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 5,
-        "category_eligibility_rejection_count": 5,
+        "category_eligibility_assessed_count": 6,
+        "category_eligibility_rejection_count": 6,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [
+              "source_locality:treasure coast",
+              "source_locality:port st lucie"
+            ],
+            "headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-prepares-for-weekend-rain-as-businesses-brace-for-more-flooding"
+          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -3932,15 +3952,40 @@
             "category_key": "business",
             "source_headline": "Grandson arrested in Indian River County after veteran found dead, cross-county chase with deputies",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-okeechobee-county-sheriffs-announce-apprehension-of-suspect",
-            "editorial_story_id": "story_021654",
+            "editorial_story_id": "story_021675",
             "canonical_slug": "2026-10-15-suspect-facing-800-felonies-captured-in-vero-beach",
             "canonical_headline": "Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "33 years after uncle's murder, family asks Gov. Ron DeSantis to sign killer's death warrant",
+            "source_url": "https://www.wptv.com/wptv-investigates/33-years-after-uncles-murder-family-asks-gov-ron-desantis-to-sign-killers-death-warrant",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
+            "basis": "exact_structured_incident_key",
+            "identity_keys": [
+              "incident:named-person-death:ron-desantis",
+              "story:story_007016",
+              "source:https://www.wptv.com/wptv-investigates/33-years-after-uncles-murder-family-asks-gov-ron-desantis-to-sign-killers-death-warrant"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "incident",
+              "story"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=incident:named-person-death:ron-desantis,story:story_007016",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -4008,7 +4053,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.954
+        "elapsed_seconds": 14.029
       },
       {
         "category_key": "sports",
@@ -4098,7 +4143,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 15.44
+        "elapsed_seconds": 9.972
       },
       {
         "category_key": "things_to_do",
@@ -4163,23 +4208,40 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.354
+        "elapsed_seconds": 11.717
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 1,
-        "selected_source_count": 0,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Florida category eligibility contract",
+        "attempt_count": 2,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 12.142,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Amendment 3's Dec. 31 deadline could spark rush of Florida homebuyers"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 11.155,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Amendment 3's Dec. 31 deadline could spark rush of Florida homebuyers"
+          }
+        ],
+        "model_elapsed_seconds": 23.297,
+        "failure_code": "article_framing_integrity",
+        "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Amendment 3's Dec. 31 deadline could spark rush of Florida homebuyers",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4188,7 +4250,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -4201,14 +4263,16 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.145
+        "generation_status": "failed",
+        "budget_seconds": 180.0,
+        "elapsed_seconds": 31.838
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 23,
+        "fetched_candidate_count": 30,
+        "fresh_candidate_count": 26,
         "publishable_source_count": 6,
         "selected_source_count": 5,
         "cache_hit": false,
@@ -4218,11 +4282,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 24.171,
+            "elapsed_seconds": 24.808,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 24.171,
+        "model_elapsed_seconds": 24.808,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4236,7 +4300,7 @@
         "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -4270,16 +4334,6 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Rescued Hobe Sound kittens recover with foster family after being buried alive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/rescued-hobe-sound-kittens-recover-with-foster-family-after-being-buried-alive",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
             "source_headline": "Martin County Sheriff’s Office investigates fatal shooting in Hobe Sound - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-hobe-sound-shooting/74139183",
             "editorial_story_id": "story_021480",
@@ -4289,32 +4343,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Man dies after Hobe Sound shooting; person detained for questioning - WPTV",
-            "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
-            "canonical_headline": "Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired",
-            "basis": "event-identity-authority:exact_source_url",
-            "identity_keys": [
-              "incident:named-person-death:hobe-sound",
-              "story:story_021480",
-              "source:https://www.wptv.com/news/region-martin-county/hobe-sound/1-hospitalized-with-life-threatening-injuries-after-shooting-in-hobe-sound"
-            ],
-            "match_confidence": 1.0,
-            "evidence_dimensions": [
-              "source_url"
-            ],
-            "decision_trace": [
-              "exact_source_url=True",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 4,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
@@ -4368,12 +4398,13 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.97,
+            "confidence": 0.98,
             "shared_anchors": [],
             "novel_facts": [
-              "21-year-old Jarvis Preston fatally shot in Hobe Sound's Banner Lake neighborhood",
-              "Shooting occurred on Southeast Citrus Way, involving a friend with an AR-15",
-              "Sheriff John Budensiek discusses possible stand-your-ground circumstances"
+              "Fatal shooting of Jarvis Preston, 21, in Hobe Sound's Banner Lake neighborhood",
+              "Shooting occurred on Southeast Citrus Way",
+              "Martin County Sheriff John Budensiek discusses possible stand your ground circumstances",
+              "Shooter and victim were friends; victim had been drinking and threatening shooter with a gun"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4399,30 +4430,15 @@
             "confidence": 0.98,
             "shared_anchors": [],
             "novel_facts": [
-              "Fatal shooting in Banner Lake neighborhood, Hobe Sound",
+              "Fatal shooting in Banner Lake neighborhood, Hobe Sound, Martin County",
               "Victim identified as Jarvis Preston",
-              "Shooting occurred on SE Citrus Way during an argument",
-              "Martin County Sheriff investigating possible stand-your-ground defense"
+              "Shooting occurred on Southeast Citrus Way",
+              "Martin County Sheriff investigating potential stand-your-ground defense"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
               "known_canonical_identity_conflict"
             ]
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Rescued Hobe Sound kittens recover with foster family after being buried alive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/rescued-hobe-sound-kittens-recover-with-foster-family-after-being-buried-alive",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "martin",
@@ -4444,9 +4460,10 @@
             "shared_anchors": [],
             "novel_facts": [
               "Fatal shooting in Banner Lake area of Hobe Sound",
-              "Victim found on Southeast Citrus Way",
+              "Scene along Southeast Citrus Way",
+              "Martin County Sheriff's Office investigation",
               "One person detained for questioning",
-              "Grandmother Harriet Ford Greg account of events"
+              "Grandmother Harriet Ford Greg account of victim"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4457,18 +4474,18 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Hobe Sound Shooting Victim Dies; No Arrest in Friend's Killing",
+        "live_hero_headline": "Hobe Sound Man Shot by Best Friend Dies, No Arrest Yet in Banner Lake Case",
         "generated_card_count": 1,
-        "elapsed_seconds": 56.162
+        "elapsed_seconds": 49.559
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 4,
-        "selected_source_count": 1,
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 6,
+        "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4476,11 +4493,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.494,
+            "elapsed_seconds": 31.448,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 8.494,
+        "model_elapsed_seconds": 31.448,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4491,11 +4508,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
+            "source_url": "https://cbs12.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather",
+            "editorial_story_id": "story_021671",
+            "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+            "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie residents could pay about $11 more a month for trash - WPBF",
@@ -4528,16 +4555,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
-            "editorial_story_id": "story_021538",
-            "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
-            "canonical_headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020 - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
             "editorial_story_id": "story_021538",
@@ -4553,16 +4570,6 @@
             "editorial_story_id": "story_021474",
             "canonical_slug": "2026-10-15-st-lucie-county-voters-to-decide-sales-tax-renewal-mosquito-control-expansion",
             "canonical_headline": "St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Death sentence handed down for 67-year-old Otto Lenke in Fort Pierce killing case - WPEC",
-            "source_url": "https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
-            "editorial_story_id": "story_021277",
-            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-            "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4589,11 +4596,26 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
+            "source_url": "https://cbs12.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather",
+            "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+            "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie residents could pay about $11 more a month for trash - WPBF",
@@ -4641,21 +4663,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
-            "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
-            "canonical_headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020 - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
             "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
@@ -4683,34 +4690,6 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Death sentence handed down for 67-year-old Otto Lenke in Fort Pierce killing case - WPEC",
-            "source_url": "https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
-            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-            "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Otto Lenke",
-              "Richard Benson",
-              "Fort Pierce motorcycle shop killing",
-              "death sentence handed down Wednesday by Circuit Court Judge Michael Linn",
-              "same source URL/article"
-            ],
-            "novel_facts": [],
-            "reason": "This is the same sentencing event already captured in the canonical article - same defendant, victim, judge, sentence, and even the identical source URL. No new facts such as an appeal ruling or further proceeding are present; this is a duplicate republish.",
-            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -4759,17 +4738,17 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
-        "generated_card_count": 0,
-        "elapsed_seconds": 23.595
+        "live_hero_headline": "Port St. Lucie Man Arrested After Chase Ends in PIT Maneuver on South Hutchinson Island",
+        "generated_card_count": 1,
+        "elapsed_seconds": 44.57
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 8,
+        "fresh_candidate_count": 25,
+        "publishable_source_count": 11,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4786,47 +4765,45 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 11,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
-        "published_story_duplicate_suppressions": [
+        "published_story_duplicate_suppression_count": 0,
+        "published_story_duplicate_suppressions": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
           {
-            "category_key": "indian_river",
-            "source_headline": "Rescued Hobe Sound kittens recover with foster family after being buried alive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/rescued-hobe-sound-kittens-recover-with-foster-family-after-being-buried-alive",
-            "editorial_story_id": "story_020183",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
+            "source_headline": "33 years after uncle's murder, family asks Gov. Ron DeSantis to sign killer's death warrant",
+            "source_url": "https://www.wptv.com/wptv-investigates/33-years-after-uncles-murder-family-asks-gov-ron-desantis-to-sign-killers-death-warrant",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-08-26-gov-desantis-orders-florida-flags-to-half-staff-through-sept-1-following-dolly-p",
+            "canonical_headline": "Florida prepares to execute Harold Gene Lucas, first of three executions scheduled this month",
+            "basis": "exact_structured_incident_key",
+            "identity_keys": [
+              "incident:named-person-death:ron-desantis",
+              "story:story_007016",
+              "source:https://www.wptv.com/wptv-investigates/33-years-after-uncles-murder-family-asks-gov-ron-desantis-to-sign-killers-death-warrant"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "incident",
+              "story"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=incident:named-person-death:ron-desantis,story:story_007016",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [
-          {
-            "category_key": "indian_river",
-            "source_headline": "Rescued Hobe Sound kittens recover with foster family after being buried alive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/rescued-hobe-sound-kittens-recover-with-foster-family-after-being-buried-alive",
-            "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
-            "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          }
-        ],
+        "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.181
+        "elapsed_seconds": 11.119
       }
     ]
   }
