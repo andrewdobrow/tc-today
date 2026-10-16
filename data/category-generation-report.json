@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-16T15:45:51Z",
+  "generated_at": "2026-10-16T18:47:00Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,25 +15,25 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 2,
-      "category_eligibility_archive_recovery": 7
+      "category_eligibility_archive_recovery": 6,
+      "generated_live": 3
     },
     "failures": {
-      "no_category_eligible_sources": 7
+      "no_category_eligible_sources": 6
     },
-    "model_attempt_count": 0,
-    "model_elapsed_seconds": 0.0,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 78.215,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 1,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 35,
-    "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 9,
+    "category_eligibility_rejection_count": 12,
+    "published_story_duplicate_suppression_count": 33,
+    "story_aware_update_context_count": 3,
+    "material_update_promotion_evaluation_count": 8,
     "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 4,
-    "material_update_promotion_model_call_count": 5
+    "material_update_promotion_model_call_count": 4
   },
   "categories": [
     {
@@ -42,7 +42,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 29,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 9,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -59,9 +59,69 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 7,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "South Florida fitness company brings personal trainers directly to clients",
+          "source_url": "https://www.wptv.com/news/health/south-florida-fitness-company-brings-personal-trainers-directly-to-clients"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
+          "source_url": "https://cbs12.com/news/local/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/jackknifed-semi-truck-blocks-northbound-lanes-of-floridas-turnpike-in-martin-county"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Okeechobee County Sheriff's Office seeks public's help on homicide suspect's movements before arrest",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-sheriffs-office-seeks-publics-help-on-homicide-suspects-movements-before-arrest"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -216,10 +276,11 @@
           "confidence": 0.97,
           "shared_anchors": [],
           "novel_facts": [
-            "Fatal shooting on SE Citrus Way in Banner Lake area of Hobe Sound",
-            "Martin County Sheriff's Office investigation",
-            "Person detained for questioning",
-            "Victim died after being flown to hospital"
+            "Fatal shooting in Hobe Sound's Banner Lake area",
+            "Scene along Southeast Citrus Way",
+            "Victim's grandmother Harriet Ford Greg describes hearing gunshots",
+            "One person detained for questioning",
+            "Martin County Sheriff's Office investigating"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -228,21 +289,28 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.625
+      "elapsed_seconds": 22.044
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "cache_hit",
+      "status": "generated_live",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 9,
-      "selected_source_count": 1,
-      "cache_hit": true,
+      "publishable_source_count": 11,
+      "selected_source_count": 2,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 16.714,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 16.714,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -253,7 +321,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -267,8 +335,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "What's on my ballot? Palm Beach County and Treasure Coast Voter Guide 2026",
-          "source_url": "https://www.wptv.com/news/political/elections-local/whats-on-my-ballot-palm-beach-county-and-treasure-coast-voter-guide-2026"
+          "headline": "South Florida fitness company brings personal trainers directly to clients",
+          "source_url": "https://www.wptv.com/news/health/south-florida-fitness-company-brings-personal-trainers-directly-to-clients"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -281,8 +349,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "How to find your polling place in Palm Beach County and the Treasure Coast",
-          "source_url": "https://www.wptv.com/news/political/elections-local/how-to-find-your-polling-place-in-palm-beach-county-and-the-treasure-coast"
+          "headline": "How to report voting problems in Palm Beach County and the Treasure Coast",
+          "source_url": "https://www.wptv.com/news/political/elections-local/how-to-report-voting-problems-in-palm-beach-county-and-the-treasure-coast"
         }
       ],
       "published_story_duplicate_suppression_count": 4,
@@ -415,8 +483,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Hobe Sound Man Dies After Friend Shoots Him, No Arrest Made",
-      "elapsed_seconds": 9.876
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Hobe Sound Man Dies After Shooting by Friend, No Charges Filed",
+      "generated_card_count": 0,
+      "elapsed_seconds": 27.818
     },
     {
       "category_key": "business",
@@ -424,7 +495,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 11,
+      "publishable_source_count": 13,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -441,9 +512,41 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast"
+          ],
+          "headline": "South Florida fitness company brings personal trainers directly to clients",
+          "source_url": "https://www.wptv.com/news/health/south-florida-fitness-company-brings-personal-trainers-directly-to-clients"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:martin county"
+          ],
+          "headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/jackknifed-semi-truck-blocks-northbound-lanes-of-floridas-turnpike-in-martin-county"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -454,15 +557,32 @@
           "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [],
           "competing_signals": [
-            "election_political_process:ballot",
-            "schools_education:school board"
+            "election_political_process:early voting"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast"
+          ],
+          "headline": "How to report voting problems in Palm Beach County and the Treasure Coast",
+          "source_url": "https://www.wptv.com/news/political/elections-local/how-to-report-voting-problems-in-palm-beach-county-and-the-treasure-coast"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
           ],
           "local_nexus_signals": [
             "source_locality:treasure coast",
-            "source_locality:port st lucie"
+            "source_locality:indian river county"
           ],
-          "headline": "What's on my ballot? Palm Beach County and Treasure Coast Voter Guide 2026",
-          "source_url": "https://www.wptv.com/news/political/elections-local/whats-on-my-ballot-palm-beach-county-and-treasure-coast-voter-guide-2026"
+          "headline": "Okeechobee County Sheriff's Office seeks public's help on homicide suspect's movements before arrest",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-sheriffs-office-seeks-publics-help-on-homicide-suspects-movements-before-arrest"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -484,26 +604,6 @@
           ],
           "headline": "How to find your polling place in Palm Beach County and the Treasure Coast",
           "source_url": "https://www.wptv.com/news/political/elections-local/how-to-find-your-polling-place-in-palm-beach-county-and-the-treasure-coast"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:indian river county",
-            "source_locality:sebastian"
-          ],
-          "headline": "Grandson arrested in Indian River County after veteran found dead, cross-county chase with deputies",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-okeechobee-county-sheriffs-announce-apprehension-of-suspect"
         }
       ],
       "published_story_duplicate_suppression_count": 4,
@@ -540,40 +640,17 @@
         },
         {
           "category_key": "business",
-          "source_headline": "AmeriCorps returns to Martin County with renewed focus on boosting students' reading skills",
-          "source_url": "https://www.wptv.com/news/education/americorps-returns-to-martin-county-with-renewed-focus-on-boosting-students-reading-skills",
-          "editorial_story_id": "story_021457",
-          "canonical_slug": "2026-10-15-americorps-literacy-mentors-return-to-martin-county-boys-girls-clubs",
-          "canonical_headline": "AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs",
+          "source_headline": "Grandson arrested in Indian River County after veteran found dead, cross-county chase with deputies",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-okeechobee-county-sheriffs-announce-apprehension-of-suspect",
+          "editorial_story_id": "story_021627",
+          "canonical_slug": "2026-10-15-suspect-facing-800-felonies-captured-in-vero-beach",
+          "canonical_headline": "Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Grandson arrested in Indian River County after veteran found dead, cross-county chase with deputies",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-okeechobee-county-sheriffs-announce-apprehension-of-suspect",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-15-suspect-facing-800-felonies-captured-in-vero-beach",
-          "canonical_headline": "Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_021627",
-            "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-okeechobee-county-sheriffs-announce-apprehension-of-suspect"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-okeechobee-county-sheriffs-announce-apprehension-of-suspect",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -626,12 +703,12 @@
         },
         {
           "category_key": "business",
-          "source_headline": "AmeriCorps returns to Martin County with renewed focus on boosting students' reading skills",
-          "source_url": "https://www.wptv.com/news/education/americorps-returns-to-martin-county-with-renewed-focus-on-boosting-students-reading-skills",
-          "canonical_slug": "2026-10-15-americorps-literacy-mentors-return-to-martin-county-boys-girls-clubs",
-          "canonical_headline": "AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs",
+          "source_headline": "Grandson arrested in Indian River County after veteran found dead, cross-county chase with deputies",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-okeechobee-county-sheriffs-announce-apprehension-of-suspect",
+          "canonical_slug": "2026-10-15-suspect-facing-800-felonies-captured-in-vero-beach",
+          "canonical_headline": "Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:exact_source_url",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -641,7 +718,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.019
+      "elapsed_seconds": 12.646
     },
     {
       "category_key": "sports",
@@ -649,7 +726,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -731,14 +808,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 7.325
+      "elapsed_seconds": 9.747
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -796,7 +873,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.984
+      "elapsed_seconds": 11.092
     },
     {
       "category_key": "florida",
@@ -834,21 +911,36 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 7.804
+      "elapsed_seconds": 6.608
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "cache_hit",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
-      "cache_hit": true,
+      "status": "generated_live",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 6,
+      "selected_source_count": 5,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 19.855,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — 1 person dies after shooting in Hobe Sound, no arrest made - WPEC"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 21.338,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 41.194,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -859,7 +951,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 7,
@@ -906,22 +998,22 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQZElNYjhLSkRPTGtrRW0xRGp5X3JOaFBVU3BjQlloVWhQWThQLW5iWElxbjZmdHJLOVp5LUVUZ0hlUzNzdnR6bU9YdVFuZ1FpYVFuUHpJWU9DZm5QY2trc3lrVHcyX1A5LWhlbks2TUZ6d1BMbzgtaUNmWUw0bFFRZGc4blJLbXk0blNTcHR4QWhyVld0blJvc0ltSWJqNjUzNG9qcEVkSjBBYzQ2UTR2dmFnSUh2Z0kyVXp2NGtIdURJNW1MTFp5X1FuNURGLXJ6NlpkdkczZXlmSUE2U1E",
-          "editorial_story_id": "story_021537",
-          "canonical_slug": "2026-10-15-stuarts-atlantic-diving-team-trains-young-divers-toward-scholarships-and-olympic",
-          "canonical_headline": "Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams",
           "source_url": "https://www.wptv.com/sports/local-sports/young-stuart-divers-take-a-leap-toward-college-scholarships-international-competition-and-olympic-dreams",
           "editorial_story_id": "story_021537",
           "canonical_slug": "2026-10-15-stuarts-atlantic-diving-team-trains-young-divers-toward-scholarships-and-olympic",
           "canonical_headline": "Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQZElNYjhLSkRPTGtrRW0xRGp5X3JOaFBVU3BjQlloVWhQWThQLW5iWElxbjZmdHJLOVp5LUVUZ0hlUzNzdnR6bU9YdVFuZ1FpYVFuUHpJWU9DZm5QY2trc3lrVHcyX1A5LWhlbks2TUZ6d1BMbzgtaUNmWUw0bFFRZGc4blJLbXk0blNTcHR4QWhyVld0blJvc0ltSWJqNjUzNG9qcEVkSjBBYzQ2UTR2dmFnSUh2Z0kyVXp2NGtIdURJNW1MTFp5X1FuNURGLXJ6NlpkdkczZXlmSUE2U1E",
+          "editorial_story_id": "story_021537",
+          "canonical_slug": "2026-10-15-stuarts-atlantic-diving-team-trains-young-divers-toward-scholarships-and-olympic",
+          "canonical_headline": "Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1014,14 +1106,13 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.98,
+          "confidence": 0.97,
           "shared_anchors": [],
           "novel_facts": [
-            "21-year-old Jarvis Preston fatally shot in Hobe Sound's Banner Lake neighborhood",
-            "Shooting occurred on Southeast Citrus Way, Martin County",
-            "Sheriff John Budensiek described possible stand-your-ground circumstances",
-            "Preston was shot by a friend after threatening him while armed, per witness accounts",
-            "Grandmother Harriet Ford Gregg's account of finding him"
+            "Jarvis Preston fatally shot in Hobe Sound's Banner Lake neighborhood",
+            "Martin County Sheriff John Budensiek details stand-your-ground question",
+            "Shooter used AR-15/rifle after Preston drew a handgun following threats",
+            "Grandmother Harriet Ford Gregg discovered the scene"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1047,10 +1138,10 @@
           "confidence": 0.98,
           "shared_anchors": [],
           "novel_facts": [
-            "Fatal shooting in Hobe Sound's Banner Lake neighborhood on Southeast Citrus Way",
-            "Victim identified as Jarvis Preston",
+            "Fatal shooting of Jarvis Preston in Hobe Sound's Banner Lake neighborhood",
+            "Shooting occurred on Southeast Citrus Way during an argument",
             "Martin County Sheriff investigating possible stand-your-ground defense",
-            "Shooter used AR-15 rifle, shot victim three times"
+            "Shooter used an AR-15 rifle"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1074,13 +1165,13 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQZElNYjhLSkRPTGtrRW0xRGp5X3JOaFBVU3BjQlloVWhQWThQLW5iWElxbjZmdHJLOVp5LUVUZ0hlUzNzdnR6bU9YdVFuZ1FpYVFuUHpJWU9DZm5QY2trc3lrVHcyX1A5LWhlbks2TUZ6d1BMbzgtaUNmWUw0bFFRZGc4blJLbXk0blNTcHR4QWhyVld0blJvc0ltSWJqNjUzNG9qcEVkSjBBYzQ2UTR2dmFnSUh2Z0kyVXp2NGtIdURJNW1MTFp5X1FuNURGLXJ6NlpkdkczZXlmSUE2U1E",
+          "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams",
+          "source_url": "https://www.wptv.com/sports/local-sports/young-stuart-divers-take-a-leap-toward-college-scholarships-international-competition-and-olympic-dreams",
           "canonical_slug": "2026-10-15-stuarts-atlantic-diving-team-trains-young-divers-toward-scholarships-and-olympic",
           "canonical_headline": "Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1089,13 +1180,13 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams",
-          "source_url": "https://www.wptv.com/sports/local-sports/young-stuart-divers-take-a-leap-toward-college-scholarships-international-competition-and-olympic-dreams",
+          "source_headline": "Young Stuart divers take a leap toward college scholarships, international competition and Olympic dreams - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQZElNYjhLSkRPTGtrRW0xRGp5X3JOaFBVU3BjQlloVWhQWThQLW5iWElxbjZmdHJLOVp5LUVUZ0hlUzNzdnR6bU9YdVFuZ1FpYVFuUHpJWU9DZm5QY2trc3lrVHcyX1A5LWhlbks2TUZ6d1BMbzgtaUNmWUw0bFFRZGc4blJLbXk0blNTcHR4QWhyVld0blJvc0ltSWJqNjUzNG9qcEVkSjBBYzQ2UTR2dmFnSUh2Z0kyVXp2NGtIdURJNW1MTFp5X1FuNURGLXJ6NlpkdkczZXlmSUE2U1E",
           "canonical_slug": "2026-10-15-stuarts-atlantic-diving-team-trains-young-divers-toward-scholarships-and-olympic",
           "canonical_headline": "Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1121,10 +1212,9 @@
           "confidence": 0.97,
           "shared_anchors": [],
           "novel_facts": [
-            "Fatal shooting on SE Citrus Way in Banner Lake area of Hobe Sound",
-            "Martin County Sheriff's Office investigation",
-            "Person detained for questioning",
-            "Victim died after being flown to hospital"
+            "Fatal shooting in Banner Lake area of Hobe Sound on Southeast Citrus Way",
+            "Victim's grandmother Harriet Ford Greg describes hearing gunshots and finding him",
+            "One person detained for questioning by Martin County Sheriff's Office"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1133,24 +1223,34 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Hobe Sound Shooting Victim Dies; Sheriff Weighs Self-Defense vs. Homicide Charges",
-      "elapsed_seconds": 19.11
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Hobe Sound Shooting Victim Dies; No Arrest as Martin County Weighs Stand Your Ground",
+      "generated_card_count": 0,
+      "elapsed_seconds": 63.058
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 2,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 6,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed St. Lucie County category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 20.307,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 20.307,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1159,10 +1259,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1176,7 +1276,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020 - WPTV",
+          "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
           "editorial_story_id": "story_021538",
           "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
@@ -1186,7 +1286,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020",
+          "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020 - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
           "editorial_story_id": "story_021538",
           "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
@@ -1202,16 +1302,6 @@
           "canonical_slug": "2026-10-15-st-lucie-county-voters-to-decide-sales-tax-renewal-mosquito-control-expansion",
           "canonical_headline": "St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "'We don't need to lose another child': Port St. Lucie residents push for safer walking routes - WPBF",
-          "source_url": "https://www.wpbf.com/article/we-dont-need-to-lose-another-child-port-st-lucie-residents-push-safer-walking-routes/74137651",
-          "editorial_story_id": "story_020402",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1236,31 +1326,85 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie woman pleads guilty to exploiting elderly Boca Raton client - WPBF",
-          "source_url": "https://www.wpbf.com/article/rachel-r-albert-boca-raton-pleads-guilty-exploiting-elderly-client/74135843",
-          "editorial_story_id": "story_021311",
-          "canonical_slug": "2026-10-14-port-st-lucie-woman-pleads-guilty-to-exploiting-elderly-boca-raton-client",
-          "canonical_headline": "Port St. Lucie Woman Pleads Guilty to Exploiting Elderly Boca Raton Client",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County fall plant sale, workshops set for Saturday - cw34.com",
-          "source_url": "https://cw34.com/news/local/st-lucie-county-fall-plant-sale-workshops-set-for-saturday-plant-sale-florida-friendly-plants-native-species-gardening-advice-ufifas-extension-st-lucie-county-fall-plant-sale-fort-pierce-picos-road-quart-size-plants-one-gallon-plants-three?teaserSource=trending",
+          "source_headline": "St. Lucie County fall plant sale, workshops set for Saturday - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-fall-plant-sale-workshops-set-for-saturday-plant-sale-florida-friendly-plants-native-species-gardening-advice-ufifas-extension-st-lucie-county-fall-plant-sale-fort-pierce-picos-road-quart-size-plants-one-gallon-plants-three",
           "editorial_story_id": "story_021080",
           "canonical_slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
           "canonical_headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Fort Pierce police investigate after body found in Lincoln Park lake - cw34.com",
+          "source_url": "https://cw34.com/news/local/police-activity-draws-large-response-to-lincoln-park-in-fort-pierce-available-lincoln-park-fort-pierce-fort-pierce-police-department-fort-pierce-police-police-presence-police-activity-crime-scene-tape-police-cruisers-police",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-10-14-fort-pierce-police-investigate-death-of-man-found-in-lincoln-park-lake",
+          "canonical_headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:named-person-death:lincoln-park",
+            "story:story_021281",
+            "source:https://cw34.com/news/local/police-activity-draws-large-response-to-lincoln-park-in-fort-pierce-available-lincoln-park-fort-pierce-fort-pierce-police-department-fort-pierce-police-police-presence-police-activity-crime-scene-tape-police-cruisers-police"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:lincoln-park,story:story_021281",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Crashes block lane, shoulder near Becker Road on I-95 and the Turnpike in St. Lucie County - WPEC",
+          "source_url": "https://cbs12.com/news/local/crashes-block-lane-shoulder-near-becker-road-i-95-florida-turnpike-florida-drivers-exit-114-exit-138-traffic-florida-511-florida-news",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_020870"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['palm-beach-county', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['crash', 'drug-case']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['becker-road', 'county-i95-florida-turnpike-becker-road', 'exit-114-for-becker-road', 'i95-lane']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['beck-road-turnpike', 'beck-road-turnpike-wpec', 'block-lane-should', 'block-lane-should-near', 'crash-block-lane', 'crash-block-lane-should', 'lane-should-near', 'lane-should-near-beck', 'near-beck-road', 'near-beck-road-turnpike', 'road-turnpike-wpec', 'should-near-beck', 'should-near-beck-road']",
+            "shared_headline_topic_core=['beck', 'block', 'crash', 'lane', 'near', 'road', 'should', 'turnpike', 'wpec']",
+            "shared_distinctive_token_count=62",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1279,7 +1423,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020 - WPTV",
+          "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
           "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
           "canonical_headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
@@ -1294,7 +1438,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020",
+          "source_headline": "Prima Vista Boulevard safety plan in St. Lucie County would add raised median after 578 crashes since 2020 - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/prima-vista-boulevard-safety-plan-in-st-lucie-county-would-add-raised-median-after-578-crashes-since-2020",
           "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
           "canonical_headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
@@ -1321,40 +1465,6 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "'We don't need to lose another child': Port St. Lucie residents push for safer walking routes - WPBF",
-          "source_url": "https://www.wpbf.com/article/we-dont-need-to-lose-another-child-port-st-lucie-residents-push-safer-walking-routes/74137651",
-          "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.72,
-          "shared_anchors": [
-            "port-st-lucie locality",
-            "reference to the 14-year-old Treasure Coast High School student death"
-          ],
-          "novel_facts": [
-            "Resident Green's advocacy campaign for sidewalks, pedestrian stop signs and crosswalks",
-            "Specific unsafe conditions at Southwest Paar Drive bus stop",
-            "City's Capital Improvement Projects and Sidewalk Master Plan details, including active/completed/upcoming sidewalk projects",
-            "City meetings with St. Lucie County School Board on bus stop safety",
-            "Federal accessibility requirements governing crosswalk installation",
-            "Plan to present updated sidewalk master plan to City Council in 2027"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
         },
         {
           "category_key": "st_lucie",
@@ -1401,27 +1511,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie woman pleads guilty to exploiting elderly Boca Raton client - WPBF",
-          "source_url": "https://www.wpbf.com/article/rachel-r-albert-boca-raton-pleads-guilty-exploiting-elderly-client/74135843",
-          "canonical_slug": "2026-10-14-port-st-lucie-woman-pleads-guilty-to-exploiting-elderly-boca-raton-client",
-          "canonical_headline": "Port St. Lucie Woman Pleads Guilty to Exploiting Elderly Boca Raton Client",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County fall plant sale, workshops set for Saturday - cw34.com",
-          "source_url": "https://cw34.com/news/local/st-lucie-county-fall-plant-sale-workshops-set-for-saturday-plant-sale-florida-friendly-plants-native-species-gardening-advice-ufifas-extension-st-lucie-county-fall-plant-sale-fort-pierce-picos-road-quart-size-plants-one-gallon-plants-three?teaserSource=trending",
+          "source_headline": "St. Lucie County fall plant sale, workshops set for Saturday - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-fall-plant-sale-workshops-set-for-saturday-plant-sale-florida-friendly-plants-native-species-gardening-advice-ufifas-extension-st-lucie-county-fall-plant-sale-fort-pierce-picos-road-quart-size-plants-one-gallon-plants-three",
           "canonical_slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
           "canonical_headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -1430,20 +1525,25 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
+          "confidence": 0.98,
           "shared_anchors": [
+            "same source_url",
             "UF/IFAS Extension St. Lucie County Fall Plant Sale",
-            "Saturday, Oct. 17",
             "8400 Picos Road, Fort Pierce",
-            "same plant pricing ($4/$7/$12)"
+            "Saturday Oct. 17",
+            "same pricing details"
           ],
           "novel_facts": [],
-          "reason": "This is the same plant sale event at the same location, date, and pricing as the existing canonical article, republished with minor wording changes and extra background links. No material update is present.",
+          "reason": "Identical source article covering the same plant sale event with same location, date, and pricing; no new material facts beyond minor wording and additional event detail restatement.",
           "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.106
+      "new_publication_stale_rejected_count": 1,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup",
+      "generated_card_count": 1,
+      "elapsed_seconds": 32.459
     },
     {
       "category_key": "indian_river",
@@ -1451,7 +1551,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 4,
+      "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1468,7 +1568,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
@@ -1558,7 +1658,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.16
+      "elapsed_seconds": 11.131
     }
   ]
 }
