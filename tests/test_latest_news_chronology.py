@@ -49,7 +49,7 @@ def _entry(slug: str, published: str, *, date: str, lastmod: str = "", urgency: 
     }
 
 
-def test_latest_news_uses_publication_time_not_importance_or_lastmod():
+def test_latest_news_ignores_importance_and_unvalidated_lastmod():
     g = _load_generate()
     old_high_priority = _entry(
         "2026-07-22-old-breaking-story",
@@ -81,6 +81,76 @@ def test_latest_news_uses_publication_time_not_importance_or_lastmod():
         old_high_priority["slug"],
     ]
 
+
+
+def test_latest_news_validated_material_update_ranks_first_and_is_labeled():
+    g = _load_generate()
+    newer_publication = _entry(
+        "2026-10-15-new-story",
+        "Thu, 15 Oct 2026 23:23:10 -0400",
+        date="2026-10-15",
+    )
+    older_updated = _entry(
+        "2026-10-15-prima-vista-proposal",
+        "Thu, 15 Oct 2026 19:31:06 -0400",
+        date="2026-10-15",
+    )
+    older_updated.update(
+        meaningful_update_validated=True,
+        canonical_last_material_update_at="2026-10-16T14:21:00+00:00",
+    )
+    selected = g._select_latest_news_entries([newer_publication, older_updated])
+    assert [entry["slug"] for entry in selected] == [
+        older_updated["slug"], newer_publication["slug"]
+    ]
+    assert g._latest_news_effective_datetime(older_updated).isoformat() == "2026-10-16T14:21:00+00:00"
+    assert g._latest_news_validated_update_datetime(newer_publication) is None
+    assert g._latest_news_display_timestamp(older_updated).startswith("Updated ")
+    assert not g._latest_news_display_timestamp(newer_publication).startswith("Updated ")
+
+
+def test_latest_news_unvalidated_or_non_material_changes_never_promote():
+    g = _load_generate()
+    fresh = _entry("2026-10-15-new", "Thu, 15 Oct 2026 23:00:00 -0400", date="2026-10-15")
+    old = _entry("2026-10-14-old", "Wed, 14 Oct 2026 10:00:00 -0400", date="2026-10-14")
+    old.update(
+        lastmod="2026-10-16",
+        updated_at="2026-10-16T15:00:00Z",
+        canonical_last_material_update_at="2026-10-16T15:00:00Z",
+        meaningful_update_validated=False,
+    )
+    assert [row["slug"] for row in g._select_latest_news_entries([old, fresh])] == [fresh["slug"], old["slug"]]
+
+    old["meaningful_update_validated"] = True
+    old["canonical_last_material_update_at"] = "2026-10-14T08:00:00Z"  # before publication
+    old["last_meaningful_update_at"] = ""
+    assert g._latest_news_validated_update_datetime(old) is None
+    assert [row["slug"] for row in g._select_latest_news_entries([old, fresh])] == [fresh["slug"], old["slug"]]
+
+    old["canonical_last_material_update_at"] = "2026-10-14T18:00:00Z"  # valid, but not newer than fresh
+    assert [row["slug"] for row in g._select_latest_news_entries([old, fresh])] == [fresh["slug"], old["slug"]]
+    assert g._latest_news_display_timestamp(old).startswith("Updated ")
+
+
+def test_latest_news_contract_enforces_material_update_sorting(tmp_path):
+    g = _load_generate()
+    new = _entry("2026-10-15-new", "Thu, 15 Oct 2026 23:00:00 -0400", date="2026-10-15")
+    old = _entry("2026-10-15-updated", "Thu, 15 Oct 2026 18:00:00 -0400", date="2026-10-15")
+    old.update(meaningful_update_validated=True, canonical_last_material_update_at="2026-10-16T15:00:00Z")
+    with pytest.raises(RuntimeError, match="Latest News rail contract FAILED"):
+        g._write_latest_news_rail_contract([new, old], [new, old], tmp_path)
+    assert g._write_latest_news_rail_contract([old, new], [new, old], tmp_path)["passed"] is True
+    report = json.loads((tmp_path / "data/latest-news-rail-contract.json").read_text())
+    assert report["schema_version"] == 2
+    assert report["policy"] == "strict_reverse_tct_validated_editorial_activity"
+    assert report["selected_effective_times"][0] == "2026-10-16T15:00:00+00:00"
+
+
+def test_latest_news_section_chronology_remains_original_publication():
+    g = _load_generate()
+    old = _entry("2026-10-15-old", "Thu, 15 Oct 2026 18:00:00 -0400", date="2026-10-15")
+    old.update(meaningful_update_validated=True, canonical_last_material_update_at="2026-10-16T15:00:00Z")
+    assert g._latest_news_effective_datetime(old) > g._section_publication_datetime(old)
 
 def test_latest_news_selects_five_newest_across_categories():
     g = _load_generate()

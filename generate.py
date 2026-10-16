@@ -10614,14 +10614,13 @@ def global_rank(all_cards, dedupe_against=None):
 
 
 
-LATEST_NEWS_RAIL_SCHEMA_VERSION = 1
+LATEST_NEWS_RAIL_SCHEMA_VERSION = 2
 
 
 def _latest_news_publication_datetime(entry):
-    """Return the article's real TCT publication time for chronological surfaces.
+    """Return the article's original TCT publication time.
 
-    ``Latest News`` is a publication stream, not an importance ranking. Prefer the
-    full ``first_published`` receipt written when TCT created the article. Legacy
+    Prefer the full ``first_published`` receipt written when TCT created the article. Legacy
     rows without that receipt fall back to their publication date or dated slug.
     Deliberately do not use ``lastmod``: routine archive reconciliation or an in-place
     copy edit must not make an old article appear newly published.
@@ -10635,8 +10634,50 @@ def _latest_news_publication_datetime(entry):
     return _slug_date(entry.get("slug"))
 
 
+
+def _latest_news_validated_update_datetime(entry):
+    """Return only a proven material-update timestamp newer than publication.
+
+    ``lastmod`` and generic ``updated_at`` reflect ordinary maintenance and must
+    never make an archived story new again, even if it had an earlier material
+    update. The historical publication timestamp remains immutable.
+    """
+    if not isinstance(entry, dict) or entry.get("meaningful_update_validated") is not True:
+        return None
+    published_at = _latest_news_publication_datetime(entry)
+    updates = [
+        parsed.astimezone(timezone.utc)
+        for key in ("canonical_last_material_update_at", "last_meaningful_update_at")
+        if (parsed := _parse_any_datetime(entry.get(key))) is not None
+    ]
+    if not updates:
+        return None
+    update_at = max(updates)
+    return update_at if published_at is None or update_at > published_at else None
+
+
+def _latest_news_effective_datetime(entry):
+    """Chronology for Latest News: publication or validated material update."""
+    return _latest_news_validated_update_datetime(entry) or _latest_news_publication_datetime(entry)
+
+
+def _latest_news_display_timestamp(entry, archive_entries=None):
+    """Use the same update authority for ordering and the visible timestamp."""
+    updated_at = _latest_news_validated_update_datetime(entry)
+    if updated_at is not None:
+        from email.utils import format_datetime
+        label = format_age(format_datetime(updated_at))
+        if label:
+            if label.startswith("A few minutes ago"):
+                label = "a few minutes ago" + label[len("A few minutes ago"):]
+            elif label.startswith("Yesterday"):
+                label = "yesterday" + label[len("Yesterday"):]
+            return f"Updated {label}"
+    return _format_category_hero_timestamp(entry, archive_entries)
+
+
 def _select_latest_news_entries(archive_entries, limit=5):
-    """Select the newest canonical TCT publications in strict reverse chronology."""
+    """Select the newest canonical TCT stories by publication or validated update."""
     try:
         limit = max(0, int(limit))
     except (TypeError, ValueError):
@@ -10660,12 +10701,14 @@ def _select_latest_news_entries(archive_entries, limit=5):
         if publication_key in seen_publications:
             continue
         published_at = _latest_news_publication_datetime(entry)
-        if published_at is None:
+        effective_at = _latest_news_effective_datetime(entry)
+        if effective_at is None:
             continue
         normalized = dict(entry)
         normalized["slug"] = slug
-        normalized["_latest_published_at"] = published_at.isoformat()
-        candidates.append((published_at, slug, normalized))
+        normalized["_latest_published_at"] = published_at.isoformat() if published_at else ""
+        normalized["_latest_effective_at"] = effective_at.isoformat()
+        candidates.append((effective_at, slug, normalized))
         seen_publications.add(publication_key)
 
     candidates.sort(key=lambda row: (row[0], row[1]), reverse=True)
@@ -10957,7 +11000,7 @@ def _write_top_stories_ranking_report(report, output_root):
 def _write_latest_news_rail_contract(entries, archive_entries, output_root):
     """Persist and fail closed when the Latest News rail is not chronological."""
     selected = list(entries or [])
-    selected_times = [_latest_news_publication_datetime(entry) for entry in selected]
+    selected_times = [_latest_news_effective_datetime(entry) for entry in selected]
     descending = all(
         selected_times[index] is not None
         and selected_times[index + 1] is not None
@@ -10971,12 +11014,17 @@ def _write_latest_news_rail_contract(entries, archive_entries, output_root):
     report = {
         "schema_version": LATEST_NEWS_RAIL_SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "policy": "strict_reverse_tct_publication_chronology",
+        "policy": "strict_reverse_tct_validated_editorial_activity",
         "passed": passed,
         "limit": len(selected),
         "selected_slugs": selected_slugs,
-        "selected_publication_times": [
+        "selected_effective_times": [
             value.isoformat() if value is not None else "" for value in selected_times
+        ],
+        "selected_publication_times": [
+            (dt.isoformat() if dt is not None else "")
+            for entry in selected
+            for dt in [_latest_news_publication_datetime(entry)]
         ],
         "expected_slugs": expected_slugs,
     }
@@ -10986,11 +11034,11 @@ def _write_latest_news_rail_contract(entries, archive_entries, output_root):
     if not passed:
         raise RuntimeError(
             "Latest News rail contract FAILED: entries are not the newest canonical "
-            "TCT publications in reverse chronological order"
+            "TCT publications or validated material updates in reverse chronological order"
         )
     print(
         "  Latest News rail contract PASSED "
-        f"({len(selected_slugs)} strictly chronological publication(s))"
+        f"({len(selected_slugs)} chronological publication(s) or validated update(s))"
     )
     return report
 
@@ -11498,8 +11546,8 @@ def render_index(all_categories, top_cat):
         ]
     )
 
-    # Editorial redesign modules: Latest News is an independent chronological
-    # publication stream. It must never inherit Top Stories importance ranking.
+    # Latest News is chronological editorial activity (new publications plus
+    # validated substantive updates), independent of Top Stories importance.
     latest_entries = _select_latest_news_entries(archive_for_links, limit=5)
     _write_latest_news_rail_contract(latest_entries, archive_for_links, OUTPUT_DIR)
     latest_items_html = ""
@@ -11508,7 +11556,7 @@ def render_index(all_categories, top_cat):
         if not _slug:
             continue
         _url = _canonical_article_permalink(_slug)
-        _ltime = _format_category_hero_timestamp(_latest, archive_for_links)
+        _ltime = _latest_news_display_timestamp(_latest, archive_for_links)
         _latest_category_key = str(_latest.get("category_key") or "")
         _lcat = str(_latest.get("category_label") or "").strip()
         if not _lcat and _latest_category_key in CATEGORIES:
