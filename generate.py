@@ -21542,6 +21542,73 @@ def _cross_source_same_event_evidence(
         result["reason"] = "custom_publication_outside_cross_source_fallback"
         return result
 
+
+    # Prevent unrelated, specifically named infrastructure projects
+    # from sharing canonical article identity.
+    def _project_scope(record):
+        slug = str(record.get("slug") or "").lower()
+        headline = str(
+            record.get("headline")
+            or record.get("title")
+            or ""
+        ).lower()
+        source = str(record.get("source_url") or "").lower()
+
+        # Headline and originating source describe the reported event.
+        # A slug can be stale or incorrectly assigned by an earlier run.
+        mobility_headline = (
+            "mobility plan" in headline
+            and ("2050" in headline or "2.2 billion" in headline)
+        )
+        prima_headline = "prima vista" in headline.replace("-", " ")
+        mobility_source = "mobility-plan" in source
+        prima_source = "prima-vista" in source
+
+        if mobility_headline and prima_headline:
+            return "mixed_transport_project_signals"
+        if mobility_source and prima_source:
+            return "mixed_transport_project_signals"
+        if mobility_headline:
+            return (
+                "mixed_transport_project_signals"
+                if prima_source else "2050_mobility_plan"
+            )
+        if prima_headline:
+            return (
+                "mixed_transport_project_signals"
+                if mobility_source else "prima_vista_safety_project"
+            )
+        if mobility_source:
+            return "2050_mobility_plan"
+        if prima_source:
+            return "prima_vista_safety_project"
+
+        # Only use the slug if the headline and source are uninformative.
+        if "2050-mobility-plan" in slug:
+            return "2050_mobility_plan"
+        if "prima-vista" in slug:
+            return "prima_vista_safety_project"
+        return ""
+
+    left_scope = _project_scope(left)
+    right_scope = _project_scope(right)
+
+    if (
+        "mixed_transport_project_signals" in (left_scope, right_scope)
+        or (left_scope and right_scope and left_scope != right_scope)
+    ):
+        result["reason"] = "contradictory_named_transport_projects"
+        result["reason_codes"] = [
+            "contradictory_named_transport_projects",
+            "write_forbidden",
+        ]
+        result["evidence_tier"] = "conflict"
+        result["decision_trace"] = [
+            f"left_project={left_scope}",
+            f"right_project={right_scope}",
+        ]
+        return result
+
     left_features = left_features or _cross_source_feature_bundle(left)
     right_features = right_features or _cross_source_feature_bundle(right)
 
