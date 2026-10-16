@@ -127,7 +127,80 @@ def build_top_news_app_feed(*, hero_slug, top_story_slugs, homepage_other_slugs,
     }
 
 
+
+def _published_short_brief_on_disk(entry, output_root):
+    """Recognize a *finished* short brief without reapplying the draft word floor.
+
+    Publication has already authorized and stamped the row.  This exception is
+    narrowly limited to a legitimate canonical publication with a real article
+    file, a verified external source, and at least 60 words in two paragraphs.
+    It must never turn a missing, retired, or quarantined hero into a feed card.
+    """
+    if not isinstance(entry, dict) or entry.get("ranking_eligible") is not True:
+        return False
+    slug = _safe_slug(entry.get("slug"))
+    if not slug or entry.get("canonical_slug", slug) != slug:
+        return False
+    if entry.get("legacy_identity_status") != "identified":
+        return False
+    if any(entry.get(key) for key in (
+        "identity_quarantine_reason", "exclude_from_live_recovery",
+        "retired_custom", "_section_placeholder",
+    )):
+        return False
+    if entry.get("is_weather_alert") or entry.get("is_custom"):
+        return False
+    if not (entry.get("canonical_publication_id") and entry.get("first_published")):
+        return False
+    source = str(entry.get("source_url") or "").strip()
+    if urlsplit(source).scheme not in ("http", "https") or not urlsplit(source).netloc:
+        return False
+    try:
+        words = int(entry.get("article_word_count") or 0)
+        paragraphs = int(entry.get("article_paragraph_count") or 0)
+    except (TypeError, ValueError):
+        return False
+    if not 60 <= words < 120 or paragraphs < 2:
+        return False
+    article = Path(output_root) / "articles" / f"{slug}.html"
+    if not article.is_file():
+        return False
+    # A redirect file is not a publishable article, even if its archive metadata
+    # hasn't yet been reconciled.  Normal published article HTML is preserved.
+    try:
+        article_text = article.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
+    return bool(article_text.strip()) and not re.search(
+        r'<meta\s+[^>]*http-equiv\s*=\s*["\']?refresh\b',
+        article_text, re.I,
+    )
+
+
+def _postpublication_checker(output_root, original_checker):
+    """Honor normal eligibility; allow only verified published short briefs.
+
+    The generator's `_archive_entry_publishable` callback has a generic 120-word
+    archive recovery floor. The *earlier publication gate* intentionally permits
+    verified short breaking briefs.  Once such a brief has been safely published,
+    the iOS mirror must not reject it solely for falling below that generic floor.
+    """
+    def check(entry):
+        if callable(original_checker) and original_checker(entry):
+            return True
+        return _published_short_brief_on_disk(entry, output_root)
+    return check
+
+
 def write_top_news_app_feed(output_root, **kwargs):
+    # Adjust the pre-publication depth checker at the writer boundary, where the
+    # actual article file can be verified. The pure builder remains strict and
+    # retains its documented callback semantics for other callers.
+    checker = kwargs.get("is_publishable")
+    if callable(checker) and getattr(checker, "__name__", "") == "_archive_entry_publishable":
+        # Only adapt TCT's known generic *archive-recovery* depth callback.
+        # Other callers' explicit eligibility callbacks remain authoritative.
+        kwargs["is_publishable"] = _postpublication_checker(output_root, checker)
     result = build_top_news_app_feed(**kwargs)
     destination = Path(output_root) / "data" / "top-news-app-feed.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
