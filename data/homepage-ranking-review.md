@@ -12,30 +12,32 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island | Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island | 61 | importance 0; freshness 99.96; urgency 8/10 |
-| 2 | Turnpike Lanes Reopen in Martin County After Semi Jackknifes | Turnpike Lanes Reopen in Martin County After Semi Jackknifes | 52 | importance 0; freshness 99.97; urgency 4/10 |
-| 3 | Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup | At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan | 51 | importance 0; freshness 85.8; urgency 2/10; validated material update |
-| 4 | Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests | Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup | 46 | importance 0; freshness 93.21; urgency 2/10 |
-| 5 | At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan | Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death | 46 | importance 0; freshness 65.0; urgency 2/10; validated material update |
-| 6 | Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death | Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired | 45 | importance 0; freshness 61.06; urgency 2/10; validated material update |
-| 7 | Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired | Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals | 40 | importance 0; freshness 67.51; urgency 2/10 |
-| 8 | Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals | AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs | 37 | importance 0; freshness 53.36; urgency 2/10; -4 county saturation |
-| 9 | AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs | Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests | 46 | importance 0; freshness 93.21; urgency 2/10; -6 category saturation; -8 county saturation |
-| 10 | After Fatal Crash, Neighbors Press FDOT for Lighting on Port St. Lucie Boulevard | Matt Gaetz, Joel Greenberg Named in New Federal Sex Trafficking Lawsuit | 32 | importance 0; freshness 52.28; urgency 2/10 |
-| 11 | Matt Gaetz, Joel Greenberg Named in New Federal Sex Trafficking Lawsuit | After Fatal Crash, Neighbors Press FDOT for Lighting on Port St. Lucie Boulevard | 37 | importance 0; freshness 53.37; urgency 2/10; -12 county saturation |
-| 12 | St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion | St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion | 36 | importance 0; freshness 52.27; urgency 2/10; -12 county saturation |
+| 1 | Amendment 3 vote looms, real estate agents warn of rush before homestead deadline | Amendment 3 vote looms, real estate agents warn of rush before homestead deadline | 53 | importance 0; freshness 99.94; urgency 6/10 |
+| 2 | Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island | At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan | 49 | importance 0; freshness 80.73; urgency 2/10; validated material update |
+| 3 | Turnpike Lanes Reopen in Martin County After Semi Jackknifes | Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island | 47 | importance 0; freshness 94.9; urgency 2/10 |
+| 4 | Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup | Turnpike Lanes Reopen in Martin County After Semi Jackknifes | 47 | importance 0; freshness 94.9; urgency 2/10 |
+| 5 | Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests | Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup | 45 | importance 0; freshness 88.14; urgency 2/10 |
+| 6 | At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan | Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death | 44 | importance 0; freshness 59.93; urgency 2/10; validated material update |
+| 7 | Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death | Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired | 43 | importance 0; freshness 55.99; urgency 2/10; validated material update |
+| 8 | Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired | Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals | 39 | importance 0; freshness 62.44; urgency 2/10 |
+| 9 | Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals | AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs | 36 | importance 0; freshness 48.3; urgency 2/10; -4 county saturation |
+| 10 | AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs | Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests | 45 | importance 0; freshness 88.14; urgency 2/10; -6 category saturation; -8 county saturation |
+| 11 | After Fatal Crash, Neighbors Press FDOT for Lighting on Port St. Lucie Boulevard | Matt Gaetz, Joel Greenberg Named in New Federal Sex Trafficking Lawsuit | 31 | importance 0; freshness 47.21; urgency 2/10 |
+| 12 | Matt Gaetz, Joel Greenberg Named in New Federal Sex Trafficking Lawsuit | After Fatal Crash, Neighbors Press FDOT for Lighting on Port St. Lucie Boulevard | 36 | importance 0; freshness 48.3; urgency 2/10; -12 county saturation |
 
 ## Recommended moves
 
-- **Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests**: 4 → 9 — importance 0; freshness 93.21; urgency 2/10; -6 category saturation; -8 county saturation
-- **At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan**: 5 → 3 — importance 0; freshness 85.8; urgency 2/10; validated material update
-- **Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup**: 3 → 4 — importance 0; freshness 93.21; urgency 2/10
-- **Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death**: 6 → 5 — importance 0; freshness 65.0; urgency 2/10; validated material update
-- **Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired**: 7 → 6 — importance 0; freshness 61.06; urgency 2/10; validated material update
-- **Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals**: 8 → 7 — importance 0; freshness 67.51; urgency 2/10
-- **AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs**: 9 → 8 — importance 0; freshness 53.36; urgency 2/10; -4 county saturation
-- **After Fatal Crash, Neighbors Press FDOT for Lighting on Port St. Lucie Boulevard**: 10 → 11 — importance 0; freshness 53.37; urgency 2/10; -12 county saturation
-- **Matt Gaetz, Joel Greenberg Named in New Federal Sex Trafficking Lawsuit**: 11 → 10 — importance 0; freshness 52.28; urgency 2/10
+- **Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests**: 5 → 10 — importance 0; freshness 88.14; urgency 2/10; -6 category saturation; -8 county saturation
+- **At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan**: 6 → 2 — importance 0; freshness 80.73; urgency 2/10; validated material update
+- **Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island**: 2 → 3 — importance 0; freshness 94.9; urgency 2/10
+- **Turnpike Lanes Reopen in Martin County After Semi Jackknifes**: 3 → 4 — importance 0; freshness 94.9; urgency 2/10
+- **Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup**: 4 → 5 — importance 0; freshness 88.14; urgency 2/10
+- **Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death**: 7 → 6 — importance 0; freshness 59.93; urgency 2/10; validated material update
+- **Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired**: 8 → 7 — importance 0; freshness 55.99; urgency 2/10; validated material update
+- **Stuart's Atlantic Diving Team trains young divers toward scholarships and Olympic goals**: 9 → 8 — importance 0; freshness 62.44; urgency 2/10
+- **AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs**: 10 → 9 — importance 0; freshness 48.3; urgency 2/10; -4 county saturation
+- **After Fatal Crash, Neighbors Press FDOT for Lighting on Port St. Lucie Boulevard**: 11 → 12 — importance 0; freshness 48.3; urgency 2/10; -12 county saturation
+- **Matt Gaetz, Joel Greenberg Named in New Federal Sex Trafficking Lawsuit**: 12 → 11 — importance 0; freshness 47.21; urgency 2/10
 
 ## Guardrails
 
