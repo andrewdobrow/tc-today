@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-17T12:49:24Z",
+  "generated_at": "2026-10-17T15:47:41Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,36 +15,37 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 2,
       "category_eligibility_archive_recovery": 5,
       "generated_live": 1,
-      "no_publishable_sources": 1
+      "no_publishable_sources": 1,
+      "quality_gate_archive_recovery": 2
     },
     "failures": {
-      "no_category_eligible_sources": 5
+      "no_category_eligible_sources": 5,
+      "publication_quality_rejected": 2
     },
-    "model_attempt_count": 1,
-    "model_elapsed_seconds": 16.799,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 3,
+    "model_elapsed_seconds": 31.57,
+    "archive_recovery_requested_count": 8,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 43,
-    "story_aware_update_context_count": 0,
+    "published_story_duplicate_suppression_count": 41,
+    "story_aware_update_context_count": 1,
     "material_update_promotion_evaluation_count": 18,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 11,
-    "material_update_promotion_model_call_count": 7
+    "material_update_promotion_cache_hit_count": 12,
+    "material_update_promotion_model_call_count": 6
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 3,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -103,6 +104,16 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/16/port-st-lucie-prepares-weekend-rain-businesses-brace-more-flooding?outputType=amp",
+          "editorial_story_id": "story_021671",
+          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-prepares-for-weekend-rain-as-businesses-brace-for-more-flooding",
           "editorial_story_id": "story_021671",
@@ -130,24 +141,14 @@
           "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/jackknifed-semi-truck-blocks-northbound-lanes-of-floridas-turnpike-in-martin-county",
-          "editorial_story_id": "story_021647",
-          "canonical_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
-          "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
@@ -182,19 +183,46 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "Florida death penalty/execution topic",
-            "Gov. Ron DeSantis role in signing death warrants"
+            "Florida death penalty",
+            "Gov. Ron DeSantis death warrant signing authority"
           ],
           "novel_facts": [
-            "Richard Kunkel 1993 murder by Ronald Knight",
-            "Brendan Meehan 1995 murder also attributed to Knight",
-            "Knight sentenced to death in 1998",
-            "family now petitioning DeSantis to sign Knight's death warrant"
+            "Richard Kunkel murder case from 1993 in West Palm Beach",
+            "Killer Ronald Knight convicted in 1998 for two murders (Kunkel and Brendan Meehan)",
+            "Family member Brian Kunkel publicly requesting DeSantis sign Knight's death warrant"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/16/port-st-lucie-prepares-weekend-rain-businesses-brace-more-flooding?outputType=amp",
+          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.9,
+          "shared_anchors": [
+            "Port St. Lucie Public Works",
+            "Scott Samples",
+            "same weekend rain event",
+            "Savona/California boulevards intersection flooding",
+            "same date published"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles cover Port St. Lucie's preparation for the same incoming weekend rain, citing the same spokesperson (Scott Samples), same drain-clearing efforts, and same flood-prone Savona/California intersection. The incoming article adds quotes from a local business owner and detail on pilot water sensors, but these are routine scene/color details and background explanation rather than a material update changing the core facts readers need to know.",
+          "validation_errors": []
         },
         {
           "category_key": "local_gov",
@@ -257,39 +285,31 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/jackknifed-semi-truck-blocks-northbound-lanes-of-floridas-turnpike-in-martin-county",
-          "canonical_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
-          "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 22.547
+      "elapsed_seconds": 22.051
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "cache_hit",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 4,
-      "selected_source_count": 1,
-      "cache_hit": true,
+      "status": "generated_live",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 5,
+      "selected_source_count": 2,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 18.953,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 18.953,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -300,7 +320,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -318,7 +338,7 @@
           "source_url": "https://www.wptv.com/news/health/south-florida-fitness-company-brings-personal-trainers-directly-to-clients"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -362,17 +382,80 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
-          "source_url": "https://cbs12.com/news/local/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
+          "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - cw34.com",
+          "source_url": "https://cw34.com/news/local/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
           "editorial_story_id": "story_021645",
           "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
           "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/jackknifed-semi-truck-blocks-northbound-lanes-of-floridas-turnpike-in-martin-county",
+          "editorial_story_id": "story_021647",
+          "canonical_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
+          "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie residents weigh in on proposed Prima Vista Boulevard safety changes - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-residents-weigh-in-on-proposed-prima-vista-boulevard-safety-changes-aroso-blvd-us-1-oct-15-2026-florida-news-local-news",
+          "editorial_story_id": "story_021538",
+          "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
+          "canonical_headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
+          "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
+          "basis": "event-identity-authority:participant_plus_precise_location",
+          "identity_keys": [
+            "story:story_021645",
+            "source:https://cbs12.com/newsletter-daily/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['port-st-lucie', 'st-lucie']",
+            "shared_event_families=['drug-case']",
+            "shared_named_people=['albert johnson']",
+            "shared_precise_locations=['southwest-burlington-terrace']",
+            "shared_agencies=['port-st-lucie-police']",
+            "shared_subject_phrases=['cocaine-guns-seiz', 'cocaine-guns-seiz-drug', 'drug-bust-wpec', 'fentanyl-cocaine-guns', 'fentanyl-cocaine-guns-seiz', 'guns-seiz-drug', 'guns-seiz-drug-bust', 'seiz-drug-bust', 'seiz-drug-bust-wpec']",
+            "shared_headline_topic_core=['bust', 'cocaine', 'drug', 'fentanyl', 'guns', 'seiz', 'wpec']",
+            "shared_distinctive_token_count=68",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
@@ -441,13 +524,13 @@
           "confidence": 0.95,
           "shared_anchors": [
             "Florida death penalty context",
-            "Gov. Ron DeSantis death warrant process"
+            "Gov. Ron DeSantis death warrant signing authority"
           ],
           "novel_facts": [
-            "1993 murder of Richard Kunkel by Ronald Knight in West Palm Beach",
-            "1995 murder of Brendan Meehan also attributed to Knight",
+            "Richard Kunkel's 1993 murder by Ronald Knight",
+            "Brendan Meehan's 1995 murder also attributed to Knight",
             "Knight sentenced to death in 1998",
-            "family publicly requesting DeSantis sign Knight's death warrant"
+            "family's request for DeSantis to sign Knight's death warrant"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -488,10 +571,25 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
-          "source_url": "https://cbs12.com/news/local/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
+          "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - cw34.com",
+          "source_url": "https://cw34.com/news/local/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
           "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
           "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/jackknifed-semi-truck-blocks-northbound-lanes-of-floridas-turnpike-in-martin-county",
+          "canonical_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
+          "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -500,11 +598,29 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie residents weigh in on proposed Prima Vista Boulevard safety changes - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-residents-weigh-in-on-proposed-prima-vista-boulevard-safety-changes-aroso-blvd-us-1-oct-15-2026-florida-news-local-news",
+          "canonical_slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
+          "canonical_headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Hobe Sound Shooting Death Ruled Homicide, No Arrest Made",
-      "elapsed_seconds": 20.856
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Port St. Lucie Drug Bust: Gang Member, Juvenile Among Three Arrested",
+      "generated_card_count": 1,
+      "elapsed_seconds": 37.224
     },
     {
       "category_key": "business",
@@ -689,13 +805,14 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "Florida death penalty context",
-            "Gov. Ron DeSantis death warrant process"
+            "Florida death penalty",
+            "Gov. Ron DeSantis death warrant signing authority"
           ],
           "novel_facts": [
-            "Richard Kunkel 1993 murder in West Palm Beach",
-            "Ronald Knight convicted of killing both Kunkel and Brendan Meehan",
-            "Family request for DeSantis to sign Knight's death warrant"
+            "Richard Kunkel 1993 murder by Ronald Knight",
+            "Brendan Meehan 1995 murder also attributed to Knight",
+            "Knight sentenced to death in 1998",
+            "Family publicly requesting DeSantis sign Knight's death warrant"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -781,7 +898,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.729
+      "elapsed_seconds": 18.486
     },
     {
       "category_key": "sports",
@@ -846,7 +963,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 14.812
+      "elapsed_seconds": 10.022
     },
     {
       "category_key": "things_to_do",
@@ -911,7 +1028,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.855
+      "elapsed_seconds": 14.397
     },
     {
       "category_key": "florida",
@@ -1001,23 +1118,30 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.32
+      "elapsed_seconds": 12.978
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "cache_hit",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
+      "fresh_candidate_count": 27,
       "publishable_source_count": 3,
-      "selected_source_count": 3,
-      "cache_hit": true,
-      "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "selected_source_count": 2,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 7.479,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 7.479,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1029,18 +1153,8 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/16/jackknifed-semi-truck-blocks-northbound-lanes-floridas-turnpike-martin-county?outputType=amp",
-          "editorial_story_id": "story_021647",
-          "canonical_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
-          "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WPTV",
@@ -1070,40 +1184,15 @@
           "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Investigators question if fatal shooting in Hobe Sound falls under stand-your-ground law - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-hobe-sound-shooting-stand-your-ground/74151729",
-          "editorial_story_id": "story_021480",
-          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/16/jackknifed-semi-truck-blocks-northbound-lanes-floridas-turnpike-martin-county?outputType=amp",
-          "canonical_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
-          "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "martin",
           "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WPTV",
@@ -1170,39 +1259,9 @@
           "confidence": 0.97,
           "shared_anchors": [],
           "novel_facts": [
-            "Fatal shooting of Jarvis Preston, 21, in Hobe Sound's Banner Lake neighborhood",
-            "Shooting occurred along Southeast Citrus Way",
-            "Sheriff John Budensiek described the incident and possible stand-your-ground question",
-            "Grandmother Harriet Ford Gregg describes finding him shot"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Investigators question if fatal shooting in Hobe Sound falls under stand-your-ground law - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-hobe-sound-shooting-stand-your-ground/74151729",
-          "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-          "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.97,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Fatal shooting in Hobe Sound's Banner Lake neighborhood on Southeast Citrus Way",
-            "Victim identified by family as Jarvis Preston",
-            "Shooter used AR-15 rifle, shot victim three times in chest",
-            "Martin County Sheriff investigating possible stand-your-ground defense"
+            "21-year-old Jarvis Preston fatally shot in Hobe Sound's Banner Lake neighborhood",
+            "Martin County Sheriff John Budensiek details circumstances including drinking, threats, and possible stand-your-ground claim",
+            "Shooter used AR-15/rifle after victim allegedly pulled a handgun"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1211,31 +1270,32 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Hobe Sound Shooting Victim Dies; Sheriff Calls Shooter Lifelong Friend",
-      "elapsed_seconds": 24.843
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 29.832
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 3,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 2,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.799,
+          "elapsed_seconds": 5.138,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 16.799,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 5.138,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1244,10 +1304,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 13,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1261,22 +1321,22 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMiwgJBVV95cUxPUGVNd2tJUFN4V2hLaU1PSUdoNEN5cm0xVUhNR05SelhUbDBuMGcwcmZmR19vblNUeDY4dV84Ry1xVHhXV3l0Y0UzVmM2RXU4YlBBVDVDd214RTFoOWdPdWxVdzRxUHR2VlozU3FiTzNPakt2TG9RbmpRdDFJdzBDQ3I4WEs2RFVfTFhmSW9qMDhoa2NfM2hoOXZWeEdrSm1DaDZVWlNJZVJwLXNLMlJIVlVFbXYtN1N0Y19TYXlxeXNES2YxMkVoems0Mk91WjZZdXFlT1FVUFJMeTlObHVKbF9MWkpQNjBFWllTN053cUtvUWhuTG5aVFhhaE1jRkRlOWZmanc4M0NRbFpkejJnSGlHRmd6QlBxUzc2WTRwdFJDazZ3OTVsT2NOOGgtWjVQcGpsdUltTnJVZ2h1aS1paHdB",
-          "editorial_story_id": "story_017829",
-          "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-          "canonical_headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
+          "source_headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
+          "source_url": "https://cw34.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather?teaserSource=trending",
+          "editorial_story_id": "story_021671",
+          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
-          "source_url": "https://cbs12.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather",
+          "source_headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/16/port-st-lucie-prepares-weekend-rain-businesses-brace-more-flooding?outputType=amp",
           "editorial_story_id": "story_021671",
           "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
           "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1293,16 +1353,6 @@
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-prepares-for-weekend-rain-as-businesses-brace-for-more-flooding",
-          "editorial_story_id": "story_021671",
-          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
-          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNS1gtbnh4ZVB4MW43XzRDOUdVVW9hb215N0FvMHJyM3JwYjIwR3AtU1hCdGd5NmpfX005RFhTVFRwM2t5eUlaVFpsbTlMZm5XOVo5V0JiVkNkWjdtbk0waTFVcDNhTW5pcndtaWVrVm9NaTlZTm9vVjdMcGl4bmt0a2dQZ01HenQ0bTYtdmdYcG1zR0NDY0FLVjYtS0hPVDdMZzhueUk4cFpJLXhoM25aQkJhRWV0R29MR2NFOHBXaVRMeS1fZlpDTWlleENidDRlSXpn",
           "editorial_story_id": "story_021671",
           "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
           "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
@@ -1368,24 +1418,14 @@
           "canonical_headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie ICU nurse arrested on charges involving patient's IV - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-icu-nurse-arrested-on/74107952",
-          "editorial_story_id": "story_020811",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 5,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 6,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1418,48 +1458,61 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMiwgJBVV95cUxPUGVNd2tJUFN4V2hLaU1PSUdoNEN5cm0xVUhNR05SelhUbDBuMGcwcmZmR19vblNUeDY4dV84Ry1xVHhXV3l0Y0UzVmM2RXU4YlBBVDVDd214RTFoOWdPdWxVdzRxUHR2VlozU3FiTzNPakt2TG9RbmpRdDFJdzBDQ3I4WEs2RFVfTFhmSW9qMDhoa2NfM2hoOXZWeEdrSm1DaDZVWlNJZVJwLXNLMlJIVlVFbXYtN1N0Y19TYXlxeXNES2YxMkVoems0Mk91WjZZdXFlT1FVUFJMeTlObHVKbF9MWkpQNjBFWllTN053cUtvUWhuTG5aVFhhaE1jRkRlOWZmanc4M0NRbFpkejJnSGlHRmd6QlBxUzc2WTRwdFJDazZ3OTVsT2NOOGgtWjVQcGpsdUltTnJVZ2h1aS1paHdB",
-          "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
-          "canonical_headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
-          "source_url": "https://cbs12.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather",
+          "source_headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
+          "source_url": "https://cw34.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather?teaserSource=trending",
           "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
           "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
+          "confidence": 0.9,
           "shared_anchors": [
-            "same source URL (cbs12.com)",
-            "Port St. Lucie flooding from last week's storm (4 inches rain in 48 hours)",
-            "same intersections: Savona Boulevard/SW California Boulevard, SW Todd Avenue/SW Broadview Street",
-            "same city spokesperson quote about Public Works standby and canal monitoring",
-            "same forecast of more rain this weekend"
+            "Port St. Lucie flooding from last week's storm (4 inches in 48 hours)",
+            "Intersection of SW Todd Avenue and SW Broadview Street",
+            "Savona Boulevard / SW California Boulevard flood-prone area",
+            "City Public Works preparing for weekend rain",
+            "Same underlying forecast concern for upcoming weekend rain"
           ],
           "novel_facts": [
-            "Additional resident quotes from Peter Rodriguez and Frank Camarda",
-            "Confirmation no reports of floodwater entering homes/businesses last week"
+            "Quotes from resident Peter Rodriguez and Frank Camarda",
+            "Quote from city spokesman Scott Samples confirming no reports of floodwater entering homes/businesses"
           ],
-          "reason": "This is the same WPEC article about anticipated weekend flooding in Port St. Lucie following last week's storm, published one day after the canonical version with identical source URL and headline. It adds resident color and quotes but no material new facts like injuries, deaths, official findings, or consequential government action.",
+          "reason": "Both articles cover the same real-world situation: Port St. Lucie's recovery from last week's flooding and preparations for anticipated weekend rain, citing the same rainfall totals, same flood-prone locations, and same city response. The incoming article adds resident quotes and PIO commentary but no new factual development (no new casualty, official finding, or policy change) beyond what the canonical already covers as an ongoing weather-preparedness story.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/16/port-st-lucie-prepares-weekend-rain-businesses-brace-more-flooding?outputType=amp",
+          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.9,
+          "shared_anchors": [
+            "Port St. Lucie Public Works",
+            "Scott Samples",
+            "same weekend rain event",
+            "Savona/California boulevards intersection flooding",
+            "same date published"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles cover Port St. Lucie's preparation for the same incoming weekend rain, citing the same spokesperson (Scott Samples), same drain-clearing efforts, and same flood-prone Savona/California intersection. The incoming article adds quotes from a local business owner and detail on pilot water sensors, but these are routine scene/color details and background explanation rather than a material update changing the core facts readers need to know.",
           "validation_errors": []
         },
         {
@@ -1525,21 +1578,6 @@
           ],
           "reason": "Both articles cover the same real-world event: Port St. Lucie's preparation for weekend rain following prior flooding, including the same spokesperson (Scott Samples), same locations (Savona/California intersection), and same drainage mitigation efforts. The incoming article adds color (sensor testing, business owner quotes, drainage project specifics) but these are routine background/human-interest details rather than material updates like an official finding, casualty, or policy vote. No accountability or consequence angle is introduced that would warrant a separate story.",
           "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNS1gtbnh4ZVB4MW43XzRDOUdVVW9hb215N0FvMHJyM3JwYjIwR3AtU1hCdGd5NmpfX005RFhTVFRwM2t5eUlaVFpsbTlMZm5XOVo5V0JiVkNkWjdtbk0waTFVcDNhTW5pcndtaWVrVm9NaTlZTm9vVjdMcGl4bmt0a2dQZ01HenQ0bTYtdmdYcG1zR0NDY0FLVjYtS0hPVDdMZzhueUk4cFpJLXhoM25aQkJhRWV0R29MR2NFOHBXaVRMeS1fZlpDTWlleENidDRlSXpn",
-          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
-          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -1643,54 +1681,20 @@
           "novel_facts": [],
           "reason": "Identical source article covering the same plant sale event with same location, date, and pricing; no new material facts beyond minor wording and additional event detail restatement.",
           "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie ICU nurse arrested on charges involving patient's IV - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-icu-nurse-arrested-on/74107952",
-          "canonical_slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "canonical_headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
-          "shared_anchors": [
-            "Leslie Pope",
-            "Cleveland Clinic Tradition Hospital",
-            "Port St. Lucie Police Department",
-            "same arrest Thursday in Jupiter",
-            "same source_url"
-          ],
-          "novel_facts": [
-            "Bond amount of $150,000 and release details",
-            "Additional detail on second incident with family member intervention",
-            "Cleveland Clinic spokesperson statement"
-          ],
-          "reason": "This is the same arrest and case as the canonical article, same source URL, same suspect, same hospital and charges. The incoming version adds some procedural detail (bond, booking, hospital statement) but these are routine elaborations, not a material new development like a new charge, death, or court ruling.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie Tests New Water Sensors as Weekend Rain Threatens Flooding",
-      "generated_card_count": 0,
-      "elapsed_seconds": 44.27
+      "elapsed_seconds": 22.395
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 7,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1707,7 +1711,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
@@ -1793,14 +1797,14 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "Florida death penalty context",
-            "Gov. DeSantis death warrant process"
+            "Florida death penalty",
+            "Gov. Ron DeSantis death warrant signing authority"
           ],
           "novel_facts": [
-            "Richard Kunkel 1993 murder case",
-            "Ronald Knight convicted of two murders in 1998",
-            "Brian Kunkel family seeking death warrant signature",
-            "Brendan Meehan 1995 murder case"
+            "Richard Kunkel murder in 1993 by Ronald Knight",
+            "Brendan Meehan murder in 1995 also by Knight",
+            "Knight sentenced to death in 1998",
+            "Family publicly requesting DeSantis sign Knight's death warrant"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1856,7 +1860,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.697
+      "elapsed_seconds": 17.601
     }
   ]
 }
