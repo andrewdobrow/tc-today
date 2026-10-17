@@ -16,6 +16,7 @@ import shutil
 import sys
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from urllib.parse import quote
 from zoneinfo import ZoneInfo
@@ -345,15 +346,71 @@ def render_city_pages(archive: list[dict]) -> dict:
     return {"rendered": rendered, "skipped": skipped, "counts": counts}
 
 
+
+def _archive_parse_datetime(raw) -> datetime | None:
+    """Interpret persisted publication and verified update receipts in UTC."""
+    if not raw:
+        return None
+    value = str(raw).strip()
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        try:
+            parsed = parsedate_to_datetime(value)
+        except (TypeError, ValueError, IndexError):
+            return None
+    if parsed.tzinfo is None:
+        # A date-only record represents the original calendar date in Florida.
+        parsed = parsed.replace(tzinfo=ZoneInfo("America/New_York"))
+    return parsed.astimezone(timezone.utc)
+
+
+def _archive_editorial_activity(entry: dict) -> tuple[datetime | None, bool]:
+    """Match Latest News: original publication or a *validated* material update.
+
+    Ignore lastmod, updated_at and ordinary corrections. A newer article body or
+    changed headline alone is not evidence of a material update; only the
+    explicit validation receipt can promote an existing story in chronology.
+    """
+    published = (
+        _archive_parse_datetime(entry.get("first_published"))
+        or _archive_parse_datetime(entry.get("date"))
+    )
+    if entry.get("meaningful_update_validated") is not True:
+        return published, False
+    updates = [
+        timestamp
+        for key in ("canonical_last_material_update_at", "last_meaningful_update_at")
+        if (timestamp := _archive_parse_datetime(entry.get(key))) is not None
+    ]
+    if not updates:
+        return published, False
+    updated = max(updates)
+    if published is not None and updated <= published:
+        return published, False
+    return updated, True
+
+
+def _archive_activity_sort_key(entry: dict):
+    activity, _ = _archive_editorial_activity(entry)
+    return (
+        activity or datetime.min.replace(tzinfo=timezone.utc),
+        str(entry.get("slug") or ""),
+    )
+
 def render_searchable_archive(archive: list[dict]) -> dict:
     by_month: dict[tuple[str, str], list[dict]] = defaultdict(list)
     rows = []
-    for e in sorted(archive, key=lambda x: _entry_date(x), reverse=True):
+    for e in sorted(archive, key=_archive_activity_sort_key, reverse=True):
         if not str(e.get("slug") or "").strip():
             continue
-        date = _entry_date(e)
+        activity_at, updated = _archive_editorial_activity(e)
+        activity_date = (
+            activity_at.astimezone(ZoneInfo("America/New_York")).date().isoformat()
+            if activity_at is not None else _entry_date(e)
+        )
         try:
-            key = date[:7]
+            key = activity_date[:7]
             label = datetime.strptime(key, "%Y-%m").strftime("%B %Y")
         except Exception:
             key, label = "recent", "Recent"
@@ -363,6 +420,8 @@ def render_searchable_archive(archive: list[dict]) -> dict:
         record = dict(e)
         record["_city_slugs"] = city_slugs
         record["_county_keys"] = county_keys
+        record["_archive_activity_date"] = activity_date
+        record["_archive_updated"] = updated
         by_month[(key, label)].append(record)
         rows.append(record)
     month_html = []
@@ -370,18 +429,24 @@ def render_searchable_archive(archive: list[dict]) -> dict:
         items = []
         for e in entries:
             search = _clean_text(" ".join([str(e.get("headline") or ""), str(e.get("teaser") or ""), e.get("_city_slugs", ""), e.get("_county_keys", "")])).lower()
-            items.append(f'''<li class="archive-item" data-archive-item data-search="{html_lib.escape(search, quote=True)}" data-category="{html_lib.escape(str(e.get('category_key') or ''), quote=True)}" data-counties="{html_lib.escape(e.get('_county_keys',''), quote=True)}" data-cities="{html_lib.escape(e.get('_city_slugs',''), quote=True)}" data-date="{html_lib.escape(_entry_date(e), quote=True)}">
-<a href="{html_lib.escape(_entry_url(e), quote=True)}" class="archive-link"><span class="archive-cat">{html_lib.escape(str(e.get('category_label') or 'Local News'))}</span><span class="archive-story-headline">{html_lib.escape(str(e.get('headline') or ''))}</span><span class="archive-date">{html_lib.escape(_entry_date(e))}</span></a></li>''')
+            original_date = _entry_date(e)
+            activity_date = e["_archive_activity_date"]
+            update_label = f"Updated {activity_date}" if e["_archive_updated"] else original_date
+            original_title = f' title="Originally published {html_lib.escape(original_date, quote=True)}"' if e["_archive_updated"] else ""
+            update_flag = '<span class="archive-update-flag">Updated</span> ' if e["_archive_updated"] else ""
+            items.append(f'''<li class="archive-item" data-archive-item data-search="{html_lib.escape(search, quote=True)}" data-category="{html_lib.escape(str(e.get('category_key') or ''), quote=True)}" data-counties="{html_lib.escape(e.get('_county_keys',''), quote=True)}" data-cities="{html_lib.escape(e.get('_city_slugs',''), quote=True)}" data-date="{html_lib.escape(activity_date, quote=True)}" data-published="{html_lib.escape(original_date, quote=True)}">
+<a href="{html_lib.escape(_entry_url(e), quote=True)}" class="archive-link"><span class="archive-cat">{html_lib.escape(str(e.get('category_label') or 'Local News'))}</span><span class="archive-story-headline">{update_flag}{html_lib.escape(str(e.get('headline') or ''))}</span><span class="archive-date"{original_title}>{html_lib.escape(update_label)}</span></a></li>''')
         month_html.append(f'<section class="archive-month" data-archive-month><h2 class="archive-month-label">{html_lib.escape(label)}</h2><ul class="archive-list">{"".join(items)}</ul></section>')
 
     category_options = sorted({(str(e.get("category_key") or ""), str(e.get("category_label") or "")) for e in rows if e.get("category_key") and e.get("category_label")})
     city_options = "".join(f'<option value="{c["slug"]}">{html_lib.escape(c["name"])}</option>' for c in CITY_CONFIG)
     category_option_html = "".join(f'<option value="{html_lib.escape(k, quote=True)}">{html_lib.escape(v)}</option>' for k,v in category_options)
     head = _page_head("Article Archive | Treasure Coast Today", "Search and browse Treasure Coast Today local news by keyword, county, city, category and date.", "/archive.html")
-    page = f'''<!DOCTYPE html><html lang="en"><head>{head}</head><body>
+    page = f'''<!DOCTYPE html><html lang="en"><head>{head}
+<style>.archive-update-flag{{display:inline-block;margin-right:.35em;font-family:inherit;font-size:.7em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);white-space:nowrap}}</style></head><body>
 {_page_header(active='archive')}
 <main><div class="archive-wrap archive-wrap--searchable">
-<span class="archive-eyebrow">Archive</span><h1 class="archive-page-title">Search TCT News</h1><p class="archive-sub">Search every published Treasure Coast Today story, or browse chronologically below.</p>
+<span class="archive-eyebrow">Archive</span><h1 class="archive-page-title">Search TCT News</h1><p class="archive-sub">Search every published Treasure Coast Today story, or browse new stories and verified substantive updates in chronological order.</p>
 <form class="archive-search-panel" data-archive-form onsubmit="return false">
 <label class="archive-search-keyword"><span>Keyword</span><input type="search" data-archive-query placeholder="Search headlines and story summaries" autocomplete="off"></label>
 <label><span>County</span><select data-archive-county><option value="">All counties</option><option value="martin">Martin County</option><option value="st_lucie">St. Lucie County</option><option value="indian_river">Indian River County</option></select></label>
