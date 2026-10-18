@@ -93,7 +93,7 @@ def test_fresh_custom_card_can_replace_stale_section_hero_and_archive_sports():
 
 def test_no_fresh_candidates_uses_non_sports_deterministic_fallback():
     generate = _load_generate_module()
-    old = (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%d")
+    old = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d")
 
     sports = _category(
         "sports",
@@ -119,12 +119,12 @@ def test_no_fresh_candidates_uses_non_sports_deterministic_fallback():
     selected = generate.select_front_page_hero([sports, local_gov])
 
     assert selected is local_gov
-    assert generate.FRONT_PAGE_HERO_AUDIT["selection_reason"] == "deterministic_stale_fallback"
+    assert generate.FRONT_PAGE_HERO_AUDIT["selection_reason"] == "recent_canonical_fallback_72h"
 
 
 def test_archive_only_sports_is_last_resort_when_archive_non_sports_exists():
     generate = _load_generate_module()
-    old = (datetime.now(timezone.utc) - timedelta(days=4)).strftime("%Y-%m-%d")
+    old = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d")
 
     sports = _category(
         "sports",

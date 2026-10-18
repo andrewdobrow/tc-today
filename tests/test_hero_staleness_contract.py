@@ -54,7 +54,7 @@ def test_same_day_high_urgency_story_is_not_filtered_by_past_day_language():
 def test_stale_audit_records_date_age_and_reason():
     generate = _load_generate_module()
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    fresh = _category("crime", "Fresh local story", today, "New details announced today.", 8)
+    fresh = _category("crime", "Fresh Fort Pierce local story", today, "New details announced today.", 8)
     stale = _category("martin", "Old local story", "2020-01-01", "This happened last week.", 4)
     generate.select_front_page_hero([fresh, stale])
     row = next(item for item in generate.HERO_PREFILTER_AUDIT if item["headline"] == "Old local story")

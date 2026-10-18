@@ -178,7 +178,7 @@ def test_exact_hoarding_regression_reselects_fresh_canonical_after_final_binding
     assert "fresh-school-plan" in report
 
 
-def test_stale_fallback_is_allowed_only_when_no_fresh_canonical_exists(tmp_path):
+def test_expired_canonical_fallback_is_blocked_even_without_fresh_alternative(tmp_path):
     g = _load_generate()
     g.CANONICAL_HERO_FRESHNESS_REPORT_PATH = tmp_path / "canonical-hero-freshness-contract.json"
     old = (datetime.now(timezone.utc) - timedelta(days=4)).strftime("%a, %d %b %Y %H:%M:%S GMT")
@@ -191,10 +191,9 @@ def test_stale_fallback_is_allowed_only_when_no_fresh_canonical_exists(tmp_path)
     })
     category = _category("martin", "Martin County", item)
 
-    selected = g.enforce_final_canonical_hero_freshness([category], category, tmp_path)
-    assert selected is category
-    report = (tmp_path / "canonical-hero-freshness-contract.json").read_text()
-    assert '"action": "stale_fallback_no_fresh_canonical_candidates"' in report
+    import pytest
+    with pytest.raises(RuntimeError, match="72 hours"):
+        g.enforce_final_canonical_hero_freshness([category], category, tmp_path)
 
 
 def test_final_freshness_gate_can_reselect_recent_archive_recovery(tmp_path):
