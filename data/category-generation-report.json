@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-18T18:48:50Z",
+  "generated_at": "2026-10-18T19:40:41Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,25 +16,26 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 5,
-      "generated_live": 2,
-      "no_publishable_sources": 2
+      "no_publishable_sources": 2,
+      "quality_gate_archive_recovery": 2
     },
     "failures": {
-      "no_category_eligible_sources": 5
+      "no_category_eligible_sources": 5,
+      "publication_quality_rejected": 2
     },
     "model_attempt_count": 2,
-    "model_elapsed_seconds": 41.674,
-    "archive_recovery_requested_count": 7,
+    "model_elapsed_seconds": 11.508,
+    "archive_recovery_requested_count": 9,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 3,
     "published_story_duplicate_suppression_count": 28,
-    "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 9,
+    "story_aware_update_context_count": 0,
+    "material_update_promotion_evaluation_count": 11,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 8,
-    "material_update_promotion_model_call_count": 1
+    "material_update_promotion_cache_hit_count": 9,
+    "material_update_promotion_model_call_count": 2
   },
   "categories": [
     {
@@ -241,30 +242,30 @@
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 17.386
+      "elapsed_seconds": 18.122
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 7,
-      "selected_source_count": 2,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.0,
+          "elapsed_seconds": 5.614,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 16.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 5.614,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -273,7 +274,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -291,7 +292,7 @@
           "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/palm-beach-gardens/palm-beach-county-no-kings-rally-urges-early-voting"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -312,57 +313,24 @@
           "canonical_headline": "Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
+        },
         {
+          "category_key": "crime",
           "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
           "source_url": "https://cbs12.com/news/addicted-florida/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
-          "publisher": "cbs12.com",
+          "editorial_story_id": "story_021645",
           "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
           "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_021645",
-            "source:https://cbs12.com/news/addicted-florida/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['albert johnson']",
-            "shared_precise_locations=['southwest-burlington-terrace']",
-            "shared_agencies=['port-st-lucie-police']",
-            "shared_subject_phrases=['cocaine-guns-seiz', 'cocaine-guns-seiz-drug', 'drug-bust-wpec', 'fentanyl-cocaine-guns', 'fentanyl-cocaine-guns-seiz', 'guns-seiz-drug', 'guns-seiz-drug-bust', 'seiz-drug-bust', 'seiz-drug-bust-wpec']",
-            "shared_headline_topic_core=['bust', 'cocaine', 'drug', 'fentanyl', 'guns', 'seiz', 'wpec']",
-            "shared_distinctive_token_count=68",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
@@ -407,14 +375,40 @@
           "novel_facts": [],
           "reason": "Same incident, same suspect, same source article republished a day later with identical details and no new developments (charges, custody status, and facts are unchanged).",
           "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
+          "source_url": "https://cbs12.com/news/addicted-florida/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
+          "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
+          "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Albert Johnson, 36",
+            "Southwest Burlington Terrace",
+            "Port St. Lucie Police Department",
+            "same drug/gun seizure amounts",
+            "same three arrests"
+          ],
+          "novel_facts": [],
+          "reason": "Identical incident with same suspect, location, agency, and seizure details; no new facts beyond the existing canonical article.",
+          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie Drug Bust: Gang Member Among 3 Arrested in Fentanyl, Gun Seizure",
-      "generated_card_count": 0,
-      "elapsed_seconds": 38.044
+      "elapsed_seconds": 27.313
     },
     {
       "category_key": "business",
@@ -603,10 +597,9 @@
             "Gov. Ron DeSantis death warrant signing authority"
           ],
           "novel_facts": [
-            "Richard Kunkel 1993 murder by Ronald Knight",
-            "Brendan Meehan 1995 murder also attributed to Knight",
-            "Knight sentenced to death in 1998",
-            "Family publicly requesting DeSantis sign Knight's death warrant"
+            "Richard Kunkel's 1993 murder in West Palm Beach",
+            "Ronald Knight convicted of both Kunkel and Brendan Meehan murders",
+            "Family petition specifically for Knight's death warrant"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -707,7 +700,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 4,
-      "elapsed_seconds": 23.827
+      "elapsed_seconds": 24.16
     },
     {
       "category_key": "sports",
@@ -744,8 +737,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 6,
-      "elapsed_seconds": 11.512
+      "new_publication_stale_rejected_count": 5,
+      "elapsed_seconds": 12.647
     },
     {
       "category_key": "things_to_do",
@@ -753,7 +746,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 7,
+      "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -810,7 +803,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.825
+      "elapsed_seconds": 16.917
     },
     {
       "category_key": "florida",
@@ -848,14 +841,14 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.687
+      "elapsed_seconds": 11.517
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "no_publishable_sources",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 27,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 26,
       "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -876,67 +869,40 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/16/lanes-reopen-after-semi-truck-jackknifes-floridas-turnpike-martin-county",
-          "editorial_story_id": "story_021647",
-          "canonical_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
-          "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Lanes reopen after semi-truck jackknifes on Florida's Turnpike in Martin County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/16/lanes-reopen-after-semi-truck-jackknifes-floridas-turnpike-martin-county",
-          "canonical_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
-          "canonical_headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.444
+      "elapsed_seconds": 12.162
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 19,
       "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 25.674,
+          "elapsed_seconds": 5.894,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 25.674,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 5.894,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -948,7 +914,7 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -963,16 +929,6 @@
         {
           "category_key": "st_lucie",
           "source_headline": "Man found dead after barricade situation in St. Lucie County, deputies say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-deputies-surround-fort-pierce-home-after-domestic-battery-call-swat-requested",
-          "editorial_story_id": "story_021820",
-          "canonical_slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
-          "canonical_headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Man found dead after barricade situation in St. Lucie County, deputies say - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-deputies-surround-fort-pierce-home-after-domestic-battery-call-swat-requested",
           "editorial_story_id": "story_021820",
           "canonical_slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
@@ -1002,22 +958,22 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
-          "source_url": "https://cw34.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather?teaserSource=trending",
-          "editorial_story_id": "story_021671",
-          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
-          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
           "source_url": "https://news.google.com/rss/articles/CBMiwgJBVV95cUxPUGVNd2tJUFN4V2hLaU1PSUdoNEN5cm0xVUhNR05SelhUbDBuMGcwcmZmR19vblNUeDY4dV84Ry1xVHhXV3l0Y0UzVmM2RXU4YlBBVDVDd214RTFoOWdPdWxVdzRxUHR2VlozU3FiTzNPakt2TG9RbmpRdDFJdzBDQ3I4WEs2RFVfTFhmSW9qMDhoa2NfM2hoOXZWeEdrSm1DaDZVWlNJZVJwLXNLMlJIVlVFbXYtN1N0Y19TYXlxeXNES2YxMkVoems0Mk91WjZZdXFlT1FVUFJMeTlObHVKbF9MWkpQNjBFWllTN053cUtvUWhuTG5aVFhhaE1jRkRlOWZmanc4M0NRbFpkejJnSGlHRmd6QlBxUzc2WTRwdFJDazZ3OTVsT2NOOGgtWjVQcGpsdUltTnJVZ2h1aS1paHdB",
           "editorial_story_id": "story_017829",
           "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
           "canonical_headline": "Port St. Lucie removes 18 Flock cameras after commission votes to end program",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
+          "source_url": "https://cbs12.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather",
+          "editorial_story_id": "story_021671",
+          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1042,63 +998,40 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQMU5BcHlIRmFnSDZZVk5tR1h1LVh1MEpGc3M3QUFiRkZnTUk2NHZ1Z29yOWY4N200djBnTlFoeFA0bXd1emxrbm5NS3UxYUczaWhCZXd6QjRfNXJmMjNUS3hEUVdXRWlqb21UV2hNdDFfVUFudm9kU1VER05TcGR5TTM0cGpjMENUUGtEZWFKb3FzV1dScVlhS0pxNm1RZmVwOW1fZkx3bnJVQ1lmSURBcTlrajZSRGMyNTktT3c3dUdqMzdHWC1memNMLXZDWHdTcWhKdw",
+          "source_headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNS1gtbnh4ZVB4MW43XzRDOUdVVW9hb215N0FvMHJyM3JwYjIwR3AtU1hCdGd5NmpfX005RFhTVFRwM2t5eUlaVFpsbTlMZm5XOVo5V0JiVkNkWjdtbk0waTFVcDNhTW5pcndtaWVrVm9NaTlZTm9vVjdMcGl4bmt0a2dQZ01HenQ0bTYtdmdYcG1zR0NDY0FLVjYtS0hPVDdMZzhueUk4cFpJLXhoM25aQkJhRWV0R29MR2NFOHBXaVRMeS1fZlpDTWlleENidDRlSXpn",
           "editorial_story_id": "story_021671",
           "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
           "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
+        },
         {
-          "source_headline": "3 arrested after fentanyl, cocaine and guns seized in Port St. Lucie drug bust - WPEC",
-          "source_url": "https://cbs12.com/news/addicted-florida/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
-          "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_021645",
-            "source:https://cbs12.com/news/addicted-florida/three-arrested-including-juvenile-cocaine-fentanyl-cannabis-drug-bust-home-southwest-burlington-terrace-port-st-lucie-police-department-florida-news"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['albert johnson']",
-            "shared_precise_locations=['southwest-burlington-terrace']",
-            "shared_agencies=['port-st-lucie-police']",
-            "shared_subject_phrases=['cocaine-guns-seiz', 'cocaine-guns-seiz-drug', 'drug-bust-wpec', 'fentanyl-cocaine-guns', 'fentanyl-cocaine-guns-seiz', 'guns-seiz-drug', 'guns-seiz-drug-bust', 'seiz-drug-bust', 'seiz-drug-bust-wpec']",
-            "shared_headline_topic_core=['bust', 'cocaine', 'drug', 'fentanyl', 'guns', 'seiz', 'wpec']",
-            "shared_distinctive_token_count=68",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County voters to decide on sales tax renewal, mosquito control expansion - WPBF",
+          "source_url": "https://www.wpbf.com/article/st-lucie-county-mosquito-control-expansion-sales-tax-renewal/74146251",
+          "editorial_story_id": "story_021474",
+          "canonical_slug": "2026-10-15-st-lucie-county-voters-to-decide-sales-tax-renewal-mosquito-control-expansion",
+          "canonical_headline": "St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County fall plant sale, workshops set for Saturday - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-fall-plant-sale-workshops-set-for-saturday-plant-sale-florida-friendly-plants-native-species-gardening-advice-ufifas-extension-st-lucie-county-fall-plant-sale-fort-pierce-picos-road-quart-size-plants-one-gallon-plants-three",
+          "editorial_story_id": "story_021080",
+          "canonical_slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
+          "canonical_headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "material_update_promotion_evaluation_count": 4,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 5,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_cache_hit_count": 5,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -1119,21 +1052,6 @@
         {
           "category_key": "st_lucie",
           "source_headline": "Man found dead after barricade situation in St. Lucie County, deputies say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-deputies-surround-fort-pierce-home-after-domestic-battery-call-swat-requested",
-          "canonical_slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
-          "canonical_headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Man found dead after barricade situation in St. Lucie County, deputies say - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-deputies-surround-fort-pierce-home-after-domestic-battery-call-swat-requested",
           "canonical_slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
           "canonical_headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
@@ -1192,37 +1110,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
-          "source_url": "https://cw34.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather?teaserSource=trending",
-          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
-          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.9,
-          "shared_anchors": [
-            "Port St. Lucie flooding from last week's storm (4 inches in 48 hours)",
-            "Intersection of SW Todd Avenue and SW Broadview Street",
-            "Savona Boulevard / SW California Boulevard flood-prone area",
-            "City Public Works preparing for weekend rain",
-            "Same underlying forecast concern for upcoming weekend rain"
-          ],
-          "novel_facts": [
-            "Quotes from resident Peter Rodriguez and Frank Camarda",
-            "Quote from city spokesman Scott Samples confirming no reports of floodwater entering homes/businesses"
-          ],
-          "reason": "Both articles cover the same real-world situation: Port St. Lucie's recovery from last week's flooding and preparations for anticipated weekend rain, citing the same rainfall totals, same flood-prone locations, and same city response. The incoming article adds resident quotes and PIO commentary but no new factual development (no new casualty, official finding, or policy change) beyond what the canonical already covers as an ongoing weather-preparedness story.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Port St. Lucie pauses Flock program; 18 cameras set for removal Sept. 30 - WPEC",
           "source_url": "https://news.google.com/rss/articles/CBMiwgJBVV95cUxPUGVNd2tJUFN4V2hLaU1PSUdoNEN5cm0xVUhNR05SelhUbDBuMGcwcmZmR19vblNUeDY4dV84Ry1xVHhXV3l0Y0UzVmM2RXU4YlBBVDVDd214RTFoOWdPdWxVdzRxUHR2VlozU3FiTzNPakt2TG9RbmpRdDFJdzBDQ3I4WEs2RFVfTFhmSW9qMDhoa2NfM2hoOXZWeEdrSm1DaDZVWlNJZVJwLXNLMlJIVlVFbXYtN1N0Y19TYXlxeXNES2YxMkVoems0Mk91WjZZdXFlT1FVUFJMeTlObHVKbF9MWkpQNjBFWllTN053cUtvUWhuTG5aVFhhaE1jRkRlOWZmanc4M0NRbFpkejJnSGlHRmd6QlBxUzc2WTRwdFJDazZ3OTVsT2NOOGgtWjVQcGpsdUltTnJVZ2h1aS1paHdB",
           "canonical_slug": "2026-09-29-port-st-lucie-schedules-removal-of-18-flock-cameras-by-sept-30",
@@ -1235,6 +1122,37 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
+          "source_url": "https://cbs12.com/news/local/will-port-st-lucie-see-more-floods-this-weekend-florida-news-florida-weather-local-news-local-weather",
+          "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+          "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "same source URL (cbs12.com)",
+            "Port St. Lucie flooding from last week's storm (4 inches rain in 48 hours)",
+            "same intersections: Savona Boulevard/SW California Boulevard, SW Todd Avenue/SW Broadview Street",
+            "same city spokesperson quote about Public Works standby and canal monitoring",
+            "same forecast of more rain this weekend"
+          ],
+          "novel_facts": [
+            "Additional resident quotes from Peter Rodriguez and Frank Camarda",
+            "Confirmation no reports of floodwater entering homes/businesses last week"
+          ],
+          "reason": "This is the same WPEC article about anticipated weekend flooding in Port St. Lucie following last week's storm, published one day after the canonical version with identical source URL and headline. It adds resident color and quotes but no material new facts like injuries, deaths, official findings, or consequential government action.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1298,8 +1216,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Will Port St. Lucie see more floods this weekend? - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQMU5BcHlIRmFnSDZZVk5tR1h1LVh1MEpGc3M3QUFiRkZnTUk2NHZ1Z29yOWY4N200djBnTlFoeFA0bXd1emxrbm5NS3UxYUczaWhCZXd6QjRfNXJmMjNUS3hEUVdXRWlqb21UV2hNdDFfVUFudm9kU1VER05TcGR5TTM0cGpjMENUUGtEZWFKb3FzV1dScVlhS0pxNm1RZmVwOW1fZkx3bnJVQ1lmSURBcTlrajZSRGMyNTktT3c3dUdqMzdHWC1memNMLXZDWHdTcWhKdw",
+          "source_headline": "Will Port St. Lucie see more floods this weekend? - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNS1gtbnh4ZVB4MW43XzRDOUdVVW9hb215N0FvMHJyM3JwYjIwR3AtU1hCdGd5NmpfX005RFhTVFRwM2t5eUlaVFpsbTlMZm5XOVo5V0JiVkNkWjdtbk0waTFVcDNhTW5pcndtaWVrVm9NaTlZTm9vVjdMcGl4bmt0a2dQZ01HenQ0bTYtdmdYcG1zR0NDY0FLVjYtS0hPVDdMZzhueUk4cFpJLXhoM25aQkJhRWV0R29MR2NFOHBXaVRMeS1fZlpDTWlleENidDRlSXpn",
           "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
           "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
           "canonical_is_custom": false,
@@ -1310,21 +1228,62 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County voters to decide on sales tax renewal, mosquito control expansion - WPBF",
+          "source_url": "https://www.wpbf.com/article/st-lucie-county-mosquito-control-expansion-sales-tax-renewal/74146251",
+          "canonical_slug": "2026-10-15-st-lucie-county-voters-to-decide-sales-tax-renewal-mosquito-control-expansion",
+          "canonical_headline": "St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County fall plant sale, workshops set for Saturday - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-fall-plant-sale-workshops-set-for-saturday-plant-sale-florida-friendly-plants-native-species-gardening-advice-ufifas-extension-st-lucie-county-fall-plant-sale-fort-pierce-picos-road-quart-size-plants-one-gallon-plants-three",
+          "canonical_slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
+          "canonical_headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "same source_url",
+            "UF/IFAS Extension St. Lucie County Fall Plant Sale",
+            "8400 Picos Road, Fort Pierce",
+            "Saturday Oct. 17",
+            "same pricing details"
+          ],
+          "novel_facts": [],
+          "reason": "Identical source article covering the same plant sale event with same location, date, and pricing; no new material facts beyond minor wording and additional event detail restatement.",
+          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie Drug Bust: Gang Member, Two Others Charged in Fentanyl Case",
-      "generated_card_count": 0,
-      "elapsed_seconds": 42.635
+      "elapsed_seconds": 25.195
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 25,
       "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1345,44 +1304,17 @@
       "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Man found dead after barricade situation in St. Lucie County, deputies say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-deputies-surround-fort-pierce-home-after-domestic-battery-call-swat-requested",
-          "editorial_story_id": "story_021820",
-          "canonical_slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
-          "canonical_headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Man found dead after barricade situation in St. Lucie County, deputies say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-deputies-surround-fort-pierce-home-after-domestic-battery-call-swat-requested",
-          "canonical_slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
-          "canonical_headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.318
+      "elapsed_seconds": 12.912
     }
   ]
 }
