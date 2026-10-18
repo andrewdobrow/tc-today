@@ -10469,7 +10469,9 @@ def format_age(published_str):
     try:
         from email.utils import parsedate_to_datetime
         from datetime import timezone, timedelta
-        et      = timezone(timedelta(hours=-4))  # EDT approximation
+        # "Yesterday" describes the previous *Eastern calendar day*, not the
+        # preceding 48 hours. Use the real Eastern time zone for DST transitions.
+        et      = ZoneInfo("America/New_York")
         dt_utc  = parsedate_to_datetime(published_str).astimezone(timezone.utc)
         now_utc = datetime.now(timezone.utc)
         mins    = int((now_utc - dt_utc).total_seconds() / 60)
@@ -10478,11 +10480,9 @@ def format_age(published_str):
         hour    = dt_et.hour % 12 or 12
         ampm    = "AM" if dt_et.hour < 12 else "PM"
         time_str = f"{hour}:{dt_et.strftime('%M')} {ampm} ET"
-        if mins < 60:
-            return "A few minutes ago"
         if dt_et.date() == now_et.date():
-            return time_str
-        if mins < 2880:
+            return "A few minutes ago" if 0 <= mins < 60 else time_str
+        if dt_et.date() == now_et.date() - timedelta(days=1):
             return f"Yesterday, {time_str}"
         months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
         return f"{months[dt_et.month-1]} {dt_et.day}, {time_str}"
