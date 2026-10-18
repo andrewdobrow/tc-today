@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-18T10:48:22Z",
+  "generated_at": "2026-10-18T12:48:21Z",
   "mode": "shadow",
   "publication_behavior_changed": false,
   "activation": {
@@ -25,8 +25,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 1,
-    "placements_after": 1,
+    "placements_before": 2,
+    "placements_after": 2,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -51,21 +51,22 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 185,
+    "candidates_processed": 184,
     "routes": {
-      "generate_new": 29,
-      "skip": 156
+      "generate_new": 11,
+      "skip": 172,
+      "update_existing": 1
     },
     "eligibility": {
       "listing": 4,
-      "low_value": 144,
-      "publishable": 37
+      "low_value": 141,
+      "publishable": 39
     },
     "source_classes": {
-      "aggregator": 148,
-      "local_news": 22,
-      "regional_news": 12,
-      "unknown": 3
+      "aggregator": 145,
+      "local_news": 24,
+      "regional_news": 13,
+      "unknown": 2
     },
     "rejected_count": 4,
     "rejected_examples": [
@@ -89,7 +90,7 @@
       },
       {
         "headline": "The Real Amendment 3 Before Florida Voters: 5 Things Floridians Should Know About Property Tax Relief - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxORWdMZXF3MVZWcjRZRlNqek9EQklHbDluendnMjhSbDZQMjFTMEpFam9pcWNadlI4bXlOSTN0SUtqQlVmUVMzUjJqQmFLbHVOVmtKQlZFZHBFbWFJa2lyNV93NXJNOGdCdVQ4alhGdk03UzdmM0VoblpBdkVKclMzZnliLXR1aHhnWGVHTkFSTXQwZ2FT?oc=5",
+        "source_url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPZ25BaXFZWl9uRnZIYmRqYUtwYl9PTjlycElXUWZsMFAwMzBoSHN3NDZtVDR1U20zMlY5cVcwQXladl9lYXN3Y1BjRDZYbnpzWnRjWWU2SEgwX09VSGtnbXdHSDczUkhpWFM3WVphSWh2dlppcV9VNnVWZnlzU2o4UnY5VUxfQ3FH?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -109,20 +110,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 25,
-      "same_event": 160
+      "new_story": 13,
+      "same_event": 171
     },
     "examples": [
       {
         "story_id": "story_021882",
         "title": "Permanent Daylight Saving Time Raises School Safety Concerns - Demokratis.co.id",
         "event_key": "unknown-event-368342367b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -233,6 +236,20 @@
         ]
       },
       {
+        "story_id": "story_021830",
+        "title": "SWAT responds to domestic battery situation in Lakewood Park neighborhood - WPEC",
+        "event_key": "unknown-event-61af066cbb",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_021801",
         "title": "Insurance and inflation top issues for Brevard legislative candidates - Bradenton Herald",
         "event_key": "unknown-event-8f4019cdd8",
@@ -371,20 +388,6 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_021718",
-        "title": "Florida high school football scores: Palm Beach County Week 9 results - AOL.com",
-        "event_key": "unknown-event-69b2756065",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
@@ -392,13 +395,15 @@
         "story_id": "story_021882",
         "title": "Permanent Daylight Saving Time Raises School Safety Concerns - Demokratis.co.id",
         "event_key": "unknown-event-368342367b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -507,6 +512,21 @@
         ]
       },
       {
+        "story_id": "story_021830",
+        "title": "SWAT responds to domestic battery situation in Lakewood Park neighborhood - WPEC",
+        "event_key": "unknown-event-61af066cbb",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_021801",
         "title": "Insurance and inflation top issues for Brevard legislative candidates - Bradenton Herald",
         "event_key": "unknown-event-8f4019cdd8",
@@ -670,87 +690,28 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_021751",
-        "title": "Stuart commissioners vote to rehire city manager they fired nearly a year ago - WPEC",
-        "event_key": "unknown-event-94da090853",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
+    "candidate_count": 0,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 1
-    },
-    "milestones": {
-      "opening": 1
-    },
-    "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1,
-      "title_continuity": 1
-    },
-    "examples": [
-      {
-        "headline": "Vero Beach Museum of Art to open temporary hub during campus construction - WQCS",
-        "event_key": "unknown-event-4c15438195",
-        "current_story_id": "story_021888",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_019514",
-        "candidate_confidence": 0.64,
-        "candidate_milestones": [
-          "opening"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_019514",
-          "Novel milestones: opening",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.40",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.64"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 6,
     "retrospective_high_confidence_candidate_count": 1,
     "retrospective_activation_eligible_candidate_count": 0,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 518,
-      "timeline_entries_examined": 1553,
-      "transitions_examined": 967,
+      "stories_with_timelines": 510,
+      "timeline_entries_examined": 1534,
+      "transitions_examined": 956,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 6,
       "high_confidence_candidate_count": 1,
@@ -1861,27 +1822,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 673,
-      "treasure_coast_local": 427,
+      "florida": 664,
+      "treasure_coast_local": 420,
       "treasure_coast_region": 144,
-      "unknown": 1254
+      "unknown": 1253
     },
-    "average_score": 57.65
+    "average_score": 57.52
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 673,
-      "treasure_coast_local": 427,
+      "florida": 664,
+      "treasure_coast_local": 420,
       "treasure_coast_region": 144,
-      "unknown": 1254
+      "unknown": 1253
     },
-    "average_priority": 4.01
+    "average_priority": 4.0
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1566,
-      "developing": 95,
-      "ongoing": 836,
+      "active": 1572,
+      "developing": 93,
+      "ongoing": 815,
       "resolved": 1
     }
   },
@@ -1889,8 +1850,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2476,
-    "active_stories_after": 2476,
+    "active_stories_before": 2470,
+    "active_stories_after": 2470,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -1915,24 +1876,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 60,
+    "incident_anchor_to_story_count": 58,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-18T10:42:46Z",
-    "quarantined_story_records_retained": 4535,
-    "active_story_count": 2498
+    "generated_at": "2026-10-18T12:42:51Z",
+    "quarantined_story_records_retained": 4538,
+    "active_story_count": 2481
   },
   "stories": {
-    "total": 2498,
+    "total": 2481,
     "importance_levels": {
       "breaking": 7,
-      "high": 65,
-      "normal": 486,
-      "low": 1940,
+      "high": 64,
+      "normal": 483,
+      "low": 1927,
       "archived": 0
     },
-    "average_importance": 10.63,
+    "average_importance": 10.6,
     "top": [
       {
         "story_id": "story_021480",
@@ -1947,7 +1908,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 59.33
+          "age_hours": 61.33
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2013,7 +1974,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-15T23:23:40.828417+00:00",
-          "hours_since_update": 59.33,
+          "hours_since_update": 61.33,
           "event_count": 56,
           "timeline_entries": 43
         }
@@ -2031,7 +1992,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 59.98
+          "age_hours": 61.99
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2079,7 +2040,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-15T22:44:30.827001+00:00",
-          "hours_since_update": 59.98,
+          "hours_since_update": 61.99,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2097,7 +2058,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 91.81
+          "age_hours": 93.81
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2145,7 +2106,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-14T14:54:48.604761+00:00",
-          "hours_since_update": 91.81,
+          "hours_since_update": 93.81,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2163,7 +2124,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 83.97
+          "age_hours": 85.97
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2212,7 +2173,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 83.97,
+          "hours_since_update": 85.97,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2230,7 +2191,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 96.0
+          "age_hours": 98.0
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2279,7 +2240,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-14T10:43:25.080645+00:00",
-          "hours_since_update": 96.0,
+          "hours_since_update": 98.0,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2297,7 +2258,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 66.97
+          "age_hours": 68.98
         },
         "level": "high",
         "importance_reasons": [
@@ -2342,7 +2303,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-15T15:45:10.684448+00:00",
-          "hours_since_update": 66.97,
+          "hours_since_update": 68.98,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2360,7 +2321,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 44.47
+          "age_hours": 46.48
         },
         "level": "high",
         "importance_reasons": [
@@ -2401,7 +2362,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-16T14:15:09.845672+00:00",
-          "hours_since_update": 44.47,
+          "hours_since_update": 46.48,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2419,7 +2380,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 13.97
+          "age_hours": 15.97
         },
         "level": "high",
         "importance_reasons": [
@@ -2457,7 +2418,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-17T20:45:02.970790+00:00",
-          "hours_since_update": 13.97,
+          "hours_since_update": 15.97,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2475,7 +2436,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 83.97
+          "age_hours": 85.97
         },
         "level": "high",
         "importance_reasons": [
@@ -2520,7 +2481,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 83.97,
+          "hours_since_update": 85.97,
           "event_count": 19,
           "timeline_entries": 18
         }
@@ -2538,7 +2499,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 72.0
+          "age_hours": 74.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2582,7 +2543,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-15T10:43:23.074448+00:00",
-          "hours_since_update": 72.0,
+          "hours_since_update": 74.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2600,7 +2561,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 72.0
+          "age_hours": 74.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2642,10 +2603,10 @@
         "relationship_decisions": 0,
         "canonical_source_candidates": 7,
         "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "state": "ongoing",
+          "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-15T10:43:23.074448+00:00",
-          "hours_since_update": 72.0,
+          "hours_since_update": 74.01,
           "event_count": 5,
           "timeline_entries": 4
         }
@@ -2663,7 +2624,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 83.97
+          "age_hours": 85.97
         },
         "level": "high",
         "importance_reasons": [
@@ -2710,7 +2671,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 83.97,
+          "hours_since_update": 85.97,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2728,7 +2689,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 56.97
+          "age_hours": 58.97
         },
         "level": "high",
         "importance_reasons": [
@@ -2764,7 +2725,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-16T01:45:26.393536+00:00",
-          "hours_since_update": 56.97,
+          "hours_since_update": 58.97,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2782,7 +2743,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 14.0
+          "age_hours": 16.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -2820,7 +2781,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-17T20:45:02.970790+00:00",
-          "hours_since_update": 14.0,
+          "hours_since_update": 16.0,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2838,7 +2799,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 189.99
+          "age_hours": 191.99
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2888,7 +2849,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-10T12:44:08.138949+00:00",
-          "hours_since_update": 189.99,
+          "hours_since_update": 191.99,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2906,7 +2867,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 135.97
+          "age_hours": 137.97
         },
         "level": "high",
         "importance_reasons": [
@@ -2949,7 +2910,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 135.97,
+          "hours_since_update": 137.97,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2967,7 +2928,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 135.97
+          "age_hours": 137.97
         },
         "level": "high",
         "importance_reasons": [
@@ -3005,7 +2966,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 135.97,
+          "hours_since_update": 137.97,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3023,7 +2984,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 133.97
+          "age_hours": 135.97
         },
         "level": "high",
         "importance_reasons": [
@@ -3062,7 +3023,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-12T20:45:23.189599+00:00",
-          "hours_since_update": 133.97,
+          "hours_since_update": 135.97,
           "event_count": 16,
           "timeline_entries": 16
         }
@@ -3080,7 +3041,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 135.97
+          "age_hours": 137.97
         },
         "level": "high",
         "importance_reasons": [
@@ -3119,7 +3080,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-12T18:45:31.115542+00:00",
-          "hours_since_update": 135.97,
+          "hours_since_update": 137.97,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3137,7 +3098,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 107.97
+          "age_hours": 109.97
         },
         "level": "high",
         "importance_reasons": [
@@ -3176,7 +3137,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-13T22:45:20.533812+00:00",
-          "hours_since_update": 107.97,
+          "hours_since_update": 109.97,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3186,7 +3147,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-18T10:45:51Z",
+    "generated_at": "2026-10-18T12:45:40Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3202,21 +3163,22 @@
       "category_count": 9,
       "statuses": {
         "category_eligibility_archive_recovery": 6,
-        "no_publishable_sources": 1,
-        "quality_gate_archive_recovery": 2
+        "generated_live": 1,
+        "generation_failed_archive_recovery": 1,
+        "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 6,
-        "publication_quality_rejected": 2
+        "contextless_update_lead": 1,
+        "no_category_eligible_sources": 6
       },
       "model_attempt_count": 3,
-      "model_elapsed_seconds": 24.385,
-      "archive_recovery_requested_count": 9,
+      "model_elapsed_seconds": 17.491,
+      "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejection_count": 2,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 6,
-      "published_story_duplicate_suppression_count": 30,
+      "published_story_duplicate_suppression_count": 32,
       "story_aware_update_context_count": 0,
       "material_update_promotion_evaluation_count": 11,
       "material_update_promotion_count": 0,
@@ -3228,9 +3190,9 @@
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 26,
-        "publishable_source_count": 4,
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 25,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3403,7 +3365,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 11.615
+        "elapsed_seconds": 9.613
       },
       {
         "category_key": "crime",
@@ -3594,13 +3556,13 @@
             "confidence": 0.95,
             "shared_anchors": [
               "Florida death penalty context",
-              "Gov. Ron DeSantis death warrant signing authority"
+              "Gov. DeSantis death warrant process"
             ],
             "novel_facts": [
-              "Richard Kunkel 1993 murder by Ronald Knight",
+              "Richard Kunkel 1993 murder case",
+              "Ronald Knight as convicted killer",
               "Brendan Meehan 1995 murder",
-              "family petitioning for death warrant on Knight",
-              "Knight sentenced to death in 1998"
+              "family request for death warrant for Knight"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -3656,7 +3618,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.161
+        "elapsed_seconds": 15.329
       },
       {
         "category_key": "business",
@@ -3865,13 +3827,13 @@
             "confidence": 0.95,
             "shared_anchors": [
               "Florida death penalty context",
-              "Gov. Ron DeSantis death warrant process"
+              "Gov. Ron DeSantis role in signing death warrants"
             ],
             "novel_facts": [
               "Richard Kunkel 1993 murder by Ronald Knight",
-              "Brendan Meehan 1995 murder, also by Knight",
-              "Family of Richard Kunkel requesting DeSantis sign Knight's death warrant",
-              "Knight convicted and sentenced to death in 1998"
+              "Brendan Meehan 1995 murder also attributed to Knight",
+              "Family petitioning for death warrant specifically for Ronald Knight",
+              "Knight sentenced to death in 1998 for both killings"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -3927,7 +3889,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.086
+        "elapsed_seconds": 15.52
       },
       {
         "category_key": "sports",
@@ -3964,16 +3926,16 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 8.834
+        "new_publication_stale_rejected_count": 2,
+        "elapsed_seconds": 8.181
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 5,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3993,17 +3955,44 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
+        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppressions": [
+          {
+            "category_key": "things_to_do",
+            "source_headline": "Treasure Coast families invited to watch and try dog sports at kennel club's Pirate Cluster",
+            "source_url": "https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster",
+            "editorial_story_id": "story_020260",
+            "canonical_slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
+            "canonical_headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          }
+        ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "things_to_do",
+            "source_headline": "Treasure Coast families invited to watch and try dog sports at kennel club's Pirate Cluster",
+            "source_url": "https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster",
+            "canonical_slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
+            "canonical_headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 9.029
+        "elapsed_seconds": 9.81
       },
       {
         "category_key": "florida",
@@ -4093,38 +4082,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.694
+        "elapsed_seconds": 7.419
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "quality_gate_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 29,
         "publishable_source_count": 2,
         "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.492,
-            "result": "copydesk_integrity",
-            "error_type": "CopyDeskIntegrityError",
-            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.761,
+            "elapsed_seconds": 6.644,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 18.254,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 6.644,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4175,30 +4156,42 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 31.141
+        "live_hero_headline": "Northbound Turnpike Lanes Reopen in Martin County After Semi Crash",
+        "generated_card_count": 0,
+        "elapsed_seconds": 20.459
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "quality_gate_archive_recovery",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 3,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 1,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.131,
-            "result": "success"
+            "elapsed_seconds": 5.902,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing — 25th Street northbound at Bell Avenue closed in Fort Pierce after crash - WPEC"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 4.946,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing — 25th Street northbound at Bell Avenue closed in Fort Pierce after crash - WPEC"
           }
         ],
-        "model_elapsed_seconds": 6.131,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 10.847,
+        "failure_code": "contextless_update_lead",
+        "failure_summary": "Contextless update lead for hero: original_event_context_missing — 25th Street northbound at Bell Avenue closed in Fort Pierce after crash - WPEC",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4207,10 +4200,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 11,
+        "published_story_duplicate_suppression_count": 12,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4319,6 +4312,16 @@
             "editorial_story_id": "story_021645",
             "canonical_slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
             "canonical_headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County voters to decide on sales tax renewal, mosquito control expansion - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-mosquito-control-expansion-sales-tax-renewal/74146251",
+            "editorial_story_id": "story_021474",
+            "canonical_slug": "2026-10-15-st-lucie-county-voters-to-decide-sales-tax-renewal-mosquito-control-expansion",
+            "canonical_headline": "St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -4554,12 +4557,27 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County voters to decide on sales tax renewal, mosquito control expansion - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-mosquito-control-expansion-sales-tax-renewal/74146251",
+            "canonical_slug": "2026-10-15-st-lucie-county-voters-to-decide-sales-tax-renewal-mosquito-control-expansion",
+            "canonical_headline": "St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 20.83
+        "elapsed_seconds": 20.022
       },
       {
         "category_key": "indian_river",
@@ -4624,7 +4642,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.539
+        "elapsed_seconds": 7.19
       }
     ]
   }

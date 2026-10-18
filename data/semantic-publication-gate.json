@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-18T10:47:45.911852+00:00",
+  "generated_at": "2026-10-18T12:47:43.549425+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,20 +62,20 @@
     }
   },
   "summary": {
-    "evaluations": 43,
-    "candidate_pairs": 0,
+    "evaluations": 44,
+    "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "model_calls": 1,
     "cache_hits": 0,
     "no_candidate_passes": 43,
-    "duplicates_preserved": 0,
+    "duplicates_preserved": 1,
     "canonical_updates_selected": 0,
     "new_stories_allowed": 0,
     "retroactive_rows_retained": 43,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
     "material_update_composer_calls": 0,
     "material_updates_applied": 0,
     "material_update_redirects": 0,
@@ -207,13 +207,13 @@
       "confidence": 0.95,
       "shared_anchors": [
         "Florida death penalty context",
-        "Gov. Ron DeSantis death warrant signing authority"
+        "Gov. DeSantis death warrant process"
       ],
       "novel_facts": [
-        "Richard Kunkel 1993 murder by Ronald Knight",
+        "Richard Kunkel 1993 murder case",
+        "Ronald Knight as convicted killer",
         "Brendan Meehan 1995 murder",
-        "family petitioning for death warrant on Knight",
-        "Knight sentenced to death in 1998"
+        "family request for death warrant for Knight"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -271,13 +271,13 @@
       "confidence": 0.95,
       "shared_anchors": [
         "Florida death penalty context",
-        "Gov. Ron DeSantis death warrant process"
+        "Gov. Ron DeSantis role in signing death warrants"
       ],
       "novel_facts": [
         "Richard Kunkel 1993 murder by Ronald Knight",
-        "Brendan Meehan 1995 murder, also by Knight",
-        "Family of Richard Kunkel requesting DeSantis sign Knight's death warrant",
-        "Knight convicted and sentenced to death in 1998"
+        "Brendan Meehan 1995 murder also attributed to Knight",
+        "Family petitioning for death warrant specifically for Ronald Knight",
+        "Knight sentenced to death in 1998 for both killings"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -1297,16 +1297,95 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Northbound Turnpike Lanes Reopen in Martin County After Semi Crash",
+      "incoming_source_url": "https://cbs12.com/newsletter-daily/major-crash-blocks-all-northbound-lanes-floridas-turnpike-martin-county-mile-markers-122-125-traffic-florida-news",
+      "incoming_story_id": "story_021711",
+      "candidates": [
+        {
+          "slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
+          "headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
+          "retrieval_score": 0.9877,
+          "headline_similarity": 0.7878,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "county",
+            "lanes",
+            "martin",
+            "reopen",
+            "semi",
+            "turnpike"
+          ],
+          "shared_topic_tokens": [
+            "lanes",
+            "reopen",
+            "semi",
+            "turnpike"
+          ],
+          "content_similarity": {
+            "score": 0.3634,
+            "overlap": 0.4706,
+            "jaccard": 0.0879,
+            "shared_token_count": 8,
+            "shared_tokens": [
+              "injuries",
+              "jackknifed",
+              "lanes",
+              "northbound",
+              "reopen",
+              "semi",
+              "truck",
+              "turnpike"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 0,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "strong_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "strong_content_event_continuity",
+            "publication_gap_0_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.93,
+        "shared_anchors": [
+          "Florida's Turnpike northbound",
+          "Martin County",
+          "mile marker 125 area",
+          "jackknifed semi-truck",
+          "Friday",
+          "lanes reopened after crash"
+        ],
+        "novel_facts": [],
+        "reason": "Both articles report the same jackknifed semi-truck crash on Florida's Turnpike northbound in Martin County near mile marker 125 on the same Friday, with lanes reopening after cleanup. The incoming article adds no new facts beyond what's in the canonical (cause still undetermined, injuries unknown in both); it's a rehash of the same event without a material update.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
     }
   ],
   "archive_repairs": [],
   "material_update_compositions": [],
   "material_updates": [],
   "registry_consolidation": {
-    "status": "no_changes",
+    "status": "consolidated",
     "directives_considered": 8,
-    "story_records_merged": 0,
-    "aliases_written": 0,
+    "story_records_merged": 1,
+    "aliases_written": 1,
     "already_consolidated": 0,
     "skipped": [
       {
@@ -1683,6 +1762,27 @@
       }
     ],
     "rejected_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_021711",
+        "target_story_id": "story_021647",
+        "target_slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
+        "incoming_headline": "Northbound Turnpike Lanes Reopen in Martin County After Semi Crash",
+        "confidence": 0.93,
+        "shared_anchors": [
+          "Florida's Turnpike northbound",
+          "Martin County",
+          "mile marker 125 area",
+          "jackknifed semi-truck",
+          "Friday",
+          "lanes reopened after crash"
+        ],
+        "reason": "Both articles report the same jackknifed semi-truck crash on Florida's Turnpike northbound in Martin County near mile marker 125 on the same Friday, with lanes reopening after cleanup. The incoming article adds no new facts beyond what's in the canonical (cause still undetermined, injuries unknown in both); it's a rehash of the same event without a material update.",
+        "relationship_type": "duplicate",
+        "novel_facts": [],
+        "resolved_source_story_id": "story_021711",
+        "resolved_target_story_id": "story_021647"
+      }
+    ]
   }
 }
