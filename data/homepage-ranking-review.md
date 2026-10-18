@@ -12,21 +12,20 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Amendment 3 vote looms, real estate agents warn of rush before homestead deadline | At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan | 40 | importance 0; freshness 40.8; urgency 2/10; validated material update |
-| 2 | Turnpike Lanes Reopen in Martin County After Semi Jackknifes | Turnpike Lanes Reopen in Martin County After Semi Jackknifes | 37 | importance 0; freshness 54.97; urgency 2/10 |
-| 3 | Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island | Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island | 37 | importance 0; freshness 54.97; urgency 2/10 |
-| 4 | Port St. Lucie Watches for More Flooding as Weekend Rain Approaches | Port St. Lucie Watches for More Flooding as Weekend Rain Approaches | 36 | importance 0; freshness 50.57; urgency 2/10 |
-| 5 | Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests | Amendment 3 vote looms, real estate agents warn of rush before homestead deadline | 34 | importance 0; freshness 60.01; urgency 2/10 |
-| 6 | Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup | Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests | 35 | importance 0; freshness 48.21; urgency 2/10; -4 county saturation |
-| 7 | At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan | Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup | 35 | importance 0; freshness 48.21; urgency 2/10; -8 county saturation |
-| 8 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 10-11 | — |  |  |
+| 1 | Amendment 3 vote looms, real estate agents warn of rush before homestead deadline | At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan | 36 | importance 0; freshness 25.93; urgency 2/10; validated material update |
+| 2 | Turnpike Lanes Reopen in Martin County After Semi Jackknifes | Turnpike Lanes Reopen in Martin County After Semi Jackknifes | 34 | importance 0; freshness 40.1; urgency 2/10 |
+| 3 | Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island | Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island | 33 | importance 0; freshness 40.09; urgency 2/10 |
+| 4 | Port St. Lucie Watches for More Flooding as Weekend Rain Approaches | Port St. Lucie Watches for More Flooding as Weekend Rain Approaches | 33 | importance 0; freshness 35.7; urgency 2/10 |
+| 5 | Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup | Amendment 3 vote looms, real estate agents warn of rush before homestead deadline | 31 | importance 0; freshness 45.14; urgency 2/10 |
+| 6 | Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests | Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup | 32 | importance 0; freshness 33.34; urgency 2/10; -4 county saturation |
+| 7 | At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan | Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests | 32 | importance 0; freshness 33.34; urgency 2/10; -8 county saturation |
 
 ## Recommended moves
 
-- **At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan**: 7 → 1 — importance 0; freshness 40.8; urgency 2/10; validated material update
-- **Amendment 3 vote looms, real estate agents warn of rush before homestead deadline**: 1 → 5 — importance 0; freshness 60.01; urgency 2/10
-- **Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests**: 5 → 6 — importance 0; freshness 48.21; urgency 2/10; -4 county saturation
-- **Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup**: 6 → 7 — importance 0; freshness 48.21; urgency 2/10; -8 county saturation
+- **At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan**: 7 → 1 — importance 0; freshness 25.93; urgency 2/10; validated material update
+- **Amendment 3 vote looms, real estate agents warn of rush before homestead deadline**: 1 → 5 — importance 0; freshness 45.14; urgency 2/10
+- **Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup**: 5 → 6 — importance 0; freshness 33.34; urgency 2/10; -4 county saturation
+- **Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests**: 6 → 7 — importance 0; freshness 33.34; urgency 2/10; -8 county saturation
 
 ## Guardrails
 
