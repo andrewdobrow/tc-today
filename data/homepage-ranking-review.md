@@ -4,16 +4,16 @@
 
 ## Hero
 
-- Current: **Brother of slain Indian River deputy reacts to Oct. 27 execution date for killer**
-- Recommended: **Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown**
-- Recommendation: CHANGE (not enforced)
+- Current: **Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases**
+- Recommended: **Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases**
+- Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | 43 | importance 0; freshness 98.13; urgency 2/10 |
-| 2 | Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated | Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated | 36 | importance 0; freshness 23.27; urgency 2/10; validated material update |
+| 1 | Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack | Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack | 54 | importance 0; freshness 99.94; urgency 5/10 |
+| 2 | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | 43 | importance 0; freshness 94.76; urgency 2/10 |
 
 ## Recommended moves
 

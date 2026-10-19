@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-19T18:53:21.972304+00:00",
+  "generated_at": "2026-10-19T20:54:37.550267+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 41,
+    "evaluations": 43,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 41,
+    "no_candidate_passes": 43,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 2,
     "retroactive_rows_retained": 41,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 9,
+    "pre_generation_materiality_evaluations": 11,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 3,
-    "pre_generation_materiality_holds": 6,
-    "pre_generation_materiality_model_calls": 6,
+    "pre_generation_materiality_holds": 8,
+    "pre_generation_materiality_model_calls": 8,
     "pre_generation_materiality_cache_hits": 3,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 2,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -119,52 +119,56 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "invalid_model_response",
       "semantic_action": "hold",
-      "confidence": 0.72,
+      "confidence": 0.78,
       "shared_anchors": [
-        "Winter Haven High School bus crash",
-        "Polk County fatal rollover",
-        "Same reporter Katie LaGrone investigating seatbelt policy",
-        "St. Lucie County Aaron Beauchamp precedent referenced in both"
+        "Winter Haven High School bus crash in Polk County",
+        "same victim-related incident (Adinaluz Prieto Oyola vs. earlier unnamed 10th grader)",
+        "St. Lucie County / Aaron Beauchamp seatbelt history referenced in both",
+        "Florida school bus seatbelt policy debate"
       ],
       "novel_facts": [
-        "Named victim Adinaluz Prieto Oyola identified",
-        "Direct NTSB expert (Dr. Kristin Poland) interview explaining rollover physics and seatbelt release design",
-        "Sheriff Grady Judd quote on seatbelt risk tradeoffs",
-        "Confirmation district's buses only have lap belts",
-        "New reporting on Florida districts' slow progress adopting three-point belts post-NTSB recommendation"
+        "Victim now identified by name: Adinaluz Prieto Oyola",
+        "Detailed crash mechanics: another vehicle struck bus rear, causing head-on collision and rollover",
+        "Sheriff Grady Judd's comments on seatbelt risk during rollover",
+        "NTSB expert Dr. Kristin Poland's technical explanation of lap vs. three-point belts and rollover dynamics",
+        "Confirmation school bus only had lap belts, consistent with district fleet-wide policy",
+        "NTSB has not yet determined if shoulder belts would have changed outcome"
       ],
-      "reason": "This is the same underlying Winter Haven bus crash story as the Oct 5 canonical, but it introduces a distinct, independently newsworthy angle: an NTSB safety expert directly addressing whether seatbelts endanger students in rollovers, combined with the victim's name, sheriff's controversial comments, and a broader accountability question about Florida's seatbelt mandate and district compliance. This goes beyond routine update and merits its own follow-up story rather than a silent edit to the original crash canonical.",
+      "reason": "This is the same underlying Winter Haven bus crash story, but it introduces an independently newsworthy expert accountability angle: an NTSB safety expert directly addressing whether seatbelts could increase rollover risk, sheriff's controversial public comments, and victim identification. This goes beyond routine update and merits its own follow-up given the distinct public-safety policy question raised, though it should also be reflected as an update to the canonical if only victim ID were new. The expert analysis and sheriff controversy constitute a new angle warranting a separate story.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
     },
     {
-      "category_key": "local_gov",
-      "source_headline": "Port St. Lucie tests new water sensors as weekend rain threatens flood-prone areas - WFLX",
-      "source_url": "https://www.wflx.com/2026/10/16/port-st-lucie-prepares-weekend-rain-businesses-brace-more-flooding?outputType=amp",
-      "canonical_slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
-      "canonical_headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+      "category_key": "crime",
+      "source_headline": "Port St. Lucie police make 3 separate DUI arrests over weekend - WPEC",
+      "source_url": "https://cbs12.com/news/local/florida-crime-news-port-st-lucie-police-make-3-dui-arrests-over-weekend-impairment-disturbance-crash-breath-tests-drinking-driving",
+      "canonical_slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
+      "canonical_headline": "Two Port St. Lucie Hit-and-Run Suspects Arrested, Released on Bond",
       "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.9,
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
       "shared_anchors": [
-        "Port St. Lucie Public Works",
-        "Scott Samples",
-        "same weekend rain event",
-        "Savona/California boulevards intersection flooding",
-        "same date published"
+        "port-st-lucie-police",
+        "southwest-becker-road"
       ],
-      "novel_facts": [],
-      "reason": "Both articles cover Port St. Lucie's preparation for the same incoming weekend rain, citing the same spokesperson (Scott Samples), same drain-clearing efforts, and same flood-prone Savona/California intersection. The incoming article adds quotes from a local business owner and detail on pilot water sensors, but these are routine scene/color details and background explanation rather than a material update changing the core facts readers need to know.",
-      "validation_errors": []
+      "novel_facts": [
+        "Three distinct DUI arrests of Kathleen Amber, James Kirby, and Tamra Goodman over a weekend",
+        "MidFlorida Event Center disturbance incident",
+        "Crash on SE Port St. Lucie Boulevard involving a Mustang"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "crime",
@@ -184,19 +188,20 @@
       "semantic_action": "hold",
       "confidence": 0.72,
       "shared_anchors": [
-        "Winter Haven High School bus crash",
-        "Polk County fatal rollover",
-        "St. Lucie County / Aaron Beauchamp seatbelt history",
-        "Florida seatbelt law scrutiny"
+        "Winter Haven High School bus crash in Polk County",
+        "Same reporter Katie LaGrone / WPTV I-Team investigation",
+        "St. Lucie County seatbelt history and Aaron Beauchamp case referenced in both",
+        "Florida seatbelt law/requirements for school buses"
       ],
       "novel_facts": [
-        "New on-record NTSB expert (Dr. Kristin Poland) interview specifically addressing whether seatbelts increase rollover risk",
-        "Sheriff Grady Judd's quote about 37 kids 'hanging from the roof by a seat belt'",
-        "Victim now named as Adinaluz Prieto Oyola",
-        "Confirmation bus only had lap belts, as does entire district fleet",
-        "New reporting on which Florida districts are moving to lap-shoulder belts and cost barriers"
+        "Victim identified as 16-year-old Adinaluz Prieto Oyola",
+        "New on-record interview with NTSB school bus safety expert Dr. Kristin Poland",
+        "Sheriff Grady Judd's quote addressing whether seatbelt use could trap students in a rollover",
+        "NTSB technical explanation of crash dynamics and three-point vs lap-belt protection",
+        "District confirmation that its buses only have lap belts",
+        "Update that some Florida districts are now moving toward lap-shoulder belts"
       ],
-      "reason": "This is the same underlying Winter Haven bus crash as the Oct. 5 canonical story, but the Oct. 19 piece is a distinct investigative follow-up built around a new on-record NTSB safety expert addressing a specific accountability/safety question (does seatbelt type increase rollover danger), plus new law enforcement quotes and victim identification. This goes beyond routine update and merits its own story rather than folding into the original seatbelt-law piece.",
+      "reason": "This is the same underlying Winter Haven bus crash story already covered in the canonical, but it introduces a distinct accountability/policy angle: an NTSB expert directly addressing the rollover seatbelt safety question raised by the sheriff, plus newly confirmed victim identification and expert technical findings. This goes beyond routine update and merits independent follow-up coverage given the specific expert analysis and policy implications for seatbelt design on Florida buses.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
@@ -219,20 +224,20 @@
       "semantic_action": "hold",
       "confidence": 0.72,
       "shared_anchors": [
-        "Polk County/Winter Haven school bus crash",
-        "Florida seatbelt law debate",
-        "St. Lucie County Aaron Beauchamp precedent",
-        "NTSB recommendation history"
+        "Winter Haven High School bus crash",
+        "Polk County fatal crash",
+        "St. Lucie County / Aaron Beauchamp seatbelt history",
+        "Florida school bus seatbelt policy debate"
       ],
       "novel_facts": [
         "Victim identified by name: Adinaluz Prieto Oyola",
-        "Sheriff Grady Judd's comments on seatbelt feasibility with 37 students",
-        "Direct NTSB expert (Dr. Kristin Poland) interview addressing whether seatbelts increase rollover risk",
-        "Explanation of three-point belt release mechanism under tension",
-        "District confirms bus only had lap belts, as does entire fleet",
-        "Data on how many Florida districts have moved to lap-shoulder belts"
+        "New on-record NTSB expert interview (Dr. Kristin Poland) addressing whether seatbelts could endanger students in rollovers",
+        "Sheriff Grady Judd's direct comments on seatbelt feasibility for 37 students",
+        "Technical explanation of three-point vs lap belt protection and NTSB crash dynamics findings",
+        "District confirmation that the bus only had lap belts",
+        "Data on how many Florida districts have upgraded to lap-shoulder belts"
       ],
-      "reason": "This is the same underlying Winter Haven bus crash story as the candidate, but it introduces a distinct, substantive investigative angle: a direct NTSB technical expert interview addressing the specific safety question of whether seatbelts endanger students in rollovers, combined with the sheriff's public comments and new reporting on statewide seatbelt adoption data. This goes beyond routine update and stands as an independently newsworthy accountability/policy follow-up addressing a public safety question with lasting relevance, warranting its own article per the guidelines on independently newsworthy follow-ups.",
+      "reason": "This is the same underlying Winter Haven bus crash and seatbelt policy story as the canonical from Oct. 5, but it introduces a distinct, independently newsworthy angle: a detailed NTSB safety expert interview addressing a specific public safety question (do seatbelts endanger kids in rollovers), new sheriff quotes, and expanded reporting on lap vs. shoulder belt safety efficacy and statewide adoption data. This constitutes a substantive accountability/investigative follow-up beyond routine update, warranting a separate story while remaining linked to the original event.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
@@ -256,13 +261,12 @@
       "confidence": 0.95,
       "shared_anchors": [
         "Florida death penalty context",
-        "Gov. DeSantis death warrant process"
+        "Gov. Ron DeSantis death warrant process"
       ],
       "novel_facts": [
-        "Richard Kunkel's 1993 murder by Ronald Knight",
-        "Brendan Meehan's 1995 murder also tied to Knight",
-        "Knight sentenced to death in 1998",
-        "family's current request for DeSantis to sign Knight's death warrant"
+        "Richard Kunkel murder in 1993",
+        "Ronald Knight convicted of killing Kunkel and Brendan Meehan",
+        "Family petitioning for death warrant specifically for Knight's case"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -319,21 +323,51 @@
       "semantic_action": "hold",
       "confidence": 0.78,
       "shared_anchors": [
-        "Polk County/Winter Haven High School bus crash",
-        "St. Lucie County seatbelt precedent (Aaron Beauchamp case)",
-        "Florida seatbelt law scrutiny",
-        "same underlying fatal crash investigation"
+        "Winter Haven High School bus crash in Polk County",
+        "St. Lucie County precedent (Aaron Beauchamp case)",
+        "Florida school bus seatbelt policy debate",
+        "NTSB investigation into school bus restraints"
       ],
       "novel_facts": [
         "Victim identified as 16-year-old Adinaluz Prieto Oyola",
-        "NTSB expert Dr. Kristin Poland directly addresses rollover seatbelt risk question",
-        "Sheriff Grady Judd's comments on seatbelt feasibility with 37 students",
-        "Confirmation school bus only had lap belts, as does entire district fleet",
-        "Update that some FL districts are moving toward three-point belts"
+        "Sheriff Grady Judd's comments on seatbelt risks during rollover",
+        "NTSB expert Dr. Kristin Poland's explanation of three-point belt safety mechanics",
+        "Confirmation the bus only had lap belts, consistent with district fleet-wide practice",
+        "Update that some Florida districts are moving toward three-point belts"
       ],
-      "reason": "This is the same Winter Haven/Polk County bus crash story already covered by the canonical article, now with the victim named and expert analysis on seatbelt safety mechanics. These are material updates (victim ID, official statements) that belong folded into the existing continuing story rather than a new standalone accountability angle.",
+      "reason": "This is the same Winter Haven/Polk County school bus crash story previously covered, now with the victim's name confirmed and expert/official commentary added on the seatbelt safety debate. These are material updates (victim ID, sheriff's statement, NTSB expert analysis) that belong in the existing canonical rather than constituting a standalone newsworthy follow-up, since the core angle (seatbelt policy scrutiny tied to this crash and the St. Lucie precedent) remains the same.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Port St. Lucie police make 3 separate DUI arrests over weekend - WPEC",
+      "source_url": "https://cbs12.com/news/local/florida-crime-news-port-st-lucie-police-make-3-dui-arrests-over-weekend-impairment-disturbance-crash-breath-tests-drinking-driving",
+      "canonical_slug": "2026-10-01-two-port-st-lucie-hit-and-run-suspects-arrested-released-on-bond",
+      "canonical_headline": "Two Port St. Lucie Hit-and-Run Suspects Arrested, Released on Bond",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "port-st-lucie-police",
+        "southwest-becker-road"
+      ],
+      "novel_facts": [
+        "Three distinct DUI arrests of Kathleen Amber, James Kirby, and Tamra Goodman over the weekend of Oct 17-19",
+        "Different dates, suspects, and incident types (DUI, not hit-and-run) than the candidate from Oct 1"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
       ]
     },
     {
@@ -365,6 +399,37 @@
       "validation_errors": []
     },
     {
+      "category_key": "st_lucie",
+      "source_headline": "Port St. Lucie family chooses organ donation after teen's death, creating hope through tragedy - WPTV",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-chooses-organ-donation-after-teens-death-creating-hope-through-tragedy",
+      "canonical_slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+      "canonical_headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.85,
+      "shared_anchors": [
+        "Port St. Lucie Boulevard/Squirrel Avenue location",
+        "14-year-old pedestrian struck while walking to school",
+        "Port St. Lucie Police Department",
+        "death of the teen from injuries"
+      ],
+      "novel_facts": [
+        "Family chose to donate organs",
+        "quotes from organ donation advocates and transplant recipient",
+        "national organ donation statistics"
+      ],
+      "reason": "This is the same crash/death already covered in the canonical story, now with a human-interest angle about the family's organ donation decision. While emotionally significant, this is color/follow-up framing rather than a material update to the core facts (victim ID, cause, charges, etc.) and does not raise a new accountability or policy question warranting a separate URL.",
+      "validation_errors": []
+    },
+    {
       "category_key": "indian_river",
       "source_headline": "Do seatbelts put students at risk in a school bus rollover? An NTSB expert weighs in",
       "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/do-seatbelts-put-students-at-risk-in-a-school-bus-rollover-an-ntsb-expert-weighs-in",
@@ -382,19 +447,21 @@
       "semantic_action": "hold",
       "confidence": 0.72,
       "shared_anchors": [
-        "Winter Haven Polk County bus crash",
-        "same reporter Katie LaGrone",
-        "St. Lucie County Aaron Beauchamp seatbelt history",
-        "NTSB seatbelt recommendation context"
+        "Winter Haven school bus crash",
+        "Polk County",
+        "seatbelt policy debate",
+        "reporter Katie LaGrone",
+        "St. Lucie County Aaron Beauchamp precedent"
       ],
       "novel_facts": [
-        "Victim identified by name: Adinaluz Prieto Oyola",
-        "On-record NTSB expert interview (Dr. Kristin Poland) addressing whether seatbelts pose rollover risk",
-        "Sheriff Grady Judd's quote about seatbelt concerns in rollover",
-        "Confirmation school bus only had lap belts, as does entire district fleet",
-        "Detail that majority of Florida public school buses still have lap-belt-only equipment despite NTSB recommendation"
+        "Victim identified as 16-year-old Adinaluz Prieto Oyola",
+        "Crash cause detail: another vehicle struck bus rear causing head-on collision and rollover",
+        "On-record NTSB expert (Dr. Kristin Poland) interview addressing whether seatbelts could endanger students in rollovers",
+        "Sheriff Grady Judd's direct quote on seatbelt concerns",
+        "Confirmation district's buses only have lap belts, and statewide data on lap-belt-only majority",
+        "Explanation of NTSB's three-point belt release mechanism safety design"
       ],
-      "reason": "This is the same underlying Winter Haven bus crash story as the Oct 5 canonical, but it introduces a distinct, independently newsworthy angle: an NTSB technical/safety expert directly addressing whether seatbelts endanger students in rollovers, combined with new victim identification and law enforcement commentary. This goes beyond routine update and raises a standalone public-safety/policy question warranting its own article, per the independently-newsworthy-followup carve-out though it exists as a follow-on from the earlier canonical story.",
+      "reason": "This follow-up covers the same Winter Haven bus crash story but introduces a distinct accountability/policy angle: a named NTSB expert directly addressing public safety concerns about seatbelt risk in rollovers, combined with victim identification and statewide seatbelt compliance data. This expert-driven safety analysis with new named sourcing (Poland, Judd) and policy implications goes beyond routine follow-up and merits independent newsworthiness, justifying a new story rather than folding into the original canonical's brief crash report.",
       "validation_errors": [
         "same_event_confidence_below_threshold"
       ]
@@ -1220,6 +1287,386 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
+      "incoming_source_url": "https://cbs12.com/news/local/string-of-indecent-exposure-reports-on-fort-pierce-bridge-leads-to-arrest-fort-pierce-police-department-fppd-arrest-criminal-investigation-indecent-exposure-reports-suspected-flasher-women-walking-alone-bridge-incidents-treasure-coast-crime-st",
+      "incoming_story_id": "story_022129",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
+      "incoming_source_url": "https://cbs12.com/news/local/string-of-indecent-exposure-reports-on-fort-pierce-bridge-leads-to-arrest-fort-pierce-police-department-fppd-arrest-criminal-investigation-indecent-exposure-reports-suspected-flasher-women-walking-alone-bridge-incidents-treasure-coast-crime-st",
+      "incoming_story_id": "story_022129",
+      "candidates": [
+        {
+          "slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6527,
+          "retrieval_score": 0.5777,
+          "reasons": [
+            "publication_gap_42_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-police-arrest-two-in-south-6th-street-shooting",
+          "headline": "Fort Pierce Police Arrest Two in South 6th Street Shooting",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6474,
+          "retrieval_score": 0.5974,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-fort-pierce-police-investigate-death-of-man-found-in-lincoln-park-lake",
+          "headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6182,
+          "retrieval_score": 0.5432,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5846,
+          "retrieval_score": 0.5276,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-man-charged-after-ramming-two-tow-trucks-with-u-haul",
+          "headline": "Fort Pierce Man Charged After Ramming Two Tow Trucks With U-Haul",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5717,
+          "retrieval_score": 0.5217,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
+          "headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5468,
+          "retrieval_score": 0.5128,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fort-pierce-seniors-push-back-as-orange-avenue-center-sale-nears",
+          "headline": "Fort Pierce Seniors Push Back as Orange Avenue Center Sale Nears",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5009,
+          "retrieval_score": 0.5009,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4969,
+          "retrieval_score": 0.4899,
+          "reasons": [
+            "publication_gap_21_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-12-fort-pierce-ends-crabbys-dockside-lease-over-nearly-334000-debt",
+          "headline": "Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4549,
+          "retrieval_score": 0.4359,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+          "headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4516,
+          "retrieval_score": 0.4266,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-19-florida-secures-arrest-warrant-for-raul-castro-in-1996-jet-shootdown",
+          "headline": "Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4394,
+          "retrieval_score": 0.3994,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
+          "headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4164,
+          "retrieval_score": 0.3944,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Arrest of Kyle Kennedy, 27",
+          "Seaway Bridge indecent exposure case",
+          "Two counts indecent exposure plus violation of probation charge"
+        ],
+        "reason": "None of the candidate articles involve the Seaway Bridge indecent exposure incidents or Kyle Kennedy; they cover unrelated Fort Pierce events (fatal hit-and-run, shooting, drowning, animal cruelty, standoff, city government matters). This is a distinct new incident with no prior canonical coverage.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Arrest of Kyle Kennedy, 27",
+          "Seaway Bridge indecent exposure case",
+          "Two counts indecent exposure plus violation of probation charge"
+        ],
+        "reason": "None of the candidate articles involve the Seaway Bridge indecent exposure incidents or Kyle Kennedy; they cover unrelated Fort Pierce events (fatal hit-and-run, shooting, drowning, animal cruelty, standoff, city government matters). This is a distinct new incident with no prior canonical coverage.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
+      "incoming_source_url": "https://cw34.com/news/local/man-who-claimed-woman-was-possessed-by-the-devil-sentenced-for-vero-beach-hotel-attack-exorcism-holy-water-possessed-by-the-devil-hotel-room-attack-econo-lodge-false-imprisonment-battery-nine-months-in-jail-county-jail-sentence-no-contest-plea",
+      "incoming_story_id": "story_022148",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
+      "incoming_source_url": "https://cw34.com/news/local/man-who-claimed-woman-was-possessed-by-the-devil-sentenced-for-vero-beach-hotel-attack-exorcism-holy-water-possessed-by-the-devil-hotel-room-attack-econo-lodge-false-imprisonment-battery-nine-months-in-jail-county-jail-sentence-no-contest-plea",
+      "incoming_story_id": "story_022148",
+      "candidates": [
+        {
+          "slug": "2026-10-15-suspect-facing-800-felonies-captured-in-vero-beach",
+          "headline": "Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5183,
+          "retrieval_score": 0.4403,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5038,
+          "retrieval_score": 0.4348,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-06-port-st-lucie-woman-pleads-guilty-in-palm-beach-county-apartment-theft-scheme",
+          "headline": "Port St. Lucie Woman Pleads Guilty in Palm Beach County Apartment Theft Scheme",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4996,
+          "retrieval_score": 0.4986,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-vero-beach-airport-schedule-change-renews-focus-on-treasure-coast-travel-options",
+          "headline": "Vero Beach Airport Schedule Change Renews Focus On Treasure Coast Travel Options",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4961,
+          "retrieval_score": 0.4711,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-08-vero-beach-mermaid-brandee-anthony-turns-decade-old-hobby-into-full-business",
+          "headline": "Vero Beach Mermaid Brandee Anthony Turns Decade-Old Hobby Into Full Business",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4763,
+          "retrieval_score": 0.4693,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-10-09-jensen-beach-man-killed-in-loxahatchee-groves-motorcycle-crash",
+          "headline": "Jensen Beach Man Killed in Loxahatchee Groves Motorcycle Crash",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4614,
+          "retrieval_score": 0.4514,
+          "reasons": [
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-10-13-vero-beach-council-approves-lease-for-116-room-marriott-at-regional-airport",
+          "headline": "Vero Beach Council Approves Lease for Marriott at Regional Airport",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4394,
+          "retrieval_score": 0.4144,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
+          "headline": "Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4252,
+          "retrieval_score": 0.3652,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+          "headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4115,
+          "retrieval_score": 0.3865,
+          "reasons": [
+            "publication_gap_80_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4055,
+          "retrieval_score": 0.3985,
+          "reasons": [
+            "publication_gap_21_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-16-port-st-lucie-man-faces-charges-after-chase-ends-on-south-hutchinson-island",
+          "headline": "Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4014,
+          "retrieval_score": 0.3704,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+          "headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3949,
+          "retrieval_score": 0.3759,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Frank Joseph Lagola sentenced to time served/nine months for Dec. 23, 2025 Econo Lodge 'exorcism' attack on victim Coppeto"
+        ],
+        "reason": "None of the candidates involve this incident, the named defendant Lagola, the victim Coppeto, or the Econo Lodge exorcism attack. No prior canonical article exists for this case, so this is a new story rather than a duplicate or update.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Frank Joseph Lagola sentenced to time served/nine months for Dec. 23, 2025 Econo Lodge 'exorcism' attack on victim Coppeto"
+        ],
+        "reason": "None of the candidates involve this incident, the named defendant Lagola, the victim Coppeto, or the Econo Lodge exorcism attack. No prior canonical article exists for this case, so this is a new story rather than a duplicate or update.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
     }
   ],
   "archive_repairs": [],
@@ -1227,10 +1674,10 @@
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 9,
+    "directives_considered": 8,
     "story_records_merged": 0,
     "aliases_written": 0,
-    "already_consolidated": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_019789",
