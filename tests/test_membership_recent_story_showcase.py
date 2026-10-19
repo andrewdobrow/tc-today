@@ -71,6 +71,36 @@ def test_current_ranking_artifact_has_canonical_slugs_that_resolve_in_archive():
         for row in archive
         if isinstance(row, dict)
     }
-    selected = list(ranking.get("selected") or [])[:4]
-    assert selected
-    assert all(row.get("slug") in archive_slugs for row in selected)
+    _assert_ranked_slugs_resolve(ranking, archive_slugs)
+
+
+def _assert_ranked_slugs_resolve(ranking, archive_slugs):
+    # The persisted report is output from a *previous* Update. The next Update
+    # runs pytest before regeneration, so it must not require a stale snapshot
+    # to have still-fresh articles. Top Stories intentionally allows zero
+    # selections rather than filling its deck with expired news.
+    selected = ranking.get("selected")
+    assert isinstance(selected, list)
+    assert ranking.get("selected_count") == len(selected)
+    assert len(selected) <= int(ranking.get("limit", 12))
+    slugs = [row.get("slug") for row in selected if isinstance(row, dict)]
+    assert len(slugs) == len(selected)
+    assert all(slug and slug in archive_slugs for slug in slugs)
+    assert len(slugs) == len(set(slugs))
+
+
+def test_empty_prior_ranking_is_valid_before_next_news_generation():
+    # A no-stale-backfill policy explicitly permits an empty Top Stories deck.
+    _assert_ranked_slugs_resolve(
+        {"selected": [], "selected_count": 0, "limit": 12}, {"canonical-story"}
+    )
+
+
+def test_ranked_slugs_still_must_be_canonical_when_nonempty():
+    import pytest
+
+    with pytest.raises(AssertionError):
+        _assert_ranked_slugs_resolve(
+            {"selected": [{"slug": "missing-article"}], "selected_count": 1, "limit": 12},
+            {"canonical-story"},
+        )
