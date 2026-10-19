@@ -840,7 +840,20 @@ def _event_detail_eligible(event: dict) -> bool:
     if not (_clean_text(event.get("title")) and _clean_text(event.get("starts_at"))):
         return False
     if not (_clean_text(event.get("venue")) or _clean_text(event.get("city"))):
-        return False
+        # Some trusted organizers publish a precise official event URL and full
+        # event description but omit city/venue metadata. Such events can still
+        # have truthful TCT detail pages using the verified county as location.
+        county = _clean_text(event.get("county"))
+        description = _clean_text(event.get("description"))
+        official_url = _event_absolute_url(event.get("event_url"))
+        source_url = _event_absolute_url(event.get("source_url"))
+        if not (
+            county in {"Martin", "St. Lucie", "Indian River"}
+            and len(description) >= 50
+            and official_url
+            and official_url != source_url
+        ):
+            return False
     substantive = any(_clean_text(event.get(field)) for field in ("description","price","ticket_url","address"))
     event_url = _clean_text(event.get("event_url")); source_url = _clean_text(event.get("source_url"))
     if event_url and source_url and event_url != source_url:
@@ -1189,12 +1202,32 @@ def render_event_detail_pages() -> dict:
         event_image = _event_schema_image(event)
         if event_image:
             schema["image"] = [event_image]
+        event_photo = (
+            '<figure class="event-detail-photo"><img src="'
+            + html_lib.escape(event_image, quote=True)
+            + '" alt="" loading="lazy" decoding="async" onerror="this.parentNode.remove()"></figure>'
+            if event_image else ''
+        )
         lifecycle_end = _event_effective_end(event)
         lifecycle_meta = ''
         if lifecycle_end is not None:
             lifecycle_meta += f'\n<meta name="tct-event-lifecycle-end" content="{html_lib.escape(lifecycle_end.isoformat(timespec="seconds"), quote=True)}">'
         lifecycle_meta += f'\n<meta name="tct-event-id" content="{html_lib.escape(_clean_text(event.get("id")), quote=True)}">'
         head = _page_head(f"{title} | Treasure Coast Events", description[:155], detail_path, structured_data=schema) + lifecycle_meta + "\n" + _event_share_styles()
+        if event_image:
+            # Align event-specific social previews with the source image instead
+            # of showing the generic site artwork on every event detail page.
+            head = head.replace(
+                f'<meta property="og:image" content="{SITE_URL}/og-image.png">',
+                f'<meta property="og:image" content="{html_lib.escape(event_image, quote=True)}">', 1,
+            ).replace(
+                f'<meta name="twitter:image" content="{SITE_URL}/og-image.png">',
+                f'<meta name="twitter:image" content="{html_lib.escape(event_image, quote=True)}">', 1,
+            )
+        head += """<style data-tct-event-detail-images>
+.event-detail-photo { margin:0 0 22px; border-radius:12px; overflow:hidden; background:var(--bg-secondary); }
+.event-detail-photo img { display:block; width:100%; max-height:420px; aspect-ratio:16/9; object-fit:cover; }
+</style>"""
         source_url = _clean_text(event.get("source_url")); event_url = _clean_text(event.get("event_url")); ticket_url = _clean_text(event.get("ticket_url"))
         source_link = f'<a href="{html_lib.escape(source_url, quote=True)}" target="_blank" rel="noopener noreferrer external">{html_lib.escape(_clean_text(event.get("source_name")) or "Official source")}</a>' if source_url else "Official source"
         official = event_url or source_url
@@ -1206,6 +1239,7 @@ def render_event_detail_pages() -> dict:
 <nav class="tct-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/events.html">Events</a><span aria-hidden="true">›</span><span aria-current="page">{html_lib.escape(title)}</span></nav>
 <header class="event-detail-hero"><span class="event-detail-category">{html_lib.escape(_clean_text(event.get('category')))}</span><h1>{html_lib.escape(title)}</h1><p class="event-detail-when">{html_lib.escape(when_display)}</p></header>
 <div class="event-detail-grid"><article class="event-detail-main">
+{event_photo}
 <dl class="event-detail-facts"><div><dt>When</dt><dd>{html_lib.escape(when_display)}{(' – ' + html_lib.escape(end)) if time_known and end and end != start else ''}</dd></div><div><dt>Where</dt><dd>{html_lib.escape(location or _clean_text(event.get('county')) + ' County')}</dd></div>{f'<div><dt>Price</dt><dd>{html_lib.escape(_clean_text(event.get("price")))}</dd></div>' if event.get('price') else ''}</dl>
 <p class="event-detail-description">{html_lib.escape(description)}</p><div class="event-detail-actions">{official_link}{tickets}</div>
 {_event_share_block(title, detail_path)}
