@@ -12,8 +12,8 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | 55 | importance 0; freshness 99.94; urgency 7/10 |
-| 2 | Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated | Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated | 36 | importance 0; freshness 25.09; urgency 2/10; validated material update |
+| 1 | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | 43 | importance 0; freshness 98.13; urgency 2/10 |
+| 2 | Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated | Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated | 36 | importance 0; freshness 23.27; urgency 2/10; validated material update |
 
 ## Recommended moves
 
