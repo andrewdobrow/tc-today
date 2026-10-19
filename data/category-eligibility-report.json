@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-19T01:48:26Z",
+  "generated_at": "2026-10-19T10:45:43Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,7 +10,7 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 11,
+    "assessed_count": 10,
     "rejected_count": 3,
     "enforced_categories": [
       "business",
@@ -58,24 +58,9 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 1,
-      "rejected_count": 1,
-      "rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Palm Beach County ‘No Kings’ rally urges early voting",
-          "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/palm-beach-gardens/palm-beach-county-no-kings-rally-urges-early-voting"
-        }
-      ]
+      "assessed_count": 0,
+      "rejected_count": 0,
+      "rejections": []
     },
     {
       "category_key": "business",
@@ -119,9 +104,28 @@
       "category_label": "Things To Do",
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
-      "assessed_count": 0,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 1,
+      "rejected_count": 1,
+      "rejections": [
+        {
+          "contract_version": "1.0-local-attendable-activity-focus",
+          "category_key": "things_to_do",
+          "mode": "enforce",
+          "policy": "local_attendable_activity_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_attendable_activity_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:police"
+          ],
+          "local_nexus_signals": [
+            "treasure_coast_locality"
+          ],
+          "headline": "No Kings protests bring demonstrators to streets across Palm Beach County, Treasure Coast - WPEC",
+          "source_url": "https://cbs12.com/news/local/no-kings-protests-bring-demonstrators-to-streets-across-palm-beach-county-treasure-coast"
+        }
+      ]
     },
     {
       "category_key": "florida",
@@ -137,7 +141,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 1,
+      "assessed_count": 2,
       "rejected_count": 0,
       "rejections": []
     },
@@ -155,7 +159,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 5,
       "rejected_count": 0,
       "rejections": []
     }

@@ -12,7 +12,6 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Amendment 3 vote looms, real estate agents warn of rush before homestead deadline | Amendment 3 vote looms, real estate agents warn of rush before homestead deadline | 25 | importance 0; freshness 20.02; urgency 2/10 |
 
 ## Recommended moves
 
