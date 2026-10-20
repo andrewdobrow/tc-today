@@ -4,18 +4,18 @@
 
 ## Hero
 
-- Current: **Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR**
-- Recommended: **Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR**
+- Current: **Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases**
+- Recommended: **Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases | Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases | 50 | importance 0; freshness 91.67; urgency 4/10 |
-| 2 | Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline | Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline | 47 | importance 0; freshness 94.98; urgency 2/10 |
-| 3 | Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack | Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack | 46 | importance 0; freshness 91.67; urgency 2/10 |
-| 4 | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | 41 | importance 0; freshness 86.49; urgency 2/10 |
+| 1 | Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR | Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR | 49 | importance 0; freshness 85.01; urgency 4/10 |
+| 2 | Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline | Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline | 43 | importance 0; freshness 80.05; urgency 2/10 |
+| 3 | Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack | Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack | 42 | importance 0; freshness 76.74; urgency 2/10 |
+| 4 | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown | 37 | importance 0; freshness 71.55; urgency 2/10 |
 
 ## Recommended moves
 
