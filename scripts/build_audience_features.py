@@ -1686,6 +1686,61 @@ def update_sitemap() -> dict:
     return {"added":added,"removed_event_urls":removed_event_urls,"total":len(existing)}
 
 
+def prune_expired_event_detail_pages() -> dict:
+    """Retire event leaf pages that crossed the 30-day cutoff during a long run.
+
+    The initial audience build already retires expired pages. But after that build,
+    membership preparation and final quality checks can take long enough for a
+    retained, recently ended page to pass the 30-day boundary. Run this small,
+    deterministic sweep immediately before final validation; unlike rebuilding
+    event pages, it does not touch active events or already-rendered event content.
+
+    Unknown legacy pages and explicit retention overrides must never be guessed
+    away. All other event lifecycle checks remain strict and independent.
+    """
+    payload = _read_json(ROOT / "data" / "events.json", None)
+    if not isinstance(payload, dict) or not isinstance(payload.get("events"), list):
+        raise RuntimeError("Event lifecycle finalization requires a valid events.json events list")
+
+    active_paths = {
+        str(event.get("detail_url"))
+        for event in payload["events"]
+        if isinstance(event, dict) and event.get("detail_url")
+    }
+    retained_paths = _retained_event_paths()
+    now = _event_now()
+    grace = timedelta(days=EVENT_DETAIL_GRACE_DAYS)
+    scanned = 0
+    removed = 0
+    preserved_without_lifecycle = 0
+    event_dir = ROOT / "events"
+    if event_dir.exists():
+        for path in sorted(event_dir.glob("*.html")):
+            detail = "/" + path.relative_to(ROOT).as_posix()
+            if detail in active_paths or detail in retained_paths:
+                continue
+            scanned += 1
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            end_at = _event_page_lifecycle_end(text)
+            if end_at is None:
+                preserved_without_lifecycle += 1
+                continue
+            if now - end_at > grace:
+                path.unlink()
+                removed += 1
+
+    # Reconciliation is idempotent and also evicts any now-retired URLs from
+    # sitemap.xml. It does not change articles, archive identities or event data.
+    sitemap = update_sitemap()
+    return {
+        "checked_inactive": scanned,
+        "removed": removed,
+        "preserved_unknown_legacy": preserved_without_lifecycle,
+        "sitemap": sitemap,
+        "grace_days": EVENT_DETAIL_GRACE_DAYS,
+    }
+
+
 def validate_event_detail_lifecycle() -> dict:
     failures: list[str] = []
     now = _event_now()
@@ -1850,8 +1905,13 @@ def main(argv=None) -> int:
     parser.add_argument("--validate-only", action="store_true")
     parser.add_argument("--events-only", action="store_true", help="Render and retire event detail pages, reconcile event sitemap URLs, and validate the event lifecycle.")
     parser.add_argument("--validate-events-only", action="store_true", help="Validate only the event-detail lifecycle contract.")
+    parser.add_argument("--prune-expired-events", action="store_true", help="Final prevalidation pass: remove only expired, inactive event detail pages and reconcile the sitemap.")
     args=parser.parse_args(argv)
     archive=_read_json(ROOT/"archive.json",[])
+    if args.prune_expired_events:
+        report = prune_expired_event_detail_pages()
+        print("Late event expiration cleanup:", json.dumps(report, ensure_ascii=False))
+        return 0
     if args.validate_events_only:
         report = validate_event_detail_lifecycle()
         print("Event detail lifecycle validation PASSED:", json.dumps(report, ensure_ascii=False)); return 0
