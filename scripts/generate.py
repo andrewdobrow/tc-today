@@ -16514,6 +16514,123 @@ def _write_latest_news_rail_contract(entries, archive_entries, output_root):
     return report
 
 
+def _homepage_hero_headline_key(value):
+    """A displayed headline's exact text, independent of HTML entities or spacing."""
+    from html import unescape
+    return " ".join(unescape(re.sub(r"<[^>]*>", "", str(value or ""))).casefold().split())
+
+
+def _homepage_hero_exact_archive_owner(headline, archive, articles_dir):
+    """Find the unique published archive owner of the hero's *visible* headline.
+
+    A similarity, registry story ID, county-only incident key, or existing HTML
+    file is never enough to justify pairing unrelated headline and permalink.
+    """
+    heading = _homepage_hero_headline_key(headline)
+    if not heading:
+        return None
+    redirects = _load_canonical_redirect_slug_map(Path(articles_dir).parent)
+    matches = []
+    for entry in archive or []:
+        if not isinstance(entry, dict):
+            continue
+        if _homepage_hero_headline_key(entry.get("headline")) != heading:
+            continue
+        slug = _normalize_existing_article_slug(entry.get("slug"))
+        if not slug or not _published_article_path(slug, articles_dir):
+            continue
+        direct_slug, _ = _follow_canonical_redirect_slug(slug, redirects)
+        if direct_slug != slug:
+            continue
+        if entry.get("exclude_from_live_recovery") or entry.get("retired"):
+            continue
+        if not _archive_entry_live_identity_safe(entry):
+            continue
+        matches.append(entry)
+    return matches[0] if len(matches) == 1 else None
+
+
+def reconcile_homepage_hero_headline_permalink(top_cat, output_root):
+    """Repair a live lead whose inherited slug belongs to a different article.
+
+    The final canonical resolver can carry an old `_archived_slug` into rendering
+    even when the hero's new headline/body belong to a different publication.
+    This runs before homepage and iOS-feed rendering, using the persisted
+    archive's exact publication headline as independent identity evidence.
+    """
+    hero = (top_cat or {}).get("hero")
+    if not isinstance(hero, dict) or not hero.get("headline"):
+        return {"action": "no_hero"}
+    root = Path(output_root)
+    archive = load_archive(root / "archive.json")
+    by_slug = {
+        _normalize_existing_article_slug(row.get("slug")): row
+        for row in archive if isinstance(row, dict) and row.get("slug")
+    }
+    actual_slug = _normalize_existing_article_slug(
+        hero.get("_archived_slug") or hero.get("canonical_slug")
+        or _article_slug_from_permalink(hero.get("link", ""))
+    )
+    current = by_slug.get(actual_slug)
+    headline = _homepage_hero_headline_key(hero.get("headline"))
+    if current and _homepage_hero_headline_key(current.get("headline")) == headline:
+        return {"action": "verified", "slug": actual_slug}
+    if not current:
+        return {"action": "unbound", "slug": actual_slug}
+
+    corrected = _homepage_hero_exact_archive_owner(
+        hero.get("headline"), archive, root / "articles"
+    )
+    if not corrected:
+        raise RuntimeError(
+            "Homepage hero headline/permalink identity FAILED: "
+            f"{hero.get('headline', '')!r} is bound to unrelated published "
+            f"article {actual_slug!r} ({current.get('headline', '')!r}); "
+            "no unique, independently verified matching canonical headline."
+        )
+    new_slug = _normalize_existing_article_slug(corrected.get("slug"))
+    hero["_archived_slug"] = new_slug
+    hero["canonical_slug"] = new_slug
+    hero["slug"] = new_slug
+    hero["link"] = _canonical_article_permalink(new_slug)
+    for field in ("editorial_story_id", "incident_anchor_key", "custom_publication_key", "custom_event_key"):
+        if corrected.get(field):
+            hero[field] = corrected[field]
+        else:
+            hero.pop(field, None)
+    hero["_editorial_story_id"] = corrected.get("editorial_story_id", "")
+    hero["_canonical_freshness_bound"] = True
+    print(f"  Homepage hero permalink corrected: {actual_slug} -> {new_slug}")
+    return {"action": "corrected", "previous_slug": actual_slug, "canonical_slug": new_slug}
+
+
+def validate_rendered_homepage_hero_headline_permalink(index_html, output_root):
+    """Fail closed if late final-projection rewriting reintroduces a wrong hero URL."""
+    html = str(index_html or "")
+    match = re.search(
+        r'<section\b[^>]*data-cat-hero="all"[^>]*>(.*?)</section>',
+        html, flags=re.IGNORECASE | re.DOTALL,
+    )
+    if not match:
+        return {"action": "no_hero"}
+    block = match.group(1)
+    href = re.search(r'<a\b[^>]*class="hero-v3-link"[^>]*href="([^"]+)"', block)
+    heading = re.search(r'<h1\b[^>]*class="hero-v3-headline"[^>]*>(.*?)</h1>', block, re.I | re.S)
+    if not href or not heading:
+        raise RuntimeError("Homepage hero headline/permalink identity FAILED: missing hero link or headline")
+    slug = _article_slug_from_permalink(href.group(1))
+    rows = load_archive(Path(output_root) / "archive.json")
+    article = next((row for row in rows if _normalize_existing_article_slug(row.get("slug")) == slug), None)
+    if article is None or _homepage_hero_headline_key(article.get("headline")) != _homepage_hero_headline_key(heading.group(1)):
+        raise RuntimeError(
+            "Homepage hero headline/permalink identity FAILED after final render: "
+            f"visible={_homepage_hero_headline_key(heading.group(1))!r} | "
+            f"linked_slug={slug!r} | "
+            f"linked_article={str((article or {}).get('headline') or '')!r}"
+        )
+    return {"action": "verified", "slug": slug}
+
+
 def render_index(all_categories, top_cat):
     COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
     archive = load_archive(OUTPUT_DIR / "archive.json")
@@ -43061,12 +43178,21 @@ def main():
             f"{(top_cat or {}).get('hero', {}).get('headline', '')[:90]!r} "
             f"(age_hours={_published_hero_age}); refusing stale homepage deployment"
         )
+    # The homepage headline and canonical permalink must identify the same
+    # published article. Late placement rebinding can otherwise donate an old
+    # article's valid slug to a newly written, unrelated lead.
+    _hero_headline_permalink_reconciliation = reconcile_homepage_hero_headline_permalink(
+        top_cat, OUTPUT_DIR
+    )
     index_html = render_index(all_categories, top_cat)
     index_html, _final_surface_projection_repair = repair_final_canonical_surface_projection(
         index_html, OUTPUT_DIR
     )
     validate_final_canonical_surface_uniqueness(index_html, OUTPUT_DIR)
     validate_homepage_permalink_uniqueness(index_html, OUTPUT_DIR)
+    # The final URL-only projection may rewrite a link after in-memory repairs;
+    # inspect the actual hero headline + href together before publishing HTML.
+    validate_rendered_homepage_hero_headline_permalink(index_html, OUTPUT_DIR)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
 
     # Normalize persistent article files, then stop the deployment if the unified
