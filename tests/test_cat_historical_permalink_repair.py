@@ -39,13 +39,40 @@ def test_updated_october_article_preserves_date_and_validated_evolution():
         # A later *validated* material update may legitimately evolve headline/body.
         # Do not resurrect the October 9 headline and clobber subsequent reporting.
         assert row.get('meaningful_update_validated') is True
-        assert row.get('editorial_story_id') == 'story_020183'
+        # The registry may legitimately reassign an internal story ID. Validate
+        # the immutable publication and the actual incident instead of an ID literal.
+        assert row.get('editorial_story_id')
+        assert 'martin' in row.get('county_keys', [])
+        assert 'Hobe Sound' in row['headline']
         assert 'Alba Chavez' in row['body']
+        assert 'Hobe Sound' in row['body']
     else:
         # Without a newer validated update, the historical repair remains required.
         assert current_update == repair_update
         assert row['headline'] == DATA['headline']
         assert row['body'] == DATA['body']
+
+
+def test_hobe_sound_and_port_st_lucie_cat_cases_remain_independent():
+    # The newer Port St. Lucie mass-hoarding story must never inherit the
+    # October 8 Hobe Sound case's story/publication identity (or vice versa).
+    import pytest
+    archive=json.loads((ROOT/'archive.json').read_text())
+    hobe=next(a for a in archive if a.get('slug')==NEW)
+    other_slug='2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house'
+    psl=next((a for a in archive if a.get('slug')==other_slug),None)
+    if psl is None:
+        pytest.skip('October 19 article not yet present in this historical archive snapshot')
+    assert 'martin' in hobe.get('county_keys', [])
+    assert 'st_lucie' in psl.get('county_keys', [])
+    assert 'Alba Chavez' in hobe.get('body','')
+    assert hobe['slug'] != psl['slug']
+    assert hobe.get('editorial_story_id')
+    assert psl.get('editorial_story_id')
+    assert hobe['editorial_story_id'] != psl['editorial_story_id'], 'Unrelated cat incidents share a registry identity'
+    assert hobe.get('canonical_publication_id')
+    assert psl.get('canonical_publication_id')
+    assert hobe['canonical_publication_id'] != psl['canonical_publication_id'], 'Unrelated cat incidents share a publication identity'
 
 def test_repair_is_idempotent_and_preserves_redirect_history():
     import shutil
