@@ -423,6 +423,10 @@ jobs:
 
       - name: Validate final SEO and audience contracts
         run: |
+          # Events can cross their exact 30-day expiry cutoff after the earlier
+          # audience build. Prune only those expired inactive event leaf pages
+          # before final SEO/lifecycle verification, without rebuilding articles.
+          python scripts/build_audience_features.py --prune-expired-events
           python scripts/validate_seo_contracts.py
           python scripts/build_audience_features.py --validate-only
 
