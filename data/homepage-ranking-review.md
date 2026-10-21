@@ -12,20 +12,16 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | 42 | importance 0; freshness 56.68; urgency 4/10 |
-| 2 | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | 41 | importance 0; freshness 70.13; urgency 2/10 |
-| 3 | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | 39 | importance 0; freshness 63.34; urgency 2/10 |
-| 4 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | 39 | importance 0; freshness 63.33; urgency 2/10 |
-| 5 | Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases | Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases | 33 | importance 0; freshness 20.01; urgency 4/10 |
-| 6 | Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR | Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline | 30 | importance 0; freshness 23.33; urgency 2/10 |
-| 7 | Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline | Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack | 28 | importance 0; freshness 20.02; urgency 2/10 |
-| 8 | Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack | Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR | 31 | importance 0; freshness 28.29; urgency 2/10; -6 category saturation |
+| 1 | Florida Senate President Albritton Now Opposes Amendment 3 | Florida Senate President Albritton Now Opposes Amendment 3 | 53 | importance 0; freshness 99.95; urgency 6/10 |
+| 2 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | 41 | importance 0; freshness 53.33; urgency 4/10 |
+| 3 | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | 40 | importance 0; freshness 66.77; urgency 2/10 |
+| 4 | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | 38 | importance 0; freshness 59.98; urgency 2/10 |
+| 5 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | 38 | importance 0; freshness 59.98; urgency 2/10 |
+| 6 | Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR | Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR | 30 | importance 0; freshness 24.94; urgency 2/10; -6 category saturation |
 
 ## Recommended moves
 
-- **Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR**: 6 → 8 — importance 0; freshness 28.29; urgency 2/10; -6 category saturation
-- **Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline**: 7 → 6 — importance 0; freshness 23.33; urgency 2/10
-- **Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack**: 8 → 7 — importance 0; freshness 20.02; urgency 2/10
+No top-deck moves recommended.
 
 ## Guardrails
 
