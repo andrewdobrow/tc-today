@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-21T02:54:58Z",
+  "generated_at": "2026-10-21T10:51:02Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,33 +16,35 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 5,
-      "generated_live": 4
+      "generated_live": 3,
+      "generation_failed_archive_recovery": 1
     },
     "failures": {
+      "contextless_update_lead": 1,
       "no_category_eligible_sources": 5
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 45.824,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 63.835,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 2,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 47,
-    "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 12,
+    "category_eligibility_rejection_count": 6,
+    "published_story_duplicate_suppression_count": 48,
+    "story_aware_update_context_count": 2,
+    "material_update_promotion_evaluation_count": 11,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 5,
-    "material_update_promotion_model_call_count": 7
+    "material_update_promotion_cache_hit_count": 3,
+    "material_update_promotion_model_call_count": 8
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 8,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 9,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -59,8 +61,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -73,8 +75,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes"
+          "headline": "Multi-vehicle crash blocks 2 lanes on I-95 North near Hobe Sound, causing delays - cw34.com",
+          "source_url": "https://cw34.com/news/local/multi-vehicle-crash-blocks-2-lanes-on-i-95-north-near-hobe-sound-causing-delays"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -89,10 +91,34 @@
           "local_nexus_signals": [],
           "headline": "Oculina Bank: Rare Florida coral reef faces pivotal federal decision over return of shrimp trawling",
           "source_url": "https://www.wptv.com/wptv-investigates/oculina-bank-rare-florida-coral-reef-faces-pivotal-federal-decision-over-return-of-shrimp-trawling"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Truck fire closes southbound lanes of Florida’s Turnpike in St. Lucie County - cw34.com",
+          "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-morning-commute-florida-traffic-florida-news?teaserSource=trending"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "editorial_story_id": "story_022418",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
@@ -106,7 +132,7 @@
         {
           "category_key": "local_gov",
           "source_headline": "Vero Beach gives Three Corners developers another extension as Dec. 8 deadline looms - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNZjJzMThYd3FXVVJ0bVRnNmZ6VUVZendiTDVLVzhWRDdrX3NSSXhKNkFneWZ4LWluX1c0VEV4RHhVR3Z6ZE16ZzBjUjRfWU1BMmxGVHJ1amRrMjNsTE5zNXctdnB3RWY4M09RcWtJY2ZMc1FFZGVhZURtNGExM21kYjEzOVkwOU9UYTdoZU04X0xwRjdOdU5YRGNaWElpVTN0WUhtUEh2ZlNpUWdoU1lHdk5hVnB3Vm10ODBr",
+          "source_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPRm9SeUllN2tMOEpqS2VzUEl3NkFYMTJkQXY4Y1lFb0VWc2k1UHpOVXlseHVuZlRNQnc2aGhtOXI1Wkt2amVBSHp5TFV2WVEtWUlBcTBRcTh5VUFxQlhHWm0wdXdzSTVHZUYwMjNMR2JTb1c0Z2xHYUtNYmdHMUliay1mQjNGcVc5YUxqY1FkYWd3d1ZaTE1QVUt4WWlMaW85eHZVcWwzNkswbWlxQUs4THp3MHlsQ29kZ1NpelFqQTR5MGUwSVlrazI1Q244WkU",
           "editorial_story_id": "story_022168",
           "canonical_slug": "2026-10-19-vero-beach-council-gives-three-corners-developers-fourth-extension-sets-dec-8-de",
           "canonical_headline": "Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline",
@@ -115,12 +141,12 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "William Reaves executed Tuesday after being convicted of killing Indian River County deputy in 1986",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
-          "editorial_story_id": "story_020070",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Man who claimed woman was possessed by the devil sentenced for Vero Beach hotel attack - cw34.com",
+          "source_url": "https://cw34.com/news/local/man-who-claimed-woman-was-possessed-by-the-devil-sentenced-for-vero-beach-hotel-attack-exorcism-holy-water-possessed-by-the-devil-hotel-room-attack-econo-lodge-false-imprisonment-battery-nine-months-in-jail-county-jail-sentence-no-contest-plea",
+          "editorial_story_id": "story_022148",
+          "canonical_slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
+          "canonical_headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -136,11 +162,26 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
@@ -159,7 +200,7 @@
         {
           "category_key": "local_gov",
           "source_headline": "Vero Beach gives Three Corners developers another extension as Dec. 8 deadline looms - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNZjJzMThYd3FXVVJ0bVRnNmZ6VUVZendiTDVLVzhWRDdrX3NSSXhKNkFneWZ4LWluX1c0VEV4RHhVR3Z6ZE16ZzBjUjRfWU1BMmxGVHJ1amRrMjNsTE5zNXctdnB3RWY4M09RcWtJY2ZMc1FFZGVhZURtNGExM21kYjEzOVkwOU9UYTdoZU04X0xwRjdOdU5YRGNaWElpVTN0WUhtUEh2ZlNpUWdoU1lHdk5hVnB3Vm10ODBr",
+          "source_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPRm9SeUllN2tMOEpqS2VzUEl3NkFYMTJkQXY4Y1lFb0VWc2k1UHpOVXlseHVuZlRNQnc2aGhtOXI1Wkt2amVBSHp5TFV2WVEtWUlBcTBRcTh5VUFxQlhHWm0wdXdzSTVHZUYwMjNMR2JTb1c0Z2xHYUtNYmdHMUliay1mQjNGcVc5YUxqY1FkYWd3d1ZaTE1QVUt4WWlMaW85eHZVcWwzNkswbWlxQUs4THp3MHlsQ29kZ1NpelFqQTR5MGUwSVlrazI1Q244WkU",
           "canonical_slug": "2026-10-19-vero-beach-council-gives-three-corners-developers-fourth-extension-sets-dec-8-de",
           "canonical_headline": "Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline",
           "canonical_is_custom": false,
@@ -173,18 +214,32 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "William Reaves executed Tuesday after being convicted of killing Indian River County deputy in 1986",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "source_headline": "Man who claimed woman was possessed by the devil sentenced for Vero Beach hotel attack - cw34.com",
+          "source_url": "https://cw34.com/news/local/man-who-claimed-woman-was-possessed-by-the-devil-sentenced-for-vero-beach-hotel-attack-exorcism-holy-water-possessed-by-the-devil-hotel-room-attack-econo-lodge-false-imprisonment-battery-nine-months-in-jail-county-jail-sentence-no-contest-plea",
+          "canonical_slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
+          "canonical_headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Frank Joseph Lagola",
+            "Econo Lodge, 950 U.S. Highway 1, Vero Beach",
+            "Indian River County Sheriff's Office",
+            "false imprisonment and battery charges",
+            "no contest plea",
+            "sentenced Thursday to nine months with time served"
+          ],
+          "novel_facts": [],
+          "reason": "Same source URL and identical underlying sentencing event with the same defendant, charges, location, and sentence; incoming article adds only additional narrative/affidavit detail, not a material update.",
+          "validation_errors": []
         },
         {
           "category_key": "local_gov",
@@ -203,7 +258,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.424
+      "elapsed_seconds": 32.281
     },
     {
       "category_key": "crime",
@@ -211,8 +266,8 @@
       "status": "generated_live",
       "fetched_candidate_count": 29,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 8,
-      "selected_source_count": 2,
+      "publishable_source_count": 7,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -220,11 +275,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.372,
+          "elapsed_seconds": 8.423,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.372,
+      "model_elapsed_seconds": 8.423,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -235,7 +290,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -257,41 +312,31 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
+          "source_headline": "Man convicted of killing Indian River County deputy in 1986 executed tonight - WPEC",
+          "source_url": "https://cbs12.com/news/local/william-reaves-convicted-of-killing-florida-indian-river-county-deputy-richard-raczkoski-1986-vero-beach-set-to-be-executed-tonight-death-sentence-execution-florida-state-prison",
+          "editorial_story_id": "story_020070",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "124 cats, some deceased, surrendered in disturbing Port St. Lucie hoarding case - cw34.com",
-          "source_url": "https://cw34.com/news/local/124-cats-some-deceased-surrendered-in-disturbing-port-st-lucie-hoarding-case-port-st-lucie-animal-hoarding-124-cats-cat-rescue-animal-cruelty-deceased-kittens-unsanitary-conditions-port-st-lucie-police-department-st-lucie-county-animal",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "More than 100 cats rescued from hoarding situation in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-cats-kittens-hoarding-rescued/74184860",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "editorial_story_id": "story_022418",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "William Reaves executed Tuesday after being convicted of killing Indian River County deputy in 1986",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
-          "editorial_story_id": "story_020070",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
+          "editorial_story_id": "story_022411",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -327,6 +372,16 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Man convicted of killing Indian River County deputy set for execution Tuesday - WPEC",
+          "source_url": "https://cbs12.com/news/local/william-reaves-77-killing-indian-river-county-deputy-die-by-lethal-injection-florida-state-prison-governor-ron-desantis-florida-supreme-court-florida-news",
+          "editorial_story_id": "story_020070",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Man who claimed woman was possessed by the devil sentenced for Vero Beach hotel attack - WPEC",
           "source_url": "https://cbs12.com/news/local/man-who-claimed-woman-was-possessed-by-the-devil-sentenced-for-vero-beach-hotel-attack-exorcism-holy-water-possessed-by-the-devil-hotel-room-attack-econo-lodge-false-imprisonment-battery-nine-months-in-jail-county-jail-sentence-no-contest-plea",
           "editorial_story_id": "story_022148",
@@ -345,13 +400,13 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
+          "source_headline": "Man convicted of killing Indian River County deputy in 1986 executed tonight - WPEC",
+          "source_url": "https://cbs12.com/news/local/william-reaves-convicted-of-killing-florida-indian-river-county-deputy-richard-raczkoski-1986-vero-beach-set-to-be-executed-tonight-death-sentence-execution-florida-state-prison",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -360,25 +415,10 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "124 cats, some deceased, surrendered in disturbing Port St. Lucie hoarding case - cw34.com",
-          "source_url": "https://cw34.com/news/local/124-cats-some-deceased-surrendered-in-disturbing-port-st-lucie-hoarding-case-port-st-lucie-animal-hoarding-124-cats-cat-rescue-animal-cruelty-deceased-kittens-unsanitary-conditions-port-st-lucie-police-department-st-lucie-county-animal",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "More than 100 cats rescued from hoarding situation in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-cats-kittens-hoarding-rescued/74184860",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -390,13 +430,13 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "William Reaves executed Tuesday after being convicted of killing Indian River County deputy in 1986",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -419,11 +459,11 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.95,
+          "confidence": 0.97,
           "shared_anchors": [],
           "novel_facts": [
             "Truck fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
-            "Fire units T19, E01, Rescue 19 responded at 7:49 a.m."
+            "Fire reported around 7:49 a.m., units T19, E01, Rescue 19 responded"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -448,13 +488,12 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "port-st-lucie-police",
-            "southwest-becker-road location mentioned"
+            "port-st-lucie-police agency",
+            "southwest-becker-road location overlap"
           ],
           "novel_facts": [
-            "Three distinct DUI arrests of Kathleen Amber, James Kirby, and Tamra Goodman over a weekend",
-            "Different dates and incidents than the hit-and-run case",
-            "No overlap in named suspects with candidate"
+            "Three distinct DUI arrests of Kathleen Amber, James Kirby, and Tamra Goodman over a weekend in October",
+            "Different dates, suspects, and incident types (DUI arrests vs. hit-and-run crashes) than the candidate"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -494,6 +533,21 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Man convicted of killing Indian River County deputy set for execution Tuesday - WPEC",
+          "source_url": "https://cbs12.com/news/local/william-reaves-77-killing-indian-river-county-deputy-die-by-lethal-injection-florida-state-prison-governor-ron-desantis-florida-supreme-court-florida-news",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Man who claimed woman was possessed by the devil sentenced for Vero Beach hotel attack - WPEC",
           "source_url": "https://cbs12.com/news/local/man-who-claimed-woman-was-possessed-by-the-devil-sentenced-for-vero-beach-hotel-attack-exorcism-holy-water-possessed-by-the-devil-hotel-room-attack-econo-lodge-false-imprisonment-battery-nine-months-in-jail-county-jail-sentence-no-contest-plea",
           "canonical_slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
@@ -511,16 +565,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "William Reaves Executed for 1986 Murder of Indian River County Deputy",
+      "live_hero_headline": "Indian River Sheriff Witnesses Execution of Deputy's 1986 Killer",
       "generated_card_count": 0,
-      "elapsed_seconds": 41.481
+      "elapsed_seconds": 44.044
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -538,7 +592,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -558,8 +612,18 @@
           "source_url": "https://www.wptv.com/wptv-investigates/oculina-bank-rare-florida-coral-reef-faces-pivotal-federal-decision-over-return-of-shrimp-trawling"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "editorial_story_id": "story_022418",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
@@ -576,7 +640,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
           "editorial_story_id": "story_020070",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -600,6 +664,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
           "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
@@ -618,7 +697,7 @@
           "source_headline": "William Reaves executed Tuesday after being convicted of killing Indian River County deputy in 1986",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -648,8 +727,9 @@
           "shared_anchors": [],
           "novel_facts": [
             "truck fire on Florida's Turnpike southbound near mile marker 161",
-            "separate crash in same area causing lane closures",
-            "date October 20, 2026"
+            "occurred October 20, 2026 (over a month after candidate event)",
+            "separate crash in same area causing additional lane closure",
+            "all lanes reopened after delays"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -658,7 +738,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.067
+      "elapsed_seconds": 24.813
     },
     {
       "category_key": "sports",
@@ -666,7 +746,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -696,7 +776,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 8.795
+      "elapsed_seconds": 19.986
     },
     {
       "category_key": "things_to_do",
@@ -753,14 +833,14 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.715
+      "elapsed_seconds": 16.942
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -781,69 +861,26 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Florida secures arrest warrant for Raúl Castro in 1996 Brothers to the Rescue shootdown",
-          "source_url": "https://www.wptv.com/news/state/miami-dade/florida-secures-arrest-warrant-for-raul-castro-in-1996-brothers-to-the-rescue-shootdown",
-          "editorial_story_id": "story_022089",
-          "canonical_slug": "2026-10-19-florida-secures-arrest-warrant-for-raul-castro-in-1996-jet-shootdown",
-          "canonical_headline": "Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Florida secures arrest warrant for Raúl Castro in 1996 Brothers to the Rescue shootdown",
-          "source_url": "https://www.wptv.com/news/state/miami-dade/florida-secures-arrest-warrant-for-raul-castro-in-1996-brothers-to-the-rescue-shootdown",
-          "canonical_slug": "2026-10-19-florida-secures-arrest-warrant-for-raul-castro-in-1996-jet-shootdown",
-          "canonical_headline": "Florida Secures Arrest Warrant for Raúl Castro in 1996 Jet Shootdown",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Raúl Castro arrest warrant",
-            "Florida Attorney General James Uthmeier",
-            "1996 Brothers to the Rescue shootdown",
-            "conspiracy to commit first-degree murder charge",
-            "four victims: Carlos Costa, Pablo Morales, Mario de la Peña, Armando Alejandre Jr."
-          ],
-          "novel_facts": [
-            "Additional quotes from Dave Aronberg and a Cuban American community member (Mirta Luaces)",
-            "Political timing criticism tied to Miami-Dade early voting"
-          ],
-          "reason": "Both articles report the identical announcement of Florida's arrest warrant for Raúl Castro over the same 1996 shootdown, same charge, same victims, and same AG. The incoming article adds reaction/color (political timing criticism, community reaction) but no new factual development like an arrest, charge change, or official finding, so it is a duplicate rather than an update or new story.",
-          "validation_errors": []
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.286
+      "elapsed_seconds": 14.271
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 3,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -851,11 +888,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.465,
+          "elapsed_seconds": 17.703,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 17.465,
+      "model_elapsed_seconds": 17.703,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -866,11 +903,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "editorial_story_id": "story_022418",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "editorial_story_id": "story_022418",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Jensen Beach man Mike Gonzalez wins $70,000 on 'Wheel of Fortune' - WPBF",
@@ -879,16 +936,6 @@
           "canonical_slug": "2026-10-20-jensen-beach-man-wins-over-70000-on-wheel-of-fortune-during-nba-week",
           "canonical_headline": "Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County woman honored after using CPR to save 3-year-old girl from swimming pool - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/20/martin-county-woman-honored-after-using-cpr-save-3-year-old-girl-swimming-pool",
-          "editorial_story_id": "story_022183",
-          "canonical_slug": "2026-10-19-martin-county-fire-rescue-honors-woman-who-saved-drowning-3-year-old-with-cpr",
-          "canonical_headline": "Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR",
-          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -907,13 +954,37 @@
           "source_url": "https://cbs12.com/news/local/william-reaves-77-killing-indian-river-county-deputy-die-by-lethal-injection-florida-state-prison-governor-ron-desantis-florida-supreme-court-florida-news",
           "editorial_story_id": "story_020070",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County woman honored after using CPR to save 3-year-old girl from swimming pool - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-woman-honored-after-using-cpr-to-save-3-year-old-girl-from-swimming-pool",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-19-martin-county-fire-rescue-honors-woman-who-saved-drowning-3-year-old-with-cpr",
+          "canonical_headline": "Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_022183",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-woman-honored-after-using-cpr-to-save-3-year-old-girl-from-swimming-pool"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_022183,source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-woman-honored-after-using-cpr-to-save-3-year-old-girl-from-swimming-pool",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -921,10 +992,10 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
-          "source_headline": "Jensen Beach man Mike Gonzalez wins $70,000 on 'Wheel of Fortune' - WPBF",
-          "source_url": "https://www.wpbf.com/article/jensen-beach-man-wins-70000-on-wheel-of-fortune/74192090",
-          "canonical_slug": "2026-10-20-jensen-beach-man-wins-over-70000-on-wheel-of-fortune-during-nba-week",
-          "canonical_headline": "Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -936,12 +1007,27 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County woman honored after using CPR to save 3-year-old girl from swimming pool - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/20/martin-county-woman-honored-after-using-cpr-save-3-year-old-girl-swimming-pool",
-          "canonical_slug": "2026-10-19-martin-county-fire-rescue-honors-woman-who-saved-drowning-3-year-old-with-cpr",
-          "canonical_headline": "Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
           "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Jensen Beach man Mike Gonzalez wins $70,000 on 'Wheel of Fortune' - WPBF",
+          "source_url": "https://www.wpbf.com/article/jensen-beach-man-wins-70000-on-wheel-of-fortune/74192090",
+          "canonical_slug": "2026-10-20-jensen-beach-man-wins-over-70000-on-wheel-of-fortune-during-nba-week",
+          "canonical_headline": "Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -969,7 +1055,7 @@
           "source_headline": "Man convicted of killing Indian River County deputy set for execution Tuesday - WPEC",
           "source_url": "https://cbs12.com/news/local/william-reaves-77-killing-indian-river-county-deputy-die-by-lethal-injection-florida-state-prison-governor-ron-desantis-florida-supreme-court-florida-news",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -983,32 +1069,42 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+      "live_hero_headline": "Martin County Fire Rescue Honors Madison Isler With First Heroic Heart Award",
       "generated_card_count": 0,
-      "elapsed_seconds": 34.106
+      "elapsed_seconds": 45.19
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 9,
+      "fresh_candidate_count": 12,
       "publishable_source_count": 1,
       "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 6.022,
-          "result": "success"
+          "elapsed_seconds": 14.122,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — More than 100 cats rescued from hoarding situation in Port St. Lucie - WPBF"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 15.171,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — More than 100 cats rescued from hoarding situation in Port St. Lucie - WPBF"
         }
       ],
-      "model_elapsed_seconds": 6.022,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 29.293,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — More than 100 cats rescued from hoarding situation in Port St. Lucie - WPBF",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1020,18 +1116,8 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 20,
+      "published_story_duplicate_suppression_count": 17,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "st_lucie",
-          "source_headline": "124 cats, some deceased, surrendered in disturbing Port St. Lucie hoarding case - WPEC",
-          "source_url": "https://cbs12.com/news/local/124-cats-some-deceased-surrendered-in-disturbing-port-st-lucie-hoarding-case-port-st-lucie-animal-hoarding-124-cats-cat-rescue-animal-cruelty-deceased-kittens-unsanitary-conditions-port-st-lucie-police-department-st-lucie-county-animal",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "st_lucie",
           "source_headline": "Florida gubernatorial candidate Byron Donalds makes campaign stop in Fort Pierce - WPBF",
@@ -1044,8 +1130,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
+          "source_headline": "124 cats, some deceased, surrendered in disturbing Port St. Lucie hoarding case - WPEC",
+          "source_url": "https://cbs12.com/news/local/124-cats-some-deceased-surrendered-in-disturbing-port-st-lucie-hoarding-case-port-st-lucie-animal-hoarding-124-cats-cat-rescue-animal-cruelty-deceased-kittens-unsanitary-conditions-port-st-lucie-police-department-st-lucie-county-animal",
           "editorial_story_id": "story_022411",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
           "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
@@ -1064,21 +1150,21 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Florida gubernatorial candidate Byron Donalds makes campaign stop in Fort Pierce - Yahoo",
-          "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNaHdPMlplU1VYWFpVRjNicDNqU0xZdUZobkhOazAyNTVRelpHOGVjUmRGc0h5a0E3SGZ2T2JnbGVDb3Y0ZVpVQ0dPV2MxNHN3bzRCVjJCM2FHLTl6VDVyNkc2S0cyR2o0bEs1S3kzOExadktmYU1nMUNkWXdsNzNfenFaRlQxcHdNWFB0WktUaFR6OFdxcXVsNWlR",
-          "editorial_story_id": "story_022381",
-          "canonical_slug": "2026-10-20-byron-donalds-brings-governor-bus-tour-to-fort-pierce-college-campus",
-          "canonical_headline": "Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus",
+          "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
+          "editorial_story_id": "story_022411",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "124 cats surrendered after animal hoarding investigation at Florida home - SNN News",
-          "source_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQcENHaGsyUXRqN19XRC1MV3M3UEtYWWdXR3FaY1p5OHh0YmFSRFd4R1I0b3Z4X29VZmxyS25MYnJNR1owN2Rod1JCc3d4OG5UdlZnY1BFOFJZd1A5UjNkQW50Sm5INmVHLXlPem9IRlpEMUt1T3R4bmxmcTB3N3huZDR2bUF1NjZDVDRWSENvSWZ3clhSU0xJWm1WalVTZ19LNHfSAacBQVVfeXFMTWVCeTlHQTEwTnd4dkNoNnZlNFpOT0tQck1UcmFSR2NWX0dUTjUwVlhhTnJERnJLc1VzQ2cwVFY0UUYxall6ZE04Z2hJYWJGYTNmeWhDMEZmR3dfSEhXaXFHLU5hZXN4bUNfbVJ2eHF0VktHZGltMFYzTFF2QU9Da21Bd3hHN2lFMVNxYjJ2eHZadWxZczdaR2dGQjV4OGgzd3pNT2t4NWs",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
+          "source_headline": "Florida gubernatorial candidate Byron Donalds makes campaign stop in Fort Pierce - Yahoo",
+          "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNaHdPMlplU1VYWFpVRjNicDNqU0xZdUZobkhOazAyNTVRelpHOGVjUmRGc0h5a0E3SGZ2T2JnbGVDb3Y0ZVpVQ0dPV2MxNHN3bzRCVjJCM2FHLTl6VDVyNkc2S0cyR2o0bEs1S3kzOExadktmYU1nMUNkWXdsNzNfenFaRlQxcHdNWFB0WktUaFR6OFdxcXVsNWlR",
+          "editorial_story_id": "story_022381",
+          "canonical_slug": "2026-10-20-byron-donalds-brings-governor-bus-tour-to-fort-pierce-college-campus",
+          "canonical_headline": "Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1104,12 +1190,22 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "More than 100 cats rescued from hoarding situation in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-cats-kittens-hoarding-rescued/74184860",
+          "source_headline": "St. Lucie County firefighters respond to 2 structure fires, rescue cat - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-district-respond-2-structure-fires-cat-rescued-215-calls-17th-street-fort-pierce-aragon-lane-port-st-lucie-florida-news",
           "editorial_story_id": "story_022411",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
           "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County firefighters respond to 2 structure fires, rescue cat - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxQYWMyOHpxQldxSFBucnlaOGRCaThuakV2YllKSFo2bnJUX2FRMm5NamE4N0RCeERmbmdmdEtkZ2tOQjRSUmpYdzFvbFgxTGtnaUlaWHFONlloSzBVQkNTWTdpZVg2bE52UWx2QkRZa2NJVXNIdU82VnppRUhXOUJpcTVLUG45aEhUUkZkalEzR0lGdWg3ajJ4TExfaEdSRGt2cXRGeEJZYXUyX0gxbjVFejYzc3JMMWotcV83Unh3bHJRTzBDVDVjS3lZdGQ2eFk3RURFYjF5WUtzN3FIQjBRT3c1ZlV1Ukpyd3lTanl5SGRuN284LTZHMWMtdEREV0VNaGtpSnhhQQ",
+          "editorial_story_id": "story_022385",
+          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1124,8 +1220,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "More than 100 cats removed from alleged 'hoarding' case in Florida - Miramar News",
-          "source_url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBGRUV3TkFyNFBDb1kxTG9abThvMEtaV2FUdUlnTzhfTjhMX3dwT2Ewd0Y4VldMSHJrMVRpekFwcklFWjl1WVZUWG4xMVNXZWxadlpmVkV5QWhSWEV6SFlLSndUeUlBRWM",
+          "source_headline": "124 cats surrendered after animal hoarding investigation at Florida home - WFLA",
+          "source_url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNaG9xRTRFenYwMHRqSnZ6STlzX1pYUHRZajZsTVY4X2MxUW9WRHlzTm9QN0hyRHY2QU5ZMk1Gb0tNZE9lT0Jtak9jVzE0WGY1b0twa1dpU3VteGwzYlJjeE5fdFI1YktFSVdUZU9FX0J1Ymdua0xOMEMwM0VXN3dkNV9RSEhwcm1tY3pOeUVWQVE4LUNzUXVRQ1EtY1NrU3M1RDBtZHJ3Wm9VZ295cHBUWNIBsAFBVV95cUxNaG9xRTRFenYwMHRqSnZ6STlzX1pYUHRZajZsTVY4X2MxUW9WRHlzTm9QN0hyRHY2QU5ZMk1Gb0tNZE9lT0Jtak9jVzE0WGY1b0twa1dpU3VteGwzYlJjeE5fdFI1YktFSVdUZU9FX0J1Ymdua0xOMEMwM0VXN3dkNV9RSEhwcm1tY3pOeUVWQVE4LUNzUXVRQ1EtY1NrU3M1RDBtZHJ3Wm9VZ295cHBUWA",
           "editorial_story_id": "story_022411",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
           "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
@@ -1144,16 +1240,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "More than 100 cats removed from alleged 'hoarding' case in Florida - Pembroke Pines News",
-          "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFB3VTBvcUYtTnJtTUkySDgxMDVOOWNUUEZEUHdDemkwQUdaU3dHVllBek5PaUlQQWJfTGUwOWJMQ0pHMU9aV2dQSy1EQkdRWHR6cWZyaFJ4M3hFTGZqWjctWVhpOTFRVTQ1WUhnQ19hOA",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Vehicle fire closes all southbound lanes on Florida’s Turnpike in St. Lucie County - cw34.com",
           "source_url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxQVG92WlpSRHZ5Q28xREdSbVE5azd1VmNWdGVtdlBCc2dhMG9LcFZvalowMUFMOGI4aXBEbzdJOWxQTVp0NkpNTFdwRUtVNEFfek1uTDI3UFV1NGIyQndoTFQ0OW9UY1FZVndkMlFtUzU3V3pkdnZhek1EQWRqaXpSMnp4amlnOEpPYWdkWDNwTXhzVy1ycXpXMjdvWEFsRjktVm9aQTRYVnhib3N4dDkxLUlzYl9MWnpDdWNhM1lpQzR1N043NGdocHdiVkJnNWUzRm1ETzRZSkRITnI5LUxfNTE0cWdpOGQ3WHJXQTgxemJlcmc",
           "editorial_story_id": "story_021480",
@@ -1164,22 +1250,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Truck fire shuts down Florida's Turnpike South in St. Lucie County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/20/truck-fire-shuts-down-floridas-turnpike-south-st-lucie-county?outputType=amp",
-          "editorial_story_id": "story_020868",
-          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-          "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Fort Pierce flasher? String of indecent exposure reports on bridge leads to arrest - WPEC",
-          "source_url": "https://cbs12.com/news/crime/string-of-indecent-exposure-reports-on-fort-pierce-bridge-leads-to-arrest-fort-pierce-police-department-fppd-arrest-criminal-investigation-indecent-exposure-reports-suspected-flasher-women-walking-alone-bridge-incidents-treasure-coast-crime-st",
+          "source_url": "https://cbs12.com/news/local/string-of-indecent-exposure-reports-on-fort-pierce-bridge-leads-to-arrest-fort-pierce-police-department-fppd-arrest-criminal-investigation-indecent-exposure-reports-suspected-flasher-women-walking-alone-bridge-incidents-treasure-coast-crime-st",
           "editorial_story_id": "story_022129",
           "canonical_slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
           "canonical_headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1211,25 +1287,70 @@
           "canonical_headline": "St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County fall plant sale, workshops set for Saturday - cw34.com",
-          "source_url": "https://cw34.com/news/local/st-lucie-county-fall-plant-sale-workshops-set-for-saturday-plant-sale-florida-friendly-plants-native-species-gardening-advice-ufifas-extension-st-lucie-county-fall-plant-sale-fort-pierce-picos-road-quart-size-plants-one-gallon-plants-three?teaserSource=trending",
-          "editorial_story_id": "story_021080",
-          "canonical_slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
-          "canonical_headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 7,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "More than 100 cats rescued from hoarding situation in Port St. Lucie - WPBF",
+          "source_url": "https://www.wpbf.com/article/port-st-lucie-cats-kittens-hoarding-rescued/74184860",
+          "publisher": "www.wpbf.com",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:st-lucie-county",
+            "story:story_022411",
+            "source:https://www.wpbf.com/article/port-st-lucie-cats-kittens-hoarding-rescued/74184860"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:st-lucie-county,story:story_022411,source:https://www.wpbf.com/article/port-st-lucie-cats-kittens-hoarding-rescued/74184860",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 4,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Florida gubernatorial candidate Byron Donalds makes campaign stop in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-byron-donalds-campaign/74195883",
+          "canonical_slug": "2026-10-20-byron-donalds-brings-governor-bus-tour-to-fort-pierce-college-campus",
+          "canonical_headline": "Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Byron Donalds",
+            "Fort Pierce, Indian River State College Eastman Workforce Center",
+            "Bryan Avila",
+            "Brian Mast",
+            "same source_url",
+            "statewide bus tour stop"
+          ],
+          "novel_facts": [],
+          "reason": "Identical source URL and same campaign stop event (Donalds bus tour stop in Fort Pierce with Avila, Mast, Grall). The incoming article is the same WPBF story with minor rewording and no new material facts.",
+          "validation_errors": []
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "124 cats, some deceased, surrendered in disturbing Port St. Lucie hoarding case - WPEC",
@@ -1247,12 +1368,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Florida gubernatorial candidate Byron Donalds makes campaign stop in Fort Pierce - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-byron-donalds-campaign/74195883",
-          "canonical_slug": "2026-10-20-byron-donalds-brings-governor-bus-tour-to-fort-pierce-college-campus",
-          "canonical_headline": "Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus",
+          "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1277,40 +1398,10 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/more-than-120-cats-kittens-found-in-port-st-lucie-home-in-alleged-hoarding-situation",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Florida gubernatorial candidate Byron Donalds makes campaign stop in Fort Pierce - Yahoo",
           "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNaHdPMlplU1VYWFpVRjNicDNqU0xZdUZobkhOazAyNTVRelpHOGVjUmRGc0h5a0E3SGZ2T2JnbGVDb3Y0ZVpVQ0dPV2MxNHN3bzRCVjJCM2FHLTl6VDVyNkc2S0cyR2o0bEs1S3kzOExadktmYU1nMUNkWXdsNzNfenFaRlQxcHdNWFB0WktUaFR6OFdxcXVsNWlR",
           "canonical_slug": "2026-10-20-byron-donalds-brings-governor-bus-tour-to-fort-pierce-college-campus",
           "canonical_headline": "Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "124 cats surrendered after animal hoarding investigation at Florida home - SNN News",
-          "source_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQcENHaGsyUXRqN19XRC1MV3M3UEtYWWdXR3FaY1p5OHh0YmFSRFd4R1I0b3Z4X29VZmxyS25MYnJNR1owN2Rod1JCc3d4OG5UdlZnY1BFOFJZd1A5UjNkQW50Sm5INmVHLXlPem9IRlpEMUt1T3R4bmxmcTB3N3huZDR2bUF1NjZDVDRWSENvSWZ3clhSU0xJWm1WalVTZ19LNHfSAacBQVVfeXFMTWVCeTlHQTEwTnd4dkNoNnZlNFpOT0tQck1UcmFSR2NWX0dUTjUwVlhhTnJERnJLc1VzQ2cwVFY0UUYxall6ZE04Z2hJYWJGYTNmeWhDMEZmR3dfSEhXaXFHLU5hZXN4bUNfbVJ2eHF0VktHZGltMFYzTFF2QU9Da21Bd3hHN2lFMVNxYjJ2eHZadWxZczdaR2dGQjV4OGgzd3pNT2t4NWs",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "insufficient_source_depth",
@@ -1365,13 +1456,28 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "More than 100 cats rescued from hoarding situation in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-cats-kittens-hoarding-rescued/74184860",
+          "source_headline": "St. Lucie County firefighters respond to 2 structure fires, rescue cat - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-district-respond-2-structure-fires-cat-rescued-215-calls-17th-street-fort-pierce-aragon-lane-port-st-lucie-florida-news",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
           "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County firefighters respond to 2 structure fires, rescue cat - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxQYWMyOHpxQldxSFBucnlaOGRCaThuakV2YllKSFo2bnJUX2FRMm5NamE4N0RCeERmbmdmdEtkZ2tOQjRSUmpYdzFvbFgxTGtnaUlaWHFONlloSzBVQkNTWTdpZVg2bE52UWx2QkRZa2NJVXNIdU82VnppRUhXOUJpcTVLUG45aEhUUkZkalEzR0lGdWg3ajJ4TExfaEdSRGt2cXRGeEJZYXUyX0gxbjVFejYzc3JMMWotcV83Unh3bHJRTzBDVDVjS3lZdGQ2eFk3RURFYjF5WUtzN3FIQjBRT3c1ZlV1Ukpyd3lTanl5SGRuN284LTZHMWMtdEREV0VNaGtpSnhhQQ",
+          "canonical_slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "canonical_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1397,9 +1503,10 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Truck fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County on 2026-10-20",
-            "Separate crash in same area causing lane closures",
-            "All lanes reopened after incidents"
+            "truck fire on Florida's Turnpike southbound near mile marker 161",
+            "separate crash in same area",
+            "occurred Tuesday morning, October 20, 2026",
+            "distinct from September 7 Fort Pierce hit-and-run scooter fatality"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1408,8 +1515,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "More than 100 cats removed from alleged 'hoarding' case in Florida - Miramar News",
-          "source_url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBGRUV3TkFyNFBDb1kxTG9abThvMEtaV2FUdUlnTzhfTjhMX3dwT2Ewd0Y4VldMSHJrMVRpekFwcklFWjl1WVZUWG4xMVNXZWxadlpmVkV5QWhSWEV6SFlLSndUeUlBRWM",
+          "source_headline": "124 cats surrendered after animal hoarding investigation at Florida home - WFLA",
+          "source_url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNaG9xRTRFenYwMHRqSnZ6STlzX1pYUHRZajZsTVY4X2MxUW9WRHlzTm9QN0hyRHY2QU5ZMk1Gb0tNZE9lT0Jtak9jVzE0WGY1b0twa1dpU3VteGwzYlJjeE5fdFI1YktFSVdUZU9FX0J1Ymdua0xOMEMwM0VXN3dkNV9RSEhwcm1tY3pOeUVWQVE4LUNzUXVRQ1EtY1NrU3M1RDBtZHJ3Wm9VZ295cHBUWNIBsAFBVV95cUxNaG9xRTRFenYwMHRqSnZ6STlzX1pYUHRZajZsTVY4X2MxUW9WRHlzTm9QN0hyRHY2QU5ZMk1Gb0tNZE9lT0Jtak9jVzE0WGY1b0twa1dpU3VteGwzYlJjeE5fdFI1YktFSVdUZU9FX0J1Ymdua0xOMEMwM0VXN3dkNV9RSEhwcm1tY3pOeUVWQVE4LUNzUXVRQ1EtY1NrU3M1RDBtZHJ3Wm9VZ295cHBUWA",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
           "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
           "canonical_is_custom": false,
@@ -1441,27 +1548,12 @@
           "shared_anchors": [],
           "novel_facts": [
             "Truck fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
-            "Fire reported around 7:49 a.m. with units T19, E01, and Rescue 19 responding"
+            "Fire reported around 7:49 a.m., units T19, E01, Rescue 19 responded"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "More than 100 cats removed from alleged 'hoarding' case in Florida - Pembroke Pines News",
-          "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFB3VTBvcUYtTnJtTUkySDgxMDVOOWNUUEZEUHdDemkwQUdaU3dHVllBek5PaUlQQWJfTGUwOWJMQ0pHMU9aV2dQSy1EQkdRWHR6cWZyaFJ4M3hFTGZqWjctWVhpOTFRVTQ1WUhnQ19hOA",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Port St. Lucie Hoarding Case: 124 Cats Removed, Two Residents Cited",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -1480,41 +1572,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Truck fire shuts down Florida's Turnpike South in St. Lucie County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/20/truck-fire-shuts-down-floridas-turnpike-south-st-lucie-county?outputType=amp",
-          "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-          "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.95,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Truck fire on Florida's Turnpike southbound near mile marker 161",
-            "Separate crash in same area causing full closure",
-            "Occurred Tuesday morning, October 20, 2026",
-            "Located in St. Lucie County, distinct from Fort Pierce/Okeechobee Road hit-and-run"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Fort Pierce flasher? String of indecent exposure reports on bridge leads to arrest - WPEC",
-          "source_url": "https://cbs12.com/news/crime/string-of-indecent-exposure-reports-on-fort-pierce-bridge-leads-to-arrest-fort-pierce-police-department-fppd-arrest-criminal-investigation-indecent-exposure-reports-suspected-flasher-women-walking-alone-bridge-incidents-treasure-coast-crime-st",
+          "source_url": "https://cbs12.com/news/local/string-of-indecent-exposure-reports-on-fort-pierce-bridge-leads-to-arrest-fort-pierce-police-department-fppd-arrest-criminal-investigation-indecent-exposure-reports-suspected-flasher-women-walking-alone-bridge-incidents-treasure-coast-crime-st",
           "canonical_slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
           "canonical_headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -1526,17 +1589,16 @@
           "confidence": 0.97,
           "shared_anchors": [
             "Kyle Kennedy, 27",
-            "Seaway Bridge in Fort Pierce",
-            "Fort Pierce Police Department",
-            "arrested Friday",
+            "Seaway Bridge, Fort Pierce",
+            "indecent exposure arrest Friday",
+            "Fort Pierce Police Department investigation",
             "two victims identified him in photo lineups"
           ],
           "novel_facts": [
-            "quote from Leidi Cruz, a local resident",
-            "specific charges: two counts indecent exposure, one violation of probation",
-            "tip line contact info"
+            "resident quote from Leidi Cruz",
+            "specific charge count: two counts indecent exposure, one violation of probation"
           ],
-          "reason": "This is the same arrest and investigation already covered in the canonical article, with identical suspect, location, agency, and arrest details. The new details (resident quote, exact charges, tip line) are routine color and procedural detail, not material updates that change what readers need to know.",
+          "reason": "Same arrest of Kyle Kennedy for the same Seaway Bridge indecent exposure incidents reported the prior day; identical source URL and facts, with only minor added color (quote, charge detail) that does not materially change what readers need to know.",
           "validation_errors": []
         },
         {
@@ -1558,9 +1620,9 @@
           "confidence": 0.95,
           "shared_anchors": [],
           "novel_facts": [
-            "Truck fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
+            "Truck fire on Florida's Turnpike southbound near mile marker 161, St. Lucie County",
             "Separate crash in same area causing additional lane closure",
-            "Event occurred Tuesday morning, October 20, 2026"
+            "Occurred morning of Oct 20, 2026"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1596,48 +1658,19 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County fall plant sale, workshops set for Saturday - cw34.com",
-          "source_url": "https://cw34.com/news/local/st-lucie-county-fall-plant-sale-workshops-set-for-saturday-plant-sale-florida-friendly-plants-native-species-gardening-advice-ufifas-extension-st-lucie-county-fall-plant-sale-fort-pierce-picos-road-quart-size-plants-one-gallon-plants-three?teaserSource=trending",
-          "canonical_slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
-          "canonical_headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
-          "shared_anchors": [
-            "UF/IFAS Extension St. Lucie County Fall Plant Sale",
-            "Saturday, Oct. 17",
-            "8400 Picos Road, Fort Pierce",
-            "same plant pricing ($4/$7/$12)"
-          ],
-          "novel_facts": [],
-          "reason": "This is the same plant sale event at the same location, date, and pricing as the existing canonical article, republished with minor wording changes and extra background links. No material update is present.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
-      "generated_card_count": 0,
-      "elapsed_seconds": 42.257
+      "elapsed_seconds": 56.873
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 19,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 7,
       "selected_source_count": 1,
       "cache_hit": false,
@@ -1647,11 +1680,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.965,
+          "elapsed_seconds": 8.416,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 8.965,
+      "model_elapsed_seconds": 8.416,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1665,8 +1698,28 @@
       "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Man convicted of killing Indian River County deputy in 1986 executed tonight - WPEC",
+          "source_url": "https://cbs12.com/news/local/william-reaves-convicted-of-killing-florida-indian-river-county-deputy-richard-raczkoski-1986-vero-beach-set-to-be-executed-tonight-death-sentence-execution-florida-state-prison",
+          "editorial_story_id": "story_020070",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "editorial_story_id": "story_022418",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
@@ -1693,7 +1746,7 @@
           "source_url": "https://www.wflx.com/2026/10/20/william-reaves-man-convicted-killing-indian-river-county-deputy-1986-scheduled-be-executed-tuesday?outputType=amp",
           "editorial_story_id": "story_020070",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1703,17 +1756,7 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
           "editorial_story_id": "story_020070",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "William Reaves executed Tuesday after being convicted of killing Indian River County deputy in 1986",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
-          "editorial_story_id": "story_020070",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1725,6 +1768,16 @@
           "canonical_slug": "2026-10-19-vero-beach-council-gives-three-corners-developers-fourth-extension-sets-dec-8-de",
           "canonical_headline": "Vero Beach Council Gives Three Corners Developers Fourth Extension, Sets Dec. 8 Deadline",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Man convicted of killing Indian River County deputy set for execution Tuesday - WPEC",
+          "source_url": "https://cbs12.com/news/local/william-reaves-77-killing-indian-river-county-deputy-die-by-lethal-injection-florida-state-prison-governor-ron-desantis-florida-supreme-court-florida-news",
+          "editorial_story_id": "story_020070",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1745,6 +1798,36 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Man convicted of killing Indian River County deputy in 1986 executed tonight - WPEC",
+          "source_url": "https://cbs12.com/news/local/william-reaves-convicted-of-killing-florida-indian-river-county-deputy-richard-raczkoski-1986-vero-beach-set-to-be-executed-tonight-death-sentence-execution-florida-state-prison",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Year-long bridge closure in southern Martin County forces drivers onto detour, adds minutes to commutes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/year-long-bridge-closure-in-southern-martin-county-forces-drivers-onto-detour-adds-minutes-to-commutes",
+          "canonical_slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "canonical_headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "More than 120 cats, kittens found in Port St. Lucie home in alleged hoarding situation",
@@ -1780,7 +1863,7 @@
           "source_headline": "William Reaves: Man convicted of killing Indian River County deputy in 1986 scheduled to be executed Tuesday - WFLX",
           "source_url": "https://www.wflx.com/2026/10/20/william-reaves-man-convicted-killing-indian-river-county-deputy-1986-scheduled-be-executed-tuesday?outputType=amp",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1795,22 +1878,7 @@
           "source_headline": "William Reaves executed Tuesday after being convicted of killing Indian River County deputy in 1986 - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
           "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "William Reaves executed Tuesday after being convicted of killing Indian River County deputy in 1986",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/william-reaves-man-convicted-of-killing-indian-river-county-deputy-in-1986-scheduled-to-be-executed-tuesday",
-          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
-          "canonical_headline": "William Reaves Set for Tuesday Execution in 1986 Killing of Indian River Deputy",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -1837,6 +1905,21 @@
         },
         {
           "category_key": "indian_river",
+          "source_headline": "Man convicted of killing Indian River County deputy set for execution Tuesday - WPEC",
+          "source_url": "https://cbs12.com/news/local/william-reaves-77-killing-indian-river-county-deputy-die-by-lethal-injection-florida-state-prison-governor-ron-desantis-florida-supreme-court-florida-news",
+          "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "canonical_headline": "Indian River County Deputy's Killer Executed After Supreme Court Rejects Final Appeal",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "Man who claimed woman was possessed by the devil sentenced for Vero Beach hotel attack - WPEC",
           "source_url": "https://cbs12.com/news/local/man-who-claimed-woman-was-possessed-by-the-devil-sentenced-for-vero-beach-hotel-attack-exorcism-holy-water-possessed-by-the-devil-hotel-room-attack-econo-lodge-false-imprisonment-battery-nine-months-in-jail-county-jail-sentence-no-contest-plea",
           "canonical_slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
@@ -1854,9 +1937,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "William Reaves Executed for 1986 Killing of Indian River County Deputy",
+      "live_hero_headline": "Indian River Sheriff Witnesses Execution of Deputy's 1986 Killer",
       "generated_card_count": 0,
-      "elapsed_seconds": 24.265
+      "elapsed_seconds": 32.247
     }
   ]
 }
