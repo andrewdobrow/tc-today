@@ -19621,13 +19621,20 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     # published_raw (which for feed articles is the original source's timestamp).
     _pub_raw = hero.get("first_published") or hero.get("date", "") or pub_date
     _pub_display = _fmt_full(_pub_raw) if _pub_raw else pub_date
-    _updated_raw = ""
-    if hero.get("meaningful_update_validated"):
-        _updated_raw = str(
-            hero.get("last_meaningful_update_at")
-            or hero.get("updated_at")
-            or ""
-        ).strip()
+    # An article cannot be updated before it exists on TCT. Use the same
+    # validated material-update authority as Latest News, rather than falling
+    # back to a generic (possibly inherited) updated_at field. Compare the
+    # actual publish receipt as well because pub_date may be supplied by the
+    # caller when the archive row has no timestamp.
+    _validated_update_dt = _latest_news_validated_update_datetime(hero)
+    _published_dt = _parse_any_datetime(_pub_raw)
+    if (
+        _validated_update_dt is not None
+        and _published_dt is not None
+        and _validated_update_dt <= _published_dt.astimezone(timezone.utc)
+    ):
+        _validated_update_dt = None
+    _updated_raw = _validated_update_dt.isoformat() if _validated_update_dt is not None else ""
     _updated_display = _fmt_full(_updated_raw) if _updated_raw else ""
     _updated_html = (
         f'<span class="article-updated">Updated {_updated_display}</span>'
@@ -35427,6 +35434,67 @@ def _repair_article_shells(output_root):
             "wrapped": wrapped, "header_normalized": header_normalized,
             "sidebar_css_normalized": sidebar_css_normalized, "unrepairable": unrepairable}
 
+def _repair_prepublication_article_timestamps(output_root, limit=250):
+    """Correct impossible update-before-publication dates on retained article pages.
+
+    Newly generated pages use validated chronology in render_article_page(). Existing
+    HTML is intentionally retained between runs, so normalize recent direct pages
+    without rewriting their prose, canonical identity, or legitimate later updates.
+    """
+    from zoneinfo import ZoneInfo
+
+    publication_pattern = re.compile(
+        r'<span class="article-published">Published ([^<]+)</span>', re.I
+    )
+    update_pattern = re.compile(
+        r'<span class="article-updated">Updated ([^<]+)</span>', re.I
+    )
+    schema_pattern = re.compile(
+        r'(<script\s+type=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)',
+        re.I | re.S,
+    )
+    eastern = ZoneInfo("America/New_York")
+
+    def _byline_dt(value):
+        try:
+            return datetime.strptime(str(value).strip(), "%B %d, %Y at %I:%M %p ET").replace(tzinfo=eastern)
+        except (ValueError, TypeError):
+            return None
+
+    changed = 0
+    paths = _recent_direct_article_paths(output_root, limit=limit)
+    for path in paths:
+        original = path.read_text(encoding="utf-8", errors="ignore")
+        html = original
+        pub_match = publication_pattern.search(html)
+        upd_match = update_pattern.search(html)
+        if pub_match and upd_match:
+            pub_dt = _byline_dt(pub_match.group(1))
+            upd_dt = _byline_dt(upd_match.group(1))
+            if pub_dt is not None and upd_dt is not None and upd_dt <= pub_dt:
+                html = html[:upd_match.start()] + html[upd_match.end():]
+
+        def _repair_schema(match):
+            try:
+                payload = json.loads(match.group(2))
+            except (ValueError, TypeError):
+                return match.group(0)
+            if not isinstance(payload, dict) or payload.get("@type") not in ("NewsArticle", "Article"):
+                return match.group(0)
+            published = _parse_any_datetime(payload.get("datePublished"))
+            modified = _parse_any_datetime(payload.get("dateModified"))
+            if published is None or modified is None or modified >= published:
+                return match.group(0)
+            payload["dateModified"] = payload["datePublished"]
+            return match.group(1) + json.dumps(payload, ensure_ascii=False) + match.group(3)
+
+        html = schema_pattern.sub(_repair_schema, html)
+        if html != original:
+            path.write_text(html, encoding="utf-8")
+            changed += 1
+    return {"checked": len(paths), "repaired": changed}
+
+
 def _validate_presentation_contract(output_root):
     """Validate current presentation without blocking an urgent deploy on old archives.
 
@@ -43199,6 +43267,9 @@ def main():
     # presentation contract is not present. This prevents another apparently random
     # mix of old and new article shells from reaching production.
     _repair_article_shells(OUTPUT_DIR)
+    _timestamp_repair = _repair_prepublication_article_timestamps(OUTPUT_DIR)
+    if _timestamp_repair["repaired"]:
+        print(f"  Repaired {_timestamp_repair['repaired']} impossible article update timestamp(s)")
     _article_prose_policy = _normalize_article_prose_policy_sitewide(OUTPUT_DIR)
     print(
         "  Article prose policy contract PASSED: "
