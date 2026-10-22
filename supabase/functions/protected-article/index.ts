@@ -1,14 +1,15 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import { ACTIVE_STATUSES, STRIPE_LIVEMODE } from '../_shared/membership.ts'
 
-const METER_POLICY = 'one_free_article_per_month'
+const METER_POLICY = 'three_free_articles_per_month'
+const FREE_ARTICLE_LIMIT = 3
 const METER_TIME_ZONE = 'America/New_York'
 const FULL_BODY_MARKER = '<!--tct-full-article-v2-->'
 
 type MeterPayload = {
-  v: 1
+  v: 2
   period: string
-  slug: string
+  slugs: string[]
   issued_at: number
 }
 
@@ -79,11 +80,18 @@ async function readMeterToken(raw: unknown): Promise<MeterPayload | null> {
   const expectedSignature = await meterSignature(payloadSegment)
   if (suppliedSignature !== expectedSignature) return null
   try {
-    const parsed = JSON.parse(base64UrlToText(payloadSegment)) as Partial<MeterPayload>
-    if (parsed.v !== 1 || !/^\d{4}-\d{2}$/.test(String(parsed.period ?? ''))) return null
-    if (!/^[a-z0-9][a-z0-9-]{2,180}$/.test(String(parsed.slug ?? ''))) return null
-    if (!Number.isFinite(Number(parsed.issued_at))) return null
-    return parsed as MeterPayload
+    const parsed = JSON.parse(base64UrlToText(payloadSegment)) as {
+      v?: number; period?: unknown; slug?: unknown; slugs?: unknown; issued_at?: unknown
+    }
+    if (!/^\d{4}-\d{2}$/.test(String(parsed.period ?? ''))) return null
+    if (!Number.isFinite(parsed.issued_at) || Number(parsed.issued_at) <= 0) return null
+    // Respect signed v1 grants already held by readers before the policy change.
+    // Do not treat their first article as a new allowance.
+    const slugs: unknown = parsed.v === 1 ? [parsed.slug] : parsed.v === 2 ? parsed.slugs : null
+    if (!Array.isArray(slugs) || slugs.length < 1 || slugs.length > FREE_ARTICLE_LIMIT) return null
+    if (!slugs.every((value) => typeof value === 'string' && /^[a-z0-9][a-z0-9-]{2,180}$/.test(value))) return null
+    if (new Set(slugs).size !== slugs.length) return null
+    return { v: 2, period: String(parsed.period), slugs, issued_at: Number(parsed.issued_at) }
   } catch {
     return null
   }
@@ -122,7 +130,7 @@ export default {
     if (body.action === 'meter-capability') {
       return Response.json({
         meter_policy: METER_POLICY,
-        free_articles_per_period: 1,
+        free_articles_per_period: FREE_ARTICLE_LIMIT,
         period: currentMeterPeriod(),
         period_time_zone: METER_TIME_ZONE,
       })
@@ -152,20 +160,24 @@ export default {
 
     const period = currentMeterPeriod()
     const existingMeter = await readMeterToken(body.meter_token)
-    if (existingMeter?.period === period && existingMeter.slug !== slug) {
+    const usedSlugs = existingMeter?.period === period ? [...existingMeter.slugs] : []
+    if (!usedSlugs.includes(slug) && usedSlugs.length >= FREE_ARTICLE_LIMIT) {
       return Response.json({
-        error: 'Your free article for this month has already been used.',
+        error: 'You have read all 3 free articles for this month.',
         code: 'FREE_ARTICLE_USED',
         meter_policy: METER_POLICY,
         period,
-        used_slug: existingMeter.slug,
+        used_slugs: usedSlugs,
+        remaining_free_articles: 0,
       }, { status: 403 })
     }
 
-    let meterToken = String(body.meter_token ?? '').trim()
-    if (!existingMeter || existingMeter.period !== period || existingMeter.slug !== slug) {
-      meterToken = await signMeterToken({ v: 1, period, slug, issued_at: Date.now() })
-    }
+    // Reopening a previously granted article never consumes an additional read.
+    // Each new distinct slug is atomically included in the newly signed token.
+    const nextSlugs = usedSlugs.includes(slug) ? usedSlugs : [...usedSlugs, slug]
+    const meterToken = usedSlugs.includes(slug) && existingMeter
+      ? String(body.meter_token).trim()
+      : await signMeterToken({ v: 2, period, slugs: nextSlugs, issued_at: Date.now() })
 
     return Response.json({
       slug: article.slug,
@@ -173,9 +185,11 @@ export default {
       updated_at: article.updated_at,
       access: 'monthly_free',
       meter_policy: METER_POLICY,
-      free_articles_per_period: 1,
+      free_articles_per_period: FREE_ARTICLE_LIMIT,
       period,
       meter_token: meterToken,
+      used_slugs: nextSlugs,
+      remaining_free_articles: FREE_ARTICLE_LIMIT - nextSlugs.length,
       full_body_payload: String(article.protected_body || '').startsWith(FULL_BODY_MARKER),
     })
   }),

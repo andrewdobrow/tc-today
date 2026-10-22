@@ -39,6 +39,7 @@ function currentMeterPeriod(){
     return /^\d{4}$/.test(year) && /^\d{2}$/.test(month) ? `${year}-${month}` : ''
   } catch { return '' }
 }
+const FREE_ARTICLE_LIMIT = 3
 function readMeterState(){
   try {
     const raw = localStorage.getItem(METER_STATE_KEY)
@@ -46,12 +47,19 @@ function readMeterState(){
     const state = JSON.parse(raw)
     if (!state || typeof state !== 'object') return null
     if (!/^\d{4}-\d{2}$/.test(String(state.period || ''))) return null
-    if (!/^[a-z0-9][a-z0-9-]{2,180}$/.test(String(state.slug || ''))) return null
-    if (state.pending && !state.meter_token && Date.now() - Number(state.started_at || 0) > METER_PENDING_TTL_MS) {
-      localStorage.removeItem(METER_STATE_KEY)
-      return null
+    // Legacy one-article state had `slug` but no `slugs` collection.
+    const slugs = Array.isArray(state.slugs) ? state.slugs : state.slug ? [state.slug] : []
+    if (slugs.length > FREE_ARTICLE_LIMIT || new Set(slugs).size !== slugs.length ||
+        !slugs.every(slug => /^[a-z0-9][a-z0-9-]{2,180}$/.test(String(slug)))) return null
+    if (state.pending && Date.now() - Number(state.started_at || 0) > METER_PENDING_TTL_MS) {
+      if (!state.meter_token) {
+        localStorage.removeItem(METER_STATE_KEY)
+        return null
+      }
+      // Release an unfinished reservation without forgetting earlier grants.
+      state.pending = false
     }
-    return state
+    return { ...state, slugs }
   } catch { return null }
 }
 function writeMeterState(state){
@@ -59,18 +67,27 @@ function writeMeterState(state){
 }
 function clearPendingMeterFor(slug){
   const state = readMeterState()
-  if (!state || state.slug !== slug || !state.pending || state.meter_token) return
-  try { localStorage.removeItem(METER_STATE_KEY) } catch {}
+  if (!state || state.slug !== slug || !state.pending) return
+  if (state.meter_token) writeMeterState({ ...state, pending:false })
+  else { try { localStorage.removeItem(METER_STATE_KEY) } catch {} }
 }
 function reserveMeterArticle(slug){
   const period = currentMeterPeriod()
   if (!period) return { allowed:false, state:null, reason:'period_unavailable' }
   const state = readMeterState()
   if (state?.period === period) {
-    if (state.slug !== slug) return { allowed:false, state, reason:'already_used' }
-    return { allowed:true, state, period, meterToken:String(state.meter_token || '') }
+    if (state.pending && state.slug !== slug) {
+      return { allowed:false, state, period, reason:'pending' }
+    }
+    if (!state.slugs.includes(slug) && state.slugs.length >= FREE_ARTICLE_LIMIT) {
+      return { allowed:false, state, period, reason:'already_used' }
+    }
+    const pending = state.slugs.includes(slug) ? state :
+      { ...state, slug, pending:true, started_at:Date.now() }
+    if (pending !== state) writeMeterState(pending)
+    return { allowed:true, state:pending, period, meterToken:String(state.meter_token || '') }
   }
-  const pending = { period, slug, meter_token:'', pending:true, started_at:Date.now() }
+  const pending = { period, slug, slugs:[], meter_token:'', pending:true, started_at:Date.now() }
   writeMeterState(pending)
   return { allowed:true, state:pending, period, meterToken:'' }
 }
@@ -400,7 +417,7 @@ function setMeterPaywallState(paywall, period, afterRead=false){
   const status = qs('[data-meter-status]', paywall)
   const headline = qs('[data-paywall-headline]', paywall)
   status?.classList.remove('hidden')
-  if (status) status.textContent = "You've read your free article this month."
+  if (status) status.textContent = "You've read all 3 free articles this month."
   if (headline) headline.innerHTML = 'Keep reading for <span class="tct-paywall-headline-accent">$1</span>'
   paywall.classList.toggle('tct-paywall-metered-after-read', afterRead)
   syncPaywallFullBleed(paywall)
@@ -575,9 +592,13 @@ async function unlockArticle(statusPromise=null){
   }
 
   if (!error && data?.protected_body && data?.access === 'monthly_free') {
+    const previousSlugs = reservation.state?.slugs || []
+    const usedSlugs = Array.isArray(data.used_slugs) ? data.used_slugs :
+      [...new Set([...previousSlugs, slug])]
     writeMeterState({
       period: String(data.period || reservation.period || currentMeterPeriod()),
       slug,
+      slugs: usedSlugs,
       meter_token: String(data.meter_token || ''),
       pending: false,
       started_at: Date.now(),
@@ -589,9 +610,15 @@ async function unlockArticle(statusPromise=null){
     setMessage(message, '')
     if (rendered) {
       removePostArticleNewsletter()
+      // First two full reads have no hard sales interruption. At the third,
+      // position the conversion treatment at the end of the complete article.
       placePostReadMeterAfterStory(paywall)
-      const meterPeriod = String(data.period || reservation.period || currentMeterPeriod())
-      setMeterPaywallState(paywall, meterPeriod, true)
+      if (usedSlugs.length >= FREE_ARTICLE_LIMIT) {
+        const meterPeriod = String(data.period || reservation.period || currentMeterPeriod())
+        setMeterPaywallState(paywall, meterPeriod, true)
+      } else {
+        paywall?.remove()
+      }
     }
     return { access:'monthly_free', rendered }
   }

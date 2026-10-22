@@ -22,7 +22,7 @@ def test_tccn_partner_page_is_true_marketing_landing_page():
     assert 'Annual: $49/year' in page
     assert 'The annual plan remains $49 per year and is not included in the free-month offer.' in page
     assert 'content="noindex,follow"' in page
-    assert '/membership.js?v=1.13.9.38' in page
+    assert '/membership.js?v=1.13.9.38' in page  # Pre-build static artifact; normalization upgrades this.
 
 
 def test_normal_subscribe_page_remains_on_standard_one_dollar_offer():
@@ -70,5 +70,5 @@ def test_tccn_partner_page_survives_membership_asset_normalization():
     page = PARTNER_PAGE.read_text()
     normalized = inject_membership_assets(page, "")
     assert '/membership.css?v=1.13.9.36' in normalized
-    assert '/membership.js?v=1.13.9.38' in normalized
+    assert '/membership.js?v=1.13.9.39' in normalized
     assert '/membership.js?v=1.13.9.36' not in normalized

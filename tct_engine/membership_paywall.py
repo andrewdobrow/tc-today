@@ -38,12 +38,12 @@ PREVIEW_MAX_CHARS = 340
 PREVIEW_MIN_CHARS = 150
 PREVIEW_MIN_HIDDEN_CHARS = 90
 
-# Sponsored Packard feature is advertiser-funded public content and must never
-# enter the membership paywall/protected-content pipeline. Keep this exact-slug
-# scoped so ordinary editorial and future sponsored-content policy remain
-# unchanged unless explicitly configured.
+# Advertiser-funded Packard and Comcast custom sponsored features are public.
+# Keep access scoped to these two verified slugs so ordinary editorial and
+# any future sponsored-content policy do not change without explicit approval.
 PAYWALL_EXEMPT_SLUGS = frozenset({
     "2026-10-04-three-generations-later-packard-roofing-remains-rooted-on-the-treasure-coast",
+    "2026-10-21-new-xfinity-store-opens-in-stuart-comcast-announces-35000-grant-for-martin-county-pal",
 })
 
 
@@ -213,7 +213,7 @@ def add_paywall_schema(page_html: str) -> str:
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
 MEMBERSHIP_ASSET_VERSION = "1.13.9.36"
-MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.38"
+MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.39"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'
@@ -227,9 +227,10 @@ MEMBER_PREPAINT_SCRIPT = (
     "var y=(z.find(function(p){return p.type==='year'})||{}).value||'';var m=(z.find(function(p){return p.type==='month'})||{}).value||'';"
     "var period=y+'-'+m;var slug=(location.pathname.split('/').pop()||'').replace(/\\.html$/,'');"
     "var raw=localStorage.getItem('tct_monthly_free_article_v1');var state=raw?JSON.parse(raw):null;"
+    "var used=state&&(Array.isArray(state.slugs)?state.slugs:(state.slug?[state.slug]:[]))||[];"
     "var stalePending=state&&state.pending&&!state.meter_token&&(Date.now()-Number(state.started_at||0)>120000);"
     "if(stalePending){localStorage.removeItem('tct_monthly_free_article_v1');state=null;}"
-    "if(slug&&(!state||state.period!==period||state.slug===slug)){document.documentElement.classList.add('tct-meter-precheck');setTimeout(function(){document.documentElement.classList.remove('tct-meter-precheck')},5000);}"
+    "if(slug&&(!state||state.period!==period||used.indexOf(slug)>=0||used.length<3)){document.documentElement.classList.add('tct-meter-precheck');setTimeout(function(){document.documentElement.classList.remove('tct-meter-precheck')},5000);}"
     "}catch(_e){}})();\n"
     '</script>'
 )
