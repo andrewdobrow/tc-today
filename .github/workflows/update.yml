@@ -351,11 +351,14 @@ jobs:
           output = os.environ["GITHUB_OUTPUT"]
           if response.status_code < 300:
               payload = response.json()
-              if payload.get("meter_policy") != "one_free_article_per_month":
-                  raise SystemExit("Protected-article function responded but does not advertise the required monthly meter.")
-              print("Monthly free-article meter capability is current.")
-              with open(output, "a", encoding="utf-8") as handle:
-                  handle.write("needs_deploy=false\n")
+              if payload.get("meter_policy") == "three_free_articles_per_month" and payload.get("free_articles_per_period") == 3:
+                  print("Three-article monthly meter capability is current.")
+                  with open(output, "a", encoding="utf-8") as handle:
+                      handle.write("needs_deploy=false\n")
+              else:
+                  print("Older monthly meter detected; deploying three-article endpoint.")
+                  with open(output, "a", encoding="utf-8") as handle:
+                      handle.write("needs_deploy=true\n")
               raise SystemExit(0)
           if response.status_code in {400, 401, 404}:
               print("Legacy protected-article function detected; metered function will be deployed automatically.")
