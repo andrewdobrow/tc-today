@@ -212,8 +212,8 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.9.36"
-MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.39"
+MEMBERSHIP_ASSET_VERSION = "1.13.9.110"
+MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.111"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'

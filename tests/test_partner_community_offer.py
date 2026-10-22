@@ -69,6 +69,6 @@ def test_partner_success_and_cancel_return_to_partner_landing_page():
 def test_tccn_partner_page_survives_membership_asset_normalization():
     page = PARTNER_PAGE.read_text()
     normalized = inject_membership_assets(page, "")
-    assert '/membership.css?v=1.13.9.36' in normalized
-    assert '/membership.js?v=1.13.9.39' in normalized
-    assert '/membership.js?v=1.13.9.36' not in normalized
+    assert '/membership.css?v=1.13.9.110' in normalized
+    assert '/membership.js?v=1.13.9.111' in normalized
+    assert '/membership.js?v=1.13.9.110' not in normalized

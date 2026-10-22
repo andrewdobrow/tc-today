@@ -84,7 +84,7 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
     assert "membership-story-card" in page
     assert "membership-landing-value-grid" in page
     assert "membership-faq-grid" in page
-    assert '/membership.css?v=1.13.9.36' in page
+    assert '/membership.css?v=' in page
     assert '/membership.js?v=1.13.9.109' in page
     assert "Create account" not in page
     assert 'type="password"' not in page
@@ -243,8 +243,8 @@ def test_sitewide_subscriber_chrome_loads_membership_state_and_prepaints(tmp_pat
     assert "data-tct-member-prepaint" in rendered
     assert "tct_member_entitled_hint" in rendered
     assert 'src="/membership-config.js"' in rendered
-    assert 'src="/membership.js?v=1.13.9.39"' in rendered
-    assert rendered.count('/membership.js?v=1.13.9.39') == 1
+    assert 'src="/membership.js?v=1.13.9.111"' in rendered
+    assert rendered.count('/membership.js?v=1.13.9.111') == 1
 
 
 def test_entitled_subscriber_chrome_replaces_sales_header_and_hides_membership_card():

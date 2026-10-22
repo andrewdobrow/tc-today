@@ -40,6 +40,106 @@ function currentMeterPeriod(){
   } catch { return '' }
 }
 const FREE_ARTICLE_LIMIT = 3
+// Campaign copy is presentation only. Source cannot change the signed meter,
+// article entitlements, Stripe price, or reader identity.
+const REFERRAL_SESSION_KEY = 'tct_subscription_referral_v1'
+const REFERRAL_COPY = {
+  nextdoor: {
+    heading: 'Hey, Nextdoor neighbor!',
+    locked: 'Keep up with the stories affecting our neighborhoods. Get unlimited, ad-free Treasure Coast news with your first month for $1.',
+    read: 'Stay connected with what is happening around the Treasure Coast. Your first month of unlimited, ad-free news is $1.',
+    soft: 'Stay in the know about the stories affecting our local neighborhoods.'
+  },
+  reddit: {
+    heading: 'Found us on Reddit?',
+    locked: 'Support independent local reporting in our community. Read every TCT story, ad-free, with your first month for $1.',
+    read: 'Keep the local conversation going. Support independent Treasure Coast reporting for $1 your first month.',
+    soft: 'Keep the local conversation going beyond the thread.'
+  },
+  facebook: {
+    heading: 'Following this story from Facebook?',
+    locked: 'There is more to the story than your feed. Stay informed across Martin, St. Lucie and Indian River counties for $1 your first month.',
+    read: 'Stay connected to local news beyond your feed. Try unlimited, ad-free access for $1 your first month.',
+    soft: 'Get more local news beyond what appears in your feed.'
+  },
+  newsletter: {
+    heading: 'Thanks for reading the Morning Brief!',
+    locked: 'Go beyond the headlines with unlimited, ad-free Treasure Coast reporting. Your first month is $1.',
+    read: 'Enjoy the stories behind your Morning Brief. Start unlimited access for $1 your first month.',
+    soft: 'Go beyond the Morning Brief headlines with unlimited local reporting.'
+  }
+}
+function knownReferralSource(value){
+  const key = String(value || '').trim().toLowerCase().replace(/[^a-z]/g, '')
+  if (key === 'nextdoor') return 'nextdoor'
+  if (key === 'reddit') return 'reddit'
+  if (key === 'facebook' || key === 'fb') return 'facebook'
+  if (key === 'newsletter' || key === 'newsletterdaily' || key === 'morningbrief' || key === 'email' || key === 'kit') return 'newsletter'
+  return ''
+}
+function referralFromURL(raw){
+  try {
+    const url = new URL(raw)
+    if (!['https:', 'http:'].includes(url.protocol)) return ''
+    const host = url.hostname.toLowerCase()
+    const matches = domain => host === domain || host.endsWith(`.${domain}`)
+    if (matches('nextdoor.com')) return 'nextdoor'
+    if (matches('reddit.com') || matches('redd.it')) return 'reddit'
+    if (matches('facebook.com') || matches('fb.com') || matches('fb.me')) return 'facebook'
+    return ''
+  } catch { return '' }
+}
+function subscriptionReferralSource(){
+  let source = ''
+  try { source = knownReferralSource(new URLSearchParams(window.location.search).get('utm_source')) } catch {}
+  if (!source) source = referralFromURL(document.referrer || '')
+  if (source) {
+    try { sessionStorage.setItem(REFERRAL_SESSION_KEY, source) } catch {}
+  } else {
+    try { source = knownReferralSource(sessionStorage.getItem(REFERRAL_SESSION_KEY)) } catch {}
+  }
+  return source
+}
+function applyReferralPaywallCopy(paywall, afterRead=false){
+  if (!paywall) return
+  const source = subscriptionReferralSource()
+  const copy = REFERRAL_COPY[source]
+  if (!copy) return
+  const headline = qs('[data-paywall-headline]', paywall)
+  const subhead = qs('.tct-paywall-offer-subhead', paywall)
+  if (headline) headline.textContent = copy.heading
+  if (subhead) subhead.textContent = afterRead ? copy.read : copy.locked
+  paywall.dataset.tctReferral = source
+}
+function addSoftMeterInvitation(paywall, remaining){
+  if (!paywall?.parentElement || remaining <= 0 || remaining >= FREE_ARTICLE_LIMIT) return
+  const source = subscriptionReferralSource()
+  const note = REFERRAL_COPY[source]?.soft || 'Enjoying Treasure Coast Today? Stay informed with more independent local reporting.'
+  const invite = document.createElement('aside')
+  invite.className = 'tct-meter-soft-invitation'
+  invite.setAttribute('aria-label', 'Optional Treasure Coast Today subscription invitation')
+  invite.setAttribute('data-tct-meter-soft-invitation', '')
+  const counter = document.createElement('p')
+  counter.className = 'tct-meter-soft-count'
+  counter.textContent = `${remaining} free ${remaining === 1 ? 'article' : 'articles'} left this month`
+  const heading = document.createElement('h3')
+  heading.textContent = source === 'nextdoor' ? 'Enjoying local news, neighbor?' :
+    source === 'reddit' ? 'Keep the conversation going.' :
+    source === 'facebook' ? 'Stay in the loop beyond your feed.' :
+    source === 'newsletter' ? 'Enjoying the Morning Brief?' : 'Enjoying Treasure Coast Today?'
+  const body = document.createElement('p')
+  body.className = 'tct-meter-soft-description'
+  body.textContent = note
+  const action = document.createElement('a')
+  const path = `${window.location.pathname}${window.location.search}`
+  action.href = `/subscribe.html?next=${encodeURIComponent(path)}`
+  action.className = 'tct-meter-soft-action'
+  action.textContent = 'Get unlimited access for $1 →'
+  const terms = document.createElement('small')
+  terms.textContent = 'First month $1, then $4.99/month. Cancel anytime. Or keep reading for free.'
+  invite.append(counter, heading, body, action, terms)
+  paywall.insertAdjacentElement('beforebegin', invite)
+}
 function readMeterState(){
   try {
     const raw = localStorage.getItem(METER_STATE_KEY)
@@ -419,6 +519,7 @@ function setMeterPaywallState(paywall, period, afterRead=false){
   status?.classList.remove('hidden')
   if (status) status.textContent = "You've read all 3 free articles this month."
   if (headline) headline.innerHTML = 'Keep reading for <span class="tct-paywall-headline-accent">$1</span>'
+  applyReferralPaywallCopy(paywall, afterRead)
   paywall.classList.toggle('tct-paywall-metered-after-read', afterRead)
   syncPaywallFullBleed(paywall)
   qs('.tct-paywall-fade', paywall.parentElement || document)?.remove()
@@ -612,11 +713,14 @@ async function unlockArticle(statusPromise=null){
       removePostArticleNewsletter()
       // First two full reads have no hard sales interruption. At the third,
       // position the conversion treatment at the end of the complete article.
-      placePostReadMeterAfterStory(paywall)
+      const placed = placePostReadMeterAfterStory(paywall)
       if (usedSlugs.length >= FREE_ARTICLE_LIMIT) {
         const meterPeriod = String(data.period || reservation.period || currentMeterPeriod())
         setMeterPaywallState(paywall, meterPeriod, true)
       } else {
+        // Reader already received the full body. Show a small, optional nudge
+        // after it and ahead of the newsletter, never a blocking paywall.
+        if (placed) addSoftMeterInvitation(paywall, FREE_ARTICLE_LIMIT - usedSlugs.length)
         paywall?.remove()
       }
     }
