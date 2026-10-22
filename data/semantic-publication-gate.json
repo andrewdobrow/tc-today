@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-22T04:32:07.066353+00:00",
+  "generated_at": "2026-10-22T04:54:16.458149+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 38,
+    "evaluations": 39,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 38,
+    "no_candidate_passes": 39,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 38,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -81,28 +81,55 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 2,
+    "pre_generation_materiality_evaluations": 3,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 2,
-    "pre_generation_materiality_holds": 0,
-    "pre_generation_materiality_model_calls": 0,
+    "pre_generation_materiality_holds": 1,
+    "pre_generation_materiality_model_calls": 1,
     "pre_generation_materiality_cache_hits": 2,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
     "terminal_permalink_new_authorized": 0,
-    "terminal_permalink_duplicates_blocked": 0,
+    "terminal_permalink_duplicates_blocked": 1,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
     "late_published_skip_materiality_evaluations": 0,
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "crime",
+      "source_headline": "Truck fire closes southbound lanes of Florida’s Turnpike in St. Lucie County - WPEC",
+      "source_url": "https://cbs12.com/traffic/traffic-tracker-12/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-morning-commute-florida-traffic-florida-news",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Truck/vehicle fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
+        "Incident occurred around 7:49 a.m. with units T19, E01, Rescue 19 responding"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
     {
       "category_key": "st_lucie",
       "source_headline": "Florida gubernatorial candidate Byron Donalds makes campaign stop in Fort Pierce - WPBF",
@@ -920,6 +947,211 @@
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce Man Arrested After Indecent Exposure Reports on Seaway Bridge",
+      "incoming_source_url": "https://cw34.com/news/local/string-of-indecent-exposure-reports-on-fort-pierce-bridge-leads-to-arrest-fort-pierce-police-department-fppd-arrest-criminal-investigation-indecent-exposure-reports-suspected-flasher-women-walking-alone-bridge-incidents-treasure-coast-crime-st?teaserSource=trending",
+      "incoming_story_id": "story_022129",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Fort Pierce Man Arrested After Indecent Exposure Reports on Seaway Bridge",
+      "incoming_source_url": "https://cw34.com/news/local/string-of-indecent-exposure-reports-on-fort-pierce-bridge-leads-to-arrest-fort-pierce-police-department-fppd-arrest-criminal-investigation-indecent-exposure-reports-suspected-flasher-women-walking-alone-bridge-incidents-treasure-coast-crime-st?teaserSource=trending",
+      "incoming_story_id": "story_022129",
+      "candidates": [
+        {
+          "slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
+          "headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 1.087,
+          "retrieval_score": 1.0,
+          "reasons": [
+            "strong_fuzzy_headline",
+            "strong_content_event_continuity",
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5566,
+          "retrieval_score": 0.4846,
+          "reasons": [
+            "publication_gap_43_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
+          "headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5401,
+          "retrieval_score": 0.5091,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-08-fort-pierce-women-charged-after-neglected-dog-dies-at-pine-creek-apartments",
+          "headline": "Fort Pierce Women Charged After Neglected Dog Dies at Pine Creek Apartments",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5271,
+          "retrieval_score": 0.4731,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-fort-pierce-police-investigate-death-of-man-found-in-lincoln-park-lake",
+          "headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5094,
+          "retrieval_score": 0.4374,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
+          "headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4947,
+          "retrieval_score": 0.4727,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
+          "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4456,
+          "retrieval_score": 0.4056,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+          "headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4449,
+          "retrieval_score": 0.4409,
+          "reasons": [
+            "publication_gap_22_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
+          "headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3989,
+          "retrieval_score": 0.3769,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-15-suspect-facing-800-felonies-captured-in-vero-beach",
+          "headline": "Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3982,
+          "retrieval_score": 0.3732,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-05-fatal-crash-shuts-down-a1a-at-regatta-drive-in-vero-beach",
+          "headline": "FHP Identifies Driver Killed in A1A Truck Crash in Vero Beach",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3913,
+          "retrieval_score": 0.3913,
+          "reasons": [
+            "publication_gap_15_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
+          "headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3883,
+          "retrieval_score": 0.3513,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.97,
+        "shared_anchors": [
+          "Kyle Kennedy, 27",
+          "Seaway Bridge",
+          "Fort Pierce Police Department",
+          "indecent exposure arrest Friday",
+          "photo lineup identification by two victims"
+        ],
+        "novel_facts": [
+          "resident quote from Leidi Cruz",
+          "tip line phone number and Crime Stoppers mention"
+        ],
+        "reason": "This is the same arrest of Kyle Kennedy for indecent exposure on the Seaway Bridge already covered in the canonical article, with identical core facts (name, age, charges, investigation method). The incoming version adds only a resident reaction quote and tip-line contact info, which are routine color, not material updates.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.97,
+        "shared_anchors": [
+          "Kyle Kennedy, 27",
+          "Seaway Bridge",
+          "Fort Pierce Police Department",
+          "indecent exposure arrest Friday",
+          "photo lineup identification by two victims"
+        ],
+        "novel_facts": [
+          "resident quote from Leidi Cruz",
+          "tip line phone number and Crime Stoppers mention"
+        ],
+        "reason": "This is the same arrest of Kyle Kennedy for indecent exposure on the Seaway Bridge already covered in the canonical article, with identical core facts (name, age, charges, investigation method). The incoming version adds only a resident reaction quote and tip-line contact info, which are routine color, not material updates.",
+        "validation_errors": [],
+        "consistency_repairs": []
       }
     }
   ],

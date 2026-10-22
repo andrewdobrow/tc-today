@@ -12,12 +12,12 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | 51 | importance 0; freshness 87.17; urgency 2/10; validated material update |
-| 2 | Florida Senate President Albritton Now Opposes Amendment 3 | Florida Senate President Albritton Now Opposes Amendment 3 | 42 | importance 0; freshness 90.52; urgency 2/10 |
-| 3 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | 39 | importance 0; freshness 43.89; urgency 4/10 |
-| 4 | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | 38 | importance 0; freshness 57.34; urgency 2/10 |
-| 5 | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | 36 | importance 0; freshness 50.55; urgency 2/10 |
-| 6 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | 36 | importance 0; freshness 50.55; urgency 2/10 |
+| 1 | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | 51 | importance 0; freshness 86.56; urgency 2/10; validated material update |
+| 2 | Florida Senate President Albritton Now Opposes Amendment 3 | Florida Senate President Albritton Now Opposes Amendment 3 | 41 | importance 0; freshness 89.91; urgency 2/10 |
+| 3 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | 39 | importance 0; freshness 43.29; urgency 4/10 |
+| 4 | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | 38 | importance 0; freshness 56.73; urgency 2/10 |
+| 5 | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | 36 | importance 0; freshness 49.94; urgency 2/10 |
+| 6 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | 36 | importance 0; freshness 49.94; urgency 2/10 |
 
 ## Recommended moves
 
