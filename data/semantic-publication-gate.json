@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-22T05:43:30.775407+00:00",
+  "generated_at": "2026-10-22T10:53:17.432571+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 38,
+    "evaluations": 39,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 38,
+    "no_candidate_passes": 39,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 38,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -87,15 +87,15 @@
     "pre_generation_materiality_holds": 1,
     "pre_generation_materiality_model_calls": 1,
     "pre_generation_materiality_cache_hits": 2,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -105,8 +105,8 @@
   "pre_generation_materiality_decisions": [
     {
       "category_key": "crime",
-      "source_headline": "Truck fire closes southbound lanes of Florida’s Turnpike in St. Lucie County - cw34.com",
-      "source_url": "https://cw34.com/news/local/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-morning-commute-florida-traffic-florida-news?teaserSource=trending",
+      "source_headline": "Truck fire closes southbound lanes of Florida’s Turnpike in St. Lucie County - WPEC",
+      "source_url": "https://cbs12.com/traffic/traffic-tracker-12/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-morning-commute-florida-traffic-florida-news",
       "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
       "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
       "canonical_is_custom": false,
@@ -119,11 +119,11 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 0.9,
       "shared_anchors": [],
       "novel_facts": [
         "Truck fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
-        "Fire reported around 7:49 a.m. Tuesday",
+        "Reported Tuesday morning, call at 7:49 a.m.",
         "Units T19, E01, Rescue 19 responded"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -948,6 +948,200 @@
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Martin County Panel to Review Witham Field Nighttime Jet Noise Data",
+      "incoming_source_url": "https://cbs12.com/news/local/martin-county-airport-committee-to-review-overnight-flights-and-noise-concerns",
+      "incoming_story_id": "story_022697",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Martin County Panel to Review Witham Field Nighttime Jet Noise Data",
+      "incoming_source_url": "https://cbs12.com/news/local/martin-county-airport-committee-to-review-overnight-flights-and-noise-concerns",
+      "incoming_story_id": "story_022697",
+      "candidates": [
+        {
+          "slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
+          "headline": "Martin County Ends MARTY Bus Contract, Targets Service Restart Next Week",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6279,
+          "retrieval_score": 0.5149,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
+          "headline": "Martin County Advances Data Center Moratorium, But New Project Would Be Exempt",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6145,
+          "retrieval_score": 0.5015,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
+          "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.483,
+          "retrieval_score": 0.449,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-19-martin-county-fire-rescue-honors-woman-who-saved-drowning-3-year-old-with-cpr",
+          "headline": "Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4607,
+          "retrieval_score": 0.4297,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-16-port-st-lucie-polls-residents-on-paying-11-more-a-month-for-extra-trash-pickup",
+          "headline": "Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.457,
+          "retrieval_score": 0.435,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-10-martin-county-employee-rescues-three-girls-from-rip-current-at-bob-graham-beach",
+          "headline": "Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4551,
+          "retrieval_score": 0.4511,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
+          "headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4187,
+          "retrieval_score": 0.3967,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
+          "headline": "Florida Senate President Albritton Now Opposes Amendment 3",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4051,
+          "retrieval_score": 0.3681,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3992,
+          "retrieval_score": 0.3892,
+          "reasons": [
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
+          "headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3985,
+          "retrieval_score": 0.3675,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-15-matt-gaetz-joel-greenberg-named-in-new-federal-sex-trafficking-lawsuit",
+          "headline": "Matt Gaetz, Joel Greenberg Named in New Federal Sex Trafficking Lawsuit",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3958,
+          "retrieval_score": 0.3768,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+          "headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3916,
+          "retrieval_score": 0.3696,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Martin County Airport Noise Advisory Committee meeting on Witham Field jet noise",
+          "September 2026 flight operations data (7,474 takeoffs/landings, 1,224 jet ops)",
+          "96.55% nighttime curfew compliance rate",
+          "Residential Sound Insulation Program update"
+        ],
+        "reason": "None of the candidates concern Witham Field, airport noise, or the Airport Noise Advisory Committee. The closest matches share only the 'martin-county' locality and 'public-policy' event family, which is insufficient per the instructions to merge stories about distinct governmental actions (bus service, data center moratorium, airport noise). This is a new, unrelated event requiring its own story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Martin County Airport Noise Advisory Committee meeting on Witham Field jet noise",
+          "September 2026 flight operations data (7,474 takeoffs/landings, 1,224 jet ops)",
+          "96.55% nighttime curfew compliance rate",
+          "Residential Sound Insulation Program update"
+        ],
+        "reason": "None of the candidates concern Witham Field, airport noise, or the Airport Noise Advisory Committee. The closest matches share only the 'martin-county' locality and 'public-policy' event family, which is insufficient per the instructions to merge stories about distinct governmental actions (bus service, data center moratorium, airport noise). This is a new, unrelated event requiring its own story.",
+        "validation_errors": [],
+        "consistency_repairs": []
       }
     }
   ],
