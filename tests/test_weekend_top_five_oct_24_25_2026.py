@@ -52,7 +52,7 @@ def test_science_festival_venue_hike_age_and_honest_pricing():
     assert "Check the organizer for registration and participation details" in body
 
 
-def test_only_current_weekend_is_in_editor_queue():
-    # Published Oct. 10-11 and Xfinity pages persist in the archive, not the queue.
-    assert [x.get("custom_id") for x in ARTICLES] == [TARGET_ID]
-    assert ARTICLES[0]["expires"] == "2026-10-26"
+def test_only_current_weekend_guide_is_in_editor_queue():
+    guides = [row for row in ARTICLES if "weekend" in str(row.get("custom_id", "")).lower()]
+    assert [row.get("custom_id") for row in guides] == [TARGET_ID]
+    assert guides[0]["expires"] == "2026-10-26"

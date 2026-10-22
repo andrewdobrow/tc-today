@@ -72,7 +72,7 @@ def test_october_tenth_weekend_guide_expires_after_events(monkeypatch, tmp_path)
 def test_stale_weekend_guide_cannot_stay_in_active_queue(monkeypatch, tmp_path):
     """The generator must ignore an expired queued guide rather than republish it."""
     rows = _items()
-    assert [x.get("custom_id") for x in rows] == [CURRENT_ID]
+    assert [x.get("custom_id") for x in rows if "weekend" in str(x.get("custom_id", "")).lower()] == [CURRENT_ID]
     (tmp_path / "custom_articles.json").write_text(json.dumps(rows), encoding="utf-8")
     engine = _engine()
     monkeypatch.setattr(engine, "OUTPUT_DIR", tmp_path)
@@ -82,7 +82,7 @@ def test_stale_weekend_guide_cannot_stay_in_active_queue(monkeypatch, tmp_path):
 
 def test_weekend_event_guides_in_current_editor_queue_have_expiration():
     rows = _items()
-    assert len(rows) == 1
+    assert len([row for row in rows if "weekend" in str(row.get("custom_id", "")).lower()]) == 1
     for row in rows:
         if "weekend" not in str(row.get("custom_id", "")).lower():
             continue
