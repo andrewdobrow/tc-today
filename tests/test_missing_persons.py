@@ -382,7 +382,7 @@ def test_county_search_is_driven_by_live_fdle_form_and_forces_all_categories():
     """
     spec = m._search_form_submission(search_html, m.SOURCE_HOME, "St. Lucie")
     assert spec["method"] == "POST"
-    assert spec["action"].endswith("/mcicsearch/Results.asp")
+    assert spec["action"].endswith("/Results.asp")
     assert spec["county_field"] == "cou"
     assert spec["county_value"] == "56"
     assert spec["category_field"] == "cat"

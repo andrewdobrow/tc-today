@@ -33,7 +33,12 @@ if str(ROOT) not in sys.path:
 from scripts import build_audience_features as audience
 
 SITE_URL = "https://treasurecoast.today"
-SOURCE_HOME = "https://www.fdle.state.fl.us/mcicsearch/Search.asp"
+# FDLE moved its MEPIC search application to its own official subdomain.
+# The old www.fdle.state.fl.us/MCICSearch/Results.asp now returns HTTP 404.
+# Use the current official host for new searches, pagination, flyers and photos;
+# keep the independent county/count verification below unchanged.
+MEPIC_ORIGIN = "https://mepic.fdle.state.fl.us"
+SOURCE_HOME = f"{MEPIC_ORIGIN}/Search.asp"
 FDLE_PHONE = "1-888-356-4774"
 COUNTIES = ("Martin", "St. Lucie", "Indian River")
 COUNTY_SLUG = {"Martin": "martin", "St. Lucie": "st-lucie", "Indian River": "indian-river"}
@@ -263,7 +268,16 @@ def _search_form_submission(html: str, page_url: str, county: str) -> dict:
 def _qr_county_url(county: str, source_county: str | None = None) -> str:
     """Build one FDLE public county-only QR result URL."""
     source_county = source_county or FDLE_QUERY_COUNTY.get(county, county)
-    return "https://www.fdle.state.fl.us/MCICSearch/Results.asp?" + urlencode({"From": "QR", "cou": source_county})
+    return f"{MEPIC_ORIGIN}/Results.asp?" + urlencode({"From": "QR", "cou": source_county})
+
+
+def _fdle_response_diagnostic(response, fallback_url: str) -> str:
+    """Log enough safe response context to diagnose moved or blocked FDLE pages."""
+    actual_url = _clean(getattr(response, "url", "")) or fallback_url
+    title = BeautifulSoup(getattr(response, "text", "") or "", "html.parser").title
+    page_title = _clean(title.get_text(" ", strip=True))[:100] if title else "(no HTML title)"
+    status = getattr(response, "status_code", "unknown")
+    return f"HTTP {status}; final URL={actual_url}; page title={page_title!r}"
 
 
 def _verified_county_result(html: str, county: str) -> tuple[bool, str, int | None]:
@@ -315,7 +329,10 @@ def _start_county_search(session: requests.Session, county: str) -> tuple[str, s
                     "category_text": "All Categories",
                 }))
             else:
-                errors.append(f"QR county search {source_county!r}: {reason}")
+                errors.append(
+                    f"QR county search {source_county!r}: {reason}; "
+                    + _fdle_response_diagnostic(response, qr_url)
+                )
         except Exception as exc:
             errors.append(f"QR county search {source_county!r}: {exc}")
 
@@ -331,7 +348,10 @@ def _start_county_search(session: requests.Session, county: str) -> tuple[str, s
             form_spec["search_mode"] = "fdle_form"
             candidates.append((total, 2, result_response.text, result_response.url or spec["action"], form_spec))
         else:
-            errors.append(f"live form search: {reason}")
+            errors.append(
+                f"live form search: {reason}; "
+                + _fdle_response_diagnostic(result_response, spec["action"])
+            )
     except Exception as exc:
         errors.append(f"live form search: {exc}")
 
@@ -574,7 +594,7 @@ def _pagination_urls(html: str, page_url: str, county: str) -> list[str]:
 def _candidate_flyers(record_id: str) -> list[str]:
     if not record_id:
         return []
-    base = "https://www.fdle.state.fl.us/MCICSearch/Flyers/"
+    base = f"{MEPIC_ORIGIN}/Flyers/"
     return [
         f"{base}FlyerCust1pic.asp?ID={record_id}",
         f"{base}FlyerCust2pic.asp?ID={record_id}",
@@ -886,6 +906,28 @@ def refresh() -> dict:
     _write_json(DATA_PATH, payload)
     _write_json(STATUS_PATH, status_payload)
     return {"people": len(normalized), "fresh_counties": fresh_counties, "status": statuses}
+
+
+def require_complete_fdle_refresh(county_statuses: dict) -> None:
+    """Never mark an FDLE update successful unless all three counties refreshed.
+
+    Keeping last-known-good records is a reader-safety fallback, *not* evidence
+    that the upstream source worked.  A source failure must stop publication and
+    produce a red GitHub Actions run with the per-county underlying error.
+    """
+    failures = []
+    for county in COUNTIES:
+        row = county_statuses.get(county) if isinstance(county_statuses, dict) else None
+        state = row.get("status") if isinstance(row, dict) else None
+        if state != "fresh":
+            reason = _clean(row.get("error")) if isinstance(row, dict) else ""
+            failures.append(f"{county}: {state or 'missing status'}: {reason or 'no FDLE verification evidence'}")
+    if failures:
+        raise RuntimeError(
+            "FDLE missing-person REFRESH FAILED. "
+            "Last-known-good records were retained, but this run MUST NOT publish "
+            "or report success. Source failure(s): " + " | ".join(failures)
+        )
 
 
 def _format_date(raw: str) -> str:
@@ -1290,10 +1332,14 @@ def main() -> None:
     parser.add_argument("--render-only", action="store_true")
     args = parser.parse_args()
     if args.validate_only:
-        validate(); return
+        validate()
+        status_payload = _read_json(STATUS_PATH, {})
+        require_complete_fdle_refresh(status_payload.get("counties", {}) if isinstance(status_payload, dict) else {})
+        return
     if not args.render_only:
         result = refresh()
         print("FDLE refresh:", json.dumps(result, ensure_ascii=False))
+        require_complete_fdle_refresh(result.get("status", {}))
     render_result = render()
     print("Missing-person render:", json.dumps(render_result, ensure_ascii=False))
     validate()
