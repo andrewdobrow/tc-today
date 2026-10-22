@@ -4,28 +4,32 @@
 
 ## Hero
 
-- Current: **Port St. Lucie Police Now Seek Two Vehicles in NW University Blvd Hit-and-Run**
-- Recommended: **Port St. Lucie Police Now Seek Two Vehicles in NW University Blvd Hit-and-Run**
+- Current: **Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters**
+- Recommended: **Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25 | Martin County Panel to Review Witham Field Nighttime Jet Noise Data | 46 | importance 0; freshness 91.57; urgency 2/10 |
-| 2 | Martin County Panel to Review Witham Field Nighttime Jet Noise Data | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | 46 | importance 0; freshness 68.2; urgency 2/10; validated material update |
-| 3 | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25 | 44 | importance 0; freshness 80.97; urgency 4/10 |
-| 4 | Florida Senate President Albritton Now Opposes Amendment 3 | Florida Senate President Albritton Now Opposes Amendment 3 | 37 | importance 0; freshness 71.55; urgency 2/10 |
-| 5 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | 34 | importance 0; freshness 24.92; urgency 4/10 |
-| 6 | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | 33 | importance 0; freshness 38.37; urgency 2/10 |
-| 7 | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | 31 | importance 0; freshness 31.58; urgency 2/10 |
-| 8 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | 31 | importance 0; freshness 31.57; urgency 2/10; -6 category saturation |
+| 1 | Port St. Lucie Police Now Seek Two Vehicles in NW University Blvd Hit-and-Run | Port St. Lucie Police Now Seek Two Vehicles in NW University Blvd Hit-and-Run | 61 | importance 0; freshness 94.61; urgency 6/10; validated material update |
+| 2 | Xfinity Celebrates New Store in Stuart | Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert | 52 | importance 0; freshness 99.95; urgency 4/10 |
+| 3 | Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert | Xfinity Celebrates New Store in Stuart | 49 | importance 0; freshness 99.95; urgency 4/10 |
+| 4 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25 | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | 45 | importance 0; freshness 62.86; urgency 2/10; validated material update |
+| 5 | Martin County Panel to Review Witham Field Nighttime Jet Noise Data | Martin County Panel to Review Witham Field Nighttime Jet Noise Data | 44 | importance 0; freshness 86.23; urgency 2/10 |
+| 6 | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25 | 43 | importance 0; freshness 75.63; urgency 4/10 |
+| 7 | Florida Senate President Albritton Now Opposes Amendment 3 | Florida Senate President Albritton Now Opposes Amendment 3 | 36 | importance 0; freshness 66.21; urgency 2/10 |
+| 8 | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | 32 | importance 0; freshness 33.03; urgency 2/10 |
+| 9 | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | 30 | importance 0; freshness 26.24; urgency 2/10; -4 county saturation |
+| 10 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | 30 | importance 0; freshness 26.24; urgency 2/10; -6 category saturation |
+| 11 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | — |  |  |
 
 ## Recommended moves
 
-- **Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25**: 1 → 3 — importance 0; freshness 80.97; urgency 4/10
-- **Martin County Panel to Review Witham Field Nighttime Jet Noise Data**: 2 → 1 — importance 0; freshness 91.57; urgency 2/10
-- **More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges**: 3 → 2 — importance 0; freshness 68.2; urgency 2/10; validated material update
+- **More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges**: 6 → 4 — importance 0; freshness 62.86; urgency 2/10; validated material update
+- **Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25**: 4 → 6 — importance 0; freshness 75.63; urgency 4/10
+- **Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert**: 3 → 2 — importance 0; freshness 99.95; urgency 4/10
+- **Xfinity Celebrates New Store in Stuart**: 2 → 3 — importance 0; freshness 99.95; urgency 4/10
 
 ## Guardrails
 
