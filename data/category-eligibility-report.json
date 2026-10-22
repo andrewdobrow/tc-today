@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-22T10:50:16Z",
+  "generated_at": "2026-10-22T12:47:15Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 35,
-    "rejected_count": 4,
+    "assessed_count": 40,
+    "rejected_count": 7,
     "enforced_categories": [
       "business",
       "crime",
@@ -58,9 +58,23 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
-      "rejected_count": 1,
+      "assessed_count": 5,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "'This is a mistake': Swimmers react to possible elimination of IRSC swimming and diving",
+          "source_url": "https://www.wptv.com/sports/college-sports/this-is-a-mistake-swimmers-react-to-possible-elimination-of-irsc-swimming-and-diving"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -82,8 +96,8 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 1,
+      "assessed_count": 4,
+      "rejected_count": 3,
       "rejections": [
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -102,6 +116,40 @@
           ],
           "headline": "High surf and red flag warnings put St. Lucie County beaches under high hazard advisory this week",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/high-surf-and-red-flag-warnings-put-st-lucie-county-beaches-under-high-hazard-advisory-this-week"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "sports:championship"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast"
+          ],
+          "headline": "'This is a mistake': Swimmers react to possible elimination of IRSC swimming and diving",
+          "source_url": "https://www.wptv.com/sports/college-sports/this-is-a-mistake-swimmers-react-to-possible-elimination-of-irsc-swimming-and-diving"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [
+            "sports:championship"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Indian River State College trustees to consider eliminating men's, women's swimming and diving programs",
+          "source_url": "https://www.wptv.com/sports/college-sports/indian-river-state-college-trustees-to-consider-eliminating-mens-womens-swimming-and-diving-programs"
         }
       ]
     },
@@ -156,7 +204,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 2,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -165,7 +213,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 13,
+      "assessed_count": 14,
       "rejected_count": 0,
       "rejections": []
     },
@@ -174,7 +222,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 9,
       "rejected_count": 0,
       "rejections": []
     }

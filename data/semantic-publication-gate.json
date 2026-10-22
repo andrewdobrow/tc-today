@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-22T10:53:17.432571+00:00",
+  "generated_at": "2026-10-22T12:49:46.559933+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,43 +62,43 @@
     }
   },
   "summary": {
-    "evaluations": 39,
+    "evaluations": 32,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 39,
+    "no_candidate_passes": 32,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 38,
+    "new_stories_allowed": 2,
+    "retroactive_rows_retained": 30,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
     "registry_aliases_written": 0,
-    "material_update_composer_calls": 0,
-    "material_updates_applied": 0,
+    "material_update_composer_calls": 1,
+    "material_updates_applied": 1,
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 3,
+    "pre_generation_materiality_evaluations": 4,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 2,
-    "pre_generation_materiality_holds": 1,
-    "pre_generation_materiality_model_calls": 1,
+    "pre_generation_materiality_holds": 2,
+    "pre_generation_materiality_model_calls": 2,
     "pre_generation_materiality_cache_hits": 2,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
-    "terminal_permalink_updates_routed": 0,
-    "terminal_permalink_holds": 0,
+    "terminal_permalink_updates_routed": 1,
+    "terminal_permalink_holds": 1,
     "late_published_skip_materiality_evaluations": 0,
     "late_published_skip_materiality_promotions": 0
   },
@@ -123,8 +123,7 @@
       "shared_anchors": [],
       "novel_facts": [
         "Truck fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
-        "Reported Tuesday morning, call at 7:49 a.m.",
-        "Units T19, E01, Rescue 19 responded"
+        "Fire reported at 7:49 a.m., units T19, E01, Rescue 19 responded"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -187,69 +186,37 @@
       "novel_facts": [],
       "reason": "Identical source URL and same incident details (time, location, fire description) with no new facts; same story already canonicalized.",
       "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "All lanes reopen on Florida's Turnpike after truck fire, crash in St. Lucie County - WFLX",
+      "source_url": "https://www.wflx.com/2026/10/20/floridas-turnpike-south-blocked-st-lucie-county-after-truck-fire-separate-crash",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
+      "canonical_is_custom": false,
+      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Truck fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
+        "Separate crash in same area causing additional lane closure",
+        "Event occurred October 20, 2026, distinct date from candidate's September 7 fatal hit-and-run"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     }
   ],
   "decisions": [
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-      "incoming_source_url": "https://cbs12.com/news/local/death-sentence-handed-down-for-66-year-old-otto-lenke-in-fort-pierce-killing-case-florida-news",
-      "incoming_story_id": "story_021277",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-van-driver-after-fleeing-fatal-crash-involving-scooter-fort-pierce/74109868",
-      "incoming_story_id": "story_020868",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "St. Lucie Fire Board Member Urges Chief Jeff Lee to Resign After Vote",
-      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-attorney-resigns-amid-hazing-fallout-chief-faces-no-confidence-vote",
-      "incoming_story_id": "story_018462",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
     {
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Indian River County Sheriff Witnessed Deputy Killer's Execution, Plans Monument",
@@ -275,126 +242,6 @@
       "incoming_headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
       "incoming_source_url": "https://www.wpbf.com/article/florida-woman-arrested-after-cats-buried-alive-in-her-yard-in-hobe-sound/74085778",
       "incoming_story_id": "story_022385",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Vero Beach Council Approves Lease for Marriott at Regional Airport",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/city-council-approves-lease-agreement-to-bring-hotel-to-vero-beach-regional-airport-area",
-      "incoming_story_id": "story_021126",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
-      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/suspected-fentanyl-supplier-linked-to-overdose-death-arrested-after-chase-on-i-95",
-      "incoming_story_id": "story_021217",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/first-of-many-attorney-general-discusses-nick-mimms-conviction-warns-of-more-corruption-cases",
-      "incoming_story_id": "story_021219",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Vero Beach Airport Schedule Change Renews Focus On Treasure Coast Travel Options",
-      "incoming_source_url": "https://www.wflx.com/2026/10/13/treasure-coast-travelers-say-limited-transportation-options-make-it-difficult-get-around?outputType=amp",
-      "incoming_story_id": "story_020774",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
-      "incoming_source_url": "https://cbs12.com/news/local/police-activity-draws-large-response-to-lincoln-park-in-fort-pierce-available-lincoln-park-fort-pierce-fort-pierce-police-department-fort-pierce-police-police-presence-police-activity-crime-scene-tape-police-cruisers-police",
-      "incoming_story_id": "story_021281",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Port St. Lucie Woman Pleads Guilty to Exploiting Elderly Boca Raton Client",
-      "incoming_source_url": "https://www.wpbf.com/article/rachel-r-albert-boca-raton-pleads-guilty-exploiting-elderly-client/74135843",
-      "incoming_story_id": "story_021311",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -951,10 +798,30 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Martin County Panel to Review Witham Field Nighttime Jet Noise Data",
       "incoming_source_url": "https://cbs12.com/news/local/martin-county-airport-committee-to-review-overnight-flights-and-noise-concerns",
       "incoming_story_id": "story_022697",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
+      "incoming_source_url": "https://cbs12.com/news/cbs12-news-i-team/port-st-lucie-election-includes-mayors-race-and-trash-pick-up",
+      "incoming_story_id": "story_022712",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -975,179 +842,600 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Martin County Panel to Review Witham Field Nighttime Jet Noise Data",
-      "incoming_source_url": "https://cbs12.com/news/local/martin-county-airport-committee-to-review-overnight-flights-and-noise-concerns",
-      "incoming_story_id": "story_022697",
+      "incoming_headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
+      "incoming_source_url": "https://cbs12.com/news/cbs12-news-i-team/port-st-lucie-election-includes-mayors-race-and-trash-pick-up",
+      "incoming_story_id": "story_022712",
       "candidates": [
-        {
-          "slug": "2026-10-08-marty-transit-service-halted-in-martin-county-after-provider-cancels-contract",
-          "headline": "Martin County Ends MARTY Bus Contract, Targets Service Restart Next Week",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6279,
-          "retrieval_score": 0.5149,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
-          "headline": "Martin County Advances Data Center Moratorium, But New Project Would Be Exempt",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6145,
-          "retrieval_score": 0.5015,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
-          "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.483,
-          "retrieval_score": 0.449,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-10-19-martin-county-fire-rescue-honors-woman-who-saved-drowning-3-year-old-with-cpr",
-          "headline": "Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4607,
-          "retrieval_score": 0.4297,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
         {
           "slug": "2026-10-16-port-st-lucie-polls-residents-on-paying-11-more-a-month-for-extra-trash-pickup",
           "headline": "Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.457,
-          "retrieval_score": 0.435,
+          "terminal_recall_score": 0.6407,
+          "retrieval_score": 0.6187,
           "reasons": [
             "publication_gap_6_days"
           ]
         },
         {
-          "slug": "2026-10-10-martin-county-employee-rescues-three-girls-from-rip-current-at-bob-graham-beach",
-          "headline": "Martin County Employee Rescues Three Girls From Rip Current at Bob Graham Beach",
+          "slug": "2026-10-13-port-st-lucie-family-seeks-animal-cruelty-charges-after-dog-killed-on-goodman-av",
+          "headline": "Port St. Lucie Family Seeks Animal Cruelty Charges After Dog Killed on Goodman Avenue",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4551,
-          "retrieval_score": 0.4511,
+          "terminal_recall_score": 0.5735,
+          "retrieval_score": 0.5605,
           "reasons": [
-            "publication_gap_12_days"
+            "publication_gap_9_days"
           ]
         },
         {
-          "slug": "2026-10-16-turnpike-lanes-reopen-in-martin-county-after-semi-jackknifes",
-          "headline": "Turnpike Lanes Reopen in Martin County After Semi Jackknifes",
+          "slug": "2026-10-16-port-st-lucie-man-faces-charges-after-chase-ends-on-south-hutchinson-island",
+          "headline": "Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4187,
-          "retrieval_score": 0.3967,
+          "terminal_recall_score": 0.5602,
+          "retrieval_score": 0.5382,
           "reasons": [
             "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-          "headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4051,
-          "retrieval_score": 0.3681,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3992,
-          "retrieval_score": 0.3892,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
-          "headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3985,
-          "retrieval_score": 0.3675,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-10-15-matt-gaetz-joel-greenberg-named-in-new-federal-sex-trafficking-lawsuit",
-          "headline": "Matt Gaetz, Joel Greenberg Named in New Federal Sex Trafficking Lawsuit",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3958,
-          "retrieval_score": 0.3768,
-          "reasons": [
-            "publication_gap_7_days"
           ]
         },
         {
           "slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
           "headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3916,
-          "retrieval_score": 0.3696,
+          "terminal_recall_score": 0.5563,
+          "retrieval_score": 0.5343,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-11-flooding-at-port-st-lucies-california-and-savona-costs-pizza-shop-thousands",
+          "headline": "Flooding at Port St. Lucie's California and Savona costs pizza shop thousands",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5273,
+          "retrieval_score": 0.5203,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-10-10-grease-fire-sparks-propane-explosion-at-port-st-lucie-home",
+          "headline": "Port St. Lucie Fire Victim Identified as Church Helps Family Recover",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5077,
+          "retrieval_score": 0.5037,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+          "headline": "Port St. Lucie Hit-and-Run: Police Seek Driver Who Struck Man Near NW University Blvd",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4868,
+          "retrieval_score": 0.4858,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-09-30-st-lucie-fire-district-attorney-resigns-as-chief-faces-no-confidence-vote",
+          "headline": "St. Lucie Fire Board Member Urges Chief Jeff Lee to Resign After Vote",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4852,
+          "retrieval_score": 0.4692,
+          "reasons": [
+            "publication_gap_22_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4823,
+          "retrieval_score": 0.4723,
+          "reasons": [
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-port-st-lucie-man-fights-citys-126-camera-network-in-federal-court",
+          "headline": "Port St. Lucie Man Fights City's 126-Camera Network in Federal Court",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4748,
+          "retrieval_score": 0.4648,
+          "reasons": [
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
+          "headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4733,
+          "retrieval_score": 0.4693,
+          "reasons": [
+            "publication_gap_15_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
+          "headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4685,
+          "retrieval_score": 0.4465,
           "reasons": [
             "publication_gap_6_days"
           ]
         }
       ],
       "initial_decision": {
-        "status": "validated",
+        "status": "invalid_model_response",
+        "action": "hold",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-10-16-port-st-lucie-polls-residents-on-paying-11-more-a-month-for-extra-trash-pickup",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.72,
+        "shared_anchors": [
+          "Port St. Lucie non-binding ballot question on twice-weekly trash pickup",
+          "FCC trash contract/second collection day cost increase context",
+          "same municipal election cycle"
+        ],
+        "novel_facts": [
+          "Early voting has begun, with the mayoral race (Shannon Martin vs. Steven Giordano) now tied to the same ballot as the trash question",
+          "Voter sentiment at polls favoring keeping current schedule",
+          "Candidate positions on infrastructure/roadwork and city governance"
+        ],
+        "reason": "This incoming article covers the same non-binding trash pickup ballot question previously reported, now updated with early voting underway and tied explicitly to the mayoral race, plus new voter sentiment and candidate details -- a material update on the same underlying civic event rather than a new distinct story, since the mayoral race itself was not previously covered as a standalone canonical topic and both threads are bound together by the same Oct. ballot event.",
+        "validation_errors": [
+          "same_event_confidence_below_threshold"
+        ],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "invalid_model_response",
+        "action": "hold",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-10-16-port-st-lucie-polls-residents-on-paying-11-more-a-month-for-extra-trash-pickup",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.72,
+        "shared_anchors": [
+          "Port St. Lucie non-binding ballot question on twice-weekly trash pickup",
+          "FCC trash contract/second collection day cost increase context",
+          "same municipal election cycle"
+        ],
+        "novel_facts": [
+          "Early voting has begun, with the mayoral race (Shannon Martin vs. Steven Giordano) now tied to the same ballot as the trash question",
+          "Voter sentiment at polls favoring keeping current schedule",
+          "Candidate positions on infrastructure/roadwork and city governance"
+        ],
+        "reason": "This incoming article covers the same non-binding trash pickup ballot question previously reported, now updated with early voting underway and tied explicitly to the mayoral race, plus new voter sentiment and candidate details -- a material update on the same underlying civic event rather than a new distinct story, since the mayoral race itself was not previously covered as a standalone canonical topic and both threads are bound together by the same Oct. ballot event.",
+        "validation_errors": [
+          "same_event_confidence_below_threshold"
+        ],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "William Reaves Executed for 1986 Murder of Indian River County Deputy",
+      "incoming_source_url": "https://cw34.com/news/local/william-reaves-convicted-of-killing-florida-indian-river-county-deputy-richard-raczkoski-1986-vero-beach-set-to-be-executed-tonight-death-sentence-execution-florida-state-prison?teaserSource=trending",
+      "incoming_story_id": "story_020070",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
         "action": "new_story",
-        "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.95,
+        "confidence": 1.0,
         "shared_anchors": [],
-        "novel_facts": [
-          "Martin County Airport Noise Advisory Committee meeting on Witham Field jet noise",
-          "September 2026 flight operations data (7,474 takeoffs/landings, 1,224 jet ops)",
-          "96.55% nighttime curfew compliance rate",
-          "Residential Sound Insulation Program update"
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "William Reaves Executed for 1986 Murder of Indian River County Deputy",
+      "incoming_source_url": "https://cw34.com/news/local/william-reaves-convicted-of-killing-florida-indian-river-county-deputy-richard-raczkoski-1986-vero-beach-set-to-be-executed-tonight-death-sentence-execution-florida-state-prison?teaserSource=trending",
+      "incoming_story_id": "story_020070",
+      "candidates": [
+        {
+          "slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "headline": "Indian River County Sheriff Witnessed Deputy Killer's Execution, Plans Monument",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.8465,
+          "retrieval_score": 0.6565,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-15-suspect-facing-800-felonies-captured-in-vero-beach",
+          "headline": "Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6193,
+          "retrieval_score": 0.4473,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-03-17-year-old-dies-after-overnight-shooting-near-garcias-boat-ramp-in-indian-river",
+          "headline": "Fellsmere Boat Ramp Shooting: Mother Rejects Self-Defense Claim, Wants Charges",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6136,
+          "retrieval_score": 0.4626,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_18_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-05-man-booked-in-indian-river-county-jail-in-vero-beach-ex-girlfriends-killing",
+          "headline": "Affidavit Details Evidence in Vero Beach Ex-Girlfriend's Murder Case",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6042,
+          "retrieval_score": 0.4502,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_16_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
+          "headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5769,
+          "retrieval_score": 0.4929,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-high-speed-i-95-chase-ends-in-arrest-of-suspected-fentanyl-supplier-tied-to-over",
+          "headline": "High-Speed I-95 Chase Ends in Arrest of Suspected Fentanyl Supplier Tied to Overdose Death",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4676,
+          "retrieval_score": 0.4486,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-07-uf-study-finds-dengue-linked-mosquito-thriving-in-indian-river-county-yards",
+          "headline": "UF Study Finds Dengue-Linked Mosquito Common in Indian River County Yards",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.46,
+          "retrieval_score": 0.46,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.428,
+          "retrieval_score": 0.365,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+          "headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4179,
+          "retrieval_score": 0.3989,
+          "reasons": [
+            "publication_gap_82_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
+          "headline": "Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.403,
+          "retrieval_score": 0.381,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-fort-pierce-police-investigate-death-of-man-found-in-lincoln-park-lake",
+          "headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3861,
+          "retrieval_score": 0.3671,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
+          "headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3806,
+          "retrieval_score": 0.3436,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.93,
+        "shared_anchors": [
+          "William Reaves",
+          "Deputy Richard Raczkoski/Raczkowski",
+          "Indian River County Sheriff Eric Flowers",
+          "Florida State Prison execution",
+          "1986 convenience store killing near Vero Beach"
         ],
-        "reason": "None of the candidates concern Witham Field, airport noise, or the Airport Noise Advisory Committee. The closest matches share only the 'martin-county' locality and 'public-policy' event family, which is insufficient per the instructions to merge stories about distinct governmental actions (bus service, data center moratorium, airport noise). This is a new, unrelated event requiring its own story.",
+        "novel_facts": [
+          "Execution actually carried out Tuesday evening with official time of death 6:12 p.m.",
+          "U.S. Supreme Court denied final appeal",
+          "Details of execution witnesses, final meal, final words",
+          "Reaves' attorneys' final arguments citing PTSD and Vietnam service"
+        ],
+        "reason": "This is the same execution case for William Reaves/Deputy Raczkoski covered by the candidate canonical, now updated with the actual execution occurring and final details, which is a material status change (clemency plea stage to completed execution) but not a distinct accountability story warranting a new URL.",
         "validation_errors": [],
         "consistency_repairs": []
       },
       "resolution_decision": {},
       "decision": {
         "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+        "same_real_world_event": true,
+        "material_new_update": true,
         "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Martin County Airport Noise Advisory Committee meeting on Witham Field jet noise",
-          "September 2026 flight operations data (7,474 takeoffs/landings, 1,224 jet ops)",
-          "96.55% nighttime curfew compliance rate",
-          "Residential Sound Insulation Program update"
+        "confidence": 0.93,
+        "shared_anchors": [
+          "William Reaves",
+          "Deputy Richard Raczkoski/Raczkowski",
+          "Indian River County Sheriff Eric Flowers",
+          "Florida State Prison execution",
+          "1986 convenience store killing near Vero Beach"
         ],
-        "reason": "None of the candidates concern Witham Field, airport noise, or the Airport Noise Advisory Committee. The closest matches share only the 'martin-county' locality and 'public-policy' event family, which is insufficient per the instructions to merge stories about distinct governmental actions (bus service, data center moratorium, airport noise). This is a new, unrelated event requiring its own story.",
+        "novel_facts": [
+          "Execution actually carried out Tuesday evening with official time of death 6:12 p.m.",
+          "U.S. Supreme Court denied final appeal",
+          "Details of execution witnesses, final meal, final words",
+          "Reaves' attorneys' final arguments citing PTSD and Vietnam service"
+        ],
+        "reason": "This is the same execution case for William Reaves/Deputy Raczkoski covered by the candidate canonical, now updated with the actual execution occurring and final details, which is a material status change (clemency plea stage to completed execution) but not a distinct accountability story warranting a new URL.",
         "validation_errors": [],
         "consistency_repairs": []
       }
     }
   ],
   "archive_repairs": [],
-  "material_update_compositions": [],
-  "material_updates": [],
+  "material_update_compositions": [
+    {
+      "phase": "terminal_permalink_authority",
+      "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+      "incoming_slug": "",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 437,
+      "paragraph_count": 4,
+      "baseline_lead_hits": [
+        "deputy",
+        "execution",
+        "indian",
+        "river"
+      ],
+      "novelty_lead_hits": [
+        "appeals",
+        "carried",
+        "death",
+        "expected",
+        "his",
+        "injection",
+        "last",
+        "lethal",
+        "official",
+        "out",
+        "previously",
+        "raczkoski",
+        "time"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "validated_canonical_headline_evolution",
+        "token_similarity": 0.7778,
+        "date_gap_days": 14,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "prospective": true,
+        "existing_headline": "Indian River County Sheriff Witnessed Deputy Killer's Execution, Plans Monument",
+        "incoming_headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing",
+        "candidate_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+        "prospective_lastmod": "2026-10-22",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 88,
+        "baseline_anchor": "fatality",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "deputy",
+          "execution",
+          "indian",
+          "river"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Indian River County Sheriff Witnessed Deputy Killer's Execution, Plans Monument",
+        "novelty_anchor": "semantic_gate_novel_fact",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "1986",
+          "executed"
+        ],
+        "semantic_novel_fact_hits": [
+          "12",
+          "appeal",
+          "carried",
+          "court",
+          "death",
+          "denied",
+          "evening",
+          "final",
+          "official",
+          "supreme",
+          "time",
+          "tuesday"
+        ],
+        "semantic_novel_fact_token_count": 22,
+        "missing": [],
+        "source_title": "Man convicted of killing Indian River County deputy in 1986 executed - cw34.com",
+        "headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing"
+      },
+      "headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing"
+    }
+  ],
+  "material_updates": [
+    {
+      "phase": "forward_publication",
+      "source_slug": "",
+      "target_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+      "source_story_id": "",
+      "target_story_id": "story_020070",
+      "source_headline": "Man convicted of killing Indian River County deputy in 1986 executed - cw34.com",
+      "updated_headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing",
+      "confidence": 0.93,
+      "shared_anchors": [
+        "William Reaves",
+        "Deputy Richard Raczkoski/Raczkowski",
+        "Indian River County Sheriff Eric Flowers",
+        "Florida State Prison execution",
+        "1986 convenience store killing near Vero Beach"
+      ],
+      "novel_facts": [
+        "Execution actually carried out Tuesday evening with official time of death 6:12 p.m.",
+        "U.S. Supreme Court denied final appeal",
+        "Details of execution witnesses, final meal, final words",
+        "Reaves' attorneys' final arguments citing PTSD and Vietnam service"
+      ],
+      "updated_at": "2026-10-22T12:48:55Z",
+      "composition": {
+        "phase": "terminal_permalink_authority",
+        "canonical_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+        "incoming_slug": "",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 437,
+        "paragraph_count": 4,
+        "baseline_lead_hits": [
+          "deputy",
+          "execution",
+          "indian",
+          "river"
+        ],
+        "novelty_lead_hits": [
+          "appeals",
+          "carried",
+          "death",
+          "expected",
+          "his",
+          "injection",
+          "last",
+          "lethal",
+          "official",
+          "out",
+          "previously",
+          "raczkoski",
+          "time"
+        ],
+        "headline_alignment": {
+          "aligned": true,
+          "reason": "validated_canonical_headline_evolution",
+          "token_similarity": 0.7778,
+          "date_gap_days": 14,
+          "meaningful_update_basis": "semantic_material_update_gate",
+          "prospective": true,
+          "existing_headline": "Indian River County Sheriff Witnessed Deputy Killer's Execution, Plans Monument",
+          "incoming_headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing",
+          "candidate_slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "prospective_lastmod": "2026-10-22",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 88,
+          "baseline_anchor": "fatality",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "deputy",
+            "execution",
+            "indian",
+            "river"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Indian River County Sheriff Witnessed Deputy Killer's Execution, Plans Monument",
+          "novelty_anchor": "semantic_gate_novel_fact",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "1986",
+            "executed"
+          ],
+          "semantic_novel_fact_hits": [
+            "12",
+            "appeal",
+            "carried",
+            "court",
+            "death",
+            "denied",
+            "evening",
+            "final",
+            "official",
+            "supreme",
+            "time",
+            "tuesday"
+          ],
+          "semantic_novel_fact_token_count": 22,
+          "missing": [],
+          "source_title": "Man convicted of killing Indian River County deputy in 1986 executed - cw34.com",
+          "headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing"
+        },
+        "headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing"
+      }
+    }
+  ],
   "registry_consolidation": {
     "status": "no_changes",
     "directives_considered": 8,
