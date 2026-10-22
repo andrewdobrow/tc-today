@@ -49,8 +49,14 @@ def _packard_item(g):
 
 
 def test_current_custom_queue_contains_only_weekend_article():
+    # The queue is a rotating editor inbox, not the permanent article archive.
+    # Prior editions and already-published sponsored articles stay available via
+    # their historical URLs without remaining in custom_articles.json.
     queue = _queue()
-    assert [row.get("custom_id") for row in queue] == ["treasure-coast-top-five-weekend-2026-10-10-11"]
+    assert [row.get("custom_id") for row in queue] == [
+        "treasure-coast-top-five-weekend-2026-10-24-25"
+    ]
+    assert queue[0]["expires"] == "2026-10-26"
 
 
 def test_packard_article_is_scheduled_for_october_4_eastern():

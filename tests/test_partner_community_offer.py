@@ -1,6 +1,9 @@
 from pathlib import Path
+import re
 
-from tct_engine.membership_paywall import inject_membership_assets
+from tct_engine.membership_paywall import (
+    inject_membership_assets, MEMBERSHIP_ASSET_VERSION, MEMBERSHIP_JS_ASSET_VERSION
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 PARTNER_PAGE = ROOT / "partners" / "treasure-coast-community-news.html"
@@ -22,7 +25,12 @@ def test_tccn_partner_page_is_true_marketing_landing_page():
     assert 'Annual: $49/year' in page
     assert 'The annual plan remains $49 per year and is not included in the free-month offer.' in page
     assert 'content="noindex,follow"' in page
-    assert '/membership.js?v=1.13.9.38' in page  # Pre-build static artifact; normalization upgrades this.
+    # Source HTML may hold its prebuild URL or the most recently normalized
+    # asset URL after an Update run. Check the real current release, not a
+    # stale hardcoded version that changes during production generation.
+    script = re.search(r'<script type="module" src="/membership\.js\?v=([^"]+)"', page)
+    assert script, "Partner page must include the membership JavaScript bundle"
+    assert script.group(1) in {"1.13.9.38", MEMBERSHIP_JS_ASSET_VERSION}
 
 
 def test_normal_subscribe_page_remains_on_standard_one_dollar_offer():
@@ -69,6 +77,6 @@ def test_partner_success_and_cancel_return_to_partner_landing_page():
 def test_tccn_partner_page_survives_membership_asset_normalization():
     page = PARTNER_PAGE.read_text()
     normalized = inject_membership_assets(page, "")
-    assert '/membership.css?v=1.13.9.110' in normalized
-    assert '/membership.js?v=1.13.9.111' in normalized
-    assert '/membership.js?v=1.13.9.110' not in normalized
+    assert f'/membership.css?v={MEMBERSHIP_ASSET_VERSION}' in normalized
+    assert f'/membership.js?v={MEMBERSHIP_JS_ASSET_VERSION}' in normalized
+    assert len(re.findall(r'/membership\.js\?v=[^"\s<]+', normalized)) == 1
