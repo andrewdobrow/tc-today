@@ -12,11 +12,12 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida Senate President Albritton Now Opposes Amendment 3 | Florida Senate President Albritton Now Opposes Amendment 3 | 43 | importance 0; freshness 94.9; urgency 2/10 |
-| 2 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | 40 | importance 0; freshness 48.27; urgency 4/10 |
-| 3 | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | 39 | importance 0; freshness 61.72; urgency 2/10 |
-| 4 | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | 37 | importance 0; freshness 54.93; urgency 2/10 |
-| 5 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | 37 | importance 0; freshness 54.92; urgency 2/10 |
+| 1 | Indian River County Sheriff Witnessed Deputy Killer's Execution, Plans Monument | Indian River County Sheriff Witnessed Deputy Killer's Execution, Plans Monument | 57 | importance 0; freshness 75.7; urgency 6/10; validated material update |
+| 2 | Florida Senate President Albritton Now Opposes Amendment 3 | Florida Senate President Albritton Now Opposes Amendment 3 | 42 | importance 0; freshness 92.39; urgency 2/10 |
+| 3 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | 39 | importance 0; freshness 45.76; urgency 4/10 |
+| 4 | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County | 38 | importance 0; freshness 59.21; urgency 2/10 |
+| 5 | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus | 36 | importance 0; freshness 52.42; urgency 2/10 |
+| 6 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | 36 | importance 0; freshness 52.41; urgency 2/10 |
 
 ## Recommended moves
 
