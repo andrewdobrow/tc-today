@@ -42,6 +42,24 @@ class PublishedHomeParity(unittest.TestCase):
              archive=records,now=NOW)
         self.assertEqual([r['slug'] for r in feed['more_news']],['ok'])
 
+    def test_missing_homepage_slug_provides_useful_diagnostics(self):
+        with self.assertRaisesRegex(ValueError, "absent from archive.json"):
+            build_top_news_app_feed(hero_slug='new-but-never-archived',
+                                    top_story_slugs=[], homepage_other_slugs=[],
+                                    archive=[item('real-canonical-story')], now=NOW)
+
+    def test_present_but_ineligible_hero_gives_explicit_reason(self):
+        with self.assertRaisesRegex(ValueError, "ranking_eligible=False"):
+            build_top_news_app_feed(hero_slug='real-story',
+                                    top_story_slugs=[], homepage_other_slugs=[],
+                                    archive=[item('real-story', ranking_eligible=False)], now=NOW)
+
+    def test_redirect_alias_hero_fails_closed_with_canonical_diagnostic(self):
+        with self.assertRaisesRegex(ValueError, "different canonical slug"):
+            build_top_news_app_feed(hero_slug='old-story',
+                                    top_story_slugs=[], homepage_other_slugs=[],
+                                    archive=[item('old-story', canonical_slug='real-story')], now=NOW)
+
     def test_no_unpublished_hero_fallback(self):
         with self.assertRaises(ValueError):
             build_top_news_app_feed(hero_slug='ghost',top_story_slugs=['top'],

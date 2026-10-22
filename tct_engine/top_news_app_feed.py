@@ -66,7 +66,38 @@ def build_top_news_app_feed(*, hero_slug, top_story_slugs, homepage_other_slugs,
 
     hero_slug = _safe_slug(hero_slug)
     if hero_slug not in entries:
-        raise ValueError("Homepage hero missing from canonical publishable archive; refusing out-of-sync app feed")
+        # Never silently substitute a different story or promote an alias.  Tell
+        # the operator *why* the selected homepage permalink could not become
+        # the iOS hero, without logging private source content.
+        matching = [
+            row for row in archive
+            if isinstance(row, dict) and _safe_slug(row.get("slug")) == hero_slug
+        ]
+        if not hero_slug:
+            reason = "homepage permalink does not contain an article slug"
+        elif not matching:
+            reason = "homepage permalink slug is absent from archive.json"
+        else:
+            row = matching[-1]
+            reasons = []
+            canonical = _safe_slug(row.get("canonical_slug") or row.get("slug"))
+            if canonical != hero_slug:
+                reasons.append(f"archive row points to different canonical slug {canonical!r}")
+            if row.get("ranking_eligible") is not True:
+                reasons.append(f"ranking_eligible={row.get('ranking_eligible')!r}")
+            for field in (
+                "identity_quarantine_reason", "exclude_from_live_recovery",
+                "retired_custom", "identity_quarantine_persistent",
+            ):
+                if row.get(field):
+                    reasons.append(f"{field}={str(row.get(field))[:90]!r}")
+            if callable(is_publishable) and not is_publishable(row):
+                reasons.append("rejected by final publication eligibility check")
+            reason = "; ".join(reasons) or "archive row was omitted from the canonical eligible set"
+        raise ValueError(
+            "Homepage hero missing from canonical publishable archive; refusing "
+            f"out-of-sync app feed (slug={hero_slug!r}; reason={reason})"
+        )
 
     seen_ids = set()
 
