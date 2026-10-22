@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-22T20:24:59.810958+00:00",
+  "generated_at": "2026-10-22T20:54:34.501311+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,16 +62,16 @@
     }
   },
   "summary": {
-    "evaluations": 36,
-    "candidate_pairs": 2,
+    "evaluations": 39,
+    "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
-    "model_calls": 2,
+    "model_calls": 1,
     "cache_hits": 0,
-    "no_candidate_passes": 34,
+    "no_candidate_passes": 38,
     "duplicates_preserved": 1,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 34,
+    "new_stories_allowed": 3,
+    "retroactive_rows_retained": 35,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -87,15 +87,15 @@
     "pre_generation_materiality_holds": 1,
     "pre_generation_materiality_model_calls": 1,
     "pre_generation_materiality_cache_hits": 1,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "terminal_permalink_evaluations": 3,
+    "terminal_permalink_candidate_pairs": 36,
+    "terminal_permalink_model_calls": 3,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 3,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -103,6 +103,33 @@
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "crime",
+      "source_headline": "Truck fire closes southbound lanes of Florida’s Turnpike in St. Lucie County - WPEC",
+      "source_url": "https://cbs12.com/traffic/traffic-tracker-12/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-morning-commute-florida-traffic-florida-news",
+      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
+      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Truck/vehicle fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
+        "Fire units T19, E01, Rescue 19 responded at 7:49 a.m."
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
     {
       "category_key": "st_lucie",
       "source_headline": "Florida gubernatorial candidate Byron Donalds makes campaign stop in Fort Pierce - WPBF",
@@ -131,34 +158,6 @@
       "novel_facts": [],
       "reason": "Identical source URL and same campaign stop event (Donalds bus tour stop in Fort Pierce with Avila, Mast, Grall). The incoming article is the same WPBF story with minor rewording and no new material facts.",
       "validation_errors": []
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Truck fire closes southbound lanes of Florida’s Turnpike in St. Lucie County - WPEC",
-      "source_url": "https://cbs12.com/traffic/traffic-tracker-12/vehicle-fire-closes-all-southbound-lanes-on-floridas-turnpike-in-st-lucie-county-morning-commute-florida-traffic-florida-news",
-      "canonical_slug": "2026-10-01-family-still-searching-8-months-after-fort-pierce-man-vanished",
-      "canonical_headline": "Family Still Searching 8 Months After Fort Pierce Man Vanished",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 0.95,
-      "shared_anchors": [],
-      "novel_facts": [
-        "Truck fire on Florida's Turnpike southbound near mile marker 161 in St. Lucie County",
-        "Fire units T19, E01, Rescue 19 responded",
-        "Call came in at 7:49 a.m."
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
     }
   ],
   "decisions": [
@@ -843,77 +842,43 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
       "incoming_source_url": "https://cbs12.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
       "incoming_story_id": "story_022576",
-      "candidates": [
-        {
-          "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
-          "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
-          "retrieval_score": 0.6383,
-          "headline_similarity": 0.4586,
-          "similarity_basis": "source_headline",
-          "shared_headline_tokens": [
-            "county",
-            "lucie",
-            "st",
-            "wpec"
-          ],
-          "shared_topic_tokens": [
-            "wpec"
-          ],
-          "content_similarity": {
-            "score": 0.2715,
-            "overlap": 0.3636,
-            "jaccard": 0.0345,
-            "shared_token_count": 8,
-            "shared_tokens": [
-              "district",
-              "fire",
-              "firefighters",
-              "fires",
-              "fort",
-              "pierce",
-              "two",
-              "wpec"
-            ]
-          },
-          "strong_content_event_continuity": true,
-          "day_gap": 2,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "strong_content_event_continuity",
-            "publication_gap_2_days"
-          ]
-        }
-      ],
+      "candidates": [],
       "decision": {
-        "status": "validated",
+        "status": "no_candidates",
         "action": "new_story",
-        "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [
-          "St. Lucie County Fire District",
-          "Fort Pierce locality"
-        ],
-        "novel_facts": [
-          "Chief Jeff Lee fired without cause by fire board vote",
-          "Paul Langel named interim chief 4-3 vote",
-          "no-confidence vote results from IAFF Local 1377",
-          "hazing investigation background and arbitration pursuit"
-        ],
-        "reason": "The candidate article is about two unrelated structure fires and a cat rescue, an entirely different incident involving different personnel and events. The incoming article concerns a governance/personnel action (firing of the fire chief) tied to a hazing scandal and union no-confidence vote, sharing only the same fire district and county, not the same real-world event.",
-        "validation_errors": [],
-        "consistency_repairs": []
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-nuclear-power-plant-turns-50",
+      "incoming_story_id": "story_022832",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
       }
     },
     {
@@ -921,114 +886,73 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
-      "incoming_source_url": "https://cbs12.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
-      "incoming_story_id": "story_022576",
+      "incoming_headline": "St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-nuclear-power-plant-turns-50",
+      "incoming_story_id": "story_022832",
       "candidates": [
+        {
+          "slug": "2026-10-13-port-st-lucie-family-seeks-animal-cruelty-charges-after-dog-killed-on-goodman-av",
+          "headline": "Port St. Lucie Family Seeks Animal Cruelty Charges After Dog Killed on Goodman Avenue",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6497,
+          "retrieval_score": 0.5367,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_9_days"
+          ]
+        },
         {
           "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
           "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.7723,
-          "retrieval_score": 0.6383,
+          "terminal_recall_score": 0.6469,
+          "retrieval_score": 0.5129,
           "reasons": [
             "shared_locality_and_event_family",
-            "strong_content_event_continuity",
             "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
+          "headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6393,
+          "retrieval_score": 0.4993,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_0_days"
           ]
         },
         {
           "slug": "2026-10-16-port-st-lucie-polls-residents-on-paying-11-more-a-month-for-extra-trash-pickup",
           "headline": "Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6471,
-          "retrieval_score": 0.5251,
+          "terminal_recall_score": 0.6121,
+          "retrieval_score": 0.4901,
           "reasons": [
             "shared_locality_and_event_family",
             "publication_gap_6_days"
           ]
         },
         {
-          "slug": "2026-10-12-fort-pierce-ends-crabbys-dockside-lease-over-nearly-334000-debt",
-          "headline": "Fort Pierce Ends Crabby's Dockside Lease Over Nearly $334,000 Debt",
+          "slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "headline": "More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5632,
-          "retrieval_score": 0.4532,
+          "terminal_recall_score": 0.5308,
+          "retrieval_score": 0.3938,
           "reasons": [
             "shared_locality_and_event_family",
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-14-ag-cites-fort-pierce-managers-conviction-as-first-case-of-new-corruption-unit",
-          "headline": "AG Cites Fort Pierce Manager's Conviction as First Case of New Corruption Unit",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5168,
-          "retrieval_score": 0.4008,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-09-30-st-lucie-fire-district-attorney-resigns-as-chief-faces-no-confidence-vote",
-          "headline": "St. Lucie Fire Board Member Urges Chief Jeff Lee to Resign After Vote",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.7795,
-          "retrieval_score": 0.7635,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_22_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
-          "headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5744,
-          "retrieval_score": 0.4934,
-          "reasons": [
             "publication_gap_3_days"
           ]
         },
         {
-          "slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
-          "headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5364,
-          "retrieval_score": 0.4964,
+          "slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
+          "headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5151,
+          "retrieval_score": 0.4141,
           "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
-          "headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5118,
-          "retrieval_score": 0.4868,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
-          "headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4938,
-          "retrieval_score": 0.4718,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "headline": "Port St. Lucie Police Now Seek Two Vehicles in NW University Blvd Hit-and-Run",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4878,
-          "retrieval_score": 0.4478,
-          "reasons": [
+            "shared_locality_and_event_family",
             "publication_gap_13_days"
           ]
         },
@@ -1036,18 +960,58 @@
           "slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
           "headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.485,
-          "retrieval_score": 0.472,
+          "terminal_recall_score": 0.5663,
+          "retrieval_score": 0.5533,
           "reasons": [
             "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-13-port-st-lucie-approves-costco-entertainment-district-rehab-hospital-in-southern",
+          "headline": "Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4893,
+          "retrieval_score": 0.4763,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
+          "headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4819,
+          "retrieval_score": 0.4419,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
+          "headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4766,
+          "retrieval_score": 0.4666,
+          "reasons": [
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+          "headline": "Port St. Lucie Police Now Seek Two Vehicles in NW University Blvd Hit-and-Run",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4736,
+          "retrieval_score": 0.4336,
+          "reasons": [
+            "publication_gap_13_days"
           ]
         },
         {
           "slug": "2026-10-15-st-lucie-county-voters-to-decide-sales-tax-renewal-mosquito-control-expansion",
           "headline": "St. Lucie County Voters to Decide Sales Tax Renewal, Mosquito Control Expansion",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4753,
-          "retrieval_score": 0.4563,
+          "terminal_recall_score": 0.4588,
+          "retrieval_score": 0.4398,
           "reasons": [
             "publication_gap_7_days"
           ]
@@ -1057,24 +1021,19 @@
         "status": "validated",
         "action": "new_story",
         "recommended_action": "new_story",
-        "selected_candidate_slug": "2026-09-30-st-lucie-fire-district-attorney-resigns-as-chief-faces-no-confidence-vote",
-        "same_real_world_event": true,
-        "material_new_update": true,
-        "independently_newsworthy_followup": true,
-        "confidence": 0.88,
-        "shared_anchors": [
-          "Chief Jeff Lee",
-          "St. Lucie County Fire District Board",
-          "hazing investigation/no-confidence vote controversy"
-        ],
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.97,
+        "shared_anchors": [],
         "novel_facts": [
-          "Board voted Wednesday to fire Chief Jeff Lee without cause",
-          "Board voted 4-3 to appoint Deputy Chief Paul Langel as interim chief",
-          "Debate over severance terms",
-          "Comparison to 2017 Buddy Emerson departure",
-          "Public comment from Taylor Baldwin and resident Katie at the termination meeting"
+          "St. Lucie Nuclear Power Plant 50th anniversary feature",
+          "NRC granted 20-year license extension",
+          "Behind-the-scenes access with employees Carlos Santos, Nicholas Negron, Alfred Phillips",
+          "August manual shutdown after control rods dropped"
         ],
-        "reason": "This is the same underlying leadership-crisis saga as the 9/30 canonical (same chief, same board, same hazing/no-confidence controversy), but it reports the culminating accountability event: the actual termination of the chief and naming of an interim replacement. This is a decisive consequence (firing, successor named) that is independently newsworthy and changes what readers need to know, warranting a new story rather than folding into the older article about calls for resignation.",
+        "reason": "None of the candidates concern the nuclear power plant, NRC licensing, or this feature story; they involve unrelated animal cases, fire department leadership, trash pickup, elections, and other distinct events. No shared participants, location, or incident with any candidate.",
         "validation_errors": [],
         "consistency_repairs": []
       },
@@ -1083,70 +1042,57 @@
         "status": "validated",
         "action": "new_story",
         "recommended_action": "new_story",
-        "selected_candidate_slug": "2026-09-30-st-lucie-fire-district-attorney-resigns-as-chief-faces-no-confidence-vote",
-        "same_real_world_event": true,
-        "material_new_update": true,
-        "independently_newsworthy_followup": true,
-        "confidence": 0.88,
-        "shared_anchors": [
-          "Chief Jeff Lee",
-          "St. Lucie County Fire District Board",
-          "hazing investigation/no-confidence vote controversy"
-        ],
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.97,
+        "shared_anchors": [],
         "novel_facts": [
-          "Board voted Wednesday to fire Chief Jeff Lee without cause",
-          "Board voted 4-3 to appoint Deputy Chief Paul Langel as interim chief",
-          "Debate over severance terms",
-          "Comparison to 2017 Buddy Emerson departure",
-          "Public comment from Taylor Baldwin and resident Katie at the termination meeting"
+          "St. Lucie Nuclear Power Plant 50th anniversary feature",
+          "NRC granted 20-year license extension",
+          "Behind-the-scenes access with employees Carlos Santos, Nicholas Negron, Alfred Phillips",
+          "August manual shutdown after control rods dropped"
         ],
-        "reason": "This is the same underlying leadership-crisis saga as the 9/30 canonical (same chief, same board, same hazing/no-confidence controversy), but it reports the culminating accountability event: the actual termination of the chief and naming of an interim replacement. This is a decisive consequence (firing, successor named) that is independently newsworthy and changes what readers need to know, warranting a new story rather than folding into the older article about calls for resignation.",
+        "reason": "None of the candidates concern the nuclear power plant, NRC licensing, or this feature story; they involve unrelated animal cases, fire department leadership, trash pickup, elections, and other distinct events. No shared participants, location, or incident with any candidate.",
         "validation_errors": [],
-        "consistency_repairs": [],
-        "independent_followup_authorized": true
+        "consistency_repairs": []
       }
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Vero Beach Man Killed in Crash With Semi at 66th Ave and 49th St",
+      "incoming_headline": "Vero Beach Man Dies After Semi-Truck Turns Into His SUV in Indian River County",
       "incoming_source_url": "https://www.wptv.com/traffic/traffic-news/semi-truck-turns-into-path-of-suv-killing-vero-beach-driver-fhp-says",
-      "incoming_story_id": "story_022812",
+      "incoming_story_id": "story_022829",
       "candidates": [
         {
           "slug": "2026-10-22-vero-beach-man-60-dies-in-crash-with-semi-at-66th-and-49th",
           "headline": "Vero Beach Man, 60, Dies in Crash With Semi at 66th and 49th",
-          "retrieval_score": 1.0,
-          "headline_similarity": 0.8409,
+          "retrieval_score": 0.8261,
+          "headline_similarity": 0.4844,
           "similarity_basis": "final_headline",
           "shared_headline_tokens": [
-            "49th",
-            "66th",
             "beach",
-            "crash",
             "death",
             "man",
             "semi",
             "vero"
           ],
           "shared_topic_tokens": [
-            "49th",
-            "66th",
-            "crash",
             "death",
             "man",
             "semi"
           ],
           "content_similarity": {
-            "score": 0.5912,
-            "overlap": 0.75,
-            "jaccard": 0.1829,
-            "shared_token_count": 15,
+            "score": 0.553,
+            "overlap": 0.7,
+            "jaccard": 0.175,
+            "shared_token_count": 14,
             "shared_tokens": [
               "49th",
               "60",
               "66th",
               "avenue",
-              "collided",
               "crash",
               "death",
               "intersection",
@@ -1166,7 +1112,6 @@
           "incident_anchor_conflict": false,
           "known_event_key_conflict": false,
           "reasons": [
-            "strong_fuzzy_headline",
             "shared_locality_and_event_family",
             "shared_incident_anchor",
             "strong_content_event_continuity",
@@ -1186,12 +1131,395 @@
         "shared_anchors": [
           "60-year-old Vero Beach man",
           "intersection of 66th Avenue and 49th Street",
-          "semi-truck/Freightliner",
-          "same crash date and time",
-          "Holmes Regional Medical Center"
+          "semi-truck/Freightliner turning left",
+          "same crash date and Holmes Regional death"
         ],
         "novel_facts": [],
-        "reason": "Same crash: identical victim age/residence, exact intersection, same vehicle types, same date and FHP account. No new facts beyond the existing canonical article.",
+        "reason": "Both articles describe the identical fatal crash: same victim age/hometown, same intersection, same Freightliner truck turning left into the SUV, same hospital outcome, published same day. No new facts are present beyond slightly different phrasing.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club",
+      "incoming_source_url": "https://cbs12.com/news/arc-florida/tee-it-up-for-the-troops-brings-veterans-day-fundraiser-to-hobe-sound-the-club-at-lost-lake-november-11-chris-larocque-nonprofit-vets-pga-hope",
+      "incoming_story_id": "story_022840",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club",
+      "incoming_source_url": "https://cbs12.com/news/arc-florida/tee-it-up-for-the-troops-brings-veterans-day-fundraiser-to-hobe-sound-the-club-at-lost-lake-november-11-chris-larocque-nonprofit-vets-pga-hope",
+      "incoming_story_id": "story_022840",
+      "candidates": [
+        {
+          "slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.47,
+          "retrieval_score": 0.451,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
+          "headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.39,
+          "retrieval_score": 0.35,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
+          "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3811,
+          "retrieval_score": 0.3471,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-15-hobe-sound-shooting-leaves-one-with-life-threatening-injuries-one-detained",
+          "headline": "Hobe Sound Shooting: Witnesses Say Preston Was Armed, Drunk Before Friend Fired",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.371,
+          "retrieval_score": 0.352,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-16-amendment-3-vote-looms-real-estate-agents-warn-of-rush-before-homestead-deadline",
+          "headline": "Amendment 3 vote looms, real estate agents warn of rush before homestead deadline",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3531,
+          "retrieval_score": 0.3311,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-19-vero-beach-man-sentenced-to-time-served-in-hotel-exorcism-attack",
+          "headline": "Vero Beach Man Sentenced to Time Served in Hotel 'Exorcism' Attack",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.351,
+          "retrieval_score": 0.32,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
+          "headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.35,
+          "retrieval_score": 0.337,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
+          "headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3461,
+          "retrieval_score": 0.3121,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "headline": "More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3447,
+          "retrieval_score": 0.3077,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-jensen-beach-man-wins-over-70000-on-wheel-of-fortune-during-nba-week",
+          "headline": "Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3428,
+          "retrieval_score": 0.3088,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-port-st-lucie-woman-pleads-guilty-to-exploiting-elderly-boca-raton-client",
+          "headline": "Port St. Lucie Woman Pleads Guilty to Exploiting Elderly Boca Raton Client",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3425,
+          "retrieval_score": 0.3265,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-byron-donalds-brings-governor-bus-tour-to-fort-pierce-college-campus",
+          "headline": "Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3403,
+          "retrieval_score": 0.3063,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.97,
+        "shared_anchors": [
+          "hobe-sound locality only"
+        ],
+        "novel_facts": [
+          "Tee It Up for the Troops golf fundraiser at The Club at Lost Lake",
+          "Nov. 11 event date",
+          "Chris LaRocque, nonprofit details",
+          "PGA HOPE partnership"
+        ],
+        "reason": "No candidate concerns this Veterans Day golf fundraiser; the only overlapping candidates share just the Hobe Sound locality (e.g., animal cruelty case, shooting) with no shared participants, venue, or incident. This is a distinct, unrelated event requiring a new story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.97,
+        "shared_anchors": [
+          "hobe-sound locality only"
+        ],
+        "novel_facts": [
+          "Tee It Up for the Troops golf fundraiser at The Club at Lost Lake",
+          "Nov. 11 event date",
+          "Chris LaRocque, nonprofit details",
+          "PGA HOPE partnership"
+        ],
+        "reason": "No candidate concerns this Veterans Day golf fundraiser; the only overlapping candidates share just the Hobe Sound locality (e.g., animal cruelty case, shooting) with no shared participants, venue, or incident. This is a distinct, unrelated event requiring a new story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver",
+      "incoming_source_url": "https://cbs12.com/news/local/charges-dropped-against-indian-river-county-school-bus-driver-accused-of-child-abuse-threat-break-finger-unruly-child-no-information-middle-finger-student-after-school-care",
+      "incoming_story_id": "story_022816",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver",
+      "incoming_source_url": "https://cbs12.com/news/local/charges-dropped-against-indian-river-county-school-bus-driver-accused-of-child-abuse-threat-break-finger-unruly-child-no-information-middle-finger-student-after-school-care",
+      "incoming_story_id": "story_022816",
+      "candidates": [
+        {
+          "slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+          "headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5099,
+          "retrieval_score": 0.4699,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-vero-beach-man-60-dies-in-crash-with-semi-at-66th-and-49th",
+          "headline": "Vero Beach Man, 60, Dies in Crash With Semi at 66th and 49th",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4923,
+          "retrieval_score": 0.4523,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-red-flag-warnings-4-6-foot-surf-keep-st-lucie-beaches-on-high-hazard-alert",
+          "headline": "Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4599,
+          "retrieval_score": 0.4199,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
+          "headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4287,
+          "retrieval_score": 0.3887,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-southeast-county-line-road-bridge-closes-for-year-long-7m-rebuild-in-martin-coun",
+          "headline": "Southeast County Line Road Bridge Closes for Year-Long $7M Rebuild in Martin County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.418,
+          "retrieval_score": 0.384,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-byron-donalds-brings-governor-bus-tour-to-fort-pierce-college-campus",
+          "headline": "Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3998,
+          "retrieval_score": 0.3658,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
+          "headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3972,
+          "retrieval_score": 0.3632,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-12-lost-cellphone-sparked-false-weapon-rumor-at-vero-beach-high-school",
+          "headline": "Lost Cellphone Sparked False Weapon Rumor at Vero Beach High School",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3968,
+          "retrieval_score": 0.3868,
+          "reasons": [
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-10-08-hobe-sound-woman-accused-of-burying-cats-alive-says-she-thought-they-were-demons",
+          "headline": "Rescued Hobe Sound Kittens Buried Alive Recovering in Foster Care",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3946,
+          "retrieval_score": 0.3756,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
+          "headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3828,
+          "retrieval_score": 0.3518,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-15-americorps-literacy-mentors-return-to-martin-county-boys-girls-clubs",
+          "headline": "AmeriCorps Literacy Mentors Return to Martin County Boys & Girls Clubs",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3806,
+          "retrieval_score": 0.3616,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-vero-beach-airport-schedule-change-renews-focus-on-treasure-coast-travel-options",
+          "headline": "Vero Beach Airport Schedule Change Renews Focus On Treasure Coast Travel Options",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3656,
+          "retrieval_score": 0.3496,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Prosecutors filed a no information on Oct. 5 against bus driver Tracy Marie Alpy",
+          "Alpy, 65, of Sebastian, arrested Sept. 10 over Aug. 24 incident involving a student's finger"
+        ],
+        "reason": "No candidate concerns the Tracy Marie Alpy school bus child abuse case; none share the named defendant, incident, or case facts. This is a distinct event with no prior canonical in the candidate set, so it should become a new story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Prosecutors filed a no information on Oct. 5 against bus driver Tracy Marie Alpy",
+          "Alpy, 65, of Sebastian, arrested Sept. 10 over Aug. 24 incident involving a student's finger"
+        ],
+        "reason": "No candidate concerns the Tracy Marie Alpy school bus child abuse case; none share the named defendant, incident, or case facts. This is a distinct event with no prior canonical in the candidate set, so it should become a new story.",
         "validation_errors": [],
         "consistency_repairs": []
       }
