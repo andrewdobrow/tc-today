@@ -28,7 +28,10 @@ def _article():
 def test_xfinity_sponsored_identity_date_and_dedicated_martin_category():
     item = _article()
     assert item["slug"] == SLUG
-    assert item["headline"] == "Xfinity Celebrates New Store in Stuart"
+    # Keep the permanent story identity stable without freezing editable headline copy.
+    # An approved sponsor headline may change while its canonical URL stays unchanged.
+    headline = str(item.get("headline") or "").casefold()
+    assert "xfinity" in headline and "stuart" in headline
     assert item["publish_on"] == "2026-10-21"
     assert item["category"] == "business"
     assert item["sponsored"] is True
