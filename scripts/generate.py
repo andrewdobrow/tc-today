@@ -19108,6 +19108,17 @@ def load_custom_articles():
                 if str(art.get("article_type") or "") == "product_guide"
                 else ""
             )
+            # Body-only equality must not suppress an editor's new hero image.
+            # Image corrections update the existing custom permalink in place,
+            # while unchanged queue entries remain no-ops. Check all archived
+            # image representations because image mirroring can preserve a hosted
+            # URL separately from the original editorial selection.
+            submitted_image = str(art.get("image_url") or "").strip()
+            archived_images = {
+                str(identity_existing.get(field) or "").strip()
+                for field in ("image_url", "source_image_url", "hosted_image_url")
+            }
+            image_changed = bool(submitted_image and submitted_image not in archived_images)
             exact_headline_unchanged = (
                 _archive_custom_headline_key(identity_existing) == headline
                 or _exact_custom_headline(identity_existing.get("headline")) == headline
@@ -19118,6 +19129,7 @@ def load_custom_articles():
                 and saved_hash
                 and saved_hash == payload_hash
                 and product_signature == current_product_signature
+                and not image_changed
             )
             slug = str(identity_existing.get("slug") or "")
             art["replace_slug"] = slug

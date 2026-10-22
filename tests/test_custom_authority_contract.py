@@ -71,6 +71,81 @@ def test_exact_payload_is_retained_as_active_placement_without_republication(tmp
     assert retained[0]["link"].endswith("/articles/custom-city-budget.html")
 
 
+def test_custom_image_only_update_reuses_original_permalink(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    headline, body = "Weekend events guide", "Five verified events " * 40
+    slug = "2026-10-21-treasure-coast-weekend-events-oct-24-25"
+    image = "https://treasurecoast.today/images/hobgoblins-stuart.jpg"
+    archive = [{
+        "slug": slug, "headline": headline, "is_custom": True,
+        "authoritative_custom": True,
+        "custom_id": "treasure-coast-top-five-weekend-2026-10-24-25",
+        "custom_body_hash": g._custom_body_hash(body),
+        "image_url": "", "product_guide_hash": "",
+        "first_published": "Wed, 21 Oct 2026 15:00:00 -0400",
+    }]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    submission = {
+        "headline": headline, "body": body, "category": "things_to_do",
+        "slug": slug, "custom_id": archive[0]["custom_id"],
+        "image_url": image, "expires": "2099-01-01",
+    }
+    (tmp_path / "custom_articles.json").write_text(json.dumps([submission]), encoding="utf-8")
+    rows = g.load_custom_articles()
+    assert len(rows) == 1
+    assert not rows[0].get("_custom_payload_unchanged")
+    assert rows[0]["replace_slug"] == slug
+    assert rows[0]["image_url"] == image
+    page = g.render_article_page(rows[0], "Things to Do", "things_to_do", "2026-10-21", slug)
+    assert f'<figure class="article-hero-image"><img src="{image}"' in page
+    assert f'<meta property="og:image" content="{image}"' in page
+    assert f'<meta name="twitter:image" content="{image}"' in page
+
+
+def test_custom_unchanged_image_does_not_force_rerender(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    headline, body = "Weekend events guide", "Five verified events " * 40
+    slug = "2026-10-21-treasure-coast-weekend-events-oct-24-25"
+    image = "https://treasurecoast.today/images/hobgoblins-stuart.jpg"
+    archive = [{
+        "slug": slug, "headline": headline, "is_custom": True,
+        "custom_body_hash": g._custom_body_hash(body),
+        "image_url": image, "product_guide_hash": "",
+    }]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    (tmp_path / "custom_articles.json").write_text(json.dumps([{
+        "headline": headline, "body": body, "category": "things_to_do",
+        "slug": slug, "image_url": image, "expires": "2099-01-01",
+    }]), encoding="utf-8")
+    rows = g.load_custom_articles()
+    assert len(rows) == 1
+    assert rows[0]["_custom_payload_unchanged"] is True
+    assert rows[0]["_archived_slug"] == slug
+
+
+def test_custom_image_mirrored_source_url_is_still_unchanged(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    headline, body = "Weekend events guide", "Five verified events " * 40
+    source_image = "https://treasurecoast.today/images/hobgoblins-stuart.jpg"
+    archive = [{
+        "slug": "custom-weekend-guide", "headline": headline, "is_custom": True,
+        "custom_body_hash": g._custom_body_hash(body),
+        "image_url": "https://cdn.example.com/mirrored.jpg",
+        "source_image_url": source_image, "product_guide_hash": "",
+    }]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    (tmp_path / "custom_articles.json").write_text(json.dumps([{
+        "headline": headline, "body": body, "category": "things_to_do",
+        "image_url": source_image, "expires": "2099-01-01",
+    }]), encoding="utf-8")
+    rows = g.load_custom_articles()
+    assert len(rows) == 1
+    assert rows[0]["_custom_payload_unchanged"] is True
+
+
 def test_changed_body_updates_exact_headline_in_place(tmp_path, monkeypatch):
     g = _load_generate()
     monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)

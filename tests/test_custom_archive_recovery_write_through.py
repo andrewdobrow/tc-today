@@ -244,6 +244,9 @@ def test_unchanged_published_custom_remains_active_queue_item(tmp_path, monkeypa
         "authoritative_custom": True,
         "custom_body_hash": g._custom_body_hash(body),
         "product_guide_hash": "",
+        # This fixture represents an unchanged published article, including its image.
+        # A missing archived image must instead trigger an image-only correction.
+        "image_url": "/images/psltrainingfacility.png",
         "editorial_story_id": "custom:psl-training",
         "ranking_eligible": True,
         "legacy_identity_status": "identified",
