@@ -10527,7 +10527,9 @@ def format_age(published_str):
     try:
         from email.utils import parsedate_to_datetime
         from datetime import timezone, timedelta
-        et      = timezone(timedelta(hours=-4))  # EDT approximation
+        # "Yesterday" describes the previous *Eastern calendar day*, not the
+        # preceding 48 hours. Use the real Eastern time zone for DST transitions.
+        et      = ZoneInfo("America/New_York")
         dt_utc  = parsedate_to_datetime(published_str).astimezone(timezone.utc)
         now_utc = datetime.now(timezone.utc)
         mins    = int((now_utc - dt_utc).total_seconds() / 60)
@@ -10536,11 +10538,9 @@ def format_age(published_str):
         hour    = dt_et.hour % 12 or 12
         ampm    = "AM" if dt_et.hour < 12 else "PM"
         time_str = f"{hour}:{dt_et.strftime('%M')} {ampm} ET"
-        if mins < 60:
-            return "A few minutes ago"
         if dt_et.date() == now_et.date():
-            return time_str
-        if mins < 2880:
+            return "A few minutes ago" if 0 <= mins < 60 else time_str
+        if dt_et.date() == now_et.date() - timedelta(days=1):
             return f"Yesterday, {time_str}"
         months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
         return f"{months[dt_et.month-1]} {dt_et.day}, {time_str}"
@@ -10686,6 +10686,8 @@ def _format_category_hero_timestamp(item, archive_entries=None):
 
 CANONICAL_HERO_FRESHNESS_VERSION = "1.2"
 CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS = 18
+# A quiet news period must never promote week-old reporting into the homepage hero.
+CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS = 72
 CANONICAL_HERO_OLD_CANONICAL_UPDATE_WINDOW_HOURS = 8
 CANONICAL_HERO_REFRESHED_SLUGS_THIS_RUN = set()
 
@@ -10888,6 +10890,156 @@ def _write_canonical_hero_freshness_report(report):
     return report
 
 
+def _recent_canonical_archive_homepage_hero(archive, output_root, *, now=None, max_age_hours=72):
+    """Recover a homepage candidate from the FULL canonical published archive.
+
+    This is intentionally independent of category hero/card selection: that small
+    display deck is not a complete inventory of newly published reporting. Only
+    existing article files with publishable, canonical, non-retired identities and
+    verifiable first-publication or validated material-update timestamps qualify.
+    The archive is never modified and an unrelated archive headline cannot create
+    a new permalink.
+    """
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    output_root = Path(output_root)
+    article_dir = output_root / "articles"
+    checked = 0
+    verified = []
+    for entry in _filter_source_retirement_archive_view(archive, output_root):
+        if not isinstance(entry, dict):
+            continue
+        slug = str(entry.get("slug") or "").strip()
+        if not slug or entry.get("canonical_slug", slug) != slug:
+            continue
+        if entry.get("ranking_eligible") is not True:
+            continue
+        # Check canonical editorial recency BEFORE costly HTML/identity checks:
+        # only a handful of articles need quality validation on each update run.
+        # lastmod, RSS timestamps and automated image changes do not count.
+        freshness = _canonical_hero_freshness_assessment(entry, now=now)
+        age = freshness.get("age_hours")
+        actual_instant = _parse_publication_timestamp(freshness.get("date_value"))
+        if (age is None or not 0 <= age < max_age_hours or actual_instant is None
+                or actual_instant > now + timedelta(minutes=5)):
+            continue
+        checked += 1
+        if not _archive_entry_live_identity_safe(entry):
+            continue
+        if not _published_article_path(slug, article_dir):
+            continue
+        if not _archive_entry_publishable(entry):
+            continue
+        if (_is_nonstory_placeholder(entry)
+                or _is_publisher_self_promotion(entry)
+                or _is_external_weekend_event_roundup(entry)
+                or _archive_entry_has_contextless_update_lead(entry)
+                or _archive_entry_has_article_framing_failure(entry)):
+            continue
+        memberships = set(_item_category_memberships(entry))
+        memberships.update(entry.get("category_keys") or ())
+        memberships.update(entry.get("county_keys") or ())
+        if memberships == {"florida"} or not memberships:
+            continue
+        # Avoid a sports recap or event promotion displacing current hard news.
+        if memberships <= {"sports", "things_to_do", "florida"}:
+            continue
+        if "sports" in memberships and _archive_sports_event_window_expired(entry, now):
+            continue
+        key = next((k for k in ("crime", "local_gov", "business") if k in memberships), "")
+        if not key:
+            for county_key in ("martin", "st_lucie", "indian_river"):
+                if county_key not in memberships:
+                    continue
+                authority = _county_membership_authority_assessment(entry, county_key)
+                if county_key in authority.get("supported_counties", ()):
+                    key = county_key
+                    break
+        if not key or key not in CATEGORIES:
+            continue
+        # An article recovered for the homepage must satisfy the exact same
+        # topic and county authority as its category placement would.
+        contract = _category_eligibility_contract_assessment(key, entry)
+        if contract.get("mode") == "enforce" and not contract.get("eligible"):
+            continue
+        declared_counties = memberships.intersection(COUNTY_KEYS)
+        if any(
+            county not in _county_membership_authority_assessment(
+                entry, county
+            ).get("supported_counties", ())
+            for county in declared_counties
+        ):
+            continue
+        if key not in COUNTY_KEYS:
+            # A locally unrelated Florida-wide article cannot enter the homepage
+            # merely because it received a broad 'crime' or 'business' tag.
+            local_text = " ".join(str(entry.get(f) or "") for f in (
+                "headline", "teaser", "source_headline",
+            )).lower()
+            if not _has_any(local_text, (
+                "treasure coast", "martin county", "st. lucie", "st lucie",
+                "indian river", "stuart", "jensen beach", "palm city",
+                "hobe sound", "port salerno", "port st. lucie", "port st lucie",
+                "fort pierce", "vero beach", "sebastian", "fellsmere",
+                "indiantown", "jupiter island", "hutchinson island",
+            )):
+                continue
+        body = (_archive_article_body(entry) or entry.get("teaser") or "").strip()
+        if not body:
+            continue
+        row = dict(entry)
+        row.update({
+            "body": body,
+            "teaser": str(entry.get("teaser") or body[:220]),
+            "published": entry.get("first_published") or entry.get("date") or "",
+            "published_raw": entry.get("first_published") or entry.get("date") or "",
+            "link": f"{SITE_URL}/articles/{slug}.html",
+            "_archived_slug": slug,
+            "_archive_only": True,
+            "_archive_verified_quality": True,
+            "_canonical_freshness_bound": True,
+            "source_quality": "archive",
+            "category_key": key,
+            "category_label": CATEGORIES[key]["label"],
+            "category_keys": sorted(memberships),
+            "county_keys": sorted(memberships.intersection(COUNTY_KEYS)),
+            "urgency_score": 4 if key in ("crime", "local_gov") else 3,
+            "image_url": entry.get("image_url") or "",
+            "image_credit": entry.get("image_credit") or "",
+            "enriched": True,
+        })
+        # Archive candidates may lead the homepage, but do not become new
+        # category-page placements, overwrite archived content or alter URLs.
+        verified.append((age, row))
+
+    if not verified:
+        return None, {"recent_timestamp_candidates": checked, "eligible": 0}
+    # Newsworthiness is considered within the freshest 12-hour band, rather
+    # than allowing a high-urgency week-old story to outrank current reporting.
+    best_band = min(int(age // 12) for age, _ in verified)
+    band = [(age, row) for age, row in verified if int(age // 12) == best_band]
+    def order(candidate):
+        age, row = candidate
+        key = row["category_key"]
+        importance = {"crime": 4, "local_gov": 4, "business": 3,
+                      "martin": 3, "st_lucie": 3, "indian_river": 3}.get(key, 0)
+        quality = min(int(row.get("article_word_count") or 0), 600) / 600
+        return (importance, quality, -age)
+    age, chosen = max(band, key=order)
+    synthetic = {
+        "category_key": chosen["category_key"],
+        "category_label": chosen["category_label"],
+        "hero": chosen,
+        "cards": [],
+    }
+    return synthetic, {
+        "recent_timestamp_candidates": checked,
+        "eligible": len(verified),
+        "freshest_band_hours": best_band * 12,
+        "selected_slug": chosen["_archived_slug"],
+        "selected_age_hours": age,
+    }
+
+
 def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=None):
     """Re-evaluate the homepage hero after final canonical publication binding.
 
@@ -10899,6 +11051,15 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
     now = datetime.now(timezone.utc)
     before = (top_cat or {}).get("hero") or {}
     before_assessment = _canonical_hero_freshness_assessment(before, now=now)
+
+    # The category decks are presentation subsets, not the universe of news.
+    # Examine the entire PUBLISHED canonical archive after write_archives(), so
+    # hundreds of recent articles cannot silently disappear from hero competition.
+    latest_archive = load_archive(output_root / "archive.json")
+    archive_lead, archive_pool_report = _recent_canonical_archive_homepage_hero(
+        latest_archive, output_root, now=now,
+        max_age_hours=CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS,
+    )
 
     fresh_candidates = []
     for category in all_categories or []:
@@ -10943,6 +11104,20 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
                     **assessment,
                 })
 
+    # The final publication bind may change the candidate's identity and date.
+    # Retain a separate recent pool so the no-18-hour case cannot fall back to
+    # an old, high-urgency canonical even when yesterday's coverage survives.
+    recent_candidates = []
+    for category in all_categories or []:
+        for item in [category.get("hero")] + list(category.get("cards") or []):
+            if not isinstance(item, dict) or not item.get("headline"):
+                continue
+            if _is_nonstory_placeholder(item) or item.get("ranking_eligible") is False:
+                continue
+            age = _canonical_hero_freshness_assessment(item, now=now).get("age_hours")
+            if age is not None and 0 <= age < CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS:
+                recent_candidates.append(item)
+
     refreshed_slugs = {str(slug or "").strip() for slug in CANONICAL_HERO_REFRESHED_SLUGS_THIS_RUN if str(slug or "").strip()}
     refreshed_candidates = [
         row for row in fresh_candidates
@@ -10965,17 +11140,54 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
                 "update became fresh but hero reselection produced no hero"
             )
         action = "reselected_after_same_run_material_update"
-    elif before_assessment.get("stale") and fresh_candidates:
+    elif before_assessment.get("stale") and (fresh_candidates or recent_candidates):
         selected = select_front_page_hero(all_categories, deterministic_only=True)
         if selected is None:
             raise RuntimeError(
-                "Canonical hero freshness contract FAILED: a fresh canonical candidate exists "
+                "Canonical hero freshness contract FAILED: a recent canonical candidate exists "
                 "but reselection produced no hero"
             )
         action = "reselected_after_final_canonical_binding"
 
     after = (selected or {}).get("hero") or {}
     after_assessment = _canonical_hero_freshness_assessment(after, now=now)
+    after_age = after_assessment.get("age_hours")
+    recovered_age = archive_pool_report.get("selected_age_hours")
+    if archive_lead and recovered_age is not None and (
+        after_age is None
+        or after_age >= CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS
+        or (after_age >= CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS
+            and recovered_age + 12 < after_age)
+    ):
+        selected = archive_lead
+        after = selected["hero"]
+        after_assessment = _canonical_hero_freshness_assessment(after, now=now)
+        after_age = after_assessment.get("age_hours")
+        action = "recovered_newer_verified_article_from_full_archive"
+        global FRONT_PAGE_HERO_AUDIT
+        FRONT_PAGE_HERO_AUDIT = {
+            "version": "1.11.3.5",
+            "generated_at": now.isoformat(timespec="seconds"),
+            "selection_reason": action,
+            "selected": {
+                "headline": after.get("headline", ""),
+                "category_key": selected["category_key"],
+                "archive_only": True,
+                "slug": after.get("_archived_slug", ""),
+            },
+            "full_archive_candidate_pool": archive_pool_report,
+        }
+        print(
+            "  Homepage hero archive recovery: "
+            f"{archive_pool_report.get('eligible', 0)} verified recent articles; "
+            f"selected '{after.get('headline','')[:75]}' "
+            f"(age={after_age}h)"
+        )
+    if after_age is None or after_age >= CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS:
+        raise RuntimeError(
+            "Canonical hero freshness contract FAILED: chosen homepage hero has "
+            "no verified editorial timestamp within 72 hours"
+        )
     if after_assessment.get("stale") and fresh_candidates:
         report = {
             "version": CANONICAL_HERO_FRESHNESS_VERSION,
@@ -10999,7 +11211,7 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
         "version": CANONICAL_HERO_FRESHNESS_VERSION,
         "generated_at": now.isoformat(timespec="seconds"),
         "passed": True,
-        "action": action if fresh_candidates else "stale_fallback_no_fresh_canonical_candidates",
+        "action": action,
         "before": {
             "headline": before.get("headline", ""),
             "canonical_slug": before.get("canonical_slug") or before.get("_archived_slug") or "",
@@ -11014,6 +11226,7 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
         "fresh_candidates": fresh_candidates,
         "same_run_material_update_candidate_count": len(refreshed_candidates),
         "same_run_material_update_candidates": refreshed_candidates,
+        "full_archive_candidate_pool": archive_pool_report,
     }
     _write_canonical_hero_freshness_report(report)
     print(
@@ -11366,9 +11579,15 @@ def select_front_page_hero(all_categories, deterministic_only=False):
     ]
     working = active_candidates if active_candidates else list(candidate_pool)
 
-    forced = [c for c in working if (c.get("hero") or {}).get("force_hero")]
+    # Even an editorial pin cannot turn an expired story into breaking news.
+    # Evaluate its canonical publication/update timestamp before honoring a pin.
+    forced = [
+        c for c in working
+        if (c.get("hero") or {}).get("force_hero")
+        and not _stale_assessment(c).get("stale")
+    ]
     if forced:
-        return _materialize(max(forced, key=_priority), "explicit_force_hero")
+        return _materialize(max(forced, key=_priority), "explicit_fresh_force_hero")
 
     fresh_candidates = []
     global HERO_PREFILTER_AUDIT
@@ -11420,11 +11639,46 @@ def select_front_page_hero(all_categories, deterministic_only=False):
                 if c.get("category_key") != "sports" or _is_major_sports_story(c.get("hero") or {})
             ]
     else:
-        print("  Hero pre-filter: no fresh canonical candidates; using deterministic stale fallback")
-        non_sports = [c for c in working if c.get("category_key") != "sports"]
-        if non_sports:
-            working = non_sports
-        return _materialize(max(working, key=_priority), "deterministic_stale_fallback")
+        # The previous fallback ranked every item older than 72 hours with
+        # virtually the same age penalty. A high-urgency article updated a week
+        # ago could therefore beat yesterday's coverage on a quiet Sunday.
+        # Restore progressively wider editorial freshness windows instead of
+        # treating the entire archive as one urgency contest. These windows use
+        # canonical publication/validated-update receipts, never generic lastmod.
+        for limit in (48, CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS):
+            recent = []
+            for candidate in candidate_pool:
+                assessment = _stale_assessment(candidate)
+                age = assessment.get("age_hours")
+                if age is not None and 0 <= age < limit:
+                    recent.append(candidate)
+            if not recent:
+                continue
+            # A 25-hour-old story should beat a 44-hour-old one before
+            # urgency and other editorial weighting break ties.
+            youngest_band = min(int(_stale_assessment(c)["age_hours"] // 12) for c in recent)
+            recent = [
+                c for c in recent
+                if int(_stale_assessment(c)["age_hours"] // 12) == youngest_band
+            ]
+            non_sports = [c for c in recent if c.get("category_key") != "sports"]
+            if non_sports:
+                recent = non_sports
+            forced_recent = [c for c in recent if (c.get("hero") or {}).get("force_hero")]
+            choice = max(forced_recent or recent, key=_priority)
+            print(
+                f"  Hero pre-filter: no story within 18 hours; selecting a "
+                f"canonical story within {limit} hours rather than an outdated lead"
+            )
+            return _materialize(choice, f"recent_canonical_fallback_{limit}h")
+
+        # This is the PRE-publication selection pass. The complete canonical
+        # archive is only available after write_archives(), and the final gate
+        # will reselect or refuse publication. Do not abort before it can rescue
+        # a recent article missing from every category deck.
+        non_sports = [c for c in candidate_pool if c.get("category_key") != "sports"]
+        provisional = max(non_sports or candidate_pool, key=_priority)
+        return _materialize(provisional, "provisional_pending_full_archive_freshness_recovery")
 
     working = sorted(working, key=_priority, reverse=True)[:12]
     if deterministic_only:
@@ -15511,14 +15765,13 @@ def global_rank(all_cards, dedupe_against=None):
 
 
 
-LATEST_NEWS_RAIL_SCHEMA_VERSION = 1
+LATEST_NEWS_RAIL_SCHEMA_VERSION = 2
 
 
 def _latest_news_publication_datetime(entry):
-    """Return the article's real TCT publication time for chronological surfaces.
+    """Return the article's original TCT publication time.
 
-    ``Latest News`` is a publication stream, not an importance ranking. Prefer the
-    full ``first_published`` receipt written when TCT created the article. Legacy
+    Prefer the full ``first_published`` receipt written when TCT created the article. Legacy
     rows without that receipt fall back to their publication date or dated slug.
     Deliberately do not use ``lastmod``: routine archive reconciliation or an in-place
     copy edit must not make an old article appear newly published.
@@ -15595,8 +15848,50 @@ def _latest_news_entry_eligible(entry):
     return True
 
 
+
+def _latest_news_validated_update_datetime(entry):
+    """Return only a proven material-update timestamp newer than publication.
+
+    ``lastmod`` and generic ``updated_at`` reflect ordinary maintenance and must
+    never make an archived story new again, even if it had an earlier material
+    update. The historical publication timestamp remains immutable.
+    """
+    if not isinstance(entry, dict) or entry.get("meaningful_update_validated") is not True:
+        return None
+    published_at = _latest_news_publication_datetime(entry)
+    updates = [
+        parsed.astimezone(timezone.utc)
+        for key in ("canonical_last_material_update_at", "last_meaningful_update_at")
+        if (parsed := _parse_any_datetime(entry.get(key))) is not None
+    ]
+    if not updates:
+        return None
+    update_at = max(updates)
+    return update_at if published_at is None or update_at > published_at else None
+
+
+def _latest_news_effective_datetime(entry):
+    """Chronology for Latest News: publication or validated material update."""
+    return _latest_news_validated_update_datetime(entry) or _latest_news_publication_datetime(entry)
+
+
+def _latest_news_display_timestamp(entry, archive_entries=None):
+    """Use the same update authority for ordering and the visible timestamp."""
+    updated_at = _latest_news_validated_update_datetime(entry)
+    if updated_at is not None:
+        from email.utils import format_datetime
+        label = format_age(format_datetime(updated_at))
+        if label:
+            if label.startswith("A few minutes ago"):
+                label = "a few minutes ago" + label[len("A few minutes ago"):]
+            elif label.startswith("Yesterday"):
+                label = "yesterday" + label[len("Yesterday"):]
+            return f"Updated {label}"
+    return _format_category_hero_timestamp(entry, archive_entries)
+
+
 def _select_latest_news_entries(archive_entries, limit=5):
-    """Select the newest canonical TCT publications in strict reverse chronology."""
+    """Select the newest canonical TCT stories by publication or validated update."""
     try:
         limit = max(0, int(limit))
     except (TypeError, ValueError):
@@ -15620,12 +15915,14 @@ def _select_latest_news_entries(archive_entries, limit=5):
         if publication_key in seen_publications:
             continue
         published_at = _latest_news_publication_datetime(entry)
-        if published_at is None:
+        effective_at = _latest_news_effective_datetime(entry)
+        if effective_at is None:
             continue
         normalized = dict(entry)
         normalized["slug"] = slug
-        normalized["_latest_published_at"] = published_at.isoformat()
-        candidates.append((published_at, slug, normalized))
+        normalized["_latest_published_at"] = published_at.isoformat() if published_at else ""
+        normalized["_latest_effective_at"] = effective_at.isoformat()
+        candidates.append((effective_at, slug, normalized))
         seen_publications.add(publication_key)
 
     candidates.sort(key=lambda row: (row[0], row[1]), reverse=True)
@@ -16288,7 +16585,7 @@ def _write_top_stories_ranking_report(report, output_root):
 def _write_latest_news_rail_contract(entries, archive_entries, output_root):
     """Persist and fail closed when the Latest News rail is not chronological."""
     selected = list(entries or [])
-    selected_times = [_latest_news_publication_datetime(entry) for entry in selected]
+    selected_times = [_latest_news_effective_datetime(entry) for entry in selected]
     descending = all(
         selected_times[index] is not None
         and selected_times[index + 1] is not None
@@ -16302,12 +16599,17 @@ def _write_latest_news_rail_contract(entries, archive_entries, output_root):
     report = {
         "schema_version": LATEST_NEWS_RAIL_SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "policy": "strict_reverse_tct_publication_chronology",
+        "policy": "strict_reverse_tct_validated_editorial_activity",
         "passed": passed,
         "limit": len(selected),
         "selected_slugs": selected_slugs,
-        "selected_publication_times": [
+        "selected_effective_times": [
             value.isoformat() if value is not None else "" for value in selected_times
+        ],
+        "selected_publication_times": [
+            (dt.isoformat() if dt is not None else "")
+            for entry in selected
+            for dt in [_latest_news_publication_datetime(entry)]
         ],
         "expected_slugs": expected_slugs,
     }
@@ -16317,13 +16619,130 @@ def _write_latest_news_rail_contract(entries, archive_entries, output_root):
     if not passed:
         raise RuntimeError(
             "Latest News rail contract FAILED: entries are not the newest canonical "
-            "TCT publications in reverse chronological order"
+            "TCT publications or validated material updates in reverse chronological order"
         )
     print(
         "  Latest News rail contract PASSED "
-        f"({len(selected_slugs)} strictly chronological publication(s))"
+        f"({len(selected_slugs)} chronological publication(s) or validated update(s))"
     )
     return report
+
+
+def _homepage_hero_headline_key(value):
+    """A displayed headline's exact text, independent of HTML entities or spacing."""
+    from html import unescape
+    return " ".join(unescape(re.sub(r"<[^>]*>", "", str(value or ""))).casefold().split())
+
+
+def _homepage_hero_exact_archive_owner(headline, archive, articles_dir):
+    """Find the unique published archive owner of the hero's *visible* headline.
+
+    A similarity, registry story ID, county-only incident key, or existing HTML
+    file is never enough to justify pairing unrelated headline and permalink.
+    """
+    heading = _homepage_hero_headline_key(headline)
+    if not heading:
+        return None
+    redirects = _load_canonical_redirect_slug_map(Path(articles_dir).parent)
+    matches = []
+    for entry in archive or []:
+        if not isinstance(entry, dict):
+            continue
+        if _homepage_hero_headline_key(entry.get("headline")) != heading:
+            continue
+        slug = _normalize_existing_article_slug(entry.get("slug"))
+        if not slug or not _published_article_path(slug, articles_dir):
+            continue
+        direct_slug, _ = _follow_canonical_redirect_slug(slug, redirects)
+        if direct_slug != slug:
+            continue
+        if entry.get("exclude_from_live_recovery") or entry.get("retired"):
+            continue
+        if not _archive_entry_live_identity_safe(entry):
+            continue
+        matches.append(entry)
+    return matches[0] if len(matches) == 1 else None
+
+
+def reconcile_homepage_hero_headline_permalink(top_cat, output_root):
+    """Repair a live lead whose inherited slug belongs to a different article.
+
+    The final canonical resolver can carry an old `_archived_slug` into rendering
+    even when the hero's new headline/body belong to a different publication.
+    This runs before homepage and iOS-feed rendering, using the persisted
+    archive's exact publication headline as independent identity evidence.
+    """
+    hero = (top_cat or {}).get("hero")
+    if not isinstance(hero, dict) or not hero.get("headline"):
+        return {"action": "no_hero"}
+    root = Path(output_root)
+    archive = load_archive(root / "archive.json")
+    by_slug = {
+        _normalize_existing_article_slug(row.get("slug")): row
+        for row in archive if isinstance(row, dict) and row.get("slug")
+    }
+    actual_slug = _normalize_existing_article_slug(
+        hero.get("_archived_slug") or hero.get("canonical_slug")
+        or _article_slug_from_permalink(hero.get("link", ""))
+    )
+    current = by_slug.get(actual_slug)
+    headline = _homepage_hero_headline_key(hero.get("headline"))
+    if current and _homepage_hero_headline_key(current.get("headline")) == headline:
+        return {"action": "verified", "slug": actual_slug}
+    if not current:
+        return {"action": "unbound", "slug": actual_slug}
+
+    corrected = _homepage_hero_exact_archive_owner(
+        hero.get("headline"), archive, root / "articles"
+    )
+    if not corrected:
+        raise RuntimeError(
+            "Homepage hero headline/permalink identity FAILED: "
+            f"{hero.get('headline', '')!r} is bound to unrelated published "
+            f"article {actual_slug!r} ({current.get('headline', '')!r}); "
+            "no unique, independently verified matching canonical headline."
+        )
+    new_slug = _normalize_existing_article_slug(corrected.get("slug"))
+    hero["_archived_slug"] = new_slug
+    hero["canonical_slug"] = new_slug
+    hero["slug"] = new_slug
+    hero["link"] = _canonical_article_permalink(new_slug)
+    for field in ("editorial_story_id", "incident_anchor_key", "custom_publication_key", "custom_event_key"):
+        if corrected.get(field):
+            hero[field] = corrected[field]
+        else:
+            hero.pop(field, None)
+    hero["_editorial_story_id"] = corrected.get("editorial_story_id", "")
+    hero["_canonical_freshness_bound"] = True
+    print(f"  Homepage hero permalink corrected: {actual_slug} -> {new_slug}")
+    return {"action": "corrected", "previous_slug": actual_slug, "canonical_slug": new_slug}
+
+
+def validate_rendered_homepage_hero_headline_permalink(index_html, output_root):
+    """Fail closed if late final-projection rewriting reintroduces a wrong hero URL."""
+    html = str(index_html or "")
+    match = re.search(
+        r'<section\b[^>]*data-cat-hero="all"[^>]*>(.*?)</section>',
+        html, flags=re.IGNORECASE | re.DOTALL,
+    )
+    if not match:
+        return {"action": "no_hero"}
+    block = match.group(1)
+    href = re.search(r'<a\b[^>]*class="hero-v3-link"[^>]*href="([^"]+)"', block)
+    heading = re.search(r'<h1\b[^>]*class="hero-v3-headline"[^>]*>(.*?)</h1>', block, re.I | re.S)
+    if not href or not heading:
+        raise RuntimeError("Homepage hero headline/permalink identity FAILED: missing hero link or headline")
+    slug = _article_slug_from_permalink(href.group(1))
+    rows = load_archive(Path(output_root) / "archive.json")
+    article = next((row for row in rows if _normalize_existing_article_slug(row.get("slug")) == slug), None)
+    if article is None or _homepage_hero_headline_key(article.get("headline")) != _homepage_hero_headline_key(heading.group(1)):
+        raise RuntimeError(
+            "Homepage hero headline/permalink identity FAILED after final render: "
+            f"visible={_homepage_hero_headline_key(heading.group(1))!r} | "
+            f"linked_slug={slug!r} | "
+            f"linked_article={str((article or {}).get('headline') or '')!r}"
+        )
+    return {"action": "verified", "slug": slug}
 
 
 def render_index(all_categories, top_cat):
@@ -17192,8 +17611,8 @@ def render_index(all_categories, top_cat):
     # Primary navigation is county-first. Editorial topics live under Sections so
     # the masthead remains easy to scan as TCT adds products such as Events.
 
-    # Editorial redesign modules: Latest News is an independent chronological
-    # publication stream. It must never inherit Top Stories importance ranking.
+    # Latest News is chronological editorial activity (new publications plus
+    # validated substantive updates), independent of Top Stories importance.
     latest_entries = _select_latest_news_entries(archive_for_links, limit=5)
     _write_latest_news_rail_contract(latest_entries, archive_for_links, OUTPUT_DIR)
     latest_items_html = ""
@@ -17202,7 +17621,7 @@ def render_index(all_categories, top_cat):
         if not _slug:
             continue
         _url = _canonical_article_permalink(_slug)
-        _ltime = _format_category_hero_timestamp(_latest, archive_for_links)
+        _ltime = _latest_news_display_timestamp(_latest, archive_for_links)
         _latest_category_key = str(_latest.get("category_key") or "")
         _lcat = str(_latest.get("category_label") or "").strip()
         if not _lcat and _latest_category_key in CATEGORIES:
@@ -18803,6 +19222,13 @@ def load_custom_articles():
                 if str(art.get("article_type") or "") == "product_guide"
                 else ""
             )
+            # An image-only correction must update the existing canonical page.
+            submitted_image = str(art.get("image_url") or "").strip()
+            archived_images = {
+                str(identity_existing.get(field) or "").strip()
+                for field in ("image_url", "source_image_url", "hosted_image_url")
+            }
+            image_changed = bool(submitted_image and submitted_image not in archived_images)
             exact_headline_unchanged = (
                 _archive_custom_headline_key(identity_existing) == headline
                 or _exact_custom_headline(identity_existing.get("headline")) == headline
@@ -18813,6 +19239,7 @@ def load_custom_articles():
                 and saved_hash
                 and saved_hash == payload_hash
                 and product_signature == current_product_signature
+                and not image_changed
             )
             slug = str(identity_existing.get("slug") or "")
             art["replace_slug"] = slug
@@ -19316,13 +19743,20 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     # published_raw (which for feed articles is the original source's timestamp).
     _pub_raw = hero.get("first_published") or hero.get("date", "") or pub_date
     _pub_display = _fmt_full(_pub_raw) if _pub_raw else pub_date
-    _updated_raw = ""
-    if hero.get("meaningful_update_validated"):
-        _updated_raw = str(
-            hero.get("last_meaningful_update_at")
-            or hero.get("updated_at")
-            or ""
-        ).strip()
+    # An article cannot be updated before it exists on TCT. Use the same
+    # validated material-update authority as Latest News, rather than falling
+    # back to a generic (possibly inherited) updated_at field. Compare the
+    # actual publish receipt as well because pub_date may be supplied by the
+    # caller when the archive row has no timestamp.
+    _validated_update_dt = _latest_news_validated_update_datetime(hero)
+    _published_dt = _parse_any_datetime(_pub_raw)
+    if (
+        _validated_update_dt is not None
+        and _published_dt is not None
+        and _validated_update_dt <= _published_dt.astimezone(timezone.utc)
+    ):
+        _validated_update_dt = None
+    _updated_raw = _validated_update_dt.isoformat() if _validated_update_dt is not None else ""
     _updated_display = _fmt_full(_updated_raw) if _updated_raw else ""
     _updated_html = (
         f'<span class="article-updated">Updated {_updated_display}</span>'
@@ -35122,6 +35556,67 @@ def _repair_article_shells(output_root):
             "wrapped": wrapped, "header_normalized": header_normalized,
             "sidebar_css_normalized": sidebar_css_normalized, "unrepairable": unrepairable}
 
+def _repair_prepublication_article_timestamps(output_root, limit=250):
+    """Correct impossible update-before-publication dates on retained article pages.
+
+    Newly generated pages use validated chronology in render_article_page(). Existing
+    HTML is intentionally retained between runs, so normalize recent direct pages
+    without rewriting their prose, canonical identity, or legitimate later updates.
+    """
+    from zoneinfo import ZoneInfo
+
+    publication_pattern = re.compile(
+        r'<span class="article-published">Published ([^<]+)</span>', re.I
+    )
+    update_pattern = re.compile(
+        r'<span class="article-updated">Updated ([^<]+)</span>', re.I
+    )
+    schema_pattern = re.compile(
+        r'(<script\s+type=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)',
+        re.I | re.S,
+    )
+    eastern = ZoneInfo("America/New_York")
+
+    def _byline_dt(value):
+        try:
+            return datetime.strptime(str(value).strip(), "%B %d, %Y at %I:%M %p ET").replace(tzinfo=eastern)
+        except (ValueError, TypeError):
+            return None
+
+    changed = 0
+    paths = _recent_direct_article_paths(output_root, limit=limit)
+    for path in paths:
+        original = path.read_text(encoding="utf-8", errors="ignore")
+        html = original
+        pub_match = publication_pattern.search(html)
+        upd_match = update_pattern.search(html)
+        if pub_match and upd_match:
+            pub_dt = _byline_dt(pub_match.group(1))
+            upd_dt = _byline_dt(upd_match.group(1))
+            if pub_dt is not None and upd_dt is not None and upd_dt <= pub_dt:
+                html = html[:upd_match.start()] + html[upd_match.end():]
+
+        def _repair_schema(match):
+            try:
+                payload = json.loads(match.group(2))
+            except (ValueError, TypeError):
+                return match.group(0)
+            if not isinstance(payload, dict) or payload.get("@type") not in ("NewsArticle", "Article"):
+                return match.group(0)
+            published = _parse_any_datetime(payload.get("datePublished"))
+            modified = _parse_any_datetime(payload.get("dateModified"))
+            if published is None or modified is None or modified >= published:
+                return match.group(0)
+            payload["dateModified"] = payload["datePublished"]
+            return match.group(1) + json.dumps(payload, ensure_ascii=False) + match.group(3)
+
+        html = schema_pattern.sub(_repair_schema, html)
+        if html != original:
+            path.write_text(html, encoding="utf-8")
+            changed += 1
+    return {"checked": len(paths), "repaired": changed}
+
+
 def _validate_presentation_contract(output_root):
     """Validate current presentation without blocking an urgent deploy on old archives.
 
@@ -42860,18 +43355,43 @@ def main():
     # final rendered projection is repaired with the exact URL/archive identity
     # model used by the validator so a repairable duplicate cannot abort an
     # otherwise-valid publication run.  The strict contracts still execute next.
+    # Final hard boundary after county/topic recovery and canonical rebinds.
+    # No late mutation may publish an expired homepage hero after the earlier gate.
+    _published_hero_assessment = _canonical_hero_freshness_assessment(
+        (top_cat or {}).get("hero") or {}
+    )
+    _published_hero_age = _published_hero_assessment.get("age_hours")
+    if (_published_hero_age is None
+            or _published_hero_age >= CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS):
+        raise RuntimeError(
+            "Final homepage hero freshness FAILED before render: "
+            f"{(top_cat or {}).get('hero', {}).get('headline', '')[:90]!r} "
+            f"(age_hours={_published_hero_age}); refusing stale homepage deployment"
+        )
+    # The homepage headline and canonical permalink must identify the same
+    # published article. Late placement rebinding can otherwise donate an old
+    # article's valid slug to a newly written, unrelated lead.
+    _hero_headline_permalink_reconciliation = reconcile_homepage_hero_headline_permalink(
+        top_cat, OUTPUT_DIR
+    )
     index_html = render_index(all_categories, top_cat)
     index_html, _final_surface_projection_repair = repair_final_canonical_surface_projection(
         index_html, OUTPUT_DIR
     )
     validate_final_canonical_surface_uniqueness(index_html, OUTPUT_DIR)
     validate_homepage_permalink_uniqueness(index_html, OUTPUT_DIR)
+    # The final URL-only projection may rewrite a link after in-memory repairs;
+    # inspect the actual hero headline + href together before publishing HTML.
+    validate_rendered_homepage_hero_headline_permalink(index_html, OUTPUT_DIR)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
 
     # Normalize persistent article files, then stop the deployment if the unified
     # presentation contract is not present. This prevents another apparently random
     # mix of old and new article shells from reaching production.
     _repair_article_shells(OUTPUT_DIR)
+    _timestamp_repair = _repair_prepublication_article_timestamps(OUTPUT_DIR)
+    if _timestamp_repair["repaired"]:
+        print(f"  Repaired {_timestamp_repair['repaired']} impossible article update timestamp(s)")
     _article_prose_policy = _normalize_article_prose_policy_sitewide(OUTPUT_DIR)
     print(
         "  Article prose policy contract PASSED: "
