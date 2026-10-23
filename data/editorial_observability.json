@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-23T17:49:36Z",
+  "generated_at": "2026-10-23T18:54:11Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 4,
-    "placements_after": 4,
+    "placements_before": 5,
+    "placements_after": 5,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,24 +49,33 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 182,
+    "candidates_processed": 181,
     "routes": {
-      "generate_new": 23,
-      "skip": 159
+      "generate_new": 15,
+      "skip": 166
     },
     "eligibility": {
       "listing": 3,
-      "low_value": 136,
+      "low_value": 135,
       "publishable": 43
     },
     "source_classes": {
-      "aggregator": 139,
-      "local_news": 30,
-      "regional_news": 10,
-      "unknown": 3
+      "aggregator": 138,
+      "local_news": 27,
+      "regional_news": 14,
+      "unknown": 2
     },
     "rejected_count": 3,
     "rejected_examples": [
+      {
+        "headline": "13055 N Indian River Dr, Sebastian, FL 32958 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNS0kwbXlpWVBhWEg5SzZ4c3B4U3JtVmdjNThzX1RnRVo1bFFVOHBvaFJCeDRLY1pXZEZvcVhfVi1wWnlFakxCdjJsSTFEOFQ3dHZwbzBYNGtjVjlSR2VOalVtYnNROVJUYWpVR2huLVhIeTVXUjFacWswUEt1SEVUSm1vWkoweTRLUXpRM1hudGZ0UU5KWWN4UDJyQQ?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "1593 Summit Rd SE, Palm Bay, FL 32909 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPVC03aElCdFF4R21TNTZSVkZQekpLVDI4N2I3VWxhTXJOZERLYUN0OC1kX09yM2JGOFAyN19yckZWQW5wSENJb2tWM3d3NWhFWWxOSDNxNEE5Q2ZTNlpNZEI2Y0tjM1dvdHBCSlp5VFQxVnMzTHhjRFZack5fZEN1ZTlBZHpGeXM2cnNOOGlteTJrQQ?oc=5",
@@ -84,28 +93,19 @@
           "Headline matches listing pattern 'realtor.com'"
         ],
         "source_class": "aggregator"
-      },
-      {
-        "headline": "13055 N Indian River Dr, Sebastian, FL 32958 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNS0kwbXlpWVBhWEg5SzZ4c3B4U3JtVmdjNThzX1RnRVo1bFFVOHBvaFJCeDRLY1pXZEZvcVhfVi1wWnlFakxCdjJsSTFEOFQ3dHZwbzBYNGtjVjlSR2VOalVtYnNROVJUYWpVR2huLVhIeTVXUjFacWswUEt1SEVUSm1vWkoweTRLUXpRM1hudGZ0UU5KWWN4UDJyQQ?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 19,
-      "same_event": 163
+      "new_story": 16,
+      "same_event": 165
     },
     "examples": [
       {
-        "story_id": "story_022973",
-        "title": "From billionaire taxes to abortion rights, these ballot measures could have national impact",
-        "event_key": "unknown-event-f39bb03653",
+        "story_id": "story_022992",
+        "title": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive",
+        "event_key": "unknown-event-8c54b4276f",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -115,15 +115,31 @@
         ]
       },
       {
+        "story_id": "story_022973",
+        "title": "From billionaire taxes to abortion rights, these ballot measures could have national impact",
+        "event_key": "unknown-event-f39bb03653",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_022974",
         "title": "Martin County Schools to host ‘Fall in Love with Martin’ family event - WCTI",
         "event_key": "unknown-event-b9f2061448",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -142,15 +158,14 @@
       },
       {
         "story_id": "story_022949",
-        "title": "Trump administration files lawsuit to block possible Democratic win in Alaska Senate race",
-        "event_key": "unknown-event-083d2ee2f3",
+        "title": "Trump says he ordered the Justice Department's lawsuit over Alaska's US Senate race",
+        "event_key": "unknown-event-c8ce2a381e",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://www.wptv.com/politics/america-votes/trump-administration-files-lawsuit-to-block-possible-democratic-win-in-alaska-senate-race",
           "Confidence: 1.00"
         ]
       },
@@ -195,6 +210,15 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "",
+        "title": "13055 N Indian River Dr, Sebastian, FL 32958 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
       },
       {
         "story_id": "story_022892",
@@ -340,34 +364,6 @@
         "story_id": "story_022846",
         "title": "156 Florida local officials back Byron Donalds for governor - Florida’s Voice",
         "event_key": "unknown-event-554fba5872",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_022847",
-        "title": "‘Really all I have to say’: Lee reacts to termination as St. Lucie fire chief",
-        "event_key": "fire-471784bc0a-471784bc0a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_022847",
-        "title": "‘Really all I have to say’: Lee reacts to termination as St. Lucie fire chief - WFLX",
-        "event_key": "fire-458f164dfe-458f164dfe",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -381,9 +377,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_022973",
-        "title": "From billionaire taxes to abortion rights, these ballot measures could have national impact",
-        "event_key": "unknown-event-f39bb03653",
+        "story_id": "story_022992",
+        "title": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive",
+        "event_key": "unknown-event-8c54b4276f",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -394,16 +390,33 @@
         ]
       },
       {
+        "story_id": "story_022973",
+        "title": "From billionaire taxes to abortion rights, these ballot measures could have national impact",
+        "event_key": "unknown-event-f39bb03653",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_022974",
         "title": "Martin County Schools to host ‘Fall in Love with Martin’ family event - WCTI",
         "event_key": "unknown-event-b9f2061448",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -423,16 +436,15 @@
       },
       {
         "story_id": "story_022949",
-        "title": "Trump administration files lawsuit to block possible Democratic win in Alaska Senate race",
-        "event_key": "unknown-event-083d2ee2f3",
+        "title": "Trump says he ordered the Justice Department's lawsuit over Alaska's US Senate race",
+        "event_key": "unknown-event-c8ce2a381e",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://www.wptv.com/politics/america-votes/trump-administration-files-lawsuit-to-block-possible-democratic-win-in-alaska-senate-race",
           "Confidence: 1.00"
         ]
       },
@@ -650,21 +662,6 @@
         "story_id": "story_022847",
         "title": "‘Really all I have to say’: Lee reacts to termination as St. Lucie fire chief",
         "event_key": "fire-471784bc0a-471784bc0a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_022847",
-        "title": "‘Really all I have to say’: Lee reacts to termination as St. Lucie fire chief - WFLX",
-        "event_key": "fire-458f164dfe-458f164dfe",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -694,9 +691,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 397,
-      "timeline_entries_examined": 1279,
-      "transitions_examined": 835,
+      "stories_with_timelines": 396,
+      "timeline_entries_examined": 1276,
+      "transitions_examined": 833,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 13,
       "high_confidence_candidate_count": 2,
@@ -1771,7 +1768,7 @@
           ]
         },
         {
-          "story_id": "story_022972",
+          "story_id": "story_022991",
           "story_title": "Semi-truck turns into path of SUV, killing Vero Beach driver, FHP says",
           "milestones": [
             "death"
@@ -1809,7 +1806,7 @@
           "prior_article": {
             "article_id": "rss-f553d4c8a3f4e320dbce",
             "event_key": "traffic-crash-vero-beach-00d3649543",
-            "published_at": "2026-10-23T17:41:05.468879+00:00",
+            "published_at": "2026-10-23T18:45:29.223473+00:00",
             "title": "Semi-truck turns into path of SUV, killing Vero Beach driver, FHP says",
             "source": "https://www.wptv.com/traffic/traffic-news/semi-truck-turns-into-path-of-suv-killing-vero-beach-driver-fhp-says",
             "url": "https://www.wptv.com/traffic/traffic-news/semi-truck-turns-into-path-of-suv-killing-vero-beach-driver-fhp-says"
@@ -1817,14 +1814,14 @@
           "newer_article": {
             "article_id": "rss-f995a5ace4061b13db15",
             "event_key": "traffic-crash-vero-beach-92d382e0b8",
-            "published_at": "2026-10-23T17:41:05.468879+00:00",
+            "published_at": "2026-10-23T18:45:29.223473+00:00",
             "title": "Vero Beach man, 60, dies in crash involving tractor-trailer in Indian River County - WPEC",
             "source": "https://cbs12.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news",
             "url": "https://cbs12.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_022972",
+            "Story: story_022991",
             "Novel milestones: death",
             "Identity anchor qualified: True",
             "Identity anchor codes: event_family_match, identity_anchor_qualified",
@@ -2397,35 +2394,35 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 669,
-      "treasure_coast_local": 398,
+      "florida": 664,
+      "treasure_coast_local": 399,
       "treasure_coast_region": 152,
-      "unknown": 1208
+      "unknown": 1197
     },
-    "average_score": 57.69
+    "average_score": 57.79
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 669,
-      "treasure_coast_local": 398,
+      "florida": 664,
+      "treasure_coast_local": 399,
       "treasure_coast_region": 152,
-      "unknown": 1208
+      "unknown": 1197
     },
     "average_priority": 3.5
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1544,
-      "developing": 102,
-      "ongoing": 781
+      "active": 1549,
+      "developing": 103,
+      "ongoing": 760
     }
   },
   "registry_health": {
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2410,
-    "active_stories_after": 2410,
+    "active_stories_before": 2397,
+    "active_stories_after": 2397,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2450,24 +2447,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 51,
+    "incident_anchor_to_story_count": 52,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-23T17:40:10Z",
-    "quarantined_story_records_retained": 4612,
-    "active_story_count": 2427
+    "generated_at": "2026-10-23T18:44:36Z",
+    "quarantined_story_records_retained": 4614,
+    "active_story_count": 2412
   },
   "stories": {
-    "total": 2427,
+    "total": 2412,
     "importance_levels": {
       "breaking": 8,
       "high": 53,
-      "normal": 395,
-      "low": 1971,
+      "normal": 391,
+      "low": 1960,
       "archived": 0
     },
-    "average_importance": 8.76,
+    "average_importance": 8.75,
     "top": [
       {
         "story_id": "story_021480",
@@ -2482,7 +2479,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 37.3
+          "age_hours": 38.37
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2548,13 +2545,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-22T04:23:25.505650+00:00",
-          "hours_since_update": 37.3,
+          "hours_since_update": 38.37,
           "event_count": 66,
           "timeline_entries": 52
         }
       },
       {
-        "story_id": "story_022972",
+        "story_id": "story_022991",
         "title": "Semi-truck turns into path of SUV, killing Vero Beach driver, FHP says",
         "score": 75,
         "editorial_priority": 85,
@@ -2566,7 +2563,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.05
+          "age_hours": 0.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2608,8 +2605,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-23T17:41:05.468879+00:00",
-          "hours_since_update": 0.05,
+          "last_updated": "2026-10-23T18:45:29.223473+00:00",
+          "hours_since_update": 0.06,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2627,7 +2624,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 30.94
+          "age_hours": 32.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2677,7 +2674,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-22T10:44:49.931157+00:00",
-          "hours_since_update": 30.94,
+          "hours_since_update": 32.02,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2695,7 +2692,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 1.93
+          "age_hours": 3.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2733,7 +2730,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-23T15:45:30.009156+00:00",
-          "hours_since_update": 1.93,
+          "hours_since_update": 3.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2751,7 +2748,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.05
+          "age_hours": 1.13
         },
         "level": "high",
         "importance_reasons": [
@@ -2790,7 +2787,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-23T17:41:05.468879+00:00",
-          "hours_since_update": 0.05,
+          "hours_since_update": 1.13,
           "event_count": 17,
           "timeline_entries": 17
         }
@@ -2808,7 +2805,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 6.95
+          "age_hours": 8.03
         },
         "level": "high",
         "importance_reasons": [
@@ -2846,7 +2843,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-23T10:44:25.402106+00:00",
-          "hours_since_update": 6.95,
+          "hours_since_update": 8.03,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2864,7 +2861,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 22.71
+          "age_hours": 23.79
         },
         "level": "high",
         "importance_reasons": [
@@ -2902,7 +2899,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-22T19:00:07.202363+00:00",
-          "hours_since_update": 22.71,
+          "hours_since_update": 23.79,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2920,7 +2917,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 22.69
+          "age_hours": 23.76
         },
         "level": "high",
         "importance_reasons": [
@@ -2956,7 +2953,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-10-22T19:00:07.202363+00:00",
-          "hours_since_update": 22.69,
+          "hours_since_update": 23.76,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2974,7 +2971,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 94.93
+          "age_hours": 96.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3015,7 +3012,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-19T18:45:36.350614+00:00",
-          "hours_since_update": 94.93,
+          "hours_since_update": 96.0,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3033,7 +3030,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 218.77
+          "age_hours": 219.85
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3081,7 +3078,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-14T14:54:48.604761+00:00",
-          "hours_since_update": 218.77,
+          "hours_since_update": 219.85,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3099,7 +3096,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 210.93
+          "age_hours": 212.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3148,7 +3145,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 210.93,
+          "hours_since_update": 212.01,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3166,7 +3163,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 186.95
+          "age_hours": 188.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3214,7 +3211,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-15T22:44:30.827001+00:00",
-          "hours_since_update": 186.95,
+          "hours_since_update": 188.02,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3232,7 +3229,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 66.95
+          "age_hours": 68.02
         },
         "level": "high",
         "importance_reasons": [
@@ -3284,7 +3281,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-20T22:44:30.679215+00:00",
-          "hours_since_update": 66.95,
+          "hours_since_update": 68.02,
           "event_count": 12,
           "timeline_entries": 11
         }
@@ -3302,7 +3299,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 222.96
+          "age_hours": 224.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3351,7 +3348,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-14T10:43:25.080645+00:00",
-          "hours_since_update": 222.96,
+          "hours_since_update": 224.04,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3369,7 +3366,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 316.95
+          "age_hours": 318.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3419,7 +3416,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-10T12:44:08.138949+00:00",
-          "hours_since_update": 316.95,
+          "hours_since_update": 318.03,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -3437,7 +3434,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 90.93
+          "age_hours": 92.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3475,7 +3472,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-19T22:45:27.947214+00:00",
-          "hours_since_update": 90.93,
+          "hours_since_update": 92.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3493,7 +3490,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 28.96
+          "age_hours": 30.04
         },
         "level": "normal",
         "importance_reasons": [
@@ -3533,7 +3530,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-22T12:43:43.652724+00:00",
-          "hours_since_update": 28.96,
+          "hours_since_update": 30.04,
           "event_count": 19,
           "timeline_entries": 19
         }
@@ -3551,7 +3548,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 210.94
+          "age_hours": 212.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3596,7 +3593,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 210.94,
+          "hours_since_update": 212.01,
           "event_count": 19,
           "timeline_entries": 18
         }
@@ -3614,7 +3611,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 198.96
+          "age_hours": 200.04
         },
         "level": "high",
         "importance_reasons": [
@@ -3658,7 +3655,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-15T10:43:23.074448+00:00",
-          "hours_since_update": 198.96,
+          "hours_since_update": 200.04,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3676,7 +3673,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 198.97
+          "age_hours": 200.04
         },
         "level": "high",
         "importance_reasons": [
@@ -3721,7 +3718,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-15T10:43:23.074448+00:00",
-          "hours_since_update": 198.97,
+          "hours_since_update": 200.04,
           "event_count": 5,
           "timeline_entries": 4
         }
@@ -3731,7 +3728,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-23T17:44:35Z",
+    "generated_at": "2026-10-23T18:49:06Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3755,17 +3752,17 @@
         "no_category_eligible_sources": 4
       },
       "model_attempt_count": 2,
-      "model_elapsed_seconds": 21.636,
+      "model_elapsed_seconds": 22.995,
       "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 27,
+      "category_eligibility_rejection_count": 9,
+      "published_story_duplicate_suppression_count": 28,
       "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0
     },
     "categories": [
@@ -3774,7 +3771,7 @@
         "category_label": "Local Government",
         "status": "cache_hit",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 12,
         "selected_source_count": 1,
         "cache_hit": true,
@@ -3792,10 +3789,25 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 1,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 1,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive"
+          }
+        ],
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3804,16 +3816,6 @@
             "editorial_story_id": "story_022867",
             "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
             "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "St. Lucie County Nuclear Power Plant turns 50",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-nuclear-power-plant-turns-50",
-            "editorial_story_id": "story_022832",
-            "canonical_slug": "2026-10-22-st-lucie-nuclear-plant-marks-50-years-as-nrc-grants-20-year-license-extension",
-            "canonical_headline": "St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3861,21 +3863,6 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-parents-win-push-for-school-zone-outside-citrus-grove-elementary",
             "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
             "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "St. Lucie County Nuclear Power Plant turns 50",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-nuclear-power-plant-turns-50",
-            "canonical_slug": "2026-10-22-st-lucie-nuclear-plant-marks-50-years-as-nrc-grants-20-year-license-extension",
-            "canonical_headline": "St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -3933,7 +3920,7 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "St. Lucie Fire Chief Jeff Lee Terminated; Deputy Chief Langel Named Interim",
-        "elapsed_seconds": 26.759
+        "elapsed_seconds": 24.809
       },
       {
         "category_key": "crime",
@@ -3941,7 +3928,7 @@
         "status": "generated_live",
         "fetched_candidate_count": 28,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 8,
+        "publishable_source_count": 9,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": false,
@@ -3950,11 +3937,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.217,
+            "elapsed_seconds": 5.918,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 6.217,
+        "model_elapsed_seconds": 5.918,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3965,11 +3952,50 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 2,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive"
+          },
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Gas leak closes Indiantown Road between I-95 and Maplewood Drive - WPEC",
+            "source_url": "https://cbs12.com/news/local/traffic-delay-indiantown-road-closure-island-way-due-to-construction-alternative-routes-palm-beach-county-traffic-island-way-florida-news"
+          }
+        ],
         "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
+            "editorial_story_id": "story_020394",
+            "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+            "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary",
@@ -3988,16 +4014,6 @@
             "canonical_slug": "2026-10-22-prosecutors-drop-child-abuse-case-against-indian-river-county-bus-driver",
             "canonical_headline": "Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Port St. Lucie Election includes Mayors race and trash pick-up - cw34.com",
-            "source_url": "https://cw34.com/news/local/port-st-lucie-election-includes-mayors-race-and-trash-pick-up",
-            "editorial_story_id": "story_022712",
-            "canonical_slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
-            "canonical_headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4030,6 +4046,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
+            "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
+            "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+            "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-parents-win-push-for-school-zone-outside-citrus-grove-elementary",
             "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
@@ -4051,21 +4082,6 @@
             "canonical_headline": "Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Port St. Lucie Election includes Mayors race and trash pick-up - cw34.com",
-            "source_url": "https://cw34.com/news/local/port-st-lucie-election-includes-mayors-race-and-trash-pick-up",
-            "canonical_slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
-            "canonical_headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -4107,9 +4123,9 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Port St. Lucie Police Arrest Suspect in Hit-and-Run That Critically Injured 63-Year-Old",
+        "live_hero_headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
         "generated_card_count": 0,
-        "elapsed_seconds": 30.021
+        "elapsed_seconds": 30.338
       },
       {
         "category_key": "business",
@@ -4134,9 +4150,28 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 5,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 6,
+        "category_eligibility_rejection_count": 4,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [
+              "source_locality:treasure coast",
+              "source_locality:st lucie county",
+              "source_locality:port st lucie",
+              "source_locality:fort pierce"
+            ],
+            "headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive"
+          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -4277,7 +4312,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 20.771
+        "elapsed_seconds": 19.704
       },
       {
         "category_key": "sports",
@@ -4315,7 +4350,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.07
+        "elapsed_seconds": 12.238
       },
       {
         "category_key": "things_to_do",
@@ -4323,7 +4358,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 5,
+        "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4388,7 +4423,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.919
+        "elapsed_seconds": 13.915
       },
       {
         "category_key": "florida",
@@ -4426,14 +4461,14 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.792
+        "elapsed_seconds": 11.592
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 22,
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4582,16 +4617,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.775
+        "elapsed_seconds": 16.159
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 3,
+        "selected_source_count": 3,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4599,11 +4634,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 15.419,
+            "elapsed_seconds": 17.077,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 15.419,
+        "model_elapsed_seconds": 17.077,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4614,15 +4649,15 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 11,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
+            "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - cw34.com",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
             "editorial_story_id": "story_020394",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
@@ -4641,8 +4676,8 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
+            "source_headline": "Port St. Lucie police seek two vehicles in hit-and-run that severely injured man - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-seek-two-vehicles-in-hit-and-run-that-severely-injured-man-63-year-old-october-9-public-ientification-vehicles-different-directions",
             "editorial_story_id": "story_020394",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
@@ -4652,6 +4687,16 @@
           {
             "category_key": "st_lucie",
             "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
+            "editorial_story_id": "story_020394",
+            "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+            "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
             "editorial_story_id": "story_020394",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
@@ -4708,24 +4753,34 @@
             "canonical_headline": "Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Lanes reopen after tractor trailer fire on Florida's Turnpike in St. Lucie County - WPBF",
+            "source_url": "https://www.wpbf.com/article/tractor-trailer-fire-florida-turnpike-st-lucie-county/74191434",
+            "editorial_story_id": "story_022280",
+            "canonical_slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
+            "canonical_headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
+            "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - cw34.com",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4749,7 +4804,22 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say - WPTV",
+            "source_headline": "Port St. Lucie police seek two vehicles in hit-and-run that severely injured man - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-seek-two-vehicles-in-hit-and-run-that-severely-injured-man-63-year-old-october-9-public-ientification-vehicles-different-directions",
+            "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+            "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
@@ -4764,7 +4834,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say",
+            "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
@@ -4851,14 +4921,42 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Lanes reopen after tractor trailer fire on Florida's Turnpike in St. Lucie County - WPBF",
+            "source_url": "https://www.wpbf.com/article/tractor-trailer-fire-florida-turnpike-st-lucie-county/74191434",
+            "canonical_slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
+            "canonical_headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Florida's Turnpike southbound",
+              "St. Lucie County",
+              "Mile Marker 161 near Okeechobee Road exit",
+              "7:54 a.m. tractor trailer fire",
+              "same source_url (WPBF)"
+            ],
+            "novel_facts": [],
+            "reason": "Identical source URL and same incident details (time, location, fire description) with no new facts; same story already canonicalized.",
+            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Taxpayers Face $350,000 Severance",
-        "generated_card_count": 0,
-        "elapsed_seconds": 33.023
+        "live_hero_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
+        "generated_card_count": 1,
+        "elapsed_seconds": 34.673
       },
       {
         "category_key": "indian_river",
@@ -4866,7 +4964,7 @@
         "status": "cache_hit",
         "fetched_candidate_count": 26,
         "fresh_candidate_count": 25,
-        "publishable_source_count": 8,
+        "publishable_source_count": 9,
         "selected_source_count": 2,
         "cache_hit": true,
         "archive_recovery_requested": false,
@@ -4883,7 +4981,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 9,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 1,
@@ -4939,7 +5037,7 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Vero Beach Man, 60, Dies in Crash at 66th Avenue and 49th Street",
-        "elapsed_seconds": 17.65
+        "elapsed_seconds": 18.742
       }
     ]
   }
