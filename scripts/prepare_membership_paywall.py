@@ -357,6 +357,13 @@ def main() -> None:
                 text = text[:body_match.start(1)] + cleaned_body_html + text[body_match.end(1):]
                 body_html = cleaned_body_html
                 prose_repaired += changed_paragraphs
+                # Recompute offsets after replacing any paragraph. Continuing
+                # with the pre-sanitization match could consume the start of
+                # the next sibling (usually the Kit newsletter <aside>) and
+                # render the end of its attributes as visible article text.
+                body_match = BODY_RE.search(text)
+                if not body_match:
+                    raise RuntimeError(f"Article prose repair invalidated the body/newsletter boundary: {slug}")
         split = split_article_body(body_html)
         if not split:
             short += 1
