@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-23T20:36:56Z",
+  "generated_at": "2026-10-23T22:48:25Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,43 +15,44 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 3,
+      "cache_hit": 1,
       "category_eligibility_archive_recovery": 5,
+      "generated_live": 2,
       "no_publishable_sources": 1
     },
     "failures": {
       "no_category_eligible_sources": 5
     },
-    "model_attempt_count": 0,
-    "model_elapsed_seconds": 0.0,
+    "model_attempt_count": 2,
+    "model_elapsed_seconds": 59.769,
     "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 35,
-    "story_aware_update_context_count": 2,
+    "category_eligibility_rejection_count": 8,
+    "published_story_duplicate_suppression_count": 28,
+    "story_aware_update_context_count": 0,
     "material_update_promotion_evaluation_count": 2,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 2,
-    "material_update_promotion_model_call_count": 0
+    "material_update_promotion_cache_hit_count": 1,
+    "material_update_promotion_model_call_count": 1
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "cache_hit",
-      "fetched_candidate_count": 27,
+      "status": "category_eligibility_archive_recovery",
+      "fetched_candidate_count": 26,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 11,
-      "selected_source_count": 1,
-      "cache_hit": true,
-      "archive_recovery_requested": false,
+      "publishable_source_count": 12,
+      "selected_source_count": 0,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Local Government category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -60,10 +61,41 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Turning declining shopping malls into housing developments",
+          "source_url": "https://www.wptv.com/money/real-estate-news/turning-declining-shopping-malls-into-housing-developments"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Man exercising at night critically injured in hit-and-run crash in Port St. Lucie, man arrested: Officials",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/man-charged-in-connection-with-hit-and-run-crash-critically-injuring-63-year-old-in-port-st-lucie-officials"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -102,16 +134,6 @@
           "editorial_story_id": "story_022712",
           "canonical_slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
           "canonical_headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County Fire Board terminates chief after calls for leadership change - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
-          "editorial_story_id": "story_022576",
-          "canonical_slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
-          "canonical_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -182,42 +204,33 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County Fire Board terminates chief after calls for leadership change - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
-          "canonical_slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
-          "canonical_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "St. Lucie Fire Chief Jeff Lee Terminated; Deputy Chief Langel Named Interim",
-      "elapsed_seconds": 24.95
+      "elapsed_seconds": 23.411
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 20,
+      "status": "generated_live",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 7,
-      "selected_source_count": 0,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Crime & Safety category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 17.427,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 17.427,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -226,7 +239,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -240,22 +253,12 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Gas leak closes Indiantown Road between I-95 and Maplewood Drive - WPEC",
-          "source_url": "https://cbs12.com/news/local/traffic-delay-indiantown-road-closure-island-way-due-to-construction-alternative-routes-palm-beach-county-traffic-island-way-florida-news"
+          "headline": "Turning declining shopping malls into housing developments",
+          "source_url": "https://www.wptv.com/money/real-estate-news/turning-declining-shopping-malls-into-housing-developments"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "Bronx man accused in St. Lucie County check fraud scheme arrested at Canadian border - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMiogJBVV95cUxPWXJYT0VwSjR0blhkSExvQ0pzTEwwV3E2aFhLWjMwOFhyNjF0WHQ2a0ZMa1FjMkdWNDlrbTl6QUE5YWxTSXMzRkYwekN2VUJGTXlKTFJWS3pESURxRGRsZTB3VTFBMTYzejBVNzFTcTlVd0NZYmJGS19OOWx1cnBRUHJJakFCNkxjN3JxaEZWOVBuTWkwNHF1NlA2cVNRZi1LQWVna3ZFOVZGRXZCYWJDaERvQUxJYlNYdDluQmh3dFhZWUpTakQ0a1p6dU1udHRnLVJnLVJNbEV4eHlVMWkwZXNUZDREU2RvWWpOOW5wTkJ3VU1QRlJGeE9YcFYzYkdBX1Bya3JnT3VnVFhrbF9XT1pmc0k0cE1QZGQ1RFhCT1plUQ",
-          "editorial_story_id": "story_022993",
-          "canonical_slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
-          "canonical_headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "crime",
           "source_headline": "Bronx man accused in St. Lucie County check fraud scheme arrested at Canadian border - WPEC",
@@ -278,22 +281,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
+          "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - cw34.com",
+          "source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
           "editorial_story_id": "story_020394",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-parents-win-push-for-school-zone-outside-citrus-grove-elementary",
-          "editorial_story_id": "story_022867",
-          "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
-          "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -326,21 +319,6 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "Bronx man accused in St. Lucie County check fraud scheme arrested at Canadian border - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMiogJBVV95cUxPWXJYT0VwSjR0blhkSExvQ0pzTEwwV3E2aFhLWjMwOFhyNjF0WHQ2a0ZMa1FjMkdWNDlrbTl6QUE5YWxTSXMzRkYwekN2VUJGTXlKTFJWS3pESURxRGRsZTB3VTFBMTYzejBVNzFTcTlVd0NZYmJGS19OOWx1cnBRUHJJakFCNkxjN3JxaEZWOVBuTWkwNHF1NlA2cVNRZi1LQWVna3ZFOVZGRXZCYWJDaERvQUxJYlNYdDluQmh3dFhZWUpTakQ0a1p6dU1udHRnLVJnLVJNbEV4eHlVMWkwZXNUZDREU2RvWWpOOW5wTkJ3VU1QRlJGeE9YcFYzYkdBX1Bya3JnT3VnVFhrbF9XT1pmc0k0cE1QZGQ1RFhCT1plUQ",
-          "canonical_slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
-          "canonical_headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Bronx man accused in St. Lucie County check fraud scheme arrested at Canadian border - WPEC",
           "source_url": "https://cbs12.com/news/local/bronx-man-accused-in-st-lucie-county-check-fraud-scheme-arrested-at-canadian-border-stolen-identity-stolen-check-real-estate-company-niagra-county-jail-new-york",
           "canonical_slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
@@ -371,27 +349,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
+          "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - cw34.com",
+          "source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-parents-win-push-for-school-zone-outside-citrus-grove-elementary",
-          "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
-          "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -431,7 +394,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.218
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Geofence Data, Blood Evidence Lead PSLPD to Arrest in NW California Blvd Hit-and-Run",
+      "generated_card_count": 0,
+      "elapsed_seconds": 34.339
     },
     {
       "category_key": "business",
@@ -439,7 +406,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 11,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -469,14 +436,15 @@
           "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [],
           "competing_signals": [
-            "schools_education:students"
+            "crime_public_safety:arrested"
           ],
           "local_nexus_signals": [
             "source_locality:treasure coast",
+            "source_locality:st lucie county",
             "source_locality:port st lucie"
           ],
-          "headline": "Treasure Coast group marks 50 years of friendship, service to community",
-          "source_url": "https://www.wptv.com/news/treasure-coast/treasure-coast-group-marks-50-years-of-friendship-service-to-community"
+          "headline": "Man exercising at night critically injured in hit-and-run crash in Port St. Lucie, man arrested: Officials",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/man-charged-in-connection-with-hit-and-run-crash-critically-injuring-63-year-old-in-port-st-lucie-officials"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -485,15 +453,17 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
+          "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:indian river county",
-            "source_locality:vero beach"
+          "competing_signals": [
+            "schools_education:students"
           ],
-          "headline": "Semi-truck turns into path of SUV, killing Vero Beach driver, FHP says",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/semi-truck-turns-into-path-of-suv-killing-vero-beach-driver-fhp-says"
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:port st lucie"
+          ],
+          "headline": "Treasure Coast group marks 50 years of friendship, service to community",
+          "source_url": "https://www.wptv.com/news/treasure-coast/treasure-coast-group-marks-50-years-of-friendship-service-to-community"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -550,7 +520,7 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
           "editorial_story_id": "story_020394",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -612,7 +582,7 @@
           "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -624,7 +594,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.14
+      "elapsed_seconds": 15.944
     },
     {
       "category_key": "sports",
@@ -632,7 +602,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 4,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -654,56 +624,45 @@
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
       "published_story_duplicate_suppressions": [],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Vero Beach man, 60, dies in crash involving tractor-trailer in Indian River County - cw34.com",
-          "source_url": "https://cw34.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news?teaserSource=trending",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-10-22-vero-beach-man-60-dies-in-crash-with-semi-at-66th-and-49th",
-          "canonical_headline": "Vero Beach Man, 60, Dies in Crash With Semi at 66th and 49th",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_023014",
-            "source:https://cw34.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news?teaserSource=trending"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
-            "shared_event_families=['crash', 'shooting']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['66th-avenue', 'westbound-49th-street']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['crash-involv-tractor', 'crash-involv-tractor-trail', 'dies-crash-involv', 'dies-crash-involv-tractor', 'involv-tractor-trail']",
-            "shared_headline_topic_core=['crash', 'dies', 'involv', 'tractor', 'trail']",
-            "shared_distinctive_token_count=76",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 12.374
+      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "sports",
+          "source_headline": "Vero Beach man, 60, dies in crash involving tractor-trailer in Indian River County - cw34.com",
+          "source_url": "https://cw34.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news?teaserSource=trending",
+          "canonical_slug": "2026-10-22-vero-beach-man-60-dies-in-crash-with-semi-at-66th-and-49th",
+          "canonical_headline": "Vero Beach Man, 60, Dies in Crash With Semi at 66th and 49th",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "60-year-old Vero Beach man",
+            "2026 Freightliner truck-tractor",
+            "intersection of 66th Avenue and 49th Street",
+            "Indian River County",
+            "Thursday crash",
+            "Florida Highway Patrol report"
+          ],
+          "novel_facts": [],
+          "reason": "Same crash: same victim description, vehicles, intersection, date, and FHP report details. No new facts such as identification, additional charges, or updated casualty status beyond what's already in the canonical.",
+          "validation_errors": []
+        }
+      ],
+      "new_publication_stale_rejected_count": 5,
+      "elapsed_seconds": 13.978
     },
     {
       "category_key": "things_to_do",
@@ -776,7 +735,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.236
+      "elapsed_seconds": 10.486
     },
     {
       "category_key": "florida",
@@ -814,14 +773,14 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.107
+      "elapsed_seconds": 9.092
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -842,18 +801,8 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOYm84VVhka2wwbkkyX251dm9mRDY4T19UbFBkY1lveUN3TTMyT0ZhdHh0Z1J3Sm9USVQxTG5UWTNlTGdEcVc0OGVudzRkcC1vbngxLUxpOXJELXZXNHNEdGJFMmtWZWNVYnJDcjFzWDVpLVAxaVFxRzJxWFdVNmNnY1Y1NG1TS2FtV2RFSm1QbGJHb2E3SVJSa3FpWDZtOS13NktZakVCOHRfT1loVE1wQlltaw",
-          "editorial_story_id": "story_022867",
-          "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
-          "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "Martin County parents win push for a school zone outside Citrus Grove Elementary - WPTV",
@@ -867,11 +816,11 @@
         {
           "category_key": "martin",
           "source_headline": "Tee It Up for the Troops brings Veterans Day fundraiser to Hobe Sound golf club - WPEC",
-          "source_url": "https://cbs12.com/news/local/tee-it-up-for-the-troops-brings-veterans-day-fundraiser-to-hobe-sound-the-club-at-lost-lake-november-11-chris-larocque-nonprofit-vets-pga-hope",
+          "source_url": "https://cbs12.com/news/arc-florida/tee-it-up-for-the-troops-brings-veterans-day-fundraiser-to-hobe-sound-the-club-at-lost-lake-november-11-chris-larocque-nonprofit-vets-pga-hope",
           "editorial_story_id": "story_022840",
           "canonical_slug": "2026-10-22-veterans-day-golf-fundraiser-comes-to-hobe-sounds-lost-lake-club",
           "canonical_headline": "Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -892,21 +841,6 @@
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOYm84VVhka2wwbkkyX251dm9mRDY4T19UbFBkY1lveUN3TTMyT0ZhdHh0Z1J3Sm9USVQxTG5UWTNlTGdEcVc0OGVudzRkcC1vbngxLUxpOXJELXZXNHNEdGJFMmtWZWNVYnJDcjFzWDVpLVAxaVFxRzJxWFdVNmNnY1Y1NG1TS2FtV2RFSm1QbGJHb2E3SVJSa3FpWDZtOS13NktZakVCOHRfT1loVE1wQlltaw",
-          "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
-          "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "martin",
           "source_headline": "Martin County parents win push for a school zone outside Citrus Grove Elementary - WPTV",
@@ -941,11 +875,11 @@
         {
           "category_key": "martin",
           "source_headline": "Tee It Up for the Troops brings Veterans Day fundraiser to Hobe Sound golf club - WPEC",
-          "source_url": "https://cbs12.com/news/local/tee-it-up-for-the-troops-brings-veterans-day-fundraiser-to-hobe-sound-the-club-at-lost-lake-november-11-chris-larocque-nonprofit-vets-pga-hope",
+          "source_url": "https://cbs12.com/news/arc-florida/tee-it-up-for-the-troops-brings-veterans-day-fundraiser-to-hobe-sound-the-club-at-lost-lake-november-11-chris-larocque-nonprofit-vets-pga-hope",
           "canonical_slug": "2026-10-22-veterans-day-golf-fundraiser-comes-to-hobe-sounds-lost-lake-club",
           "canonical_headline": "Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -970,21 +904,28 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.305
+      "elapsed_seconds": 13.06
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "cache_hit",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
-      "cache_hit": true,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 7,
+      "selected_source_count": 7,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 42.342,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 42.342,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -995,10 +936,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 13,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1036,7 +977,7 @@
           "source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
           "editorial_story_id": "story_020394",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1052,42 +993,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police seek two vehicles in hit-and-run that severely injured man - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-seek-two-vehicles-in-hit-and-run-that-severely-injured-man-63-year-old-october-9-public-ientification-vehicles-different-directions",
-          "editorial_story_id": "story_020394",
-          "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
           "editorial_story_id": "story_020394",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
-          "editorial_story_id": "story_020394",
-          "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "High surf and red flag warnings put St. Lucie County beaches under high hazard advisory this week - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/high-surf-and-red-flag-warnings-put-st-lucie-county-beaches-under-high-hazard-advisory-this-week",
-          "editorial_story_id": "story_022664",
-          "canonical_slug": "2026-10-22-red-flag-warnings-4-6-foot-surf-keep-st-lucie-beaches-on-high-hazard-alert",
-          "canonical_headline": "Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1112,6 +1023,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "St. Lucie County Fire Board terminates fire chief after union vote - cw34.com",
+          "source_url": "https://cw34.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
+          "editorial_story_id": "story_022576",
+          "canonical_slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
+          "canonical_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Fort Pierce man arrested on child abuse charge while out on bond - WPBF",
           "source_url": "https://www.wpbf.com/article/fort-pierce-man-arrested-on-child-abuse-charge-while-out-on-bond/74210336",
           "editorial_story_id": "story_022632",
@@ -1119,46 +1040,13 @@
           "canonical_headline": "Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Lanes reopen after tractor trailer fire on Florida's Turnpike in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/tractor-trailer-fire-florida-turnpike-st-lucie-county/74191434",
-          "editorial_story_id": "story_022280",
-          "canonical_slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
-          "canonical_headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "St. Lucie County firefighters respond to 2 structure fires, rescue cat - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-district-respond-2-structure-fires-cat-rescued-215-calls-17th-street-fort-pierce-aragon-lane-port-st-lucie-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
-          "canonical_headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
-          "basis": "event-identity-authority:exact_source_url",
-          "identity_keys": [
-            "story:story_021047",
-            "source:https://cbs12.com/news/local/st-lucie-county-fire-district-respond-2-structure-fires-cat-rescued-215-calls-17th-street-fort-pierce-aragon-lane-port-st-lucie-florida-news"
-          ],
-          "match_confidence": 1.0,
-          "evidence_dimensions": [
-            "source_url"
-          ],
-          "decision_trace": [
-            "exact_source_url=True",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -1211,7 +1099,7 @@
           "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that critically injured 63-year-old - cw34.com",
           "source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1238,58 +1126,13 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police seek two vehicles in hit-and-run that severely injured man - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-seek-two-vehicles-in-hit-and-run-that-severely-injured-man-63-year-old-october-9-public-ientification-vehicles-different-directions",
-          "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
           "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
+          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
-          "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Suspect in NW University Blvd Hit-and-Run",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "High surf and red flag warnings put St. Lucie County beaches under high hazard advisory this week - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/high-surf-and-red-flag-warnings-put-st-lucie-county-beaches-under-high-hazard-advisory-this-week",
-          "canonical_slug": "2026-10-22-red-flag-warnings-4-6-foot-surf-keep-st-lucie-beaches-on-high-hazard-alert",
-          "canonical_headline": "Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1328,6 +1171,21 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "St. Lucie County Fire Board terminates fire chief after union vote - cw34.com",
+          "source_url": "https://cw34.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
+          "canonical_slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
+          "canonical_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Fort Pierce man arrested on child abuse charge while out on bond - WPBF",
           "source_url": "https://www.wpbf.com/article/fort-pierce-man-arrested-on-child-abuse-charge-while-out-on-bond/74210336",
           "canonical_slug": "2026-10-22-fort-pierce-man-out-on-cocaine-bond-now-charged-with-child-abuse",
@@ -1340,39 +1198,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Lanes reopen after tractor trailer fire on Florida's Turnpike in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/tractor-trailer-fire-florida-turnpike-st-lucie-county/74191434",
-          "canonical_slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
-          "canonical_headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Florida's Turnpike southbound",
-            "St. Lucie County",
-            "Mile Marker 161",
-            "tractor trailer fire at 7:54 a.m.",
-            "same source URL"
-          ],
-          "novel_facts": [],
-          "reason": "Identical incident with same source URL, time, location, and details; no new facts beyond the already-reported fire and lane reopening.",
-          "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "live_hero_headline": "St. Lucie County Fire Board Fires Chief Jeff Lee Without Cause",
-      "elapsed_seconds": 16.617
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Bronx Man Extradited to St. Lucie County in Check Fraud, Money Laundering Case",
+      "generated_card_count": 3,
+      "elapsed_seconds": 64.001
     },
     {
       "category_key": "indian_river",
@@ -1380,7 +1213,7 @@
       "status": "cache_hit",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
+      "publishable_source_count": 8,
       "selected_source_count": 2,
       "cache_hit": true,
       "archive_recovery_requested": false,
@@ -1397,7 +1230,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
@@ -1414,11 +1247,11 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-parents-win-push-for-school-zone-outside-citrus-grove-elementary",
-          "editorial_story_id": "story_022867",
-          "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
-          "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
+          "source_headline": "Vero Beach man found dead in car pulled from Indian River Lagoon - WPBF",
+          "source_url": "https://www.wpbf.com/article/vero-beach-indian-river-lagoon-man-dead-car/74222684",
+          "editorial_story_id": "story_022917",
+          "canonical_slug": "2026-10-23-86-year-old-found-dead-after-car-plunges-into-indian-river-lagoon-in-vero-beach",
+          "canonical_headline": "86-Year-Old Found Dead After Car Plunges Into Indian River Lagoon in Vero Beach",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1447,10 +1280,10 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-parents-win-push-for-school-zone-outside-citrus-grove-elementary",
-          "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
-          "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
+          "source_headline": "Vero Beach man found dead in car pulled from Indian River Lagoon - WPBF",
+          "source_url": "https://www.wpbf.com/article/vero-beach-indian-river-lagoon-man-dead-car/74222684",
+          "canonical_slug": "2026-10-23-86-year-old-found-dead-after-car-plunges-into-indian-river-lagoon-in-vero-beach",
+          "canonical_headline": "86-Year-Old Found Dead After Car Plunges Into Indian River Lagoon in Vero Beach",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1478,7 +1311,7 @@
       ],
       "new_publication_stale_rejected_count": 0,
       "live_hero_headline": "Vero Beach Man, 60, Dies in Crash at 66th Avenue and 49th Street",
-      "elapsed_seconds": 15.763
+      "elapsed_seconds": 11.578
     }
   ]
 }
