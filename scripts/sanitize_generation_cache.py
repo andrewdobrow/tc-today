@@ -160,6 +160,16 @@ def sanitize_cache_payload(payload: Any) -> tuple[dict[str, Any], CacheSanitizat
         categories = {}
         payload["categories"] = categories
 
+    # Publisher article text is authoritative reporting input, not a durable
+    # optimization. Force a live publisher fetch once per generation process.
+    # The in-process cache in generate.py still coalesces repeat reads of the
+    # same source during this run, but cannot reuse yesterday's extraction after
+    # GitHub Actions restores the previous run's generation cache.
+    stale_source_text = payload.get("source_text")
+    source_text_evicted = isinstance(stale_source_text, dict) and bool(stale_source_text)
+    if source_text_evicted:
+        payload["source_text"] = {}
+
     removed_keys: list[str] = []
     removed_headlines: list[str] = []
 
@@ -186,7 +196,9 @@ def sanitize_cache_payload(payload: Any) -> tuple[dict[str, Any], CacheSanitizat
 
     previous_version = str(payload.get("cache_integrity_version") or "")
     payload["cache_integrity_version"] = CACHE_INTEGRITY_VERSION
-    changed = bool(removed_keys or previous_version != CACHE_INTEGRITY_VERSION)
+    changed = bool(
+        source_text_evicted or removed_keys or previous_version != CACHE_INTEGRITY_VERSION
+    )
     if changed:
         payload["updated_at"] = _utc_now_iso()
 

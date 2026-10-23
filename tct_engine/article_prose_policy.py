@@ -76,6 +76,39 @@ _OFFICIAL_INFORMATION_GAP_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Names/charges/details omitted from source material are not news facts.
+# These formulations were absent from the older policy and slipped into a
+# developing arrest story alongside a newly refreshed suspect image.
+# Subject- and information-scoped to preserve substantive negatives such as
+# "police have not arrested anyone" or "the city rejected the proposal".
+_INFORMATION_ABSENCE_RE = re.compile(
+    r"(?:"
+    r"\b(?:suspect|driver|victim|person|man|woman)(?:'s)?\s+"
+    r"(?:name|identity)\s+(?:has|have|had|was|were|is|are)\s+"
+    r"(?:not|never)\s+(?:yet\s+)?(?:been\s+)?"
+    r"(?:released|disclosed|provided|confirmed|published|announced|identified|named)\b|"
+    r"\b(?:name|identity)\s+of\s+(?:the\s+)?"
+    r"(?:suspect|driver|victim|person|man|woman)\s+"
+    r"(?:has|have|had|was|were|is|are)\s+(?:not|never)\s+"
+    r"(?:yet\s+)?(?:been\s+)?"
+    r"(?:released|disclosed|provided|confirmed|published|announced|identified|named)\b|"
+    r"\b(?:suspect|driver|victim)\s+(?:has|have|was|were|is|are)\s+"
+    r"(?:not|never)\s+(?:yet\s+)?(?:been\s+)?"
+    r"(?:named|identified)\b|"
+    r"\b(?:charges?|names?|identit(?:y|ies))\s+"
+    r"(?:has|have|had|was|were|is|are)\s+(?:not|never)\s+"
+    r"(?:yet\s+)?(?:been\s+)?"
+    r"(?:released|disclosed|provided|specified|listed|announced|made\s+public)\b|"
+    r"\b(?:the\s+)?(?:initial\s+|press\s+)?release\s+(?:did|does|has)\s+not\s+"
+    r"(?:identify|name|list|provide|specify|disclose|release)\b|"
+    r"\b(?:no|few)\s+(?:further|additional)\s+(?:details|information)\b|"
+    r"\b(?:further|additional)\s+(?:details|information)\s+"
+    r"(?:has|have|had|was|were)\s+not\s+(?:yet\s+)?"
+    r"(?:been\s+)?(?:released|provided|disclosed|made\s+public)\b"
+    r")",
+    re.IGNORECASE,
+)
+
 _TAG_RE = re.compile(r"<[^>]+>")
 _P_RE = re.compile(r"<p\b([^>]*)>(.*?)</p>", re.IGNORECASE | re.DOTALL)
 
@@ -286,9 +319,19 @@ def sentence_violates_article_prose_policy(
     sentence = str(sentence or "").strip()
     if not sentence:
         return False
+    # Normalize contractions for policy matching only. The caller still returns
+    # the original text for permissible sentences.
+    sentence = re.sub(
+        r"\b(has|have|had|was|were|is|are|did|does)n['’]t\b",
+        r"\1 not",
+        sentence,
+        flags=re.IGNORECASE,
+    )
     if _OUTREACH_ABSENCE_RE.search(sentence):
         return True
     if _OFFICIAL_INFORMATION_GAP_RE.search(sentence):
+        return True
+    if _INFORMATION_ABSENCE_RE.search(sentence):
         return True
     return bool(
         _has_outlet_marker(sentence, source_url, source_headline)

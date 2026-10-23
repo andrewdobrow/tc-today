@@ -208,3 +208,50 @@ def test_membership_rehydration_cleans_protected_copy_before_resync(tmp_path, mo
     assert "WPBF" not in protected_payload
     assert "declined to talk" not in public_page
     assert "declined to talk" not in protected_payload
+
+
+def test_arrest_identity_absence_sentences_are_removed_but_arrest_is_preserved():
+    reported = (
+        "Port St. Lucie police arrested a suspect in the October 9 hit-and-run. "
+        "The suspect's identity has not been released. "
+        "Detectives identified a second vehicle involved in the crash."
+    )
+    cleaned = sanitize_article_text(reported)
+    assert "arrested a suspect" in cleaned
+    assert "second vehicle" in cleaned
+    assert "identity has not been released" not in cleaned
+
+    variants = (
+        "The identity of the suspect has not yet been released.",
+        "The suspect has not been named.",
+        "The suspect's name was not provided.",
+        "No further details were available.",
+        "Charges have not yet been announced.",
+        "The suspect's name hasn't been released.",
+        "The press release didn't identify the suspect.",
+        "The release did not identify the suspect or list any charges.",
+    )
+    for sentence in variants:
+        assert sanitize_article_text(sentence) == "", sentence
+
+
+def test_absence_sanitizer_keeps_actual_negative_developments():
+    statements = (
+        "Police have not arrested anyone in connection with the crash.",
+        "Investigators did not find evidence of a second vehicle.",
+        "The city did not approve the developer's application.",
+    )
+    for sentence in statements:
+        assert sanitize_article_text(sentence) == sentence
+
+
+def test_missing_suspect_name_is_removed_from_existing_html_preview():
+    raw = (
+        "<p>Police arrested a suspect Friday. The suspect's identity has not been released.</p>"
+        '<p>The October 9 crash injured a 63-year-old man.</p>'
+    )
+    cleaned, changed = sanitize_article_body_html(raw)
+    assert changed == 1
+    assert "identity has not been released" not in cleaned
+    assert "Police arrested a suspect Friday" in cleaned
+    assert "October 9 crash" in cleaned

@@ -232,3 +232,38 @@ def test_category_cache_key_separates_promoted_editor_writer_architecture(monkey
     monkeypatch.setattr(generate, "ASSIGNMENT_EDITOR_LIVE_ENABLED", False)
     legacy_key = generate._category_generation_cache_key("martin", [source])
     assert live_key != legacy_key
+
+
+def test_persistent_publisher_text_is_evicted_at_each_generation_start(tmp_path: Path):
+    """New runs must read updated publisher reporting, even with a stable RSS hint."""
+    generate = _load_generate_module()
+    path = tmp_path / "generation-cache.json"
+    cache = generate.PersistentGenerationCache(path)
+    cache.put(
+        "source_text", "same-url-same-hint", {"text": "Old arrest report"},
+        ttl_seconds=86400,
+    )
+    cache.put("classifications", "still-valid", {"categories": ["crime"]})
+    cache.save()
+
+    restored = generate.PersistentGenerationCache(path)
+    assert restored.get("source_text", "same-url-same-hint") is generate._CACHE_MISS
+    assert restored.get("classifications", "still-valid") == {"categories": ["crime"]}
+    assert restored.dirty is True
+    restored.save()
+    assert not json.loads(path.read_text(encoding="utf-8"))["source_text"]
+
+
+def test_cache_sanitizer_evicts_old_publisher_text_only_when_present():
+    raw = {
+        "schema_version": 1,
+        "cache_integrity_version": CACHE_INTEGRITY_VERSION,
+        "source_text": {"url-and-rss-hint": {"value": {"text": "Old update"}}},
+        "categories": {"unchanged": {"value": {"data": {"hero": {}, "cards": []}}}},
+    }
+    result, info = sanitize_cache_payload(raw)
+    assert info.changed
+    assert result["source_text"] == {}
+    assert "unchanged" in result["categories"]
+    _, again = sanitize_cache_payload(result)
+    assert not again.changed
