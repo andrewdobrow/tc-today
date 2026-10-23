@@ -11,7 +11,7 @@ is_generated_conflict() {
     data/custom_articles.json|data/manual_events.json)
       return 1
       ;;
-    sitemap.xml|archive.json|rss.xml|index.html|events.html|search.html|subscribe.html|account.html|weather.html)
+    sitemap.xml|feed.xml|archive.html|archive.json|rss.xml|data.json|story-registry.json|index.html|events.html|search.html|subscribe.html|account.html|weather.html)
       return 0
       ;;
     articles/*|missing-persons/*|martin/*|st-lucie/*|indian-river/*|port-st-lucie/*|jensen-beach/*|stuart/*|vero-beach/*|fellsmere/*|sebastian/*|partners/*)
@@ -20,7 +20,15 @@ is_generated_conflict() {
     data/editorial_story_registry.json|data/editorial_story_registry.preflight.json|data/editorial_story_history.jsonl|data/editorial_story_history/*|data/editorial_state.json|data/editorial_audit.jsonl|data/generation-cache.json)
       return 0
       ;;
-    data/*-report.json|data/*_report.json|data/story-index.json|data/*identity*.json|data/*ranking*.json|data/*observability*.json)
+    # Generated editorial state and feeds. Explicit entries are intentional:
+    # data/ also contains editor-maintained corrections and configuration that
+    # must NEVER be silently replaced by a long-running automation.
+    data/stories.json|data/story-registry.json|data/story-processed-articles.json|data/story-shadow-log.json|data/top-news-app-feed.json|data/trusted-source-recovery.json|data/canonical-cleanup-history.jsonl|data/canonical-publication-ledger.json|data/canonical-redirects.json|data/editorial-image-rotation.json|data/editorial_activation.json|data/editorial_activation_history.jsonl|data/editorial_observability.json|data/events.json|data/events-source-status.json)
+      return 0
+      ;;
+    # Read-only post-generation diagnostics/validation artifacts. The Update
+    # job writes these every run, so concurrent runs/human pushes can conflict.
+    data/*-report.json|data/*_report.json|data/story-index.json|data/*identity*.json|data/*ranking*.json|data/*observability*.json|data/*-contract.json|data/*-dedup.json|data/*-dedupe.json|data/*-repair.json|data/*-reconciliation.json|data/*-integrity.json|data/*-invariant.json|data/*-purge.json|data/*-suppression.json|data/*-authority.json|data/*-gate.json|data/*-selection.json|data/*-audit.json|data/*-rebind.json|data/*-migration.json|data/*-review.md)
       return 0
       ;;
     *)
@@ -36,25 +44,34 @@ resolve_generated_conflicts() {
     return 1
   fi
 
+  # Validate the entire conflict set *before* staging any resolution.
+  # Hand-edited corrections and source/config changes must fail closed.
   unsafe=""
   while IFS= read -r path; do
     [[ -n "$path" ]] || continue
-    if is_generated_conflict "$path"; then
-      echo "Auto-resolving generated rebase conflict with current run output: $path"
-      # During rebase, --theirs is the commit being replayed (this bot run), while
-      # --ours is the newly fetched origin/main.
-      git checkout --theirs -- "$path"
-      git add -- "$path"
-    else
+    if ! is_generated_conflict "$path"; then
       unsafe+="${path}"$'\n'
     fi
   done <<< "$conflicts"
 
   if [[ -n "$unsafe" ]]; then
-    echo "Unsafe source/config conflict(s) require human review:" >&2
+    echo "Unsafe source/config rebase conflict(s) require human review; generated changes NOT pushed:" >&2
     printf '%s' "$unsafe" >&2
     return 2
   fi
+
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+    echo "Auto-resolving generated rebase conflict with current run output: $path"
+    # Rebase --theirs means this bot's commit; --ours is fetched origin/main.
+    # Handle a generated file removed by the bot as well as one it rewrote.
+    if git ls-files -u -- "$path" | awk '$3 == 3 { found = 1 } END { exit !found }'; then
+      git checkout --theirs -- "$path"
+      git add -- "$path"
+    else
+      git rm -f -- "$path"
+    fi
+  done <<< "$conflicts"
   return 0
 }
 
