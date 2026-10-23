@@ -249,6 +249,10 @@ _ABBREVIATION_RE = re.compile(
     re.IGNORECASE,
 )
 _DOTTED_ABBREVIATION_RE = re.compile(r"\b(?:U\.S|U\.S\.A|a\.m|p\.m)\.", re.IGNORECASE)
+# A reporter's middle initial (e.g. "Laurie K. Blandford") is not the end of a
+# sentence. Without this guard, deleting an outlet-attribution sentence leaves
+# the orphaned surname and any following first name in published copy.
+_PERSONAL_INITIAL_RE = re.compile(r"\b[A-Z]\.(?=\s+(?:[A-Z]\.\s+)*[A-Z][a-z])")
 _DOT_SENTINEL = "\uFFF0"
 
 
@@ -261,7 +265,8 @@ def _protect_abbreviation_dots(text: str) -> str:
         return match.group(0).replace(".", _DOT_SENTINEL)
 
     text = _DOTTED_ABBREVIATION_RE.sub(repl, text)
-    return _ABBREVIATION_RE.sub(repl, text)
+    text = _ABBREVIATION_RE.sub(repl, text)
+    return _PERSONAL_INITIAL_RE.sub(repl, text)
 
 
 def _split_sentences(text: str) -> list[str]:
