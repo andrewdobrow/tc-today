@@ -4,41 +4,41 @@
 
 ## Hero
 
-- Current: **Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse**
-- Recommended: **Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse**
+- Current: **86-Year-Old Found Dead After Car Plunges Into Indian River Lagoon in Vero Beach**
+- Recommended: **86-Year-Old Found Dead After Car Plunges Into Indian River Lagoon in Vero Beach**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Comcast Opens New Xfinity Store in Stuart and Announces $35,000 Grant for Martin County PAL | Martin County Commission Approves School Zone for Citrus Grove Elementary | 48 | importance 0; freshness 98.76; urgency 2/10 |
-| 2 | Martin County Commission Approves School Zone for Citrus Grove Elementary | Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver | 46 | importance 0; freshness 91.73; urgency 2/10 |
-| 3 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25 | Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club | 46 | importance 0; freshness 91.72; urgency 2/10 |
-| 4 | Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver | St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension | 46 | importance 0; freshness 91.72; urgency 2/10 |
-| 5 | Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club | Comcast Opens New Xfinity Store in Stuart and Announces $35,000 Grant for Martin County PAL | 46 | importance 0; freshness 88.76; urgency 4/10 |
-| 6 | St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension | St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief | 45 | importance 0; freshness 90.92; urgency 2/10 |
-| 7 | St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief | Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert | 45 | importance 0; freshness 88.76; urgency 2/10 |
-| 8 | Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert | Martin County Panel to Review Witham Field Nighttime Jet Noise Data | 42 | importance 0; freshness 75.04; urgency 2/10 |
-| 9 | Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | 42 | importance 0; freshness 51.67; urgency 2/10; validated material update |
-| 10 | Martin County Panel to Review Witham Field Nighttime Jet Noise Data | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25 | 40 | importance 0; freshness 64.44; urgency 4/10 |
-| 11 | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters | 45 | importance 0; freshness 88.76; urgency 2/10; -6 category saturation |
-| 12 | Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County | Florida Senate President Albritton Now Opposes Amendment 3 | 33 | importance 0; freshness 55.02; urgency 2/10 |
+| 1 | Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club | Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club | 49 | importance 0; freshness 76.7; urgency 5/10 |
+| 2 | Comcast Opens New Xfinity Store in Stuart and Announces $35,000 Grant for Martin County PAL | Martin County Commission Approves School Zone for Citrus Grove Elementary | 44 | importance 0; freshness 83.73; urgency 2/10 |
+| 3 | Martin County Commission Approves School Zone for Citrus Grove Elementary | Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse | 44 | importance 0; freshness 83.74; urgency 2/10 |
+| 4 | Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse | Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver | 42 | importance 0; freshness 76.7; urgency 2/10 |
+| 5 | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25 | St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension | 42 | importance 0; freshness 76.69; urgency 2/10 |
+| 6 | Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver | St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief | 42 | importance 0; freshness 75.9; urgency 2/10 |
+| 7 | St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension | Comcast Opens New Xfinity Store in Stuart and Announces $35,000 Grant for Martin County PAL | 42 | importance 0; freshness 73.73; urgency 4/10 |
+| 8 | St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief | Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters | 41 | importance 0; freshness 73.73; urgency 2/10 |
+| 9 | Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert | Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25 | 37 | importance 0; freshness 49.41; urgency 4/10 |
+| 10 | Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters | Martin County Panel to Review Witham Field Nighttime Jet Noise Data | 38 | importance 0; freshness 60.01; urgency 2/10; -4 county saturation |
+| 11 | Martin County Panel to Review Witham Field Nighttime Jet Noise Data | More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges | 39 | importance 0; freshness 36.64; urgency 2/10; validated material update; -6 category saturation |
+| 12 | Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week | Florida Senate President Albritton Now Opposes Amendment 3 | 29 | importance 0; freshness 39.99; urgency 2/10 |
 
 ## Recommended moves
 
-- **Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25**: 3 → 10 — importance 0; freshness 64.44; urgency 4/10
-- **Comcast Opens New Xfinity Store in Stuart and Announces $35,000 Grant for Martin County PAL**: 1 → 5 — importance 0; freshness 88.76; urgency 4/10
-- **Florida Senate President Albritton Now Opposes Amendment 3**: 16 → 12 — importance 0; freshness 55.02; urgency 2/10
-- **Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver**: 4 → 2 — importance 0; freshness 91.73; urgency 2/10
-- **Veterans Day Golf Fundraiser Comes to Hobe Sound's Lost Lake Club**: 5 → 3 — importance 0; freshness 91.72; urgency 2/10
-- **St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension**: 6 → 4 — importance 0; freshness 91.72; urgency 2/10
-- **Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters**: 9 → 11 — importance 0; freshness 88.76; urgency 2/10; -6 category saturation
-- **Martin County Panel to Review Witham Field Nighttime Jet Noise Data**: 10 → 8 — importance 0; freshness 75.04; urgency 2/10
-- **More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges**: 11 → 9 — importance 0; freshness 51.67; urgency 2/10; validated material update
-- **Martin County Commission Approves School Zone for Citrus Grove Elementary**: 2 → 1 — importance 0; freshness 98.76; urgency 2/10
-- **St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief**: 7 → 6 — importance 0; freshness 90.92; urgency 2/10
-- **Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert**: 8 → 7 — importance 0; freshness 88.76; urgency 2/10
+- **More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges**: 23 → 11 — importance 0; freshness 36.64; urgency 2/10; validated material update; -6 category saturation
+- **Comcast Opens New Xfinity Store in Stuart and Announces $35,000 Grant for Martin County PAL**: 2 → 7 — importance 0; freshness 73.73; urgency 4/10
+- **Florida Senate President Albritton Now Opposes Amendment 3**: 17 → 12 — importance 0; freshness 39.99; urgency 2/10
+- **Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert**: 9 → 13 — importance 0; freshness 73.74; urgency 2/10
+- **Looking for something to do this weekend? Here are the Top 5 local events for Oct. 24-25**: 5 → 9 — importance 0; freshness 49.41; urgency 4/10
+- **Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver**: 6 → 4 — importance 0; freshness 76.7; urgency 2/10
+- **St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension**: 7 → 5 — importance 0; freshness 76.69; urgency 2/10
+- **St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief**: 8 → 6 — importance 0; freshness 75.9; urgency 2/10
+- **Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters**: 10 → 8 — importance 0; freshness 73.73; urgency 2/10
+- **Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week**: 12 → 14 — importance 0; freshness 0.02; urgency 4/10
+- **Martin County Commission Approves School Zone for Citrus Grove Elementary**: 3 → 2 — importance 0; freshness 83.73; urgency 2/10
+- **Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse**: 4 → 3 — importance 0; freshness 83.74; urgency 2/10
 
 ## Guardrails
 
