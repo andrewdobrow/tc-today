@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-24T21:24:04.826194+00:00",
+  "generated_at": "2026-10-24T22:54:32.456013+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -85,8 +85,8 @@
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 7,
     "pre_generation_materiality_holds": 5,
-    "pre_generation_materiality_model_calls": 5,
-    "pre_generation_materiality_cache_hits": 7,
+    "pre_generation_materiality_model_calls": 6,
+    "pre_generation_materiality_cache_hits": 6,
     "terminal_permalink_evaluations": 1,
     "terminal_permalink_candidate_pairs": 12,
     "terminal_permalink_model_calls": 1,
@@ -95,11 +95,11 @@
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
-    "terminal_permalink_holds": 1,
-    "late_published_skip_materiality_evaluations": 0,
+    "terminal_permalink_holds": 0,
+    "late_published_skip_materiality_evaluations": 2,
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
@@ -122,9 +122,9 @@
       "confidence": 0.97,
       "shared_anchors": [],
       "novel_facts": [
-        "St. Lucie County firefighter died unexpectedly on a Saturday morning",
-        "St. Lucie County Fire District announcement of condolences",
-        "Indian River County Sheriff's Office and Port St. Lucie Police statements of mourning"
+        "St. Lucie County firefighter died unexpectedly Saturday morning",
+        "Multiple agencies (Indian River County Sheriff's Office, Port St. Lucie Police) offering condolences",
+        "Firefighter's identity not yet released"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -208,9 +208,8 @@
       "confidence": 0.97,
       "shared_anchors": [],
       "novel_facts": [
-        "St. Lucie County firefighter died unexpectedly Saturday morning",
-        "St. Lucie County Fire District announcement of the death",
-        "Condolences from Indian River County Sheriff's Office and Port St. Lucie Police Department"
+        "Unidentified St. Lucie County firefighter died unexpectedly Saturday morning",
+        "Multiple agencies (Indian River County Sheriff, Port St. Lucie Police) offering condolences"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -233,12 +232,12 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 0.97,
       "shared_anchors": [],
       "novel_facts": [
         "St. Lucie County firefighter died unexpectedly Saturday morning",
-        "St. Lucie County Fire District confirmed the death",
-        "Condolences from Indian River County Sheriff's Office and Port St. Lucie Police Department"
+        "Multiple agencies (Indian River County Sheriff's Office, Port St. Lucie Police Department) issued condolences",
+        "Firefighter's identity not yet released"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -306,6 +305,34 @@
     },
     {
       "category_key": "st_lucie",
+      "source_headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
+      "source_url": "https://cw34.com/news/local/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office?teaserSource=trending",
+      "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
+      "canonical_headline": "Fort Pierce Girl, 5, Found Dead in Water After Portofino Landings Search",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.97,
+      "shared_anchors": [
+        "Mayra Glory Odelus",
+        "Fort Pierce Police Department",
+        "Portofino Landings Boulevard",
+        "found dead in nearby body of water",
+        "same date (Oct 24, 2026)"
+      ],
+      "novel_facts": [],
+      "reason": "Both articles report the identical incident: a 5-year-old nonverbal girl, Mayra Glory Odelus, reported missing from the Portofino Landings complex in Fort Pierce and later found dead in a nearby body of water. No new facts are present beyond what the canonical already reports.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
       "source_headline": "St. Lucie County Fire District confirms firefighter's death; Treasure Coast agencies mourn the loss",
       "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-confirms-death-of-firefighter",
       "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
@@ -323,8 +350,8 @@
       "confidence": 0.97,
       "shared_anchors": [],
       "novel_facts": [
-        "St. Lucie County firefighter died unexpectedly Saturday morning",
-        "Multiple Treasure Coast agencies (fire district, Indian River County Sheriff, Port St. Lucie Police) issued condolences",
+        "St. Lucie County Fire District firefighter died unexpectedly Saturday morning",
+        "Condolences from Indian River County Sheriff's Office and Port St. Lucie Police Department",
         "Firefighter's identity not yet released"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -396,34 +423,6 @@
       "validation_errors": []
     },
     {
-      "category_key": "st_lucie",
-      "source_headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive - WFLX",
-      "source_url": "https://www.wflx.com/2026/10/23/st-lucie-county-partners-with-treasure-coast-food-bank-community-food-drive",
-      "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
-      "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "St. Lucie County Board of County Commissioners",
-        "Treasure Coast Food Bank",
-        "county-wide food drive",
-        "October",
-        "shelf-stable food donation sites"
-      ],
-      "novel_facts": [],
-      "reason": "Both articles report the same St. Lucie County and Treasure Coast Food Bank county-wide food drive announcement with identical details about donation sites and needed items. No new facts, figures, or developments distinguish the incoming article from the existing canonical.",
-      "validation_errors": []
-    },
-    {
       "category_key": "indian_river",
       "source_headline": "St. Lucie County Fire District confirms firefighter's death; Treasure Coast agencies mourn the loss",
       "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-confirms-death-of-firefighter",
@@ -443,8 +442,8 @@
       "shared_anchors": [],
       "novel_facts": [
         "St. Lucie County firefighter died unexpectedly Saturday morning",
-        "Multiple agencies (Indian River County Sheriff's Office, Port St. Lucie Police) offered condolences",
-        "St. Lucie County Fire District confirmed the death"
+        "Multiple agencies (Indian River County Sheriff's Office, Port St. Lucie Police) offering condolences",
+        "Firefighter's identity not yet released"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -777,7 +776,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash",
       "incoming_source_url": "https://cw34.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news?teaserSource=trending",
-      "incoming_story_id": "story_023173",
+      "incoming_story_id": "story_023192",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1075,9 +1074,9 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Port St. Lucie Police Arrest Man in Oct. 9 Hit-and-Run That Critically Injured Jogger",
-      "incoming_source_url": "https://www.wflx.com/2026/10/23/man-charged-connection-with-hit-and-run-crash-critically-injuring-63-year-old-port-st-lucie-officials",
-      "incoming_story_id": "story_020394",
+      "incoming_headline": "St. Lucie Fire District Mourns Second Hodge Brother in a Year",
+      "incoming_source_url": "https://www.wpbf.com/article/st-lucie-county-firefighter-dies/74237571",
+      "incoming_story_id": "story_023149",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1098,186 +1097,177 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Port St. Lucie Police Arrest Man in Oct. 9 Hit-and-Run That Critically Injured Jogger",
-      "incoming_source_url": "https://www.wflx.com/2026/10/23/man-charged-connection-with-hit-and-run-crash-critically-injuring-63-year-old-port-st-lucie-officials",
-      "incoming_story_id": "story_020394",
+      "incoming_headline": "St. Lucie Fire District Mourns Second Hodge Brother in a Year",
+      "incoming_source_url": "https://www.wpbf.com/article/st-lucie-county-firefighter-dies/74237571",
+      "incoming_story_id": "story_023149",
       "candidates": [
         {
-          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
-          "terminal_recall_tier": 5,
-          "terminal_recall_score": 1.327,
-          "retrieval_score": 1.0,
+          "slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
+          "headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6257,
+          "retrieval_score": 0.5417,
           "reasons": [
-            "strong_fuzzy_headline",
-            "shared_locality_and_event_family",
-            "shared_incident_anchor",
-            "publication_gap_14_days"
+            "publication_gap_2_days"
           ]
         },
         {
-          "slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.8315,
-          "retrieval_score": 0.6805,
+          "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
+          "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6108,
+          "retrieval_score": 0.5828,
           "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_16_days",
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+          "headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6024,
+          "retrieval_score": 0.5124,
+          "reasons": [
+            "publication_gap_15_days",
             "outside_recent_window"
           ]
         },
         {
-          "slug": "2026-10-12-port-st-lucie-man-fights-citys-126-camera-network-in-federal-court",
-          "headline": "Port St. Lucie Man Fights City's 126-Camera Network in Federal Court",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6509,
-          "retrieval_score": 0.5439,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-15-after-fatal-crash-neighbors-press-fdot-for-lighting-on-port-st-lucie-boulevard",
-          "headline": "After Fatal Crash, Neighbors Press FDOT for Lighting on Port St. Lucie Boulevard",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5943,
-          "retrieval_score": 0.4783,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5132,
-          "retrieval_score": 0.4062,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-16-port-st-lucie-drug-bust-nets-fentanyl-cocaine-guns-three-arrests",
-          "headline": "Port St. Lucie Drug Bust Nets Fentanyl, Cocaine, Guns, Three Arrests",
+          "slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
+          "headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5429,
-          "retrieval_score": 0.4739,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
-          "headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5255,
-          "retrieval_score": 0.4885,
+          "terminal_recall_score": 0.5979,
+          "retrieval_score": 0.5109,
           "reasons": [
             "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "headline": "More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5227,
-          "retrieval_score": 0.4387,
-          "reasons": [
-            "publication_gap_4_days"
           ]
         },
         {
           "slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
           "headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5087,
-          "retrieval_score": 0.4517,
+          "terminal_recall_score": 0.5854,
+          "retrieval_score": 0.5314,
           "reasons": [
-            "publication_gap_11_days"
+            "publication_gap_12_days"
           ]
         },
         {
-          "slug": "2026-10-13-port-st-lucie-approves-costco-entertainment-district-rehab-hospital-in-southern",
-          "headline": "Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove",
+          "slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
+          "headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5078,
-          "retrieval_score": 0.4978,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
-          "headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.507,
-          "retrieval_score": 0.479,
+          "terminal_recall_score": 0.5797,
+          "retrieval_score": 0.5517,
           "reasons": [
             "publication_gap_4_days"
           ]
         },
         {
-          "slug": "2026-10-10-grease-fire-sparks-propane-explosion-at-port-st-lucie-home",
-          "headline": "Port St. Lucie Fire Victim Identified as Church Helps Family Recover",
+          "slug": "2026-09-30-st-lucie-fire-district-attorney-resigns-as-chief-faces-no-confidence-vote",
+          "headline": "St. Lucie Fire Board Member Urges Chief Jeff Lee to Resign After Vote",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4932,
-          "retrieval_score": 0.4922,
+          "terminal_recall_score": 0.5789,
+          "retrieval_score": 0.5689,
           "reasons": [
-            "publication_gap_13_days"
+            "publication_gap_24_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
+          "headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5784,
+          "retrieval_score": 0.5094,
+          "reasons": [
+            "publication_gap_7_days",
+            "structured_identity_conflict"
+          ]
+        },
+        {
+          "slug": "2026-10-22-fort-pierce-man-out-on-cocaine-bond-now-charged-with-child-abuse",
+          "headline": "Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5692,
+          "retrieval_score": 0.4852,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
+          "headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5659,
+          "retrieval_score": 0.5289,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-st-lucie-nuclear-plant-marks-50-years-as-nrc-grants-20-year-license-extension",
+          "headline": "St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5396,
+          "retrieval_score": 0.5056,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-23-fort-pierce-water-tank-mural-named-national-tank-of-the-year",
+          "headline": "Fort Pierce Water Tank Mural Named National Tank of the Year",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5341,
+          "retrieval_score": 0.4971,
+          "reasons": [
+            "publication_gap_1_days"
           ]
         }
       ],
       "initial_decision": {
-        "status": "invalid_model_response",
-        "action": "hold",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-        "same_real_world_event": true,
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.95,
+        "confidence": 0.93,
         "shared_anchors": [
-          "Eric Saint Aude",
-          "Oct. 9 crash near NW University Blvd and NW California Blvd",
-          "63-year-old jogger victim",
-          "Port St. Lucie Police Department",
-          "HCA Florida Lawnwood Hospital",
-          "arrest and charge of leaving scene of crash with serious injury"
+          "St. Lucie County Fire District"
         ],
-        "novel_facts": [],
-        "reason": "The existing canonical slug already covers the same Oct. 9 crash and Oct. 23 arrest of Eric Saint Aude on the same charge, including Niemczyk's briefing, geofence warrant, vehicle recovery, and newspaper delivery detail. The incoming article repeats the same arrest facts with less detail (omits geofence warrant, second vehicle, blood evidence) and adds only minor color (Garmin watch identification, chief's quote about recognizing him jogging) which does not constitute a new material development beyond what's already in the canonical.",
-        "validation_errors": [
-          "update_action_without_material_evidence"
+        "novel_facts": [
+          "Austin Hodge, firefighter-paramedic, died Saturday on duty at Station 9",
+          "This is the second Hodge brother to die in the department in just over a year, following Jarius Hodge's July 22, 2025 death",
+          "Procession held from hospital to morgue in Fort Pierce",
+          "Multiple agencies offered condolences and support"
         ],
+        "reason": "No candidate covers the death of Austin Hodge or his brother Jarius Hodge; all candidates concern distinct St. Lucie Fire District matters (chief firing, structure fires, turnpike fire, hazing fallout) with different named individuals and incidents. This is a new, distinct named-person-death event not previously covered in the candidate set.",
+        "validation_errors": [],
         "consistency_repairs": []
       },
       "resolution_decision": {},
       "decision": {
-        "status": "invalid_model_response",
-        "action": "hold",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-        "same_real_world_event": true,
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.95,
+        "confidence": 0.93,
         "shared_anchors": [
-          "Eric Saint Aude",
-          "Oct. 9 crash near NW University Blvd and NW California Blvd",
-          "63-year-old jogger victim",
-          "Port St. Lucie Police Department",
-          "HCA Florida Lawnwood Hospital",
-          "arrest and charge of leaving scene of crash with serious injury"
+          "St. Lucie County Fire District"
         ],
-        "novel_facts": [],
-        "reason": "The existing canonical slug already covers the same Oct. 9 crash and Oct. 23 arrest of Eric Saint Aude on the same charge, including Niemczyk's briefing, geofence warrant, vehicle recovery, and newspaper delivery detail. The incoming article repeats the same arrest facts with less detail (omits geofence warrant, second vehicle, blood evidence) and adds only minor color (Garmin watch identification, chief's quote about recognizing him jogging) which does not constitute a new material development beyond what's already in the canonical.",
-        "validation_errors": [
-          "update_action_without_material_evidence"
+        "novel_facts": [
+          "Austin Hodge, firefighter-paramedic, died Saturday on duty at Station 9",
+          "This is the second Hodge brother to die in the department in just over a year, following Jarius Hodge's July 22, 2025 death",
+          "Procession held from hospital to morgue in Fort Pierce",
+          "Multiple agencies offered condolences and support"
         ],
+        "reason": "No candidate covers the death of Austin Hodge or his brother Jarius Hodge; all candidates concern distinct St. Lucie Fire District matters (chief firing, structure fires, turnpike fire, hazing fallout) with different named individuals and incidents. This is a new, distinct named-person-death event not previously covered in the candidate set.",
+        "validation_errors": [],
         "consistency_repairs": []
       }
     }
@@ -1667,5 +1657,61 @@
     ],
     "rejected_directives": [],
     "merges": []
-  }
+  },
+  "late_published_skip_materiality_decisions": [
+    {
+      "phase": "late_published_skip_write_barrier",
+      "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/missing-5-year-old-found-dead-in-fort-pierce-police-say",
+      "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
+      "canonical_headline": "Fort Pierce Girl, 5, Found Dead in Water After Portofino Landings Search",
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Fort Pierce",
+        "5-year-old girl",
+        "missing then found dead in water",
+        "Fort Pierce Police Department",
+        "Saturday Oct. 24"
+      ],
+      "novel_facts": [],
+      "reason": "Both articles report the identical incident: a 5-year-old girl reported missing Saturday morning in Fort Pierce and found dead in nearby water hours later, per Fort Pierce Police. The candidate includes the victim's name (Mayra Glory Odelus) and precise location, which the incoming article lacks, so there is no new information in the incoming piece-only less detail.",
+      "validation_errors": []
+    },
+    {
+      "phase": "late_published_skip_write_barrier",
+      "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/missing-5-year-old-found-dead-in-fort-pierce-police-say",
+      "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
+      "canonical_headline": "Fort Pierce Girl, 5, Found Dead in Water After Portofino Landings Search",
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Fort Pierce",
+        "5-year-old girl",
+        "found dead in nearby water",
+        "reported missing Saturday Oct 24",
+        "Fort Pierce Police Department"
+      ],
+      "novel_facts": [],
+      "reason": "Both articles report the same incident: a 5-year-old girl reported missing in Fort Pierce on Oct. 24 and found dead in nearby water the same day. The canonical candidate has more detail (victim's name, exact location), while the incoming article lacks these specifics and adds no new facts.",
+      "validation_errors": []
+    }
+  ]
 }
