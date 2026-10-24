@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-23T23:29:47.290782+00:00",
+  "generated_at": "2026-10-24T01:53:00.760790+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 37,
+    "evaluations": 36,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 37,
+    "no_candidate_passes": 36,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
+    "new_stories_allowed": 0,
     "retroactive_rows_retained": 36,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -80,23 +80,23 @@
     "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 0,
-    "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 11,
+    "material_update_replays_suppressed": 1,
+    "pre_generation_materiality_evaluations": 13,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 11,
+    "pre_generation_materiality_duplicates": 13,
     "pre_generation_materiality_holds": 0,
-    "pre_generation_materiality_model_calls": 4,
-    "pre_generation_materiality_cache_hits": 7,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_model_calls": 5,
+    "pre_generation_materiality_cache_hits": 8,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
     "terminal_permalink_new_authorized": 0,
-    "terminal_permalink_duplicates_blocked": 1,
+    "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
     "late_published_skip_materiality_evaluations": 0,
@@ -119,16 +119,80 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.9,
+      "shared_anchors": [
+        "Eric Saint Aude",
+        "Oct. 9 crash",
+        "NW University Blvd and NW California Blvd",
+        "63-year-old victim",
+        "Port St. Lucie Police",
+        "arrest for leaving scene with serious bodily injury"
+      ],
+      "novel_facts": [],
+      "reason": "Both articles cover the same Oct. 9 hit-and-run crash and the arrest of Eric Saint Aude, already reported in the canonical article including the arrest, charge, and investigative details. The incoming article adds no new facts beyond what the canonical already reports (same victim, same arrest, same charge).",
+      "validation_errors": []
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "Port St. Lucie police: Suspect's car had blood, damage after hit-and-run - cw34.com",
+      "source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
+      "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+      "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
       "confidence": 0.93,
       "shared_anchors": [
         "Eric Saint Aude",
-        "Oct. 9 crash near NW University Boulevard and NW California Boulevard",
-        "63-year-old victim found unconscious with head injuries",
-        "Port St. Lucie Police investigation and arrest",
-        "charge of leaving scene of crash with serious bodily injury"
+        "NW California Boulevard / NW University Boulevard crash",
+        "63-year-old Port St. Lucie victim",
+        "Police Chief Leo Niemczyk October 23 briefing",
+        "geofence warrant leading to arrest",
+        "vehicle damage and blood evidence",
+        "second southbound vehicle still being sought"
+      ],
+      "novel_facts": [
+        "Specific detail that recovered fender-well fasteners matched missing parts on suspect's vehicle",
+        "Victim identified via Garmin watch data",
+        "$45,000 bond amount",
+        "Victim expected to survive but quality of life may be affected"
+      ],
+      "reason": "This is the same hit-and-run incident and arrest already covered in the canonical article, including the same suspect, victim, location, date, and briefing. The additional details (fender fasteners, Garmin watch identification, bond amount) are incremental elaborations on the same arrest announcement already captured as the material update in the canonical story, not a new distinct event or independently newsworthy follow-up.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "Man charged in connection with hit-and-run crash critically injuring 63-year-old in Port St. Lucie: Officials - WFLX",
+      "source_url": "https://www.wflx.com/2026/10/23/man-charged-connection-with-hit-and-run-crash-critically-injuring-63-year-old-port-st-lucie-officials?outputType=amp",
+      "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+      "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Oct. 9 crash near NW University Blvd and NW California Blvd",
+        "63-year-old male victim found unconscious with head injuries",
+        "Eric Saint Aude identified and arrested as suspect",
+        "Chief Leo Niemczyk statements",
+        "HCA Florida Lawnwood Hospital"
       ],
       "novel_facts": [],
-      "reason": "The incoming article reports the same arrest of Eric Saint Aude for the same Oct. 9 hit-and-run crash already covered in the canonical article, which already includes the arrest, charge, and investigation details. The incoming piece adds only minor color (Garmin watch identification, chief's quote about jogging habits) without any new material fact like additional charges, status change, or court action.",
+      "reason": "The incoming article covers the same Oct. 9 hit-and-run crash and arrest of Eric Saint Aude already captured in the canonical article, which already reports the arrest, charge, and victim's critical condition. No new material development (e.g., death, new charge, court action) is present beyond details already in the canonical.",
       "validation_errors": []
     },
     {
@@ -147,16 +211,17 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.93,
+      "confidence": 0.9,
       "shared_anchors": [
         "Eric Saint Aude",
-        "Oct. 9 crash near NW University Boulevard and NW California Boulevard",
-        "63-year-old victim found unconscious with head injuries",
-        "Port St. Lucie Police investigation and arrest",
-        "charge of leaving scene of crash with serious bodily injury"
+        "Oct. 9 crash",
+        "NW University Blvd and NW California Blvd",
+        "63-year-old victim",
+        "Port St. Lucie Police",
+        "arrest for leaving scene with serious bodily injury"
       ],
       "novel_facts": [],
-      "reason": "The incoming article reports the same arrest of Eric Saint Aude for the same Oct. 9 hit-and-run crash already covered in the canonical article, which already includes the arrest, charge, and investigation details. The incoming piece adds only minor color (Garmin watch identification, chief's quote about jogging habits) without any new material fact like additional charges, status change, or court action.",
+      "reason": "Both articles cover the same Oct. 9 hit-and-run crash and the arrest of Eric Saint Aude, already reported in the canonical article including the arrest, charge, and investigative details. The incoming article adds no new facts beyond what the canonical already reports (same victim, same arrest, same charge).",
       "validation_errors": []
     },
     {
@@ -175,17 +240,16 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.95,
+      "confidence": 0.93,
       "shared_anchors": [
-        "Eric Saint Aude, 60, arrested",
         "Oct. 9 crash near NW University Blvd and NW California Blvd",
         "63-year-old victim found unconscious with head injuries",
         "HCA Florida Lawnwood Hospital",
-        "Chief Leo Niemczyk statements",
-        "leaving scene of crash with serious bodily injury charge"
+        "suspect Eric Saint Aude, arrested and charged with leaving scene of crash with serious bodily injury",
+        "Chief Leo Niemczyk quoted"
       ],
       "novel_facts": [],
-      "reason": "This article reports the same arrest of Eric Saint Aude for the same Oct. 9 hit-and-run already covered in the canonical article, which includes the arrest, charge, and additional investigative details (geofence warrant, second vehicle, vehicle damage). No new facts beyond what's already in the canonical are present.",
+      "reason": "This covers the same hit-and-run crash and arrest of Eric Saint Aude already detailed in the canonical article, including the arrest, charge, victim condition, and chief's comments. The canonical already reports the arrest with more detail (geofence warrant, vehicle evidence, second vehicle investigation); the incoming article adds no new facts beyond what's already covered, just a condensed retelling via a different outlet.",
       "validation_errors": []
     },
     {
@@ -204,16 +268,17 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.93,
+      "confidence": 0.9,
       "shared_anchors": [
         "Eric Saint Aude",
-        "Oct. 9 crash near NW University Boulevard and NW California Boulevard",
-        "63-year-old victim found unconscious with head injuries",
-        "Port St. Lucie Police investigation and arrest",
-        "charge of leaving scene of crash with serious bodily injury"
+        "Oct. 9 crash",
+        "NW University Blvd and NW California Blvd",
+        "63-year-old victim",
+        "Port St. Lucie Police",
+        "arrest for leaving scene with serious bodily injury"
       ],
       "novel_facts": [],
-      "reason": "The incoming article reports the same arrest of Eric Saint Aude for the same Oct. 9 hit-and-run crash already covered in the canonical article, which already includes the arrest, charge, and investigation details. The incoming piece adds only minor color (Garmin watch identification, chief's quote about jogging habits) without any new material fact like additional charges, status change, or court action.",
+      "reason": "Both articles cover the same Oct. 9 hit-and-run crash and the arrest of Eric Saint Aude, already reported in the canonical article including the arrest, charge, and investigative details. The incoming article adds no new facts beyond what the canonical already reports (same victim, same arrest, same charge).",
       "validation_errors": []
     },
     {
@@ -227,8 +292,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -296,13 +361,49 @@
       "shared_anchors": [
         "Eric Saint Aude",
         "NW California Boulevard",
-        "63-year-old victim in ICU",
-        "hit-and-run arrest",
+        "63-year-old victim critically injured",
         "Port St. Lucie Police",
-        "second vehicle investigation"
+        "geofence warrant leading to suspect",
+        "second southbound vehicle still sought",
+        "Chief Leo Niemczyk"
       ],
       "novel_facts": [],
-      "reason": "This article covers the same arrest of Eric Saint Aude in the same October 9 hit-and-run already detailed in the canonical article, which already includes the arrest, phone/geofence evidence, vehicle damage/blood evidence, and the second vehicle detail. No new facts beyond what's already captured.",
+      "reason": "This is the same hit-and-run case already covered in the canonical article, which already reflects the arrest of Eric Saint Aude, the geofence warrant breakthrough, vehicle damage/blood evidence, and the search for a second vehicle. The incoming article repeats these same facts with added color (bystander quotes) but no new material development.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Port St. Lucie police: Suspect's car had blood, damage after hit-and-run - cw34.com",
+      "source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
+      "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+      "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.93,
+      "shared_anchors": [
+        "Eric Saint Aude",
+        "NW California Boulevard / NW University Boulevard crash",
+        "63-year-old Port St. Lucie victim",
+        "Police Chief Leo Niemczyk October 23 briefing",
+        "geofence warrant leading to arrest",
+        "vehicle damage and blood evidence",
+        "second southbound vehicle still being sought"
+      ],
+      "novel_facts": [
+        "Specific detail that recovered fender-well fasteners matched missing parts on suspect's vehicle",
+        "Victim identified via Garmin watch data",
+        "$45,000 bond amount",
+        "Victim expected to survive but quality of life may be affected"
+      ],
+      "reason": "This is the same hit-and-run incident and arrest already covered in the canonical article, including the same suspect, victim, location, date, and briefing. The additional details (fender fasteners, Garmin watch identification, bond amount) are incremental elaborations on the same arrest announcement already captured as the material update in the canonical story, not a new distinct event or independently newsworthy follow-up.",
       "validation_errors": []
     },
     {
@@ -321,16 +422,17 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.93,
+      "confidence": 0.9,
       "shared_anchors": [
         "Eric Saint Aude",
-        "Oct. 9 crash near NW University Boulevard and NW California Boulevard",
-        "63-year-old victim found unconscious with head injuries",
-        "Port St. Lucie Police investigation and arrest",
-        "charge of leaving scene of crash with serious bodily injury"
+        "Oct. 9 crash",
+        "NW University Blvd and NW California Blvd",
+        "63-year-old victim",
+        "Port St. Lucie Police",
+        "arrest for leaving scene with serious bodily injury"
       ],
       "novel_facts": [],
-      "reason": "The incoming article reports the same arrest of Eric Saint Aude for the same Oct. 9 hit-and-run crash already covered in the canonical article, which already includes the arrest, charge, and investigation details. The incoming piece adds only minor color (Garmin watch identification, chief's quote about jogging habits) without any new material fact like additional charges, status change, or court action.",
+      "reason": "Both articles cover the same Oct. 9 hit-and-run crash and the arrest of Eric Saint Aude, already reported in the canonical article including the arrest, charge, and investigative details. The incoming article adds no new facts beyond what the canonical already reports (same victim, same arrest, same charge).",
       "validation_errors": []
     },
     {
@@ -349,45 +451,16 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.95,
+      "confidence": 0.93,
       "shared_anchors": [
-        "Eric Saint Aude, 60, arrested",
         "Oct. 9 crash near NW University Blvd and NW California Blvd",
         "63-year-old victim found unconscious with head injuries",
         "HCA Florida Lawnwood Hospital",
-        "Chief Leo Niemczyk statements",
-        "leaving scene of crash with serious bodily injury charge"
+        "suspect Eric Saint Aude, arrested and charged with leaving scene of crash with serious bodily injury",
+        "Chief Leo Niemczyk quoted"
       ],
       "novel_facts": [],
-      "reason": "This article reports the same arrest of Eric Saint Aude for the same Oct. 9 hit-and-run already covered in the canonical article, which includes the arrest, charge, and additional investigative details (geofence warrant, second vehicle, vehicle damage). No new facts beyond what's already in the canonical are present.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Lanes reopen after tractor trailer fire on Florida's Turnpike in St. Lucie County - WPBF",
-      "source_url": "https://www.wpbf.com/article/tractor-trailer-fire-florida-turnpike-st-lucie-county/74191434",
-      "canonical_slug": "2026-10-20-southbound-turnpike-lanes-reopen-after-tractor-trailer-fire-in-st-lucie-county",
-      "canonical_headline": "Southbound Turnpike Lanes Reopen After Tractor Trailer Fire in St. Lucie County",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Florida's Turnpike southbound",
-        "St. Lucie County",
-        "Mile Marker 161",
-        "tractor trailer fire at 7:54 a.m.",
-        "same source URL"
-      ],
-      "novel_facts": [],
-      "reason": "Identical incident with same source URL, time, location, and details; no new facts beyond the already-reported fire and lane reopening.",
+      "reason": "This covers the same hit-and-run crash and arrest of Eric Saint Aude already detailed in the canonical article, including the arrest, charge, victim condition, and chief's comments. The canonical already reports the arrest with more detail (geofence warrant, vehicle evidence, second vehicle investigation); the incoming article adds no new facts beyond what's already covered, just a condensed retelling via a different outlet.",
       "validation_errors": []
     },
     {
@@ -406,16 +479,17 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.93,
+      "confidence": 0.9,
       "shared_anchors": [
         "Eric Saint Aude",
-        "Oct. 9 crash near NW University Boulevard and NW California Boulevard",
-        "63-year-old victim found unconscious with head injuries",
-        "Port St. Lucie Police investigation and arrest",
-        "charge of leaving scene of crash with serious bodily injury"
+        "Oct. 9 crash",
+        "NW University Blvd and NW California Blvd",
+        "63-year-old victim",
+        "Port St. Lucie Police",
+        "arrest for leaving scene with serious bodily injury"
       ],
       "novel_facts": [],
-      "reason": "The incoming article reports the same arrest of Eric Saint Aude for the same Oct. 9 hit-and-run crash already covered in the canonical article, which already includes the arrest, charge, and investigation details. The incoming piece adds only minor color (Garmin watch identification, chief's quote about jogging habits) without any new material fact like additional charges, status change, or court action.",
+      "reason": "Both articles cover the same Oct. 9 hit-and-run crash and the arrest of Eric Saint Aude, already reported in the canonical article including the arrest, charge, and investigative details. The incoming article adds no new facts beyond what the canonical already reports (same victim, same arrest, same charge).",
       "validation_errors": []
     }
   ],
@@ -884,7 +958,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Vero Beach Man, 60, Dies in Crash With Semi at 66th and 49th",
       "incoming_source_url": "https://cbs12.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news",
-      "incoming_story_id": "story_023023",
+      "incoming_story_id": "story_023048",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1138,207 +1212,6 @@
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "PSL Police Arrest Man in Hit-and-Run That Left Resident Critically Injured",
-      "incoming_source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
-      "incoming_story_id": "story_020394",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "PSL Police Arrest Man in Hit-and-Run That Left Resident Critically Injured",
-      "incoming_source_url": "https://cw34.com/news/local/port-st-lucie-police-arrest-suspect-in-hit-and-run-that-critically-injured-63-year-old-hit-and-run-victim-in-critical-condition-florida-news",
-      "incoming_story_id": "story_020394",
-      "candidates": [
-        {
-          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
-          "terminal_recall_tier": 5,
-          "terminal_recall_score": 1.1565,
-          "retrieval_score": 0.8265,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "shared_incident_anchor",
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-10-07-st-lucie-county-student-struck-by-vehicle-wednesday-police-investigating",
-          "headline": "Port St. Lucie Student, 14, Dies After Being Struck Near SW Squirrel Avenue",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6453,
-          "retrieval_score": 0.4943,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_16_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-10-15-after-fatal-crash-neighbors-press-fdot-for-lighting-on-port-st-lucie-boulevard",
-          "headline": "After Fatal Crash, Neighbors Press FDOT for Lighting on Port St. Lucie Boulevard",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5978,
-          "retrieval_score": 0.4818,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-port-st-lucie-man-fights-citys-126-camera-network-in-federal-court",
-          "headline": "Port St. Lucie Man Fights City's 126-Camera Network in Federal Court",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5716,
-          "retrieval_score": 0.4646,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.4742,
-          "retrieval_score": 0.3672,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-jupiter-nurse-charged-with-diverting-fentanyl-from-patient-at-cleveland-clinic-t",
-          "headline": "Jupiter Nurse Charged With Diverting Fentanyl From Patient at Cleveland Clinic Tradition",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6257,
-          "retrieval_score": 0.5687,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-13-port-st-lucie-family-seeks-animal-cruelty-charges-after-dog-killed-on-goodman-av",
-          "headline": "Port St. Lucie Family Seeks Animal Cruelty Charges After Dog Killed on Goodman Avenue",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5426,
-          "retrieval_score": 0.5326,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
-          "headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5114,
-          "retrieval_score": 0.4924,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-13-port-st-lucie-approves-costco-entertainment-district-rehab-hospital-in-southern",
-          "headline": "Port St. Lucie Approves Costco, Entertainment District, Rehab Hospital in Southern Grove",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4854,
-          "retrieval_score": 0.4754,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
-          "headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4836,
-          "retrieval_score": 0.4466,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
-          "headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4805,
-          "retrieval_score": 0.4525,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "headline": "More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4761,
-          "retrieval_score": 0.3921,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Eric Saint Aude arrest",
-          "NW California Boulevard / NW University Boulevard crash location",
-          "63-year-old victim in critical condition at HCA Florida Lawnwood Hospital",
-          "Chief Leo Niemczyk October 23 briefing",
-          "geofence warrant and second vehicle investigation details"
-        ],
-        "novel_facts": [],
-        "reason": "The candidate slug's canonical article already reflects the October 23 arrest of Eric Saint Aude, including the geofence warrant, vehicle damage/blood evidence, newspaper delivery detail, and second-vehicle investigation. The incoming article covers the identical arrest and evidentiary details with no new facts beyond what's already captured in that canonical record (same bond amount context, same charge, same detectives' findings). This is the same event with no material update beyond what's already reported.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Eric Saint Aude arrest",
-          "NW California Boulevard / NW University Boulevard crash location",
-          "63-year-old victim in critical condition at HCA Florida Lawnwood Hospital",
-          "Chief Leo Niemczyk October 23 briefing",
-          "geofence warrant and second vehicle investigation details"
-        ],
-        "novel_facts": [],
-        "reason": "The candidate slug's canonical article already reflects the October 23 arrest of Eric Saint Aude, including the geofence warrant, vehicle damage/blood evidence, newspaper delivery detail, and second-vehicle investigation. The incoming article covers the identical arrest and evidentiary details with no new facts beyond what's already captured in that canonical record (same bond amount context, same charge, same detectives' findings). This is the same event with no material update beyond what's already reported.",
-        "validation_errors": [],
-        "consistency_repairs": []
       }
     }
   ],
