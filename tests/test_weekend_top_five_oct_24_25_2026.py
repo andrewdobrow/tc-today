@@ -1,26 +1,27 @@
-"""Regression checks for the Oct. 24-25, 2026 custom weekend roundup."""
+"""Content regressions for the retired Oct. 24–25 weekend roundup fixture."""
 import json
 import re
 from pathlib import Path
 
-ARTICLES = json.loads((Path(__file__).resolve().parents[1] / "custom_articles.json").read_text(encoding="utf-8"))
+ROOT = Path(__file__).resolve().parents[1]
+WEEKEND_FIXTURE = ROOT / "tests" / "fixtures" / "weekend_top_five_oct_24_25_2026.json"
 TARGET_ID = "treasure-coast-top-five-weekend-2026-10-24-25"
 
 
 def target():
-    matches = [x for x in ARTICLES if x.get("custom_id") == TARGET_ID]
-    assert len(matches) == 1
-    return matches[0]
+    """Test the historical guide independently of the current editorial queue."""
+    article = json.loads(WEEKEND_FIXTURE.read_text(encoding="utf-8"))
+    assert article.get("custom_id") == TARGET_ID
+    return article
 
 
-def test_new_roundup_is_unique_and_correctly_queued():
+def test_historical_roundup_has_correct_identity_and_metadata():
     a = target()
     assert a["slug"] == "2026-10-21-treasure-coast-weekend-events-oct-24-25"
     assert a["publish_on"] == "2026-10-21"
     assert a["category"] == "things_to_do"
     assert not a["force_hero"] and not a["is_breaking"]
-    assert a["headline"] not in {x["headline"] for x in ARTICLES if x is not a}
-    assert len({x.get("custom_id") for x in ARTICLES}) == len(ARTICLES)
+    assert a["expires"] == "2026-10-26"
 
 
 def test_five_unique_sourced_events_spread_across_both_days():
@@ -52,7 +53,11 @@ def test_science_festival_venue_hike_age_and_honest_pricing():
     assert "Check the organizer for registration and participation details" in body
 
 
-def test_only_current_weekend_guide_is_in_editor_queue():
-    guides = [row for row in ARTICLES if "weekend" in str(row.get("custom_id", "")).lower()]
-    assert [row.get("custom_id") for row in guides] == [TARGET_ID]
-    assert guides[0]["expires"] == "2026-10-26"
+def test_historical_roundup_not_required_in_active_editor_queue():
+    # A new custom submission replaces the queue. Old editions are tested
+    # through fixtures, not kept in custom_articles.json to satisfy tests.
+    queued = json.loads((ROOT / "custom_articles.json").read_text(encoding="utf-8"))
+    assert isinstance(queued, list)
+    ids = [x.get("custom_id") for x in queued]
+    assert len(ids) == len(set(ids))
+    assert TARGET_ID not in ids
