@@ -181,7 +181,7 @@ def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
 
 def test_paywall_markup_uses_editorial_single_offer_and_home_exit():
     markup = paywall_html("example-story")
-    assert "Keep reading for" in markup
+    assert "Continue reading for" in markup
     assert 'class="tct-paywall-headline-accent">$1</span>' in markup
     assert "Get unlimited, ad-free access to every story." in markup
     assert "tct-paywall-subscriber-strip" in markup
@@ -701,10 +701,10 @@ def test_three_free_article_monthly_meter_contract_is_server_signed_and_repeat_s
     assert "used_slugs: nextSlugs" in protected
     assert "parsed.v === 1 ? [parsed.slug]" in protected
     assert "placePostReadMeterAfterStory(paywall)" in browser
-    assert "Keep reading for" in browser
+    assert "Continue reading for" in browser
     assert "tct-paywall-headline-accent" in browser
     assert "$1</span>" in browser
-    assert "if (headline) headline.innerHTML = 'Keep reading for <span class=\"tct-paywall-headline-accent\">$1</span>'" in browser
+    assert "if (headline) headline.innerHTML = 'Continue reading for <span class=\"tct-paywall-headline-accent\">$1</span>'" in browser
     assert "clearPendingMeterFor(slug)" in browser
     assert "METER_PENDING_TTL_MS = 120000" in browser
     assert "html.tct-meter-precheck .tct-member-only" in css
@@ -718,7 +718,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
     assert "if (access === 'member') memberOnly?.remove()" in browser
     assert "setMeterPaywallState(paywall" in browser
     assert "tct-paywall-metered-after-read" in browser
-    assert "if (headline) headline.innerHTML = 'Keep reading for <span class=\"tct-paywall-headline-accent\">$1</span>'" in browser
+    assert "if (headline) headline.innerHTML = 'Continue reading for <span class=\"tct-paywall-headline-accent\">$1</span>'" in browser
     assert "placePostReadMeterAfterStory(paywall)" in browser
     assert "#tct-protected-content.is-unlocked" in browser
     assert "memberOnly.contains(unlockedTarget)" in browser
@@ -739,8 +739,8 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.110"' in helper
-    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.111"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.112"' in helper
+    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.112"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
