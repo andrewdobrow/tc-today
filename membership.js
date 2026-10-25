@@ -39,7 +39,9 @@ function currentMeterPeriod(){
     return /^\d{4}$/.test(year) && /^\d{2}$/.test(month) ? `${year}-${month}` : ''
   } catch { return '' }
 }
-const FREE_ARTICLE_LIMIT = 3
+const FREE_ARTICLE_LIMIT = 2
+// Accept already-signed three-read meter states without granting new reads.
+const MAX_RECOGNIZED_METER_SLUGS = 3
 // Campaign copy is presentation only. Source cannot change the signed meter,
 // article entitlements, Stripe price, or reader identity.
 const REFERRAL_SESSION_KEY = 'tct_subscription_referral_v1'
@@ -83,32 +85,62 @@ function subscriptionReferralSource(){
 }
 function addSoftMeterInvitation(paywall, remaining){
   if (!paywall?.parentElement || remaining <= 0 || remaining >= FREE_ARTICLE_LIMIT) return
+  // The same coral paywall treatment appears after a free read, but this
+  // version is a nonblocking invitation: the reader retains another free article.
   const source = subscriptionReferralSource()
-  const note = REFERRAL_COPY[source]?.soft || 'Enjoying Treasure Coast Today? Stay informed with more independent local reporting.'
+  const note = REFERRAL_COPY[source]?.soft || 'Stay informed with local reporting from across the Treasure Coast.'
   const invite = document.createElement('aside')
-  invite.className = 'tct-meter-soft-invitation'
+  invite.className = 'tct-paywall tct-meter-soft-invitation'
   invite.setAttribute('aria-label', 'Optional Treasure Coast Today subscription invitation')
   invite.setAttribute('data-tct-meter-soft-invitation', '')
+
+  const strip = document.createElement('div')
+  strip.className = 'tct-paywall-subscriber-strip'
   const counter = document.createElement('p')
   counter.className = 'tct-meter-soft-count'
-  counter.textContent = `${remaining} free ${remaining === 1 ? 'article' : 'articles'} left this month`
-  const heading = document.createElement('h3')
-  heading.textContent = source === 'nextdoor' ? 'Enjoying local news, neighbor?' :
-    source === 'reddit' ? 'Keep the conversation going.' :
-    source === 'facebook' ? 'Stay in the loop beyond your feed.' :
-    source === 'newsletter' ? 'Enjoying the Morning Brief?' : 'Enjoying Treasure Coast Today?'
-  const body = document.createElement('p')
-  body.className = 'tct-meter-soft-description'
-  body.textContent = note
+  counter.textContent = `${remaining} free ${remaining === 1 ? 'article' : 'articles'} remaining this month`
+  strip.appendChild(counter)
+
+  const panel = document.createElement('div')
+  panel.className = 'tct-paywall-offer-panel'
+  const heading = document.createElement('h2')
+  heading.className = 'tct-paywall-offer-headline'
+  heading.append('Continue reading for ')
+  const accent = document.createElement('span')
+  accent.className = 'tct-paywall-headline-accent'
+  accent.textContent = '$1'
+  heading.appendChild(accent)
+
+  const subhead = document.createElement('p')
+  subhead.className = 'tct-paywall-offer-subhead'
+  subhead.textContent = 'Get unlimited, ad-free access to every story.'
+
+  const offer = document.createElement('div')
+  offer.className = 'tct-paywall-primary-offer'
+  const pricing = document.createElement('div')
+  pricing.className = 'tct-paywall-price-line'
+  pricing.innerHTML = '<strong class="tct-paywall-current-price">$1</strong><span class="tct-paywall-old-price">$4.99</span><span class="tct-paywall-price-copy">for your first month</span>'
   const action = document.createElement('a')
   const path = `${window.location.pathname}${window.location.search}`
   action.href = `/subscribe.html?next=${encodeURIComponent(path)}`
-  action.className = 'tct-meter-soft-action'
-  action.textContent = 'Get unlimited access for $1 →'
-  const terms = document.createElement('small')
-  terms.textContent = 'First month $1, then $4.99/month. Cancel anytime. Or keep reading for free.'
-  invite.append(counter, heading, body, action, terms)
+  action.className = 'tct-member-btn tct-paywall-primary-button tct-meter-soft-action'
+  action.textContent = 'Start for $1 →'
+  offer.append(pricing, action)
+
+  const terms = document.createElement('p')
+  terms.className = 'tct-paywall-renewal'
+  terms.textContent = '$4.99/month after your first month. Cancel anytime.'
+  const freeNote = document.createElement('p')
+  freeNote.className = 'tct-meter-soft-free-note'
+  freeNote.textContent = `Or keep reading for free — you still have ${remaining} ${remaining === 1 ? 'article' : 'articles'} left this month.`
+  const context = document.createElement('p')
+  context.className = 'tct-meter-soft-context'
+  context.textContent = note
+
+  panel.append(heading, subhead, offer, terms, freeNote, context)
+  invite.append(strip, panel)
   paywall.insertAdjacentElement('beforebegin', invite)
+  syncPaywallFullBleed(invite)
 }
 function readMeterState(){
   try {
@@ -119,7 +151,7 @@ function readMeterState(){
     if (!/^\d{4}-\d{2}$/.test(String(state.period || ''))) return null
     // Legacy one-article state had `slug` but no `slugs` collection.
     const slugs = Array.isArray(state.slugs) ? state.slugs : state.slug ? [state.slug] : []
-    if (slugs.length > FREE_ARTICLE_LIMIT || new Set(slugs).size !== slugs.length ||
+    if (slugs.length > MAX_RECOGNIZED_METER_SLUGS || new Set(slugs).size !== slugs.length ||
         !slugs.every(slug => /^[a-z0-9][a-z0-9-]{2,180}$/.test(String(slug)))) return null
     if (state.pending && Date.now() - Number(state.started_at || 0) > METER_PENDING_TTL_MS) {
       if (!state.meter_token) {
@@ -487,7 +519,7 @@ function setMeterPaywallState(paywall, period, afterRead=false){
   const status = qs('[data-meter-status]', paywall)
   const headline = qs('[data-paywall-headline]', paywall)
   status?.classList.remove('hidden')
-  if (status) status.textContent = "You've read all 3 free articles this month."
+  if (status) status.textContent = "You've read both free articles this month."
   if (headline) headline.innerHTML = 'Continue reading for <span class="tct-paywall-headline-accent">$1</span>'
   paywall.classList.toggle('tct-paywall-metered-after-read', afterRead)
   syncPaywallFullBleed(paywall)
@@ -680,8 +712,8 @@ async function unlockArticle(statusPromise=null){
     setMessage(message, '')
     if (rendered) {
       removePostArticleNewsletter()
-      // First two full reads have no hard sales interruption. At the third,
-      // position the conversion treatment at the end of the complete article.
+      // The first full read ends with an optional coral subscription offer.
+      // After the second free read, place the hard conversion treatment at the end.
       const placed = placePostReadMeterAfterStory(paywall)
       if (usedSlugs.length >= FREE_ARTICLE_LIMIT) {
         const meterPeriod = String(data.period || reservation.period || currentMeterPeriod())
