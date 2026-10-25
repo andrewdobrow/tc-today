@@ -181,7 +181,7 @@ def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
 
 def test_paywall_markup_uses_editorial_single_offer_and_home_exit():
     markup = paywall_html("example-story")
-    assert "Keep reading for" in markup
+    assert "Continue reading for" in markup
     assert 'class="tct-paywall-headline-accent">$1</span>' in markup
     assert "Get unlimited, ad-free access to every story." in markup
     assert "tct-paywall-subscriber-strip" in markup
@@ -214,6 +214,22 @@ def test_paywalled_schema_and_assets_are_injected_without_body_payload():
     assert '/membership.css' in page
     assert '/membership.js' in page
     assert 'data-article-slug="story-slug"' in page
+
+
+def test_retained_article_paywall_heading_upgrades_without_rewriting_story():
+    legacy = (
+        '<html><head></head><body>'
+        '<h1>A preserved article headline</h1>'
+        '<h2 class="tct-paywall-offer-headline" data-paywall-headline>'
+        'Keep reading for <span class="tct-paywall-headline-accent">$1</span></h2>'
+        '<p>The story publication metadata stays untouched.</p>'
+        '</body></html>'
+    )
+    updated = inject_membership_assets(legacy, "preserved-article")
+    assert 'Continue reading for <span class="tct-paywall-headline-accent">$1</span>' in updated
+    assert '>Keep reading for <span' not in updated
+    assert '<h1>A preserved article headline</h1>' in updated
+    assert 'The story publication metadata stays untouched.' in updated
 
 
 def test_subscribe_page_has_no_registration_gate_before_plan_buttons():
@@ -286,7 +302,7 @@ def test_protected_content_is_entitlement_or_monthly_meter_checked_server_side()
     assert "signMeterToken" in protected
     assert "readMeterToken" in protected
     assert "FREE_ARTICLE_USED" in protected
-    assert "three_free_articles_per_month" in protected
+    assert "two_free_articles_per_month" in protected
     assert ".from('protected_articles')" in protected
     section = config.split("[functions.protected-article]", 1)[1].split("[functions.", 1)[0]
     assert "verify_jwt = false" in section
@@ -517,8 +533,8 @@ def test_prepare_removes_paywall_exit_even_when_snapshot_is_unavailable(tmp_path
     public = article.read_text(encoding="utf-8")
     assert "tct-paywall-exit" not in public
     assert "&times;" not in public
-    assert '/membership.css?v=1.13.9.110' in public
-    assert '/membership.js?v=1.13.9.111' in public
+    assert '/membership.css?v=1.13.9.113' in public
+    assert '/membership.js?v=1.13.9.113' in public
     assert "Public teaser remains public." in public
 
 
@@ -598,8 +614,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.9.110"' in page
-    assert 'src="/membership.js?v=1.13.9.111"' in page
+    assert 'href="/membership.css?v=1.13.9.113"' in page
+    assert 'src="/membership.js?v=1.13.9.113"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -645,8 +661,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.9.110') == 1
-    assert first.count('/membership.js?v=1.13.9.111') == 1
+    assert first.count('/membership.css?v=1.13.9.113') == 1
+    assert first.count('/membership.js?v=1.13.9.113') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -677,13 +693,13 @@ def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
 
 
 
-def test_three_free_article_monthly_meter_contract_is_server_signed_and_repeat_safe():
+def test_two_free_article_monthly_meter_contract_is_server_signed_and_repeat_safe():
     protected = (ROOT / "supabase/functions/protected-article/index.ts").read_text()
     browser = (ROOT / "membership.js").read_text()
     css = (ROOT / "membership.css").read_text()
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
 
-    assert "METER_POLICY = 'three_free_articles_per_month'" in protected
+    assert "METER_POLICY = 'two_free_articles_per_month'" in protected
     assert "METER_TIME_ZONE = 'America/New_York'" in protected
     assert "Deno.env.get('TCT_METER_TOKEN_SECRET')" in protected
     assert "Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')" in protected
@@ -696,15 +712,15 @@ def test_three_free_article_monthly_meter_contract_is_server_signed_and_repeat_s
     assert "reserveMeterArticle(slug)" in browser
     assert "meter_token: existingMeterToken" in browser
     assert "data?.access === 'monthly_free'" in browser
-    assert "You've read all 3 free articles this month." in browser
-    assert "FREE_ARTICLE_LIMIT = 3" in browser
+    assert "You've read both free articles this month." in browser
+    assert "FREE_ARTICLE_LIMIT = 2" in browser
     assert "used_slugs: nextSlugs" in protected
     assert "parsed.v === 1 ? [parsed.slug]" in protected
     assert "placePostReadMeterAfterStory(paywall)" in browser
-    assert "Keep reading for" in browser
+    assert "Continue reading for" in browser
     assert "tct-paywall-headline-accent" in browser
     assert "$1</span>" in browser
-    assert "if (headline) headline.innerHTML = 'Keep reading for <span class=\"tct-paywall-headline-accent\">$1</span>'" in browser
+    assert "if (headline) headline.innerHTML = 'Continue reading for <span class=\"tct-paywall-headline-accent\">$1</span>'" in browser
     assert "clearPendingMeterFor(slug)" in browser
     assert "METER_PENDING_TTL_MS = 120000" in browser
     assert "html.tct-meter-precheck .tct-member-only" in css
@@ -718,7 +734,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
     assert "if (access === 'member') memberOnly?.remove()" in browser
     assert "setMeterPaywallState(paywall" in browser
     assert "tct-paywall-metered-after-read" in browser
-    assert "if (headline) headline.innerHTML = 'Keep reading for <span class=\"tct-paywall-headline-accent\">$1</span>'" in browser
+    assert "if (headline) headline.innerHTML = 'Continue reading for <span class=\"tct-paywall-headline-accent\">$1</span>'" in browser
     assert "placePostReadMeterAfterStory(paywall)" in browser
     assert "#tct-protected-content.is-unlocked" in browser
     assert "memberOnly.contains(unlockedTarget)" in browser
@@ -739,8 +755,8 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.110"' in helper
-    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.111"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.113"' in helper
+    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.113"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
@@ -822,7 +838,7 @@ def test_update_workflow_auto_repairs_legacy_protected_article_endpoint_for_mete
     workflow = (ROOT / ".github/workflows/update.yml").read_text()
     assert "Probe monthly free-article meter capability" in workflow
     assert 'json={"action": "meter-capability"}' in workflow
-    assert "three_free_articles_per_month" in workflow
+    assert "two_free_articles_per_month" in workflow
     assert "Deploy monthly free-article protected endpoint" in workflow
     assert "supabase functions deploy protected-article --use-api" in workflow
 

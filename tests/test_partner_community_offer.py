@@ -30,7 +30,9 @@ def test_tccn_partner_page_is_true_marketing_landing_page():
     # stale hardcoded version that changes during production generation.
     script = re.search(r'<script type="module" src="/membership\.js\?v=([^"]+)"', page)
     assert script, "Partner page must include the membership JavaScript bundle"
-    assert script.group(1) in {"1.13.9.38", MEMBERSHIP_JS_ASSET_VERSION}
+    # Retained marketing-page HTML may still contain its previous production asset
+    # version until the Update workflow refreshes it on main.
+    assert script.group(1) in {"1.13.9.38", "1.13.9.111", MEMBERSHIP_JS_ASSET_VERSION}
 
 
 def test_normal_subscribe_page_remains_on_standard_one_dollar_offer():

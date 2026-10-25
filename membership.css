@@ -1617,35 +1617,62 @@ body.mv-no-ads .mv-leader {
   }
 }
 
-/* Three-read meter: a quiet after-story invitation on reads one and two. */
+/* Optional post-read invitation: reuse the same coral paywall components.
+   It is never a hard content gate and does not affect the free article allowance. */
 .tct-meter-soft-invitation {
-  box-sizing:border-box; width:100%; margin:26px 0 22px; padding:22px 24px;
-  background:#f5f8f5; border:1px solid #d9e5da; border-left:4px solid #24553e;
-  border-radius:10px; color:#21392b; font-family:inherit;
+  margin-top: 30px;
+  margin-bottom: 28px;
+}
+.tct-meter-soft-invitation .tct-paywall-subscriber-strip {
+  text-align: center;
 }
 .tct-meter-soft-invitation .tct-meter-soft-count {
-  margin:0 0 7px; font-size:.76rem; font-weight:800; letter-spacing:.035em;
-  color:#356e50; text-transform:uppercase;
+  margin: 0;
+  color: #7d3324;
+  font-size: .83rem;
+  font-weight: 850;
+  letter-spacing: .045em;
+  text-transform: uppercase;
 }
-.tct-meter-soft-invitation h3 {
-  margin:0 0 8px; font-family:Georgia,serif; font-size:clamp(1.15rem,3vw,1.42rem);
-  line-height:1.22; color:#193a28;
-}
-.tct-meter-soft-invitation .tct-meter-soft-description {
-  margin:0 0 14px; font-size:.94rem; line-height:1.5; color:#334c3d;
+
+/* The optional prompt's longer headline wraps without changing the hard paywall. */
+.tct-paywall.tct-paywall-full-bleed.tct-meter-soft-invitation .tct-paywall-offer-headline {
+  max-width: 670px;
+  white-space: normal;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  font-size: clamp(1.85rem, 4.1vw, 3rem);
+  line-height: 1.08;
 }
 .tct-meter-soft-invitation .tct-meter-soft-action {
-  display:inline-block; padding:9px 13px; border:1px solid #24553e;
-  border-radius:7px; color:#24553e; background:#fff; font-size:.9rem;
-  font-weight:800; text-decoration:none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  text-align: center;
+  box-sizing: border-box;
 }
-.tct-meter-soft-invitation .tct-meter-soft-action:hover,
-.tct-meter-soft-invitation .tct-meter-soft-action:focus-visible {
-  background:#e8f1ea; text-decoration:underline;
+.tct-meter-soft-invitation .tct-meter-soft-free-note {
+  margin: 16px auto 0;
+  color: #513d35;
+  font-size: .9rem;
+  line-height: 1.45;
+  font-weight: 750;
 }
-.tct-meter-soft-invitation small { display:block; margin-top:10px; font-size:.76rem; color:#577161; }
-.tct-paywall.tct-paywall-full-bleed[data-tct-referral] .tct-paywall-offer-headline {
-  white-space:normal; overflow-wrap:break-word; font-size:clamp(1.55rem,5.2vw,2.5rem);
-  line-height:1.08; letter-spacing:-.02em;
+.tct-meter-soft-invitation .tct-meter-soft-context {
+  margin: 12px auto 0;
+  color: #6f625c;
+  font-size: .8rem;
+  line-height: 1.45;
 }
-@media(max-width:680px){.tct-meter-soft-invitation{padding:18px 17px;margin:22px 0 18px}}
+/* Keep the explicit subscription headline readable on narrow screens. */
+@media (max-width: 680px) {
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {
+    white-space: normal;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    font-size: clamp(2rem, 8.5vw, 2.85rem);
+    line-height: 1.06;
+  }
+}
+

@@ -12,15 +12,22 @@ def test_referral_copy_is_whitelisted_and_does_not_affect_entitlement():
     assert 'utm_source' in browser and 'document.referrer' in browser
     assert 'sessionStorage.setItem(REFERRAL_SESSION_KEY, source)' in browser
     assert 'domain => host === domain || host.endsWith' in browser
-    assert 'headline.textContent = copy.heading' in browser
-    assert 'subhead.textContent = afterRead ? copy.read : copy.locked' in browser
-    assert 'applyReferralPaywallCopy(paywall, afterRead)' in browser
-    assert "const FREE_ARTICLE_LIMIT = 3" in browser
+    # Referral targeting is limited to optional post-read invitations.
+    # It must never replace a hard-paywall headline or its subscription terms.
+    assert "REFERRAL_COPY[source]?.soft" in browser
+    assert "function applyReferralPaywallCopy(" not in browser
+    assert "paywall.dataset.tctReferral" not in browser
+    assert "Hey, Nextdoor neighbor!" not in browser
+    paywall_state = browser.split("function setMeterPaywallState(", 1)[1].split("function placePostReadMeterAfterStory(", 1)[0]
+    assert "Continue reading for" in paywall_state
+    assert "applyReferralPaywallCopy" not in paywall_state
+    assert "tct-paywall-headline-accent" in paywall_state
+    assert "const FREE_ARTICLE_LIMIT = 2" in browser
     assert "meter_token: existingMeterToken" in browser
-    assert "const FREE_ARTICLE_LIMIT = 3" in protected
+    assert "const FREE_ARTICLE_LIMIT = 2" in protected
 
 
-def test_first_two_free_stories_receive_nonblocking_post_read_invitation():
+def test_first_free_story_receives_clear_coral_nonblocking_invitation():
     browser = (ROOT / 'membership.js').read_text()
     css = (ROOT / 'membership.css').read_text()
     monthly = browser.split("data?.access === 'monthly_free'", 1)[1].split("return { access:'monthly_free'", 1)[0]
@@ -30,12 +37,24 @@ def test_first_two_free_stories_receive_nonblocking_post_read_invitation():
     assert 'paywall?.remove()' in monthly
     assert "paywall.insertAdjacentElement('beforebegin', invite)" in browser
     assert "invite.setAttribute('data-tct-meter-soft-invitation', '')" in browser
-    assert "First month $1, then $4.99/month. Cancel anytime." in browser
+    assert "invite.className = 'tct-paywall tct-meter-soft-invitation'" in browser
+    assert "panel.className = 'tct-paywall-offer-panel'" in browser
+    assert "strip.className = 'tct-paywall-subscriber-strip'" in browser
+    assert "action.className = 'tct-member-btn tct-paywall-primary-button tct-meter-soft-action'" in browser
+    assert "syncPaywallFullBleed(invite)" in browser
+    soft = browser.split("function addSoftMeterInvitation(paywall, remaining){", 1)[1].split("function readMeterState(){", 1)[0]
+    assert "heading.textContent = 'You only have one free article left.'" in soft
+    assert "counter.textContent = 'Treasure Coast Today membership'" in soft
+    assert "Your next article is still free. Subscribe anytime for unlimited access." in soft
+    assert "Continue reading for" not in soft
+    assert "$4.99/month after your first month. Cancel anytime." in browser
     assert '.tct-meter-soft-invitation' in css
+    assert '.tct-paywall.tct-paywall-full-bleed.tct-meter-soft-invitation .tct-paywall-offer-headline' in css
+    assert 'linear-gradient(145deg, #fffaf8 0%, #fdeee9 54%, #f9ddd4 100%)' in css
     assert "if (!paywall?.parentElement || remaining <= 0 || remaining >= FREE_ARTICLE_LIMIT) return" in browser
 
 
-def test_versions_are_cache_busted_for_dynamic_referral_copy():
+def test_versions_are_cache_busted_for_restored_paywall_copy():
     helper = (ROOT / 'tct_engine/membership_paywall.py').read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.110"' in helper
-    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.111"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.113"' in helper
+    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.113"' in helper

@@ -1,8 +1,10 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import { ACTIVE_STATUSES, STRIPE_LIVEMODE } from '../_shared/membership.ts'
 
-const METER_POLICY = 'three_free_articles_per_month'
-const FREE_ARTICLE_LIMIT = 3
+const METER_POLICY = 'two_free_articles_per_month'
+const FREE_ARTICLE_LIMIT = 2
+// Legacy three-read tokens remain valid so policy changes cannot reset grants.
+const MAX_RECOGNIZED_METER_SLUGS = 3
 const METER_TIME_ZONE = 'America/New_York'
 const FULL_BODY_MARKER = '<!--tct-full-article-v2-->'
 
@@ -88,7 +90,7 @@ async function readMeterToken(raw: unknown): Promise<MeterPayload | null> {
     // Respect signed v1 grants already held by readers before the policy change.
     // Do not treat their first article as a new allowance.
     const slugs: unknown = parsed.v === 1 ? [parsed.slug] : parsed.v === 2 ? parsed.slugs : null
-    if (!Array.isArray(slugs) || slugs.length < 1 || slugs.length > FREE_ARTICLE_LIMIT) return null
+    if (!Array.isArray(slugs) || slugs.length < 1 || slugs.length > MAX_RECOGNIZED_METER_SLUGS) return null
     if (!slugs.every((value) => typeof value === 'string' && /^[a-z0-9][a-z0-9-]{2,180}$/.test(value))) return null
     if (new Set(slugs).size !== slugs.length) return null
     return { v: 2, period: String(parsed.period), slugs, issued_at: Number(parsed.issued_at) }
@@ -163,7 +165,7 @@ export default {
     const usedSlugs = existingMeter?.period === period ? [...existingMeter.slugs] : []
     if (!usedSlugs.includes(slug) && usedSlugs.length >= FREE_ARTICLE_LIMIT) {
       return Response.json({
-        error: 'You have read all 3 free articles for this month.',
+        error: 'You have read both free articles for this month.',
         code: 'FREE_ARTICLE_USED',
         meter_policy: METER_POLICY,
         period,
@@ -189,7 +191,7 @@ export default {
       period,
       meter_token: meterToken,
       used_slugs: nextSlugs,
-      remaining_free_articles: FREE_ARTICLE_LIMIT - nextSlugs.length,
+      remaining_free_articles: Math.max(0, FREE_ARTICLE_LIMIT - nextSlugs.length),
       full_body_payload: String(article.protected_body || '').startsWith(FULL_BODY_MARKER),
     })
   }),
