@@ -533,7 +533,7 @@ def test_prepare_removes_paywall_exit_even_when_snapshot_is_unavailable(tmp_path
     public = article.read_text(encoding="utf-8")
     assert "tct-paywall-exit" not in public
     assert "&times;" not in public
-    assert '/membership.css?v=1.13.9.113' in public
+    assert '/membership.css?v=1.13.9.114' in public
     assert '/membership.js?v=1.13.9.113' in public
     assert "Public teaser remains public." in public
 
@@ -614,7 +614,7 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.9.113"' in page
+    assert 'href="/membership.css?v=1.13.9.114"' in page
     assert 'src="/membership.js?v=1.13.9.113"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
@@ -661,7 +661,7 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.9.113') == 1
+    assert first.count('/membership.css?v=1.13.9.114') == 1
     assert first.count('/membership.js?v=1.13.9.113') == 1
 
 
@@ -755,7 +755,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.113"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.114"' in helper
     assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.113"' in helper
 
 

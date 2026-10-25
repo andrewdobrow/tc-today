@@ -56,5 +56,27 @@ def test_first_free_story_receives_clear_coral_nonblocking_invitation():
 
 def test_versions_are_cache_busted_for_restored_paywall_copy():
     helper = (ROOT / 'tct_engine/membership_paywall.py').read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.113"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.114"' in helper
     assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.113"' in helper
+
+
+def test_coral_hard_and_soft_paywall_headlines_cannot_be_clipped():
+    css = (ROOT / "membership.css").read_text()
+    # Inspect the final canonical coral rules, not earlier legacy declarations.
+    canonical = css.split("TCT v1.13.7.25", 1)[1]
+    hard = canonical.split(".tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {", 1)[1].split("}", 1)[0]
+    assert "white-space: normal" in hard
+    assert "text-wrap: balance" in hard
+    assert "overflow-wrap: anywhere" in hard
+    assert "text-wrap: nowrap" not in hard
+    assert "max-width: 680px" in hard
+
+    soft = css.split(".tct-paywall.tct-paywall-full-bleed.tct-meter-soft-invitation .tct-paywall-offer-headline {", 1)[1].split("}", 1)[0]
+    assert "white-space: normal" in soft
+    assert "text-wrap: balance" in soft
+    assert "overflow-wrap: anywhere" in soft
+
+    mobile = css.rsplit("@media (max-width: 680px)", 1)[1]
+    assert "white-space: normal" in mobile
+    assert "overflow-wrap: anywhere" in mobile
+    assert ".tct-paywall-meter-status" in mobile
