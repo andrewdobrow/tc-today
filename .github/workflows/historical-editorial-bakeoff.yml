@@ -1,0 +1,82 @@
+name: Historical Editorial Model Bake-Off
+
+# Manually invoked, read-only, publication-isolated.
+on:
+  workflow_dispatch:
+    inputs:
+      article_count:
+        description: "Number of source-matched published articles (12-50)"
+        required: true
+        type: number
+        default: 30
+      historic_days:
+        description: "Daily cache snapshots across repository history (10-160)"
+        required: true
+        type: number
+        default: 100
+      max_api_usd:
+        description: "Estimated API budget limit in dollars (2-50)"
+        required: true
+        type: number
+        default: 12
+      dry_run:
+        description: "Sample historical articles only, without API calls"
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: historical-editorial-bakeoff
+  cancel-in-progress: false
+
+jobs:
+  historical-comparison:
+    name: Historic source replay (never publish)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Read complete repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate benchmark contracts
+        run: python -m unittest discover -s tests -p test_historical_editorial_bakeoff.py -v
+
+      - name: Assemble verified historical replay sample
+        run: |
+          python scripts/historical_editorial_bakeoff.py \
+            --count "${{ inputs.article_count }}" \
+            --history "${{ inputs.historic_days }}" \
+            --max-cost "${{ inputs.max_api_usd }}" \
+            --dry-run
+
+      - name: Compare Claude Sonnet 5 and GPT-6.1 Sol
+        if: ${{ inputs.dry_run == false }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python -m pip install --disable-pip-version-check "anthropic>=0.60,<2" "openai>=2,<3"
+          python scripts/historical_editorial_bakeoff.py \
+            --count "${{ inputs.article_count }}" \
+            --history "${{ inputs.historic_days }}" \
+            --max-cost "${{ inputs.max_api_usd }}"
+
+      - name: Upload private review and provenance artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: historical-editorial-bakeoff-${{ github.run_id }}
+          path: editorial-bakeoff-output/
+          retention-days: 30
+          if-no-files-found: warn
