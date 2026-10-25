@@ -302,7 +302,7 @@ def test_protected_content_is_entitlement_or_monthly_meter_checked_server_side()
     assert "signMeterToken" in protected
     assert "readMeterToken" in protected
     assert "FREE_ARTICLE_USED" in protected
-    assert "three_free_articles_per_month" in protected
+    assert "two_free_articles_per_month" in protected
     assert ".from('protected_articles')" in protected
     section = config.split("[functions.protected-article]", 1)[1].split("[functions.", 1)[0]
     assert "verify_jwt = false" in section
@@ -533,8 +533,8 @@ def test_prepare_removes_paywall_exit_even_when_snapshot_is_unavailable(tmp_path
     public = article.read_text(encoding="utf-8")
     assert "tct-paywall-exit" not in public
     assert "&times;" not in public
-    assert '/membership.css?v=1.13.9.110' in public
-    assert '/membership.js?v=1.13.9.111' in public
+    assert '/membership.css?v=1.13.9.113' in public
+    assert '/membership.js?v=1.13.9.113' in public
     assert "Public teaser remains public." in public
 
 
@@ -614,8 +614,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.9.110"' in page
-    assert 'src="/membership.js?v=1.13.9.111"' in page
+    assert 'href="/membership.css?v=1.13.9.113"' in page
+    assert 'src="/membership.js?v=1.13.9.113"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -661,8 +661,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.9.110') == 1
-    assert first.count('/membership.js?v=1.13.9.111') == 1
+    assert first.count('/membership.css?v=1.13.9.113') == 1
+    assert first.count('/membership.js?v=1.13.9.113') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
@@ -693,13 +693,13 @@ def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
 
 
 
-def test_three_free_article_monthly_meter_contract_is_server_signed_and_repeat_safe():
+def test_two_free_article_monthly_meter_contract_is_server_signed_and_repeat_safe():
     protected = (ROOT / "supabase/functions/protected-article/index.ts").read_text()
     browser = (ROOT / "membership.js").read_text()
     css = (ROOT / "membership.css").read_text()
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
 
-    assert "METER_POLICY = 'three_free_articles_per_month'" in protected
+    assert "METER_POLICY = 'two_free_articles_per_month'" in protected
     assert "METER_TIME_ZONE = 'America/New_York'" in protected
     assert "Deno.env.get('TCT_METER_TOKEN_SECRET')" in protected
     assert "Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')" in protected
@@ -838,7 +838,7 @@ def test_update_workflow_auto_repairs_legacy_protected_article_endpoint_for_mete
     workflow = (ROOT / ".github/workflows/update.yml").read_text()
     assert "Probe monthly free-article meter capability" in workflow
     assert 'json={"action": "meter-capability"}' in workflow
-    assert "three_free_articles_per_month" in workflow
+    assert "two_free_articles_per_month" in workflow
     assert "Deploy monthly free-article protected endpoint" in workflow
     assert "supabase functions deploy protected-article --use-api" in workflow
 
