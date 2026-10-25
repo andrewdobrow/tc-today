@@ -1,0 +1,33 @@
+name: Repair Austin Hodge canonical identity
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: tct-hodge-canonical-repair
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Surgically integrate custom named-death and image guards into current generator
+        run: python scripts/apply_named_death_custom_guard.py
+      - name: Focused matching and image tests
+        run: python -m unittest discover -s tests -p 'test_named_death_custom_canonical_guard.py' -v
+      - name: Commit only the current generator integration
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/generate.py
+          if ! git diff --cached --quiet; then
+            git commit -m 'Guard named-death custom canonicals and preserve original images'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
