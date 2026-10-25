@@ -98,18 +98,14 @@ function addSoftMeterInvitation(paywall, remaining){
   strip.className = 'tct-paywall-subscriber-strip'
   const counter = document.createElement('p')
   counter.className = 'tct-meter-soft-count'
-  counter.textContent = `${remaining} free ${remaining === 1 ? 'article' : 'articles'} remaining this month`
+  counter.textContent = 'Treasure Coast Today membership'
   strip.appendChild(counter)
 
   const panel = document.createElement('div')
   panel.className = 'tct-paywall-offer-panel'
   const heading = document.createElement('h2')
   heading.className = 'tct-paywall-offer-headline'
-  heading.append('Continue reading for ')
-  const accent = document.createElement('span')
-  accent.className = 'tct-paywall-headline-accent'
-  accent.textContent = '$1'
-  heading.appendChild(accent)
+  heading.textContent = 'You only have one free article left.'
 
   const subhead = document.createElement('p')
   subhead.className = 'tct-paywall-offer-subhead'
@@ -132,7 +128,7 @@ function addSoftMeterInvitation(paywall, remaining){
   terms.textContent = '$4.99/month after your first month. Cancel anytime.'
   const freeNote = document.createElement('p')
   freeNote.className = 'tct-meter-soft-free-note'
-  freeNote.textContent = `Or keep reading for free — you still have ${remaining} ${remaining === 1 ? 'article' : 'articles'} left this month.`
+  freeNote.textContent = 'Your next article is still free. Subscribe anytime for unlimited access.'
   const context = document.createElement('p')
   context.className = 'tct-meter-soft-context'
   context.textContent = note
