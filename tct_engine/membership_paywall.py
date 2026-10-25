@@ -147,7 +147,7 @@ def paywall_section_html(slug: str) -> str:
   </div>
   <div class="tct-paywall-offer-panel">
     <div class="tct-paywall-meter-status hidden" data-meter-status></div>
-    <h2 class="tct-paywall-offer-headline" data-paywall-headline>Keep reading for <span class="tct-paywall-headline-accent">$1</span></h2>
+    <h2 class="tct-paywall-offer-headline" data-paywall-headline>Continue reading for <span class="tct-paywall-headline-accent">$1</span></h2>
     <p class="tct-paywall-offer-subhead">{PAYWALL_ACCESS_SUBHEAD}</p>
     <div class="membership-message hidden"></div>
     <div class="tct-paywall-signin hidden" data-paywall-signin>
@@ -212,8 +212,8 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.9.110"
-MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.111"
+MEMBERSHIP_ASSET_VERSION = "1.13.9.112"
+MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.112"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'
