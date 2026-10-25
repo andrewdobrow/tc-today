@@ -24,7 +24,7 @@ class HistoricalEditorialBakeoff(unittest.TestCase):
         source = {MOD.urlkey(source_url): {
             "source_url": source_url,
             "evidence": "The county approved a proposal.",
-            "captured": "2026-09-20T12:10:00Z",
+            "captured": "2026-09-19T12:10:00Z",
             "snapshot": "a" * 40,
         }}
         baseline = {"slug": "2026-09-19-stuart-county-proposal",
@@ -46,15 +46,42 @@ class HistoricalEditorialBakeoff(unittest.TestCase):
         self.assertIn("The county approved a proposal.", prompt)
         self.assertIn("2026-09-19", prompt)
 
-    def test_homepage_groups_never_mix_historic_days(self):
-        rows = [{"id": str(i), "date": day, "evidence": "Evidence",
-                 "source_headline": "Title"}
-                for day, num in (("2026-08-20", 3), ("2026-09-12", 2))
+    def test_postpublication_source_evidence_is_never_used(self):
+        url = "https://example.com/local/school-project-news"
+        article = {"slug": "2026-09-19-school-project-news",
+                   "source_url": url, "date": "2026-09-19",
+                   "headline": "Held out", "source_headline": "Source"}
+        evidence = "Original evidence"
+        later = {"source_url": url, "evidence": evidence + " LATER DEVELOPMENT",
+                 "captured": "2026-09-20T09:00:00Z", "snapshot": "later"}
+        on_date = {"source_url": url, "evidence": evidence,
+                   "captured": "2026-09-19T08:00:00Z", "snapshot": "original"}
+        pool, eligible, _ = MOD.cases(
+            [article], {MOD.urlkey(url): [later, on_date]}, 30, 1)
+        self.assertEqual(eligible, 1)
+        self.assertEqual(pool[0]["snapshot"], "original")
+        self.assertNotIn("LATER DEVELOPMENT", MOD.writing_prompt(pool[0]))
+        only_later, eligible_later, _ = MOD.cases(
+            [article], {MOD.urlkey(url): [later]}, 30, 1)
+        self.assertEqual((only_later, eligible_later), ([], 0))
+
+    def test_homepage_groups_are_same_day_distinct_sources_and_month_diverse(self):
+        rows = [{"id": f"{day}-{i}", "slug": f"story-{day}-{i}",
+                 "date": day, "evidence": "Evidence", "source_headline": "Title",
+                 "source_url": f"https://example.com/local/item-{day}-{i}"}
+                for day, num in (("2026-08-20", 3), ("2026-09-12", 3),
+                                 ("2026-09-13", 2))
                 for i in range(num)]
-        groups = MOD.ranking_groups(rows)
-        self.assertEqual(len(groups), 1)
-        self.assertEqual(groups[0]["date"], "2026-08-20")
-        self.assertEqual(len(groups[0]["rows"]), 3)
+        # Same-day duplicate original evidence is not a separate ranking candidate.
+        rows.append({**rows[0], "id": "duplicate", "slug": "duplicate"})
+        groups = MOD.ranking_groups(rows, max_groups=8, seed=4)
+        self.assertEqual(len(groups), 2)
+        self.assertEqual({g["date"] for g in groups},
+                         {"2026-08-20", "2026-09-12"})
+        for group in groups:
+            self.assertEqual(len(group["rows"]), 3)
+            self.assertEqual(len({MOD.urlkey(r["source_url"]) for r in group["rows"]}), 3)
+            self.assertTrue(all(r["date"] == group["date"] for r in group["rows"]))
 
     def test_replay_is_not_production_or_scheduled(self):
         workflow = (ROOT / ".github/workflows/historical-editorial-bakeoff.yml").read_text()
@@ -74,11 +101,14 @@ class HistoricalEditorialBakeoff(unittest.TestCase):
                            "reference_headline": "Editorial reference only",
                            "source_url": "https://example.com/a/very-long-path",
                            "evidence": "Original source passage"},
-               "variants": {"A": {"data": {"headline": "Story", "teaser": "Summary", "body": "Text"}},
-                            "B": {"data": {"headline": "Other", "teaser": "Summary", "body": "Text"}}}}
+               "variants": {"A": {"result": {"headline": "Story", "teaser": "Summary", "body": "Text"}},
+                            "B": {"result": {"headline": "Other", "teaser": "Summary", "body": "Text"}}}}
         review = MOD.markdown([row], [])
         self.assertIn("Variant A", review)
         self.assertIn("Variant B", review)
+        self.assertIn("Original source passage", review)
+        self.assertIn("Text", review)
+        self.assertIn("Other", review)
         self.assertNotIn("claude-sonnet-5", review)
         self.assertNotIn("gpt-6.1-sol", review)
 
