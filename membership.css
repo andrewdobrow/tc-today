@@ -1644,8 +1644,14 @@ body.mv-no-ads .mv-leader {
   background:#e8f1ea; text-decoration:underline;
 }
 .tct-meter-soft-invitation small { display:block; margin-top:10px; font-size:.76rem; color:#577161; }
-.tct-paywall.tct-paywall-full-bleed[data-tct-referral] .tct-paywall-offer-headline {
-  white-space:normal; overflow-wrap:break-word; font-size:clamp(1.55rem,5.2vw,2.5rem);
-  line-height:1.08; letter-spacing:-.02em;
+/* Keep the explicit subscription headline readable on narrow screens. */
+@media (max-width: 680px) {
+  .tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {
+    white-space: normal;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    font-size: clamp(2rem, 8.5vw, 2.85rem);
+    line-height: 1.06;
+  }
 }
 @media(max-width:680px){.tct-meter-soft-invitation{padding:18px 17px;margin:22px 0 18px}}
