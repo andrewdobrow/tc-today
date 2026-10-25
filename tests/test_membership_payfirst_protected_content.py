@@ -216,6 +216,22 @@ def test_paywalled_schema_and_assets_are_injected_without_body_payload():
     assert 'data-article-slug="story-slug"' in page
 
 
+def test_retained_article_paywall_heading_upgrades_without_rewriting_story():
+    legacy = (
+        '<html><head></head><body>'
+        '<h1>A preserved article headline</h1>'
+        '<h2 class="tct-paywall-offer-headline" data-paywall-headline>'
+        'Keep reading for <span class="tct-paywall-headline-accent">$1</span></h2>'
+        '<p>The story publication metadata stays untouched.</p>'
+        '</body></html>'
+    )
+    updated = inject_membership_assets(legacy, "preserved-article")
+    assert 'Continue reading for <span class="tct-paywall-headline-accent">$1</span>' in updated
+    assert '>Keep reading for <span' not in updated
+    assert '<h1>A preserved article headline</h1>' in updated
+    assert 'The story publication metadata stays untouched.' in updated
+
+
 def test_subscribe_page_has_no_registration_gate_before_plan_buttons():
     page = (ROOT / "subscribe.html").read_text()
     annual_at = page.index('data-plan="annual"')
