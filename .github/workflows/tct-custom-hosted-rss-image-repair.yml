@@ -1,0 +1,37 @@
+name: Repair custom-hosted RSS image authority
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: tct-custom-hosted-rss-image-repair
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install editorial test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install feedparser anthropic requests beautifulsoup4 json-repair pytest
+      - name: Surgically update RSS image authority validator in current generator
+        run: python scripts/apply_custom_hosted_rss_image_guard.py
+      - name: Verify custom photo and mirrored publisher provenance safeguards
+        run: python -m unittest discover -s tests -p 'test_custom_hosted_image_rss_contract.py' -v
+      - name: Commit narrowly scoped validator change
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/generate.py
+          if ! git diff --cached --quiet; then
+            git commit -m 'Handle editor-hosted custom photos in RSS authority validation'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
