@@ -61,9 +61,12 @@ def archived_sources(depth):
                 continue
             source = {"source_url": value.get("url"), "evidence": text[:7500],
                       "captured": item.get("cached_at") or "", "snapshot": sha}
-            if url not in sources or len(text) > len(sources[url]["evidence"]):
-                sources[url] = source
-    return sources, len(commits)
+            # Preserve original-period evidence, not merely the latest rewrite.
+            versions = sources.setdefault(url, {})
+            day = str(source["captured"])[:10]
+            if day not in versions or len(text) > len(versions[day]["evidence"]):
+                versions[day] = source
+    return {url: list(v.values()) for url, v in sources.items()}, len(commits)
 
 
 def cases(archive, source_index, sample_size, seed):
@@ -78,16 +81,23 @@ def cases(archive, source_index, sample_size, seed):
             continue
         if a.get("legacy_identity_status") in ("legacy_unresolved", "quarantined"):
             continue
-        s = source_index.get(urlkey(a.get("source_url")))
-        if not s:
+        versions = source_index.get(urlkey(a.get("source_url")))
+        if not versions:
             continue
+        if isinstance(versions, dict):
+            versions = [versions]  # Supports focused offline fixtures.
         day = str(a.get("date") or "")[:10]
-        try:
-            delta = (date.fromisoformat(str(s["captured"])[:10]) - date.fromisoformat(day)).days
-            if not -2 <= delta <= 21:
+        valid = []
+        for s in versions:
+            try:
+                delta = (date.fromisoformat(str(s["captured"])[:10]) - date.fromisoformat(day)).days
+            except ValueError:
                 continue
-        except ValueError:
+            if -2 <= delta <= 21:
+                valid.append((abs(delta), -len(s["evidence"]), s))
+        if not valid:
             continue
+        s = sorted(valid, key=lambda x: (x[0], x[1]))[0][2]
         rows[slug] = {"id": hashlib.sha256(slug.encode()).hexdigest()[:12],
                       "slug": slug, "date": day,
                       "section": a.get("category_label") or "",
@@ -119,7 +129,8 @@ def writing_prompt(x):
             "archived source excerpt. Do not invent quotes, attributions, dates, "
             "interviews, allegations or later developments. Do not mention competing "
             "news outlets in published prose. Return only JSON with fields "
-            "headline, teaser, body (160-300 words), urgency_score (integer 0-10). "
+            "headline, teaser, body (aim for 160-300 words, shorter if the source "
+            "is limited; never pad with unsupported details), urgency_score (integer 0-10). "
             "No markdown.\nHistorical date: "+x["date"]+"\nSection: "+x["section"]+
             "\nOriginal-source title: "+x["source_headline"]+
             "\nArchived source text:\n"+x["evidence"])
@@ -244,6 +255,12 @@ def run(args):
                     if re.search(r"\b(WPTV|WPBF|WPEC|CBS12|TCPalm|WFLX)\b",
                                  str(result.get("body") or ""), re.I):
                         errors.append("competitor_name_in_body")
+                    source_text = " ".join(prompt.split()).lower()
+                    for quote in re.findall(r'["“]([^"”]{12,})["”]',
+                                            str(result.get("body") or "")):
+                        if " ".join(quote.split()).lower() not in source_text:
+                            errors.append("quote_not_verbatim_in_source")
+                            break
                 elif not isinstance(result, dict) or sorted(result.get("order") or []) != sorted(ids):
                     errors.append("invalid_ranking")
                 data["screening_flags"] = errors
