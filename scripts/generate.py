@@ -20900,6 +20900,16 @@ def validate_rss_social_image_contract(output_root=None):
                     and not _is_tct_mirrored_image_url(_absolute_image_url(row.get("source_image_url")))
                 )
                 if not mirror_ok:
+                    # User-supplied custom editorial photos may be first-party CDN
+                    # assets, not publisher mirrors. Require persisted exact-image
+                    # agreement and durable custom identity before allowing them.
+                    from tct_engine.custom_hosted_social_image import is_editor_authored_custom_hosted_image
+                    mirror_ok = is_editor_authored_custom_hosted_image(
+                        row, actual,
+                        absolute_image_url=_absolute_image_url,
+                        is_tct_image=_is_tct_mirrored_image_url,
+                    )
+                if not mirror_ok:
                     issues.append({
                         "slug": slug,
                         "reason": "mirrored_source_authority_not_persisted_to_archive",
