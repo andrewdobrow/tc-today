@@ -28,9 +28,20 @@ def urlkey(value):
 
 
 def archived_sources(depth):
-    commits = subprocess.check_output(
-        ["git", "log", "--format=%H", "--max-count="+str(depth),
+    # One immutable cache snapshot per historic day, spanning months rather than
+    # taking the last N hourly runs (which would cover only a few days).
+    history = subprocess.check_output(
+        ["git", "log", "--format=%H%x09%ad", "--date=short",
          "--", "data/generation-cache.json"], text=True).splitlines()
+    commits, seen_days = [], set()
+    for line in history:
+        parts = line.split("\t", 1)
+        if len(parts) != 2 or parts[1] in seen_days:
+            continue
+        commits.append(parts[0])
+        seen_days.add(parts[1])
+        if len(commits) >= depth:
+            break
     sources = {}
     for sha in commits:
         try:
@@ -99,7 +110,7 @@ def cases(archive, source_index, sample_size, seed):
             if buckets[key]:
                 remaining.append(key)
         keys = remaining
-    return chosen, len(rows)
+    return chosen, len(rows), list(rows.values())
 
 
 def writing_prompt(x):
@@ -178,6 +189,9 @@ def markdown(drafts, ranks):
                     "", "Review __/100. Disqualifier? __. Notes: __", ""]
     for item in ranks:
         txt += ["## Rank "+item["date"]]
+        for candidate in item.get("candidates", []):
+            txt += [candidate["id"]+": "+candidate["source_headline"]+
+                    " / "+candidate["evidence"][:650]]
         for label in ("A", "B"):
             txt += [label+": "+json.dumps(
                 (item["variants"].get(label) or {}).get("result") or {}, ensure_ascii=False), ""]
@@ -189,7 +203,7 @@ def run(args):
     output.mkdir(parents=True, exist_ok=True)
     archive = json.loads(Path("archive.json").read_text())
     originals, history_count = archived_sources(args.history)
-    pool, eligible = cases(archive, originals, args.count, args.seed)
+    pool, eligible, all_candidates = cases(archive, originals, args.count, args.seed)
     dump(output/"coverage.json", {"eligible": eligible, "sampled": len(pool),
         "history_snapshots": history_count, "source_urls": len(originals),
         "months": sorted({x["date"][:7] for x in pool})})
@@ -197,6 +211,8 @@ def run(args):
         raise RuntimeError("Too few verified historical article-source matches; "
                            "increase --history. No fabricated fallback allowed.")
     dump(output/"source-cases.json", pool)
+    ranking_candidates = ranking_groups(all_candidates)
+    dump(output/"ranking-candidate-groups.json", ranking_candidates)
     if args.dry_run:
         print("Historical dry run:", len(pool), "matches")
         return
@@ -246,15 +262,19 @@ def run(args):
         for x in pool:
             drafts.append({"source": x, "variants": variants(x["id"], writing_prompt(x))})
             dump(output/"writing.json", drafts)
-        for group in ranking_groups(pool):
+        for group in ranking_candidates:
             ids = [r["id"] for r in group["rows"]]
             ranks.append({"date": group["date"], "candidate_ids": ids,
+                          "candidates": group["rows"],
                           "variants": variants("rank:"+group["date"], ranking_prompt(group), ids)})
             dump(output/"ranking.json", ranks)
     finally:
         dump(output/"answer-key.json", {"mapping": key, "models": MODELS})
         dump(output/"usage.json", {"providers": usage, "estimated_total_usd": round(total, 5)})
         (output/"blind-review.md").write_text(markdown(drafts, ranks), encoding="utf-8")
+    if any(usage[p]["calls"] < len(drafts) for p in MODELS):
+        raise RuntimeError("One provider failed on historic article requests. "
+                           "Inspect request errors in the private artifact.")
     print("Compared", len(drafts), "historic article cases and", len(ranks),
           "ranking groups. Estimated cost USD", round(total, 5))
 
