@@ -239,8 +239,10 @@ def markdown(drafts, ranks):
     for item in ranks:
         txt += ["## Rank "+item["date"]]
         for candidate in item.get("candidates", []):
-            txt += [candidate["id"]+": "+candidate["source_headline"]+
-                    " / "+candidate["evidence"][:650]]
+            txt += [candidate["id"]+": "+candidate["source_headline"],
+                    "Source: "+candidate["source_url"],
+                    "Ranking evidence (entire 2,000-character prompt excerpt): "+
+                    candidate["evidence"][:2000], ""]
         for label in ("A", "B"):
             txt += [label+": "+json.dumps(
                 (item["variants"].get(label) or {}).get("result") or {}, ensure_ascii=False), ""]
@@ -342,6 +344,10 @@ def run(args):
     if any(usage[provider]["calls"] < len(pool) for provider in MODELS):
         raise RuntimeError("Provider requests failed on one or more historic writing cases; "
                            "inspect private artifact for request_or_json_error flags.")
+    if any((group["variants"].get(label) or {}).get("screening_flags")
+           for group in ranks for label in ("A", "B")):
+        raise RuntimeError("One or more model homepage rankings failed or returned "
+                           "invalid candidate orders; review ranking.json before scoring.")
     print("Compared", len(drafts), "historic article cases and", len(ranks),
           "ranking groups. Estimated cost USD", round(total, 5))
 
