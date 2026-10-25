@@ -94,7 +94,10 @@ def cases(archive, source_index, sample_size, seed):
                 delta = (date.fromisoformat(str(s["captured"])[:10]) - date.fromisoformat(day)).days
             except ValueError:
                 continue
-            if -1 <= delta <= 2:
+            # Evidence dated after publication would leak later facts into the replay.
+            # Archive publication timestamps are day-level, so same-day later
+            # developments remain a documented limitation, not an as-of-time proof.
+            if -1 <= delta <= 0:
                 valid.append((abs(delta), -len(s["evidence"]), s))
         if not valid:
             continue
@@ -137,11 +140,44 @@ def writing_prompt(x):
             "\nArchived source text:\n"+x["evidence"])
 
 
-def ranking_groups(selected):
+def ranking_groups(eligible, max_groups=8, seed=20261025):
+    """Build independent same-day ranking cohorts from the entire eligible corpus.
+
+    Writing stratification must not determine whether homepage judgment is tested.
+    Require distinct original source URLs within a day to avoid ranking one
+    incident's duplicated source as separate front-page news.
+    """
     dates = defaultdict(list)
-    for row in selected:
+    for row in eligible:
         dates[row["date"]].append(row)
-    return [{"date": d, "rows": v[:6]} for d, v in sorted(dates.items()) if len(v) >= 3]
+    rng = random.Random(seed)
+    by_month = defaultdict(list)
+    for day, rows in sorted(dates.items()):
+        distinct = {}
+        for row in sorted(rows, key=lambda x: (x["source_url"], x["slug"])):
+            key = urlkey(row["source_url"])
+            if key:
+                distinct.setdefault(key, row)
+        if len(distinct) < 3:
+            continue
+        candidates = list(distinct.values())
+        rng.shuffle(candidates)
+        by_month[day[:7]].append({"date": day, "rows": candidates[:6]})
+    for values in by_month.values():
+        rng.shuffle(values)
+    # Round-robin by month preserves historical diversity in the ranking test.
+    months = sorted(by_month)
+    rng.shuffle(months)
+    groups = []
+    while months and len(groups) < max_groups:
+        remaining = []
+        for month in months:
+            if by_month[month] and len(groups) < max_groups:
+                groups.append(by_month[month].pop())
+            if by_month[month]:
+                remaining.append(month)
+        months = remaining
+    return groups
 
 
 def ranking_prompt(group):
@@ -192,7 +228,8 @@ def markdown(drafts, ranks):
         txt += ["## "+x["date"]+" / "+x["id"], "",
                 "Published TCT reference: "+x["reference_headline"],
                 "https://treasurecoast.today/articles/"+x["slug"]+".html",
-                "Source: "+x["source_url"], "", x["evidence"][:3000], ""]
+                "Source: "+x["source_url"], "", "Original source evidence captured: "+str(x.get("captured", "")),
+                 "Snapshot: "+str(x.get("snapshot", "")), "", x["evidence"], ""]
         for label in ("A", "B"):
             v = item["variants"].get(label) or {}
             result = v.get("result") or {}
@@ -216,17 +253,25 @@ def run(args):
     archive = json.loads(Path("archive.json").read_text())
     originals, history_count = archived_sources(args.history)
     pool, eligible, all_candidates = cases(archive, originals, args.count, args.seed)
+    ranking_candidates = ranking_groups(all_candidates, seed=args.seed)
     dump(output/"coverage.json", {"eligible": eligible, "sampled": len(pool),
         "history_snapshots": history_count, "source_urls": len(originals),
-        "months": sorted({x["date"][:7] for x in pool})})
+        "months": sorted({x["date"][:7] for x in pool}),
+        "ranking_cohorts": len(ranking_candidates),
+        "ranking_dates": [g["date"] for g in ranking_candidates],
+        "evidence_date_rule": "source captured on or before publication date (up to 1 day before)"})
+    dump(output/"source-cases.json", pool)
+    dump(output/"ranking-candidate-groups.json", ranking_candidates)
     if len(pool) < args.min_cases:
         raise RuntimeError("Too few verified historical article-source matches; "
                            "increase --history. No fabricated fallback allowed.")
-    dump(output/"source-cases.json", pool)
-    ranking_candidates = ranking_groups(all_candidates)
-    dump(output/"ranking-candidate-groups.json", ranking_candidates)
+    if not ranking_candidates:
+        raise RuntimeError("No same-day ranking cohorts with at least 3 distinct original "
+                           "source URLs. Cannot claim to test homepage judgment; "
+                           "review coverage artifact and improve historical evidence.")
     if args.dry_run:
-        print("Historical dry run:", len(pool), "matches")
+        print("Historical dry run:", len(pool), "writing matches and",
+              len(ranking_candidates), "ranking cohorts")
         return
     if not os.getenv("ANTHROPIC_API_KEY") or not os.getenv("OPENAI_API_KEY"):
         raise RuntimeError("Add GitHub Actions secrets ANTHROPIC_API_KEY and OPENAI_API_KEY.")
@@ -297,9 +342,6 @@ def run(args):
     if any(usage[provider]["calls"] < len(pool) for provider in MODELS):
         raise RuntimeError("Provider requests failed on one or more historic writing cases; "
                            "inspect private artifact for request_or_json_error flags.")
-    if not ranks:
-        print("WARNING: no same-day three-story grouping available; homepage ordering "
-              "was not benchmarked. Curate a stronger historic evidence pool.")
     print("Compared", len(drafts), "historic article cases and", len(ranks),
           "ranking groups. Estimated cost USD", round(total, 5))
 
