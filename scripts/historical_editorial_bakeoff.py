@@ -77,7 +77,8 @@ def cases(archive, source_index, sample_size, seed):
         slug = str(a.get("slug") or "")
         if not re.fullmatch(r"[a-z0-9][a-z0-9-]{5,180}", slug):
             continue
-        if a.get("canonical_slug", slug) != slug or a.get("is_custom"):
+        if (a.get("canonical_slug", slug) != slug or a.get("is_custom")
+                or a.get("sponsored") or a.get("article_type") in ("product_guide", "sponsored")):
             continue
         if a.get("legacy_identity_status") in ("legacy_unresolved", "quarantined"):
             continue
@@ -93,7 +94,7 @@ def cases(archive, source_index, sample_size, seed):
                 delta = (date.fromisoformat(str(s["captured"])[:10]) - date.fromisoformat(day)).days
             except ValueError:
                 continue
-            if -2 <= delta <= 21:
+            if -1 <= delta <= 2:
                 valid.append((abs(delta), -len(s["evidence"]), s))
         if not valid:
             continue
