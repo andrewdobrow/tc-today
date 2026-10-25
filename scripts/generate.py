@@ -23360,6 +23360,13 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     if not (authority.get("is_custom") or authority.get("authoritative_custom")):
         return False, ""
 
+    # Named-death custom authority: exact subject, same death date and agency.
+    # This preempts headline-angle drift without merging different relatives.
+    from tct_engine.custom_named_death_identity import same_named_death_as_custom
+    named_death_match, named_death_key = same_named_death_as_custom(candidate, authority)
+    if named_death_match:
+        return True, named_death_key
+
     if _westmoreland_alf_custom_authority_match(candidate, authority):
         return True, "custom-project|westmoreland-alf|petroleum-remediation"
 
@@ -31131,6 +31138,12 @@ def _apply_semantic_material_update_metadata(
     incoming_source_image = _absolute_image_url(
         (incoming or {}).get("source_image_url") or (incoming or {}).get("image_url")
     )
+    # Preserve authoritative custom imagery during verified source updates.
+    # Manual edits to the custom queue remain the way to change the image.
+    if (canonical.get("is_custom") or canonical.get("authoritative_custom")) and _is_real_source_image_url(
+        _absolute_image_url(canonical.get("image_url") or canonical.get("source_image_url"))
+    ):
+        incoming_source_image = ""
     if _is_real_source_image_url(incoming_source_image):
         canonical["source_image_url"] = incoming_source_image
         canonical["image_url"] = incoming_source_image
