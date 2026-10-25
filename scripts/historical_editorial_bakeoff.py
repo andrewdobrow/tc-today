@@ -292,6 +292,13 @@ def run(args):
     if any(usage[p]["calls"] < len(drafts) for p in MODELS):
         raise RuntimeError("One provider failed on historic article requests. "
                            "Inspect request errors in the private artifact.")
+    # A provider failure must not be misrepresented as a completed bake-off.
+    if any(usage[provider]["calls"] < len(pool) for provider in MODELS):
+        raise RuntimeError("Provider requests failed on one or more historic writing cases; "
+                           "inspect private artifact for request_or_json_error flags.")
+    if not ranks:
+        print("WARNING: no same-day three-story grouping available; homepage ordering "
+              "was not benchmarked. Curate a stronger historic evidence pool.")
     print("Compared", len(drafts), "historic article cases and", len(ranks),
           "ranking groups. Estimated cost USD", round(total, 5))
 
