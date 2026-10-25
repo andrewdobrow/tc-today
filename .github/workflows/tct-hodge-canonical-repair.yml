@@ -19,6 +19,12 @@ jobs:
           python-version: '3.11'
       - name: Surgically integrate custom named-death and image guards into current generator
         run: python scripts/apply_named_death_custom_guard.py
+      - name: Install editorial engine test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Keep aligned with Test Editorial Engine; these tests import
+          # scripts/generate.py and require its runtime dependencies.
+          python -m pip install feedparser anthropic requests beautifulsoup4 json-repair pytest
       - name: Focused matching and image tests
         run: python -m unittest discover -s tests -p 'test_named_death_custom_canonical_guard.py' -v
       - name: Commit only the current generator integration
