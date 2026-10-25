@@ -351,12 +351,12 @@ jobs:
           output = os.environ["GITHUB_OUTPUT"]
           if response.status_code < 300:
               payload = response.json()
-              if payload.get("meter_policy") == "three_free_articles_per_month" and payload.get("free_articles_per_period") == 3:
-                  print("Three-article monthly meter capability is current.")
+              if payload.get("meter_policy") == "two_free_articles_per_month" and payload.get("free_articles_per_period") == 2:
+                  print("Two-article monthly meter capability is current.")
                   with open(output, "a", encoding="utf-8") as handle:
                       handle.write("needs_deploy=false\n")
               else:
-                  print("Older monthly meter detected; deploying three-article endpoint.")
+                  print("Older monthly meter detected; deploying two-article endpoint.")
                   with open(output, "a", encoding="utf-8") as handle:
                       handle.write("needs_deploy=true\n")
               raise SystemExit(0)
