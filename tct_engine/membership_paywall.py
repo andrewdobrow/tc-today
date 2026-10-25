@@ -248,6 +248,11 @@ def inject_membership_assets(page_html: str, slug: str) -> str:
         f'<p class="tct-paywall-offer-subhead">{LEGACY_PAYWALL_ACCESS_SUBHEAD}</p>',
         f'<p class="tct-paywall-offer-subhead">{PAYWALL_ACCESS_SUBHEAD}</p>',
     )
+    # Normalize hard-paywall copy in retained HTML, not just newly generated pages.
+    page_html = page_html.replace(
+        '<h2 class="tct-paywall-offer-headline" data-paywall-headline>Keep reading for <span class="tct-paywall-headline-accent">$1</span></h2>',
+        '<h2 class="tct-paywall-offer-headline" data-paywall-headline>Continue reading for <span class="tct-paywall-headline-accent">$1</span></h2>',
+    )
 
     # Run the visual member hint before first paint. This only suppresses the
     # sales treatment while entitlement is rechecked; protected article text is
