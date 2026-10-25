@@ -22,9 +22,9 @@ def test_referral_copy_is_whitelisted_and_does_not_affect_entitlement():
     assert "Continue reading for" in paywall_state
     assert "applyReferralPaywallCopy" not in paywall_state
     assert "tct-paywall-headline-accent" in paywall_state
-    assert "const FREE_ARTICLE_LIMIT = 3" in browser
+    assert "const FREE_ARTICLE_LIMIT = 2" in browser
     assert "meter_token: existingMeterToken" in browser
-    assert "const FREE_ARTICLE_LIMIT = 3" in protected
+    assert "const FREE_ARTICLE_LIMIT = 2" in protected
 
 
 def test_first_two_free_stories_receive_nonblocking_post_read_invitation():
@@ -37,12 +37,20 @@ def test_first_two_free_stories_receive_nonblocking_post_read_invitation():
     assert 'paywall?.remove()' in monthly
     assert "paywall.insertAdjacentElement('beforebegin', invite)" in browser
     assert "invite.setAttribute('data-tct-meter-soft-invitation', '')" in browser
-    assert "First month $1, then $4.99/month. Cancel anytime." in browser
+    assert "invite.className = 'tct-paywall tct-meter-soft-invitation'" in browser
+    assert "panel.className = 'tct-paywall-offer-panel'" in browser
+    assert "strip.className = 'tct-paywall-subscriber-strip'" in browser
+    assert "action.className = 'tct-member-btn tct-paywall-primary-button tct-meter-soft-action'" in browser
+    assert "syncPaywallFullBleed(invite)" in browser
+    assert "Continue reading for " in browser
+    assert "you still have " in browser
+    assert "$4.99/month after your first month. Cancel anytime." in browser
     assert '.tct-meter-soft-invitation' in css
+    assert 'linear-gradient(145deg, #fffaf8 0%, #fdeee9 54%, #f9ddd4 100%)' in css
     assert "if (!paywall?.parentElement || remaining <= 0 || remaining >= FREE_ARTICLE_LIMIT) return" in browser
 
 
 def test_versions_are_cache_busted_for_restored_paywall_copy():
     helper = (ROOT / 'tct_engine/membership_paywall.py').read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.112"' in helper
-    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.112"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.113"' in helper
+    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.113"' in helper
