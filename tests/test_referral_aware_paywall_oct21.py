@@ -63,7 +63,7 @@ def test_versions_are_cache_busted_for_restored_paywall_copy():
 def test_coral_hard_and_soft_paywall_headlines_cannot_be_clipped():
     css = (ROOT / "membership.css").read_text()
     # Inspect the final canonical coral rules, not earlier legacy declarations.
-    canonical = css.split("/* TCT v1.13.7.25", 1)[1]
+    canonical = css.split("TCT v1.13.7.25", 1)[1]
     hard = canonical.split(".tct-paywall.tct-paywall-full-bleed .tct-paywall-offer-headline {", 1)[1].split("}", 1)[0]
     assert "white-space: normal" in hard
     assert "text-wrap: balance" in hard

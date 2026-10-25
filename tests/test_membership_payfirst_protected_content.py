@@ -755,7 +755,7 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.113"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.114"' in helper
     assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.113"' in helper
 
 
