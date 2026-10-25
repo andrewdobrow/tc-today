@@ -696,8 +696,8 @@ def test_three_free_article_monthly_meter_contract_is_server_signed_and_repeat_s
     assert "reserveMeterArticle(slug)" in browser
     assert "meter_token: existingMeterToken" in browser
     assert "data?.access === 'monthly_free'" in browser
-    assert "You've read all 3 free articles this month." in browser
-    assert "FREE_ARTICLE_LIMIT = 3" in browser
+    assert "You've read both free articles this month." in browser
+    assert "FREE_ARTICLE_LIMIT = 2" in browser
     assert "used_slugs: nextSlugs" in protected
     assert "parsed.v === 1 ? [parsed.slug]" in protected
     assert "placePostReadMeterAfterStory(paywall)" in browser
@@ -739,8 +739,8 @@ def test_first_free_article_moves_paywall_itself_after_all_unlocked_story_conten
 
 def test_meter_asset_version_busts_cache_for_newsletter_delivery_contract():
     helper = (ROOT / "tct_engine/membership_paywall.py").read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.112"' in helper
-    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.112"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.113"' in helper
+    assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.113"' in helper
 
 
 def test_full_article_access_inserts_requested_kit_form_only_at_end_of_story():
