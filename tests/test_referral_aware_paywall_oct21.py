@@ -56,7 +56,7 @@ def test_first_free_story_receives_clear_coral_nonblocking_invitation():
 
 def test_versions_are_cache_busted_for_restored_paywall_copy():
     helper = (ROOT / 'tct_engine/membership_paywall.py').read_text()
-    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.113"' in helper
+    assert 'MEMBERSHIP_ASSET_VERSION = "1.13.9.114"' in helper
     assert 'MEMBERSHIP_JS_ASSET_VERSION = "1.13.9.113"' in helper
 
 
