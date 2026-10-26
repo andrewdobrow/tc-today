@@ -14,9 +14,14 @@ import os
 import random
 import re
 import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from scripts.historical_editorial_bakeoff import urlkey
 
@@ -365,8 +370,11 @@ def main():
     args = parser.parse_args()
     if not 1 <= args.categories <= 3 or not 10 <= args.history <= 160:
         parser.error("categories must be 1-3 and history 10-160")
-    if not 1 <= args.max_age_days <= 14 or not 1 <= args.max_cost <= 5:
-        parser.error("source age 1-14 days and budget $1-$5")
+    if not 1 <= args.max_age_days <= 14 or not 1 <= args.max_cost <= 50:
+        parser.error("source age 1-14 days and budget $1-$50")
+    # This first limited shadow cannot consume an accidental $12 workflow default.
+    # An estimated guard is not a provider-side hard cap.
+    effective_max_cost = min(args.max_cost, 2.0)
     output = Path(args.output)
     report = json.loads(Path(args.report).read_text(encoding="utf-8"))
     cutoff = utc(report["generated_at"])
@@ -400,7 +408,7 @@ def main():
         return
     if not os.getenv("ANTHROPIC_API_KEY") or not os.getenv("OPENAI_API_KEY"):
         raise RuntimeError("Both provider secrets required for non-dry run")
-    produce(cases, args.max_cost, args.seed, output)
+    produce(cases, effective_max_cost, args.seed, output)
 
 
 if __name__ == "__main__":
