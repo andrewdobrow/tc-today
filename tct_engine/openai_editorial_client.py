@@ -89,17 +89,19 @@ def adapt_openai_response(response: Any) -> Any:
     if status not in ("completed", ""):
         raise ValueError("OpenAI editorial response incomplete (status=" + status + ")")
     usage = getattr(response, "usage", None)
+    total_input = int(getattr(usage, "input_tokens", 0) or 0)
+    cached_input = int(getattr(
+        getattr(usage, "input_tokens_details", None), "cached_tokens", 0) or 0)
+    cached_input = min(total_input, max(0, cached_input))
     return SimpleNamespace(
         content=[SimpleNamespace(type="text", text=text)],
         model=str(getattr(response, "model", "") or DEFAULT_OPENAI_MODEL),
         stop_reason="end_turn",
         usage=SimpleNamespace(
-            input_tokens=int(getattr(usage, "input_tokens", 0) or 0),
+            input_tokens=total_input - cached_input,
             output_tokens=int(getattr(usage, "output_tokens", 0) or 0),
             cache_creation_input_tokens=0,
-            cache_read_input_tokens=int(
-                getattr(getattr(usage, "input_tokens_details", None),
-                        "cached_tokens", 0) or 0),
+            cache_read_input_tokens=cached_input,
         ),
     )
 
