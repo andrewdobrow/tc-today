@@ -60,7 +60,7 @@ PAYWALL_EXIT_RE = re.compile(
     r'\s*<a\b(?=[^>]*class=["\'][^"\']*\btct-paywall-exit\b[^"\']*["\'])[^>]*>.*?</a>',
     re.I | re.S,
 )
-FIRST_PARAGRAPH_RE = re.compile(r'<p\\b([^>]*)>(.*?)</p>', re.I | re.S)
+FIRST_PARAGRAPH_RE = re.compile(r'<p\b([^>]*)>(.*?)</p>', re.I | re.S)
 CURRENT_PREVIEW_P_RE = re.compile(
     r'<p([^>]*)data-tct-preview-paragraph="true"([^>]*)>(.*?)</p>', re.I | re.S
 )
