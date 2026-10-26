@@ -126,3 +126,123 @@ def test_no_generator_entrypoint_in_shadow_runner():
     assert "generate.main(" not in code
     assert "archive.json" not in code
 
+
+
+def test_actual_result_shape_generates_complete_blind_review_and_flags_failure():
+    """Regression for paid run 40257576336: results rows have source_inputs, not packet."""
+    rows = [
+        {"category_key": "indian_river", "category_label": "Indian River County",
+         "source_inputs": [{"source_index": 1, "title": "Frozen evidence",
+                            "source_url": "https://example.com/real-original",
+                            "published": "Thu, 03 Sep 2026 12:00:00 GMT",
+                            "article_text": "Evidence first, no later additions."}],
+         "fixed_writer_assignment": {"source_index": 1, "angle": "Lead verified facts"},
+         "production_reference": {"hero_source_index": 1},
+         "variants": {
+             "A": {"status": "complete", "editor_plan": {"hero": {"source_index": 1}},
+                   "writer_fixed_source": {"headline": "Draft A", "body": "Body A"}},
+             "B": {"status": "complete", "editor_plan": {"hero": {"source_index": 1}},
+                   "writer_fixed_source": {"headline": "Draft B", "body": "Body B"}},
+         }},
+        {"category_key": "st_lucie", "category_label": "St. Lucie County",
+         "source_inputs": [],
+         "fixed_writer_assignment": {"source_index": 1, "angle": "Local news"},
+         "production_reference": {"hero_source_index": 1},
+         "variants": {
+             "A": {"status": "writer_failed", "editor_plan": {"hero": {"source_index": 1}},
+                   "error": "CopyDeskIntegrityError: chained_and"},
+             "B": {"status": "writer_failed", "editor_plan": {"hero": {"source_index": 1}},
+                   "error": "CopyDeskIntegrityError: chained_and"},
+         }},
+    ]
+    review = MOD.render_blind_review(rows)
+    assert "Source #1: Frozen evidence" in review
+    assert "Draft A" in review and "Draft B" in review
+    assert "CopyDeskIntegrityError: chained_and" in review
+    assert "No publishable writer result was returned" in review
+    assert "A model's copy-desk validation failure" in review
+    assert "provider" not in review.lower()
+    summary = MOD.summarize_shadow_results(rows, {
+        "estimated_usd": .128012, "calls": [{} for _ in range(10)]})
+    assert summary["result"] == "partial"
+    assert summary["complete_writing_and_editor_pairs"] == 1
+    assert summary["complete_assignment_editor_pairs"] == 2
+    assert summary["provider_api_calls"] == 10
+    assert len(summary["failed_variants"]) == 2
+    return rows
+
+
+def test_recover_existing_paid_artifact_never_calls_model(tmp_path):
+    rows = [
+        {"category_key": "indian_river", "category_label": "Indian River County",
+         "source_inputs": [{"source_index": 1, "title": "Archived source",
+                            "source_url": "https://example.com/news/evidence",
+                            "article_text": "Original facts."}],
+         "fixed_writer_assignment": {"source_index": 1},
+         "production_reference": {"hero_source_index": 1},
+         "variants": {key: {
+             "status": "complete",
+             "editor_plan": {"hero": {"source_index": 1}},
+             "writer_fixed_source": {"headline": "Story", "body": "Text"}}
+             for key in ("A", "B")}},
+    ]
+    (tmp_path / "results.json").write_text(json.dumps(rows))
+    (tmp_path / "usage.json").write_text(json.dumps({
+        "estimated_usd": 0.03, "calls": [{}, {}]}))
+    before = (tmp_path / "results.json").read_bytes()
+    summary = MOD.recover_existing_results(tmp_path)
+    assert summary["result"] == "complete"
+    assert summary["complete_writing_and_editor_pairs"] == 1
+    assert (tmp_path / "results.json").read_bytes() == before
+    review = (tmp_path / "blind-review.md").read_text()
+    assert "Archived source" in review
+    assert "Variant A" in review and "Variant B" in review
+    assert "Story" in review
+    assert json.loads((tmp_path / "summary.json").read_text()) == summary
+
+
+def test_paid_shadow_retains_assignment_when_both_copydesks_reject(tmp_path):
+    from types import ModuleType
+    fake = ModuleType("scripts.generate")
+    fake.client = None
+    calls = []
+    def editor(packet):
+        return {"hero": {"source_index": 1}, "cards": []}, {
+            "source_mapping_valid": True}, "test-model", 0.01
+    def writer(packet, assignment, role):
+        calls.append(("writer", role))
+        if packet["category_key"] == "st_lucie":
+            raise ValueError("CopyDeskIntegrityError: chained_and")
+        return {"headline": "Real output", "teaser": "Verified",
+                "body": "Actual draft"}, "test-model", 0.01
+    fake._run_assignment_editor = editor
+    fake._run_assignment_writer = writer
+    class FakeAdapter:
+        def __init__(self, provider, budget, require_fit):
+            self.mode = "editor"
+            self.prompts = []
+    cases = [{
+        "key": k, "label": k,
+        "packet": {"category_key": k,
+                   "source_inputs": [{"source_index": 1, "title": "Source",
+                                     "source_url": "https://example.com/local/source",
+                                     "article_text": "Evidence"}]},
+        "fixed_writer_assignment": {"source_index": 1, "angle": "News"},
+        "production_reference": {"hero_source_index": 1},
+    } for k in ("indian_river", "st_lucie")]
+    with patch.dict(sys.modules, {"scripts.generate": fake}):
+        with patch.object(MOD, "Adapter", FakeAdapter):
+            MOD.produce(cases, 1.0, 1234, tmp_path)
+    summary = json.loads((tmp_path / "summary.json").read_text())
+    assert summary["result"] == "partial"
+    assert summary["complete_writing_and_editor_pairs"] == 1
+    assert summary["complete_assignment_editor_pairs"] == 2
+    assert len(summary["failed_variants"]) == 2
+    assert len(calls) == 4
+    report = json.loads((tmp_path / "results.json").read_text())
+    for v in report[1]["variants"].values():
+        assert v["status"] == "writer_failed"
+        assert v["editor_plan"]["hero"]["source_index"] == 1
+    review = (tmp_path / "blind-review.md").read_text()
+    assert "CopyDeskIntegrityError: chained_and" in review
+    assert "Original source evidence" in review
