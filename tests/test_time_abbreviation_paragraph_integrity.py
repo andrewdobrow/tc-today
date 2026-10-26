@@ -140,3 +140,25 @@ def test_repair_orphaned_thursday_after_am():
     repaired, count = repair_time_continuation_paragraph_breaks(broken)
     assert count == 1
     assert "<p>A coastal flood warning remains in effect until 2 a.m. Thursday as king tides" in repaired
+
+
+def test_repair_time_continuation_misrendered_as_article_subheading():
+    broken = (
+        '<p>Coastal flooding remains possible until 2 a.m.</p>'
+        '<h3 class="article-subhead">Thursday</h3>'
+        '<p>Low-lying roads could be inundated around high tide.</p>'
+    )
+    repaired, changed = repair_time_continuation_paragraph_breaks(broken)
+    assert changed == 1
+    assert "<p>Coastal flooding remains possible until 2 a.m. Thursday</p>" in repaired
+    assert '<h3 class="article-subhead">Thursday</h3>' not in repaired
+    assert repair_time_continuation_paragraph_breaks(repaired) == (repaired, 0)
+
+
+def test_unrelated_weekday_subheading_is_left_alone():
+    original = (
+        "<p>High tide can cause coastal flooding along the Treasure Coast.</p>"
+        '<h3 class="article-subhead">Thursday</h3>'
+        "<p>Residents should monitor local conditions.</p>"
+    )
+    assert repair_time_continuation_paragraph_breaks(original) == (original, 0)
