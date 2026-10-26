@@ -200,6 +200,70 @@ def test_recover_existing_paid_artifact_never_calls_model(tmp_path):
     assert json.loads((tmp_path / "summary.json").read_text()) == summary
 
 
+
+def test_inspect_unpublished_writer_attempts_without_changing_guard():
+    raw_initial = json.dumps({
+        "headline": "Deputies investigate",
+        "teaser": "Initial report",
+        "body": "Detectives continue reviewing video and phones and search warrants.",
+        "urgency_score": 7,
+    })
+    raw_repaired = json.dumps({
+        "headline": "Deputies investigate",
+        "teaser": "Revised report",
+        "body": "Deputies reviewed footage and phones and searched vehicles.",
+        "urgency_score": 7,
+    })
+    attempts = [
+        {"mode": "editor", "sequence": 1,
+         "raw_response": '{"hero":{"source_index":1}}'},
+        {"mode": "writer", "sequence": 2, "raw_response": raw_initial,
+         "prompt_sha256": "a1", "response_state": "end_turn"},
+        {"mode": "writer", "sequence": 3, "raw_response": raw_repaired,
+         "prompt_sha256": "a2", "response_state": "end_turn"},
+    ]
+    called = []
+    def unchanged_detector(value):
+        called.append(value)
+        return [{"code": "chained_and", "sentence": value[:200]}] if (
+            " and " in value and value.count(" and ") >= 2) else []
+    evidence = MOD.copydesk_attempt_diagnostics(attempts, unchanged_detector)
+    assert len(evidence) == 2
+    assert [a["sequence"] for a in evidence] == [2, 3]
+    assert evidence[0]["draft"]["body"] == json.loads(raw_initial)["body"]
+    assert evidence[1]["draft"]["body"] == json.loads(raw_repaired)["body"]
+    assert evidence[0]["copydesk_issues"][0]["code"] == "chained_and"
+    assert evidence[1]["copydesk_issues"][0]["code"] == "chained_and"
+    assert all(x["mode"] == "writer" for x in evidence)
+    assert called
+    # Detection annotates bad drafts; it never edits the original evidence.
+    assert attempts[1]["raw_response"] == raw_initial
+    assert attempts[2]["raw_response"] == raw_repaired
+
+
+def test_raw_api_response_saved_even_when_json_parse_fails():
+    class MockOpenAI:
+        def __init__(self, **kwargs):
+            self.responses = SimpleNamespace(create=self.create)
+        def create(self, **kwargs):
+            return SimpleNamespace(
+                output_text='{"headline":',
+                usage=SimpleNamespace(input_tokens=321, output_tokens=19),
+                status="completed")
+    adapter = MOD.Adapter("openai", MOD.Budget(1), False)
+    adapter.mode = "writer"
+    with patch.dict(sys.modules, {"openai": SimpleNamespace(OpenAI=MockOpenAI)}):
+        try:
+            adapter.create(messages=[{"role": "user", "content": "NEWSROOM INPUT"}])
+            assert False, "expected JSON parsing to reject partial response"
+        except json.JSONDecodeError:
+            pass
+    assert len(adapter.attempts) == 1
+    assert adapter.attempts[0]["raw_response"] == '{"headline":'
+    assert adapter.attempts[0]["input_tokens"] == 321
+    assert adapter.budget.estimated_usd > 0
+
+
 def test_paid_shadow_retains_assignment_when_both_copydesks_reject(tmp_path):
     from types import ModuleType
     fake = ModuleType("scripts.generate")
@@ -211,6 +275,14 @@ def test_paid_shadow_retains_assignment_when_both_copydesks_reject(tmp_path):
     def writer(packet, assignment, role):
         calls.append(("writer", role))
         if packet["category_key"] == "st_lucie":
+            fake.client.attempts.extend([
+                {"mode": "writer", "sequence": 1,
+                 "raw_response": json.dumps({"headline": "First rejected attempt",
+                     "teaser": "One", "body": "Officers searched video and phones and cars."})},
+                {"mode": "writer", "sequence": 2,
+                 "raw_response": json.dumps({"headline": "Second rejected repair",
+                     "teaser": "Two", "body": "Officers reviewed footage and phones and vehicles."})},
+            ])
             raise ValueError("CopyDeskIntegrityError: chained_and")
         return {"headline": "Real output", "teaser": "Verified",
                 "body": "Actual draft"}, "test-model", 0.01
@@ -220,6 +292,7 @@ def test_paid_shadow_retains_assignment_when_both_copydesks_reject(tmp_path):
         def __init__(self, provider, budget, require_fit):
             self.mode = "editor"
             self.prompts = []
+            self.attempts = []
     cases = [{
         "key": k, "label": k,
         "packet": {"category_key": k,
@@ -249,3 +322,9 @@ def test_paid_shadow_retains_assignment_when_both_copydesks_reject(tmp_path):
     review = (tmp_path / "blind-review.md").read_text()
     assert "CopyDeskIntegrityError: chained_and" in review
     assert "Original source evidence" in review
+    assert "First rejected attempt" in review
+    assert "Second rejected repair" in review
+    assert "Unpublished writer attempts" in review
+    for v in report[1]["variants"].values():
+        assert len(v["writer_attempts"]) == 2
+        assert v["rejected_writer_attempts_captured"] is True
