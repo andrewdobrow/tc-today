@@ -119,3 +119,24 @@ def test_real_sentence_ending_at_p_m_is_not_joined_to_unrelated_next_sentence():
     )
     rendered = generate.make_paragraphs(body)
     assert "7 p.m.</p><p>Police" in rendered
+
+
+def test_coastal_flood_warning_am_thursday_stays_in_same_paragraph():
+    body = (
+        "A coastal flood warning remains in effect for coastal St. Lucie County until 2 a.m. Thursday "
+        "as king tides are expected to produce the season's highest tides along Florida's Atlantic coast. "
+        "Low-lying locations close to the water are at risk of flooding."
+    )
+    rendered = generate.make_paragraphs(body)
+    assert "2 a.m. Thursday as king tides" in rendered
+    assert not __import__("re").search(r"2 a\\.m\\.</p>\\s*<p>Thursday", rendered)
+
+
+def test_repair_orphaned_thursday_after_am():
+    broken = (
+        "<p>A coastal flood warning remains in effect until 2 a.m.</p>"
+        "<p>Thursday as king tides are expected to produce high water.</p>"
+    )
+    repaired, count = repair_time_continuation_paragraph_breaks(broken)
+    assert count == 1
+    assert "<p>A coastal flood warning remains in effect until 2 a.m. Thursday as king tides" in repaired
