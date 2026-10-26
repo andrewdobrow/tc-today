@@ -83,6 +83,75 @@ class HistoricalEditorialBakeoff(unittest.TestCase):
             self.assertEqual(len({MOD.urlkey(r["source_url"]) for r in group["rows"]}), 3)
             self.assertTrue(all(r["date"] == group["date"] for r in group["rows"]))
 
+    def test_structured_schemas_and_strict_response_validation(self):
+        writing = MOD.response_schema()
+        self.assertEqual(set(writing["required"]),
+                         {"headline", "teaser", "body", "urgency_score"})
+        self.assertFalse(writing["additionalProperties"])
+        self.assertEqual(
+            MOD.validate_response({
+                "headline": "A", "teaser": "B", "body": "C", "urgency_score": 7
+            }), [])
+        self.assertIn("invalid_urgency_score", MOD.validate_response({
+            "headline": "A", "teaser": "B", "body": "C", "urgency_score": 15
+        }))
+        ids = ["alpha", "beta", "gamma"]
+        ranking = MOD.response_schema(ids)
+        self.assertEqual(set(ranking["properties"]["reasons"]["required"]), set(ids))
+        self.assertEqual(MOD.validate_response({
+            "order": ids, "reasons": {x: "Why" for x in ids}}, ids), [])
+        self.assertEqual(MOD.validate_response({
+            "order": ["alpha", "alpha", "beta"],
+            "reasons": {x: "Why" for x in ids}}, ids), ["invalid_ranking"])
+
+    def test_malformed_claude_response_retains_billable_usage(self):
+        import sys
+        from types import SimpleNamespace
+        from unittest.mock import patch
+
+        captured = {}
+        class MockAnthropic:
+            def __init__(self, **kwargs):
+                self.messages = SimpleNamespace(create=self.create)
+
+            def create(self, **kwargs):
+                captured.update(kwargs)
+                return SimpleNamespace(
+                    content=[SimpleNamespace(type="text", text='{"headline": "bad')],
+                    usage=SimpleNamespace(input_tokens=500, output_tokens=100),
+                    stop_reason="end_turn")
+
+        with patch.dict(sys.modules, {"anthropic": SimpleNamespace(Anthropic=MockAnthropic)}):
+            result = MOD.complete("claude", "Return JSON")
+        self.assertIn("response_parse_failed", result["screening_flags"])
+        self.assertEqual(result["tokens"], [500, 100])
+        self.assertGreater(result["estimated_cost_usd"], 0)
+        self.assertEqual(captured["output_config"]["format"]["type"], "json_schema")
+
+    def test_openai_requests_same_structured_contract(self):
+        import sys
+        from types import SimpleNamespace
+        from unittest.mock import patch
+
+        captured = {}
+        class MockOpenAI:
+            def __init__(self, **kwargs):
+                self.responses = SimpleNamespace(create=self.create)
+
+            def create(self, **kwargs):
+                captured.update(kwargs)
+                return SimpleNamespace(
+                    output_text='{"order":["x","y"],"reasons":{"x":"One","y":"Two"}}',
+                    usage=SimpleNamespace(input_tokens=200, output_tokens=50),
+                    status="completed")
+
+        with patch.dict(sys.modules, {"openai": SimpleNamespace(OpenAI=MockOpenAI)}):
+            result = MOD.complete("openai", "Rank JSON", ["x", "y"])
+        self.assertEqual(result["screening_flags"], [])
+        self.assertEqual(MOD.validate_response(result["result"], ["x", "y"]), [])
+        self.assertTrue(captured["text"]["format"]["strict"])
+        self.assertEqual(captured["text"]["format"]["type"], "json_schema")
+
     def test_replay_is_not_production_or_scheduled(self):
         workflow = (ROOT / ".github/workflows/historical-editorial-bakeoff.yml").read_text()
         self.assertIn("workflow_dispatch:", workflow)

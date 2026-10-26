@@ -14,6 +14,63 @@ from urllib.parse import urlsplit
 MODELS = {"claude": "claude-sonnet-5", "openai": "gpt-6.1-sol"}
 RATES = (2.0, 10.0)
 
+# Equivalent output contracts for both model APIs. Keep semantic prompts
+# identical; schema-constrained generation avoids charging for malformed JSON.
+WRITING_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "headline": {"type": "string"},
+        "teaser": {"type": "string"},
+        "body": {"type": "string"},
+        "urgency_score": {"type": "integer"},
+    },
+    "required": ["headline", "teaser", "body", "urgency_score"],
+    "additionalProperties": False,
+}
+
+
+def response_schema(ids=None):
+    if ids is None:
+        return WRITING_SCHEMA
+    return {
+        "type": "object",
+        "properties": {
+            "order": {"type": "array", "items": {"type": "string", "enum": ids}},
+            "reasons": {
+                "type": "object",
+                "properties": {key: {"type": "string"} for key in ids},
+                "required": ids,
+                "additionalProperties": False,
+            },
+        },
+        "required": ["order", "reasons"],
+        "additionalProperties": False,
+    }
+
+
+def validate_response(result, ids=None):
+    if not isinstance(result, dict):
+        return ["invalid_json_object"]
+    if ids is None:
+        if any(not isinstance(result.get(k), str) or not result[k].strip()
+               for k in ("headline", "teaser", "body")):
+            return ["incomplete_draft"]
+        score = result.get("urgency_score")
+        if type(score) is not int or not 0 <= score <= 10:
+            return ["invalid_urgency_score"]
+        return []
+    order = result.get("order")
+    reasons = result.get("reasons")
+    if (not isinstance(order, list) or len(order) != len(ids) or
+            any(not isinstance(item, str) for item in order) or
+            set(order) != set(ids) or
+            not isinstance(reasons, dict) or
+            set(reasons) != set(ids) or
+            any(not isinstance(reasons[k], str) or not reasons[k].strip()
+                for k in ids)):
+        return ["invalid_ranking"]
+    return []
+
 
 def urlkey(value):
     try:
@@ -192,24 +249,46 @@ def ranking_prompt(group):
             "(ID-to-explanation mapping).\n"+json.dumps(candidates))
 
 
-def complete(provider, prompt):
+def complete(provider, prompt, ids=None):
+    """Count tokens even when the provider returns an unparseable billed result."""
+    schema = response_schema(ids)
     if provider == "claude":
         import anthropic
         r = anthropic.Anthropic(max_retries=2, timeout=100).messages.create(
             model=MODELS[provider], max_tokens=1800,
-            messages=[{"role": "user", "content": prompt}])
+            messages=[{"role": "user", "content": prompt}],
+            output_config={"format": {"type": "json_schema", "schema": schema}})
         raw = "".join(x.text for x in r.content if getattr(x, "type", "") == "text")
         tokens = [r.usage.input_tokens, r.usage.output_tokens]
+        incomplete = r.stop_reason == "max_tokens"
     else:
         from openai import OpenAI
         r = OpenAI(max_retries=2, timeout=100).responses.create(
             model=MODELS[provider], input=prompt,
-            reasoning={"effort": "medium"}, max_output_tokens=3200)
+            reasoning={"effort": "medium"}, max_output_tokens=3200,
+            text={"format": {
+                "type": "json_schema", "name": "tct_editorial_result",
+                "schema": schema, "strict": True}})
         raw = r.output_text
         tokens = [r.usage.input_tokens, r.usage.output_tokens]
-    result = json.loads(raw.strip())
-    return {"result": result, "tokens": tokens,
-            "estimated_cost_usd": round(sum(x*y for x,y in zip(tokens, RATES))/1000000, 6)}
+        incomplete = r.status == "incomplete"
+    error = None
+    try:
+        result = json.loads(raw.strip())
+    except (ValueError, AttributeError) as exc:
+        result = {}
+        error = type(exc).__name__ + ": " + str(exc)[:170]
+    flags = []
+    if incomplete:
+        flags.append("response_truncated")
+    if error:
+        flags.append("response_parse_failed")
+    return {
+        "result": result, "tokens": tokens,
+        "estimated_cost_usd": round(sum(x*y for x, y in zip(tokens, RATES))/1000000, 6),
+        "screening_flags": flags,
+        **({"error": error} if error else {}),
+    }
 
 
 def dump(path, value):
@@ -292,14 +371,11 @@ def run(args):
             if total + .20 > args.max_cost:
                 raise RuntimeError("Estimated API spending cap reached.")
             try:
-                data = complete(provider, prompt)
+                data = complete(provider, prompt, ids)
                 result = data["result"]
-                errors = []
-                if ids is None:
-                    if not isinstance(result, dict) or any(
-                        not isinstance(result.get(k), str) or not result[k].strip()
-                        for k in ("headline", "teaser", "body")):
-                        errors.append("incomplete_draft")
+                errors = list(data.get("screening_flags") or [])
+                errors.extend(validate_response(result, ids))
+                if ids is None and isinstance(result, dict):
                     if re.search(r"\b(WPTV|WPBF|WPEC|CBS12|TCPalm|WFLX)\b",
                                  str(result.get("body") or ""), re.I):
                         errors.append("competitor_name_in_body")
@@ -309,9 +385,7 @@ def run(args):
                         if " ".join(quote.split()).lower() not in source_text:
                             errors.append("quote_not_verbatim_in_source")
                             break
-                elif not isinstance(result, dict) or sorted(result.get("order") or []) != sorted(ids):
-                    errors.append("invalid_ranking")
-                data["screening_flags"] = errors
+                data["screening_flags"] = sorted(set(errors))
                 total += data["estimated_cost_usd"]
                 u = usage[provider]
                 u["calls"] += 1
@@ -337,17 +411,15 @@ def run(args):
         dump(output/"answer-key.json", {"mapping": key, "models": MODELS})
         dump(output/"usage.json", {"providers": usage, "estimated_total_usd": round(total, 5)})
         (output/"blind-review.md").write_text(markdown(drafts, ranks), encoding="utf-8")
-    if any(usage[p]["calls"] < len(drafts) for p in MODELS):
-        raise RuntimeError("One provider failed on historic article requests. "
-                           "Inspect request errors in the private artifact.")
-    # A provider failure must not be misrepresented as a completed bake-off.
-    if any(usage[provider]["calls"] < len(pool) for provider in MODELS):
-        raise RuntimeError("Provider requests failed on one or more historic writing cases; "
-                           "inspect private artifact for request_or_json_error flags.")
-    if any((group["variants"].get(label) or {}).get("screening_flags")
-           for group in ranks for label in ("A", "B")):
-        raise RuntimeError("One or more model homepage rankings failed or returned "
-                           "invalid candidate orders; review ranking.json before scoring.")
+    fatal_flags = {"request_failed", "response_truncated", "response_parse_failed",
+                   "invalid_json_object", "incomplete_draft", "invalid_urgency_score",
+                   "invalid_ranking"}
+    if any(fatal_flags.intersection(
+               (item["variants"].get(label) or {}).get("screening_flags") or [])
+           for item in drafts + ranks for label in ("A", "B")):
+        raise RuntimeError("One or more provider results were missing, truncated or "
+                           "invalid. Inspect blind writing/ranking artifacts and "
+                           "usage.json; no incomplete case can be scored.")
     print("Compared", len(drafts), "historic article cases and", len(ranks),
           "ranking groups. Estimated cost USD", round(total, 5))
 
