@@ -169,7 +169,6 @@ def test_actual_result_shape_generates_complete_blind_review_and_flags_failure()
     assert summary["complete_assignment_editor_pairs"] == 2
     assert summary["provider_api_calls"] == 10
     assert len(summary["failed_variants"]) == 2
-    return rows
 
 
 def test_recover_existing_paid_artifact_never_calls_model(tmp_path):
@@ -230,9 +229,13 @@ def test_paid_shadow_retains_assignment_when_both_copydesks_reject(tmp_path):
         "fixed_writer_assignment": {"source_index": 1, "angle": "News"},
         "production_reference": {"hero_source_index": 1},
     } for k in ("indian_river", "st_lucie")]
+    import scripts
     with patch.dict(sys.modules, {"scripts.generate": fake}):
-        with patch.object(MOD, "Adapter", FakeAdapter):
-            MOD.produce(cases, 1.0, 1234, tmp_path)
+        # In the full test suite, scripts.generate is already an attribute of
+        # the imported scripts package. Patching sys.modules alone is insufficient.
+        with patch.object(scripts, "generate", fake, create=True):
+            with patch.object(MOD, "Adapter", FakeAdapter):
+                MOD.produce(cases, 1.0, 1234, tmp_path)
     summary = json.loads((tmp_path / "summary.json").read_text())
     assert summary["result"] == "partial"
     assert summary["complete_writing_and_editor_pairs"] == 1
