@@ -962,10 +962,19 @@ TRUSTED_SOURCE_RECOVERY_LOCK = threading.RLock()
 # supplies ANTHROPIC_API_KEY, so the runtime client is initialized there exactly
 # as before.
 _ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+TCT_LLM_PROVIDER = os.environ.get("TCT_LLM_PROVIDER", "anthropic").strip().lower() or "anthropic"
+if TCT_LLM_PROVIDER not in {"anthropic", "openai"}:
+    raise ValueError("TCT_LLM_PROVIDER must be 'anthropic' or 'openai'")
 MODEL_USAGE_REPORT_PATH = OUTPUT_DIR / "data" / "model-usage-report.json"
 MODEL_USAGE_TRACKER = ModelUsageTracker(MODEL_USAGE_REPORT_PATH)
-_raw_anthropic_client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY else None
-client = instrument_anthropic_client(_raw_anthropic_client, MODEL_USAGE_TRACKER)
+if TCT_LLM_PROVIDER == "openai":
+    from tct_engine.openai_editorial_client import make_openai_editorial_client
+    _raw_openai_client = make_openai_editorial_client(
+        api_key=os.environ.get("OPENAI_API_KEY", "").strip())
+    client = instrument_anthropic_client(_raw_openai_client, MODEL_USAGE_TRACKER)
+else:
+    _raw_anthropic_client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY else None
+    client = instrument_anthropic_client(_raw_anthropic_client, MODEL_USAGE_TRACKER)
 
 # v1.13.6.5 opt-in model bake-off. Production remains on MODEL_ARTICLES. The
 # challenger receives copies of successful live category request packets only after
@@ -992,8 +1001,9 @@ ASSIGNMENT_EDITOR_LIVE_ENABLED = os.environ.get(
     "TCT_ASSIGNMENT_EDITOR_LIVE", "true"
 ).strip().lower() in {"1", "true", "yes", "on"}
 ASSIGNMENT_EDITOR_MODEL = os.environ.get(
-    "TCT_ASSIGNMENT_EDITOR_MODEL", "claude-sonnet-5"
-).strip() or "claude-sonnet-5"
+    "TCT_ASSIGNMENT_EDITOR_MODEL",
+    "gpt-6.1-sol" if TCT_LLM_PROVIDER == "openai" else "claude-sonnet-5"
+).strip() or ("gpt-6.1-sol" if TCT_LLM_PROVIDER == "openai" else "claude-sonnet-5")
 
 # The completed three-way Sonnet 4.5 / Sonnet 5 / Opus 5 experiment is retained only
 # as diagnostic code. It cannot run alongside the promoted live architecture, which
@@ -1570,6 +1580,11 @@ STORY_CLASSIFICATION = None
 # TEST: running everything on Sonnet to evaluate article quality vs Haiku.
 MODEL_ARTICLES = "claude-sonnet-5"     # article generation, enrichment, ranking, rewrites
 MODEL_SELECTION = "claude-sonnet-5"    # hero selection, structural decisions
+# The provider switch changes the API transport and model only, never editorial
+# logic or deterministic publication safeguards. Roll back via repo variable.
+if TCT_LLM_PROVIDER == "openai":
+    MODEL_ARTICLES = "gpt-6.1-sol"
+    MODEL_SELECTION = "gpt-6.1-sol"
 # Sonnet 4.5 production calls ran without extended thinking. Anthropic's Sonnet 5
 # migration guidance says to disable thinking explicitly to preserve that behavior,
 # avoiding an unintended latency/token-cost increase from Sonnet 5's adaptive default.
