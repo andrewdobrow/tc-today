@@ -129,7 +129,7 @@ def test_coastal_flood_warning_am_thursday_stays_in_same_paragraph():
     )
     rendered = generate.make_paragraphs(body)
     assert "2 a.m. Thursday as king tides" in rendered
-    assert not __import__("re").search(r"2 a\\.m\\.</p>\\s*<p>Thursday", rendered)
+    assert not __import__("re").search(r"2 a\.m\.</p>\s*<p>Thursday", rendered)
 
 
 def test_repair_orphaned_thursday_after_am():
