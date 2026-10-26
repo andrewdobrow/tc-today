@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-26T18:51:01Z",
+  "generated_at": "2026-10-26T20:50:17Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,39 +16,37 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 4,
-      "category_exception_archive_recovery": 1,
       "county_zero_candidate_archive_recovery": 1,
-      "generated_live": 2,
-      "quality_gate_archive_recovery": 1
+      "generated_live": 3,
+      "generation_failed_archive_recovery": 1
     },
     "failures": {
       "article_framing_integrity": 1,
       "no_category_eligible_sources": 4,
-      "no_source_backed_county_hero_candidates": 1,
-      "publication_quality_rejected": 1
+      "no_source_backed_county_hero_candidates": 1
     },
     "model_attempt_count": 5,
-    "model_elapsed_seconds": 88.387,
-    "archive_recovery_requested_count": 7,
+    "model_elapsed_seconds": 86.399,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 1,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 36,
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 7,
+    "published_story_duplicate_suppression_count": 39,
     "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 6,
+    "material_update_promotion_evaluation_count": 7,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 1,
-    "material_update_promotion_model_call_count": 5
+    "material_update_promotion_cache_hit_count": 3,
+    "material_update_promotion_model_call_count": 4
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 9,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 10,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -65,9 +63,39 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Man released from prison 11 days ago arrested after Hobe Sound neighborhood disturbance - WPEC",
+          "source_url": "https://cbs12.com/news/local/man-released-from-prison-11-days-ago-arrested-after-hobe-sound-neighborhood-disturbance-crooked-oak-avenue-6000-block-crooked-oak-avenue-suspicious-activity-suspicious-man-yelling-at-residents-wandering-through-yards-residential-yards-hobe-sound"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -85,6 +113,16 @@
       ],
       "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "editorial_story_id": "story_023497",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -144,25 +182,30 @@
           "canonical_headline": "Jensen Beach captures District 13-4A football title against Fort Pierce Westwood",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Bronx man accused in St. Lucie County check fraud scheme arrested at Canadian border - cw34.com",
-          "source_url": "https://cw34.com/news/local/bronx-man-accused-in-st-lucie-county-check-fraud-scheme-arrested-at-canadian-border-stolen-identity-stolen-check-real-estate-company-niagra-county-jail-new-york",
-          "editorial_story_id": "story_022993",
-          "canonical_slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
-          "canonical_headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -196,10 +239,10 @@
           "semantic_action": "hold",
           "confidence": 0.98,
           "shared_anchors": [
-            "Both report crashes affecting northbound Florida's Turnpike and cite Florida 511."
+            "Both report crashes affecting northbound Florida's Turnpike traffic and cite Florida 511."
           ],
           "novel_facts": [
-            "The incoming crash occurred near Mile Marker 129 in Martin County at 2:17 p.m. Sunday.",
+            "The incoming crash occurred near Mile Marker 129 in Martin County at 2:17 p.m.",
             "The incoming incident blocked the right lane and caused two miles of congestion."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -266,61 +309,33 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Bronx man accused in St. Lucie County check fraud scheme arrested at Canadian border - cw34.com",
-          "source_url": "https://cw34.com/news/local/bronx-man-accused-in-st-lucie-county-check-fraud-scheme-arrested-at-canadian-border-stolen-identity-stolen-check-real-estate-company-niagra-county-jail-new-york",
-          "canonical_slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
-          "canonical_headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Gibrill Diallo, a 20-year-old Bronx man",
-            "Arrest by Canadian border authorities while attempting to enter Canada",
-            "Extradition to St. Lucie County in a stolen-check fraud case",
-            "Charges of money laundering, scheme to defraud of $50,000 or more, and grand theft",
-            "Same publication date and matching source URL story paths on CW34 and WPEC"
-          ],
-          "novel_facts": [],
-          "reason": "The incoming article repeats the same arrest, charges and extradition already covered by the canonical. Additional details about tracing the stolen-check proceeds and detention in Niagara County elaborate on that same report rather than establish a material new development or independently newsworthy follow-up.",
-          "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 21.768
+      "new_publication_stale_rejected_count": 0,
+      "elapsed_seconds": 26.5
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "quality_gate_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 7,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 6,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
+      "archive_recovery_requested": false,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.125,
+          "elapsed_seconds": 23.381,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.125,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 23.381,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -329,7 +344,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -343,8 +358,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
-          "source_url": "https://cbs12.com/news/local/king-tide-flooding-palm-beach-county-treasure-coast-st-lucie-county-flooding-sw-34th-street-midtown-beach-closure-juno-beach-pier-closure-florida-coastal-flood-warning-florida-news"
+          "headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -357,12 +372,32 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Watches, warnings, and advisories in place across the Treasure Coast and Palm Beaches - WPEC",
-          "source_url": "https://cbs12.com/news/local/watches-warnings-and-advisories-in-place-across-the-treasure-coast-and-palm-beaches-high-surf-rip-current-statement-small-craft-wind-coastal-flood-king-tides-large-waves-rough-seas-marine-hazards"
+          "headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
+          "source_url": "https://cbs12.com/news/local/king-tide-flooding-palm-beach-county-treasure-coast-st-lucie-county-flooding-sw-34th-street-midtown-beach-closure-juno-beach-pier-closure-florida-coastal-flood-warning-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "editorial_story_id": "story_023497",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/26/st-lucie-county-firefighter-paramedic-austin-hodge-dies-after-being-found-unresponsive?outputType=amp",
+          "editorial_story_id": "story_023150",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -375,6 +410,16 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/25/missing-5-year-old-found-dead-fort-pierce-police-say?outputType=amp",
+          "editorial_story_id": "story_023185",
+          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
+          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - WPEC",
           "source_url": "https://cbs12.com/newsletter-daily/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office",
           "editorial_story_id": "story_023185",
@@ -382,25 +427,60 @@
           "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/24/missing-5-year-old-found-dead-fort-pierce-police-say?outputType=amp",
-          "editorial_story_id": "story_023185",
-          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/26/st-lucie-county-firefighter-paramedic-austin-hodge-dies-after-being-found-unresponsive?outputType=amp",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "St. Lucie County Fire District Firefighter-Paramedic Austin Hodge",
+            "Death while on duty Saturday, Oct. 24, 2026",
+            "More than nine years of service",
+            "Earlier death of his brother, fellow firefighter Jarius Hodge"
+          ],
+          "novel_facts": [
+            "Hodge was found unresponsive in his bunk during shift change and subsequently died at a hospital.",
+            "The district described an Honor Guard gathering and support from neighboring first responders."
+          ],
+          "reason": "Both articles cover Austin Hodge's same on-duty death. The canonical already identifies him and reports his death and service history. The incoming account adds discovery circumstances and tributes, but no official cause, investigative finding, or other material development warranting an update or separate story.",
+          "validation_errors": []
+        },
         {
           "category_key": "crime",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -418,6 +498,34 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/25/missing-5-year-old-found-dead-fort-pierce-police-say?outputType=amp",
+          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
+          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "The child is identified as 5-year-old Mayra Glory Odelus.",
+            "She was reported missing in Fort Pierce on Saturday and found dead hours later in nearby water.",
+            "Fort Pierce Police Department reported the discovery."
+          ],
+          "novel_facts": [
+            "The incoming article specifies an approximately 11:39 a.m. missing-person report and a 4:13 p.m. police update."
+          ],
+          "reason": "Both articles cover the same child's disappearance and death. The canonical already reports her identity and recovery from a nearby pond; the incoming article's reporting timestamps do not constitute a material development or independently newsworthy follow-up.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - WPEC",
           "source_url": "https://cbs12.com/newsletter-daily/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office",
           "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
@@ -430,43 +538,37 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/24/missing-5-year-old-found-dead-fort-pierce-police-say?outputType=amp",
-          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 30.571
+      "live_hero_headline": "Man arrested after reported disturbance on Crooked Oak Avenue in Hobe Sound",
+      "generated_card_count": 0,
+      "elapsed_seconds": 52.567
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 13,
+      "fresh_candidate_count": 14,
       "publishable_source_count": 6,
-      "selected_source_count": 0,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Business & Development category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 7.639,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 7.639,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -475,11 +577,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 11,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "editorial_story_id": "story_023497",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -569,26 +681,6 @@
           "canonical_headline": "St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
-          "editorial_story_id": "story_020394",
-          "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "High surf and red flag warnings put St. Lucie County beaches under high hazard advisory this week",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/high-surf-and-red-flag-warnings-put-st-lucie-county-beaches-under-high-hazard-advisory-this-week",
-          "editorial_story_id": "story_022664",
-          "canonical_slug": "2026-10-22-red-flag-warnings-4-6-foot-surf-keep-st-lucie-beaches-on-high-hazard-alert",
-          "canonical_headline": "Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -598,6 +690,21 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "business",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "business",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -732,40 +839,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "2 vehicles sought in Port St. Lucie hit-and-run investigation, police say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/2-vehicles-sought-in-port-st-lucie-hit-and-run-investigation-police-say",
-          "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "High surf and red flag warnings put St. Lucie County beaches under high hazard advisory this week",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/high-surf-and-red-flag-warnings-put-st-lucie-county-beaches-under-high-hazard-advisory-this-week",
-          "canonical_slug": "2026-10-22-red-flag-warnings-4-6-foot-surf-keep-st-lucie-beaches-on-high-hazard-alert",
-          "canonical_headline": "Red Flag Warnings, 4-6 Foot Surf Keep St. Lucie Beaches on High Hazard Alert",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 4,
-      "elapsed_seconds": 15.699
+      "new_publication_stale_rejected_count": 3,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
+      "generated_card_count": 0,
+      "elapsed_seconds": 30.184
     },
     {
       "category_key": "sports",
@@ -829,8 +910,8 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 14,
-      "elapsed_seconds": 9.241
+      "new_publication_stale_rejected_count": 13,
+      "elapsed_seconds": 10.074
     },
     {
       "category_key": "things_to_do",
@@ -901,30 +982,23 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.063
+      "elapsed_seconds": 13.124
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 4,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 3,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 28.98,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 28.98,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Florida category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -933,11 +1007,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "editorial_story_id": "story_023497",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "florida",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -958,6 +1042,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "florida",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "florida",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
           "source_url": "https://www.wptv.com/money/real-estate-news/usaa-auto-insurance-rates-dropping-for-nearly-500-000-florida-policies",
           "canonical_slug": "2026-10-26-florida-approves-usaa-auto-insurance-rate-cuts-averaging-7-for-over-498000-polic",
@@ -973,20 +1072,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-      "generated_card_count": 0,
-      "elapsed_seconds": 44.751
+      "elapsed_seconds": 15.948
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "category_exception_archive_recovery",
-      "fetched_candidate_count": 27,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 28,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -994,7 +1089,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.006,
+          "elapsed_seconds": 16.737,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
           "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — SW Dyer Point Road impassable in Palm City as high-water rescue vehicles deploy"
@@ -1002,13 +1097,15 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.239,
-          "result": "success"
+          "elapsed_seconds": 12.673,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Flooding makes SW Dyer Point Road impassable in Palm City; rescue vehicles deploying"
         }
       ],
-      "model_elapsed_seconds": 24.245,
+      "model_elapsed_seconds": 29.41,
       "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed after enrichment: generated_copy_drifted_from_source_focus — Palm City flooding makes SW Dyer Point Road impassable; rescue vehicles deploying",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Flooding makes SW Dyer Point Road impassable in Palm City; rescue vehicles deploying",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1017,10 +1114,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -1054,6 +1151,16 @@
         },
         {
           "category_key": "martin",
+          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMikANBVV95cUxQaERNdzYyU3phZjNrRlV6bjJ0WDJYSDNqX0F2QjZmRndRM0w3ckI4NlM1WDZDOFpxQWRneG1OSWV2NkRZN2hja25JUGJZNHFsNVB0bXR0UkMycUxpT3Bkd2Vxa0ZwTkF6U1V0QU9sQnZrUGVoNTIxVGhVTXoyN1ZPcWZnWl84TTNvU2NIZWgzU3dQSDJzZjI4d0hXaGh1ZWdWSkxwYXhJam5yT0F1NVU1SlVEaFAzaVZFUEVpd1ZpYjNDQXdpbW9RN2U4eUg1akZkeUdpLS1ZdHJEdzdtT29kRkdZTUpHQ0h6NTF0ZkJ6T2NTcmp2RnFrZHBnWUs5dGZ3cmZNWktMLVZlM2x2cnlxby04NFVIeXNqaWp5eU9DMDFzdTJYbks3c1l6MXREcGJoTm10d285ZGFDOF9NZFJJX19ycFNHM3I0cnQ4S2ctUERZUjYyUVo4WHp3WTBMdjEtN0F5QU5OM1lrV2N3MVBxV1FmY3Z0WUk2QjlWMEE1UFNxNmc0VU1tRkJ3SE9xZDVM",
+          "editorial_story_id": "story_020870",
+          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WFLX",
           "source_url": "https://www.wflx.com/2026/10/25/crash-with-injuries-causes-2-mile-backup-floridas-turnpike-martin-county?outputType=amp",
           "editorial_story_id": "story_023328",
@@ -1067,8 +1174,8 @@
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
@@ -1081,8 +1188,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1115,10 +1222,10 @@
           "semantic_action": "hold",
           "confidence": 0.98,
           "shared_anchors": [
-            "Both report crashes affecting northbound Florida's Turnpike traffic, citing Florida 511."
+            "Both reports mention a crash on Florida's Turnpike northbound and cite Florida 511."
           ],
           "novel_facts": [
-            "The incoming crash occurred near Mile Marker 129 in Martin County at 2:17 p.m. Sunday.",
+            "The incoming crash occurred near Mile Marker 129 in Martin County at 2:17 p.m., with an update at 2:25 p.m.",
             "The incoming crash blocked the right lane and caused two miles of congestion."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -1143,6 +1250,21 @@
         },
         {
           "category_key": "martin",
+          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMikANBVV95cUxQaERNdzYyU3phZjNrRlV6bjJ0WDJYSDNqX0F2QjZmRndRM0w3ckI4NlM1WDZDOFpxQWRneG1OSWV2NkRZN2hja25JUGJZNHFsNVB0bXR0UkMycUxpT3Bkd2Vxa0ZwTkF6U1V0QU9sQnZrUGVoNTIxVGhVTXoyN1ZPcWZnWl84TTNvU2NIZWgzU3dQSDJzZjI4d0hXaGh1ZWdWSkxwYXhJam5yT0F1NVU1SlVEaFAzaVZFUEVpd1ZpYjNDQXdpbW9RN2U4eUg1akZkeUdpLS1ZdHJEdzdtT29kRkdZTUpHQ0h6NTF0ZkJ6T2NTcmp2RnFrZHBnWUs5dGZ3cmZNWktMLVZlM2x2cnlxby04NFVIeXNqaWp5eU9DMDFzdTJYbks3c1l6MXREcGJoTm10d285ZGFDOF9NZFJJX19ycFNHM3I0cnQ4S2ctUERZUjYyUVo4WHp3WTBMdjEtN0F5QU5OM1lrV2N3MVBxV1FmY3Z0WUk2QjlWMEE1UFNxNmc0VU1tRkJ3SE9xZDVM",
+          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WFLX",
           "source_url": "https://www.wflx.com/2026/10/25/crash-with-injuries-causes-2-mile-backup-floridas-turnpike-martin-county?outputType=amp",
           "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
@@ -1158,9 +1280,9 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 71.831
+      "elapsed_seconds": 56.7
     },
     {
       "category_key": "st_lucie",
@@ -1168,8 +1290,8 @@
       "status": "generated_live",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "publishable_source_count": 4,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1177,11 +1299,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 22.037,
+          "elapsed_seconds": 25.969,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 22.037,
+      "model_elapsed_seconds": 25.969,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1192,7 +1314,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 7,
@@ -1272,8 +1394,8 @@
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1286,8 +1408,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1316,8 +1438,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1409,12 +1531,12 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 2,
+      "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County firefighter-paramedic Austin Hodge dies while on duty Oct. 24",
-      "generated_card_count": 0,
-      "elapsed_seconds": 69.212
+      "live_hero_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
+      "generated_card_count": 1,
+      "elapsed_seconds": 62.273
     },
     {
       "category_key": "indian_river",
@@ -1422,7 +1544,7 @@
       "status": "county_zero_candidate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 5,
+      "publishable_source_count": 6,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1439,11 +1561,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "editorial_story_id": "story_023497",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -1452,16 +1584,6 @@
           "canonical_slug": "2026-10-26-florida-approves-usaa-auto-insurance-rate-cuts-averaging-7-for-over-498000-polic",
           "canonical_headline": "Florida approves USAA auto insurance rate cuts averaging 7% for over 498,000 policies",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOTHhiRFVXam1KX1JJNHY2MVh4dlJoWEgxWGdYaktFS2E4cG9reWt6dzNhRm9YXzVDcHRzd25PcnFjbHpNSzgwMWJINEpMdHNyWTJHNzIxNGJHS3hDUnFPcFJhM0E1bGNSMEJrZGEwejVtREZWYnctenRPTVdfVE5PRDBIYTNOV2hCQ3R4S0VZQWU4bFJJaFhtM0twbHlfY3YtaFpiUkU4TzZ2LXZ0MUZ3ZDZGMkk",
-          "editorial_story_id": "story_023476",
-          "canonical_slug": "2026-10-26-florida-approves-usaa-auto-insurance-rate-cuts-averaging-7-for-over-498000-polic",
-          "canonical_headline": "Florida approves USAA auto insurance rate cuts averaging 7% for over 498,000 policies",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -1472,6 +1594,21 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
+          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
+          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
+          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
@@ -1486,25 +1623,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOTHhiRFVXam1KX1JJNHY2MVh4dlJoWEgxWGdYaktFS2E4cG9reWt6dzNhRm9YXzVDcHRzd25PcnFjbHpNSzgwMWJINEpMdHNyWTJHNzIxNGJHS3hDUnFPcFJhM0E1bGNSMEJrZGEwejVtREZWYnctenRPTVdfVE5PRDBIYTNOV2hCQ3R4S0VZQWU4bFJJaFhtM0twbHlfY3YtaFpiUkU4TzZ2LXZ0MUZ3ZDZGMkk",
-          "canonical_slug": "2026-10-26-florida-approves-usaa-auto-insurance-rate-cuts-averaging-7-for-over-498000-polic",
-          "canonical_headline": "Florida approves USAA auto insurance rate cuts averaging 7% for over 498,000 policies",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.899
+      "elapsed_seconds": 13.511
     }
   ]
 }
