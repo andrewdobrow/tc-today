@@ -97,6 +97,47 @@ def test_copydesk_accepts_normal_journalistic_list_construction():
     assert generate._copydesk_text_issues(sentence) == []
 
 
+def test_copydesk_does_not_misread_independent_verb_and_modifier_pairs():
+    # Paid shadow run 40262582566: both models were blocked on this sentence.
+    # "prepare and submit" coordinates verbs; "individual and trust"
+    # coordinates adjectives describing returns. This is not A and B and C.
+    sentence = (
+        "Federal prosecutors allege the group worked from 2023 through 2024 "
+        "to prepare and submit false individual and trust tax returns, along "
+        "with more than 100 fictitious financial instruments, to claim refunds "
+        "from the IRS."
+    )
+    assert generate._copydesk_text_issues(sentence) == []
+
+
+def test_copydesk_still_rejects_true_compressed_conjunction_chains():
+    bad_cases = (
+        "Investigators reviewed video and phone and vehicle search warrants.",
+        "Officers checked records and phone logs and vehicle documents.",
+        "The order involves dates and times and places.",
+    )
+    for sentence in bad_cases:
+        issues = generate._copydesk_text_issues(sentence)
+        assert "chained_and" in {issue["code"] for issue in issues}, sentence
+
+
+def test_article_copydesk_gate_accepts_tax_return_sentence_not_just_text_helper():
+    from scripts import generate
+    result = generate._article_copydesk_diagnostics({
+        "headline": "Federal tax refund fraud indictment announced",
+        "teaser": "Officials accuse defendants of submitting false returns.",
+        "body": (
+            "Federal prosecutors allege the group worked from 2023 through "
+            "2024 to prepare and submit false individual and trust tax returns, "
+            "along with more than 100 fictitious financial instruments, "
+            "to claim refunds from the IRS."
+        ),
+    })
+    assert result["required"] is True
+    assert result["passed"] is True
+    assert result["issues"] == []
+
+
 def test_copydesk_enforces_no_em_dashes():
     issues = generate._copydesk_text_issues(
         "Deputies returned Friday — two days after the initial search."
