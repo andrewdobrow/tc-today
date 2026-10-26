@@ -162,9 +162,34 @@ def repair_time_continuation_paragraph_breaks(body_html: str) -> tuple[str, int]
     if not raw:
         return raw, 0
 
+    # An isolated weekday is sometimes rendered as an article subheading
+    # rather than a <p>. The existing adjacent-paragraph repair cannot see
+    # that shape, so restore only a direct time -> weekday heading boundary.
+    heading_re = re.compile(
+        r'(<p\\b[^>]*>)(.*?)(</p>)\\s*'
+        r'<h3\\b(?=[^>]*\\barticle-subhead\\b)[^>]*>([^<>]+)</h3>',
+        re.IGNORECASE | re.DOTALL,
+    )
+    heading_changed = 0
+
+    def join_time_heading(match: re.Match[str]) -> str:
+        nonlocal heading_changed
+        first_plain = _plain(match.group(2))
+        day = _plain(match.group(4))
+        day_match = _TIME_CONTINUATION_START_RE.match(day)
+        if (
+            _TIME_CONTINUATION_END_RE.search(first_plain)
+            and day_match
+            and day[day_match.end():] in {"", "."}
+        ):
+            heading_changed += 1
+            return match.group(1) + match.group(2).rstrip() + " " + day + match.group(3)
+        return match.group(0)
+
+    raw = heading_re.sub(join_time_heading, raw)
     matches = list(_P_RE.finditer(raw))
     if len(matches) < 2:
-        return raw, 0
+        return raw, heading_changed
 
     out: list[str] = []
     cursor = 0
@@ -195,9 +220,9 @@ def repair_time_continuation_paragraph_breaks(body_html: str) -> tuple[str, int]
         i += 1
 
     if not changed:
-        return raw, 0
+        return raw, heading_changed
     out.append(raw[cursor:])
-    return "".join(out), changed
+    return "".join(out), changed + heading_changed
 
 
 def repair_multparagraph_quote_continuations(body_html: str) -> tuple[str, int]:
