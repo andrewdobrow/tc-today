@@ -66,7 +66,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install feedparser anthropic requests beautifulsoup4 json-repair pytest
+          python -m pip install feedparser anthropic 'openai>=2,<3' requests beautifulsoup4 json-repair pytest
 
       - name: Set up Node for pinned Supabase CLI
         uses: actions/setup-node@v6
@@ -161,6 +161,11 @@ jobs:
           /usr/bin/time -f "Generate elapsed: %E" python -u scripts/generate.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Activate OpenAI explicitly using repository variable TCT_LLM_PROVIDER=openai.
+          # Anthropic remains the default and immediate rollback; no silent fallback
+          # on editorial-quality failures or missing provider credentials.
+          TCT_LLM_PROVIDER: ${{ vars.TCT_LLM_PROVIDER || 'anthropic' }}
           # Repository variables provide an immediate, no-code rollout control.
           # Missing or invalid values always fall back to shadow mode.
           TCT_ENGINE_MODE: ${{ vars.TCT_ENGINE_MODE || 'shadow' }}
