@@ -57,3 +57,24 @@ python scripts/production_prompt_shadow.py --output editorial-shadow-output --re
 This only reads saved results and creates `blind-review.md` and `summary.json` locally. It neither calls OpenAI nor Anthropic, nor rewrites production news or existing result data. `answer-key.json` remains separate; review the blinded outputs first.
 
 **Benchmark interpretation:** A green experiment job means the runner, output reporting and minimum viable paired comparison completed. It does **not** mean every model output passed TCT's newsroom quality checks. Always inspect `summary.json`, especially `failed_variants` and `complete_writing_and_editor_pairs`, before drawing editorial conclusions.
+
+
+## Copy-desk investigation: retain both rejected draft and repair (2026-10-25)
+
+Runs [#40257576336](https://github.com/andrewdobrow/tc-today/actions/runs/40257576336) and [#40259760351](https://github.com/andrewdobrow/tc-today/actions/runs/40259760351) encountered the same TCT production `CopyDeskIntegrityError: ... chained_and` on the St. Lucie writer path for **both** tested models. The successful reporting run had **one of two** complete writing pairs and **two of two** complete assignment-editor pairs. The actual rejected writer responses from those runs **were not saved**; a retrospective factual verdict on whether the model or the rule was at fault is impossible from those archives.
+
+The production regression test `tests/test_newsroom_copydesk_quality.py` deliberately rejects repetitive `and` chains, accepts ordinary coordinated lists, and does not automatically condemn repetitions inside a direct quote. That supports leaving the live copy-desk threshold alone until we have a real failed response.
+
+**The shadow capture now records, before validation, every raw model reply**, its chronological writer attempt number (initial draft vs copy-desk repair), response state, hashed prompt, and token usage; successful model content is not exempt from the same capture. It then annotates each draft with read-only issues from `generate._copydesk_text_issues` for the headline, teaser, and body. The writer and original model assignment still fail if the live copy desk says they fail. Neither a rejected original nor rejected repair is treated as publishable copy.
+
+Artifacts:
+- `results.json` keeps each variant's `writer_attempts` (raw response, text fields and validator issue diagnostics) even when the writer fails.
+- `blind-review.md` displays **both** unpublished attempts and issue details, while keeping model identity hidden.
+- `usage.json`, `summary.json`, `answer-key.json` remain separate.
+- Historical artifacts from **before this capture change** cannot recover responses never saved.
+
+**Review protocol for an eventual new paid run:** inspect candidate evidence and both attempts for fact fidelity and the precise sentence(s) flagged; distinguish actual grammar problems, correct quoted speech, false-positive detector hits and a failed copy-desk repair prompt. Only propose a production style-rule change if examples show a systematic false positive. A future run is optional: merge + dry run is free and proves the test wiring, while another paid run costs API usage and should be approved separately.
+
+### Exact live source/canonical packet capture remains a separate milestone
+
+This change does **not** claim to capture full live production packets. The existing `assignment-editor-shadow-report.json` stores only source summaries and the historical replay reconstructs missing article text. Full parity requires a separate **opt-in, read-only capture point in the actual production packet builder** `scripts/generate.py::_build_assignment_editor_packet`, preserving original source URLs, full extracted article texts, published/source timestamps, `story_form`, canonical headline/body, cross-source identity/revision metadata, and a deterministic fingerprint of the relevant locked story registry. Capture must run *before* publisher transformations and must not be used as publication authority. The current two-model replay will then consume that verified, immutable packet verbatim, rather than filling absent canonical context with `story_form="new"`. This integration requires a focused change to the large production generator and additional safety review; it is **not** enabled or hidden in this PR.
