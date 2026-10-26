@@ -86,6 +86,12 @@ jobs:
             --history "${{ inputs.historic_days }}" \
             --max-cost "${{ inputs.max_api_usd }}"
 
+      - name: Validate production-prompt shadow safety and response contracts
+        if: ${{ inputs.comparison_mode == 'production_prompt_shadow' }}
+        run: |
+          python -m pip install --disable-pip-version-check pytest
+          python -m pytest tests/test_production_prompt_shadow.py -q
+
       - name: Assemble frozen real production candidate packets (no API calls)
         if: ${{ inputs.comparison_mode == 'production_prompt_shadow' }}
         run: |
