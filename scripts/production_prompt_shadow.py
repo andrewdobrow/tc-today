@@ -200,7 +200,7 @@ def prompt_content(value):
     if isinstance(value, str):
         return value
     if isinstance(value, list):
-        return "\\n".join(
+        return "\n".join(
             str(c.get("text") or "") if isinstance(c, dict) else str(c)
             for c in value)
     return str(value or "")
@@ -210,11 +210,11 @@ def read_messages(kwargs):
     chunks = []
     system = kwargs.get("system")
     if system:
-        chunks.append("SYSTEM:\\n" + prompt_content(system))
+        chunks.append("SYSTEM:\n" + prompt_content(system))
     for msg in kwargs.get("messages") or []:
-        chunks.append(str(msg.get("role") or "user").upper() + ":\\n" +
+        chunks.append(str(msg.get("role") or "user").upper() + ":\n" +
                       prompt_content(msg.get("content")))
-    return "\\n\\n".join(chunks)
+    return "\n\n".join(chunks)
 
 
 class Budget:
