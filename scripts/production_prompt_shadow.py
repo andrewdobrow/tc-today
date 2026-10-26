@@ -228,6 +228,56 @@ class Budget:
             raise RuntimeError("Conservative $0.20 per-request cost reserve reached; no further API calls")
 
 
+
+def copydesk_attempt_diagnostics(attempts, detector=None):
+    """Inspect *unpublished* writer attempts using the unchanged TCT detector.
+
+    Captures both the first rejected draft and any subsequent copy-desk repair.
+    Diagnostics annotate the response; they never override publication guards.
+    """
+    results = []
+    for attempt in attempts or []:
+        if attempt.get("mode") != "writer":
+            continue
+        row = dict(attempt)
+        raw = str(row.get("raw_response") or "")
+        try:
+            payload = json.loads(raw)
+        except (ValueError, TypeError):
+            payload = {}
+            row["response_parse_error"] = True
+        if not isinstance(payload, dict):
+            payload = {}
+            row["response_parse_error"] = True
+        row["draft"] = {
+            key: str(payload.get(key) or "")
+            for key in ("headline", "teaser", "body")
+        }
+        row["copydesk_issues"] = []
+        if callable(detector):
+            for field in ("headline", "teaser", "body"):
+                draft_text = row["draft"].get(field, "")
+                if not draft_text:
+                    continue
+                try:
+                    issues = detector(draft_text)
+                except Exception as exc:
+                    row["copydesk_detector_error"] = type(exc).__name__
+                    continue
+                for issue in issues or []:
+                    if isinstance(issue, dict):
+                        record = {
+                            "field": field,
+                            "code": str(issue.get("code") or "unknown"),
+                        }
+                        for name in ("sentence", "excerpt", "text", "detail", "reason"):
+                            if issue.get(name):
+                                record[name] = str(issue[name])[:350]
+                        row["copydesk_issues"].append(record)
+        results.append(row)
+    return results
+
+
 class Adapter:
     """Expose Anthropic's messages interface to the actual TCT editor/writer."""
     def __init__(self, provider, budget, require_fit):
@@ -237,6 +287,7 @@ class Adapter:
         self.mode = "editor"
         self.messages = SimpleNamespace(create=self.create)
         self.prompts = []
+        self.attempts = []  # Entire unpublished model responses, including repair attempts.
         self._anthropic = None
         self._openai = None
 
@@ -289,6 +340,14 @@ class Adapter:
                                   "input_tokens": tokens[0], "output_tokens": tokens[1],
                                   "estimated_usd": round(cost, 6),
                                   "response_state": stop})
+        # Save the *raw response before* any JSON parsing or production copy-desk
+        # checks. This enables a free retrospective diagnosis if the writer raises.
+        self.attempts.append({
+            "mode": self.mode, "sequence": len(self.attempts) + 1,
+            "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
+            "response_state": str(stop), "raw_response": raw,
+            "input_tokens": tokens[0], "output_tokens": tokens[1],
+        })
         json.loads(raw)  # Fail on invalid billed responses rather than silently scoring.
         return SimpleNamespace(
             content=[SimpleNamespace(type="text", text=raw)],
@@ -365,6 +424,31 @@ def render_blind_review(rows):
                 ])
             else:
                 lines.extend(["**No publishable writer result was returned.**", ""])
+            writer_attempts = item.get("writer_attempts") or []
+            if writer_attempts:
+                lines.extend(["**Unpublished writer attempts (diagnostics only):**",
+                              "These are NOT approved copy; preserve the original and repair.",
+                              ""])
+                for attempt in writer_attempts:
+                    lines.extend([
+                        "**Attempt #" + str(attempt.get("sequence") or "?") + "**",
+                        "Response state: " + str(attempt.get("response_state") or ""),
+                        "TCT copy-desk issues: " + json.dumps(
+                            attempt.get("copydesk_issues") or [], ensure_ascii=False),
+                        "",
+                    ])
+                    proposal = attempt.get("draft") or {}
+                    lines.extend([
+                        "Proposed headline: " + str(proposal.get("headline") or ""),
+                        "Proposed teaser: " + str(proposal.get("teaser") or ""),
+                        "", str(proposal.get("body") or attempt.get("raw_response") or ""), "",
+                    ])
+            elif status == "writer_failed":
+                lines.extend([
+                    "**Rejected raw drafts were not captured in this run.**",
+                    "Do not infer why the copy-desk check failed without draft text.",
+                    "",
+                ])
             lines.extend([
                 "Assignment judgment __ / Writing judgment __ / Fact flags __",
                 "Reviewer notes: __", "",
@@ -454,6 +538,15 @@ def produce(cases, ceiling, seed, output):
                     item["status"] = ("writer_failed" if "editor_plan" in item
                                       else "editor_failed")
                     item["error"] = type(e).__name__ + ": " + str(e)[:250]
+                finally:
+                    # The actual TCT copy-desk detector is read-only. Never
+                    # monkeypatch, relax or bypass it to manufacture a pass.
+                    detector = getattr(generate, "_copydesk_text_issues", None)
+                    item["writer_attempts"] = copydesk_attempt_diagnostics(
+                        getattr(adapter, "attempts", []), detector)
+                    if item["status"] == "writer_failed":
+                        item["rejected_writer_attempts_captured"] = bool(
+                            item["writer_attempts"])
                 saved(output / "results.json", completed + [row])
                 saved(output / "usage.json", {
                     "estimated_usd": round(budget.estimated_usd, 6),
