@@ -4,31 +4,29 @@
 
 ## Hero
 
-- Current: **Man dies after medical distress at Fort Pierce Service Plaza on Florida's Turnpike**
+- Current: **Jensen Beach captures District 13-4A football title against Fort Pierce Westwood**
 - Recommended: **Man dies after medical distress at Fort Pierce Service Plaza on Florida's Turnpike**
-- Recommendation: KEEP (not enforced)
+- Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty | Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart | 47 | importance 0; freshness 76.68; urgency 4/10 |
-| 2 | Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart | Jensen Beach captures District 13-4A football title against Fort Pierce Westwood | 45 | importance 0; freshness 89.11; urgency 2/10 |
-| 3 | Jensen Beach captures District 13-4A football title against Fort Pierce Westwood | Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech | 44 | importance 0; freshness 85.07; urgency 2/10 |
-| 4 | ACLU Letter Alleges Abuse, Medical Neglect at 'Deportation Depot' Facility | St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty | 43 | importance 0; freshness 37.15; urgency 8/10 |
-| 5 | Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech | Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing | 42 | importance 0; freshness 49.73; urgency 2/10; validated material update |
-| 6 | Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing | ACLU Letter Alleges Abuse, Medical Neglect at 'Deportation Depot' Facility | 40 | importance 0; freshness 85.07; urgency 2/10 |
-| 7 | FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash | FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash | 39 | importance 0; freshness 37.15; urgency 2/10; validated material update |
-| 8 | Leon County probe: CBP agents at polling site tried to vote, not enforce | Leon County probe: CBP agents at polling site tried to vote, not enforce | 25 | importance 0; freshness 20.1; urgency 2/10 |
+| 1 | Man dies after medical distress at Fort Pierce Service Plaza on Florida's Turnpike | Man dies after medical distress at Fort Pierce Service Plaza on Florida's Turnpike | 57 | importance 0; freshness 96.51; urgency 4/10; validated material update |
+| 2 | St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty | Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart | 46 | importance 0; freshness 73.22; urgency 4/10 |
+| 3 | Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart | St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty | 45 | importance 0; freshness 33.69; urgency 8/10 |
+| 4 | ACLU Letter Alleges Abuse, Medical Neglect at 'Deportation Depot' Facility | Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech | 44 | importance 0; freshness 81.61; urgency 2/10 |
+| 5 | Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech | Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing | 41 | importance 0; freshness 46.27; urgency 2/10; validated material update |
+| 6 | Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing | ACLU Letter Alleges Abuse, Medical Neglect at 'Deportation Depot' Facility | 39 | importance 0; freshness 81.61; urgency 2/10 |
+| 7 | FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash | FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash | 38 | importance 0; freshness 33.69; urgency 2/10; validated material update |
 
 ## Recommended moves
 
-- **St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty**: 1 → 4 — importance 0; freshness 37.15; urgency 8/10
-- **Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech**: 5 → 3 — importance 0; freshness 85.07; urgency 2/10
-- **ACLU Letter Alleges Abuse, Medical Neglect at 'Deportation Depot' Facility**: 4 → 6 — importance 0; freshness 85.07; urgency 2/10
-- **Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart**: 2 → 1 — importance 0; freshness 76.68; urgency 4/10
-- **Jensen Beach captures District 13-4A football title against Fort Pierce Westwood**: 3 → 2 — importance 0; freshness 89.11; urgency 2/10
-- **Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing**: 6 → 5 — importance 0; freshness 49.73; urgency 2/10; validated material update
+- **ACLU Letter Alleges Abuse, Medical Neglect at 'Deportation Depot' Facility**: 4 → 6 — importance 0; freshness 81.61; urgency 2/10
+- **Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart**: 3 → 2 — importance 0; freshness 73.22; urgency 4/10
+- **St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty**: 2 → 3 — importance 0; freshness 33.69; urgency 8/10
+- **Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech**: 5 → 4 — importance 0; freshness 81.61; urgency 2/10
+- **Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing**: 6 → 5 — importance 0; freshness 46.27; urgency 2/10; validated material update
 
 ## Guardrails
 
