@@ -225,7 +225,7 @@ def test_inspect_unpublished_writer_attempts_without_changing_guard():
     called = []
     def unchanged_detector(value):
         called.append(value)
-        return [{"code": "chained_and", "sentence": value[:200]}] if (
+        return [{"code": "chained_and", "snippet": value[:200]}] if (
             " and " in value and value.count(" and ") >= 2) else []
     evidence = MOD.copydesk_attempt_diagnostics(attempts, unchanged_detector)
     assert len(evidence) == 2
@@ -233,6 +233,7 @@ def test_inspect_unpublished_writer_attempts_without_changing_guard():
     assert evidence[0]["draft"]["body"] == json.loads(raw_initial)["body"]
     assert evidence[1]["draft"]["body"] == json.loads(raw_repaired)["body"]
     assert evidence[0]["copydesk_issues"][0]["code"] == "chained_and"
+    assert evidence[0]["copydesk_issues"][0]["snippet"] == json.loads(raw_initial)["body"]
     assert evidence[1]["copydesk_issues"][0]["code"] == "chained_and"
     assert all(x["mode"] == "writer" for x in evidence)
     assert called

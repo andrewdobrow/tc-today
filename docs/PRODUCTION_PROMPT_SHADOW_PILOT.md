@@ -78,3 +78,18 @@ Artifacts:
 ### Exact live source/canonical packet capture remains a separate milestone
 
 This change does **not** claim to capture full live production packets. The existing `assignment-editor-shadow-report.json` stores only source summaries and the historical replay reconstructs missing article text. Full parity requires a separate **opt-in, read-only capture point in the actual production packet builder** `scripts/generate.py::_build_assignment_editor_packet`, preserving original source URLs, full extracted article texts, published/source timestamps, `story_form`, canonical headline/body, cross-source identity/revision metadata, and a deterministic fingerprint of the relevant locked story registry. Capture must run *before* publisher transformations and must not be used as publication authority. The current two-model replay will then consume that verified, immutable packet verbatim, rather than filling absent canonical context with `story_form="new"`. This integration requires a focused change to the large production generator and additional safety review; it is **not** enabled or hidden in this PR.
+
+
+## Resolved diagnosis: 2026-10-26 paid shadow #40262582566
+
+A paid replay generated 2/2 complete paired assignment-editor outputs, 1/2 complete paired writing outputs and an internal estimated cost of $0.122778. Its artifact captured four St. Lucie County writer attempts (first and repair for each provider).
+
+Both models' first and repaired texts contain a grammatically valid construction in federal court reporting:
+
+> prepare and submit false individual and trust tax returns
+
+The two conjunctions coordinate **two different constituents**: two verbs ("prepare"/"submit") and two types of tax returns ("individual"/"trust"). The production `_copydesk_text_issues` implementation flagged this as `chained_and` because there are **three words** between the first and second `and`: `submit false individual`. It is not the `A and B and C` prose problem the validator is intended to block. The earlier rejected drafts did not become publishable; they simply failed an overbroad mechanical style check. The finding does **not** establish overall accuracy or appropriateness of those drafts, which require separate editorial review.
+
+Targeted fix in PR: narrow the deterministic `chained_and` condition from **three or fewer intervening words** to **two or fewer**, preserving the existing checks for compressed repeated lists, em dashes, normal lists and quoted speech. A dedicated regression test reproduces the legal-reporting sentence and confirms it is accepted; other tests explicitly confirm real `A and B and C` patterns are still rejected. This is a purposeful, narrowly justified relaxation of an *overbroad heuristic*, not a wholesale lowering of TCT's newsroom standards.
+
+Additionally, shadow diagnostics now preserve the validator's actual `snippet` property when present, making future failures easier to pinpoint without storing full production prompts. No shadow rerun or production publish was triggered while preparing this change.

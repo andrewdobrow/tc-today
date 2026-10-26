@@ -270,7 +270,7 @@ def copydesk_attempt_diagnostics(attempts, detector=None):
                             "field": field,
                             "code": str(issue.get("code") or "unknown"),
                         }
-                        for name in ("sentence", "excerpt", "text", "detail", "reason"):
+                        for name in ("snippet", "sentence", "excerpt", "text", "detail", "reason"):
                             if issue.get(name):
                                 record[name] = str(issue[name])[:350]
                         row["copydesk_issues"].append(record)
