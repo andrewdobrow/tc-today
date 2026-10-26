@@ -158,3 +158,17 @@ def test_production_has_reversible_provider_flag_and_preserved_gates():
     assert "scripts/generate.py" in workflow
     assert "git push" not in source[source.index("TCT_LLM_PROVIDER ="):source.index("# v1.13.6.5")]
 
+
+
+def test_openai_does_not_reuse_previous_claude_classification_cache(monkeypatch):
+    from scripts import generate
+    article = {"title": "Stuart council approves local road project",
+               "summary": "Verified story about a city council vote."}
+    monkeypatch.setattr(generate, "MODEL_SELECTION", "claude-sonnet-5")
+    old = generate._classification_cache_key(article)
+    monkeypatch.setattr(generate, "MODEL_SELECTION", "gpt-6.1-sol")
+    new = generate._classification_cache_key(article)
+    assert old != new
+    assert generate._classification_cache_key(article) == new
+    assert generate._category_generation_cache_key("martin", []) != (
+        generate._category_generation_cache_key("st_lucie", []))
