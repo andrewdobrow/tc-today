@@ -54,6 +54,21 @@ _ANTHROPIC_PRICING = {
     },
 }
 
+# Provisional public-API list prices per 1M tokens used in the successful
+# TCT October 2026 bake-offs ($2 input / $10 output). Actual billing is the
+# source of truth; keep raw token counts for later repricing.
+_OPENAI_PRICING = {
+    "gpt-6.1-sol": {
+        "base_input": 2.0,
+        "cache_write_5m": 0.0,
+        "cache_write_1h": 0.0,
+        "cache_read": 0.20,
+        "output": 10.0,
+        "source_date": "2026-10-25",
+        "scope": "TCT experimental GPT-6.1 Sol cost assumption; verify against provider invoice",
+    },
+}
+
 _WORKLOAD_CLASS_BY_FUNCTION = {
     "generate_category_content": "mixed_generation_and_selection",
     "enhance_card": "writing_enrichment",
@@ -105,7 +120,7 @@ def _nested_usage_value(usage: Any, parent: str, child: str) -> int:
 
 def _pricing_for_model(model: str) -> Optional[Dict[str, Any]]:
     normalized = str(model or "").strip().lower()
-    for prefix, pricing in _ANTHROPIC_PRICING.items():
+    for prefix, pricing in {**_ANTHROPIC_PRICING, **_OPENAI_PRICING}.items():
         if normalized == prefix or normalized.startswith(prefix + "-"):
             return pricing
     return None
@@ -288,7 +303,7 @@ class ModelUsageTracker:
             self._add_row(by_callsite[call_key], row)
 
         pricing_catalog = {}
-        for model, pricing in _ANTHROPIC_PRICING.items():
+        for model, pricing in {**_ANTHROPIC_PRICING, **_OPENAI_PRICING}.items():
             pricing_catalog[model] = {
                 "usd_per_million_tokens": {
                     "base_input": pricing["base_input"],
@@ -306,11 +321,17 @@ class ModelUsageTracker:
             "observability_version": MODEL_USAGE_OBSERVABILITY_VERSION,
             "started_at": started_at,
             "finished_at": _utc_now_iso(),
-            "provider": "anthropic",
+            "provider": (
+                "mixed" if any(str(k).startswith("gpt-") for k in by_model)
+                and any(str(k).startswith("claude-") for k in by_model)
+                else "openai" if any(str(k).startswith("gpt-") for k in by_model)
+                else "anthropic"
+            ),
             "billing_note": (
-                "Estimated standard/global Claude API list cost from response usage metadata. "
-                "Actual invoice cost can differ because of credits, negotiated pricing, regional inference, "
-                "or provider billing adjustments. Prompts and generated text are never stored in this report."
+                "Estimated API list cost from model usage metadata; GPT-6.1 Sol "
+                "pricing is provisional based on TCT bakeoff assumptions. "
+                "Actual provider invoices may differ. Prompts and generated text "
+                "are never stored in this report."
             ),
             "pricing_catalog": pricing_catalog,
             "totals": totals,

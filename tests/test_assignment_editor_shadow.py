@@ -430,7 +430,10 @@ def test_generator_shadow_is_opt_in_post_build_and_cannot_publish():
     assert '"TCT_ASSIGNMENT_EDITOR_LIVE", "true"' in source
     assert 'not ASSIGNMENT_EDITOR_LIVE_ENABLED' in source
     assert 'os.environ.get("TCT_ASSIGNMENT_EDITOR_SHADOW", "false")' in source
-    assert '"TCT_ASSIGNMENT_EDITOR_MODEL", "claude-sonnet-5"' in source
+    # Preserve Sonnet as the explicit default, while allowing a provider-flagged
+    # OpenAI model without hardcoding a single literal for every environment.
+    assert '"TCT_ASSIGNMENT_EDITOR_MODEL",' in source
+    assert '"gpt-6.1-sol" if TCT_LLM_PROVIDER == "openai" else "claude-sonnet-5"' in source
     assert "_queue_assignment_editor_category(" in source
     assert "_run_assignment_editor_shadow_after_build(all_categories, _pre_generation_archive)" in source
 
