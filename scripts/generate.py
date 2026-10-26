@@ -12328,7 +12328,11 @@ def _copydesk_text_issues(text):
                 }
                 for token in after_words
             )
-            if len(between_words) <= 3 and not starts_new_clause:
+            # Three-word spans can connect two independent grammatical pairs:
+            # "prepare and submit false individual and trust tax returns"
+            # combines verbs and adjective modifiers; it is not "A and B and C".
+            # Limit the hard rejection to more compressed, clearer chains.
+            if len(between_words) <= 2 and not starts_new_clause:
                 snippet_start = max(0, first.start() - 36)
                 snippet_end = min(len(sentence), second.end() + 48)
                 snippet = re.sub(r"\s+", " ", sentence[snippet_start:snippet_end]).strip()
