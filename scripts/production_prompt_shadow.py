@@ -195,19 +195,26 @@ def schema(mode, require_fit):
             "required": list(props), "additionalProperties": False}
 
 
+def prompt_content(value):
+    """Preserve role text and cached system text without transferring cache metadata."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        return "\\n".join(
+            str(c.get("text") or "") if isinstance(c, dict) else str(c)
+            for c in value)
+    return str(value or "")
+
+
 def read_messages(kwargs):
     chunks = []
     system = kwargs.get("system")
     if system:
-        chunks.append("SYSTEM:\n" + (system if isinstance(system, str)
-                                      else json.dumps(system, ensure_ascii=False)))
+        chunks.append("SYSTEM:\\n" + prompt_content(system))
     for msg in kwargs.get("messages") or []:
-        content = msg.get("content") or ""
-        if isinstance(content, list):
-            content = "\n".join(str(c.get("text") or "") if isinstance(c, dict)
-                                else str(c) for c in content)
-        chunks.append(str(msg.get("role") or "user").upper() + ":\n" + str(content))
-    return "\n\n".join(chunks)
+        chunks.append(str(msg.get("role") or "user").upper() + ":\\n" +
+                      prompt_content(msg.get("content")))
+    return "\\n\\n".join(chunks)
 
 
 class Budget:
@@ -258,12 +265,20 @@ class Adapter:
             if self._openai is None:
                 from openai import OpenAI
                 self._openai = OpenAI(max_retries=1, timeout=110)
-            r = self._openai.responses.create(
-                model=MODELS["openai"], input=prompt,
-                reasoning={"effort": "medium"}, max_output_tokens=3000,
-                text={"format": {"type": "json_schema",
-                                 "name": "tct_shadow_contract",
-                                 "schema": contract, "strict": True}})
+            messages = [
+                {"role": m.get("role") or "user",
+                 "content": prompt_content(m.get("content"))}
+                for m in kwargs.get("messages") or []
+            ]
+            args = {"model": MODELS["openai"], "input": messages,
+                    "reasoning": {"effort": "medium"},
+                    "max_output_tokens": 3000,
+                    "text": {"format": {"type": "json_schema",
+                                        "name": "tct_shadow_contract",
+                                        "schema": contract, "strict": True}}}
+            if kwargs.get("system"):
+                args["instructions"] = prompt_content(kwargs["system"])
+            r = self._openai.responses.create(**args)
             raw = r.output_text or ""
             tokens = (r.usage.input_tokens, r.usage.output_tokens)
             stop = r.status
