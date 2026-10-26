@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-26T04:19:18.816918+00:00",
+  "generated_at": "2026-10-26T10:49:37.071043+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -70,32 +70,32 @@
     "no_candidate_passes": 35,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 34,
+    "new_stories_allowed": 0,
+    "retroactive_rows_retained": 35,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
     "registry_aliases_written": 0,
     "material_update_composer_calls": 0,
-    "material_updates_applied": 0,
+    "material_updates_applied": 1,
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
     "pre_generation_materiality_evaluations": 6,
-    "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 5,
-    "pre_generation_materiality_holds": 1,
-    "pre_generation_materiality_model_calls": 5,
-    "pre_generation_materiality_cache_hits": 1,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_promotions": 1,
+    "pre_generation_materiality_duplicates": 2,
+    "pre_generation_materiality_holds": 3,
+    "pre_generation_materiality_model_calls": 4,
+    "pre_generation_materiality_cache_hits": 2,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -114,8 +114,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -129,37 +129,6 @@
       ],
       "novel_facts": [],
       "reason": "The incoming article repeats the same arrest, charges and extradition already covered by the canonical. Additional details about tracing the stolen-check proceeds and detention in Niagara County elaborate on that same report rather than establish a material new development or independently newsworthy follow-up.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "crime",
-      "source_headline": "New York man faces check fraud, money laundering charges in St. Lucie County - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-man-check-fraud-money-laundering-st-lucie/74233845",
-      "canonical_slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
-      "canonical_headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.99,
-      "shared_anchors": [
-        "Gibrill Diallo of the Bronx",
-        "St. Lucie County stolen-check fraud investigation",
-        "Charges of money laundering, scheme to defraud of $50,000 or more, and grand theft",
-        "Arrest by Canadian border authorities while attempting to enter Canada",
-        "Extradition to St. Lucie County"
-      ],
-      "novel_facts": [
-        "Incoming provides additional investigative details about a stolen identity, multiple bank accounts and Zelle transfers",
-        "Incoming reports a $30,000 total bond and a Wednesday extradition time of 9:39 p.m."
-      ],
-      "reason": "Both articles report the same named defendant, financial-crime case, border arrest and completed extradition. The incoming adds supporting details but no new arrest, charge, ruling or other consequential development. Its age discrepancy—22 versus 20—is not an established material update.",
       "validation_errors": []
     },
     {
@@ -180,11 +149,40 @@
       "semantic_action": "hold",
       "confidence": 0.98,
       "shared_anchors": [
-        "Both report crashes affecting northbound Florida's Turnpike traffic and cite Florida 511."
+        "Both reports mention crashes on Florida's Turnpike northbound and cite Florida 511."
+      ],
+      "novel_facts": [
+        "The incoming crash occurred near Mile Marker 129 in Martin County at 2:17 p.m. Sunday.",
+        "The incoming report describes a blocked right lane and two miles of traffic backups."
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
+      "source_url": "https://cw34.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
+      "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+      "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.99,
+      "shared_anchors": [
+        "Both mention a crash on Florida's Turnpike northbound and traffic information from Florida 511."
       ],
       "novel_facts": [
         "The incoming crash occurred October 25 at 2:17 p.m. near Mile Marker 129 in Martin County.",
-        "The incoming crash blocked the right lane and caused approximately two miles of congestion."
+        "The incoming crash blocked the right lane and caused two miles of congestion."
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -202,8 +200,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -220,60 +218,61 @@
     },
     {
       "category_key": "st_lucie",
-      "source_headline": "New York man faces check fraud, money laundering charges in St. Lucie County - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-man-check-fraud-money-laundering-st-lucie/74233845",
-      "canonical_slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
-      "canonical_headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
+      "source_headline": "Fatal incident reported on Florida’s Turnpike near Fort Pierce Service Plaza - WPBF",
+      "source_url": "https://www.wpbf.com/article/fatal-crash-floridas-turnpike-near-fort-pierce-service-plaza-port-st-lucie/74240933",
+      "canonical_slug": "2026-10-25-fatal-medical-call-on-floridas-turnpike-near-fort-pierce-leaves-one-dead",
+      "canonical_headline": "Fatal Medical Call on Florida's Turnpike Near Fort Pierce Leaves One Dead",
       "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "identity_basis": "exact_source_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
+      "promoted": true,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "update_existing_canonical",
       "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.99,
+      "semantic_action": "update_existing_canonical",
+      "confidence": 0.98,
       "shared_anchors": [
-        "Gibrill Diallo of the Bronx",
-        "St. Lucie County stolen-check fraud investigation",
-        "Charges of money laundering, scheme to defraud of $50,000 or more, and grand theft",
-        "Arrest by Canadian border authorities while attempting to enter Canada",
-        "Extradition to St. Lucie County"
+        "Identical WPBF source URL and story identifier",
+        "Fatal Sunday-morning medical emergency at Fort Pierce Service Plaza on Florida's Turnpike",
+        "Florida Highway Patrol and St. Lucie County Fire District response shortly after 5:37 a.m."
       ],
       "novel_facts": [
-        "Incoming provides additional investigative details about a stolen identity, multiple bank accounts and Zelle transfers",
-        "Incoming reports a $30,000 total bond and a Wednesday extradition time of 9:39 p.m."
+        "FHP reports that no foul play is suspected and that the man's traveling companions said he had been feeling unwell.",
+        "FHP found the man unresponsive, not breathing and without a pulse at 5:40 a.m.",
+        "The man was transported to Florida Coast Medical Center and pronounced dead at the hospital."
       ],
-      "reason": "Both articles report the same named defendant, financial-crime case, border arrest and completed extradition. The incoming adds supporting details but no new arrest, charge, ruling or other consequential development. Its age discrepancy—22 versus 20—is not an established material update.",
+      "reason": "This is the same incident and source story. The incoming report adds an official assessment that no foul play is suspected and confirms the circumstances of the hospital death beyond the earlier database-based fatality report. These developments belong in the existing canonical, not a separate follow-up.",
       "validation_errors": []
     },
     {
       "category_key": "st_lucie",
-      "source_headline": "Treasure Coast water tank wins 2026 Tank of the Year - WPBF",
-      "source_url": "https://www.wpbf.com/article/treasure-coast-water-tank-wins-2026-tank-of-the-year/74164323",
-      "canonical_slug": "2026-10-23-fort-pierce-water-tank-mural-named-national-tank-of-the-year",
-      "canonical_headline": "Fort Pierce Water Tank Mural Named National Tank of the Year",
+      "source_headline": "All lanes reopen on Florida's Turnpike after truck fire, crash in St. Lucie County - WFLX",
+      "source_url": "https://www.wflx.com/2026/10/20/floridas-turnpike-south-blocked-st-lucie-county-after-truck-fire-separate-crash",
+      "canonical_slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+      "canonical_headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
       "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
+      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
       "cache_hit": false,
       "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
       "confidence": 0.99,
-      "shared_anchors": [
-        "The Jaycee Park water storage tank in Fort Pierce won Tnemec's 2026 Tank of the Year contest.",
-        "Tnemec announced the winner and Top 12 finalists on Friday.",
-        "Both articles cite the exact same WPBF source URL."
+      "shared_anchors": [],
+      "novel_facts": [
+        "An October 20 truck fire near southbound Florida’s Turnpike mile marker 161 caused lane closures.",
+        "A separate crash in the same area caused another closure after one lane had reopened.",
+        "All southbound lanes subsequently reopened."
       ],
-      "novel_facts": [],
-      "reason": "The incoming article reports the same award announcement already covered by the canonical. Artist reactions, mural and coating details, and calendar placement add context but do not establish a material new development or independently newsworthy follow-up.",
-      "validation_errors": []
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     }
   ],
   "decisions": [
@@ -581,7 +580,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash",
       "incoming_source_url": "https://cw34.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news?teaserSource=trending",
-      "incoming_story_id": "story_023358",
+      "incoming_story_id": "story_023373",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -958,7 +957,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Jensen Beach captures District 13-4A football title against Fort Pierce Westwood",
       "incoming_source_url": "https://cbs12.com/sports/content/friday-night-blitz-vero-beach-jensen-beach-capture-district-championships",
       "incoming_story_id": "story_023078",
@@ -976,183 +975,34 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "gpt-6.1-sol",
-      "incoming_headline": "Jensen Beach captures District 13-4A football title against Fort Pierce Westwood",
-      "incoming_source_url": "https://cbs12.com/sports/content/friday-night-blitz-vero-beach-jensen-beach-capture-district-championships",
-      "incoming_story_id": "story_023078",
-      "candidates": [
-        {
-          "slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
-          "headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5662,
-          "retrieval_score": 0.4562,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_47_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-10-15-suspect-facing-800-felonies-captured-in-vero-beach",
-          "headline": "Man with Over 800 Felonies Arrested in Vero Beach Following Grandfather's Suspicious Death",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5242,
-          "retrieval_score": 0.4112,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-10-14-fort-pierce-police-investigate-death-of-man-found-in-lincoln-park-lake",
-          "headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5002,
-          "retrieval_score": 0.3902,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-23-86-year-old-found-dead-after-car-plunges-into-indian-river-lagoon-in-vero-beach",
-          "headline": "86-Year-Old Found Dead After Car Plunges Into Indian River Lagoon in Vero Beach",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5244,
-          "retrieval_score": 0.4874,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-13-ufifas-extension-sets-fall-plant-sale-saturday-in-fort-pierce",
-          "headline": "UF/IFAS Extension Sets Fall Plant Sale Saturday in Fort Pierce",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5024,
-          "retrieval_score": 0.4954,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-12-coast-guard-tows-disabled-boat-with-four-aboard-near-fort-pierce-inlet",
-          "headline": "Coast Guard Tows Disabled Boat With Four Aboard Near Fort Pierce Inlet",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4941,
-          "retrieval_score": 0.4901,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-10-25-fatal-medical-call-on-floridas-turnpike-near-fort-pierce-leaves-one-dead",
-          "headline": "Fatal Medical Call on Florida's Turnpike Near Fort Pierce Leaves One Dead",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4879,
-          "retrieval_score": 0.4509,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
-          "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4731,
-          "retrieval_score": 0.4451,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-20-jensen-beach-man-wins-over-70000-on-wheel-of-fortune-during-nba-week",
-          "headline": "Jensen Beach Man Wins Over $70,000 on 'Wheel of Fortune' During NBA Week",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4616,
-          "retrieval_score": 0.4336,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-22-fort-pierce-man-out-on-cocaine-bond-now-charged-with-child-abuse",
-          "headline": "Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.448,
-          "retrieval_score": 0.414,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-10-13-vero-beach-council-approves-lease-for-116-room-marriott-at-regional-airport",
-          "headline": "Vero Beach Council Approves Lease for Marriott at Regional Airport",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4442,
-          "retrieval_score": 0.4342,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-10-20-byron-donalds-brings-governor-bus-tour-to-fort-pierce-college-campus",
-          "headline": "Byron Donalds Brings Governor Bus Tour to Fort Pierce College Campus",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4393,
-          "retrieval_score": 0.4113,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Jensen Beach faced Fort Pierce Westwood with the District 13-4A football championship at stake.",
-          "Vero Beach defeated Treasure Coast 24-0 to secure the District 8-6A championship."
-        ],
-        "reason": "No candidate covers these football games or district championships. The candidates concern unrelated incidents and events; shared city names and the incoming article's erroneous vehicle-chase classification do not establish event continuity.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Jensen Beach faced Fort Pierce Westwood with the District 13-4A football championship at stake.",
-          "Vero Beach defeated Treasure Coast 24-0 to secure the District 8-6A championship."
-        ],
-        "reason": "No candidate covers these football games or district championships. The candidates concern unrelated incidents and events; shared city names and the incoming article's erroneous vehicle-chase classification do not establish event continuity.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
     }
   ],
   "archive_repairs": [],
   "material_update_compositions": [],
-  "material_updates": [],
+  "material_updates": [
+    {
+      "phase": "forward_publication",
+      "source_slug": "",
+      "target_slug": "2026-10-25-fatal-medical-call-on-floridas-turnpike-near-fort-pierce-leaves-one-dead",
+      "source_story_id": "",
+      "target_story_id": "story_023300",
+      "source_headline": "Fatal incident reported on Florida’s Turnpike near Fort Pierce Service Plaza - WPBF",
+      "updated_headline": "Man dies after medical distress at Fort Pierce Service Plaza on Florida's Turnpike",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Identical WPBF source URL and story identifier",
+        "Fatal Sunday-morning medical emergency at Fort Pierce Service Plaza on Florida's Turnpike",
+        "Florida Highway Patrol and St. Lucie County Fire District response shortly after 5:37 a.m."
+      ],
+      "novel_facts": [
+        "FHP reports that no foul play is suspected and that the man's traveling companions said he had been feeling unwell.",
+        "FHP found the man unresponsive, not breathing and without a pulse at 5:40 a.m.",
+        "The man was transported to Florida Coast Medical Center and pronounced dead at the hospital."
+      ],
+      "updated_at": "2026-10-26T10:48:47Z",
+      "composition": {}
+    }
+  ],
   "registry_consolidation": {
     "status": "no_changes",
     "directives_considered": 8,
