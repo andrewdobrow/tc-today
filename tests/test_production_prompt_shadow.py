@@ -93,8 +93,9 @@ def test_gateway_preserves_model_facing_prompt_without_network():
         result = adapter.create(
             model="claude-sonnet-5", max_tokens=800,
             messages=[{"role": "user", "content": "REAL TCT WRITER PROMPT"}])
-    assert "REAL TCT WRITER PROMPT" in captured["input"]
+    assert captured["input"] == [{"role": "user", "content": "REAL TCT WRITER PROMPT"}]
     assert captured["text"]["format"]["strict"] is True
+    assert "instructions" not in captured
     assert captured["model"] == "gpt-6.1-sol"
     assert result.model == "gpt-6.1-sol"
     assert adapter.budget.estimated_usd > 0
