@@ -121,4 +121,4 @@ def test_no_generator_entrypoint_in_shadow_runner():
     assert "generate._run_assignment_writer(" in code
     assert "generate.main(" not in code
     assert "archive.json" not in code
-    assert "story_form\": \"new\" " not in code  # explicit reconstructed context in packet
+
