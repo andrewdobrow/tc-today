@@ -40,3 +40,20 @@ Score editorial selection separately from same-story writing: source fidelity (3
 ## Beyond this pilot
 
 For the **true live production-context shadow**, the next prerequisite is an explicitly gated, immutable capture of exact source packets **at the point the production engine builds them**, with the canonical-context registry snapshot and deterministic decision metadata. Compare both providers against the same captured packets with publication disabled; run material-update, identity, and final-ranking guard checks independently on the outputs. That capture must be developed and reviewed separately; never turn it on implicitly in production.
+
+
+## Recovery and model-quality failures
+
+Paid run [#40257576336](https://github.com/andrewdobrow/tc-today/actions/runs/40257576336) demonstrated two separate issues. The first category produced both models' complete writing and editor outputs. In the St. Lucie category, both models' writer paths were blocked by production `CopyDeskIntegrityError: ... chained_and` even after the generator's repair; **do not treat these as publishable drafts or score them as tied successes**. The run then crashed during report creation because results rows contain `source_inputs`, not a nested `packet`.
+
+The repaired script always writes a full `blind-review.md` and `summary.json` from results, including failures; it preserves the assignment-editor plan when the writer subsequently fails. A test with at least one complete paired category now returns success with **explicit partial coverage** instead of confusing the result-generation crash with model quality. No paired output at all still fails, with preserved diagnostic artifacts.
+
+To repair a **downloaded existing GitHub artifact offline and for $0**, extract its ZIP to a directory with `editorial-shadow-output/results.json` and `usage.json`, then run:
+
+```sh
+python scripts/production_prompt_shadow.py --output editorial-shadow-output --recover-existing
+```
+
+This only reads saved results and creates `blind-review.md` and `summary.json` locally. It neither calls OpenAI nor Anthropic, nor rewrites production news or existing result data. `answer-key.json` remains separate; review the blinded outputs first.
+
+**Benchmark interpretation:** A green experiment job means the runner, output reporting and minimum viable paired comparison completed. It does **not** mean every model output passed TCT's newsroom quality checks. Always inspect `summary.json`, especially `failed_variants` and `complete_writing_and_editor_pairs`, before drawing editorial conclusions.
