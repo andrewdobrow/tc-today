@@ -113,6 +113,9 @@ def test_workflow_remains_manual_and_safely_gates_paid_shadow():
     assert "scripts/production_prompt_shadow.py" in workflow
     assert "&& inputs.dry_run == false" in workflow
     assert "editorial-shadow-output/" in workflow
+    assert "inputs.comparison_mode == 'historical' && inputs.dry_run == false" in workflow
+    assert "inputs.comparison_mode == 'production_prompt_shadow' && inputs.dry_run == false" in workflow
+    assert "Validate production-prompt shadow safety and response contracts" in workflow
 
 
 def test_no_generator_entrypoint_in_shadow_runner():
