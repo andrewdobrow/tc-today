@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-10-25T22:53:38Z",
+  "generated_at": "2026-10-26T01:54:34Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 2,
     "applied_action_count": 2,
     "circuit_breaker_tripped": false,
-    "placements_before": 5,
-    "placements_after": 3,
+    "placements_before": 6,
+    "placements_after": 4,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -159,34 +159,25 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 184,
+    "candidates_processed": 179,
     "routes": {
-      "generate_new": 15,
-      "skip": 168,
+      "generate_new": 13,
+      "skip": 165,
       "update_existing": 1
     },
     "eligibility": {
       "listing": 3,
-      "low_value": 129,
-      "publishable": 52
+      "low_value": 126,
+      "publishable": 50
     },
     "source_classes": {
-      "aggregator": 132,
+      "aggregator": 129,
       "local_news": 31,
-      "regional_news": 17,
-      "unknown": 4
+      "regional_news": 16,
+      "unknown": 3
     },
     "rejected_count": 3,
     "rejected_examples": [
-      {
-        "headline": "8850 Hidden Pines Rd, Fort Pierce, FL 34945 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQTk5vTzN6UmdrODVLN2Y3VW4tczJzRGgwcW1xVkw3R0xLUFpod2M1THpnVTR3a3ExRTVDWnYyT0R2YkVwWm9pRkdfMUtxcGgyWGpKR2twb2ZBZmFTUFQ2ZjBqT1ZERE1KZnFKV1B0T3dpNWpxQndNaVFwUzAxU0s1MmVFdk1jdFZkeWEyOXJBejVZUjA1b0ZoYUlR?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
       {
         "headline": "Adult Kids Are Talking Their Parents Out of Florida, and One Argument Works Every Time - 24/7 Wall St.",
         "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPQmdHT3ZUdkRnMlJrcllNdmxUSzQ5dUNhcXBlSjF4QUJPMW55LUpvUGhTX3pralU2a0ZUd2h5aGFHVXFBSmE5bEt2dGtwdGRUVXcwRlBtaXNWTkJ4OFh1UzJIMnhzVExiWnFBcjlhaGpOTVgtalI5NmVVZnlzdUJYcFFDUkF4R2hHeVJPUTZHYTBkNTZnS29JLW5oeGRLaVdWN1lOV0s2THBfZWVQVVJLRG1pVzV0MjdERml4aTlSYlYwTm9CX1pIdGpCUkYxR2lvUWc?oc=5",
@@ -204,32 +195,52 @@
           "Headline matches listing pattern 'realtor.com'"
         ],
         "source_class": "aggregator"
+      },
+      {
+        "headline": "8850 Hidden Pines Rd, Fort Pierce, FL 34945 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQTk5vTzN6UmdrODVLN2Y3VW4tczJzRGgwcW1xVkw3R0xLUFpod2M1THpnVTR3a3ExRTVDWnYyT0R2YkVwWm9pRkdfMUtxcGgyWGpKR2twb2ZBZmFTUFQ2ZjBqT1ZERE1KZnFKV1B0T3dpNWpxQndNaVFwUzAxU0s1MmVFdk1jdFZkeWEyOXJBejVZUjA1b0ZoYUlR?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 13,
-      "same_event": 171
+      "new_story": 15,
+      "same_event": 164
     },
     "examples": [
+      {
+        "story_id": "story_023359",
+        "title": "Detainees allege abusive, unconstitutional conditions inside 'Deportation Depot' immigration facility",
+        "event_key": "unknown-event-274dbc6ea5",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_023360",
+        "title": "U.S. News & World ranks 12 Palm Beach County K-8 schools in top 100 - WPBF",
+        "event_key": "unknown-event-c504387ce4",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_020870",
         "title": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
         "event_key": "traffic-crash-80c1434ccd-80c1434ccd",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_023327",
-        "title": "Florida special needs teacher accused of throwing 6-year-old during dispute over a toy - WPEC",
-        "event_key": "unknown-event-0f5800b8fa",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -339,19 +350,6 @@
         ]
       },
       {
-        "story_id": "story_023185",
-        "title": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
-        "event_key": "fire-fort-pierce-95fd84e35d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_023230",
         "title": "St. Lucie firefighter-paramedic dies on duty after brother’s death in 2025 - WPEC",
         "event_key": "unknown-event-8d62e67732",
@@ -380,23 +378,9 @@
         ]
       },
       {
-        "story_id": "story_013476",
-        "title": "Firefighter paramedic in Florida dies on duty - Yahoo",
-        "event_key": "unknown-event-f112a26649",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_013476",
-        "title": "Firefighter paramedic in Florida dies on duty - Miami Herald",
-        "event_key": "named-person-death:miami-herald",
+        "story_id": "story_023185",
+        "title": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
+        "event_key": "fire-fort-pierce-476f577383",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -420,15 +404,6 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "",
-        "title": "8850 Hidden Pines Rd, Fort Pierce, FL 34945 - Realtor.com",
-        "event_key": "",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
       },
       {
         "story_id": "story_013476",
@@ -474,8 +449,34 @@
       },
       {
         "story_id": "story_023150",
-        "title": "St. Lucie County Fire District confirms firefighter's death; Treasure Coast agencies mourn the loss - WFLX",
-        "event_key": "fire-port-st-lucie-66ba0e63a9",
+        "title": "St. Lucie Fire District identifies firefighter who died on duty",
+        "event_key": "fire-port-st-lucie-16c5973f40",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_023361",
+        "title": "Bibb County names its first-ever Principal of the Year - Yahoo",
+        "event_key": "unknown-event-38cae4c6f0",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_023143",
+        "title": "Pickup driver critically injured after crash in Florida - Yahoo",
+        "event_key": "traffic-crash-8abf648927-8abf648927",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -489,23 +490,35 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_020870",
-        "title": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
-        "event_key": "traffic-crash-80c1434ccd-80c1434ccd",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "story_id": "story_023359",
+        "title": "Detainees allege abusive, unconstitutional conditions inside 'Deportation Depot' immigration facility",
+        "event_key": "unknown-event-274dbc6ea5",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
-        "story_id": "story_023327",
-        "title": "Florida special needs teacher accused of throwing 6-year-old during dispute over a toy - WPEC",
-        "event_key": "unknown-event-0f5800b8fa",
+        "story_id": "story_023360",
+        "title": "U.S. News & World ranks 12 Palm Beach County K-8 schools in top 100 - WPBF",
+        "event_key": "unknown-event-c504387ce4",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_020870",
+        "title": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
+        "event_key": "traffic-crash-80c1434ccd-80c1434ccd",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -623,20 +636,6 @@
         ]
       },
       {
-        "story_id": "story_023185",
-        "title": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
-        "event_key": "fire-fort-pierce-95fd84e35d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_023230",
         "title": "St. Lucie firefighter-paramedic dies on duty after brother’s death in 2025 - WPEC",
         "event_key": "unknown-event-8d62e67732",
@@ -667,24 +666,9 @@
         ]
       },
       {
-        "story_id": "story_013476",
-        "title": "Firefighter paramedic in Florida dies on duty - Yahoo",
-        "event_key": "unknown-event-f112a26649",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_013476",
-        "title": "Firefighter paramedic in Florida dies on duty - Miami Herald",
-        "event_key": "named-person-death:miami-herald",
+        "story_id": "story_023185",
+        "title": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
+        "event_key": "fire-fort-pierce-476f577383",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -745,21 +729,6 @@
         "story_id": "story_023076",
         "title": "Week 10 Roundup: John Carroll denied district title celebration at Benjamin - Treasure Coast News",
         "event_key": "unknown-event-4bc19b75bd",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_023150",
-        "title": "St. Lucie County Fire District confirms firefighter's death; Treasure Coast agencies mourn the loss - WFLX",
-        "event_key": "fire-port-st-lucie-66ba0e63a9",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -775,6 +744,34 @@
         "story_id": "story_023150",
         "title": "St. Lucie Fire District identifies firefighter who died on duty",
         "event_key": "fire-port-st-lucie-16c5973f40",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_023361",
+        "title": "Bibb County names its first-ever Principal of the Year - Yahoo",
+        "event_key": "unknown-event-38cae4c6f0",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_023143",
+        "title": "Pickup driver critically injured after crash in Florida - Yahoo",
+        "event_key": "traffic-crash-8abf648927-8abf648927",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -804,9 +801,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 378,
-      "timeline_entries_examined": 1222,
-      "transitions_examined": 798,
+      "stories_with_timelines": 376,
+      "timeline_entries_examined": 1219,
+      "transitions_examined": 797,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 13,
       "high_confidence_candidate_count": 4,
@@ -2377,36 +2374,36 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 658,
-      "treasure_coast_local": 406,
+      "florida": 654,
+      "treasure_coast_local": 405,
       "treasure_coast_region": 150,
-      "unknown": 1170
+      "unknown": 1168
     },
     "average_score": 58.12
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 658,
-      "treasure_coast_local": 406,
+      "florida": 654,
+      "treasure_coast_local": 405,
       "treasure_coast_region": 150,
-      "unknown": 1170
+      "unknown": 1168
     },
     "average_priority": 3.33
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1352,
+      "active": 1339,
       "breaking": 2,
-      "developing": 73,
-      "ongoing": 957
+      "developing": 69,
+      "ongoing": 967
     }
   },
   "registry_health": {
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2371,
-    "active_stories_after": 2371,
+    "active_stories_before": 2363,
+    "active_stories_after": 2363,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2431,24 +2428,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 48,
+    "incident_anchor_to_story_count": 47,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-10-25T22:44:50Z",
-    "quarantined_story_records_retained": 4658,
-    "active_story_count": 2384
+    "generated_at": "2026-10-26T01:45:16Z",
+    "quarantined_story_records_retained": 4660,
+    "active_story_count": 2377
   },
   "stories": {
-    "total": 2384,
+    "total": 2377,
     "importance_levels": {
       "breaking": 10,
-      "high": 50,
-      "normal": 339,
-      "low": 1985,
+      "high": 49,
+      "normal": 336,
+      "low": 1982,
       "archived": 0
     },
-    "average_importance": 8.02,
+    "average_importance": 7.97,
     "top": [
       {
         "story_id": "story_023150",
@@ -2460,10 +2457,10 @@
           "score": 100,
           "importance": 95,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.04
+          "age_hours": 7.06
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2518,7 +2515,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-10-25T18:46:12.503174+00:00",
-          "hours_since_update": 4.04,
+          "hours_since_update": 7.06,
           "event_count": 6,
           "timeline_entries": 6
         }
@@ -2536,7 +2533,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.05
+          "age_hours": 3.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2585,7 +2582,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-10-25T22:45:44.839998+00:00",
-          "hours_since_update": 0.05,
+          "hours_since_update": 3.02,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2603,7 +2600,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 24.03
+          "age_hours": 27.05
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2658,13 +2655,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-24T22:46:38.426958+00:00",
-          "hours_since_update": 24.03,
+          "hours_since_update": 27.05,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_023345",
+        "story_id": "story_023358",
         "title": "Semi-truck turns into path of SUV, killing Vero Beach driver, FHP says - WPTV",
         "score": 75,
         "editorial_priority": 85,
@@ -2718,7 +2715,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-10-25T22:45:44.839998+00:00",
+          "last_updated": "2026-10-26T01:46:06.116688+00:00",
           "hours_since_update": 0.01,
           "event_count": 6,
           "timeline_entries": 6
@@ -2728,16 +2725,16 @@
         "story_id": "story_023300",
         "title": "Fatal incident reported on Florida’s Turnpike near Fort Pierce Service Plaza - WPBF",
         "score": 75,
-        "editorial_priority": 84,
-        "editorial_score": 84,
+        "editorial_priority": 80,
+        "editorial_score": 80,
         "score_breakdown": {
-          "score": 84,
+          "score": 80,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 4.01
+          "age_hours": 7.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2780,7 +2777,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-25T18:46:12.503174+00:00",
-          "hours_since_update": 4.01,
+          "hours_since_update": 7.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2798,7 +2795,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 90.38
+          "age_hours": 93.38
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2864,7 +2861,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-22T04:23:25.505650+00:00",
-          "hours_since_update": 90.38,
+          "hours_since_update": 93.38,
           "event_count": 67,
           "timeline_entries": 52
         }
@@ -2882,7 +2879,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 84.02
+          "age_hours": 87.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2932,7 +2929,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-22T10:44:49.931157+00:00",
-          "hours_since_update": 84.02,
+          "hours_since_update": 87.03,
           "event_count": 12,
           "timeline_entries": 12
         }
@@ -2950,7 +2947,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 7.06
+          "age_hours": 10.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2989,13 +2986,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-25T15:44:58.446070+00:00",
-          "hours_since_update": 7.06,
+          "hours_since_update": 10.08,
           "event_count": 24,
           "timeline_entries": 24
         }
       },
       {
-        "story_id": "story_023344",
+        "story_id": "story_023357",
         "title": "Vero Beach man killed in crash involving semi-trailer in Indian River County - Vero News",
         "score": 65,
         "editorial_priority": 64,
@@ -3007,7 +3004,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.01
+          "age_hours": 0.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3044,8 +3041,62 @@
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
-          "last_updated": "2026-10-25T22:45:44.839998+00:00",
-          "hours_since_update": 0.01,
+          "last_updated": "2026-10-26T01:46:06.116688+00:00",
+          "hours_since_update": 0.0,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_023369",
+        "title": "St. Lucie County, FL, Firefighter Paramedic Dies on Duty - Firehouse.com",
+        "score": 65,
+        "editorial_priority": 64,
+        "editorial_score": 64,
+        "score_breakdown": {
+          "score": 64,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.06
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-10-26T01:46:06.116688+00:00",
+          "hours_since_update": 0.06,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3063,7 +3114,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 60.03
+          "age_hours": 63.03
         },
         "level": "high",
         "importance_reasons": [
@@ -3101,7 +3152,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-23T10:44:25.402106+00:00",
-          "hours_since_update": 60.03,
+          "hours_since_update": 63.03,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3119,7 +3170,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 55.0
+          "age_hours": 58.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3157,7 +3208,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-23T15:45:30.009156+00:00",
-          "hours_since_update": 55.0,
+          "hours_since_update": 58.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3175,7 +3226,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 148.01
+          "age_hours": 151.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3216,7 +3267,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-19T18:45:36.350614+00:00",
-          "hours_since_update": 148.01,
+          "hours_since_update": 151.01,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3234,7 +3285,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 271.85
+          "age_hours": 274.86
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3282,7 +3333,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-14T14:54:48.604761+00:00",
-          "hours_since_update": 271.85,
+          "hours_since_update": 274.86,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3300,7 +3351,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 264.01
+          "age_hours": 267.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3349,7 +3400,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 264.01,
+          "hours_since_update": 267.02,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3367,7 +3418,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 240.03
+          "age_hours": 243.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3415,7 +3466,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-15T22:44:30.827001+00:00",
-          "hours_since_update": 240.03,
+          "hours_since_update": 243.03,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3433,7 +3484,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 276.04
+          "age_hours": 279.05
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3482,7 +3533,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-14T10:43:25.080645+00:00",
-          "hours_since_update": 276.04,
+          "hours_since_update": 279.05,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3500,7 +3551,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 144.0
+          "age_hours": 147.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3538,7 +3589,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-19T22:45:27.947214+00:00",
-          "hours_since_update": 144.0,
+          "hours_since_update": 147.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3556,7 +3607,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 3.02
         },
         "level": "normal",
         "importance_reasons": [
@@ -3601,7 +3652,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-25T22:45:44.839998+00:00",
-          "hours_since_update": 0.04,
+          "hours_since_update": 3.02,
           "event_count": 10,
           "timeline_entries": 8
         }
@@ -3619,7 +3670,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 264.01
+          "age_hours": 267.02
         },
         "level": "high",
         "importance_reasons": [
@@ -3664,71 +3715,9 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-14T22:45:12.264788+00:00",
-          "hours_since_update": 264.01,
+          "hours_since_update": 267.02,
           "event_count": 19,
           "timeline_entries": 18
-        }
-      },
-      {
-        "story_id": "story_021398",
-        "title": "Former police officer sentenced to death for Fort Pierce bike shop murder - WPBF",
-        "score": 75,
-        "editorial_priority": 46,
-        "editorial_score": 46,
-        "score_breakdown": {
-          "score": 46,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.55,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 252.04
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Story remains open pending a resolution or archival threshold",
-          "last_updated": "2026-10-15T10:43:23.074448+00:00",
-          "hours_since_update": 252.04,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       }
     ]
@@ -3736,7 +3725,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-10-25T22:48:55Z",
+    "generated_at": "2026-10-26T01:50:15Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3752,35 +3741,36 @@
       "category_count": 9,
       "statuses": {
         "cache_hit": 2,
-        "category_eligibility_archive_recovery": 5,
-        "generated_live": 1,
-        "no_publishable_sources": 1
+        "category_eligibility_archive_recovery": 4,
+        "generated_live": 2,
+        "generation_failed_archive_recovery": 1
       },
       "failures": {
-        "no_category_eligible_sources": 5
+        "article_framing_integrity": 1,
+        "no_category_eligible_sources": 4
       },
-      "model_attempt_count": 1,
-      "model_elapsed_seconds": 16.009,
-      "archive_recovery_requested_count": 6,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 70.473,
+      "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 1,
-      "category_eligibility_rejection_count": 10,
-      "published_story_duplicate_suppression_count": 36,
-      "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 8,
+      "article_framing_rejection_count": 2,
+      "category_eligibility_rejection_count": 7,
+      "published_story_duplicate_suppression_count": 39,
+      "story_aware_update_context_count": 0,
+      "material_update_promotion_evaluation_count": 9,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 7,
-      "material_update_promotion_model_call_count": 1
+      "material_update_promotion_cache_hit_count": 6,
+      "material_update_promotion_model_call_count": 3
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 8,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3797,37 +3787,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 6,
-        "category_eligibility_rejection_count": 6,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
-            "source_url": "https://cw34.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce?teaserSource=trending"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
-            "source_url": "https://cw34.com/news/local/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office"
-          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3841,20 +3803,6 @@
             "local_nexus_signals": [],
             "headline": "St. Lucie County Fire District mourns unexpected loss of firefighter - cw34.com",
             "source_url": "https://cw34.com/news/local/st-lucie-county-fire-district-mourns-unexpected-loss-of-firefighter-st-lucie-county-fire-district-st-lucie-county-firefighter-firefighter-death-firefighter-dies-unexpected-death-st-lucie-county-st-lucie-county-fire-rescue-indian-river-county"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "St. Lucie County Fire District confirms firefighter's death; Treasure Coast agencies mourn the loss - WFLX",
-            "source_url": "https://www.wflx.com/2026/10/24/st-lucie-county-fire-district-confirms-firefighters-death-treasure-coast-agencies-mourn-loss/?outputType=amp"
           },
           {
             "contract_version": "1.0-local-government-central-action",
@@ -3887,8 +3835,18 @@
             "source_url": "https://cbs12.com/sports/content/friday-night-blitz-vero-beach-jensen-beach-capture-district-championships"
           }
         ],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
+            "source_url": "https://cw34.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce?teaserSource=trending",
+            "editorial_story_id": "story_020870",
+            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County",
@@ -3911,6 +3869,16 @@
           },
           {
             "category_key": "local_gov",
+            "source_headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
+            "source_url": "https://cw34.com/news/local/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office?teaserSource=trending",
+            "editorial_story_id": "story_023185",
+            "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
+            "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say",
             "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/missing-5-year-old-found-dead-in-fort-pierce-police-say",
             "editorial_story_id": "story_023185",
@@ -3918,58 +3886,58 @@
             "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
+          },
           {
-            "source_headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
-            "source_url": "https://cw34.com/news/local/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office",
-            "publisher": "cw34.com",
-            "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-            "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-            "basis": "event-identity-authority:participant_plus_precise_location",
-            "identity_keys": [
-              "incident:missing-person:mayra-odelus",
-              "story:story_023185",
-              "source:https://cw34.com/news/local/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_named_people",
-              "shared_precise_location",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['fort-pierce']",
-              "shared_event_families=['missing-person']",
-              "shared_named_people=['mayra glory odelus']",
-              "shared_precise_locations=['portofino-landings-boulevard']",
-              "shared_agencies=['fort-pierce-police']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['fort', 'miss']",
-              "shared_distinctive_token_count=25",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
+            "category_key": "local_gov",
+            "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOYm84VVhka2wwbkkyX251dm9mRDY4T19UbFBkY1lveUN3TTMyT0ZhdHh0Z1J3Sm9USVQxTG5UWTNlTGdEcVc0OGVudzRkcC1vbngxLUxpOXJELXZXNHNEdGJFMmtWZWNVYnJDcjFzWDVpLVAxaVFxRzJxWFdVNmNnY1Y1NG1TS2FtV2RFSm1QbGJHb2E3SVJSa3FpWDZtOS13NktZakVCOHRfT1loVE1wQlltaw",
+            "editorial_story_id": "story_022867",
+            "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
+            "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
-        "material_update_promotion_evaluation_count": 0,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
+            "source_url": "https://cw34.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce?teaserSource=trending",
+            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Florida's Turnpike",
+              "traffic crash",
+              "lane blockage"
+            ],
+            "novel_facts": [
+              "Martin County location",
+              "Mile Marker 129",
+              "Sunday 2:17 p.m. crash time",
+              "fire truck on scene"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County",
@@ -4002,6 +3970,21 @@
           },
           {
             "category_key": "local_gov",
+            "source_headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - cw34.com",
+            "source_url": "https://cw34.com/news/local/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office?teaserSource=trending",
+            "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
+            "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say",
             "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/missing-5-year-old-found-dead-in-fort-pierce-police-say",
             "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
@@ -4014,10 +3997,25 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Martin County parents win push for school zone outside Citrus Grove Elementary - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOYm84VVhka2wwbkkyX251dm9mRDY4T19UbFBkY1lveUN3TTMyT0ZhdHh0Z1J3Sm9USVQxTG5UWTNlTGdEcVc0OGVudzRkcC1vbngxLUxpOXJELXZXNHNEdGJFMmtWZWNVYnJDcjFzWDVpLVAxaVFxRzJxWFdVNmNnY1Y1NG1TS2FtV2RFSm1QbGJHb2E3SVJSa3FpWDZtOS13NktZakVCOHRfT1loVE1wQlltaw",
+            "canonical_slug": "2026-10-22-martin-county-commission-approves-school-zone-for-citrus-grove-elementary",
+            "canonical_headline": "Martin County Commission Approves School Zone for Citrus Grove Elementary",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.005
+        "elapsed_seconds": 21.059
       },
       {
         "category_key": "crime",
@@ -4025,7 +4023,7 @@
         "status": "cache_hit",
         "fetched_candidate_count": 28,
         "fresh_candidate_count": 19,
-        "publishable_source_count": 4,
+        "publishable_source_count": 5,
         "selected_source_count": 2,
         "cache_hit": true,
         "archive_recovery_requested": false,
@@ -4080,6 +4078,16 @@
             "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
             "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - WPEC",
+            "source_url": "https://cbs12.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
+            "editorial_story_id": "story_020870",
+            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4141,24 +4149,14 @@
             "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man exercising at night critically injured in hit-and-run crash in Port St. Lucie, man arrested, police say - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/man-charged-in-connection-with-hit-and-run-crash-critically-injuring-63-year-old-in-port-st-lucie-officials",
-            "editorial_story_id": "story_020394",
-            "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-            "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
@@ -4202,6 +4200,39 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - WPEC",
+            "source_url": "https://cbs12.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
+            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+            "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Florida's Turnpike",
+              "traffic crash",
+              "Florida 511 source"
+            ],
+            "novel_facts": [
+              "Martin County location, Mile Marker 129",
+              "crash time 2:17 p.m. Sunday Oct 25",
+              "two miles of bumper-to-bumper traffic",
+              "fire truck on scene"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           },
           {
             "category_key": "crime",
@@ -4309,26 +4340,11 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man exercising at night critically injured in hit-and-run crash in Port St. Lucie, man arrested, police say - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/man-charged-in-connection-with-hit-and-run-crash-critically-injuring-63-year-old-in-port-st-lucie-officials",
-            "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-            "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Port St. Lucie Police Arrest Man in NW California Boulevard Hit-and-Run",
-        "elapsed_seconds": 16.553
+        "elapsed_seconds": 19.349
       },
       {
         "category_key": "business",
@@ -4588,21 +4604,28 @@
           }
         ],
         "new_publication_stale_rejected_count": 9,
-        "elapsed_seconds": 20.766
+        "elapsed_seconds": 20.422
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 11.945,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 11.945,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4613,7 +4636,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "existing_athletic_guard_retained",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -4626,7 +4649,11 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 10,
-        "elapsed_seconds": 8.97
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech",
+        "generated_card_count": 0,
+        "elapsed_seconds": 25.773
       },
       {
         "category_key": "things_to_do",
@@ -4634,7 +4661,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 9,
+        "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4697,23 +4724,38 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.81
+        "elapsed_seconds": 14.251
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 1,
-        "selected_source_count": 0,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Florida category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 2,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 21.61,
+            "result": "copydesk_integrity",
+            "error_type": "CopyDeskIntegrityError",
+            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 18.587,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 40.198,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4722,7 +4764,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -4735,143 +4777,67 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.482
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "ACLU Letter Alleges Abuse, Medical Neglect at 'Deportation Depot' Facility",
+        "generated_card_count": 0,
+        "elapsed_seconds": 60.7
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 4,
-        "selected_source_count": 3,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 16.009,
-            "result": "success"
+            "elapsed_seconds": 11.084,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Jensen Beach Beats Fort Pierce Westwood for District 13-4A Title"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 7.246,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Jensen Beach Wins District 13-4A Title, Fourth in Five Years"
           }
         ],
-        "model_elapsed_seconds": 16.009,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 18.33,
+        "failure_code": "article_framing_integrity",
+        "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Jensen Beach Wins District 13-4A Title, Fourth in Five Years",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "headline": "Jensen Beach Beats Fort Pierce Westwood for District 13-4A Title",
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": true,
-              "headline": "Jensen Beach Beats Fort Pierce Westwood for District 13-4A Title",
-              "lead": "Jensen Beach captured the District 13-4A football championship with a win over Fort Pierce Westwood on Friday night, securing the program's fourth district title in five years. The Falcons entered the championship game riding a wave of momentum after a 51-0 rout of Legacy the previous week.",
-              "lead_word_count": 50,
-              "headline_overlap_ratio": 0.9,
-              "new_context_token_count": 24,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "standard",
-              "surname_first_reference": {
-                "required": true,
-                "passed": true,
-                "missing": [],
-                "candidates": [
-                  {
-                    "full": "Friday Night Blitz",
-                    "first": "Friday",
-                    "last": "Blitz"
-                  }
-                ]
-              },
-              "update_diagnostics": {
-                "required": false,
-                "passed": true,
-                "story_form": "standard"
-              },
-              "missing": []
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": true,
-              "headline": "Jensen Beach Beats Fort Pierce Westwood for District 13-4A Title",
-              "lead": "Jensen Beach captured the District 13-4A football championship with a win over Fort Pierce Westwood on Friday night, securing the program's fourth district title in five years. The Falcons entered the championship game riding a wave of momentum after a 51-0 rout of Legacy the previous week.",
-              "headline_money_claims": [],
-              "lead_money_claims": [],
-              "missing_money_claims": [],
-              "headline_jurisdictions": [
-                "fort_pierce",
-                "jensen_beach"
-              ],
-              "lead_jurisdictions": [
-                "fort_pierce",
-                "jensen_beach"
-              ],
-              "missing_jurisdictions": [],
-              "headline_judge_claims": [],
-              "lead_judge_claims": [],
-              "missing_judge_claims": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": []
-            },
-            "source_focus": {
-              "required": true,
-              "passed": false,
-              "generated_headline": "Jensen Beach Beats Fort Pierce Westwood for District 13-4A Title",
-              "generated_lead": "Jensen Beach captured the District 13-4A football championship with a win over Fort Pierce Westwood on Friday night, securing the program's fourth district title in five years. The Falcons entered the championship game riding a wave of momentum after a 51-0 rout of Legacy the previous week.",
-              "source_title": "Friday Night Blitz: Vero Beach, Jensen Beach Capture District Championships - WPEC",
-              "source_lead": "Friday night football delivered big wins and district championship celebrations on the Treasure Coast in this week’s Friday Night Blitz. Vero Beach made a statement against rival Treasure Coast, earning a 24-0 shutout victory to capture the District 8-6A championship.",
-              "title_similarity": {
-                "score": 0.3316,
-                "overlap": 0.3,
-                "jaccard": 0.1765,
-                "sorted_sequence": 0.5455,
-                "ordered_sequence": 0.3768,
-                "shared_token_count": 3.0
-              },
-              "lead_token_overlap": 0.28,
-              "missing": [
-                "generated_copy_drifted_from_source_focus"
-              ]
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "official_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "temporal_integrity": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
+            "editorial_story_id": "story_023328",
+            "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
+            "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WPTV",
@@ -4884,12 +4850,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
+            "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WFLX",
+            "source_url": "https://www.wflx.com/2026/10/25/crash-with-injuries-causes-2-mile-backup-floridas-turnpike-martin-county?outputType=amp",
             "editorial_story_id": "story_023328",
             "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
             "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4922,6 +4888,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
+            "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
+            "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
+            "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
             "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
@@ -4937,12 +4918,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
+            "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WFLX",
+            "source_url": "https://www.wflx.com/2026/10/25/crash-with-injuries-causes-2-mile-backup-floridas-turnpike-martin-county?outputType=amp",
             "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
             "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -4969,13 +4950,13 @@
             "confidence": 0.95,
             "shared_anchors": [
               "Florida's Turnpike northbound",
-              "generic crash/traffic alert format"
+              "crash",
+              "traffic alert"
             ],
             "novel_facts": [
-              "Different date (Oct 25 vs Oct 12)",
-              "Different county (Martin vs St. Lucie)",
-              "Different mile marker (129) vs Becker Road location",
-              "Different time (2:17 p.m.)"
+              "Martin County location at Mile Marker 129",
+              "crash occurred at 2:17 p.m. Sunday October 25",
+              "fire truck on scene with right lane blocked"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -5012,18 +4993,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Injury Crash Backs Up Florida's Turnpike for 2 Miles Near Stuart",
-        "generated_card_count": 0,
-        "elapsed_seconds": 37.398
+        "elapsed_seconds": 34.738
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "cache_hit",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 4,
         "selected_source_count": 4,
         "cache_hit": true,
@@ -5044,7 +5023,7 @@
         "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 10,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -5069,7 +5048,7 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office",
+            "source_url": "https://cbs12.com/news/local/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office",
             "editorial_story_id": "story_023185",
             "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
             "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
@@ -5118,21 +5097,11 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Man exercising at night critically injured in hit-and-run crash in Port St. Lucie, man arrested, police say - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/man-charged-in-connection-with-hit-and-run-crash-critically-injuring-63-year-old-in-port-st-lucie-officials",
+            "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that left victim in ICU - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-hit-and-run-suspect-arrest/74233911",
             "editorial_story_id": "story_020394",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive - WFLX",
-            "source_url": "https://www.wflx.com/2026/10/23/st-lucie-county-partners-with-treasure-coast-food-bank-community-food-drive",
-            "editorial_story_id": "story_022992",
-            "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
-            "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5149,9 +5118,9 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 4,
+        "material_update_promotion_cache_hit_count": 3,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -5200,7 +5169,7 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Missing 5-year-old girl found dead in Fort Pierce body of water - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office",
+            "source_url": "https://cbs12.com/news/local/fort-pierce-police-search-for-missing-non-verbal-5-year-old-girl-james-fishback-byron-donalds-gates-mcgavick-florida-governor-race-florida-gubernatorial-election-2026-florida-governor-primary-republican-primary-pinellas-county-sheriffs-office",
             "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
             "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
             "canonical_is_custom": false,
@@ -5307,46 +5276,18 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Man exercising at night critically injured in hit-and-run crash in Port St. Lucie, man arrested, police say - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/man-charged-in-connection-with-hit-and-run-crash-critically-injuring-63-year-old-in-port-st-lucie-officials",
+            "source_headline": "Port St. Lucie police arrest suspect in hit-and-run that left victim in ICU - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-hit-and-run-suspect-arrest/74233911",
             "canonical_slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
             "canonical_headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive - WFLX",
-            "source_url": "https://www.wflx.com/2026/10/23/st-lucie-county-partners-with-treasure-coast-food-bank-community-food-drive",
-            "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
-            "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "St. Lucie County Board of County Commissioners",
-              "Treasure Coast Food Bank",
-              "county-wide food drive",
-              "October",
-              "shelf-stable food donation sites"
-            ],
-            "novel_facts": [],
-            "reason": "Both articles report the same St. Lucie County and Treasure Coast Food Bank county-wide food drive announcement with identical details about donation sites and needed items. No new facts, figures, or developments distinguish the incoming article from the existing canonical.",
-            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -5364,9 +5305,9 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 0,
+        "new_publication_stale_rejected_count": 1,
         "live_hero_headline": "St. Lucie Firefighter Austin Hodge Dies on Duty, Second Brother Lost in a Year",
-        "elapsed_seconds": 16.708
+        "elapsed_seconds": 16.971
       },
       {
         "category_key": "indian_river",
@@ -5456,7 +5397,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.285
+        "elapsed_seconds": 10.987
       }
     ]
   }
