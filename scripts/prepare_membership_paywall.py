@@ -19,7 +19,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tct_engine.article_prose_policy import sanitize_article_body_html
+from tct_engine.article_prose_policy import (
+    repair_time_continuation_paragraph_breaks,
+    sanitize_article_body_html,
+)
 
 from tct_engine.membership_paywall import (
     FULL_BODY_MARKER,
@@ -57,6 +60,7 @@ PAYWALL_EXIT_RE = re.compile(
     r'\s*<a\b(?=[^>]*class=["\'][^"\']*\btct-paywall-exit\b[^"\']*["\'])[^>]*>.*?</a>',
     re.I | re.S,
 )
+FIRST_PARAGRAPH_RE = re.compile(r'<p\b([^>]*)>(.*?)</p>', re.I | re.S)
 CURRENT_PREVIEW_P_RE = re.compile(
     r'<p([^>]*)data-tct-preview-paragraph="true"([^>]*)>(.*?)</p>', re.I | re.S
 )
@@ -159,6 +163,36 @@ def _apply_article_body_replacements(
     return text, changed
 
 
+def _load_article_lead_overrides() -> dict[str, str]:
+    """Exact, slug-scoped lead copy edits; never rewrite a protected full story."""
+    path = ROOT / "data" / "article-content-overrides.json"
+    if not path.is_file():
+        return {}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    overrides = payload.get("overrides", {}) if isinstance(payload, dict) else {}
+    return {
+        slug: str(row["first_paragraph"]).strip()
+        for slug, row in overrides.items()
+        if isinstance(row, dict) and str(row.get("first_paragraph") or "").strip()
+    }
+
+
+def _apply_article_lead_override(body_html: str, new_lead: str) -> tuple[str, int]:
+    """Replace only paragraph one, preserving every later paragraph and heading.
+
+    Rejoin a malformed time/weekday boundary first so an orphaned heading from
+    the original first paragraph does not survive the lead correction.
+    """
+    raw = str(body_html or "")
+    normalized, _ = repair_time_continuation_paragraph_breaks(raw)
+    match = FIRST_PARAGRAPH_RE.search(normalized)
+    if not match:
+        raise RuntimeError("Article lead override cannot find its first paragraph")
+    replacement = f'<p{match.group(1)}>{html.escape(new_lead, quote=False)}</p>'
+    corrected = normalized[:match.start()] + replacement + normalized[match.end():]
+    return corrected, int(corrected != raw)
+
+
 def _load_article_source_context() -> dict[str, dict[str, object]]:
     """Load source provenance needed only to remove reader-facing outlet boilerplate."""
     path = ROOT / "archive.json"
@@ -255,9 +289,10 @@ def main() -> None:
     snapshot = _load_snapshot()
     source_context = _load_article_source_context()
     body_replacements = _load_article_body_replacements()
+    lead_overrides = _load_article_lead_overrides()
     snapshot_expected = bool(os.getenv("TCT_PROTECTED_SNAPSHOT_PATH", "").strip())
     protected: list[dict[str, str]] = []
-    rewritten = short = already = rehydrated = prose_repaired = copyedit_repaired = 0
+    rewritten = short = already = rehydrated = prose_repaired = copyedit_repaired = lead_repaired = 0
     for path in sorted(ARTICLES.glob("*.html")):
         text = path.read_text(encoding="utf-8", errors="ignore")
         original_text = text
@@ -347,6 +382,17 @@ def main() -> None:
             body_html = body_match.group(1)
 
         context = source_context.get(slug, {})
+        if not context.get("is_custom") and slug in lead_overrides:
+            corrected_lead_html, lead_changed = _apply_article_lead_override(
+                body_html, lead_overrides[slug]
+            )
+            if lead_changed:
+                text = text[:body_match.start(1)] + corrected_lead_html + text[body_match.end(1):]
+                lead_repaired += 1
+                body_html = corrected_lead_html
+                body_match = BODY_RE.search(text)
+                if not body_match:
+                    raise RuntimeError(f"Article lead override invalidated body boundary: {slug}")
         if not context.get("is_custom"):
             cleaned_body_html, changed_paragraphs = sanitize_article_body_html(
                 body_html,
@@ -399,7 +445,8 @@ def main() -> None:
         f"Membership paywall prepared: {rewritten} protected, {rehydrated} legacy/current pages rehydrated, "
         f"{short} too short, {already} already protected without snapshot, "
         f"{prose_repaired} prohibited reporting-process paragraph(s) normalized, "
-        f"{copyedit_repaired} protected copy-edit replacement(s) applied"
+        f"{copyedit_repaired} protected copy-edit replacement(s) applied, "
+        f"{lead_repaired} lead paragraph edit(s) applied"
     )
     print(f"Protected export written outside repo: {export_path}")
 
