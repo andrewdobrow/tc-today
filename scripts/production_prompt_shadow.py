@@ -302,6 +302,123 @@ def blind_label(category, provider, seed):
     return "A" if (provider == "claude") == bool(bit) else "B"
 
 
+def render_blind_review(rows):
+    """Format an existing result artifact without API calls or model labels.
+
+    The paid job stores source_inputs in each result row, not a nested packet.
+    Report a missing writer as a failure, never as empty successful copy.
+    """
+    lines = [
+        "# TCT production-prompt shadow — blind review", "",
+        "Actual TCT editor and writer functions were used in the original run.",
+        "The historical source text was reconstructed from archived caches; it is",
+        "NOT a captured exact production packet. Canonical context was unavailable.",
+        "Identity matching, material updates and final homepage ranking were not tested.",
+        "Both variants are anonymized. Record judgments before opening answer-key.json.",
+        "A model's copy-desk validation failure is a real writing failure, not a",
+        "technical scoring tie and not permission to publish the rejected copy.", "",
+    ]
+    for row in rows:
+        lines.extend([
+            "## " + str(row.get("category_label") or row.get("category_key") or "Unknown"),
+            "", "Reference production hero source index: " +
+            str((row.get("production_reference") or {}).get("hero_source_index")), "",
+            "**Original source evidence**", "",
+        ])
+        sources = row.get("source_inputs")
+        if sources is None:
+            sources = (row.get("packet") or {}).get("source_inputs") or []
+        for source in sources:
+            lines.extend([
+                "### Source #" + str(source.get("source_index") or "?") +
+                ": " + str(source.get("title") or ""),
+                str(source.get("source_url") or ""),
+                "Published: " + str(source.get("published") or ""),
+                "", str(source.get("article_text") or ""),
+                "",
+            ])
+        assignment = row.get("fixed_writer_assignment") or {}
+        lines.extend([
+            "**Controlled writing task:** Both variants receive source #" +
+            str(assignment.get("source_index") or "?"),
+            "Fixed angle: " + str(assignment.get("angle") or ""), "",
+        ])
+        for label in ("A", "B"):
+            item = (row.get("variants") or {}).get(label) or {}
+            status = str(item.get("status") or "missing")
+            lines.extend(["### Variant " + label, "",
+                          "**Status:** " + status, ""])
+            if item.get("error"):
+                lines.extend(["**Blocked by:** " + str(item["error"]), ""])
+            plan = item.get("editor_plan")
+            if isinstance(plan, dict):
+                lines.extend(["**Actual assignment editor plan:**", "",
+                              json.dumps(plan, ensure_ascii=False, indent=2), ""])
+            else:
+                lines.extend(["**Assignment plan unavailable.**", ""])
+            draft = item.get("writer_fixed_source")
+            if isinstance(draft, dict):
+                lines.extend([
+                    "**Writer headline:** " + str(draft.get("headline") or ""),
+                    "**Writer teaser:** " + str(draft.get("teaser") or ""),
+                    "", str(draft.get("body") or ""), "",
+                ])
+            else:
+                lines.extend(["**No publishable writer result was returned.**", ""])
+            lines.extend([
+                "Assignment judgment __ / Writing judgment __ / Fact flags __",
+                "Reviewer notes: __", "",
+            ])
+    return "\n".join(lines) + "\n"
+
+
+def summarize_shadow_results(rows, usage=None):
+    """Always distinguish complete model pairs from incomplete quality outcomes."""
+    rows = list(rows)
+    complete_pairs = []
+    editor_pairs = []
+    failed = []
+    for row in rows:
+        variants = row.get("variants") or {}
+        key = str(row.get("category_key") or "unknown")
+        if all((variants.get(k) or {}).get("status") == "complete"
+               for k in ("A", "B")):
+            complete_pairs.append(key)
+        if all(isinstance((variants.get(k) or {}).get("editor_plan"), dict)
+               for k in ("A", "B")):
+            editor_pairs.append(key)
+        for label in ("A", "B"):
+            v = variants.get(label) or {}
+            if v.get("status") != "complete":
+                failed.append({"category_key": key, "variant": label,
+                               "status": v.get("status") or "missing",
+                               "error": v.get("error") or ""})
+    return {
+        "categories_attempted": len(rows),
+        "complete_writing_and_editor_pairs": len(complete_pairs),
+        "complete_pair_categories": complete_pairs,
+        "complete_assignment_editor_pairs": len(editor_pairs),
+        "assignment_editor_pair_categories": editor_pairs,
+        "failed_variants": failed,
+        "result": ("complete" if len(complete_pairs) == len(rows) and rows
+                   else "partial" if rows else "empty"),
+        "estimated_api_cost_usd": (usage or {}).get("estimated_usd", 0),
+        "provider_api_calls": len((usage or {}).get("calls") or []),
+    }
+
+
+def recover_existing_results(output):
+    """Create missing blind review and summary from a saved Actions artifact, for $0."""
+    rows = json.loads((output / "results.json").read_text(encoding="utf-8"))
+    usage_path = output / "usage.json"
+    usage = json.loads(usage_path.read_text(encoding="utf-8")) if usage_path.exists() else {}
+    (output / "blind-review.md").write_text(
+        render_blind_review(rows), encoding="utf-8")
+    summary = summarize_shadow_results(rows, usage)
+    saved(output / "summary.json", summary)
+    return summary
+
+
 def produce(cases, ceiling, seed, output):
     from scripts import generate  # Import only, never execute the publishing entrypoint.
     budget = Budget(ceiling)
@@ -319,20 +436,24 @@ def produce(cases, ceiling, seed, output):
                 label = blind_label(case["key"], provider, seed)
                 key.setdefault(case["key"], {})[label] = provider
                 adapter = Adapter(provider, budget, case["key"] not in COUNTY_KEYS)
+                item = {"status": "editor_pending", "prompts": adapter.prompts}
+                row["variants"][label] = item
                 try:
                     generate.client = adapter
                     adapter.mode = "editor"
                     plan, diagnostics, _, _ = generate._run_assignment_editor(packet)
+                    item["editor_plan"] = plan
+                    item["editor_diagnostics"] = diagnostics
+                    item["status"] = "writer_pending"
                     adapter.mode = "writer"
                     draft, _, _ = generate._run_assignment_writer(
                         packet, case["fixed_writer_assignment"], role="hero")
-                    row["variants"][label] = {
-                        "editor_plan": plan, "editor_diagnostics": diagnostics,
-                        "writer_fixed_source": draft, "prompts": adapter.prompts,
-                        "status": "complete"}
+                    item["writer_fixed_source"] = draft
+                    item["status"] = "complete"
                 except Exception as e:
-                    row["variants"][label] = {"status": "failed",
-                                              "error": type(e).__name__ + ": " + str(e)[:250]}
+                    item["status"] = ("writer_failed" if "editor_plan" in item
+                                      else "editor_failed")
+                    item["error"] = type(e).__name__ + ": " + str(e)[:250]
                 saved(output / "results.json", completed + [row])
                 saved(output / "usage.json", {
                     "estimated_usd": round(budget.estimated_usd, 6),
@@ -344,32 +465,15 @@ def produce(cases, ceiling, seed, output):
             "estimated_usd": round(budget.estimated_usd, 6),
             "calls": budget.calls, "budget_guard_usd": ceiling})
         saved(output / "results.json", completed)
-        review = ["# TCT production-prompt shadow — blind review", "",
-                  "Uses actual TCT editor/writer functions and saved production category candidates.",
-                  "Source text is reconstructed from prior cache, not identical captured production",
-                  "input; story_form and missing canonical context are explicit limitations.",
-                  "No live publication, full identity adjudication, canonical update, or",
-                  "post-generation ranking was exercised. Score before opening answer-key.json.", ""]
-        for case in completed:
-            review += ["## " + case["category_label"], "",
-                       "Reference published hero source index: " +
-                       str(case["production_reference"]["hero_source_index"]), ""]
-            for source in case["packet"]["source_inputs"]:
-                review += ["Source #" + str(source["source_index"]) + ": " + source["title"],
-                           source["source_url"], source["article_text"], ""]
-            for label in ("A", "B"):
-                item = case["variants"].get(label) or {}
-                review += ["### Variant " + label, "Status: " + str(item.get("status")),
-                           "Editor plan: " + json.dumps(item.get("editor_plan", {})),
-                           "Writer: " + json.dumps(item.get("writer_fixed_source", {}),
-                                                    ensure_ascii=False),
-                           "Editorial score __/100, fact flags __, notes __", ""]
-        (output / "blind-review.md").write_text("\n".join(review) + "\n", encoding="utf-8")
-    if any(r["variants"].get(k, {}).get("status") != "complete"
-           for r in completed for k in ("A", "B")):
-        raise RuntimeError("Incomplete paired model result: inspect artifact; do not score missing cases")
-    print("Production-prompt shadow:", len(completed), "complete categories; estimated USD",
-          round(budget.estimated_usd, 6))
+        summary = recover_existing_results(output)
+    if not summary["complete_writing_and_editor_pairs"]:
+        raise RuntimeError("No complete paired writing comparison. Review results and "
+                           "summary artifacts; do not score missing writer outputs.")
+    print("Production-prompt shadow:", summary["categories_attempted"],
+          "categories,", summary["complete_writing_and_editor_pairs"],
+          "complete writing pairs,", summary["complete_assignment_editor_pairs"],
+          "assignment editor pairs; status", summary["result"],
+          "; estimated USD", round(budget.estimated_usd, 6))
 
 
 def main():
@@ -382,7 +486,14 @@ def main():
     parser.add_argument("--max-cost", type=float, default=2.0)
     parser.add_argument("--seed", type=int, default=20261025)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--recover-existing", action="store_true",
+                        help="Recreate review/summary from previous results without API calls")
     args = parser.parse_args()
+    if args.recover_existing:
+        summary = recover_existing_results(Path(args.output))
+        print("Recovered offline shadow review:", summary["result"],
+              summary["complete_writing_and_editor_pairs"], "complete pairs; no API calls")
+        return
     if not 1 <= args.categories <= 3 or not 10 <= args.history <= 160:
         parser.error("categories must be 1-3 and history 10-160")
     if not 1 <= args.max_age_days <= 14 or not 1 <= args.max_cost <= 50:
