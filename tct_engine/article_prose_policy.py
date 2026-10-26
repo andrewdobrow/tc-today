@@ -166,8 +166,8 @@ def repair_time_continuation_paragraph_breaks(body_html: str) -> tuple[str, int]
     # rather than a <p>. The existing adjacent-paragraph repair cannot see
     # that shape, so restore only a direct time -> weekday heading boundary.
     heading_re = re.compile(
-        r'(<p\\b[^>]*>)(.*?)(</p>)\\s*'
-        r'<h3\\b(?=[^>]*\\barticle-subhead\\b)[^>]*>([^<>]+)</h3>',
+        r'(<p\b[^>]*>)(.*?)(</p>)\s*'
+        r'<h3\b(?=[^>]*\barticle-subhead\b)[^>]*>([^<>]+)</h3>',
         re.IGNORECASE | re.DOTALL,
     )
     heading_changed = 0
