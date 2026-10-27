@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-27T03:57:37Z",
+  "generated_at": "2026-10-27T19:00:36Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,44 +15,51 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 6,
-      "generated_live": 2,
+      "category_eligibility_archive_recovery": 2,
+      "generated_live": 6,
       "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 6,
+      "no_category_eligible_sources": 2,
       "publication_quality_rejected": 1
     },
-    "model_attempt_count": 3,
-    "model_elapsed_seconds": 54.765,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 7,
+    "model_elapsed_seconds": 163.304,
+    "archive_recovery_requested_count": 3,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 1,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 57,
-    "story_aware_update_context_count": 5,
-    "material_update_promotion_evaluation_count": 32,
+    "category_eligibility_rejection_count": 8,
+    "published_story_duplicate_suppression_count": 29,
+    "story_aware_update_context_count": 3,
+    "material_update_promotion_evaluation_count": 23,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 26,
-    "material_update_promotion_model_call_count": 6
+    "material_update_promotion_cache_hit_count": 16,
+    "material_update_promotion_model_call_count": 7
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 7,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 9,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 9.726,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 9.726,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -61,8 +68,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -75,79 +82,35 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+          "headline": "Southbound US-1 reopens near Treasure Coast Mall after serious crash",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/serious-crash-shuts-down-us-1-southbound-lanes-near-treasure-coast-square-mall"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrest"
+          ],
+          "local_nexus_signals": [],
+          "headline": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - WPEC",
+          "source_url": "https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
-          "editorial_story_id": "story_023150",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "editorial_story_id": "custom:55ae9e407b6b6bcf4a1009834738d18e",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
-          "editorial_story_id": "story_023612",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
-          "editorial_story_id": "story_023499",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Man released from prison 11 days ago arrested after Hobe Sound neighborhood disturbance - WPEC",
-          "source_url": "https://cbs12.com/news/local/man-released-from-prison-11-days-ago-arrested-after-hobe-sound-neighborhood-disturbance-crooked-oak-avenue-6000-block-crooked-oak-avenue-suspicious-activity-suspicious-man-yelling-at-residents-wandering-through-yards-residential-yards-hobe-sound",
-          "editorial_story_id": "story_023535",
-          "canonical_slug": "2026-10-26-man-arrested-after-reported-disturbance-on-crooked-oak-avenue-in-hobe-sound",
-          "canonical_headline": "Man arrested after reported disturbance on Crooked Oak Avenue in Hobe Sound",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027",
-          "editorial_story_id": "story_023536",
-          "canonical_slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
-          "editorial_story_id": "story_023497",
-          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
-          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Friday Night Blitz: Vero Beach, Jensen Beach Capture District Championships - WPEC",
-          "source_url": "https://cbs12.com/sports/content/friday-night-blitz-vero-beach-jensen-beach-capture-district-championships",
-          "editorial_story_id": "story_023078",
-          "canonical_slug": "2026-10-26-jensen-beach-captures-district-13-4a-football-title-against-fort-pierce-westwood",
-          "canonical_headline": "Jensen Beach captures District 13-4A football title against Fort Pierce Westwood",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -155,16 +118,16 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
-          "publisher": "www.wptv.com",
+          "source_headline": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - WPEC",
+          "source_url": "https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-",
+          "publisher": "cbs12.com",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:austin-hodge",
             "story:story_023150",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+            "source:https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
@@ -178,50 +141,19 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "St. Lucie County Fire District firefighter-paramedic Austin Hodge",
-            "Death on Saturday, Oct. 24, 2026",
-            "More than nine years of service with the district",
-            "Line-of-duty death designation"
-          ],
-          "novel_facts": [
-            "Hodge was found unresponsive in his firehouse bunk during shift change.",
-            "Firefighters escorted him from the medical examiner's office to a funeral home through Fort Pierce.",
-            "He also worked as a respiratory therapist and served on the district's Honor Guard and Firefighter Challenge Team."
-          ],
-          "reason": "The incoming article covers the same named firefighter's death. Its additions are tribute coverage, biographical details and circumstances of discovery, not a new official cause, finding or other consequential development. The procession and colleague recollections do not constitute an independently newsworthy follow-up.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "identity_basis": "pre_generation_ledger:exact_source_url",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -230,136 +162,49 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
+          "confidence": 0.99,
           "shared_anchors": [
-            "St. Lucie County Detective Tyler Horstman",
-            "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
-            "Felony DUI arrest warrant and surrender at the Indian River County Jail",
-            "Announcement by Sheriff Richard Del Toro Jr."
+            "St. Lucie County firefighter-paramedic Austin Hodge, 34, died while on duty after being found unresponsive in his firehouse bunk.",
+            "Siblings Alexis Hodge and Javan Hodge seek answers about his final hours.",
+            "Both articles use the identical WPTV source URL and share the Austin Hodge death incident anchor."
           ],
           "novel_facts": [
-            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
-            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
+            "The incoming text adds family recollections that Austin appeared normal before bed and also worked as a respiratory therapist.",
+            "It expands on the family's grief, his brother Jairus' earlier death, and the siblings' plans to honor their brothers."
           ],
-          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
+          "reason": "The candidate already covers the same death and the siblings' search for answers from the same source report. The expanded recollections and family background provide color, not a material development. No cause of death, official finding, or distinct accountability development is reported.",
           "validation_errors": []
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.94,
-          "shared_anchors": [
-            "October 26, 2026 king-tide coastal flooding on the Treasure Coast",
-            "Dyer Point Road in Palm City, listed as Southwest Dyer Point Road in the candidate metadata",
-            "Martin County Sheriff's Office involvement",
-            "High-water risks around subsequent high tides"
-          ],
-          "novel_facts": [
-            "Resident Terresa Baldwin describes flooding at her backyard, dock and patio, along with sewage odors and displaced snakes.",
-            "Lt. Dave Rosko says three high-water vehicles are ready for rescue efforts."
-          ],
-          "reason": "The matching date, flooding episode, specific road and sheriff's agency establish the same event despite the candidate's St. Lucie-focused headline. The incoming article adds resident observations and routine preparedness details, not a consequential new development or an independently newsworthy follow-up.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Man released from prison 11 days ago arrested after Hobe Sound neighborhood disturbance - WPEC",
-          "source_url": "https://cbs12.com/news/local/man-released-from-prison-11-days-ago-arrested-after-hobe-sound-neighborhood-disturbance-crooked-oak-avenue-6000-block-crooked-oak-avenue-suspicious-activity-suspicious-man-yelling-at-residents-wandering-through-yards-residential-yards-hobe-sound",
-          "canonical_slug": "2026-10-26-man-arrested-after-reported-disturbance-on-crooked-oak-avenue-in-hobe-sound",
-          "canonical_headline": "Man arrested after reported disturbance on Crooked Oak Avenue in Hobe Sound",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027",
-          "canonical_slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
-          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
-          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Friday Night Blitz: Vero Beach, Jensen Beach Capture District Championships - WPEC",
-          "source_url": "https://cbs12.com/sports/content/friday-night-blitz-vero-beach-jensen-beach-capture-district-championships",
-          "canonical_slug": "2026-10-26-jensen-beach-captures-district-13-4a-football-title-against-fort-pierce-westwood",
-          "canonical_headline": "Jensen Beach captures District 13-4A football title against Fort Pierce Westwood",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 30.289
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Martin County approves one-year data center pause; Kanner Highway proposal exempt",
+      "generated_card_count": 0,
+      "elapsed_seconds": 54.193
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 8,
-      "selected_source_count": 2,
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 9,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
+      "archive_recovery_requested": false,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.026,
+          "elapsed_seconds": 24.764,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.026,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 24.764,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -368,8 +213,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -382,30 +227,58 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+          "headline": "Martin County approves 1-year pause on new data center development",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-approves-1-year-pause-on-new-data-center-development"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Florida's U.S. Senate Race: What voters need to know before Election Day",
+          "source_url": "https://www.wptv.com/news/political/elections-local/floridas-u-s-senate-race-what-voters-need-to-know-before-election-day"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - WPEC",
+          "source_url": "https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-"
         }
       ],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
-          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
-          "editorial_story_id": "story_023445",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "editorial_story_id": "custom:55ae9e407b6b6bcf4a1009834738d18e",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
-          "editorial_story_id": "story_023150",
-          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
-          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "source_headline": "Man released from prison 11 days ago arrested after Hobe Sound neighborhood disturbance - cw34.com",
+          "source_url": "https://cw34.com/news/local/man-released-from-prison-11-days-ago-arrested-after-hobe-sound-neighborhood-disturbance-crooked-oak-avenue-6000-block-crooked-oak-avenue-suspicious-activity-suspicious-man-yelling-at-residents-wandering-through-yards-residential-yards-hobe-sound",
+          "editorial_story_id": "story_023535",
+          "canonical_slug": "2026-10-26-man-arrested-after-reported-disturbance-on-crooked-oak-avenue-in-hobe-sound",
+          "canonical_headline": "Man arrested after reported disturbance on Crooked Oak Avenue in Hobe Sound",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -420,9 +293,9 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
-          "editorial_story_id": "story_023612",
+          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
+          "editorial_story_id": "",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
@@ -440,22 +313,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/27/st-lucie-county-detective-faces-felony-dui-charge-accused-driving-3-times-legal-limit-sheriff",
-          "editorial_story_id": "story_023612",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
+          "source_headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
+          "source_url": "https://cbs12.com/news/local/king-tide-flooding-palm-beach-county-treasure-coast-st-lucie-county-flooding-sw-34th-street-midtown-beach-closure-juno-beach-pier-closure-florida-coastal-flood-warning-florida-news",
           "editorial_story_id": "story_023499",
           "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
           "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -467,41 +330,21 @@
           "canonical_headline": "Man arrested after reported disturbance on Crooked Oak Avenue in Hobe Sound",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/26/st-lucie-county-firefighter-paramedic-austin-hodge-dies-after-being-found-unresponsive?outputType=amp",
-          "editorial_story_id": "story_023150",
-          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
-          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/25/missing-5-year-old-found-dead-fort-pierce-police-say?outputType=amp",
-          "editorial_story_id": "story_023185",
-          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
-          "publisher": "www.wptv.com",
+          "source_headline": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - WPEC",
+          "source_url": "https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-",
+          "publisher": "cbs12.com",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:austin-hodge",
             "story:custom:55ae9e407b6b6bcf4a1009834738d18e",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+            "source:https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
@@ -516,19 +359,19 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 8,
+      "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 5,
-      "material_update_promotion_model_call_count": 3,
+      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
-          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -537,48 +380,42 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
+          "confidence": 0.99,
           "shared_anchors": [
-            "St. Lucie County Sheriff's Office employee Tyler Horstman",
-            "Off-duty crash in Vero Beach while driving an agency vehicle",
-            "Felony DUI warrant and surrender at the Indian River County Jail on Monday, October 26"
+            "St. Lucie County firefighter-paramedic Austin Hodge, 34, died while on duty after being found unresponsive in his firehouse bunk.",
+            "Siblings Alexis Hodge and Javan Hodge are seeking answers about his final hours.",
+            "Both articles use the identical WPTV source URL and share the named-person-death:austin-hodge incident anchor."
           ],
-          "novel_facts": [
-            "The incoming account specifies a March 2 crash date and a blood alcohol concentration of 0.246.",
-            "It adds administrative-leave timing, booking and bond details, and the status of the internal investigation."
-          ],
-          "reason": "Both articles report the same crash-related felony DUI arrest and surrender. The incoming article supplies additional supporting details, but establishes no subsequent charge, ruling, finding, or other material development beyond the arrest already covered by the canonical.",
+          "novel_facts": [],
+          "reason": "The canonical already covers the same death and the siblings' search for answers from the same source report. The fuller incoming text adds family recollections and background but no established cause, investigative finding, concrete accountability allegation, or other material development. Its later publication date does not establish a new event or independently newsworthy follow-up.",
           "validation_errors": []
         },
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
-          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
-          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "source_headline": "Man released from prison 11 days ago arrested after Hobe Sound neighborhood disturbance - cw34.com",
+          "source_url": "https://cw34.com/news/local/man-released-from-prison-11-days-ago-arrested-after-hobe-sound-neighborhood-disturbance-crooked-oak-avenue-6000-block-crooked-oak-avenue-suspicious-activity-suspicious-man-yelling-at-residents-wandering-through-yards-residential-yards-hobe-sound",
+          "canonical_slug": "2026-10-26-man-arrested-after-reported-disturbance-on-crooked-oak-avenue-in-hobe-sound",
+          "canonical_headline": "Man arrested after reported disturbance on Crooked Oak Avenue in Hobe Sound",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.99,
           "shared_anchors": [
-            "St. Lucie County Fire District firefighter-paramedic Austin Hodge",
-            "Death on Saturday, Oct. 24, 2026",
-            "More than nine years of service with the district",
-            "Line-of-duty death designation"
+            "Joseph Oswald, 28, arrested in Hobe Sound",
+            "Residents in the 6000 block of Crooked Oak Avenue called 911",
+            "Reports of yelling at people and wandering through the neighborhood",
+            "Martin County Sheriff's Office response",
+            "Source headlines both describe release from prison 11 days before the arrest"
           ],
-          "novel_facts": [
-            "Hodge was found unresponsive in his firehouse bunk during shift change.",
-            "Firefighters escorted him from the medical examiner's office to a funeral home through Fort Pierce.",
-            "He also worked as a respiratory therapist and served on the district's Honor Guard and Firefighter Challenge Team."
-          ],
-          "reason": "The incoming article covers the same named firefighter's death. Its additions are tribute coverage, biographical details and circumstances of discovery, not a new official cause, finding or other consequential development. The procession and colleague recollections do not constitute an independently newsworthy follow-up.",
+          "novel_facts": [],
+          "reason": "The incoming article repeats the same arrest and distinctive circumstances reported by the canonical candidate. Its fuller account provides charges and criminal-history details, but there is no evidence of a subsequent charging decision or other new development; the candidate excerpt is truncated. The later publication by another outlet does not warrant an update or a new URL.",
           "validation_errors": []
         },
         {
@@ -592,8 +429,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -614,8 +451,8 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
+          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "canonical_is_custom": true,
@@ -628,18 +465,17 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
+          "confidence": 0.98,
           "shared_anchors": [
-            "St. Lucie County Detective Tyler Horstman",
-            "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
-            "Felony DUI arrest warrant and surrender at the Indian River County Jail",
-            "Announcement by Sheriff Richard Del Toro Jr."
+            "St. Lucie County Sheriff's Office employee Tyler Horstman",
+            "Off-duty crash in Vero Beach while driving an agency vehicle",
+            "Felony DUI warrant and surrender at the Indian River County Jail on Monday, October 26"
           ],
           "novel_facts": [
-            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
-            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
+            "The incoming account specifies a March 2 crash date and a blood alcohol concentration of 0.246.",
+            "It adds administrative-leave timing, booking and bond details, and the status of the internal investigation."
           ],
-          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
+          "reason": "Both articles report the same crash-related felony DUI arrest and surrender. The incoming article supplies additional supporting details, but establishes no subsequent charge, ruling, finding, or other material development beyond the arrest already covered by the canonical.",
           "validation_errors": []
         },
         {
@@ -653,8 +489,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -674,27 +510,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/27/st-lucie-county-detective-faces-felony-dui-charge-accused-driving-3-times-legal-limit-sheriff",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
+          "source_headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
+          "source_url": "https://cbs12.com/news/local/king-tide-flooding-palm-beach-county-treasure-coast-st-lucie-county-flooding-sw-34th-street-midtown-beach-closure-juno-beach-pier-closure-florida-coastal-flood-warning-florida-news",
           "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
           "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -703,18 +524,16 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.94,
+          "confidence": 0.98,
           "shared_anchors": [
-            "October 26, 2026 king-tide coastal flooding on the Treasure Coast",
-            "Dyer Point Road in Palm City, listed as Southwest Dyer Point Road in the candidate metadata",
-            "Martin County Sheriff's Office involvement",
-            "High-water risks around subsequent high tides"
+            "Identical WPEC source URL and publication date of October 26, 2026",
+            "Same king-tide coastal flooding episode affecting Palm Beach County and the Treasure Coast",
+            "Same coastal St. Lucie County flood warning ending at 2 a.m. Thursday",
+            "Shared location anchors include SW Dyer Point Road, SW 34th Street and Cornell Avenue, Ocean Avenue, and South Ocean Boulevard",
+            "Martin County Sheriff's Office involvement"
           ],
-          "novel_facts": [
-            "Resident Terresa Baldwin describes flooding at her backyard, dock and patio, along with sewage odors and displaced snakes.",
-            "Lt. Dave Rosko says three high-water vehicles are ready for rescue efforts."
-          ],
-          "reason": "The matching date, flooding episode, specific road and sheriff's agency establish the same event despite the candidate's St. Lucie-focused headline. The incoming article adds resident observations and routine preparedness details, not a consequential new development or an independently newsworthy follow-up.",
+          "novel_facts": [],
+          "reason": "The exact source match, persistent story match, warning deadline, and specific locations establish the same flooding episode. The incoming text expands regional scene details, resident accounts, and closures, but provides no demonstrated subsequent development or independently newsworthy follow-up beyond the already represented source report.",
           "validation_errors": []
         },
         {
@@ -731,86 +550,37 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/26/st-lucie-county-firefighter-paramedic-austin-hodge-dies-after-being-found-unresponsive?outputType=amp",
-          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
-          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "St. Lucie County Fire District Firefighter-Paramedic Austin Hodge",
-            "Death while on duty Saturday, Oct. 24, 2026",
-            "More than nine years of service",
-            "Earlier death of his brother, fellow firefighter Jarius Hodge"
-          ],
-          "novel_facts": [
-            "Hodge was found unresponsive in his bunk during shift change and subsequently died at a hospital.",
-            "The district described an Honor Guard gathering and support from neighboring first responders."
-          ],
-          "reason": "Both articles cover Austin Hodge's same on-duty death. The canonical already identifies him and reports his death and service history. The incoming account adds discovery circumstances and tributes, but no official cause, investigative finding, or other material development warranting an update or separate story.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/25/missing-5-year-old-found-dead-fort-pierce-police-say?outputType=amp",
-          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "The child is identified as 5-year-old Mayra Glory Odelus.",
-            "She was reported missing in Fort Pierce on Saturday and found dead hours later in nearby water.",
-            "Fort Pierce Police Department reported the discovery."
-          ],
-          "novel_facts": [
-            "The incoming article specifies an approximately 11:39 a.m. missing-person report and a 4:13 p.m. police update."
-          ],
-          "reason": "Both articles cover the same child's disappearance and death. The canonical already reports her identity and recovery from a nearby pond; the incoming article's reporting timestamps do not constitute a material development or independently newsworthy follow-up.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 59.849
+      "live_hero_headline": "Southbound US-1 reopens after crash near Treasure Coast Mall disrupted traffic",
+      "generated_card_count": 0,
+      "elapsed_seconds": 66.713
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 15,
-      "publishable_source_count": 9,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 10,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Business & Development category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.134,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 11.134,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -819,7 +589,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -829,19 +599,30 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
+          "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:st lucie county"
+          "competing_signals": [
+            "election_political_process:early voting"
           ],
-          "headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+          "local_nexus_signals": [
+            "source_locality:martin county"
+          ],
+          "headline": "Florida's U.S. Senate Race: What voters need to know before Election Day",
+          "source_url": "https://www.wptv.com/news/political/elections-local/floridas-u-s-senate-race-what-voters-need-to-know-before-election-day"
         }
       ],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "editorial_story_id": "custom:55ae9e407b6b6bcf4a1009834738d18e",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
@@ -854,7 +635,7 @@
         },
         {
           "category_key": "business",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
+          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit, sheriff says",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
           "editorial_story_id": "story_023612",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
@@ -881,90 +662,41 @@
           "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
-          "editorial_story_id": "story_023497",
-          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
-          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
-          "source_url": "https://www.wptv.com/money/real-estate-news/usaa-auto-insurance-rates-dropping-for-nearly-500-000-florida-policies",
-          "editorial_story_id": "story_023476",
-          "canonical_slug": "2026-10-26-florida-approves-usaa-auto-insurance-rate-cuts-averaging-7-for-over-498000-polic",
-          "canonical_headline": "Florida approves USAA auto insurance rate cuts averaging 7% for over 498,000 policies",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
-          "editorial_story_id": "story_023328",
-          "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
-          "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/missing-5-year-old-found-dead-in-fort-pierce-police-say",
-          "editorial_story_id": "story_023185",
-          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-confirms-death-of-firefighter",
-          "editorial_story_id": "story_023150",
-          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
-          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 4,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_decisions": [
         {
+          "category_key": "business",
           "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
-          "publisher": "www.wptv.com",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:named-person-death:austin-hodge",
-            "story:custom:55ae9e407b6b6bcf4a1009834738d18e",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+          "canonical_is_custom": true,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "St. Lucie County firefighter-paramedic Austin Hodge, 34, died while on duty after being found unresponsive in his firehouse bunk.",
+            "Siblings Alexis Hodge and Javan Hodge are seeking answers about his final hours.",
+            "Both articles use the identical WPTV source URL and share the named-person-death:austin-hodge incident anchor."
           ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident",
-            "story"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:austin-hodge,story:custom:55ae9e407b6b6bcf4a1009834738d18e",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 3,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
+          "novel_facts": [],
+          "reason": "The canonical already covers the same death and the siblings' search for answers from the same source report. The fuller incoming text adds family recollections and background but no established cause, investigative finding, concrete accountability allegation, or other material development. Its later publication date does not establish a new event or independently newsworthy follow-up.",
+          "validation_errors": []
+        },
         {
           "category_key": "business",
           "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
@@ -976,29 +708,28 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.99,
           "shared_anchors": [
-            "St. Lucie County Fire District firefighter-paramedic Austin Hodge",
-            "Death on Saturday, Oct. 24, 2026",
-            "More than nine years of service with the district",
-            "Line-of-duty death designation"
+            "St. Lucie County firefighter-paramedic Austin Hodge",
+            "Found unresponsive in his bunk at the firehouse",
+            "Death while on duty on Saturday, Oct. 24, 2026"
           ],
           "novel_facts": [
-            "Hodge was found unresponsive in his firehouse bunk during shift change.",
-            "Firefighters escorted him from the medical examiner's office to a funeral home through Fort Pierce.",
-            "He also worked as a respiratory therapist and served on the district's Honor Guard and Firefighter Challenge Team."
+            "Firefighters escorted Hodge from the medical examiner's office to a funeral home through Fort Pierce.",
+            "Colleague Dr. Aleta Paschal shared tributes and described his additional work as a respiratory therapist.",
+            "Hodge served more than nine years with the district and participated in its Honor Guard and Firefighter Challenge Team."
           ],
-          "reason": "The incoming article covers the same named firefighter's death. Its additions are tribute coverage, biographical details and circumstances of discovery, not a new official cause, finding or other consequential development. The procession and colleague recollections do not constitute an independently newsworthy follow-up.",
+          "reason": "Both articles concern the same named firefighter's on-duty death under the same circumstances. The incoming story adds a memorial procession, colleague recollections and service background, but no new cause, investigative finding or other consequential development. The line-of-duty status is already reflected in the canonical.",
           "validation_errors": []
         },
         {
           "category_key": "business",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
+          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit, sheriff says",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
@@ -1007,23 +738,23 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.97,
           "shared_anchors": [
             "St. Lucie County Detective Tyler Horstman",
-            "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
+            "Off-duty crash in Vero Beach while driving a sheriff's office vehicle",
             "Felony DUI arrest warrant and surrender at the Indian River County Jail",
             "Announcement by Sheriff Richard Del Toro Jr."
           ],
           "novel_facts": [
-            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
-            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
+            "The incoming specifies a March 2 crash date and a blood alcohol concentration of .246.",
+            "It adds September notification and administrative-leave dates and says the internal investigation is paused pending criminal proceedings."
           ],
-          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
+          "reason": "Both articles cover Horstman's felony DUI case arising from the same agency-vehicle crash and his surrender. The incoming adds supporting chronology and administrative context, but reports no new charge, ruling, finding, or subsequent development beyond the arrest already covered.",
           "validation_errors": []
         },
         {
@@ -1070,101 +801,37 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
-          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
-          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
-          "source_url": "https://www.wptv.com/money/real-estate-news/usaa-auto-insurance-rates-dropping-for-nearly-500-000-florida-policies",
-          "canonical_slug": "2026-10-26-florida-approves-usaa-auto-insurance-rate-cuts-averaging-7-for-over-498000-polic",
-          "canonical_headline": "Florida approves USAA auto insurance rate cuts averaging 7% for over 498,000 policies",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
-          "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
-          "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Missing 5-year-old found dead in Fort Pierce, police say",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/missing-5-year-old-found-dead-in-fort-pierce-police-say",
-          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-confirms-death-of-firefighter",
-          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
-          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.906
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Martin County approves one-year data center pause; Kanner Highway proposal exempt",
+      "generated_card_count": 0,
+      "elapsed_seconds": 49.565
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 24,
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 23,
       "publishable_source_count": 3,
-      "selected_source_count": 0,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Sports category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 23.953,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 23.953,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1173,11 +840,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "sports",
+          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQcEJYUTktQlRiWkM0eHNXYU50aDZTOGN6OVJMZWM3bjBkTlB3RTczUGQ0aEdlTl9XUVJDVmoxdUNqYU5WTG9rOW1xN21IQ0RyZ3pzLTh2cDBGbVRNWGVSZ2xIQm5lWXhHdzlNbWJpem53TUNyYVhSSFE0cl9Ia3B0QUdSTEwzWHBjTFVsQnpYZC1weFlUV004VnhkR0cxMkRSa2VLOWdNWUF1eG1Xd0VJYjJkS3pFSTZhZkpxQXdWSkZKcUptaUxFMW5wTWVjTVRXenc",
+          "editorial_story_id": "story_023150",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "sports",
           "source_headline": "From Jensen Beach to Louisiana Tech: Andrew Burnette gets one more shot at college football",
@@ -1198,6 +875,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "sports",
+          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death - WFLX",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQcEJYUTktQlRiWkM0eHNXYU50aDZTOGN6OVJMZWM3bjBkTlB3RTczUGQ0aEdlTl9XUVJDVmoxdUNqYU5WTG9rOW1xN21IQ0RyZ3pzLTh2cDBGbVRNWGVSZ2xIQm5lWXhHdzlNbWJpem53TUNyYVhSSFE0cl9Ia3B0QUdSTEwzWHBjTFVsQnpYZC1weFlUV004VnhkR0cxMkRSa2VLOWdNWUF1eG1Xd0VJYjJkS3pFSTZhZkpxQXdWSkZKcUptaUxFMW5wTWVjTVRXenc",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "sports",
           "source_headline": "From Jensen Beach to Louisiana Tech: Andrew Burnette gets one more shot at college football",
           "source_url": "https://www.wptv.com/sports/college-sports/from-jensen-beach-to-louisiana-tech-andrew-burnette-gets-one-more-shot-at-college-football",
           "canonical_slug": "2026-10-25-jensen-beachs-andrew-burnette-wins-legal-fight-for-fifth-year-returns-to-louisia",
@@ -1212,8 +904,12 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 10,
-      "elapsed_seconds": 14.975
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Jensen Beach's Andrew Burnette gets another season at Louisiana Tech",
+      "generated_card_count": 0,
+      "elapsed_seconds": 49.641
     },
     {
       "category_key": "things_to_do",
@@ -1221,7 +917,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1284,23 +980,30 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.103
+      "elapsed_seconds": 19.272
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 1,
-      "selected_source_count": 0,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Florida category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 14.589,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 14.589,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1312,78 +1015,30 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
-          "editorial_story_id": "story_023497",
-          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
-          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
-          "source_url": "https://www.wptv.com/money/real-estate-news/usaa-auto-insurance-rates-dropping-for-nearly-500-000-florida-policies",
-          "editorial_story_id": "story_023476",
-          "canonical_slug": "2026-10-26-florida-approves-usaa-auto-insurance-rate-cuts-averaging-7-for-over-498000-polic",
-          "canonical_headline": "Florida approves USAA auto insurance rate cuts averaging 7% for over 498,000 policies",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
-          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
-          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "USAA auto insurance rates dropping for nearly 500,000 Florida policies",
-          "source_url": "https://www.wptv.com/money/real-estate-news/usaa-auto-insurance-rates-dropping-for-nearly-500-000-florida-policies",
-          "canonical_slug": "2026-10-26-florida-approves-usaa-auto-insurance-rate-cuts-averaging-7-for-over-498000-polic",
-          "canonical_headline": "Florida approves USAA auto insurance rate cuts averaging 7% for over 498,000 policies",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 18.786
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Florida voters choose among Moody, Nixon and Gillespie in Senate special election",
+      "generated_card_count": 0,
+      "elapsed_seconds": 43.25
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1391,11 +1046,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.466,
+          "elapsed_seconds": 54.563,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.466,
+      "model_elapsed_seconds": 54.563,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1406,31 +1061,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
-          "editorial_story_id": "story_023499",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
-          "editorial_story_id": "story_023499",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
@@ -1450,125 +1085,15 @@
           "canonical_headline": "Man arrested after reported disturbance on Crooked Oak Avenue in Hobe Sound",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
-          "editorial_story_id": "story_020870",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "From Jensen Beach to Louisiana Tech: Andrew Burnette gets one more shot at college football - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/26/jensen-beach-louisiana-tech-andrew-burnette-gets-one-more-shot-college-football",
-          "editorial_story_id": "story_023363",
-          "canonical_slug": "2026-10-25-jensen-beachs-andrew-burnette-wins-legal-fight-for-fifth-year-returns-to-louisia",
-          "canonical_headline": "Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
-          "editorial_story_id": "story_023328",
-          "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
-          "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMikANBVV95cUxQaERNdzYyU3phZjNrRlV6bjJ0WDJYSDNqX0F2QjZmRndRM0w3ckI4NlM1WDZDOFpxQWRneG1OSWV2NkRZN2hja25JUGJZNHFsNVB0bXR0UkMycUxpT3Bkd2Vxa0ZwTkF6U1V0QU9sQnZrUGVoNTIxVGhVTXoyN1ZPcWZnWl84TTNvU2NIZWgzU3dQSDJzZjI4d0hXaGh1ZWdWSkxwYXhJam5yT0F1NVU1SlVEaFAzaVZFUEVpd1ZpYjNDQXdpbW9RN2U4eUg1akZkeUdpLS1ZdHJEdzdtT29kRkdZTUpHQ0h6NTF0ZkJ6T2NTcmp2RnFrZHBnWUs5dGZ3cmZNWktMLVZlM2x2cnlxby04NFVIeXNqaWp5eU9DMDFzdTJYbks3c1l6MXREcGJoTm10d285ZGFDOF9NZFJJX19ycFNHM3I0cnQ4S2ctUERZUjYyUVo4WHp3WTBMdjEtN0F5QU5OM1lrV2N3MVBxV1FmY3Z0WUk2QjlWMEE1UFNxNmc0VU1tRkJ3SE9xZDVM",
-          "editorial_story_id": "story_020870",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/25/crash-with-injuries-causes-2-mile-backup-floridas-turnpike-martin-county?outputType=amp",
-          "editorial_story_id": "story_023328",
-          "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
-          "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 5,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.96,
-          "shared_anchors": [
-            "October 26, 2026 king-tide coastal flooding on the Treasure Coast",
-            "Dyer Point Road in Martin County, listed as Southwest Dyer Point Road in the candidate",
-            "Martin County sheriff's involvement in the flooding response",
-            "Warnings about additional high water around upcoming high tides"
-          ],
-          "novel_facts": [
-            "Resident Terresa Baldwin describes temporary roadway flooding and water over her dock and patio.",
-            "Lt. Dave Rosko says three high-water rescue vehicles are ready and cautions against driving through floodwater."
-          ],
-          "reason": "The matching date, flooding episode, specific roadway and sheriff's involvement establish the same event despite the candidate's St. Lucie-focused headline. Resident observations and routine rescue-readiness advice add scene detail, not a material development or an independently newsworthy follow-up.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.94,
-          "shared_anchors": [
-            "October 26, 2026 king-tide coastal flooding on the Treasure Coast",
-            "Dyer Point Road in Palm City, listed as Southwest Dyer Point Road in the candidate metadata",
-            "Martin County Sheriff's Office involvement",
-            "High-water risks around subsequent high tides"
-          ],
-          "novel_facts": [
-            "Resident Terresa Baldwin describes flooding at her backyard, dock and patio, along with sewage odors and displaced snakes.",
-            "Lt. Dave Rosko says three high-water vehicles are ready for rescue efforts."
-          ],
-          "reason": "The matching date, flooding episode, specific road and sheriff's agency establish the same event despite the candidate's St. Lucie-focused headline. The incoming article adds resident observations and routine preparedness details, not a consequential new development or an independently newsworthy follow-up.",
-          "validation_errors": []
-        },
         {
           "category_key": "martin",
           "source_headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
@@ -1611,143 +1136,74 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Both reports mention a crash affecting northbound Florida's Turnpike traffic on a Sunday afternoon."
-          ],
-          "novel_facts": [
-            "The incoming crash occurred near Mile Marker 129 in Martin County at 2:17 p.m.",
-            "The incoming crash blocked the right lane and caused two miles of bumper-to-bumper traffic.",
-            "A fire truck was present at the incoming crash scene."
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "From Jensen Beach to Louisiana Tech: Andrew Burnette gets one more shot at college football - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/26/jensen-beach-louisiana-tech-andrew-burnette-gets-one-more-shot-college-football",
-          "canonical_slug": "2026-10-25-jensen-beachs-andrew-burnette-wins-legal-fight-for-fifth-year-returns-to-louisia",
-          "canonical_headline": "Jensen Beach's Andrew Burnette wins legal fight for fifth year, returns to Louisiana Tech",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Andrew Burnette, a Jensen Beach High School football player who moved from Michigan to Martin County around age 12",
-            "Legal challenge against the NCAA resulting in a fifth season of college football eligibility",
-            "Return to football at Louisiana Tech after regaining eligibility",
-            "Matching source headline about Burnette getting one more shot at college football"
-          ],
-          "novel_facts": [],
-          "reason": "Both articles cover Burnette's successful eligibility challenge and return to Louisiana Tech. The incoming account adds career background and personal quotes but reports no new ruling, eligibility development, or independently newsworthy consequence beyond the canonical story.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/crash-with-injuries-causes-2-mile-backup-on-floridas-turnpike-in-martin-county",
-          "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
-          "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMikANBVV95cUxQaERNdzYyU3phZjNrRlV6bjJ0WDJYSDNqX0F2QjZmRndRM0w3ckI4NlM1WDZDOFpxQWRneG1OSWV2NkRZN2hja25JUGJZNHFsNVB0bXR0UkMycUxpT3Bkd2Vxa0ZwTkF6U1V0QU9sQnZrUGVoNTIxVGhVTXoyN1ZPcWZnWl84TTNvU2NIZWgzU3dQSDJzZjI4d0hXaGh1ZWdWSkxwYXhJam5yT0F1NVU1SlVEaFAzaVZFUEVpd1ZpYjNDQXdpbW9RN2U4eUg1akZkeUdpLS1ZdHJEdzdtT29kRkdZTUpHQ0h6NTF0ZkJ6T2NTcmp2RnFrZHBnWUs5dGZ3cmZNWktMLVZlM2x2cnlxby04NFVIeXNqaWp5eU9DMDFzdTJYbks3c1l6MXREcGJoTm10d285ZGFDOF9NZFJJX19ycFNHM3I0cnQ4S2ctUERZUjYyUVo4WHp3WTBMdjEtN0F5QU5OM1lrV2N3MVBxV1FmY3Z0WUk2QjlWMEE1UFNxNmc0VU1tRkJ3SE9xZDVM",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Crash with injuries causes 2-mile backup on Florida's Turnpike in Martin County - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/25/crash-with-injuries-causes-2-mile-backup-floridas-turnpike-martin-county?outputType=amp",
-          "canonical_slug": "2026-10-25-injury-crash-on-floridas-turnpike-backs-up-traffic-2-miles-in-stuart",
-          "canonical_headline": "Injury Crash on Florida's Turnpike Backs Up Traffic 2 Miles in Stuart",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Strong winds, king tides flood Palm City; sheriff’s office warns of more high water",
-      "generated_card_count": 0,
-      "elapsed_seconds": 44.237
+      "live_hero_headline": "Martin County approves one-year data center pause; Kanner Highway proposal exempt",
+      "generated_card_count": 2,
+      "elapsed_seconds": 91.339
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 17,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 3,
       "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 28.273,
+          "elapsed_seconds": 24.575,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 28.273,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 24.575,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 80,
+          "baseline_anchor": "fatality",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "austin",
+            "duty",
+            "firefighter",
+            "hodge",
+            "lucie",
+            "paramedic"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - WPEC",
+          "headline": "Funeral procession in Fort Pierce honors St. Lucie County firefighter Austin Hodge"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
@@ -1755,16 +1211,16 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 12,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
-          "editorial_story_id": "story_023150",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "editorial_story_id": "custom:55ae9e407b6b6bcf4a1009834738d18e",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1779,9 +1235,9 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
-          "editorial_story_id": "story_023612",
+          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
+          "editorial_story_id": "",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
@@ -1789,12 +1245,22 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death - WPTV",
+          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
           "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
           "editorial_story_id": "story_023150",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit, sheriff says",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
+          "editorial_story_id": "story_023612",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1809,12 +1275,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027",
-          "editorial_story_id": "story_023536",
-          "canonical_slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
+          "editorial_story_id": "story_023150",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1839,16 +1305,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Missing girl, 5, found dead in Fort Pierce water near home - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-girl-5-reported-missing-in-fort-pierce/74238189",
-          "editorial_story_id": "story_023185",
-          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-confirms-death-of-firefighter",
           "editorial_story_id": "story_023150",
@@ -1856,41 +1312,21 @@
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive",
-          "editorial_story_id": "story_022992",
-          "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
-          "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County Fire Board terminates chief after calls for leadership change - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
-          "editorial_story_id": "story_022576",
-          "canonical_slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
-          "canonical_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
-          "publisher": "www.wptv.com",
+          "source_headline": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - WPEC",
+          "source_url": "https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-",
+          "publisher": "cbs12.com",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:named-person-death:austin-hodge",
             "story:custom:55ae9e407b6b6bcf4a1009834738d18e",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+            "source:https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
@@ -1905,19 +1341,19 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 7,
+      "material_update_promotion_evaluation_count": 9,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 7,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -1928,17 +1364,12 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.99,
           "shared_anchors": [
-            "St. Lucie County Fire District firefighter-paramedic Austin Hodge",
-            "Death on Saturday, Oct. 24, 2026",
-            "More than nine years of service with the district",
-            "Line-of-duty death designation"
+            "St. Lucie County firefighter-paramedic Austin Hodge, 34, died while on duty after being found unresponsive in his firehouse bunk.",
+            "Siblings Alexis Hodge and Javan Hodge are seeking answers about his final hours.",
+            "Both articles use the identical WPTV source URL and share the named-person-death:austin-hodge incident anchor."
           ],
-          "novel_facts": [
-            "Hodge was found unresponsive in his firehouse bunk during shift change.",
-            "Firefighters escorted him from the medical examiner's office to a funeral home through Fort Pierce.",
-            "He also worked as a respiratory therapist and served on the district's Honor Guard and Firefighter Challenge Team."
-          ],
-          "reason": "The incoming article covers the same named firefighter's death. Its additions are tribute coverage, biographical details and circumstances of discovery, not a new official cause, finding or other consequential development. The procession and colleague recollections do not constitute an independently newsworthy follow-up.",
+          "novel_facts": [],
+          "reason": "The canonical already covers the same death and the siblings' search for answers from the same source report. The fuller incoming text adds family recollections and background but no established cause, investigative finding, concrete accountability allegation, or other material development. Its later publication date does not establish a new event or independently newsworthy follow-up.",
           "validation_errors": []
         },
         {
@@ -1974,7 +1405,66 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
+          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "St. Lucie County Sheriff's Office employee Tyler Horstman",
+            "Off-duty crash in Vero Beach while driving an agency vehicle",
+            "Felony DUI warrant and surrender at the Indian River County Jail on Monday, October 26"
+          ],
+          "novel_facts": [
+            "The incoming account specifies a March 2 crash date and a blood alcohol concentration of 0.246.",
+            "It adds administrative-leave timing, booking and bond details, and the status of the internal investigation."
+          ],
+          "reason": "Both articles report the same crash-related felony DUI arrest and surrender. The incoming article supplies additional supporting details, but establishes no subsequent charge, ruling, finding, or other material development beyond the arrest already covered by the canonical.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "St. Lucie County firefighter-paramedic Austin Hodge",
+            "Found unresponsive in his bunk at the firehouse",
+            "Death while on duty on Saturday, Oct. 24, 2026"
+          ],
+          "novel_facts": [
+            "Firefighters escorted Hodge from the medical examiner's office to a funeral home through Fort Pierce.",
+            "Colleague Dr. Aleta Paschal shared tributes and described his additional work as a respiratory therapist.",
+            "Hodge served more than nine years with the district and participated in its Honor Guard and Firefighter Challenge Team."
+          ],
+          "reason": "Both articles concern the same named firefighter's on-duty death under the same circumstances. The incoming story adds a memorial procession, colleague recollections and service background, but no new cause, investigative finding or other consequential development. The line-of-duty status is already reflected in the canonical.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit, sheriff says",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
@@ -1991,47 +1481,15 @@
           "confidence": 0.97,
           "shared_anchors": [
             "St. Lucie County Detective Tyler Horstman",
-            "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
+            "Off-duty crash in Vero Beach while driving a sheriff's office vehicle",
             "Felony DUI arrest warrant and surrender at the Indian River County Jail",
             "Announcement by Sheriff Richard Del Toro Jr."
           ],
           "novel_facts": [
-            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
-            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
+            "The incoming specifies a March 2 crash date and a blood alcohol concentration of .246.",
+            "It adds September notification and administrative-leave dates and says the internal investigation is paused pending criminal proceedings."
           ],
-          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
-          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
-          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "St. Lucie County Fire District firefighter-paramedic Austin Hodge",
-            "Death on Saturday, Oct. 24, 2026",
-            "Line-of-duty death designation",
-            "More than nine years of service with the district"
-          ],
-          "novel_facts": [
-            "Hodge was found unresponsive in his firehouse bunk during shift change.",
-            "Firefighters escorted him from the medical examiner's office to a funeral home through Fort Pierce.",
-            "He also worked as a respiratory therapist and served on the district's Honor Guard and Firefighter Challenge Team.",
-            "Colleague Dr. Aleta Paschal shared personal tributes."
-          ],
-          "reason": "Both articles concern Austin Hodge's same line-of-duty death. The incoming report adds a memorial procession, personal tributes, service background and discovery circumstances, but no official cause, consequential finding or other material development. These additions do not justify rewriting the canonical or creating an independent follow-up.",
+          "reason": "Both articles cover Horstman's felony DUI case arising from the same agency-vehicle crash and his surrender. The incoming adds supporting chronology and administrative context, but reports no new charge, ruling, finding, or subsequent development beyond the arrest already covered.",
           "validation_errors": []
         },
         {
@@ -2064,18 +1522,33 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027",
-          "canonical_slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "St. Lucie County firefighter-paramedic Austin Hodge",
+            "Found unresponsive in his firehouse bunk",
+            "Death while on duty Saturday, Oct. 24, 2026"
+          ],
+          "novel_facts": [
+            "Firefighters escorted Hodge from the medical examiner's office to a funeral home through Fort Pierce.",
+            "Colleague Dr. Aleta Paschal shared memories of working with Hodge as a respiratory therapist.",
+            "Hodge served on the district's Honor Guard and Firefighter Challenge Team."
+          ],
+          "reason": "Both articles concern Hodge's same on-duty death. The incoming article adds a tribute procession, colleague recollections and service background, not a new finding, consequential development or distinct accountability question. The line-of-duty designation is already reflected in the canonical headline.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -2088,23 +1561,22 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.96,
+          "confidence": 0.99,
           "shared_anchors": [
-            "St. Lucie County Firefighter-Paramedic Austin Hodge",
-            "St. Lucie County Fire District",
-            "Hodge’s death and the district’s response to his loss"
+            "Deceased St. Lucie County firefighter-paramedic Austin Hodge",
+            "St. Lucie County Fire District honoring Hodge following his death"
           ],
           "novel_facts": [
-            "The district plans an approximately 2 p.m. procession to Stone Brothers Funeral Home.",
-            "The procession route includes S. 35th Street, Virginia Avenue, S. 13th Street, Delaware Avenue and S. 7th Street.",
-            "Fire apparatus will line the route, where community members may safely pay their respects."
+            "A procession to Stone Brothers Funeral Home is scheduled for around 2 p.m.",
+            "The announced route follows S. 35th Street, Virginia Avenue, S. 13th Street, Delaware Avenue and S. 7th Street.",
+            "Fire District apparatus will line the route, and community members may safely pay their respects."
           ],
-          "reason": "The incoming article is a memorial-procession follow-up to the same named firefighter’s death. It adds ceremonial logistics, but no new finding, consequential development or distinct public-interest question warranting an update or separate URL.",
+          "reason": "The incoming article concerns memorial arrangements following the same named firefighter's death. Procession timing, routing and tribute details do not establish a material development in the death or a distinct accountability or public-interest follow-up.",
           "validation_errors": []
         },
         {
@@ -2137,21 +1609,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Missing girl, 5, found dead in Fort Pierce water near home - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-girl-5-reported-missing-in-fort-pierce/74238189",
-          "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
-          "canonical_headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-fire-district-confirms-death-of-firefighter",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
@@ -2164,52 +1621,20 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive",
-          "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
-          "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County Fire Board terminates chief after calls for leadership change - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
-          "canonical_slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
-          "canonical_headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Austin Hodge’s siblings seek answers after St. Lucie County firefighter’s death",
-      "generated_card_count": 0,
-      "elapsed_seconds": 47.306
+      "elapsed_seconds": 57.753
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 18,
-      "publishable_source_count": 8,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -2226,29 +1651,19 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
-          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
-          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
-          "editorial_story_id": "story_023445",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
-          "editorial_story_id": "story_023150",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "editorial_story_id": "custom:55ae9e407b6b6bcf4a1009834738d18e",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -2260,117 +1675,23 @@
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui,warrant",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
-          "editorial_story_id": "story_023612",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
-          "editorial_story_id": "story_023499",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
-          "source_url": "https://cbs12.com/news/local/king-tide-flooding-palm-beach-county-treasure-coast-st-lucie-county-flooding-sw-34th-street-midtown-beach-closure-juno-beach-pier-closure-florida-coastal-flood-warning-florida-news",
-          "editorial_story_id": "story_023499",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027",
-          "editorial_story_id": "story_023536",
-          "canonical_slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
-          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:named-person-death:austin-hodge",
-            "story:custom:55ae9e407b6b6bcf4a1009834738d18e",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident",
-            "story"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:austin-hodge,story:custom:55ae9e407b6b6bcf4a1009834738d18e",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 6,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 6,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
-          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
-          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "St. Lucie County Sheriff's Office employee Tyler Horstman",
-            "Off-duty crash in Vero Beach while driving an agency vehicle",
-            "Felony DUI warrant and surrender at the Indian River County Jail on Monday, October 26"
-          ],
-          "novel_facts": [
-            "The incoming account specifies a March 2 crash date and a blood alcohol concentration of 0.246.",
-            "It adds administrative-leave timing, booking and bond details, and the status of the internal investigation."
-          ],
-          "reason": "Both articles report the same crash-related felony DUI arrest and surrender. The incoming article supplies additional supporting details, but establishes no subsequent charge, ruling, finding, or other material development beyond the arrest already covered by the canonical.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/st-lucie-county-honors-firefighter-paramedic-austin-hodge-after-line-of-duty-death",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -2381,17 +1702,12 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.99,
           "shared_anchors": [
-            "St. Lucie County Fire District firefighter-paramedic Austin Hodge",
-            "Death on Saturday, Oct. 24, 2026",
-            "More than nine years of service with the district",
-            "Line-of-duty death designation"
+            "St. Lucie County firefighter-paramedic Austin Hodge, 34, died while on duty after being found unresponsive in his firehouse bunk.",
+            "Siblings Alexis Hodge and Javan Hodge are seeking answers about his final hours.",
+            "Both articles use the identical WPTV source URL and share the named-person-death:austin-hodge incident anchor."
           ],
-          "novel_facts": [
-            "Hodge was found unresponsive in his firehouse bunk during shift change.",
-            "Firefighters escorted him from the medical examiner's office to a funeral home through Fort Pierce.",
-            "He also worked as a respiratory therapist and served on the district's Honor Guard and Firefighter Challenge Team."
-          ],
-          "reason": "The incoming article covers the same named firefighter's death. Its additions are tribute coverage, biographical details and circumstances of discovery, not a new official cause, finding or other consequential development. The procession and colleague recollections do not constitute an independently newsworthy follow-up.",
+          "novel_facts": [],
+          "reason": "The canonical already covers the same death and the siblings' search for answers from the same source report. The fuller incoming text adds family recollections and background but no established cause, investigative finding, concrete accountability allegation, or other material development. Its later publication date does not establish a new event or independently newsworthy follow-up.",
           "validation_errors": []
         },
         {
@@ -2424,113 +1740,10 @@
           ],
           "reason": "Both articles cover the same Oct. 26 surrender and felony DUI arrest arising from the same crash. The incoming article supplies additional particulars of that arrest announcement and routine booking disposition, rather than a distinct material development or independently newsworthy follow-up.",
           "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
-          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
-          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
-          "shared_anchors": [
-            "St. Lucie County Detective Tyler Horstman",
-            "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
-            "Felony DUI arrest warrant and surrender at the Indian River County Jail",
-            "Announcement by Sheriff Richard Del Toro Jr."
-          ],
-          "novel_facts": [
-            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
-            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
-          ],
-          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.94,
-          "shared_anchors": [
-            "October 26, 2026 king-tide coastal flooding on the Treasure Coast",
-            "Dyer Point Road in Palm City, listed as Southwest Dyer Point Road in the candidate metadata",
-            "Martin County Sheriff's Office involvement",
-            "High-water risks around subsequent high tides"
-          ],
-          "novel_facts": [
-            "Resident Terresa Baldwin describes flooding at her backyard, dock and patio, along with sewage odors and displaced snakes.",
-            "Lt. Dave Rosko says three high-water vehicles are ready for rescue efforts."
-          ],
-          "reason": "The matching date, flooding episode, specific road and sheriff's agency establish the same event despite the candidate's St. Lucie-focused headline. The incoming article adds resident observations and routine preparedness details, not a consequential new development or an independently newsworthy follow-up.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
-          "source_url": "https://cbs12.com/news/local/king-tide-flooding-palm-beach-county-treasure-coast-st-lucie-county-flooding-sw-34th-street-midtown-beach-closure-juno-beach-pier-closure-florida-coastal-flood-warning-florida-news",
-          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Identical WPEC source URL and publication date of October 26, 2026",
-            "Same king-tide coastal flooding episode affecting Palm Beach County and the Treasure Coast",
-            "Same coastal St. Lucie County flood warning ending at 2 a.m. Thursday",
-            "Shared location anchors include SW Dyer Point Road, SW 34th Street and Cornell Avenue, Ocean Avenue, and South Ocean Boulevard",
-            "Martin County Sheriff's Office involvement"
-          ],
-          "novel_facts": [],
-          "reason": "The exact source match, persistent story match, warning deadline, and specific locations establish the same flooding episode. The incoming text expands regional scene details, resident accounts, and closures, but provides no demonstrated subsequent development or independently newsworthy follow-up beyond the already represented source report.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027",
-          "canonical_slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.384
+      "elapsed_seconds": 22.15
     }
   ]
 }
