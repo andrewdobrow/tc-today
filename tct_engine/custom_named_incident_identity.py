@@ -9,10 +9,11 @@ occupation, broad topic, or editorial/registry story ID alone.
 from __future__ import annotations
 
 from datetime import date
+from email.utils import parsedate_to_datetime
 import re
 
 _NAME = re.compile(
-    r"(?=\b([A-Z][a-zA-Z'’-]{2,})\s+([A-Z][a-zA-Z'’-]{2,})\b)"
+    r"(?=\b([A-Z][a-zA-Z'’-]{2,})(?:\s+[A-Z]\.?)?\s+([A-Z][a-zA-Z'’-]{2,})\b)"
 )
 _BAD_FIRST = {
     "st", "saint", "lucie", "county", "city", "police", "sheriff",
@@ -69,13 +70,24 @@ def _text(item):
 
 
 def _publication_date(item):
-    slug = str(item.get("slug") or "")
-    values = [slug[:10], str(item.get("date") or "")[:10]]
-    for val in values:
+    # Generated archive entries carry ISO slug dates; incoming feeds often carry
+    # RFC-2822 source_published/published timestamps and have NO slug yet. The
+    # pre-publication guard must work for both representations.
+    for key in ("slug", "date", "source_published", "published_raw",
+                "published", "first_published"):
+        raw = str(item.get(key) or "").strip()
+        if not raw:
+            continue
+        iso = re.search(r"\b20\d{2}-\d{2}-\d{2}\b", raw)
+        if iso:
+            try:
+                return date.fromisoformat(iso.group(0))
+            except ValueError:
+                continue
         try:
-            return date.fromisoformat(val)
-        except (ValueError, TypeError):
-            pass
+            return parsedate_to_datetime(raw).date()
+        except (TypeError, ValueError, IndexError):
+            continue
     return None
 
 
