@@ -38263,6 +38263,11 @@ def write_archives(all_categories, top_cat):
         archive, OUTPUT_DIR
     )
     validate_archive_incident_uniqueness(archive, OUTPUT_DIR)
+    # Separate fail-closed custom protection: if a probable same-person incident
+    # escapes every automatic merger, NEVER deploy two active permalinks. This
+    # verifier makes no speculative redirect and preserves both records for review.
+    from tct_engine.custom_named_incident_identity import assert_no_unresolved_named_custom_collisions
+    assert_no_unresolved_named_custom_collisions(archive)
     _runtime_timing_detail("write_archives final archive authority+integrity audits", _detail_started)
     _detail_started = time.perf_counter()
 

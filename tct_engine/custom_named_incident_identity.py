@@ -123,16 +123,25 @@ def _localities(text):
 
 
 def _dated_crashes(text):
-    # Compare explicitly attributed CRASH dates only; publication dates are not
-    # incident dates. A new crash by the same person must remain separate.
-    result = set()
-    for m in _CRASH_RX.finditer(text):
-        for date_match in _MONTH_RX.finditer(text[max(0, m.start()-35):m.end()+35]):
-            month = _MONTHS.index(date_match.group(1).lower()) + 1
-            day = int(date_match.group(2))
+    """Extract ONLY dates explicitly attached to a crash, never an arrest date.
+
+    A publisher may write 'arrested October 26 after March 2 crash'; merely
+    searching for a month within 35 characters of 'crash' would incorrectly
+    treat October 26 as the crash date and reject the true duplicate.
+    """
+    dates = set()
+    month_pat = r"(" + "|".join(_MONTHS) + r")\s+(\d{1,2})"
+    templates = (
+        r"\b" + month_pat + r"\s+(?:\w+\s+){0,2}(?:crash|collision|wreck)\b",
+        r"\b(?:crash|collision|wreck)(?:\s+(?:occurred|happened|on|of|dated)){0,3}\s+" + month_pat + r"\b",
+    )
+    for template in templates:
+        for match in re.finditer(template, text, re.I):
+            month = _MONTHS.index(match.group(1).lower()) + 1
+            day = int(match.group(2))
             if 1 <= day <= 31:
-                result.add((month, day))
-    return result
+                dates.add((month, day))
+    return dates
 
 
 def same_named_incident_as_custom(candidate, authority):
@@ -189,3 +198,104 @@ def same_named_incident_as_custom(candidate, authority):
         right_date.isoformat() + "|" + ",".join(sorted(shared_facts))
     )
     return True, key
+
+
+def potential_named_custom_collision(candidate, authority):
+    """A deliberately broader *hold* predicate, never redirect authority.
+
+    This runs independently at the final publication boundary.  A probable
+    duplicate with only two independently matching facts must not be allowed
+    to publish simply because the higher-confidence automatic merger required
+    three. A false positive halts publishing for human review; it NEVER
+    redirects, erases, or alters an existing article.
+    """
+    if not isinstance(candidate, dict) or not isinstance(authority, dict):
+        return False
+    if not (authority.get("is_custom") or authority.get("authoritative_custom")):
+        return False
+    if candidate.get("is_custom") or candidate.get("authoritative_custom"):
+        return False
+    source_slug = str(candidate.get("slug") or "")
+    authority_slug = str(authority.get("slug") or "")
+    if not source_slug or not authority_slug or source_slug == authority_slug:
+        return False
+
+    candidate_day = _publication_date(candidate)
+    authority_day = _publication_date(authority)
+    if not candidate_day or not authority_day:
+        return False
+    if abs((candidate_day - authority_day).days) > 3:
+        return False
+    subject = _subject(authority)
+    if not subject:
+        return False
+    first, last = subject
+    lead = " ".join(str(candidate.get(k) or "")[:350] for k in (
+        "headline", "teaser", "body", "article_text"
+    ))
+    if not _person_pattern(first, last).search(lead):
+        return False
+    # A differently named headline subject needs independent editorial review,
+    # not silent suppression as the custom person's report.
+    for match in _NAME.finditer(str(candidate.get("headline") or "")):
+        given, family = match.group(1).lower(), match.group(2).lower()
+        if given in _BAD_FIRST or family in _BAD_LAST:
+            continue
+        if (given, family) != subject:
+            return False
+
+    left, right = _text(candidate), _text(authority)
+    if not (_localities(left) & _localities(right)):
+        return False
+    shared = _facts(left) & _facts(right)
+    if len(shared) < 2 or not (shared & _STRONG):
+        return False
+    left_crashes, right_crashes = _dated_crashes(left), _dated_crashes(right)
+    if left_crashes and right_crashes and not left_crashes.intersection(right_crashes):
+        return False
+    return True
+
+
+def assert_no_unresolved_named_custom_collisions(archive):
+    """Fail closed before deployment if an active archive escaped custom authority.
+
+    Unlike automatic canonical cleanup, this independent barrier does *not*
+    guess a redirect target or change content. It prevents the publication
+    transaction from succeeding until a possible same-person incident can be
+    resolved safely. Earlier unaffected production output remains on the site.
+    """
+    rows = [row for row in (archive or []) if isinstance(row, dict) and row.get("slug")]
+    authorities = [
+        row for row in rows
+        if (row.get("is_custom") or row.get("authoritative_custom"))
+        and _subject(row)
+    ]
+    generated = [
+        row for row in rows
+        if not (row.get("is_custom") or row.get("authoritative_custom"))
+    ]
+    collisions = []
+    for candidate in generated:
+        for authority in authorities:
+            if potential_named_custom_collision(candidate, authority):
+                collisions.append({
+                    "generated_slug": candidate["slug"],
+                    "custom_slug": authority["slug"],
+                })
+                # Limit exceptions to a useful bounded diagnostic.
+                if len(collisions) >= 10:
+                    break
+        if len(collisions) >= 10:
+            break
+    if collisions:
+        details = "; ".join(
+            f"{item['generated_slug']} -> custom:{item['custom_slug']}"
+            for item in collisions
+        )
+        raise RuntimeError(
+            "Custom canonical publication safety gate FAILED: unresolved "
+            "possible duplicate(s) of manually published custom articles. "
+            "The update must not deploy a second live permalink; investigate "
+            f"and resolve these identities first: {details}"
+        )
+    return True
