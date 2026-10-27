@@ -35,6 +35,14 @@ export default {
   // Checkout-first by design: Stripe collects the email and payment method. No TCT account is required
   // before Checkout. The signed Stripe webhook establishes/links the identity and paid entitlement.
   fetch: withSupabase({ auth: 'none' }, async (req) => {
+    // Keep old subscription billing/portal/webhooks intact. During the public
+    // donation launch set the Supabase Edge Function environment variable
+    // TCT_DISABLE_NEW_SUBSCRIPTIONS=true and deploy this function before launch.
+    if (Deno.env.get('TCT_DISABLE_NEW_SUBSCRIPTIONS') === 'true') {
+      return Response.json({
+        error: 'New paid reading memberships are closed. Treasure Coast Today news is free for everyone.',
+      }, { status: 410 })
+    }
     if (!stripeSecret || !monthlyPrice || !annualPrice) {
       return Response.json({ error: 'Stripe membership secrets are not configured.' }, { status: 503 })
     }
