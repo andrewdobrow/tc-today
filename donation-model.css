@@ -1,9 +1,81 @@
-/* TCT reader-supported, free-news mode. Keep the existing visual language. */
-.tct-donate-header{min-width:98px;flex-direction:row!important;justify-content:center;text-align:center;gap:5px!important}
-/* Decorative hearts always match their Donate label: white on coral buttons,
-   and inherited text color on ordinary footer/inline links. */
-.tct-donate-heart{color:inherit;font-size:1.07em;display:inline-block;line-height:1;vertical-align:-.025em;margin-right:.12em}
-.tct-donate-header .tct-donate-heart{flex-shrink:0}
+/* Reader-supported free news. The header CTA is a real button-style link,
+   not a two-line membership/pricing card. Mirror the restrained coral footer CTA. */
+.site-masthead a.tct-donate-header {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  min-height: 40px !important;
+  padding: 7px 12px !important;
+  border: 1px solid #f26445 !important;
+  border-radius: 7px !important;
+  background: #f26445 !important;
+  color: #fff !important;
+  box-shadow: 0 5px 16px rgba(0,0,0,.13);
+  font-family: "DM Sans", sans-serif;
+  line-height: 1 !important;
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none !important;
+}
+.site-masthead a.tct-donate-header:hover,
+.site-masthead a.tct-donate-header:focus-visible {
+  background: #dc5338 !important;
+  border-color: #dc5338 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+}
+.site-masthead a.tct-donate-header .membership-subscribe-label {
+  color: inherit !important;
+  font: 850 12px/1 "DM Sans", sans-serif !important;
+  letter-spacing: .045em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+}
+/* Never use a Unicode heart in a donation action: it may turn into an
+   oversized 3D red emoji. SVG inherits the label color and has a fixed size. */
+svg.tct-donate-heart {
+  display: inline-block;
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px;
+  max-width: 12px;
+  flex: 0 0 12px;
+  color: inherit;
+  fill: currentColor;
+  stroke: none;
+  vertical-align: -1px;
+  margin-right: 4px;
+}
+.tct-donate-header svg.tct-donate-heart { margin-right: 0; }
+.tct-donate-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none !important;
+}
+.tct-donate-button svg.tct-donate-heart { margin-right: 0; }
+@media (max-width: 560px) {
+  .site-masthead a.tct-donate-header {
+    min-height: 36px !important;
+    gap: 5px !important;
+    padding: 7px 9px !important;
+  }
+  .site-masthead a.tct-donate-header .membership-subscribe-label {
+    font-size: 11px !important;
+    letter-spacing: .01em !important;
+  }
+  .site-masthead a.tct-donate-header svg.tct-donate-heart {
+    width: 11px !important;
+    height: 11px !important;
+    min-width: 11px;
+    max-width: 11px;
+    flex-basis: 11px;
+  }
+}
 
 .tct-donate-page{min-height:60vh;padding:48px 20px 88px;background:#faf8f4;color:#252522}
 .tct-donate-content{max-width:830px;margin:0 auto}
