@@ -63,6 +63,24 @@ def test_same_incident_survives_role_only_headline_and_middle_initial():
     assert basis.startswith("named-custom-incident|tyler-horstman|")
 
 
+
+def test_incoming_rss_source_without_slug_still_resolves_to_custom():
+    # This is the important forward-publication form: no minted permalink yet.
+    incoming = duplicate()
+    incoming.pop("slug")
+    incoming.pop("date")
+    incoming["source_published"] = "Tue, 27 Oct 2026 01:08:00 GMT"
+    assert same_named_incident_as_custom(incoming, custom())[0]
+
+
+def test_middle_initial_in_manual_custom_headline_is_supported():
+    authority = custom()
+    authority["headline"] = authority["headline"].replace(
+        "Tyler Horstman", "Tyler A. Horstman"
+    )
+    assert same_named_incident_as_custom(duplicate(), authority)[0]
+
+
 def test_no_surname_only_capture():
     incoming = duplicate()
     incoming["teaser"] = incoming["teaser"].replace("Tyler A. Horstman", "Detective Horstman")
