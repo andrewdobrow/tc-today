@@ -144,6 +144,31 @@ def _dated_crashes(text):
     return dates
 
 
+def _crash_dates_compatible(left, right):
+    """Permit a one-day *reported crash-date* discrepancy, never a different incident.
+
+    This is only one input to the independent full-person, same-locality, same-week,
+    multi-fact custom identity contract. A source may report a late-night crash as
+    March 1 while an agency records March 2; exact date equality would let a
+    rewritten headline publish as a second canonical article. Two or more days
+    apart still fail closed. Invalid dates also fail closed.
+    """
+    if not left or not right:
+        return True  # Preserve the existing no-explicit-crash-date behavior.
+    if left.intersection(right):
+        return True
+    valid_left, valid_right = set(), set()
+    for source, target in ((left, valid_left), (right, valid_right)):
+        for month, day in source:
+            try:
+                target.add(date(2000, month, day).timetuple().tm_yday)
+            except (ValueError, TypeError):
+                return False
+    # Leap year gives 366 days, so Dec 31 vs Jan 1 is also one day apart.
+    return any(min(abs(a - b), 366 - abs(a - b)) <= 1
+               for a in valid_left for b in valid_right)
+
+
 def same_named_incident_as_custom(candidate, authority):
     """Return (proven, key). No guessed identity or destructive fuzzy redirects."""
     if not isinstance(candidate, dict) or not isinstance(authority, dict):
@@ -190,7 +215,7 @@ def same_named_incident_as_custom(candidate, authority):
         return False, ""
     candidate_crashes = _dated_crashes(candidate_text)
     authority_crashes = _dated_crashes(authority_text)
-    if candidate_crashes and authority_crashes and not (candidate_crashes & authority_crashes):
+    if not _crash_dates_compatible(candidate_crashes, authority_crashes):
         return False, ""
 
     key = (
@@ -251,7 +276,7 @@ def potential_named_custom_collision(candidate, authority):
     if len(shared) < 2 or not (shared & _STRONG):
         return False
     left_crashes, right_crashes = _dated_crashes(left), _dated_crashes(right)
-    if left_crashes and right_crashes and not left_crashes.intersection(right_crashes):
+    if not _crash_dates_compatible(left_crashes, right_crashes):
         return False
     return True
 
