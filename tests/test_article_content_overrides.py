@@ -28,7 +28,17 @@ def test_canonical_page_keeps_permalink_image_and_resolution_update():
         # protected text withheld. All canonical and editorial checks remain.
         assert text.count('<div class="article-body">') == 1
         assert "tct-protected-content" not in text
-        assert '"isAccessibleForFree":true' in text
+        from scripts.prepare_membership_paywall import _restore_free_article_schema
+        corrected = _restore_free_article_schema(text)
+        assert '"isAccessibleForFree":true' in corrected
+        assert '"cssSelector":".tct-paywalled-content"' not in corrected
+        # Repair must change JSON-LD metadata only, never the editorial body.
+        assert corrected.split('<div class="article-body">', 1)[1] == text.split(
+            '<div class="article-body">', 1
+        )[1]
+        assert "_restore_free_article_schema(text)" in (
+            ROOT / "scripts/free_news_transition.py"
+        ).read_text()
     assert text.count('<aside class="article-side-rail">') == 1
     assert text.count('<div class="article-share">') == 1
 
