@@ -390,6 +390,14 @@ def transition(root: Path, snapshot_path: Path, payment_link: str) -> dict:
     for path in paths:
         original = path.read_text(encoding="utf-8", errors="ignore")
         text = article_updates.get(path, original)
+        # A few editor-authored overrides already had a complete public body
+        # before this migration, but retained an old isAccessibleForFree:false
+        # JSON-LD flag and paywall hasPart. Fix *metadata only* on fully
+        # public stories; do not rewrite redirect shells or locked previews.
+        if (path.parent == root / "articles"
+                and '<div class="article-body">' in text
+                and not ACTUAL_PAYWALL_MARKER_RE.search(text)):
+            text = _restore_free_article_schema(text)
         text = _rewrite_chrome(text, path.name)
         if path == root / "index.html":
             text = _rewrite_home_support(text)

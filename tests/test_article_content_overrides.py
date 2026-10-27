@@ -19,8 +19,26 @@ def test_canonical_page_keeps_permalink_image_and_resolution_update():
     assert 'https://treasurecoast.today/images/ethan-boyd.png' in text
     assert f'<link rel="canonical" href="https://treasurecoast.today/articles/{SLUG}.html">' in text
     assert text.count('Original report:') <= 1
-    assert len(re.findall(r'(?<![\w-])data-tct-paywall(?![\w-])', text, re.I)) == 1
-    assert text.count('<div id="tct-protected-content"') == 1
+    if "data-tct-paywall" in text:
+        # Historical paid version: exactly one protected placeholder.
+        assert len(re.findall(r'(?<![\w-])data-tct-paywall(?![\w-])', text, re.I)) == 1
+        assert text.count('<div id="tct-protected-content"') == 1
+    else:
+        # Reader-supported publication: a fully accessible body with no
+        # protected text withheld. All canonical and editorial checks remain.
+        assert text.count('<div class="article-body">') == 1
+        assert "tct-protected-content" not in text
+        from scripts.prepare_membership_paywall import _restore_free_article_schema
+        corrected = _restore_free_article_schema(text)
+        assert '"isAccessibleForFree":true' in corrected
+        assert '"cssSelector":".tct-paywalled-content"' not in corrected
+        # Repair must change JSON-LD metadata only, never the editorial body.
+        assert corrected.split('<div class="article-body">', 1)[1] == text.split(
+            '<div class="article-body">', 1
+        )[1]
+        assert "_restore_free_article_schema(text)" in (
+            ROOT / "scripts/free_news_transition.py"
+        ).read_text()
     assert text.count('<aside class="article-side-rail">') == 1
     assert text.count('<div class="article-share">') == 1
 

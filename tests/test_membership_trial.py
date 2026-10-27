@@ -61,6 +61,19 @@ def test_subscribe_page_and_checkout_copy_match_intro_offer():
     page = (ROOT / "subscribe.html").read_text()
     browser = (ROOT / "membership.js").read_text()
     css = (ROOT / "membership.css").read_text()
+    if 'tct-subscriptions-closed' in page:
+        # Retain previous Stripe entitlements and the customer portal,
+        # without advertising memberships after articles became free.
+        backend = (ROOT / "supabase/functions/create-checkout/index.ts").read_text()
+        presentation = (ROOT / "donation-model.css").read_text()
+        assert 'id="tct-legacy-membership-notice"' in page
+        assert "All TCT news is now free" in page
+        assert "donate.html" in page
+        assert ".tct-subscriptions-closed [data-membership-plans]" in presentation
+        assert "TCT_DISABLE_NEW_SUBSCRIPTIONS" in backend
+        assert "Your annual membership is active." in browser
+        assert "membership-intro-price" in css
+        return
     assert "Limited time &middot; $1 first month" in page
     assert "Choose your plan" in page
     assert "Full access starts at $1." in page

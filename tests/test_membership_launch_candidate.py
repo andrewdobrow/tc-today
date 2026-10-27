@@ -64,6 +64,19 @@ def test_sitewide_chrome_normalizer_preserves_dark_mode_and_launches_retained_pa
 
 def test_subscribe_page_is_real_landing_page_not_account_gate():
     page = (ROOT / "subscribe.html").read_text()
+    if 'tct-subscriptions-closed' in page:
+        # New, free-news site: old members retain the sign-in/billing portal,
+        # while promotional pricing and checkout must no longer be offered.
+        css = (ROOT / "donation-model.css").read_text()
+        backend = (ROOT / "supabase/functions/create-checkout/index.ts").read_text()
+        assert 'id="tct-legacy-membership-notice"' in page
+        assert "All TCT news is now free" in page
+        assert "/donate.html" in page
+        assert "noindex,follow" in page
+        assert ".tct-subscriptions-closed [data-membership-plans]" in css
+        assert "TCT_DISABLE_NEW_SUBSCRIPTIONS" in backend
+        assert "/membership.js" in page
+        return
     assert "Choose your plan" in page
     assert "Full access starts at $1." in page
     assert 'id="membership-plans"' in page

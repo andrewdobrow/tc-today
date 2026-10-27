@@ -28,7 +28,12 @@ def test_updated_october_article_preserves_date_and_validated_evolution():
     assert 'article:published_time" content="Thu, 08 Oct 2026' in page
     assert f'/articles/{NEW}.html' in page
     assert f'<h1 class="article-headline">{escape(row["headline"])}</h1>' in page
-    assert 'data-tct-paywall' in page
+    if 'data-tct-paywall' in page:
+        assert 'tct-protected-content' in page
+    else:
+        assert '<div class="article-body">' in page
+        assert 'tct-protected-content' not in page
+        assert '"isAccessibleForFree":true' in page
 
     def instant(value):
         return datetime.fromisoformat(value.replace('Z','+00:00'))
