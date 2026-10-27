@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-27T03:12:30Z",
+  "generated_at": "2026-10-27T03:57:37Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,36 +15,36 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
+      "category_eligibility_archive_recovery": 6,
       "generated_live": 2,
-      "generation_failed_archive_recovery": 2
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "contextless_update_lead": 2,
-      "no_category_eligible_sources": 5
+      "no_category_eligible_sources": 6,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 108.417,
+    "model_attempt_count": 3,
+    "model_elapsed_seconds": 54.765,
     "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 4,
+    "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 2,
-    "published_story_duplicate_suppression_count": 53,
-    "story_aware_update_context_count": 1,
-    "material_update_promotion_evaluation_count": 28,
+    "category_eligibility_rejection_count": 5,
+    "published_story_duplicate_suppression_count": 57,
+    "story_aware_update_context_count": 5,
+    "material_update_promotion_evaluation_count": 32,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 19,
-    "material_update_promotion_model_call_count": 9
+    "material_update_promotion_cache_hit_count": 26,
+    "material_update_promotion_model_call_count": 6
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 6,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -61,9 +61,24 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+        }
+      ],
       "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
@@ -83,7 +98,7 @@
           "editorial_story_id": "story_023612",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -137,12 +152,36 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:named-person-death:austin-hodge",
+            "story:story_023150",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:austin-hodge",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 3,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
@@ -155,8 +194,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -182,7 +221,7 @@
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -193,17 +232,16 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.97,
           "shared_anchors": [
-            "St. Lucie County Sheriff's Office Detective Tyler Horstman",
+            "St. Lucie County Detective Tyler Horstman",
             "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
             "Felony DUI arrest warrant and surrender at the Indian River County Jail",
             "Announcement by Sheriff Richard Del Toro Jr."
           ],
           "novel_facts": [
-            "Incoming specifies March 2 as the crash date.",
-            "Incoming reports a .246 blood alcohol concentration and says the agency received that result on Sept. 9.",
-            "Incoming adds administrative-leave information and says the internal investigation is paused pending criminal proceedings."
+            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
+            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
           ],
-          "reason": "Both articles report the same detective's felony DUI case and surrender following the same agency-vehicle crash. The incoming account adds supporting details about the already-reported charge and agency response, but establishes no subsequent arrest, ruling, finding, or other material development warranting an update or separate URL.",
+          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
           "validation_errors": []
         },
         {
@@ -217,8 +255,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -297,41 +335,31 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 39.532
+      "new_publication_stale_rejected_count": 1,
+      "elapsed_seconds": 30.289
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 9,
-      "selected_source_count": 4,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 8,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 25.854,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.87,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC"
+          "elapsed_seconds": 13.026,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 50.724,
-      "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+      "model_elapsed_seconds": 13.026,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -340,11 +368,36 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
+          "editorial_story_id": "story_023445",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
@@ -357,12 +410,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
-          "editorial_story_id": "story_023612",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "editorial_story_id": "story_023617",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui,warrant",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -372,7 +425,27 @@
           "editorial_story_id": "story_023612",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
+          "editorial_story_id": "story_023612",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/27/st-lucie-county-detective-faces-felony-dui-charge-accused-driving-3-times-legal-limit-sheriff",
+          "editorial_story_id": "story_023612",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -397,32 +470,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027",
-          "editorial_story_id": "story_023536",
-          "canonical_slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty - WFLX",
           "source_url": "https://www.wflx.com/2026/10/26/st-lucie-county-firefighter-paramedic-austin-hodge-dies-after-being-found-unresponsive?outputType=amp",
           "editorial_story_id": "story_023150",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
-          "editorial_story_id": "story_020870",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -436,13 +489,67 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 7,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:named-person-death:austin-hodge",
+            "story:custom:55ae9e407b6b6bcf4a1009834738d18e",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:austin-hodge,story:custom:55ae9e407b6b6bcf4a1009834738d18e",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 8,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 5,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "St. Lucie County Sheriff's Office employee Tyler Horstman",
+            "Off-duty crash in Vero Beach while driving an agency vehicle",
+            "Felony DUI warrant and surrender at the Indian River County Jail on Monday, October 26"
+          ],
+          "novel_facts": [
+            "The incoming account specifies a March 2 crash date and a blood alcohol concentration of 0.246.",
+            "It adds administrative-leave timing, booking and bond details, and the status of the internal investigation."
+          ],
+          "reason": "Both articles report the same crash-related felony DUI arrest and surrender. The incoming article supplies additional supporting details, but establishes no subsequent charge, ruling, finding, or other material development beyond the arrest already covered by the canonical.",
+          "validation_errors": []
+        },
         {
           "category_key": "crime",
           "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
@@ -476,12 +583,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui,warrant",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -490,20 +597,19 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
+          "confidence": 0.95,
           "shared_anchors": [
-            "St. Lucie County Sheriff's Office Detective Tyler Horstman",
-            "Felony DUI warrant connected to an off-duty crash in Vero Beach",
-            "Crash involved a sheriff's office vehicle",
-            "Horstman surrendered at the Indian River County Jail",
-            "Sheriff Richard Del Toro Jr. announced the case"
+            "St. Lucie County Detective Tyler Horstman",
+            "Surrender at Indian River County Jail on Monday, Oct. 26",
+            "Felony DUI arrest warrant tied to an off-duty Vero Beach crash",
+            "Horstman was driving a St. Lucie County Sheriff's Office vehicle"
           ],
           "novel_facts": [
-            "The incoming specifies a March 2 crash date and a blood alcohol concentration of .246.",
-            "It provides a Sept. 9 notification date and Sept. 26 administrative-leave date.",
-            "It says the internal investigation is on hold pending criminal proceedings."
+            "The incoming report specifies a serious-bodily-injury DUI charge and a reported blood alcohol concentration of 0.246.",
+            "It gives the crash date as March 2 and reports prior paid administrative leave.",
+            "It reports release on $15,000 bond Monday evening."
           ],
-          "reason": "Both articles report the same detective's felony DUI case and surrender following the same agency-vehicle crash. The incoming supplies supporting details absent from the candidate excerpt, but reports no subsequent charge, ruling, finding, or other consequential development beyond the arrest already covered.",
+          "reason": "Both articles cover the same Oct. 26 surrender and felony DUI arrest arising from the same crash. The incoming article supplies additional particulars of that arrest announcement and routine booking disposition, rather than a distinct material development or independently newsworthy follow-up.",
           "validation_errors": []
         },
         {
@@ -513,7 +619,7 @@
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -524,18 +630,62 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.97,
           "shared_anchors": [
-            "St. Lucie County Sheriff's Office Detective Tyler Horstman",
+            "St. Lucie County Detective Tyler Horstman",
             "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
             "Felony DUI arrest warrant and surrender at the Indian River County Jail",
             "Announcement by Sheriff Richard Del Toro Jr."
           ],
           "novel_facts": [
-            "Incoming specifies March 2 as the crash date.",
-            "Incoming reports a .246 blood alcohol concentration and says the agency received that result on Sept. 9.",
-            "Incoming adds administrative-leave information and says the internal investigation is paused pending criminal proceedings."
+            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
+            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
           ],
-          "reason": "Both articles report the same detective's felony DUI case and surrender following the same agency-vehicle crash. The incoming account adds supporting details about the already-reported charge and agency response, but establishes no subsequent arrest, ruling, finding, or other material development warranting an update or separate URL.",
+          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
           "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.96,
+          "shared_anchors": [
+            "St. Lucie County Sheriff's Office Detective Tyler Horstman",
+            "Off-duty crash in Vero Beach while driving an agency vehicle",
+            "Felony DUI arrest warrant and surrender at the Indian River County Jail",
+            "Announcement by Sheriff Richard Del Toro Jr."
+          ],
+          "novel_facts": [
+            "The incoming specifies a March 2 crash date and a blood alcohol concentration of .246 reported to the agency on Sept. 9.",
+            "It adds that Horstman was placed on administrative leave on Sept. 26 and that the internal investigation is paused pending criminal proceedings."
+          ],
+          "reason": "Both articles report the same detective's felony DUI warrant and surrender arising from the same agency-vehicle crash. The incoming supplies supporting details and earlier administrative history, but reports no subsequent charge, ruling, finding, or other material development beyond the arrest already covered.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/27/st-lucie-county-detective-faces-felony-dui-charge-accused-driving-3-times-legal-limit-sheriff",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "crime",
@@ -584,21 +734,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Buc-ee's plan for St. Lucie County moves forward, with opening still listed for 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/buc-ees-plan-for-st-lucie-county-moves-forward-with-opening-still-listed-for-2027",
-          "canonical_slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "St. Lucie County firefighter paramedic Austin Hodge dies after being found unresponsive on duty - WFLX",
           "source_url": "https://www.wflx.com/2026/10/26/st-lucie-county-firefighter-paramedic-austin-hodge-dies-after-being-found-unresponsive?outputType=amp",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
@@ -626,35 +761,6 @@
           ],
           "reason": "Both articles cover Austin Hodge's same on-duty death. The canonical already identifies him and reports his death and service history. The incoming account adds discovery circumstances and tributes, but no official cause, investigative finding, or other material development warranting an update or separate story.",
           "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Both describe crashes affecting northbound Florida's Turnpike and cite Florida 511."
-          ],
-          "novel_facts": [
-            "The incoming crash occurred near Mile Marker 129 in Martin County at 2:17 p.m.",
-            "The incoming incident blocked the right lane and caused two miles of congestion."
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
         },
         {
           "category_key": "crime",
@@ -686,9 +792,9 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 78.454
+      "elapsed_seconds": 59.849
     },
     {
       "category_key": "business",
@@ -713,9 +819,27 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:st lucie county"
+          ],
+          "headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+        }
+      ],
       "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
@@ -735,7 +859,7 @@
           "editorial_story_id": "story_023612",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -809,8 +933,33 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:named-person-death:austin-hodge",
+            "story:custom:55ae9e407b6b6bcf4a1009834738d18e",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:austin-hodge,story:custom:55ae9e407b6b6bcf4a1009834738d18e",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 3,
@@ -854,7 +1003,7 @@
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -865,17 +1014,16 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.97,
           "shared_anchors": [
-            "St. Lucie County Sheriff's Office Detective Tyler Horstman",
+            "St. Lucie County Detective Tyler Horstman",
             "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
             "Felony DUI arrest warrant and surrender at the Indian River County Jail",
             "Announcement by Sheriff Richard Del Toro Jr."
           ],
           "novel_facts": [
-            "Incoming specifies March 2 as the crash date.",
-            "Incoming reports a .246 blood alcohol concentration and says the agency received that result on Sept. 9.",
-            "Incoming adds administrative-leave information and says the internal investigation is paused pending criminal proceedings."
+            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
+            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
           ],
-          "reason": "Both articles report the same detective's felony DUI case and surrender following the same agency-vehicle crash. The incoming account adds supporting details about the already-reported charge and agency response, but establishes no subsequent arrest, ruling, finding, or other material development warranting an update or separate URL.",
+          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
           "validation_errors": []
         },
         {
@@ -1000,7 +1148,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.382
+      "elapsed_seconds": 21.906
     },
     {
       "category_key": "sports",
@@ -1064,8 +1212,8 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 11,
-      "elapsed_seconds": 11.354
+      "new_publication_stale_rejected_count": 10,
+      "elapsed_seconds": 14.975
     },
     {
       "category_key": "things_to_do",
@@ -1136,7 +1284,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.587
+      "elapsed_seconds": 16.103
     },
     {
       "category_key": "florida",
@@ -1226,16 +1374,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 8.409
+      "elapsed_seconds": 18.786
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 2,
-      "selected_source_count": 1,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1243,11 +1391,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.348,
+          "elapsed_seconds": 13.466,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.348,
+      "model_elapsed_seconds": 13.466,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1261,8 +1409,18 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
+          "editorial_story_id": "story_023499",
+          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
+          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
@@ -1346,11 +1504,41 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 4,
+      "material_update_promotion_evaluation_count": 5,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 3,
       "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/strong-winds-king-tides-flood-parts-of-martin-county-as-officials-warn-of-more-high-water",
+          "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
+          "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.96,
+          "shared_anchors": [
+            "October 26, 2026 king-tide coastal flooding on the Treasure Coast",
+            "Dyer Point Road in Martin County, listed as Southwest Dyer Point Road in the candidate",
+            "Martin County sheriff's involvement in the flooding response",
+            "Warnings about additional high water around upcoming high tides"
+          ],
+          "novel_facts": [
+            "Resident Terresa Baldwin describes temporary roadway flooding and water over her dock and patio.",
+            "Lt. Dave Rosko says three high-water rescue vehicles are ready and cautions against driving through floodwater."
+          ],
+          "reason": "The matching date, flooding episode, specific roadway and sheriff's involvement establish the same event despite the candidate's St. Lucie-focused headline. Resident observations and routine rescue-readiness advice add scene detail, not a material development or an independently newsworthy follow-up.",
+          "validation_errors": []
+        },
         {
           "category_key": "martin",
           "source_headline": "Strong winds, king tides flood parts of Martin County as officials warn of more high water",
@@ -1392,8 +1580,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1442,11 +1630,12 @@
           "semantic_action": "hold",
           "confidence": 0.98,
           "shared_anchors": [
-            "Both report northbound Florida's Turnpike crashes and cite Florida 511."
+            "Both reports mention a crash affecting northbound Florida's Turnpike traffic on a Sunday afternoon."
           ],
           "novel_facts": [
             "The incoming crash occurred near Mile Marker 129 in Martin County at 2:17 p.m.",
-            "The right lane was blocked, causing two miles of bumper-to-bumper traffic."
+            "The incoming crash blocked the right lane and caused two miles of bumper-to-bumper traffic.",
+            "A fire truck was present at the incoming crash scene."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1529,16 +1718,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Flooding makes SW Dyer Point Road impassable in Palm City; rescue vehicles deployed",
+      "live_hero_headline": "Strong winds, king tides flood Palm City; sheriff’s office warns of more high water",
       "generated_card_count": 0,
-      "elapsed_seconds": 37.616
+      "elapsed_seconds": 44.237
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 19,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 17,
       "publishable_source_count": 3,
       "selected_source_count": 3,
       "cache_hit": false,
@@ -1548,11 +1737,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.575,
+          "elapsed_seconds": 28.273,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 24.575,
+      "model_elapsed_seconds": 28.273,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1566,7 +1755,7 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 11,
+      "published_story_duplicate_suppression_count": 12,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1580,12 +1769,22 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "editorial_story_id": "story_023617",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui,warrant",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
           "editorial_story_id": "story_023612",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1640,16 +1839,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
-          "editorial_story_id": "story_020870",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Missing girl, 5, found dead in Fort Pierce water near home - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-girl-5-reported-missing-in-fort-pierce/74238189",
           "editorial_story_id": "story_023185",
@@ -1670,6 +1859,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive",
+          "editorial_story_id": "story_022992",
+          "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
+          "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "St. Lucie County Fire Board terminates chief after calls for leadership change - WPEC",
           "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
           "editorial_story_id": "story_022576",
@@ -1682,23 +1881,24 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive",
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
           "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
-          "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
-          "basis": "exact_source_url",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "exact_structured_incident_key",
           "identity_keys": [
-            "story:story_022992",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive"
+            "incident:named-person-death:austin-hodge",
+            "story:custom:55ae9e407b6b6bcf4a1009834738d18e",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_022992,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive",
+            "deterministic_identity_keys=incident:named-person-death:austin-hodge,story:custom:55ae9e407b6b6bcf4a1009834738d18e",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1707,8 +1907,8 @@
       ],
       "material_update_promotion_evaluation_count": 7,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 5,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_cache_hit_count": 7,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1743,12 +1943,43 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui,warrant",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "St. Lucie County Detective Tyler Horstman",
+            "Surrender at Indian River County Jail on Monday, Oct. 26",
+            "Felony DUI arrest warrant tied to an off-duty Vero Beach crash",
+            "Horstman was driving a St. Lucie County Sheriff's Office vehicle"
+          ],
+          "novel_facts": [
+            "The incoming report specifies a serious-bodily-injury DUI charge and a reported blood alcohol concentration of 0.246.",
+            "It gives the crash date as March 2 and reports prior paid administrative leave.",
+            "It reports release on $15,000 bond Monday evening."
+          ],
+          "reason": "Both articles cover the same Oct. 26 surrender and felony DUI arrest arising from the same crash. The incoming article supplies additional particulars of that arrest announcement and routine booking disposition, rather than a distinct material development or independently newsworthy follow-up.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -1759,17 +1990,16 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.97,
           "shared_anchors": [
-            "St. Lucie County Sheriff's Office Detective Tyler Horstman",
+            "St. Lucie County Detective Tyler Horstman",
             "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
             "Felony DUI arrest warrant and surrender at the Indian River County Jail",
             "Announcement by Sheriff Richard Del Toro Jr."
           ],
           "novel_facts": [
-            "Incoming specifies March 2 as the crash date.",
-            "Incoming reports a .246 blood alcohol concentration and says the agency received that result on Sept. 9.",
-            "Incoming adds administrative-leave information and says the internal investigation is paused pending criminal proceedings."
+            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
+            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
           ],
-          "reason": "Both articles report the same detective's felony DUI case and surrender following the same agency-vehicle crash. The incoming account adds supporting details about the already-reported charge and agency response, but establishes no subsequent arrest, ruling, finding, or other material development warranting an update or separate URL.",
+          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
           "validation_errors": []
         },
         {
@@ -1783,8 +2013,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1907,35 +2137,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Crash snarls traffic on Florida's Turnpike north in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/crash-snarls-traffic-on-floridas-turnpike-north-in-martin-county-florida-turnpike-martin-county-crash-traffic-alert-bumper-to-bumper-traffic-traffic-delays-mile-marker-129-northbound-turnpike-florida-511-right-lane-blocked-fire-truck-crash-sce",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crashes Near Becker Road Snarl I-95 and Florida's Turnpike in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Both reports involve a crash on Florida's Turnpike northbound and cite Florida 511."
-          ],
-          "novel_facts": [
-            "The incoming crash occurred October 25 at 2:17 p.m. near Mile Marker 129 in Martin County.",
-            "The incoming crash blocked the right lane and caused two miles of traffic congestion."
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Missing girl, 5, found dead in Fort Pierce water near home - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-girl-5-reported-missing-in-fort-pierce/74238189",
           "canonical_slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
@@ -1966,6 +2167,21 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "St. Lucie County Partners with Treasure Coast Food Bank for community food drive - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive",
+          "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
+          "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "St. Lucie County Fire Board terminates chief after calls for leadership change - WPEC",
           "source_url": "https://cbs12.com/news/local/st-lucie-county-fire-board-future-fire-chief-jeff-lee-professional-fire-fighters-paramedics-st-lucie-county-three-firefighter-veterans-fired-florida-news",
           "canonical_slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
@@ -1980,45 +2196,28 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 2,
+      "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County detective arrested on DUI charge after crash in agency vehicle",
+      "live_hero_headline": "Austin Hodge’s siblings seek answers after St. Lucie County firefighter’s death",
       "generated_card_count": 0,
-      "elapsed_seconds": 50.562
+      "elapsed_seconds": 47.306
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generation_failed_archive_recovery",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 9,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 8,
+      "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.585,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 10.185,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC"
-        }
-      ],
-      "model_elapsed_seconds": 19.77,
-      "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Indian River County category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -2027,11 +2226,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
+          "editorial_story_id": "story_023445",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
@@ -2044,12 +2253,22 @@
         },
         {
           "category_key": "indian_river",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "editorial_story_id": "story_023617",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui,warrant",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
           "editorial_story_id": "story_023612",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
-          "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -2081,25 +2300,69 @@
           "canonical_headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
-          "editorial_story_id": "story_023497",
-          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
-          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 4,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "EXCLUSIVE: St. Lucie firefighter’s siblings speak out, seek answers after his death",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+          "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:named-person-death:austin-hodge",
+            "story:custom:55ae9e407b6b6bcf4a1009834738d18e",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/exclusive-st-lucie-firefighters-siblings-speak-out-seek-answers-after-his-death"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:austin-hodge,story:custom:55ae9e407b6b6bcf4a1009834738d18e",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_cache_hit_count": 6,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "St. Lucie County sheriff's deputy faces DUI charge after Vero Beach crash - WPEC",
+          "source_url": "https://cbs12.com/news/crime/st-lucie-county-deputy-faces-dui-charges-after-vero-beach-crash",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "St. Lucie County Sheriff's Office employee Tyler Horstman",
+            "Off-duty crash in Vero Beach while driving an agency vehicle",
+            "Felony DUI warrant and surrender at the Indian River County Jail on Monday, October 26"
+          ],
+          "novel_facts": [
+            "The incoming account specifies a March 2 crash date and a blood alcohol concentration of 0.246.",
+            "It adds administrative-leave timing, booking and bond details, and the status of the internal investigation."
+          ],
+          "reason": "Both articles report the same crash-related felony DUI arrest and surrender. The incoming article supplies additional supporting details, but establishes no subsequent charge, ruling, finding, or other material development beyond the arrest already covered by the canonical.",
+          "validation_errors": []
+        },
         {
           "category_key": "indian_river",
           "source_headline": "St. Lucie County honors firefighter-paramedic Austin Hodge after line-of-duty death",
@@ -2133,12 +2396,43 @@
         },
         {
           "category_key": "indian_river",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui,warrant",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "St. Lucie County Detective Tyler Horstman",
+            "Surrender at Indian River County Jail on Monday, Oct. 26",
+            "Felony DUI arrest warrant tied to an off-duty Vero Beach crash",
+            "Horstman was driving a St. Lucie County Sheriff's Office vehicle"
+          ],
+          "novel_facts": [
+            "The incoming report specifies a serious-bodily-injury DUI charge and a reported blood alcohol concentration of 0.246.",
+            "It gives the crash date as March 2 and reports prior paid administrative leave.",
+            "It reports release on $15,000 bond Monday evening."
+          ],
+          "reason": "Both articles cover the same Oct. 26 surrender and felony DUI arrest arising from the same crash. The incoming article supplies additional particulars of that arrest announcement and routine booking disposition, rather than a distinct material development or independently newsworthy follow-up.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "St. Lucie County detective faces felony DUI charge, accused of driving 3 times the legal limit: Sheriff",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-detective-faces-felony-dui-charge-accused-of-driving-3-times-the-legal-limit-sheriff",
           "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
           "canonical_headline": "St. Lucie County Detective Tyler Horstman Arrested on Felony DUI Charge",
           "canonical_is_custom": true,
-          "identity_basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-26|felony-dui-charge",
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|agency_vehicle,arrest,crash,dui,warrant",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -2149,17 +2443,16 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.97,
           "shared_anchors": [
-            "St. Lucie County Sheriff's Office Detective Tyler Horstman",
+            "St. Lucie County Detective Tyler Horstman",
             "Off-duty crash in Vero Beach involving a sheriff's office vehicle",
             "Felony DUI arrest warrant and surrender at the Indian River County Jail",
             "Announcement by Sheriff Richard Del Toro Jr."
           ],
           "novel_facts": [
-            "Incoming specifies March 2 as the crash date.",
-            "Incoming reports a .246 blood alcohol concentration and says the agency received that result on Sept. 9.",
-            "Incoming adds administrative-leave information and says the internal investigation is paused pending criminal proceedings."
+            "The incoming specifies a March 2 crash date and a reported blood alcohol concentration of .246.",
+            "It adds that the agency received the blood alcohol result on Sept. 9, placed Horstman on administrative leave on Sept. 26, and paused its internal investigation pending criminal proceedings."
           ],
-          "reason": "Both articles report the same detective's felony DUI case and surrender following the same agency-vehicle crash. The incoming account adds supporting details about the already-reported charge and agency response, but establishes no subsequent arrest, ruling, finding, or other material development warranting an update or separate URL.",
+          "reason": "Both articles report the same detective's felony DUI arrest arising from the same agency-vehicle crash. The incoming adds supporting chronology and administrative details to the already reported arrest, not a subsequent charge, ruling, investigative outcome, or independently newsworthy development.",
           "validation_errors": []
         },
         {
@@ -2234,27 +2527,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Florida governor candidates Donalds and Jolly speak one-on-one with WPTV in final push",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-governor-candidates-donalds-and-jolly-speak-one-on-one-with-wptv-in-final-push",
-          "canonical_slug": "2026-10-26-donalds-jolly-outline-differences-on-taxes-schools-and-data-centers-in-florida-r",
-          "canonical_headline": "Donalds, Jolly outline differences on taxes, schools and data centers in Florida race",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
-      "budget_seconds": 180.0,
-      "elapsed_seconds": 32.497
+      "elapsed_seconds": 19.384
     }
   ]
 }
