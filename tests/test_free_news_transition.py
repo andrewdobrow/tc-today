@@ -217,3 +217,40 @@ def test_free_news_transition_wires_all_public_policies_into_update():
         "text = _rewrite_about(text)",
     ):
         assert expected in source
+
+
+def test_donate_buttons_include_heart_before_label_and_not_newsletter():
+    from scripts.free_news_transition import create_donation_page
+    root = Path(__file__).resolve().parents[1]
+    source = (
+        '<html><head></head><body><a href="/subscribe.html" '
+        'class="support-btn membership-subscribe-btn">Subscribe</a>'
+        '<a href="/subscribe.html">Membership</a>'
+        '<a href="/subscribe.html" class="footer-subscribe-cta">'
+        '<span>Subscribe today</span></a>'
+        '<form action="https://treasure-coast-today.kit.com">'
+        '<button type="submit">Subscribe to newsletter</button></form></body></html>'
+    )
+    page = _rewrite_chrome(source, "index.html")
+    assert 'class="tct-donate-heart" aria-hidden="true">&#9829;</span> <span class="membership-subscribe-label">Donate' in page
+    assert 'class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate</a>' in page
+    assert 'class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate to local news' in page
+    assert 'Subscribe to newsletter' in page
+    assert _rewrite_chrome(page, "index.html") == page
+    home = _rewrite_home_support(
+        '<a data-support-card="true" href="/subscribe.html">Old support tile</a>'
+    )
+    assert 'class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate to support the newsroom' in home
+    generator = (root / "scripts/free_news_transition.py").read_text(encoding="utf-8")
+    assert '<span class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate securely with Stripe' in generator
+
+
+def test_open_access_launch_checks_real_supabase_checkout_before_generation():
+    source = (Path(__file__).resolve().parents[1] / ".github/workflows/update.yml").read_text(encoding="utf-8")
+    assert "Verify legacy membership checkout is blocked before free-news launch" in source
+    assert "TCT_DISABLE_NEW_SUBSCRIPTIONS=true" in source
+    assert 'if status != 410 or "new paid reading memberships are closed" not in body.lower():' in source
+    assert "method=\"GET\"" in source, "Verification must never create a new real checkout session"
+    assert source.index("Verify legacy membership checkout is blocked before free-news launch") < source.index("- name: Generate news")
+
+
