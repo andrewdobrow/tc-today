@@ -47,7 +47,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          # The production site contains thousands of generated pages and a
+          # continually growing archive of hourly commits. Downloading every
+          # branch, tag, and historical article revision costs 10–17 minutes
+          # per run without benefiting ordinary newsroom generation.
+          # Two commits retain the current/previous state and support safe
+          # generated-output rebase; on-demand fetch in push_generated_update.sh
+          # acquires concurrent main updates before attempting a push.
+          # Explicit model comparison keeps historical checkout available.
+          fetch-depth: ${{ inputs.model_bakeoff && '0' || '2' }}
 
       - name: Restore persistent generation cache
         id: generation-cache-restore

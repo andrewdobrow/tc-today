@@ -196,3 +196,49 @@ def test_editor_override_conflict_stops_without_overwriting_remote(tmp_path):
     assert path in result.stderr
     assert check_remote_file(tmp_path / "check_manual", remote, path) == "human verified correction\n"
     assert check_remote_file(tmp_path / "check_feed", remote, "feed.xml") == "human updated feed\n"
+
+
+
+def test_update_uses_shallow_checkout_unless_historical_bakeoff_requested():
+    """Production must not download every historical hourly editorial commit."""
+    workflow = (ROOT / ".github/workflows/update.yml").read_text(encoding="utf-8")
+    checkout = workflow.split("      - name: Checkout repo\n", 1)[1].split("\n      - name: ", 1)[0]
+    assert "actions/checkout@v4" in checkout
+    assert "fetch-depth: ${{ inputs.model_bakeoff && '0' || '2' }}" in checkout
+    # Deploy checks out fresh main separately, independent of the generator.
+    assert "      - name: Checkout latest main" in workflow
+
+
+def test_two_commit_checkout_rebases_generated_output_after_human_push(tmp_path):
+    """Simulate real production publishing on a shallow local clone.
+
+    The bot begins with only two commits. A human then modifies generated
+    content AND a manually edited file. The bot must preserve the human's
+    manual corrections and resolve only generated-file conflicts.
+    No live GitHub repositories are contacted.
+    """
+    remote, setup, human = local_repos(
+        tmp_path, ("feed.xml", "data/article-content-overrides.json")
+    )
+    write(setup, "data/previous-generated.json", "second base commit\n")
+    git("add", "-A", cwd=setup)
+    git("commit", "-m", "Second base", cwd=setup)
+    write(setup, "data/third-generated.json", "third base commit\n")
+    git("add", "-A", cwd=setup)
+    git("commit", "-m", "Third base", cwd=setup)
+    git("push", "origin", "main", cwd=setup)
+    bot = tmp_path / "shallow-bot"
+    git("clone", "--depth", "2", f"file://{remote}", str(bot), cwd=tmp_path)
+    assert (bot / ".git" / "shallow").exists()
+    write(bot, "feed.xml", "new bot generated feed\n")
+    git("pull", "--ff-only", cwd=human)
+    write(human, "feed.xml", "human intermediate generated feed\n")
+    write(human, "data/article-content-overrides.json", '{"editor":"keep"}\n')
+    git("add", "-A", cwd=human)
+    git("commit", "-m", "Human updated generated and protected data", cwd=human)
+    git("push", "origin", "main", cwd=human)
+    result = run_publish(bot)
+    assert result.returncode == 0, result.stdout + "\n" + result.stderr
+    assert "Auto-resolving generated rebase conflict" in result.stdout
+    assert check_remote_file(tmp_path / "shallow-feed", remote, "feed.xml") == "new bot generated feed\n"
+    assert check_remote_file(tmp_path / "shallow-protected", remote, "data/article-content-overrides.json") == '{"editor":"keep"}\n'
