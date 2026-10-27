@@ -166,6 +166,20 @@ class CanonicalHodgeTests(unittest.TestCase):
         self.assertEqual(article['image_storage_key'],
                          'articles/1f/1f251033eb69a787817d92d69c72b17fd19d387421401002ec9ed34b5d0decc6.jpg')
 
+    def test_original_custom_photo_registry_retains_displaced_publisher_image_history(self):
+        path = Path('data/article-image-registry.json')
+        if not path.exists():
+            self.skipTest('persistent image registry absent from test fixture')
+        payload = json.loads(path.read_text(encoding='utf8'))
+        image_record = payload['articles'][ORIGINAL]
+        self.assertEqual(image_record['current_image']['public_url'], ORIGINAL_IMAGE)
+        self.assertTrue(any(
+            row.get('public_url') == OCT27_WRONG_MIRROR
+            for row in image_record.get('history', [])
+        ))
+        self.assertEqual(image_record['current_image']['original_url'],
+                         'https://treasurecoast.today/images/austin-hodge.jpg')
+
     def test_original_hodge_canonical_survives_custom_queue_rotation(self):
         """An earlier custom article must remain authoritative after queue replacement."""
         archive_path = Path('archive.json')
