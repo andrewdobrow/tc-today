@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 
-from tests.test_redirect_identity_emergency_v88 import _load_generate
+from test_redirect_identity_emergency_v88 import _load_generate
 
 
 def test_cross_person_duplicate_is_quarantined_before_destructive_redirect(tmp_path: Path):
