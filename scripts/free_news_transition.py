@@ -22,7 +22,7 @@ from scripts.prepare_membership_paywall import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-PAYMENT_PATTERN = re.compile(r"^https://(?:buy|checkout)\.stripe\.com/[A-Za-z0-9/_-]+(?:\?[^\s]*)?$")
+PAYMENT_PATTERN = re.compile(r"^https://(?:buy|checkout|donate)\.stripe\.com/[A-Za-z0-9/_-]+(?:\?[^\s]*)?$")
 CUSTOMER_SERVICE = "hello@treasurecoast.today"
 
 
