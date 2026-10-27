@@ -70,7 +70,7 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
     text = re.sub(
         r'<a\b(?=[^>]*class="[^"]*\bmembership-subscribe-btn\b)[^>]*>.*?</a>',
         '<a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Donate to support Treasure Coast Today">'
-        '<span class="membership-subscribe-label">Donate</span></a>',
+        '<span class="tct-donate-heart" aria-hidden="true">&#9829;</span> <span class="membership-subscribe-label">Donate</span></a>',
         text, flags=re.I | re.S,
     )
     # If a legacy site/page uses an Advertise primary CTA, make it Donate.
@@ -115,10 +115,10 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
         )
         text = text.replace(' class="footer-column footer-connect footer-membership-ask"',
                             ' class="footer-column footer-connect footer-donation-ask"')
-    text = text.replace('<a href="/subscribe.html">Membership</a>', '<a href="/donate.html">Donate</a>')
+    text = text.replace('<a href="/subscribe.html">Membership</a>', '<a href="/donate.html"><span class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate</a>')
     text = re.sub(
         r'<a\b(?=[^>]*class="[^"]*\bfooter-subscribe-cta\b)[^>]*>.*?</a>',
-        '<a class="footer-subscribe-cta" href="/donate.html"><span>Donate to local news</span>'
+        '<a class="footer-subscribe-cta" href="/donate.html"><span><span class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate to local news</span>'
         '<small>Every story stays free</small></a>', text, flags=re.I | re.S,
     )
     text = text.replace('Unlimited articles. Help fund independent Treasure Coast reporting.',
@@ -139,7 +139,7 @@ def _rewrite_home_support(text: str) -> str:
           <h2 class="tct-membership-headline">Local news. Free for everyone.</h2>
           <p class="tct-membership-copy">No paywall. Independent reporting for Martin, St. Lucie and Indian River counties, supported by readers and advertisers.</p>
           <span class="tct-membership-options" aria-hidden="true"><span>Read for free</span><span>Donate what you choose</span><span>Stay informed</span></span>
-          <span class="tct-membership-cta">Support the newsroom <b>&rarr;</b></span>
+          <span class="tct-membership-cta"><span class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate to support the newsroom <b>&rarr;</b></span>
         </div>
       </a>"""
     return pattern.sub(replacement, text, count=1)
@@ -352,7 +352,7 @@ def create_donation_page(root: Path, payment_link: str) -> None:
         <div class="tct-donate-panel">
           <h2>Make a donation</h2>
           <p>Choose your own amount on Stripe's secure checkout. Contributions are voluntary, and you never have to donate to read a story.</p>
-          <a class="tct-donate-button" href="{html.escape(payment_link, quote=True)}" rel="noopener noreferrer">Donate securely with Stripe</a>
+          <a class="tct-donate-button" href="{html.escape(payment_link, quote=True)}" rel="noopener noreferrer"><span class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate securely with Stripe</a>
           <p class="tct-donate-disclosure">Treasure Coast Today LLC is a for-profit business, not a tax-exempt charity. Contributions are not tax-deductible charitable donations. Payment processing is handled by Stripe.</p>
         </div>
         <p class="tct-donate-secondary">Prefer to support us as a local business? <a href="/advertise.html">Explore advertising and sponsorships</a>.</p>
