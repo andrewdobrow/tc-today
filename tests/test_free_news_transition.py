@@ -268,3 +268,87 @@ def test_donate_hearts_inherit_label_color_and_align_inline():
         "index.html",
     )
     assert 'aria-hidden="true">&#9829;</span> <span class="membership-subscribe-label">Donate</span>' in source
+
+
+def test_production_direct_invocation_imports_without_pythonpath():
+    """Reproduce the exact mode that failed in run 40580075128.
+
+    Importing through pytest or with python -m succeeds even when running
+    python scripts/free_news_transition.py would throw ModuleNotFoundError.
+    """
+    import os
+    import subprocess
+    import sys
+
+    root = Path(__file__).resolve().parents[1]
+    env = dict(os.environ)
+    env.pop("PYTHONPATH", None)
+    result = subprocess.run(
+        [sys.executable, "scripts/free_news_transition.py", "--help"],
+        cwd=root,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=20,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "--snapshot" in result.stdout
+    assert "--payment-link" in result.stdout
+
+
+def test_real_site_migration_dry_run_restores_custom_article_without_publish(tmp_path):
+    """Exercise the actual shared page templates and an archived custom story.
+
+    This only writes to pytest's temporary directory. Never touches live
+    Supabase, Stripe, production pages or private protected content.
+    """
+    import shutil
+
+    root = Path(__file__).resolve().parents[1]
+    page_names = (
+        "index.html", "about.html", "privacy.html",
+        "subscription-terms.html", "ownership.html", "advertise.html",
+    )
+    for name in page_names:
+        shutil.copyfile(root / name, tmp_path / name)
+    src = root / "articles" / (
+        "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest.html"
+    )
+    assert src.is_file(), "Canonical custom article fixture is missing"
+    article_dir = tmp_path / "articles"
+    article_dir.mkdir()
+    dest = article_dir / src.name
+    shutil.copyfile(src, dest)
+    assert 'data-tct-paywall' in dest.read_text(encoding="utf-8")
+
+    snapshot_path = tmp_path / "protected-private-test.json"
+    snapshot_path.write_text(json.dumps({"articles": [{
+        "slug": src.stem,
+        "protected_body": "<!--tct-full-article-v2-->" + FULL,
+    }]}), encoding="utf-8")
+    report = transition(
+        tmp_path,
+        snapshot_path,
+        "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01",
+    )
+    assert report["rehydrated"] == 1
+    published = dest.read_text(encoding="utf-8")
+    assert "Entire original full story paragraph one." in published
+    assert "Additional reporting paragraph two." in published
+    assert "data-tct-paywall" not in published
+    assert "tct-member-preview" not in published
+    assert "tct-member-only" not in published
+    assert '"isAccessibleForFree":true' in published
+    assert 'href="/donate.html"' in published
+    assert 'href="/advertise.html"' in published
+    assert "tct_member_entitled_hint" in published, "Honor paid-through ad-free users"
+    assert (tmp_path / "donate.html").is_file()
+    donation = (tmp_path / "donate.html").read_text(encoding="utf-8")
+    assert "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" in donation
+    assert 'class="tct-donate-heart"' in donation
+    privacy = (tmp_path / "privacy.html").read_text(encoding="utf-8")
+    assert "Mediavine Programmatic Advertising (Ver 1.1)" in privacy
+    assert "voluntary reader contributions" in privacy
+    terms = (tmp_path / "subscription-terms.html").read_text(encoding="utf-8")
+    assert "Historical membership plans and pricing" in terms
