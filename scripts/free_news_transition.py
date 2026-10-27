@@ -219,7 +219,7 @@ def _rewrite_privacy(text: str) -> str:
             text = text.replace(old, new, 1)
         elif new not in text and full_policy:
             raise RuntimeError("Privacy migration requires an updated source template: " + old[:70])
-    if "<strong>Kit (ConvertKit)</strong>" not in text:
+    if "<strong>Kit</strong>" not in text:
         match = "<li><strong>Resend</strong> as an email-delivery provider for secure existing-account sign-in messages.</li>"
         text = text.replace(
             match, match + '\n          <li><strong>Kit</strong> for readers who voluntarily subscribe to the Morning Brief email newsletter; readers may unsubscribe through the links in those emails.</li>'
