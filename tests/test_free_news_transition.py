@@ -9,6 +9,9 @@ from scripts.free_news_transition import (
     _rewrite_chrome,
     _rewrite_home_support,
     _rewrite_privacy,
+    _rewrite_subscription_terms,
+    _rewrite_about,
+    _rewrite_ownership,
     load_snapshot,
     restore_article,
     transition,
@@ -148,3 +151,69 @@ def test_project_workflow_does_not_activate_donation_mode_implicitly():
     assert "TCT_DONATION_PAYMENT_LINK" in workflow
     assert "scripts/free_news_transition.py" in workflow
     assert "python scripts/sync_protected_articles.py --snapshot-file /tmp/tct-protected-current.json --required" in workflow
+
+
+def test_free_news_privacy_preserves_mediavine_exactly_and_removes_old_access_claims():
+    root = Path(__file__).resolve().parents[1]
+    raw = (root / "privacy.html").read_text(encoding="utf-8")
+    before_ad = raw.split('<h3>Mediavine Programmatic Advertising (Ver 1.1)</h3>', 1)[1].split(
+        '<h2>Your choices, retention and requests</h2>', 1,
+    )[0]
+    actual = _rewrite_privacy(raw)
+    after_ad = actual.split('<h3>Mediavine Programmatic Advertising (Ver 1.1)</h3>', 1)[1].split(
+        '<h2>Your choices, retention and requests</h2>', 1,
+    )[0]
+    assert before_ad == after_ad, "Never rewrite Mediavine-required programmatic disclosure"
+    assert "October 27, 2026" in actual
+    assert "for-profit business" in actual
+    assert "not tax-deductible" in actual
+    assert "one-time" in actual
+    assert "Kit" in actual and "Formspree" in actual
+    assert "Stripe" in actual and "Supabase" in actual
+    assert "ad-free" in actual
+    assert "monthly article-meter record" in actual
+    assert "If you purchase or use a Treasure Coast Today membership" not in actual
+    assert _rewrite_privacy(actual) == actual
+
+
+def test_historical_subscription_terms_do_not_sell_new_memberships():
+    root = Path(__file__).resolve().parents[1]
+    source = (root / "subscription-terms.html").read_text(encoding="utf-8")
+    terms = _rewrite_subscription_terms(source)
+    assert "New paid reading memberships" not in terms or "closing new paid reading memberships" in terms
+    assert "All articles are available to everyone without payment" in terms
+    assert "ad-free benefit through the end of their paid terms" in terms
+    assert "future renewals will be stopped at the billing transition" in terms
+    assert 'id="tct-existing-subscription-notice"' in terms
+    assert "Historical membership plans and pricing" in terms
+    assert "The advertised introductory offer is $1" not in terms
+    assert _rewrite_subscription_terms(terms) == terms
+
+
+def test_ownership_and_about_funding_disclosures_are_consistent():
+    root = Path(__file__).resolve().parents[1]
+    ownership = _rewrite_ownership((root / "ownership.html").read_text(encoding="utf-8"))
+    about = _rewrite_about((root / "about.html").read_text(encoding="utf-8"))
+    assert "optional reader contributions" in ownership
+    assert "not charitable tax-deductible donations" in ownership
+    assert "independent reporting" in ownership
+    assert "All Treasure Coast Today news articles are free to read." in about
+    assert 'href="/donate.html"' in about
+    assert 'href="/advertise.html"' in about
+    assert "independent coverage" in about
+    assert _rewrite_ownership(ownership) == ownership
+    assert _rewrite_about(about) == about
+
+
+def test_free_news_transition_wires_all_public_policies_into_update():
+    root = Path(__file__).resolve().parents[1]
+    source = (root / "scripts/free_news_transition.py").read_text(encoding="utf-8")
+    for expected in (
+        'if path == root / "privacy.html":',
+        'if path == root / "subscription-terms.html":',
+        'if path == root / "ownership.html":',
+        'if path == root / "about.html":',
+        "text = _rewrite_ownership(text)",
+        "text = _rewrite_about(text)",
+    ):
+        assert expected in source
