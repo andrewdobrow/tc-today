@@ -144,7 +144,21 @@ def _rewrite_privacy(text: str) -> str:
     return text
 
 
+def _rewrite_subscription_terms(text: str) -> str:
+    message = ('<p><strong>October 27, 2026 update:</strong> TCT is moving to free news '
+               'supported by voluntary reader donations and advertisements. '
+               'These historical terms continue to govern earlier paid memberships, '
+               'renewals, cancellation, and any remaining billing obligations. '
+               'New paid reading memberships are not being offered.</p>')
+    if 'historical terms continue to govern' not in text:
+        text = text.replace('<div class="policy-body">', '<div class="policy-body">\n' + message, 1)
+    return text
+
+
 def _close_new_subscriptions(text: str) -> str:
+    text = re.sub(r"<title>.*?</title>", "<title>Manage Existing Membership | Treasure Coast Today</title>", text, count=1, flags=re.I | re.S)
+    text = re.sub(r'(<meta name="description" content=")[^"]*', r'\g<1>Manage an existing Treasure Coast Today billing account. New paid reading memberships are closed; all local news is free.', text, count=1)
+    text = re.sub(r'(<meta\s+id="membership-robots"\s+name="robots"\s+content=")[^"]*', r'\g<1>noindex,follow', text, count=1)
     if 'id="tct-legacy-membership-notice"' not in text:
         notice = ('<section id="tct-legacy-membership-notice" role="status">'
                   '<h1>All TCT news is now free.</h1>'
@@ -212,6 +226,8 @@ def transition(root: Path, snapshot_path: Path, payment_link: str) -> dict:
             text = _rewrite_privacy(text)
         if path == root / "subscribe.html":
             text = _close_new_subscriptions(text)
+        if path == root / "subscription-terms.html":
+            text = _rewrite_subscription_terms(text)
         if text != original:
             path.write_text(text, encoding="utf-8")
             updated += 1
