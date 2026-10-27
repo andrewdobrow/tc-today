@@ -130,10 +130,10 @@ def _dated_crashes(text):
     treat October 26 as the crash date and reject the true duplicate.
     """
     dates = set()
-    month_pat = r"(" + "|".join(_MONTHS) + r")\\s+(\\d{1,2})"
+    month_pat = r"(" + "|".join(_MONTHS) + r")\s+(\d{1,2})"
     templates = (
-        r"\\b" + month_pat + r"\\s+(?:\w+\\s+){0,2}(?:crash|collision|wreck)\\b",
-        r"\\b(?:crash|collision|wreck)(?:\\s+(?:occurred|happened|on|of|dated)){0,3}\\s+" + month_pat + r"\\b",
+        r"\b" + month_pat + r"\s+(?:\w+\s+){0,2}(?:crash|collision|wreck)\b",
+        r"\b(?:crash|collision|wreck)(?:\s+(?:occurred|happened|on|of|dated)){0,3}\s+" + month_pat + r"\b",
     )
     for template in templates:
         for match in re.finditer(template, text, re.I):
