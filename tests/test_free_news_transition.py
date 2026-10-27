@@ -69,7 +69,7 @@ def test_main_bar_advertise_after_events_and_out_of_desktop_dropdown():
               '<div class="nav-sections-menu"><a href="/advertise.html" class="nav-section-link">'
               'Advertise</a></div></details></nav></header></body></html>')
     page = _rewrite_chrome(source, "index.html")
-    nav = re.search(r'<nav class="category-nav.*?</nav>', page).group()
+    nav = re.search(r'<nav class="category-nav.*?</nav>', page, re.S).group()
     assert nav.index('>Events</a>') < nav.index('>Advertise</a>')
     assert nav.count('href="/advertise.html"') == 1
     assert 'href="/donate.html"' in page
