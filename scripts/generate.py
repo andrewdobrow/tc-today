@@ -23400,6 +23400,15 @@ def _durable_custom_identity_match(candidate, authority, *, precomputed=None):
     if named_death_match:
         return True, named_death_key
 
+    # A custom scoop can name its subject while later feeds use a role-only
+    # headline (e.g. "detective arrested"). Require the full named subject,
+    # shared locality, same near-term episode, and concrete incident facts.
+    # This durable authority runs in forward selection AND final archive cleanup.
+    from tct_engine.custom_named_incident_identity import same_named_incident_as_custom
+    named_incident_match, named_incident_key = same_named_incident_as_custom(candidate, authority)
+    if named_incident_match:
+        return True, named_incident_key
+
     if _westmoreland_alf_custom_authority_match(candidate, authority):
         return True, "custom-project|westmoreland-alf|petroleum-remediation"
 
