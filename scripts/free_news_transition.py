@@ -64,15 +64,15 @@ def restore_article(text: str, slug: str, protected: dict[str, str]) -> str:
 
 
 def _rewrite_chrome(text: str, page_name: str) -> str:
-    # Remove only the sales/header anchors; preserve the email newsletter link.
+    # Replace subscription sales with donations, but do not remove the existing
+    # Sign in / account links. Paid readers still need to verify their ad-free
+    # entitlement and manage their already-paid subscriptions.
     text = re.sub(
-        r'<a\b(?=[^>]*class="[^"]*\bmembership-subscribe-btn\b)[^>]*>.*?</a>'
-        r'(?:\s*<a\b(?=[^>]*class="[^"]*\bmembership-header-(?:signin|welcome)\b)[^>]*>.*?</a>){0,2}',
+        r'<a\b(?=[^>]*class="[^"]*\bmembership-subscribe-btn\b)[^>]*>.*?</a>',
         '<a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Donate to support Treasure Coast Today">'
         '<span class="membership-subscribe-label">Donate</span></a>',
-        text, flags=re.I | re.S
+        text, flags=re.I | re.S,
     )
-    text = re.sub(r'<a\b(?=[^>]*class="[^"]*\bmembership-header-(?:signin|welcome)\b)[^>]*>.*?</a>', "", text, flags=re.I | re.S)
     # If a legacy site/page uses an Advertise primary CTA, make it Donate.
     text = re.sub(r'(<a\b(?=[^>]*class="[^"]*\bsupport-btn\b)[^>]*href=")/advertise\.html(")', r'\1/donate.html\2', text, flags=re.I)
     # The primary desktop nav gets Advertise immediately after Events. Mobile
@@ -95,14 +95,26 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
             nav = nav.replace('class="cat-btn nav-sections-toggle active"', 'class="cat-btn nav-sections-toggle"')
         return nav
     text = re.sub(r'<nav\b(?=[^>]*class="[^"]*\bcategory-nav--primary\b)[^>]*>.*?</nav>', nav_update, text, count=1, flags=re.I | re.S)
-    # Remove the automatic hide-ads member prepaint script and membership meter
-    # from the new public site; keep membership account tools on legacy billing.
+    # Keep member entitlement scripts so existing paying readers remain ad-free
+    # through the end of their already-paid periods. Only remove meter prepaint,
+    # which is obsolete when article access becomes universally free.
     if page_name != "subscribe.html":
-        text = re.sub(r'\s*<script\b[^>]*data-tct-member-prepaint[^>]*>.*?</script>', '', text, flags=re.I | re.S)
-        text = re.sub(r'\s*<link\b[^>]*href="/membership\.css[^"]*"[^>]*>', '', text, flags=re.I)
-        text = re.sub(r'\s*<script\b[^>]*src="/membership-config\.js"[^>]*></script>', '', text, flags=re.I)
-        text = re.sub(r'\s*<script\b[^>]*src="/membership\.js[^"]*"[^>]*></script>', '', text, flags=re.I)
-        text = text.replace(' class="footer-column footer-connect footer-membership-ask"', ' class="footer-column footer-connect footer-donation-ask"')
+        member_prepaint = (
+            '<script data-tct-member-prepaint>'
+            '(function(){try{if(localStorage.getItem("tct_member_entitled_hint")!=="1")return;'
+            'var apply=function(){if(!document.body)return false;'
+            'document.body.classList.add("mv-no-ads");return true;};'
+            'if(!apply()){var observer=new MutationObserver(function(){if(apply())observer.disconnect();});'
+            'observer.observe(document.documentElement,{childList:true});}'
+            '}catch(_e){}})();'
+            '</script>'
+        )
+        text = re.sub(
+            r'<script\b[^>]*data-tct-member-prepaint[^>]*>.*?</script>',
+            lambda _: member_prepaint, text, count=1, flags=re.I | re.S,
+        )
+        text = text.replace(' class="footer-column footer-connect footer-membership-ask"',
+                            ' class="footer-column footer-connect footer-donation-ask"')
     text = text.replace('<a href="/subscribe.html">Membership</a>', '<a href="/donate.html">Donate</a>')
     text = re.sub(
         r'<a\b(?=[^>]*class="[^"]*\bfooter-subscribe-cta\b)[^>]*>.*?</a>',
