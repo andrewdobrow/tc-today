@@ -115,6 +115,85 @@ def test_conflicting_crash_date_remains_separate():
     assert not same_named_incident_as_custom(incoming, custom())[0]
 
 
+def october_27_production_escape():
+    # Exact new URL and lead observed in the Oct 27 green production deploy.
+    return {
+        "slug": "2026-10-27-st-lucie-county-detective-charged-with-dui-put-on-unpaid-leave-after-vero-beach",
+        "headline": (
+            "St. Lucie County detective charged with DUI, put on unpaid leave "
+            "after Vero Beach crash"
+        ),
+        "teaser": (
+            "St. Lucie County sheriff's detective Tyler Horstman faces charges "
+            "including DUI and has been placed on unpaid administrative leave "
+            "following a March 1 crash in Vero Beach that seriously injured a woman."
+        ),
+        "date": "2026-10-27",
+        "is_custom": False,
+        "authoritative_custom": False,
+        "editorial_story_id": "feed:fragmented-oct27",
+    }
+
+
+def test_oct27_real_production_escape_march1_vs_march2_routes_to_original_custom():
+    from tct_engine.custom_named_incident_identity import (
+        assert_no_unresolved_named_custom_collisions,
+        potential_named_custom_collision,
+    )
+    g = importlib.import_module("scripts.generate")
+    original, generated = custom(), october_27_production_escape()
+    matched, evidence = same_named_incident_as_custom(generated, original)
+    assert matched, "Adjacent reported crash dates cannot publish two URLs for this case"
+    assert evidence.startswith("named-custom-incident|tyler-horstman|")
+    assert potential_named_custom_collision(generated, original)
+    with pytest.raises(RuntimeError, match="Custom canonical publication safety gate"):
+        assert_no_unresolved_named_custom_collisions([original, generated])
+    identified, confidence, basis = g._find_authoritative_custom_incident_match(
+        generated, archived_customs=[original], current_customs=[]
+    )
+    assert identified and identified["slug"] == CUSTOM_SLUG
+    assert confidence == 100
+    assert "named-custom-incident" in basis
+    with TemporaryDirectory() as td:
+        root = Path(td)
+        (root / "articles").mkdir()
+        cleaned, redirects = g.apply_canonical_story_cleanup(
+            [original, generated], root / "articles", root
+        )
+        assert [item["slug"] for item in cleaned] == [CUSTOM_SLUG]
+        assert any(
+            redirect["source_slug"] == generated["slug"]
+            and redirect["target_slug"] == CUSTOM_SLUG
+            and redirect["canonical_is_custom"] is True
+            for redirect in redirects
+        )
+        assert_no_unresolved_named_custom_collisions(cleaned)
+        # Retired URL must remain a redirect, not an independently indexed article.
+        page = (root / "articles" / f'{generated["slug"]}.html').read_text()
+        assert "noindex,follow" in page
+        assert f"/articles/{CUSTOM_SLUG}.html" in page
+    assert original["image_url"] == IMAGE
+    assert original["first_published"] == "Mon, 26 Oct 2026 20:25:50 -0400"
+
+
+def test_one_day_conflict_does_not_override_person_locality_or_event_checks():
+    wrong_person = october_27_production_escape()
+    wrong_person["teaser"] = wrong_person["teaser"].replace(
+        "Tyler Horstman", "Jordan Smith"
+    )
+    assert not same_named_incident_as_custom(wrong_person, custom())[0]
+    wrong_place = october_27_production_escape()
+    wrong_place["headline"] = "Detective charged with DUI after crash in Miami"
+    wrong_place["teaser"] = (
+        "Miami-Dade detective Tyler Horstman charged with DUI after a "
+        "March 1 crash in Miami."
+    )
+    assert not same_named_incident_as_custom(wrong_place, custom())[0]
+    wrong_crash = october_27_production_escape()
+    wrong_crash["teaser"] = wrong_crash["teaser"].replace("March 1", "March 5")
+    assert not same_named_incident_as_custom(wrong_crash, custom())[0]
+
+
 def test_unrelated_locality_remains_separate():
     incoming = duplicate()
     incoming["headline"] = "Detective arrested for DUI after crash in agency vehicle"
