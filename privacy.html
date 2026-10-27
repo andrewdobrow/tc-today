@@ -28,12 +28,11 @@
     .policy-nav a { font-size: 13px; color: var(--accent); font-weight: 600; text-decoration: none; }
     .policy-nav a:hover { text-decoration: underline; }
   </style>
-  <script data-tct-member-prepaint>
-(function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1'){document.documentElement.classList.add('tct-member-preverified');var a=function(){if(!document.body)return false;document.body.classList.add('mv-no-ads');return true;};if(!a()){var o=new MutationObserver(function(){if(a())o.disconnect();});o.observe(document.documentElement,{childList:true});}return;}var z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit'}).formatToParts(new Date());var y=(z.find(function(p){return p.type==='year'})||{}).value||'';var m=(z.find(function(p){return p.type==='month'})||{}).value||'';var period=y+'-'+m;var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');var raw=localStorage.getItem('tct_monthly_free_article_v1');var state=raw?JSON.parse(raw):null;var used=state&&(Array.isArray(state.slugs)?state.slugs:(state.slug?[state.slug]:[]))||[];var stalePending=state&&state.pending&&!state.meter_token&&(Date.now()-Number(state.started_at||0)>120000);if(stalePending){localStorage.removeItem('tct_monthly_free_article_v1');state=null;}if(slug&&(!state||state.period!==period||used.indexOf(slug)>=0||used.length<2)){document.documentElement.classList.add('tct-meter-precheck');setTimeout(function(){document.documentElement.classList.remove('tct-meter-precheck')},5000);}}catch(_e){}})();
-</script>
+  <script data-tct-member-prepaint>(function(){try{if(localStorage.getItem("tct_member_entitled_hint")!=="1")return;var apply=function(){if(!document.body)return false;document.body.classList.add("mv-no-ads");return true;};if(!apply()){var observer=new MutationObserver(function(){if(apply())observer.disconnect();});observer.observe(document.documentElement,{childList:true});}}catch(_e){}})();</script>
   <link rel="stylesheet" href="/membership.css?v=1.13.9.114">
 <meta name="tct-story-analytics-endpoint" content="https://pbvhdbmgqvoumcytvwyq.supabase.co/functions/v1/story-analytics">
 <script type="text/javascript" async="async" data-noptimize="1" data-cfasync="false" src="//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"></script>
+  <link rel="stylesheet" href="/donation-model.css">
 </head>
 <body data-article-slug="">
   <header class="site-masthead">
@@ -55,7 +54,7 @@
           <button type="button" class="tct-search-toggle tct-search-toggle--desktop" data-tct-search-toggle aria-label="Search Treasure Coast Today" aria-controls="tct-site-search" aria-expanded="false">
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
 </button>
-          <a href="/subscribe.html" class="support-btn membership-subscribe-btn" style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today, $1 first month"><span class="membership-subscribe-label">Subscribe</span><span class="membership-subscribe-price">Limited time &middot; $1 first month</span></a><a href="/subscribe.html?signin=1" class="membership-header-signin">Sign in</a><a href="/subscribe.html" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>
+          <a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Donate to support Treasure Coast Today"><span class="tct-donate-heart" aria-hidden="true">&#9829;</span> <span class="membership-subscribe-label">Donate</span></a><a href="/subscribe.html?signin=1" class="membership-header-signin">Sign in</a><a href="/subscribe.html" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>
         </div>
       </div>
       <nav id="tct-mobile-nav" class="mobile-nav-panel" aria-label="Mobile navigation" hidden>
@@ -103,6 +102,7 @@
         <a href="/?cat=st_lucie" class="cat-btn" style="text-decoration:none">St. Lucie County</a>
         <a href="/?cat=indian_river" class="cat-btn" style="text-decoration:none">Indian River County</a>
         <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
+        <a href="/advertise.html" class="cat-btn" style="text-decoration:none">Advertise</a>
         <details class="nav-sections">
           <summary class="cat-btn nav-sections-toggle">More <span class="nav-sections-chevron" aria-hidden="true">▾</span></summary>
           <div class="nav-sections-menu" role="group" aria-label="More">
@@ -124,7 +124,6 @@
               <a href="/missing-persons.html" class="nav-section-link">Missing Persons</a>
               <a href="/archive.html" class="nav-section-link">Archive</a>
               <a href="/newsroom.html" class="nav-section-link">Newsroom</a>
-              <a href="/advertise.html" class="nav-section-link">Advertise</a>
             </div>
           </div>
           </div>
@@ -210,26 +209,30 @@
     <div class="policy-wrap">
       <span class="policy-eyebrow">Privacy Policy</span>
       <h1 class="policy-headline">Privacy Policy</h1>
-      <p class="policy-updated">Last updated: October 15, 2026</p>
+      <p class="policy-updated">Last updated: October 27, 2026</p>
       <div class="policy-body">
         <p>Treasure Coast Today is an independent local news website and iPhone app owned and operated by Treasure Coast Today LLC, a Florida limited liability company founded and owned by Andrew Dobrow. This policy explains what information is collected when you use the website or app, how it is used, and your choices.</p>
 
+        <h2>Free articles and voluntary reader contributions</h2>
+        <p>Treasure Coast Today's news articles are freely available without a subscription, sign-in or contribution. Readers may optionally contribute to support our reporting. TCT is operated by Treasure Coast Today LLC, a for-profit business; contributions are not tax-deductible charitable donations and do not purchase ad-free access, subscription rights or editorial influence.</p>
+        <p>Our one-time, choose-your-own-amount contribution checkout is hosted by Stripe. We may receive transaction amounts, payment status, dates, Stripe identifiers, and contact details supplied for confirmations or receipts. Stripe handles payment credentials; TCT does not collect or store full card numbers. We retain payment records when needed for customer support, accounting, fraud prevention or applicable legal obligations.</p>
+        <p>Existing paid subscriptions and billing records continue to be handled through Stripe and Supabase while previously purchased periods conclude. Eligible subscribers may sign in to receive the ad-free website and iPhone app experience already included in their paid terms. New articles do not require paid access. We display clearly labeled sponsorships and advertising, including Mediavine on the website and Google AdMob in the iPhone app, as described below.</p>
         <h2>Information we collect</h2>
-        <p>We collect information needed to operate the website and app, provide memberships and news alerts, understand readership, and respond to messages:</p>
+        <p>We collect information needed to operate the website and app, manage optional contributions and pre-existing paid accounts, deliver requested news alerts and emails, understand readership, and respond to messages:</p>
         <ul>
           <li><strong>Analytics data.</strong> We use Google Analytics to understand how visitors use the site, such as which pages are viewed and general, aggregated information about our audience. This helps us improve our coverage.</li>
-          <li><strong>Membership account information.</strong> If you purchase or use a Treasure Coast Today membership, we use your email address to create or link your membership identity, send secure sign-in links and verify access.</li>
-          <li><strong>Payment information.</strong> Membership payments are processed by Stripe. Treasure Coast Today does not receive or store your full card number. We receive identifiers and subscription status needed to provide and manage membership access.</li>
+          <li><strong>Existing subscriber account information.</strong> For previously purchased memberships, we use the associated email address and account identifiers to send sign-in links, verify remaining ad-free benefits and provide access to billing management. No account is required to read public articles.</li>
+          <li><strong>Payment and contribution information.</strong> Stripe processes voluntary reader payments and historical subscriptions. We receive related confirmations, amounts, dates, customer contact information when provided, Stripe payment identifiers and existing subscription status. We do not receive or store complete payment card numbers.</li>
           <li><strong>Information you send us.</strong> If you email us a news tip, correction, or question, we receive whatever information you choose to include in that message.</li>
         </ul>
 
         <!-- tct-ios-privacy-disclosures-20261012 -->
         <h2>Information used by our iPhone app</h2>
-        <p>Public headlines, stories and event listings can be read in the iPhone app without creating a membership account. The app retrieves content from Treasure Coast Today services over an internet connection. As with ordinary website and API requests, service providers may process technical connection details such as IP address, request times and device/network information.</p>
+        <p>Headlines, news articles and event listings are available without purchasing a membership. Older installed app versions may temporarily retain legacy article-access screens until readers update. The app retrieves content from Treasure Coast Today services over an internet connection. As with ordinary website and API requests, service providers may process technical connection details such as IP address, request times and device/network information.</p>
         <ul>
           <li><strong>Optional news alerts.</strong> If you turn on push notifications, our app receives an Apple Push Notification service (APNs) device token and uses a randomly generated app-installation identifier to register your phone. Our systems store the token, installation identifier, enabled or disabled status, your selected county and breaking-news preferences, the APNs environment, and relevant registration timestamps. This information is used to deliver and manage the alerts you request. You can turn off notifications in the app or through iOS Settings.</li>
-          <li><strong>App authentication and membership access.</strong> If you sign in, we process your email address and authentication/session credentials to verify access to subscriber content. The app stores session credentials in iOS Keychain. Membership status is verified by our services; your payment card is handled by Stripe, not by the iPhone app.</li>
-          <li><strong>App preferences and reading access.</strong> The app locally stores certain settings, notification-topic preferences and information needed to recognize its monthly free-article allowance. These settings help the app remember your choices and enforce article access rules.</li>
+          <li><strong>App authentication and remaining paid benefits.</strong> Existing paid readers who sign in provide an email address and session credentials so the app can verify their remaining ad-free entitlement. Credentials are stored in iOS Keychain. Stripe, not the iPhone app, processes payment details. No login is required for ordinary free news reading.</li>
+          <li><strong>App preferences and legacy reading limits.</strong> The app locally stores settings and notification preferences. Older versions may also retain a historical monthly article-meter record on the device; new public-access versions do not use a paid reading allowance to unlock ordinary news articles.</li>
         </ul>
 
         <!-- tct-ios-admob-disclosure-20261013 -->
@@ -240,7 +243,7 @@
         <p>For more information about Google's handling of advertising data, see <a href="https://policies.google.com/privacy">Google's Privacy Policy</a> and <a href="https://policies.google.com/technologies/ads">Google's advertising information</a>.</p>
 
         <h2>How we use information</h2>
-        <p>We use the information described above to operate and improve the website and app, deliver requested push notifications, provide membership access, process and manage subscriptions, send secure authentication messages, understand readership, and respond to messages you send us. We share information with the service providers and advertising partners described in this policy. Sharing information with advertising partners may be considered a sale or sharing of personal information under applicable privacy laws, even when we do not receive payment specifically for that information. For questions about your privacy rights and available choices, contact <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a>.</p>
+        <p>We use the information described above to operate and improve the website and app, deliver requested push notifications and newsletters, process optional contributions, manage pre-existing subscriptions and their ad-free benefits, send secure account messages, understand readership, and respond to messages you send us. We share information with the service providers and advertising partners described in this policy. Sharing information with advertising partners may be considered a sale or sharing of personal information under applicable privacy laws, even when we do not receive payment specifically for that information. For questions about your privacy rights and available choices, contact <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a>.</p>
 
         <h2>News content and sources</h2>
         <p>Treasure Coast Today uses automated tools to assist in gathering and organizing information from public sources. Published coverage is produced under the editorial oversight of the publisher. For more on how our coverage is produced, see our <a href="/editorial-standards.html">Editorial Standards</a>.</p>
@@ -249,9 +252,11 @@
         <p>Treasure Coast Today relies on the following third-party services, each governed by its own privacy policy:</p>
         <ul>
           <li><strong>Google Analytics</strong> for website analytics. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</li>
-          <li><strong>Stripe</strong> for membership checkout, recurring billing and billing-account management.</li>
-          <li><strong>Supabase</strong> for membership authentication, account records, subscription entitlement and protected article delivery.</li>
-          <li><strong>Resend</strong> as an email-delivery provider for secure membership sign-in messages.</li>
+          <li><strong>Stripe</strong> for optional one-time contributions, receipts, and management of historical membership billing.</li>
+          <li><strong>Supabase</strong> for remaining subscriber authentication, account records, legacy billing status, article services and site functions.</li>
+          <li><strong>Resend</strong> as an email-delivery provider for secure existing-account sign-in messages.</li>
+          <li><strong>Kit</strong> for readers who voluntarily subscribe to the Morning Brief email newsletter; readers may unsubscribe through the links in those emails.</li>
+          <li><strong>Formspree</strong> for information submitted through advertising inquiry forms, such as a contact name, company and message.</li>
           <li><strong>Apple Push Notification service (APNs)</strong> to deliver optional iPhone news alerts. The Apple-issued device token is used for this purpose.</li>
         </ul>
 
@@ -267,7 +272,7 @@
 
         <h2>Your choices, retention and requests</h2>
         <p>You can decline or disable news alerts and change your selected notification topics through the app and iOS Settings. You can sign out of the app, and you can access your billing and cancellation options through the Treasure Coast Today membership website.</p>
-        <p>We retain information for as long as reasonably needed for the purposes described above, including to maintain memberships and comply with applicable legal, accounting, and security obligations. For questions about personal information, or to request access to or deletion of account information, contact <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a>. Some records may need to be retained when required by law.</p>
+        <p>We retain information as reasonably necessary to administer remaining paid benefits, optional contributions, requested services and applicable legal, accounting, security and recordkeeping obligations. For questions about personal information, or to request access to or deletion of account information, contact <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a>. Some records may need to be retained when required by law.</p>
 
         <h2>Children's privacy</h2>
         <p>Treasure Coast Today is a general-audience local news website and iPhone app, and is not directed at children under 13. We do not knowingly collect personal information from children.</p>

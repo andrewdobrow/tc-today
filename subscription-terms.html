@@ -28,12 +28,11 @@
     .policy-nav a { font-size: 13px; color: var(--accent); font-weight: 600; text-decoration: none; }
     .policy-nav a:hover { text-decoration: underline; }
   </style>
-  <script data-tct-member-prepaint>
-(function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1'){document.documentElement.classList.add('tct-member-preverified');var a=function(){if(!document.body)return false;document.body.classList.add('mv-no-ads');return true;};if(!a()){var o=new MutationObserver(function(){if(a())o.disconnect();});o.observe(document.documentElement,{childList:true});}return;}var z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit'}).formatToParts(new Date());var y=(z.find(function(p){return p.type==='year'})||{}).value||'';var m=(z.find(function(p){return p.type==='month'})||{}).value||'';var period=y+'-'+m;var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');var raw=localStorage.getItem('tct_monthly_free_article_v1');var state=raw?JSON.parse(raw):null;var used=state&&(Array.isArray(state.slugs)?state.slugs:(state.slug?[state.slug]:[]))||[];var stalePending=state&&state.pending&&!state.meter_token&&(Date.now()-Number(state.started_at||0)>120000);if(stalePending){localStorage.removeItem('tct_monthly_free_article_v1');state=null;}if(slug&&(!state||state.period!==period||used.indexOf(slug)>=0||used.length<2)){document.documentElement.classList.add('tct-meter-precheck');setTimeout(function(){document.documentElement.classList.remove('tct-meter-precheck')},5000);}}catch(_e){}})();
-</script>
+  <script data-tct-member-prepaint>(function(){try{if(localStorage.getItem("tct_member_entitled_hint")!=="1")return;var apply=function(){if(!document.body)return false;document.body.classList.add("mv-no-ads");return true;};if(!apply()){var observer=new MutationObserver(function(){if(apply())observer.disconnect();});observer.observe(document.documentElement,{childList:true});}}catch(_e){}})();</script>
   <link rel="stylesheet" href="/membership.css?v=1.13.9.114">
 <meta name="tct-story-analytics-endpoint" content="https://pbvhdbmgqvoumcytvwyq.supabase.co/functions/v1/story-analytics">
 <script type="text/javascript" async="async" data-noptimize="1" data-cfasync="false" src="//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"></script>
+  <link rel="stylesheet" href="/donation-model.css">
 </head>
 <body data-article-slug="">
   <header class="site-masthead">
@@ -55,7 +54,7 @@
           <button type="button" class="tct-search-toggle tct-search-toggle--desktop" data-tct-search-toggle aria-label="Search Treasure Coast Today" aria-controls="tct-site-search" aria-expanded="false">
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
 </button>
-          <a href="/subscribe.html" class="support-btn membership-subscribe-btn" style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today, $1 first month"><span class="membership-subscribe-label">Subscribe</span><span class="membership-subscribe-price">Limited time &middot; $1 first month</span></a><a href="/subscribe.html?signin=1" class="membership-header-signin">Sign in</a><a href="/subscribe.html" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>
+          <a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Donate to support Treasure Coast Today"><span class="tct-donate-heart" aria-hidden="true">&#9829;</span> <span class="membership-subscribe-label">Donate</span></a><a href="/subscribe.html?signin=1" class="membership-header-signin">Sign in</a><a href="/subscribe.html" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>
         </div>
       </div>
       <nav id="tct-mobile-nav" class="mobile-nav-panel" aria-label="Mobile navigation" hidden>
@@ -103,6 +102,7 @@
         <a href="/?cat=st_lucie" class="cat-btn" style="text-decoration:none">St. Lucie County</a>
         <a href="/?cat=indian_river" class="cat-btn" style="text-decoration:none">Indian River County</a>
         <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
+        <a href="/advertise.html" class="cat-btn" style="text-decoration:none">Advertise</a>
         <details class="nav-sections">
           <summary class="cat-btn nav-sections-toggle">More <span class="nav-sections-chevron" aria-hidden="true">▾</span></summary>
           <div class="nav-sections-menu" role="group" aria-label="More">
@@ -124,7 +124,6 @@
               <a href="/missing-persons.html" class="nav-section-link">Missing Persons</a>
               <a href="/archive.html" class="nav-section-link">Archive</a>
               <a href="/newsroom.html" class="nav-section-link">Newsroom</a>
-              <a href="/advertise.html" class="nav-section-link">Advertise</a>
             </div>
           </div>
           </div>
@@ -210,17 +209,18 @@
     <div class="policy-wrap">
       <span class="policy-eyebrow">Treasure Coast Today Membership</span>
       <h1 class="policy-headline">Subscription Terms</h1>
-      <p class="policy-updated">Last updated: October 15, 2026</p>
+      <p class="policy-updated">Last updated: October 27, 2026</p>
       <div class="policy-body">
-        <p>These terms apply to paid Treasure Coast Today (TCT) memberships purchased through our website and accessed through the website or iPhone app. Treasure Coast Today is operated by Treasure Coast Today LLC, a Florida limited liability company. Please review these terms and the <a href="/privacy.html">Privacy Policy</a> before subscribing.</p>
+        <section class="policy-callout" id="tct-existing-subscription-notice"><strong>October 27, 2026: TCT is transitioning to free news.</strong> All articles are available to everyone without payment. We are closing new paid reading memberships. Subscribers who have already paid retain their ad-free benefit through the end of their paid terms; future renewals will be stopped at the billing transition. You can <a href="/subscribe.html">sign in to manage your existing billing account</a> or <a href="mailto:hello@treasurecoast.today">contact TCT</a> for confirmation of your renewal status. The terms below document previously sold memberships.</section>
+        <p>These terms apply to paid Treasure Coast Today (TCT) memberships purchased through our website and accessed through the website or iPhone app. Treasure Coast Today is operated by Treasure Coast Today LLC, a Florida limited liability company. These terms remain available for previous subscribers. Read our <a href="/privacy.html">Privacy Policy</a> for current reader-support and advertising information.</p>
 
-        <h2>Membership plans and pricing</h2>
-        <p><strong>Monthly membership:</strong> The advertised introductory offer is $1 for the first month of an eligible new monthly subscription, followed by $4.99 per month until canceled. The introductory offer does not repeat each month. Special promotional offers may have different conditions, which will be disclosed at checkout.</p>
-        <p><strong>Annual membership:</strong> The annual plan costs $49 per year and renews annually until canceled. It includes the same membership reading benefits as the monthly plan.</p>
+        <h2>Historical membership plans and pricing</h2>
+        <p><strong>Monthly membership:</strong> The former introductory offer was $1 for the first month of an eligible new monthly subscription, followed by $4.99 per month until canceled. The introductory offer did not repeat each month. Special promotional offers may have different conditions, which will be disclosed at checkout.</p>
+        <p><strong>Annual membership:</strong> The former annual plan cost $49 per year and was sold with automatic renewal unless canceled. It includes the same membership reading benefits as the monthly plan.</p>
         <p>All prices are in U.S. dollars. Applicable taxes, any discounts and the total amount due are shown at checkout. Your Stripe checkout confirmation provides the payment amount and recurring billing details.</p>
 
         <h2>Automatic renewal and payments</h2>
-        <p>Both plans are recurring subscriptions. By subscribing, you authorize Stripe, our payment processor, to charge your selected payment method when your plan begins and again on each renewal date unless you cancel before the next renewal. The monthly promotional price applies only to the specified introductory period; subsequent charges use the standard monthly rate unless a different offer is explicitly shown at checkout.</p>
+        <p>Historically, both plans were sold as recurring subscriptions. When you subscribed, you authorized Stripe, our payment processor, to charge your selected payment method when your plan begins and again on each renewal date unless you cancel before the next renewal. The monthly promotional price applies only to the specified introductory period; subsequent charges use the standard monthly rate unless a different offer is explicitly shown at checkout.</p>
         <p>Stripe processes payments and maintains your billing details. Treasure Coast Today does not store your complete payment card number. If a payment fails or a subscription is no longer active, paid reading access may be interrupted.</p>
 
         <h2>How to cancel your subscription</h2>
@@ -235,7 +235,7 @@
         <p><strong>Delete Account</strong> is a separate permanent action offered in the iPhone app. Deleting your account immediately cancels associated subscription renewals, removes your TCT login and membership access, and does not automatically refund unused subscription time. Certain payment and transaction records may be retained when legally required. Do not delete your account if you only want to stop future renewals.</p>
 
         <h2>Access and member benefits</h2>
-        <p>An active membership provides unlimited access to TCT subscriber stories and an ad-free reading experience on supported TCT services while your account is entitled. You can use the same subscription email to sign in on the website and iPhone app. Service availability depends on an internet connection and may be affected by maintenance or technical issues.</p>
+        <p>Articles are now free for everyone. An existing paid membership continues to provide the previously promised ad-free experience on supported TCT services through the end of the already-paid period while the subscriber remains entitled. You can use the same subscription email to sign in on the website and iPhone app. Service availability depends on an internet connection and may be affected by maintenance or technical issues.</p>
         <p>Subscriptions are purchased and billed through <strong>Treasure Coast Today and Stripe</strong>, not Apple. Apple does not manage or refund these website subscriptions.</p>
 
         <h2>Changes to plans or these terms</h2>
@@ -245,7 +245,7 @@
         <p>For questions about subscription charges, cancellations, or access, email <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a> or use our <a href="/contact.html">Contact page</a>. For information about the use and deletion of personal data, see our <a href="/privacy.html">Privacy Policy</a>.</p>
       </div>
       <div class="policy-nav">
-        <a href="/subscribe.html">Membership</a>
+        <a href="/donate.html"><span class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate</a>
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/contact.html">Contact</a>
       </div>
