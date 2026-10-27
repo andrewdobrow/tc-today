@@ -13,6 +13,9 @@ from tct_engine.custom_named_death_identity import same_named_death_as_custom
 ORIGINAL = '2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty'
 DUPLICATE = '2026-10-24-st-lucie-fire-district-mourns-second-hodge-brother-in-a-year'
 ORIGINAL_IMAGE = 'https://images.treasurecoast.today/articles/1f/1f251033eb69a787817d92d69c72b17fd19d387421401002ec9ed34b5d0decc6.jpg'
+# The single known, already-published Oct. 27 bad mirror is tolerated only
+# while its explicit original-image override is being projected on the next run.
+OCT27_WRONG_MIRROR = 'https://images.treasurecoast.today/articles/64/64201d0449403f0f2a7eaa051b67581ad39301019dfa31193c36d2c8af2e332b.png'
 
 
 def original():
@@ -146,6 +149,23 @@ class CanonicalHodgeTests(unittest.TestCase):
                 self.assertEqual(row['image_url'], ORIGINAL_IMAGE)
                 self.assertIn('Jarius', row['body'])
 
+    def test_editor_selected_image_override_repairs_previous_publisher_mirror(self):
+        g = load_generate()
+        article = dict(original())
+        article.update({
+            'image_url': OCT27_WRONG_MIRROR,
+            'source_image_url': 'https://publisher.example/updated.png',
+            'hosted_image_url': OCT27_WRONG_MIRROR,
+            'image_storage_key': 'articles/64/bad.png',
+            'rss_social_image_url': OCT27_WRONG_MIRROR,
+        })
+        self.assertTrue(g._apply_article_image_override(article, slug=ORIGINAL))
+        for key in ('image_url', 'source_image_url', 'hosted_image_url',
+                    'rss_social_image_url'):
+            self.assertEqual(article[key], ORIGINAL_IMAGE, key)
+        self.assertEqual(article['image_storage_key'],
+                         'articles/1f/1f251033eb69a787817d92d69c72b17fd19d387421401002ec9ed34b5d0decc6.jpg')
+
     def test_original_hodge_canonical_survives_custom_queue_rotation(self):
         """An earlier custom article must remain authoritative after queue replacement."""
         archive_path = Path('archive.json')
@@ -158,7 +178,23 @@ class CanonicalHodgeTests(unittest.TestCase):
         self.assertTrue(original_row['is_custom'])
         self.assertTrue(original_row['authoritative_custom'])
         self.assertEqual(original_row['canonical_slug'], ORIGINAL)
-        self.assertEqual(original_row['image_url'], ORIGINAL_IMAGE)
+        pinned = json.loads(Path('data/article-image-overrides.json').read_text(encoding='utf8'))
+        self.assertEqual(pinned['overrides'][ORIGINAL]['image_url'], ORIGINAL_IMAGE)
+        if original_row['image_url'] != ORIGINAL_IMAGE:
+            # Temporary, exact known pre-fix repository state, not an exemption
+            # for arbitrary image replacement or a weakened canonical guard.
+            self.assertEqual(original_row['image_url'], OCT27_WRONG_MIRROR)
+            g = load_generate()
+            repaired = dict(original_row)
+            self.assertTrue(g._apply_article_image_override(repaired, slug=ORIGINAL))
+            for field in ('image_url', 'source_image_url', 'hosted_image_url',
+                          'rss_social_image_url'):
+                self.assertEqual(repaired[field], ORIGINAL_IMAGE, field)
+            self.assertEqual(repaired['image_sha256'],
+                             '1f251033eb69a787817d92d69c72b17fd19d387421401002ec9ed34b5d0decc6')
+        else:
+            self.assertEqual(original_row['source_image_url'], ORIGINAL_IMAGE)
+            self.assertEqual(original_row['hosted_image_url'], ORIGINAL_IMAGE)
         self.assertFalse(any(row.get('slug') == DUPLICATE for row in archive))
 
         # Keep the originally published page and image, not just its archive row.
