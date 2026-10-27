@@ -63,6 +63,50 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Verify legacy membership checkout is blocked before free-news launch
+        env:
+          TCT_READER_REVENUE_MODE: ${{ vars.TCT_READER_REVENUE_MODE || 'subscription' }}
+          TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
+        run: |
+          if [ "$TCT_READER_REVENUE_MODE" != "donation_ads" ]; then
+            echo "Subscription model active; public checkout guard not required."
+          else
+            python - <<'PY'
+          import os
+          import urllib.error
+          import urllib.request
+          from urllib.parse import urlparse
+
+          base = os.environ.get("TCT_SUPABASE_URL", "").strip().rstrip("/")
+          parsed = urlparse(base)
+          if parsed.scheme != "https" or not parsed.hostname or not parsed.hostname.endswith(".supabase.co"):
+              raise SystemExit("::error::TCT_SUPABASE_URL must be the configured HTTPS Supabase project URL.")
+
+          # A harmless GET cannot create a Stripe checkout. The published
+          # create-checkout function must reject it before parsing the body
+          # with HTTP 410 when new subscriptions are disabled.
+          request = urllib.request.Request(
+              base + "/functions/v1/create-checkout",
+              headers={"Accept": "application/json"},
+              method="GET",
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  status, body = response.status, response.read(4096).decode("utf-8", errors="replace")
+          except urllib.error.HTTPError as err:
+              status, body = err.code, err.read(4096).decode("utf-8", errors="replace")
+          except urllib.error.URLError as err:
+              raise SystemExit("::error::Cannot verify new-subscription closure: " + str(err.reason))
+          if status != 410 or "new paid reading memberships are closed" not in body.lower():
+              raise SystemExit(
+                  f"::error::Cannot launch free-news model: checkout returned HTTP {status}, "
+                  "not the expected verified HTTP 410 membership-closure response. "
+                  "Confirm Supabase secret TCT_DISABLE_NEW_SUBSCRIPTIONS=true and redeploy the existing backend."
+              )
+          print("PASS: live new-membership checkout returns HTTP 410; existing subscriber endpoints remain untouched.")
+          PY
+          fi
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
