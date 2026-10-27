@@ -254,3 +254,17 @@ def test_open_access_launch_checks_real_supabase_checkout_before_generation():
     assert source.index("Verify legacy membership checkout is blocked before free-news launch") < source.index("- name: Generate news")
 
 
+
+
+def test_donate_hearts_inherit_label_color_and_align_inline():
+    css = (Path(__file__).resolve().parents[1] / "donation-model.css").read_text(encoding="utf-8")
+    assert ".tct-donate-heart{color:inherit;" in css
+    assert ".tct-donate-button .tct-donate-heart{color:#fff}" not in css
+    assert ".tct-donate-header{min-width:98px;flex-direction:row!important;" in css
+    assert "background:#f26445;color:white!important" in css
+    # Heart is decorative; the text Donate remains the accessible action name.
+    source = _rewrite_chrome(
+        '<a class="support-btn membership-subscribe-btn" href="/subscribe.html">Subscribe</a>',
+        "index.html",
+    )
+    assert 'aria-hidden="true">&#9829;</span> <span class="membership-subscribe-label">Donate</span>' in source
