@@ -138,9 +138,9 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
     # Upgrade existing free-news pages, including inline footer links which
     # no longer contain their original /subscribe.html href.
     text = text.replace(LEGACY_DONATE_HEART, DONATE_HEART_SVG)
-    if not re.search(r'href="/donation-model\\.css(?:\\?v=[^"]*)?"', text) and "</head>" in text:
+    if not re.search(r'href="/donation-model\.css(?:\?v=[^"]*)?"', text) and "</head>" in text:
         text = text.replace("</head>", '  <link rel="stylesheet" href="/donation-model.css?v=20261027c">\n</head>', 1)
-    text = re.sub(r'href="/donation-model\\.css(?:\\?v=[^"]*)?"',
+    text = re.sub(r'href="/donation-model\.css(?:\?v=[^"]*)?"',
                   'href="/donation-model.css?v=20261027c"', text)
     return text
 
