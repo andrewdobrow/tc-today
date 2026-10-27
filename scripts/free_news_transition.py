@@ -146,24 +146,174 @@ def _rewrite_home_support(text: str) -> str:
 
 
 def _rewrite_privacy(text: str) -> str:
-    text = re.sub(r'Last updated:\s*[^<]+', 'Last updated: October 27, 2026', text, count=1)
-    note = """<h2>Donations and free access</h2>
-        <p>Treasure Coast Today's news articles are free to read. Readers may choose to make voluntary payments to support our for-profit newsroom. Stripe hosts donation checkout and processes payment details. We may receive payment confirmation, amount, date and the contact information you choose to provide for receipts and accounting. No paid account or donation is required to read stories.</p>
-        <p>We may display advertising and clearly labeled sponsored content. Our advertising partners, including Mediavine, may use cookies and similar technologies as described below. Existing subscription records may be retained for billing, cancellation and legal obligations; new reading access is not based on subscription status.</p>
+    """Publish accurate public-access, donations, legacy accounts, and ad disclosures.
+
+    The Mediavine Programmatic Advertising (Ver 1.1) section is contractual
+    supplied copy. Do not change any of its paragraphs or required heading.
+    """
+    text = re.sub(
+        r'(<p class="policy-updated">Last updated: )[^<]+',
+        r'\g<1>October 27, 2026', text, count=1,
+    )
+    note = """<h2>Free articles and voluntary reader contributions</h2>
+        <p>Treasure Coast Today's news articles are freely available without a subscription, sign-in or contribution. Readers may optionally contribute to support our reporting. TCT is operated by Treasure Coast Today LLC, a for-profit business; contributions are not tax-deductible charitable donations and do not purchase ad-free access, subscription rights or editorial influence.</p>
+        <p>Our one-time, choose-your-own-amount contribution checkout is hosted by Stripe. We may receive transaction amounts, payment status, dates, Stripe identifiers, and contact details supplied for confirmations or receipts. Stripe handles payment credentials; TCT does not collect or store full card numbers. We retain payment records when needed for customer support, accounting, fraud prevention or applicable legal obligations.</p>
+        <p>Existing paid subscriptions and billing records continue to be handled through Stripe and Supabase while previously purchased periods conclude. Eligible subscribers may sign in to receive the ad-free website and iPhone app experience already included in their paid terms. New articles do not require paid access. We display clearly labeled sponsorships and advertising, including Mediavine on the website and Google AdMob in the iPhone app, as described below.</p>
         """
-    if "<h2>Donations and free access</h2>" not in text:
-        text = text.replace("<h2>Information we collect</h2>", note + "<h2>Information we collect</h2>", 1)
+    if "<h2>Free articles and voluntary reader contributions</h2>" not in text:
+        marker = "<h2>Information we collect</h2>"
+        if marker not in text:
+            raise RuntimeError("Privacy policy: information-collection section missing")
+        text = text.replace(marker, note + marker, 1)
+    updates = (
+        (
+            "We collect information needed to operate the website and app, provide memberships and news alerts, understand readership, and respond to messages:",
+            "We collect information needed to operate the website and app, manage optional contributions and pre-existing paid accounts, deliver requested news alerts and emails, understand readership, and respond to messages:",
+        ),
+        (
+            "<li><strong>Membership account information.</strong> If you purchase or use a Treasure Coast Today membership, we use your email address to create or link your membership identity, send secure sign-in links and verify access.</li>",
+            "<li><strong>Existing subscriber account information.</strong> For previously purchased memberships, we use the associated email address and account identifiers to send sign-in links, verify remaining ad-free benefits and provide access to billing management. No account is required to read public articles.</li>",
+        ),
+        (
+            "<li><strong>Payment information.</strong> Membership payments are processed by Stripe. Treasure Coast Today does not receive or store your full card number. We receive identifiers and subscription status needed to provide and manage membership access.</li>",
+            "<li><strong>Payment and contribution information.</strong> Stripe processes voluntary reader payments and historical subscriptions. We receive related confirmations, amounts, dates, customer contact information when provided, Stripe payment identifiers and existing subscription status. We do not receive or store complete payment card numbers.</li>",
+        ),
+        (
+            "Public headlines, stories and event listings can be read in the iPhone app without creating a membership account.",
+            "Headlines, news articles and event listings are available without purchasing a membership. Older installed app versions may temporarily retain legacy article-access screens until readers update.",
+        ),
+        (
+            "<li><strong>App authentication and membership access.</strong> If you sign in, we process your email address and authentication/session credentials to verify access to subscriber content. The app stores session credentials in iOS Keychain. Membership status is verified by our services; your payment card is handled by Stripe, not by the iPhone app.</li>",
+            "<li><strong>App authentication and remaining paid benefits.</strong> Existing paid readers who sign in provide an email address and session credentials so the app can verify their remaining ad-free entitlement. Credentials are stored in iOS Keychain. Stripe, not the iPhone app, processes payment details. No login is required for ordinary free news reading.</li>",
+        ),
+        (
+            "<li><strong>App preferences and reading access.</strong> The app locally stores certain settings, notification-topic preferences and information needed to recognize its monthly free-article allowance. These settings help the app remember your choices and enforce article access rules.</li>",
+            "<li><strong>App preferences and legacy reading limits.</strong> The app locally stores settings and notification preferences. Older versions may also retain a historical monthly article-meter record on the device; new public-access versions do not use a paid reading allowance to unlock ordinary news articles.</li>",
+        ),
+        (
+            "We use the information described above to operate and improve the website and app, deliver requested push notifications, provide membership access, process and manage subscriptions, send secure authentication messages, understand readership, and respond to messages you send us.",
+            "We use the information described above to operate and improve the website and app, deliver requested push notifications and newsletters, process optional contributions, manage pre-existing subscriptions and their ad-free benefits, send secure account messages, understand readership, and respond to messages you send us.",
+        ),
+        (
+            "<li><strong>Stripe</strong> for membership checkout, recurring billing and billing-account management.</li>",
+            "<li><strong>Stripe</strong> for optional one-time contributions, receipts, and management of historical membership billing.</li>",
+        ),
+        (
+            "<li><strong>Supabase</strong> for membership authentication, account records, subscription entitlement and protected article delivery.</li>",
+            "<li><strong>Supabase</strong> for remaining subscriber authentication, account records, legacy billing status, article services and site functions.</li>",
+        ),
+        (
+            "<li><strong>Resend</strong> as an email-delivery provider for secure membership sign-in messages.</li>",
+            "<li><strong>Resend</strong> as an email-delivery provider for secure existing-account sign-in messages.</li>",
+        ),
+        (
+            "We retain information for as long as reasonably needed for the purposes described above, including to maintain memberships and comply with applicable legal, accounting, and security obligations.",
+            "We retain information as reasonably necessary to administer remaining paid benefits, optional contributions, requested services and applicable legal, accounting, security and recordkeeping obligations.",
+        ),
+    )
+    for old, new in updates:
+        if old in text:
+            text = text.replace(old, new, 1)
+        elif new not in text:
+            raise RuntimeError("Privacy migration requires an updated source template: " + old[:70])
+    if "<strong>Kit (ConvertKit)</strong>" not in text:
+        match = "<li><strong>Resend</strong> as an email-delivery provider for secure existing-account sign-in messages.</li>"
+        text = text.replace(
+            match, match + '\n          <li><strong>Kit</strong> for readers who voluntarily subscribe to the Morning Brief email newsletter; readers may unsubscribe through the links in those emails.</li>'
+            + '\n          <li><strong>Formspree</strong> for information submitted through advertising inquiry forms, such as a contact name, company and message.</li>',
+            1,
+        )
+    if "<h3>Mediavine Programmatic Advertising (Ver 1.1)</h3>" not in text:
+        raise RuntimeError("Required Mediavine privacy disclosure heading missing")
     return text
 
 
 def _rewrite_subscription_terms(text: str) -> str:
-    message = ('<p><strong>October 27, 2026 update:</strong> TCT is moving to free news '
-               'supported by voluntary reader donations and advertisements. '
-               'These historical terms continue to govern earlier paid memberships, '
-               'renewals, cancellation, and any remaining billing obligations. '
-               'New paid reading memberships are not being offered.</p>')
-    if 'historical terms continue to govern' not in text:
-        text = text.replace('<div class="policy-body">', '<div class="policy-body">\n' + message, 1)
+    """Keep historical subscriber terms, but distinguish free news at cutover."""
+    text = re.sub(
+        r'(<p class="policy-updated">Last updated: )[^<]+',
+        r'\g<1>October 27, 2026', text, count=1,
+    )
+    notice = (
+        '<section class="policy-callout" id="tct-existing-subscription-notice">'
+        '<strong>October 27, 2026: TCT is transitioning to free news.</strong> '
+        'All articles are available to everyone without payment. We are closing '
+        'new paid reading memberships. Subscribers who have already paid retain '
+        'their ad-free benefit through the end of their paid terms; future '
+        'renewals will be stopped at the billing transition. '
+        'You can <a href="/subscribe.html">sign in to manage your existing '
+        'billing account</a> or <a href="mailto:hello@treasurecoast.today">'
+        'contact TCT</a> for confirmation of your renewal status. '
+        'The terms below document previously sold memberships.'
+        '</section>'
+    )
+    if 'id="tct-existing-subscription-notice"' not in text:
+        marker = '<div class="policy-body">'
+        if marker not in text:
+            raise RuntimeError("Subscription terms: policy body not found")
+        text = text.replace(marker, marker + "\n        " + notice, 1)
+    updates = (
+        ("<h2>Membership plans and pricing</h2>",
+         "<h2>Historical membership plans and pricing</h2>"),
+        ("The advertised introductory offer is $1",
+         "The former introductory offer was $1"),
+        ("The introductory offer does not repeat each month.",
+         "The introductory offer did not repeat each month."),
+        ("The annual plan costs $49 per year and renews annually until canceled.",
+         "The former annual plan cost $49 per year and was sold with automatic renewal unless canceled."),
+        ("Both plans are recurring subscriptions. By subscribing, you authorize Stripe",
+         "Historically, both plans were sold as recurring subscriptions. When you subscribed, you authorized Stripe"),
+        ("until you cancel before the next renewal.",
+         "unless renewal is ended."),
+        ("An active membership provides unlimited access to TCT subscriber stories and an ad-free reading experience on supported TCT services while your account is entitled.",
+         "Articles are now free for everyone. An existing paid membership continues to provide the previously promised ad-free experience on supported TCT services through the end of the already-paid period while the subscriber remains entitled."),
+    )
+    for old, new in updates:
+        if old in text:
+            text = text.replace(old, new, 1)
+        elif new not in text:
+            raise RuntimeError("Historical membership terms changed unexpectedly: " + old[:70])
+    text = text.replace(
+        "Please review these terms and the <a href=\"/privacy.html\">Privacy Policy</a> before subscribing.",
+        "These terms remain available for previous subscribers. Read our <a href=\"/privacy.html\">Privacy Policy</a> for current reader-support and advertising information.",
+        1,
+    )
+    return text
+
+
+def _rewrite_ownership(text: str) -> str:
+    text = text.replace(
+        "Treasure Coast Today is supported by reader memberships, advertising, and clearly labeled sponsored content and partnerships, with additional funding from its owner.",
+        "Treasure Coast Today is funded by advertising, clearly labeled sponsored content and partnerships, optional reader contributions, and investment from its owner. Earlier memberships funded the site prior to its transition to free news.",
+        1,
+    )
+    text = text.replace(
+        "Reader memberships, advertising, and clearly labeled sponsorships support Treasure Coast Today. Sponsored content is identified as paid content and kept separate from independent reporting. Subscribers, advertisers, and sponsors do not determine whether or how we report on a person, business, or organization.",
+        "Optional reader contributions, advertising, and clearly labeled sponsorships support Treasure Coast Today. Reader contributions to Treasure Coast Today LLC are not charitable tax-deductible donations. Sponsored content is identified as paid content and kept separate from independent reporting. Contributors, former subscribers, advertisers, and sponsors do not determine whether or how we report on a person, business, or organization.",
+        1,
+    )
+    return text
+
+
+def _rewrite_about(text: str) -> str:
+    marker = "<h2>Advertise with us</h2>"
+    if marker not in text:
+        raise RuntimeError("About page: advertising section not found")
+    if "<h2>Free news, supported by readers and advertisers</h2>" not in text:
+        text = text.replace(
+            marker,
+            '<h2>Free news, supported by readers and advertisers</h2>'
+            '<p>All Treasure Coast Today news articles are free to read. '
+            'Our reporting is supported by local sponsorships, advertising and '
+            'voluntary reader contributions. You never have to pay or donate '
+            'to access a story. <a href="/donate.html" class="about-contact">'
+            'Support TCT with a one-time contribution &rarr;</a></p>'
+            '<p>Treasure Coast Today LLC is a for-profit local news business, '
+            'so contributions are not charitable tax-deductible donations. '
+            'Financial support never buys influence over independent coverage.</p>\n        '
+            + marker,
+            1,
+        )
     return text
 
 
@@ -240,6 +390,10 @@ def transition(root: Path, snapshot_path: Path, payment_link: str) -> dict:
             text = _close_new_subscriptions(text)
         if path == root / "subscription-terms.html":
             text = _rewrite_subscription_terms(text)
+        if path == root / "ownership.html":
+            text = _rewrite_ownership(text)
+        if path == root / "about.html":
+            text = _rewrite_about(text)
         if text != original:
             path.write_text(text, encoding="utf-8")
             updated += 1
