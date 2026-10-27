@@ -12,6 +12,21 @@
 - Preserve `/subscribe.html` solely so existing paying customers can manage historical membership billing. New-purchase controls are hidden in the new mode. Preserve historic Subscription Terms and augment Privacy Policy text with donation collection and ad-use disclosures.
 - Keep the existing Mediavine script **unchanged**. No invented ad slots, no duplicate loaders, no new network tracking.
 
+## Owner-approved subscriber transition decision (October 27, 2026)
+
+- All full articles become free for everyone.
+- **Keep the paid, ad-free experience for every existing entitled subscriber through their already-paid billing period.** Do not remove subscriber authentication or disable the `mv-no-ads` class on the website or the `member.isEntitled`/AdMob exemption in iOS.
+- **Stop automatic renewals at the end of current paid periods**, without refunding or prematurely terminating already-paid terms. The 15 monthly and 19 annual active Stripe subscriptions need `cancel_at_period_end=true` at cutover, after the complete public article migration is verified. Changing this flag should not cancel paid access immediately. Do not change those Stripe subscriptions while the launch remains disabled.
+- Assess the single **past-due** monthly account separately; do not promise benefits for an unpaid period. Preserve current entitlements per server status and disclose next steps.
+- Keep the legacy website login and account billing portal available, and test a signed-in paid member and a nonpaying visitor on both desktop/mobile websites and iOS. New memberships must be unavailable at checkout, not just hidden via CSS.
+- Do not shut down subscription-status, sign-in or billing webhooks; Stripe's active status must remain the authority until each paid term expires.
+
+### Existing iPhone app compatibility
+
+Current published iOS builds request `protected-article` and fall back to parsing the **public webpage** on a 404. The draft adds an explicitly gated `TCT_PUBLIC_READING_ENABLED=true` setting to the existing Supabase function to return 404 for story requests *after* the full public archive has been deployed. Keep it **false/unset until after validation**. If enabled before the archive is public, older apps could see incomplete story previews.
+
+The iOS app still has old promotional membership screens. Update them to Donate / reader-supported news in a subsequent app release without removing ad-free entitlements for active paid accounts. The website transition does not by itself ship an iOS app update.
+
 ## Critical tasks before launch
 
 - **Existing Stripe subscriptions as of October 27, 2026:** 15 active monthly at $4.99, 19 active annual at $49, 1 past due monthly, 6 canceled monthly. All 34 active and the past-due subscriber should be assessed before enabling an ad-supported experience for everyone. Do not change subscription billing without the publisher's explicit migration decision.
