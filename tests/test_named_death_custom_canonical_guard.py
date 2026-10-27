@@ -129,15 +129,47 @@ class CanonicalHodgeTests(unittest.TestCase):
         self.assertTrue(any(r['source_slug'] == DUPLICATE and r['target_slug'] == ORIGINAL for r in redirects))
         self.assertEqual(next(r for r in cleaned if r['slug'] == ORIGINAL)['image_url'], ORIGINAL_IMAGE)
 
-    def test_only_one_active_custom_article(self):
+    def test_active_queue_does_not_reintroduce_duplicate_hodge_article(self):
+        """Custom queue rotates; the previously published Hodge story lives in archive."""
         path = Path('custom_articles.json')
         if not path.exists():
             self.skipTest('custom queue absent from test fixture')
         queued = json.loads(path.read_text(encoding='utf8'))
-        self.assertEqual(len(queued), 1)
-        self.assertEqual(queued[0]['slug'], ORIGINAL)
-        self.assertEqual(queued[0]['image_url'], ORIGINAL_IMAGE)
-        self.assertIn('Jarius', queued[0]['body'])
+        self.assertIsInstance(queued, list)
+        slugs = [row['slug'] for row in queued]
+        self.assertEqual(len(slugs), len(set(slugs)))
+        self.assertNotIn(DUPLICATE, slugs)
+        # If Hodge is deliberately requeued for an edit, its identity and image
+        # still must match the existing authoritative canonical.
+        for row in queued:
+            if row['slug'] == ORIGINAL:
+                self.assertEqual(row['image_url'], ORIGINAL_IMAGE)
+                self.assertIn('Jarius', row['body'])
+
+    def test_original_hodge_canonical_survives_custom_queue_rotation(self):
+        """An earlier custom article must remain authoritative after queue replacement."""
+        archive_path = Path('archive.json')
+        if not archive_path.exists():
+            self.skipTest('archive absent from test fixture')
+        archive = json.loads(archive_path.read_text(encoding='utf8'))
+        originals = [row for row in archive if row.get('slug') == ORIGINAL]
+        self.assertEqual(len(originals), 1)
+        original_row = originals[0]
+        self.assertTrue(original_row['is_custom'])
+        self.assertTrue(original_row['authoritative_custom'])
+        self.assertEqual(original_row['canonical_slug'], ORIGINAL)
+        self.assertEqual(original_row['image_url'], ORIGINAL_IMAGE)
+        self.assertFalse(any(row.get('slug') == DUPLICATE for row in archive))
+
+        # Keep the originally published page and image, not just its archive row.
+        page = Path('articles') / f'{ORIGINAL}.html'
+        if page.exists():
+            html = page.read_text(encoding='utf8')
+            self.assertIn(
+                f'<link rel="canonical" href="https://treasurecoast.today/articles/{ORIGINAL}.html">',
+                html,
+            )
+            self.assertIn(ORIGINAL_IMAGE, html)
 
 
 if __name__ == '__main__':
