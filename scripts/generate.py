@@ -2640,6 +2640,21 @@ def _apply_article_image_override(item, *, slug="", overrides=None):
         "social_image_is_source": True,
         "article_image_override": True,
     }
+    # A first-party editor-selected CDN image is its own delivery authority.
+    # Keep the three archive/social-image fields in exact agreement, even if
+    # a previous publisher refresh left behind a different Bunny mirror.
+    # External image overrides retain their independent publisher provenance.
+    if _is_tct_mirrored_image_url(image_url):
+        image_path = urlsplit(image_url).path.lstrip("/")
+        image_sha = Path(image_path).stem.lower()
+        if image_path.startswith("articles/") and re.fullmatch(r"[a-f0-9]{64}", image_sha):
+            values.update({
+                "hosted_image_url": image_url,
+                "image_storage_provider": "bunny",
+                "image_storage_key": image_path,
+                "image_sha256": image_sha,
+                "article_image_mirror_status": "mirrored",
+            })
     for field, value in values.items():
         if item.get(field) != value:
             item[field] = value
