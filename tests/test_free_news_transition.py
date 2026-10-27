@@ -219,12 +219,12 @@ def test_free_news_transition_wires_all_public_policies_into_update():
         assert expected in source
 
 
-def test_donate_buttons_include_heart_before_label_and_not_newsletter():
-    from scripts.free_news_transition import create_donation_page
+def test_donate_buttons_have_flat_monochrome_svg_before_label_and_not_newsletter():
+    from scripts.free_news_transition import DONATE_HEART_SVG, LEGACY_DONATE_HEART
     root = Path(__file__).resolve().parents[1]
     source = (
-        '<html><head></head><body><a href="/subscribe.html" '
-        'class="support-btn membership-subscribe-btn">Subscribe</a>'
+        '<html><head><link rel="stylesheet" href="/donation-model.css"></head><body>'
+        '<a href="/subscribe.html" class="support-btn membership-subscribe-btn">Subscribe</a>'
         '<a href="/subscribe.html">Membership</a>'
         '<a href="/subscribe.html" class="footer-subscribe-cta">'
         '<span>Subscribe today</span></a>'
@@ -232,17 +232,27 @@ def test_donate_buttons_include_heart_before_label_and_not_newsletter():
         '<button type="submit">Subscribe to newsletter</button></form></body></html>'
     )
     page = _rewrite_chrome(source, "index.html")
-    assert 'class="tct-donate-heart" aria-hidden="true">&#9829;</span> <span class="membership-subscribe-label">Donate' in page
-    assert 'class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate</a>' in page
-    assert 'class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate to local news' in page
-    assert 'Subscribe to newsletter' in page
+    assert DONATE_HEART_SVG.startswith('<svg class="tct-donate-heart"')
+    assert 'fill="currentColor"' in DONATE_HEART_SVG
+    assert 'height="14"' in DONATE_HEART_SVG
+    assert 'aria-hidden="true"' in DONATE_HEART_SVG
+    assert '&#9829;' not in DONATE_HEART_SVG
+    assert DONATE_HEART_SVG + ' <span class="membership-subscribe-label">Donate</span>' in page
+    assert DONATE_HEART_SVG + ' Donate</a>' in page
+    assert DONATE_HEART_SVG + ' Donate to local news' in page
+    assert page.count('href="/donation-model.css?v=20261027c"') == 1
+    assert "Subscribe to newsletter" in page
     assert _rewrite_chrome(page, "index.html") == page
+    legacy = '<a href="/donate.html">' + LEGACY_DONATE_HEART + ' Donate</a>'
+    assert DONATE_HEART_SVG in _rewrite_chrome(legacy, "article.html")
+    assert LEGACY_DONATE_HEART not in _rewrite_chrome(legacy, "article.html")
+
     home = _rewrite_home_support(
         '<a data-support-card="true" href="/subscribe.html">Old support tile</a>'
     )
-    assert 'class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate to support the newsroom' in home
+    assert DONATE_HEART_SVG + ' Donate to support the newsroom' in home
     generator = (root / "scripts/free_news_transition.py").read_text(encoding="utf-8")
-    assert '<span class="tct-donate-heart" aria-hidden="true">&#9829;</span> Donate securely with Stripe' in generator
+    assert '{DONATE_HEART_SVG} Donate securely with Stripe' in generator
 
 
 def test_open_access_launch_checks_real_supabase_checkout_before_generation():
@@ -254,20 +264,22 @@ def test_open_access_launch_checks_real_supabase_checkout_before_generation():
     assert source.index("Verify legacy membership checkout is blocked before free-news launch") < source.index("- name: Generate news")
 
 
-
-
-def test_donate_hearts_inherit_label_color_and_align_inline():
+def test_header_donate_design_matches_footer_and_prevents_emoji_underlines():
     css = (Path(__file__).resolve().parents[1] / "donation-model.css").read_text(encoding="utf-8")
-    assert ".tct-donate-heart{color:inherit;" in css
-    assert ".tct-donate-button .tct-donate-heart{color:#fff}" not in css
-    assert ".tct-donate-header{min-width:98px;flex-direction:row!important;" in css
-    assert "background:#f26445;color:white!important" in css
-    # Heart is decorative; the text Donate remains the accessible action name.
-    source = _rewrite_chrome(
-        '<a class="support-btn membership-subscribe-btn" href="/subscribe.html">Subscribe</a>',
-        "index.html",
-    )
-    assert 'aria-hidden="true">&#9829;</span> <span class="membership-subscribe-label">Donate</span>' in source
+    footer_css = (Path(__file__).resolve().parents[1] / "style.css").read_text(encoding="utf-8")
+    assert ".site-masthead a.tct-donate-header {" in css
+    assert "flex-direction: row !important;" in css
+    assert "text-decoration: none !important;" in css
+    assert "border-radius: 7px !important;" in css
+    assert "background: #f26445 !important;" in css
+    assert "color: #fff !important;" in css
+    assert "svg.tct-donate-heart {" in css
+    assert "width: 12px !important;" in css
+    assert "height: 12px !important;" in css
+    assert "fill: currentColor;" in css
+    assert ".footer-subscribe-cta {" in footer_css
+    assert "border-radius: 7px;" in footer_css
+    assert "body.tct-member-entitled .membership-subscribe-btn" in footer_css
 
 
 def test_production_direct_invocation_imports_without_pythonpath():
