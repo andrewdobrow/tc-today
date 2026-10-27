@@ -34221,6 +34221,44 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             })
             removed_slugs.add(source_slug)
 
+    # Do not rely on the final audit to catch cross-person redirects. This
+    # function writes destructive 301 pages and drops those stories from the
+    # archive; check missing-person subject identity before either operation.
+    safe_redirects = []
+    rejected_redirects = []
+    for record in redirects:
+        subject_conflict = _missing_person_redirect_subject_conflict(
+            str(record.get("source_headline") or ""),
+            str(record.get("target_headline") or ""),
+        )
+        if subject_conflict:
+            removed_slugs.discard(str(record.get("source_slug") or ""))
+            rejected_redirects.append({
+                "source_slug": str(record.get("source_slug") or ""),
+                "target_slug": str(record.get("target_slug") or ""),
+                "source_headline": str(record.get("source_headline") or ""),
+                "target_headline": str(record.get("target_headline") or ""),
+                "subject_conflict": subject_conflict,
+            })
+            continue
+        safe_redirects.append(record)
+    redirects = safe_redirects
+    if rejected_redirects:
+        # Retain both substantive article URLs. Report the rejected identity
+        # pairing rather than disguising the failure as successful deduplication.
+        for record in rejected_redirects:
+            print(
+                "  CANONICAL REDIRECT QUARANTINE: refusing destructive "
+                f"missing-person merge ({record['subject_conflict']}): "
+                f"{record['source_slug']} -> {record['target_slug']}"
+            )
+        diagnostic_path = output_root / "data" / "canonical-redirect-rejections.json"
+        diagnostic_path.parent.mkdir(parents=True, exist_ok=True)
+        diagnostic_path.write_text(json.dumps({
+            "schema_version": 1,
+            "rejected_redirects": rejected_redirects,
+        }, indent=2, ensure_ascii=False), encoding="utf-8")
+
     cleaned = [e for e in archive if e.get("slug") not in removed_slugs]
     if not redirects:
         return cleaned, []

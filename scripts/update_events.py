@@ -212,14 +212,22 @@ def _infer_year(month: int, day: int, now: datetime) -> int:
 
 
 def _parse_clock(text_value: str) -> tuple[int, int] | None:
-    match = TIME_RE.search(_clean(text_value))
+    """Reject impossible source times rather than crashing the entire events run.
+
+    Clock text with AM/PM must use 1..12 hours, while 24-hour text allows 0..23.
+    Minutes must always be 0..59. Never infer that "13 p.m." means 1 p.m.
+    """
+    raw = _clean(text_value)
+    match = TIME_RE.search(raw)
     if not match:
-        if re.fullmatch(r"\d{1,2}:\d{2}", _clean(text_value)):
-            h, m = [int(part) for part in _clean(text_value).split(":")]
-            return h, m
+        if re.fullmatch(r"\d{1,2}:\d{2}", raw):
+            h, m = [int(part) for part in raw.split(":")]
+            return (h, m) if 0 <= h <= 23 and 0 <= m <= 59 else None
         return None
     hour = int(match.group(1))
     minute = int(match.group(2) or 0)
+    if not 1 <= hour <= 12 or not 0 <= minute <= 59:
+        return None
     ampm = match.group(3).lower()
     if ampm == "p" and hour != 12:
         hour += 12
@@ -308,6 +316,17 @@ def _single_clock_from_text(value: Any) -> tuple[int, int] | None:
     return _parse_clock(hint.group(1)) if hint else None
 
 
+def _valid_clock_evidence(clock: tuple[int, int] | None) -> bool:
+    """Check both source-parsed and older cached time evidence before datetime writes."""
+    return bool(
+        isinstance(clock, tuple)
+        and len(clock) == 2
+        and all(isinstance(value, int) and not isinstance(value, bool) for value in clock)
+        and 0 <= clock[0] <= 23
+        and 0 <= clock[1] <= 59
+    )
+
+
 def _minute_of_day(clock: tuple[int, int]) -> int:
     return clock[0] * 60 + clock[1]
 
@@ -366,6 +385,10 @@ def _apply_time_evidence(
     if start is None:
         return
     start_clock, end_clock = evidence
+    if not _valid_clock_evidence(start_clock) or (
+        end_clock is not None and not _valid_clock_evidence(end_clock)
+    ):
+        return
     repaired_start = start.replace(hour=start_clock[0], minute=start_clock[1], second=0, microsecond=0)
     repaired_end = None
     if end_clock:
@@ -1581,7 +1604,9 @@ def _repair_explicit_clock_conflict(event: dict[str, Any]) -> None:
     if start is None:
         return
     evidence = _clock_range_from_text(event.get("description", ""))
-    if evidence is None:
+    if evidence is None or not all(_valid_clock_evidence(clock) for clock in evidence):
+        # Malformed publisher copy (for example "13 p.m.") is not authority to
+        # change an event's clock. Retain its existing source time instead.
         return
     proposed = start.replace(hour=evidence[0][0], minute=evidence[0][1])
     if proposed == start or abs((proposed - start).total_seconds()) != 4 * 3600:
