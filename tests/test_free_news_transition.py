@@ -93,6 +93,13 @@ def test_privacy_policy_mentions_payments_and_for_profit_status():
     assert "for-profit" in p
 
 
+def test_stripe_donation_payment_link_host_is_supported():
+    from scripts.free_news_transition import PAYMENT_PATTERN
+    assert PAYMENT_PATTERN.fullmatch("https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01")
+    assert PAYMENT_PATTERN.fullmatch("https://buy.stripe.com/test_abc123")
+    assert not PAYMENT_PATTERN.fullmatch("https://donate.stripe.com.evil.example/abc")
+
+
 def test_public_transition_requires_actual_stripe_payment_link(tmp_path):
     with pytest.raises(RuntimeError, match="genuine Stripe-hosted"):
         transition(tmp_path, tmp_path / "snapshot.json", "https://example.com/fake")
