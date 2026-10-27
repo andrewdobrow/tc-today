@@ -298,10 +298,10 @@ def test_production_direct_invocation_imports_without_pythonpath():
 
 
 def test_real_site_migration_dry_run_restores_custom_article_without_publish(tmp_path):
-    """Exercise the actual shared page templates and an archived custom story.
+    """Validate both a legacy protected fixture and the now-open live archive.
 
-    This only writes to pytest's temporary directory. Never touches live
-    Supabase, Stripe, production pages or private protected content.
+    The protected fixture is synthetic; no real article is overwritten with
+    test body text, and no Stripe, Supabase, or production data is modified.
     """
     import shutil
 
@@ -320,29 +320,42 @@ def test_real_site_migration_dry_run_restores_custom_article_without_publish(tmp
     article_dir.mkdir()
     dest = article_dir / src.name
     shutil.copyfile(src, dest)
-    assert 'data-tct-paywall' in dest.read_text(encoding="utf-8")
+    canonical_before = dest.read_text(encoding="utf-8")
+    if "data-tct-paywall" not in canonical_before:
+        # Do not fabricate a protected body for an article that has genuinely
+        # already become public. The migration must leave its full text intact.
+        assert '<div class="article-body">' in canonical_before
+        assert '"isAccessibleForFree":true' in canonical_before
 
+    # Independently exercise the fail-closed legacy rehydration path. Real
+    # snapshots no longer need to contain public articles after cutover.
+    legacy = article_dir / "synthetic-legacy-protected-article.html"
+    legacy.write_text(LOCKED, encoding="utf-8")
     snapshot_path = tmp_path / "protected-private-test.json"
-    snapshot_path.write_text(json.dumps({"articles": [{
-        "slug": src.stem,
-        "protected_body": "<!--tct-full-article-v2-->" + FULL,
-    }]}), encoding="utf-8")
+    snapshot_path.write_text(json.dumps({"articles": [
+        {"slug": legacy.stem,
+         "protected_body": "<!--tct-full-article-v2-->" + FULL},
+        *([{"slug": src.stem, "protected_body": "<!--tct-full-article-v2-->" + FULL}]
+          if "data-tct-paywall" in canonical_before else []),
+    ]}), encoding="utf-8")
     report = transition(
         tmp_path,
         snapshot_path,
         "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01",
     )
-    assert report["rehydrated"] == 1
-    published = dest.read_text(encoding="utf-8")
+    assert report["rehydrated"] == (2 if "data-tct-paywall" in canonical_before else 1)
+    published = legacy.read_text(encoding="utf-8")
     assert "Entire original full story paragraph one." in published
     assert "Additional reporting paragraph two." in published
     assert "data-tct-paywall" not in published
     assert "tct-member-preview" not in published
     assert "tct-member-only" not in published
     assert '"isAccessibleForFree":true' in published
-    assert 'href="/donate.html"' in published
-    assert 'href="/advertise.html"' in published
-    assert "tct_member_entitled_hint" in published, "Honor paid-through ad-free users"
+    actual_custom = dest.read_text(encoding="utf-8")
+    assert "data-tct-paywall" not in actual_custom
+    assert 'href="/donate.html"' in actual_custom
+    assert 'href="/advertise.html"' in actual_custom
+    assert "tct_member_entitled_hint" in actual_custom, "Honor paid-through ad-free users"
     assert (tmp_path / "donate.html").is_file()
     donation = (tmp_path / "donate.html").read_text(encoding="utf-8")
     assert "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" in donation
