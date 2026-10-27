@@ -263,8 +263,6 @@ def _rewrite_subscription_terms(text: str) -> str:
          "The former annual plan cost $49 per year and was sold with automatic renewal unless canceled."),
         ("Both plans are recurring subscriptions. By subscribing, you authorize Stripe",
          "Historically, both plans were sold as recurring subscriptions. When you subscribed, you authorized Stripe"),
-        ("until you cancel before the next renewal.",
-         "unless renewal is ended."),
         ("An active membership provides unlimited access to TCT subscriber stories and an ad-free reading experience on supported TCT services while your account is entitled.",
          "Articles are now free for everyone. An existing paid membership continues to provide the previously promised ad-free experience on supported TCT services through the end of the already-paid period while the subscriber remains entitled."),
     )
