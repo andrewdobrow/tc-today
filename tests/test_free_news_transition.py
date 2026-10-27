@@ -131,6 +131,17 @@ def test_public_transition_requires_actual_stripe_payment_link(tmp_path):
         transition(tmp_path, tmp_path / "snapshot.json", "https://example.com/fake")
 
 
+def test_legacy_ios_free_article_fallback_is_separately_gated():
+    endpoint = (
+        Path(__file__).resolve().parents[1]
+        / "supabase/functions/protected-article/index.ts"
+    ).read_text(encoding="utf-8")
+    assert "TCT_PUBLIC_READING_ENABLED" in endpoint
+    assert "status: 404" in endpoint
+    assert endpoint.index("body.action === 'meter-capability'") < endpoint.index("TCT_PUBLIC_READING_ENABLED")
+    assert "code: 'PUBLIC_ARTICLE'" in endpoint
+
+
 def test_project_workflow_does_not_activate_donation_mode_implicitly():
     workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/update.yml").read_text()
     assert "vars.TCT_READER_REVENUE_MODE || 'subscription'" in workflow
