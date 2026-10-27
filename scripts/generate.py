@@ -36123,9 +36123,44 @@ def _publication_canonical_key(entry):
     return (custom_rank, date, first_published, quality, str(entry.get("slug") or ""))
 
 
+def _validated_selected_material_update_archive_target(item, archive):
+    """Rebind a live selected update to its separately validated canonical.
+
+    A custom article owns a `custom:...` persistent story ID, whereas the
+    reporting source may retain a different feed-registry ID. A successful
+    target-bound semantic materiality decision and write authorization are
+    stronger than that fragmented ID. Never infer a target from surname,
+    publisher or the source's ID alone.
+    """
+    if not _has_self_consistent_pre_generation_material_update_authority(item):
+        return None
+    locked_slug = str(item.get("_pre_generation_material_update_canonical_slug") or "").strip()
+    context_slug = str(item.get("_canonical_context_slug") or "").strip()
+    if context_slug and context_slug != locked_slug:
+        return None
+    matches = [
+        row for row in (archive or [])
+        if isinstance(row, dict)
+        and str(row.get("slug") or "").strip() == locked_slug
+        and _archive_entry_live_identity_safe(row)
+    ]
+    if len(matches) != 1:
+        return None
+    canonical = matches[0]
+    return canonical if _canonical_write_authorized(item, canonical) else None
+
+
 def _find_forward_publication_target(item, archive, story_id=""):
-    """Find an update target using the strongest explicit identity first."""
+    """Find an update target using independently verified identity authority."""
     story_id = str(story_id or "").strip()
+
+    # The currently selected material update already passed a source-bound
+    # semantic validation and a canonical write-authorization transaction.
+    # Preserve that exact immutable custom permalink when the unrelated
+    # feed-story ID cannot retrieve the custom:... archive identity.
+    locked = _validated_selected_material_update_archive_target(item, archive)
+    if locked is not None:
+        return locked, "validated_selected_material_update_target_lock"
 
     # Exact source identity is independent of the persistent registry and therefore
     # outranks a story ID that may have been assigned by an earlier broad-key merge.
@@ -36963,6 +36998,21 @@ def write_archives(all_categories, top_cat):
         existing, _forced_slug, _custom_story_id = _resolve_custom_publication_target(
             hero, archive, existing, headline
         )
+        if (
+            _target_basis == "validated_selected_material_update_target_lock"
+            and existing is not None
+        ):
+            # Keep the verified canonical's persistent ID, not the fragmented
+            # feed ID. This matters for protected editor-authored custom pages.
+            _locked_story_id = str(existing.get("editorial_story_id") or "").strip()
+            if _locked_story_id:
+                _editorial_story_id = _locked_story_id
+                hero["editorial_story_id"] = _locked_story_id
+                hero["_editorial_story_id"] = _locked_story_id
+            hero["canonical_slug"] = str(existing.get("slug") or "")
+            hero["canonical_publication_id"] = _stable_publication_id(
+                hero["canonical_slug"]
+            )
         if _custom_story_id:
             # Do not let the persistent source-story ID collapse recurring custom
             # editions on a later run. Each submitted payload receives its own ID.
@@ -36993,6 +37043,19 @@ def write_archives(all_categories, top_cat):
                 )
             )
             if _ledger_existing is not None:
+                if (
+                    _target_basis == "validated_selected_material_update_target_lock"
+                    and existing is not None
+                    and str(_ledger_existing.get("slug") or "") != str(existing.get("slug") or "")
+                ):
+                    # Never overwrite the separately validated canonical with
+                    # a different ledger candidate or create a duplicate page.
+                    raise RuntimeError(
+                        "VALIDATED MATERIAL UPDATE CANONICAL CONFLICT: signed target "
+                        + str(existing.get("slug") or "")
+                        + " disagrees with ledger target "
+                        + str(_ledger_existing.get("slug") or "")
+                    )
                 _repair_false_permalink_quarantine(
                     _ledger_existing, reason="canonical_publication_write_barrier"
                 )
