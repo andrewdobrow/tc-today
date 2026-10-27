@@ -59,6 +59,32 @@ def test_snapshot_requires_complete_valid_shape(tmp_path):
     assert load_snapshot(file)[SLUG].endswith(FULL)
 
 
+def test_existing_paid_readers_keep_ad_free_tracking_and_account_access():
+    source = (
+        '<html><head><script data-tct-member-prepaint>'
+        'old two article meter prepaint</script>'
+        '<link rel="stylesheet" href="/membership.css?v=1">'
+        '</head><body>'
+        '<header><div class="header-actions">'
+        '<a href="/subscribe.html" class="support-btn membership-subscribe-btn">Subscribe</a>'
+        '<a href="/subscribe.html?signin=1" class="membership-header-signin">Sign in</a>'
+        '<a href="/subscribe.html" class="membership-header-welcome">Welcome, subscriber</a>'
+        '</div></header><script src="/membership-config.js"></script>'
+        '<script type="module" src="/membership.js?v=1"></script>'
+        '</body></html>'
+    )
+    public = _rewrite_chrome(source, "article.html")
+    assert 'href="/donate.html"' in public
+    assert public.count('href="/subscribe.html?signin=1"') == 1
+    assert 'class="membership-header-welcome"' in public
+    assert "mv-no-ads" in public
+    assert "tct_member_entitled_hint" in public
+    assert "old two article meter prepaint" not in public
+    assert '<script src="/membership-config.js"></script>' in public
+    assert '<script type="module" src="/membership.js?v=1"></script>' in public
+    assert _rewrite_chrome(public, "article.html") == public
+
+
 def test_main_bar_advertise_after_events_and_out_of_desktop_dropdown():
     source = ('<html><head></head><body><header class="site-masthead">'
               '<div class="header-actions"><a href="/subscribe.html" class="support-btn '
