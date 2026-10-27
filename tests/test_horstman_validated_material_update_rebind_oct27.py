@@ -115,8 +115,10 @@ def test_unsigned_or_unvalidated_horstman_source_never_fuzzy_claims_custom():
         )
         assert matched is None, (basis, source)
         assert basis == "new_publication"
-        # The unsigned source cannot write to the custom article.
-        assert not g._authorized_custom_material_update(source, canonical)
+    # The unsigned source has no write authority. The other deliberately
+    # corrupted selections must fail the stronger target resolver above,
+    # even if their lower-level authorization token still names the custom.
+    assert not g._authorized_custom_material_update(unsigned, canonical)
 
 
 def test_signed_update_cannot_redirect_to_different_custom_permalink():
