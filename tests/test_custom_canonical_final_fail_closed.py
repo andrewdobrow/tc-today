@@ -1,5 +1,7 @@
 """Last-resort no-duplicate invariant for authoritative custom article output."""
 import pytest
+import ast
+from pathlib import Path
 
 from tct_engine.custom_named_incident_identity import (
     assert_no_unresolved_named_custom_collisions,
@@ -99,3 +101,20 @@ def test_other_custom_articles_are_never_redirect_candidates():
     second["slug"] = "2026-10-26-second-custom"
     assert not potential_named_custom_collision(second, _custom())
     assert assert_no_unresolved_named_custom_collisions([_custom(), second])
+
+
+def test_final_gate_is_wired_into_production_archive_writer():
+    # Prevent a future refactor from leaving this safety rule as a tested-but-
+    # unused helper. The AST check avoids fragile line-number assertions.
+    source = Path("scripts/generate.py").read_text(encoding="utf8")
+    module = ast.parse(source)
+    writer = next(
+        node for node in module.body
+        if isinstance(node, ast.FunctionDef) and node.name == "write_archives"
+    )
+    calls = [
+        node.func.id for node in ast.walk(writer)
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+    ]
+    assert "assert_no_unresolved_named_custom_collisions" in calls
+    assert "apply_canonical_story_cleanup" in calls
