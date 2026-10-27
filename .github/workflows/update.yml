@@ -408,18 +408,25 @@ jobs:
           TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
           TCT_CONTENT_SYNC_SECRET: ${{ secrets.TCT_CONTENT_SYNC_SECRET }}
           TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
+          TCT_READER_REVENUE_MODE: ${{ vars.TCT_READER_REVENUE_MODE || 'subscription' }}
         run: |
           rm -f /tmp/tct-protected-current.json
-          if [ "$TCT_MEMBERSHIP_UI_ENABLED" = "true" ]; then
+          if [ "$TCT_READER_REVENUE_MODE" = "donation_ads" ]; then
+            # The migration cannot publish stripped article previews without a full
+            # secure snapshot. Abort rather than exposing an incomplete archive.
+            python scripts/sync_protected_articles.py --snapshot-file /tmp/tct-protected-current.json --required
+          elif [ "$TCT_MEMBERSHIP_UI_ENABLED" = "true" ]; then
             if ! python scripts/sync_protected_articles.py --snapshot-file /tmp/tct-protected-current.json --required; then
               echo "::warning::Protected-content snapshot is temporarily unavailable. Existing paywalled pages will be preserved unchanged; new/full articles will still be protected and synced this run."
               rm -f /tmp/tct-protected-current.json
             fi
           fi
 
-      - name: Prepare member-only article payload
+      - name: Prepare member-only article payload or open-access transition
         env:
           TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
+          TCT_READER_REVENUE_MODE: ${{ vars.TCT_READER_REVENUE_MODE || 'subscription' }}
+          TCT_DONATION_PAYMENT_LINK: ${{ vars.TCT_DONATION_PAYMENT_LINK || 'https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01' }}
           TCT_PROTECTED_EXPORT_PATH: /tmp/tct-protected-articles.json
         run: |
           if [ -s /tmp/tct-protected-current.json ]; then
@@ -427,7 +434,14 @@ jobs:
           else
             unset TCT_PROTECTED_SNAPSHOT_PATH
           fi
-          python scripts/prepare_membership_paywall.py
+          if [ "$TCT_READER_REVENUE_MODE" = "donation_ads" ]; then
+            # New articles are public. Rehydrate previously protected articles
+            # from Supabase before the next site commit/deploy.
+            TCT_MEMBERSHIP_UI_ENABLED=false python scripts/prepare_membership_paywall.py
+            python scripts/free_news_transition.py --snapshot /tmp/tct-protected-current.json --payment-link "$TCT_DONATION_PAYMENT_LINK"
+          else
+            python scripts/prepare_membership_paywall.py
+          fi
 
       - name: Validate final SEO and audience contracts
         run: |
@@ -443,8 +457,11 @@ jobs:
           TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
           TCT_CONTENT_SYNC_SECRET: ${{ secrets.TCT_CONTENT_SYNC_SECRET }}
           TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
+          TCT_READER_REVENUE_MODE: ${{ vars.TCT_READER_REVENUE_MODE || 'subscription' }}
         run: |
-          if [ "$TCT_MEMBERSHIP_UI_ENABLED" = "true" ]; then
+          if [ "$TCT_READER_REVENUE_MODE" = "donation_ads" ]; then
+            echo "Donation mode: no new protected-story payloads to sync."
+          elif [ "$TCT_MEMBERSHIP_UI_ENABLED" = "true" ]; then
             python scripts/sync_protected_articles.py --export-file /tmp/tct-protected-articles.json --required
           else
             python scripts/sync_protected_articles.py --scan-public

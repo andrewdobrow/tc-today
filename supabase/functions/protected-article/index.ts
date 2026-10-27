@@ -138,6 +138,18 @@ export default {
       })
     }
 
+    // Compatibility for already-installed iPhone apps: after the complete
+    // public archive is deployed, set TCT_PUBLIC_READING_ENABLED=true in
+    // Supabase and deploy this function. iOS treats a 404 as a signal to
+    // retrieve the actual published public article. Never flip this early:
+    // the public webpage must already contain the complete article body.
+    if (Deno.env.get('TCT_PUBLIC_READING_ENABLED') === 'true') {
+      return Response.json({
+        code: 'PUBLIC_ARTICLE',
+        error: 'Article is freely readable at its published public URL.',
+      }, { status: 404 })
+    }
+
     const slug = String(body.slug ?? '').trim()
     if (!/^[a-z0-9][a-z0-9-]{2,180}$/.test(slug)) return Response.json({ error: 'Invalid article slug.' }, { status: 400 })
 
