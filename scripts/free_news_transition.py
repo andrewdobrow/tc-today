@@ -81,7 +81,7 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
     # entitlement and manage their already-paid subscriptions.
     text = re.sub(
         r'<a\b(?=[^>]*class="[^"]*\bmembership-subscribe-btn\b)[^>]*>.*?</a>',
-        '<a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Donate to support Treasure Coast Today">'
+        '<a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Donate to support Treasure Coast Today">' +
         DONATE_HEART_SVG + ' <span class="membership-subscribe-label">Donate</span></a>',
         text, flags=re.I | re.S,
     )
