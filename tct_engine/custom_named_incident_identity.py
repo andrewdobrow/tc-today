@@ -123,16 +123,25 @@ def _localities(text):
 
 
 def _dated_crashes(text):
-    # Compare explicitly attributed CRASH dates only; publication dates are not
-    # incident dates. A new crash by the same person must remain separate.
-    result = set()
-    for m in _CRASH_RX.finditer(text):
-        for date_match in _MONTH_RX.finditer(text[max(0, m.start()-35):m.end()+35]):
-            month = _MONTHS.index(date_match.group(1).lower()) + 1
-            day = int(date_match.group(2))
+    """Extract ONLY dates explicitly attached to a crash, never an arrest date.
+
+    A publisher may write 'arrested October 26 after March 2 crash'; merely
+    searching for a month within 35 characters of 'crash' would incorrectly
+    treat October 26 as the crash date and reject the true duplicate.
+    """
+    dates = set()
+    month_pat = r"(" + "|".join(_MONTHS) + r")\\s+(\\d{1,2})"
+    templates = (
+        r"\\b" + month_pat + r"\\s+(?:\w+\\s+){0,2}(?:crash|collision|wreck)\\b",
+        r"\\b(?:crash|collision|wreck)(?:\\s+(?:occurred|happened|on|of|dated)){0,3}\\s+" + month_pat + r"\\b",
+    )
+    for template in templates:
+        for match in re.finditer(template, text, re.I):
+            month = _MONTHS.index(match.group(1).lower()) + 1
+            day = int(match.group(2))
             if 1 <= day <= 31:
-                result.add((month, day))
-    return result
+                dates.add((month, day))
+    return dates
 
 
 def same_named_incident_as_custom(candidate, authority):
