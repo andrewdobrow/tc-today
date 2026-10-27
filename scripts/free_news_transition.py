@@ -12,7 +12,16 @@ import html
 import json
 import re
 from pathlib import Path
+import sys
 from urllib.parse import urlparse
+
+# This is invoked directly as `python scripts/free_news_transition.py` by the
+# existing Update workflow. Python otherwise puts scripts/ (not the repository
+# root) on sys.path, making `from scripts.*` fail in production although
+# pytest imports succeed. Align direct execution with the other TCT CLI scripts.
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from scripts.prepare_membership_paywall import (
     ACTUAL_PAYWALL_MARKER_RE,
@@ -21,7 +30,6 @@ from scripts.prepare_membership_paywall import (
     _restore_free_article_schema,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
 PAYMENT_PATTERN = re.compile(r"^https://(?:buy|checkout|donate)\.stripe\.com/[A-Za-z0-9/_-]+(?:\?[^\s]*)?$")
 CUSTOMER_SERVICE = "hello@treasurecoast.today"
 
