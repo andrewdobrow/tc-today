@@ -81,11 +81,11 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
     # entitlement and manage their already-paid subscriptions.
     text = re.sub(
         r'<a\b(?=[^>]*class="[^"]*\bmembership-subscribe-btn\b)[^>]*>.*?</a>',
-        '<a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Donate to support Treasure Coast Today">' +
-        DONATE_HEART_SVG + ' <span class="membership-subscribe-label">Donate</span></a>',
+        '<a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Support Treasure Coast Today">' +
+        DONATE_HEART_SVG + ' <span class="membership-subscribe-label">Support TCT</span></a>',
         text, flags=re.I | re.S,
     )
-    # If a legacy site/page uses an Advertise primary CTA, make it Donate.
+    # If a legacy site/page uses an Advertise primary CTA, route it to the Support TCT donation page.
     text = re.sub(r'(<a\b(?=[^>]*class="[^"]*\bsupport-btn\b)[^>]*href=")/advertise\.html(")', r'\1/donate.html\2', text, flags=re.I)
     # The primary desktop nav gets Advertise immediately after Events. Mobile
     # retains a discoverable Advertise link in its hamburger drawer.
@@ -139,9 +139,9 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
     # no longer contain their original /subscribe.html href.
     text = text.replace(LEGACY_DONATE_HEART, DONATE_HEART_SVG)
     if not re.search(r'href="/donation-model\.css(?:\?v=[^"]*)?"', text) and "</head>" in text:
-        text = text.replace("</head>", '  <link rel="stylesheet" href="/donation-model.css?v=20261027c">\n</head>', 1)
+        text = text.replace("</head>", '  <link rel="stylesheet" href="/donation-model.css?v=20261028d">\n</head>', 1)
     text = re.sub(r'href="/donation-model\.css(?:\?v=[^"]*)?"',
-                  'href="/donation-model.css?v=20261027c"', text)
+                  'href="/donation-model.css?v=20261028d"', text)
     return text
 
 
