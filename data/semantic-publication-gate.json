@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-28T10:58:45.195748+00:00",
+  "generated_at": "2026-10-28T12:51:12.727854+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -81,11 +81,11 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 6,
+    "pre_generation_materiality_evaluations": 7,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 6,
-    "pre_generation_materiality_holds": 0,
-    "pre_generation_materiality_model_calls": 1,
+    "pre_generation_materiality_duplicates": 5,
+    "pre_generation_materiality_holds": 2,
+    "pre_generation_materiality_model_calls": 2,
     "pre_generation_materiality_cache_hits": 5,
     "terminal_permalink_evaluations": 1,
     "terminal_permalink_candidate_pairs": 12,
@@ -104,32 +104,28 @@
   },
   "pre_generation_materiality_decisions": [
     {
-      "category_key": "crime",
-      "source_headline": "Man released from prison 11 days ago arrested after Hobe Sound neighborhood disturbance - cw34.com",
-      "source_url": "https://cw34.com/news/local/man-released-from-prison-11-days-ago-arrested-after-hobe-sound-neighborhood-disturbance-crooked-oak-avenue-6000-block-crooked-oak-avenue-suspicious-activity-suspicious-man-yelling-at-residents-wandering-through-yards-residential-yards-hobe-sound",
-      "canonical_slug": "2026-10-26-man-arrested-after-reported-disturbance-on-crooked-oak-avenue-in-hobe-sound",
-      "canonical_headline": "Man arrested after reported disturbance on Crooked Oak Avenue in Hobe Sound",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "category_key": "local_gov",
+      "source_headline": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - cw34.com",
+      "source_url": "https://cw34.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-",
+      "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
+      "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
       "cache_hit": false,
       "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
-      "shared_anchors": [
-        "Joseph Oswald, 28, arrested in the 6000 block of Crooked Oak Avenue in Hobe Sound",
-        "Residents called 911 after he yelled at people and wandered through the neighborhood",
-        "Martin County Sheriff's Office reported apparent impairment by an unknown substance",
-        "Charges of loitering, prowling and trespassing",
-        "Released from prison 11 days earlier, with as many as 14 prior Martin County arrests"
-      ],
+      "semantic_status": "model_error",
+      "semantic_action": "hold",
+      "confidence": 0.0,
+      "shared_anchors": [],
       "novel_facts": [],
-      "reason": "The incoming article repeats the same arrest and all substantive facts already included in the canonical. Its later publication date and different outlet do not establish a new development.",
-      "validation_errors": []
+      "reason": "Semantic gate model failure; fail-closed hold: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}",
+      "validation_errors": [
+        "model_error"
+      ]
     },
     {
       "category_key": "martin",
@@ -142,24 +138,18 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.99,
-      "shared_anchors": [
-        "Martin County commissioners unanimously approved a one-year data center moratorium at the Oct. 27 second public hearing.",
-        "The first hearing occurred Oct. 13.",
-        "A data center application off Kanner Highway was submitted Oct. 12, before the first hearing, and remains eligible for development review."
-      ],
-      "novel_facts": [
-        "The pending application is identified as the Florida Gateway Project.",
-        "Staff expect the application's development review to take approximately one year.",
-        "The incoming article adds public comments, commissioners' concerns about notification timing, and confirmation that no other large-scale data center applications are pending."
-      ],
-      "reason": "The canonical already reports final approval of the moratorium and the previously filed Kanner Highway project's exemption. The incoming article adds identification, procedural detail and reactions, but no new consequential government action or independently newsworthy accountability development.",
-      "validation_errors": []
+      "semantic_status": "model_error",
+      "semantic_action": "hold",
+      "confidence": 0.0,
+      "shared_anchors": [],
+      "novel_facts": [],
+      "reason": "Semantic gate model failure; fail-closed hold: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}",
+      "validation_errors": [
+        "model_error"
+      ]
     },
     {
       "category_key": "martin",
@@ -190,6 +180,40 @@
         "Lt. Dave Rosko says three high-water vehicles are ready for rescue efforts"
       ],
       "reason": "The canonical already covers the same day's flooding on Dyer Point Road, rescue preparations and high-tide danger. The incoming adds resident observations, localized water recession and a vehicle count, but no material change in casualties, official findings or emergency actions and no independently newsworthy follow-up.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
+      "source_url": "https://cbs12.com/news/local/king-tide-flooding-palm-beach-county-treasure-coast-st-lucie-county-flooding-sw-34th-street-midtown-beach-closure-juno-beach-pier-closure-florida-coastal-flood-warning-florida-news",
+      "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
+      "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 1.0,
+      "shared_anchors": [
+        "Identical WPEC source URL and publication date of October 26, 2026",
+        "King-tide flooding made SW Dyer Point Road impassable, with additional flooding at SW 34th Street and Cornell Avenue",
+        "Martin County Sheriff's Office deployed high-water vehicles to assist stranded residents",
+        "Ocean Avenue and Federal Highway intersection and Ocean Inlet Marina closed",
+        "Midtown Beach and Juno Beach Pier closures, and planned lifeguard-tower relocation on South Ocean Boulevard",
+        "Same coastal flood warning expiration times and Monday high tide at 9:06 p.m."
+      ],
+      "novel_facts": [
+        "Resident Terresa Baldwin described flooding around her home and expressed concerns about sewage and odor",
+        "Additional flooding described on Flagler Drive and Sunset Avenue",
+        "Cub Scouts moved campsite supplies to higher ground at Spanish River Park",
+        "Three high-water vehicles were deployed"
+      ],
+      "reason": "The incoming article repeats the same dated king-tide flooding event from the identical source. Its additional resident testimony, affected locations, campsite anecdote and vehicle count are scene detail rather than a material development or independently newsworthy follow-up.",
       "validation_errors": []
     },
     {
@@ -253,11 +277,11 @@
       "validation_errors": []
     },
     {
-      "category_key": "indian_river",
-      "source_headline": "King tides cause coastal flooding, beach closures in Palm Beach County and Treasure Coast - WPEC",
-      "source_url": "https://cbs12.com/news/local/king-tide-flooding-palm-beach-county-treasure-coast-st-lucie-county-flooding-sw-34th-street-midtown-beach-closure-juno-beach-pier-closure-florida-coastal-flood-warning-florida-news",
-      "canonical_slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-      "canonical_headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
+      "category_key": "st_lucie",
+      "source_headline": "Fatal incident reported on Florida’s Turnpike near Fort Pierce Service Plaza - WPBF",
+      "source_url": "https://www.wpbf.com/article/fatal-crash-floridas-turnpike-near-fort-pierce-service-plaza-port-st-lucie/74240933",
+      "canonical_slug": "2026-10-25-fatal-medical-call-on-floridas-turnpike-near-fort-pierce-leaves-one-dead",
+      "canonical_headline": "Man dies after medical distress at Fort Pierce Service Plaza on Florida's Turnpike",
       "canonical_is_custom": false,
       "identity_basis": "exact_source_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
@@ -270,20 +294,14 @@
       "semantic_action": "duplicate_use_existing_canonical",
       "confidence": 1.0,
       "shared_anchors": [
-        "Identical WPEC source URL and publication date of October 26, 2026",
-        "King-tide flooding made SW Dyer Point Road impassable, with additional flooding at SW 34th Street and Cornell Avenue",
-        "Martin County Sheriff's Office deployed high-water vehicles to assist stranded residents",
-        "Ocean Avenue and Federal Highway intersection and Ocean Inlet Marina closed",
-        "Midtown Beach and Juno Beach Pier closures, and planned lifeguard-tower relocation on South Ocean Boulevard",
-        "Same coastal flood warning expiration times and Monday high tide at 9:06 p.m."
+        "Identical WPBF source URL",
+        "Sunday morning medical emergency at Fort Pierce Service Plaza on Florida's Turnpike",
+        "FHP Post 5 units found an unresponsive man at 5:40 a.m. with no breathing or pulse",
+        "Man was transported to Florida Coast Medical Center and pronounced dead",
+        "Traveling companions said he had not been feeling well; no foul play suspected"
       ],
-      "novel_facts": [
-        "Resident Terresa Baldwin described flooding around her home and expressed concerns about sewage and odor",
-        "Additional flooding described on Flagler Drive and Sunset Avenue",
-        "Cub Scouts moved campsite supplies to higher ground at Spanish River Park",
-        "Three high-water vehicles were deployed"
-      ],
-      "reason": "The incoming article repeats the same dated king-tide flooding event from the identical source. Its additional resident testimony, affected locations, campsite anecdote and vehicle count are scene detail rather than a material development or independently newsworthy follow-up.",
+      "novel_facts": [],
+      "reason": "The incoming article repeats the same medical emergency and death already covered by the canonical. Its later publication date and attribution to a fire district spokesperson do not establish a material development or independently newsworthy follow-up.",
       "validation_errors": []
     }
   ],
@@ -512,7 +530,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash",
       "incoming_source_url": "https://cw34.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news?teaserSource=trending",
-      "incoming_story_id": "story_023834",
+      "incoming_story_id": "story_023847",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
