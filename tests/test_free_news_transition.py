@@ -120,6 +120,7 @@ def test_privacy_policy_mentions_payments_and_for_profit_status():
     assert "Last updated: October 27, 2026" in p
     assert "Stripe" in p
     assert "for-profit" in p
+    assert "not a tax-exempt charity" in p
 
 
 def test_stripe_donation_payment_link_host_is_supported():
@@ -252,7 +253,7 @@ def test_donate_buttons_have_flat_monochrome_svg_before_label_and_not_newsletter
     )
     assert DONATE_HEART_SVG + ' Donate to support the newsroom' in home
     generator = (root / "scripts/free_news_transition.py").read_text(encoding="utf-8")
-    assert '{DONATE_HEART_SVG} Donate securely with Stripe' in generator
+    assert '{DONATE_HEART_SVG} Support TCT Today' in generator
 
 
 def test_open_access_launch_checks_real_supabase_checkout_before_generation():
@@ -372,6 +373,9 @@ def test_real_site_migration_dry_run_restores_custom_article_without_publish(tmp
     donation = (tmp_path / "donate.html").read_text(encoding="utf-8")
     assert "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" in donation
     assert 'class="tct-donate-heart"' in donation
+    assert 'Support TCT Today' in donation
+    assert 'Donations are processed securely using Stripe.' in donation
+    assert 'not a tax-exempt charity' not in donation
     privacy = (tmp_path / "privacy.html").read_text(encoding="utf-8")
     assert "Mediavine Programmatic Advertising (Ver 1.1)" in privacy
     assert "voluntary reader contributions" in privacy
