@@ -117,7 +117,7 @@ def test_homepage_support_card_no_longer_sells_subscriptions():
 
 def test_privacy_policy_mentions_payments_and_for_profit_status():
     p = _rewrite_privacy('<p>Last updated: October 15, 2026</p><h2>Information we collect</h2>')
-    assert "Last updated: October 27, 2026" in p
+    assert "Last updated: October 28, 2026" in p
     assert "Stripe" in p
     assert "for-profit" in p
     assert "not a tax-exempt charity" in p
@@ -165,12 +165,17 @@ def test_free_news_privacy_preserves_mediavine_exactly_and_removes_old_access_cl
         '<h2>Your choices, retention and requests</h2>', 1,
     )[0]
     assert before_ad == after_ad, "Never rewrite Mediavine-required programmatic disclosure"
-    assert "October 27, 2026" in actual
+    assert "October 28, 2026" in actual
     assert "for-profit business" in actual
     assert "not tax-deductible" in actual
     assert "one-time" in actual
     assert "Kit" in actual and "Formspree" in actual
     assert "Stripe" in actual and "Supabase" in actual
+    assert "tct-ios-storekit-tips-20261028" in actual
+    assert "Apple In-App Purchase (StoreKit)" in actual
+    assert "not through Stripe" in actual
+    assert "do not unlock articles or features" in actual
+    assert "https://www.apple.com/legal/privacy/" in actual
     assert "ad-free" in actual
     assert "monthly article-meter record" in actual
     assert "If you purchase or use a Treasure Coast Today membership" not in actual
