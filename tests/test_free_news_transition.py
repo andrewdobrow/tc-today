@@ -103,6 +103,7 @@ def test_main_bar_advertise_after_events_and_out_of_desktop_dropdown():
     assert nav.count('href="/advertise.html"') == 1
     assert 'href="/donate.html"' in page
     assert ">Subscribe</span>" not in page
+    assert 'aria-label="Support Treasure Coast Today"' in page
     assert _rewrite_chrome(page, "index.html") == page
 
 
@@ -243,10 +244,10 @@ def test_donate_buttons_have_flat_monochrome_svg_before_label_and_not_newsletter
     assert 'height="14"' in DONATE_HEART_SVG
     assert 'aria-hidden="true"' in DONATE_HEART_SVG
     assert '&#9829;' not in DONATE_HEART_SVG
-    assert DONATE_HEART_SVG + ' <span class="membership-subscribe-label">Donate</span>' in page
+    assert DONATE_HEART_SVG + ' <span class="membership-subscribe-label">Support TCT</span>' in page
     assert DONATE_HEART_SVG + ' Donate</a>' in page
     assert DONATE_HEART_SVG + ' Donate to local news' in page
-    assert page.count('href="/donation-model.css?v=20261027c"') == 1
+    assert page.count('href="/donation-model.css?v=20261028d"') == 1
     assert "Subscribe to newsletter" in page
     assert _rewrite_chrome(page, "index.html") == page
     legacy = '<a href="/donate.html">' + LEGACY_DONATE_HEART + ' Donate</a>'
@@ -277,6 +278,10 @@ def test_header_donate_design_matches_footer_and_prevents_emoji_underlines():
     assert "flex-direction: row !important;" in css
     assert "text-decoration: none !important;" in css
     assert "border-radius: 7px !important;" in css
+    assert "width: max-content !important;" in css
+    assert "min-width: 0 !important;" in css
+    assert "max-width: none !important;" in css
+    assert "gap: 6px !important;" in css
     assert "background: #f26445 !important;" in css
     assert "color: #fff !important;" in css
     assert "svg.tct-donate-heart {" in css
