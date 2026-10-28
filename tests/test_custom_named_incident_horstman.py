@@ -260,7 +260,37 @@ def test_live_archive_keeps_custom_scoop_identity_and_can_repair_duplicate():
     original = originals[0]
     assert original.get("is_custom") and original.get("authoritative_custom")
     assert original.get("canonical_slug") == CUSTOM_SLUG
-    assert original.get("image_url") == IMAGE
+
+    # The custom editor-selected photo must never be replaced with a publisher
+    # image. A verified Bunny mirror may change its *delivery* URL, but only
+    # when the archive and persistent provenance registry still point back to
+    # that exact original photo. This checks both supported delivery modes
+    # without relaxing custom-image ownership or canonical article identity.
+    delivery_url = original.get("image_url")
+    if original.get("article_image_mirror_status") == "mirrored":
+        from urllib.parse import urlsplit
+
+        assert original.get("source_image_url") == IMAGE
+        assert original.get("hosted_image_url") == delivery_url
+        assert isinstance(delivery_url, str)
+        assert delivery_url.startswith("https://images.treasurecoast.today/articles/")
+        image_path = Path(urlsplit(delivery_url).path)
+        digest = image_path.stem
+        assert len(digest) == 64 and all(c in "0123456789abcdef" for c in digest)
+        assert image_path.parent.name == digest[:2]
+        registry_path = Path("data/article-image-registry.json")
+        assert registry_path.is_file(), "Mirrored custom image requires durable provenance"
+        registry = json.loads(registry_path.read_text(encoding="utf8"))
+        mirror = registry.get("articles", {}).get(CUSTOM_SLUG, {}).get("current_image", {})
+        assert mirror.get("status") == "mirrored"
+        assert mirror.get("original_url") == IMAGE
+        assert mirror.get("public_url") == delivery_url
+        assert mirror.get("sha256") == digest
+        assert mirror.get("storage_key") == image_path.as_posix().lstrip("/")
+        assert mirror.get("byte_length", 0) > 0
+    else:
+        assert delivery_url == IMAGE
+
     copies = [row for row in archive if row.get("slug") == DUP_SLUG]
     if copies:
         assert same_named_incident_as_custom(copies[0], original)[0]
