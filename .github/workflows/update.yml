@@ -210,7 +210,11 @@ jobs:
 
       - name: Generate news
         run: |
-          /usr/bin/time -f "Generate elapsed: %E" python -u scripts/generate.py
+          # Preserve the generator's exit code through tee, while capturing the
+          # actual provider response from this run for quota-failure detection.
+          set -o pipefail
+          touch "$RUNNER_TEMP/tct-generate-start.marker"
+          /usr/bin/time -f "Generate elapsed: %E" python -u scripts/generate.py 2>&1 | tee "$RUNNER_TEMP/tct-generate.log"
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -252,6 +256,17 @@ jobs:
         with:
           path: data/generation-cache.json
           key: tct-generation-cache-v2-source-focus-${{ github.ref_name }}-${{ github.run_id }}
+
+      - name: Fail on exhausted editorial API credits
+        # Archive recovery is safe for the public site, but a no-credit run must
+        # fail visibly and skip commit/deploy; ordinary 429 throttling is distinct.
+        run: |
+          python scripts/check_editorial_api_credits.py \
+            --log "$RUNNER_TEMP/tct-generate.log" \
+            --started "$RUNNER_TEMP/tct-generate-start.marker" \
+            --report data/category-generation-report.json \
+            --report data/semantic-publication-gate.json \
+            --report data/model-usage-report.json
 
       - name: Refresh Treasure Coast events
         continue-on-error: true
