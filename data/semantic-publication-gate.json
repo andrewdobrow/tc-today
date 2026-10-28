@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-10-28T20:55:21.371413+00:00",
+  "generated_at": "2026-10-28T21:31:09.436892+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 40,
+    "evaluations": 42,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 40,
+    "no_candidate_passes": 42,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 2,
     "retroactive_rows_retained": 40,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -83,19 +83,19 @@
     "material_update_replays_suppressed": 0,
     "pre_generation_materiality_evaluations": 8,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 5,
-    "pre_generation_materiality_holds": 3,
+    "pre_generation_materiality_duplicates": 8,
+    "pre_generation_materiality_holds": 0,
     "pre_generation_materiality_model_calls": 3,
     "pre_generation_materiality_cache_hits": 5,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 2,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -117,15 +117,18 @@
       "cache_hit": false,
       "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "model_error",
-      "semantic_action": "hold",
-      "confidence": 0.0,
-      "shared_anchors": [],
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.99,
+      "shared_anchors": [
+        "Tuesday morning crash on U.S. 1 near Treasure Coast Mall",
+        "Closure of all southbound lanes",
+        "Southbound lanes reopened around 7:58 a.m.",
+        "Martin County Sheriff's Office involvement"
+      ],
       "novel_facts": [],
-      "reason": "Semantic gate model failure; fail-closed hold: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}",
-      "validation_errors": [
-        "model_error"
-      ]
+      "reason": "The location, closure, day and exact reopening time identify the same crash. The incoming article repeats the initial traffic report and adds no material development; the canonical already includes substantially newer information about the pursuit, the 15-year-old driver and serious injuries.",
+      "validation_errors": []
     },
     {
       "category_key": "crime",
@@ -169,15 +172,19 @@
       "cache_hit": false,
       "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "model_error",
-      "semantic_action": "hold",
-      "confidence": 0.0,
-      "shared_anchors": [],
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.99,
+      "shared_anchors": [
+        "Identical WPEC source URL",
+        "Tuesday crash on U.S. 1 near Treasure Coast Mall",
+        "Closure of all southbound lanes",
+        "Southbound lanes reopened around 7:58 a.m.",
+        "Martin County Sheriff's Office involvement"
+      ],
       "novel_facts": [],
-      "reason": "Semantic gate model failure; fail-closed hold: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}",
-      "validation_errors": [
-        "model_error"
-      ]
+      "reason": "The incoming article repeats the initial traffic report for the same crash. The canonical already includes the reopening time and substantially newer information about the police pursuit, the 15-year-old driver, serious injuries, and investigations. The incoming article provides no material new development.",
+      "validation_errors": []
     },
     {
       "category_key": "martin",
@@ -193,15 +200,21 @@
       "cache_hit": false,
       "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "model_error",
-      "semantic_action": "hold",
-      "confidence": 0.0,
-      "shared_anchors": [],
-      "novel_facts": [],
-      "reason": "Semantic gate model failure; fail-closed hold: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}",
-      "validation_errors": [
-        "model_error"
-      ]
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.99,
+      "shared_anchors": [
+        "Martin County commissioners unanimously approved a one-year data center moratorium at its second public hearing.",
+        "The first hearing occurred Oct. 13.",
+        "A data center application off Kanner Highway was submitted Oct. 12, before the first hearing, and remains eligible for review."
+      ],
+      "novel_facts": [
+        "The incoming article names the pending proposal as the Florida Gateway Project.",
+        "Staff expect the application's development review process to take a year and report no other pending large-scale data center applications.",
+        "The incoming article adds public opposition and commissioners' criticism of how the application was communicated."
+      ],
+      "reason": "The canonical already reports final approval of the same moratorium and the previously filed Kanner Highway project's exemption. The incoming article adds a project name, review expectations and hearing comments, but no new governing action, change in project status or distinct accountability development.",
+      "validation_errors": []
     },
     {
       "category_key": "martin",
@@ -549,7 +562,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash",
       "incoming_source_url": "https://cw34.com/news/local/vero-beach-man-60-dies-in-crash-involving-freightliner-truck-tractor-intersection-49th-street-66th-avenue-health-first-holmes-medical-center-florida-highway-patrol-florida-news?teaserSource=trending",
-      "incoming_story_id": "story_023995",
+      "incoming_story_id": "story_024013",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1123,6 +1136,403 @@
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46",
+      "incoming_source_url": "https://www.wpbf.com/article/fort-pierce-police-searching-missing-endangered-adult/74271166",
+      "incoming_story_id": "story_023813",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "gpt-6.1-sol",
+      "incoming_headline": "Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46",
+      "incoming_source_url": "https://www.wpbf.com/article/fort-pierce-police-searching-missing-endangered-adult/74271166",
+      "incoming_story_id": "story_023813",
+      "candidates": [
+        {
+          "slug": "2026-10-15-st-lucie-county-proposes-raised-median-for-prima-vista-boulevard-after-578-crash",
+          "headline": "At Prima Vista Boulevard Workshop, St. Lucie County Residents Push Back on $6.1M Median Plan",
+          "terminal_recall_tier": 5,
+          "terminal_recall_score": 0.4861,
+          "retrieval_score": 0.3421,
+          "reasons": [
+            "shared_incident_anchor",
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-10-24-fort-pierce-girl-5-found-dead-in-water-after-portofino-landings-search",
+          "headline": "Fort Pierce Police: Missing 5-Year-Old Found Dead in Pond Near Portofino Landing",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.7977,
+          "retrieval_score": 0.6167,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_4_days",
+            "structured_identity_conflict"
+          ]
+        },
+        {
+          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+          "headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6756,
+          "retrieval_score": 0.5946,
+          "reasons": [
+            "publication_gap_19_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-19-fort-pierce-police-arrest-man-in-seaway-bridge-indecent-exposure-cases",
+          "headline": "Fort Pierce Police Arrest Man in Seaway Bridge Indecent Exposure Cases",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6142,
+          "retrieval_score": 0.5512,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-09-07-driver-killed-passenger-hospitalized-after-box-truck-overturns-on-floridas-turnp",
+          "headline": "Fort Pierce Police Identify Victim, Say Van Driver Showed Clear Intent to Flee",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6071,
+          "retrieval_score": 0.5571,
+          "reasons": [
+            "publication_gap_51_days",
+            "structured_identity_conflict",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-22-fort-pierce-man-out-on-cocaine-bond-now-charged-with-child-abuse",
+          "headline": "Fort Pierce Man Out on Cocaine Bond Now Charged With Child Abuse",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6004,
+          "retrieval_score": 0.5284,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-fort-pierce-police-investigate-death-of-man-found-in-lincoln-park-lake",
+          "headline": "Fort Pierce Police Investigate Death of Man Found in Lincoln Park Lake",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5794,
+          "retrieval_score": 0.5294,
+          "reasons": [
+            "publication_gap_14_days",
+            "structured_identity_conflict"
+          ]
+        },
+        {
+          "slug": "2026-10-23-fort-pierce-water-tank-mural-named-national-tank-of-the-year",
+          "headline": "Fort Pierce Water Tank Mural Named National Tank of the Year",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.504,
+          "retrieval_score": 0.479,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-25-fatal-medical-call-on-floridas-turnpike-near-fort-pierce-leaves-one-dead",
+          "headline": "Man dies after medical distress at Fort Pierce Service Plaza on Florida's Turnpike",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4843,
+          "retrieval_score": 0.4503,
+          "reasons": [
+            "publication_gap_3_days",
+            "structured_identity_conflict"
+          ]
+        },
+        {
+          "slug": "2026-10-17-swat-called-to-fort-pierce-home-after-domestic-battery-report-on-winter-garden-b",
+          "headline": "Fort Pierce Standoff Ends in Man's Apparent Suicide, Family Safely Evacuated",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4709,
+          "retrieval_score": 0.4639,
+          "reasons": [
+            "publication_gap_11_days",
+            "structured_identity_conflict"
+          ]
+        },
+        {
+          "slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+          "headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4668,
+          "retrieval_score": 0.4668,
+          "reasons": [
+            "publication_gap_89_days",
+            "structured_identity_conflict",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
+          "headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4242,
+          "retrieval_score": 0.3522,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.99,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Joseph Lee Williams, 46, was reported missing Oct. 23 from the Prima Vista Boulevard area.",
+          "Fort Pierce police describe Williams as an endangered adult who requires medication and may be in emotional distress.",
+          "Williams was last seen in Fort Pierce wearing a white T-shirt, black pants and shoes."
+        ],
+        "reason": "No candidate covers Williams' disappearance. The other missing-person case concerns 5-year-old Mayra Glory Odelus at Portofino Landing; the Prima Vista Boulevard candidate concerns a road median proposal. Shared geography and police agency do not establish event identity.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.99,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Joseph Lee Williams, 46, was reported missing Oct. 23 from the Prima Vista Boulevard area.",
+          "Fort Pierce police describe Williams as an endangered adult who requires medication and may be in emotional distress.",
+          "Williams was last seen in Fort Pierce wearing a white T-shirt, black pants and shoes."
+        ],
+        "reason": "No candidate covers Williams' disappearance. The other missing-person case concerns 5-year-old Mayra Glory Odelus at Portofino Landing; the Prima Vista Boulevard candidate concerns a road median proposal. Shared geography and police agency do not establish event identity.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
+      "incoming_source_url": "https://cbs12.com/news/local/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-",
+      "incoming_story_id": "story_023984",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "gpt-6.1-sol",
+      "incoming_headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
+      "incoming_source_url": "https://cbs12.com/news/local/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-",
+      "incoming_story_id": "story_023984",
+      "candidates": [
+        {
+          "slug": "2026-10-16-port-st-lucie-polls-residents-on-paying-11-more-a-month-for-extra-trash-pickup",
+          "headline": "Port St. Lucie Polls Residents on Paying $11 More a Month for Extra Trash Pickup",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6581,
+          "retrieval_score": 0.5541,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-10-20-st-lucie-fire-crews-battle-two-structure-fires-in-fort-pierce-port-st-lucie",
+          "headline": "St. Lucie Fire Crews Battle Two Structure Fires in Fort Pierce, Port St. Lucie",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6333,
+          "retrieval_score": 0.5173,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-st-lucie-fire-board-fires-chief-jeff-lee-names-langel-interim-chief",
+          "headline": "St. Lucie Fire Board Fires Chief Jeff Lee, Names Langel Interim Chief",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6141,
+          "retrieval_score": 0.4921,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-st-lucie-nuclear-plant-marks-50-years-as-nrc-grants-20-year-license-extension",
+          "headline": "St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5709,
+          "retrieval_score": 0.4489,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
+          "headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5383,
+          "retrieval_score": 0.4133,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
+          "headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5576,
+          "retrieval_score": 0.5266,
+          "reasons": [
+            "publication_gap_19_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-10-16-port-st-lucie-watches-for-more-flooding-as-weekend-rain-approaches",
+          "headline": "Port St. Lucie Watches for More Flooding as Weekend Rain Approaches",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5484,
+          "retrieval_score": 0.5444,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
+          "headline": "Port St. Lucie Mayor's Race and Trash Pickup Question Head to Voters",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5257,
+          "retrieval_score": 0.5037,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
+          "headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5148,
+          "retrieval_score": 0.4898,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-10-16-port-st-lucie-man-faces-charges-after-chase-ends-on-south-hutchinson-island",
+          "headline": "Port St. Lucie Man Faces Charges After Chase Ends on South Hutchinson Island",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5005,
+          "retrieval_score": 0.4965,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "headline": "More Than 100 Rescued Cats Recovering as PSL Police Weigh Charges",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4748,
+          "retrieval_score": 0.4558,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-14-port-st-lucie-woman-pleads-guilty-to-exploiting-elderly-boca-raton-client",
+          "headline": "Port St. Lucie Woman Pleads Guilty to Exploiting Elderly Boca Raton Client",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4745,
+          "retrieval_score": 0.4745,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Anthony Pizzarelli, 50, was arrested on charges of extortion, using a two-way communication device to facilitate a felony, and harassing an elected official.",
+          "A Palm Beach County Sheriff's Office affidavit alleges Pizzarelli threatened State Rep. Meg Weinberger with lawsuits and ethics complaints unless she publicly apologized and supported government audits.",
+          "The affidavit describes emails on Feb. 9 and April 6 and a voice memo sent to Weinberger's personal phone on May 18, 2026."
+        ],
+        "reason": "None of the candidates covers Pizzarelli, Weinberger, or this alleged extortion case. Geographic overlap and generic arrest language do not establish event continuity. The arrest and charges warrant a new story.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Anthony Pizzarelli, 50, was arrested on charges of extortion, using a two-way communication device to facilitate a felony, and harassing an elected official.",
+          "A Palm Beach County Sheriff's Office affidavit alleges Pizzarelli threatened State Rep. Meg Weinberger with lawsuits and ethics complaints unless she publicly apologized and supported government audits.",
+          "The affidavit describes emails on Feb. 9 and April 6 and a voice memo sent to Weinberger's personal phone on May 18, 2026."
+        ],
+        "reason": "None of the candidates covers Pizzarelli, Weinberger, or this alleged extortion case. Geographic overlap and generic arrest language do not establish event continuity. The arrest and charges warrant a new story.",
+        "validation_errors": [],
+        "consistency_repairs": []
       }
     }
   ],

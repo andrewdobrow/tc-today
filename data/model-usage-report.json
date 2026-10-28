@@ -1,21 +1,169 @@
 {
   "billing_note": "Estimated API list cost from model usage metadata; GPT-6.1 Sol pricing is provisional based on TCT bakeoff assumptions. Actual provider invoices may differ. Prompts and generated text are never stored in this report.",
-  "by_callsite": {},
-  "by_model": {},
-  "by_workload_class": {},
-  "calls": [],
-  "failed_requests_without_usage": 14,
-  "failures": [
+  "by_callsite": {
+    "generate.py:_copydesk_repair_assignment_item": {
+      "base_input_tokens": 3106,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.017222,
+      "output_tokens": 1101,
+      "requests": 2,
+      "total_input_context_tokens": 3106,
+      "unpriced_requests": 0
+    },
+    "generate.py:_run_assignment_editor": {
+      "base_input_tokens": 8788,
+      "cache_read_tokens": 1692,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.026974,
+      "output_tokens": 906,
+      "requests": 5,
+      "total_input_context_tokens": 10480,
+      "unpriced_requests": 0
+    },
+    "generate.py:_run_assignment_writer": {
+      "base_input_tokens": 26914,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.103328,
+      "output_tokens": 4950,
+      "requests": 9,
+      "total_input_context_tokens": 26914,
+      "unpriced_requests": 0
+    },
+    "generate.py:classify_stories": {
+      "base_input_tokens": 6362,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.029954,
+      "output_tokens": 1723,
+      "requests": 1,
+      "total_input_context_tokens": 6362,
+      "unpriced_requests": 0
+    },
+    "generate.py:select_front_page_hero": {
+      "base_input_tokens": 475,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.00152,
+      "output_tokens": 57,
+      "requests": 1,
+      "total_input_context_tokens": 475,
+      "unpriced_requests": 0
+    },
+    "semantic_publication_gate.py:adjudicate_candidates": {
+      "base_input_tokens": 39110,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.09038,
+      "output_tokens": 1216,
+      "requests": 5,
+      "total_input_context_tokens": 39110,
+      "unpriced_requests": 0
+    }
+  },
+  "by_model": {
+    "gpt-6.1-sol": {
+      "base_input_tokens": 84755,
+      "cache_read_tokens": 1692,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.269378,
+      "output_tokens": 9953,
+      "requests": 23,
+      "total_input_context_tokens": 86447,
+      "unpriced_requests": 0
+    }
+  },
+  "by_workload_class": {
+    "assignment_editor": {
+      "base_input_tokens": 8788,
+      "cache_read_tokens": 1692,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.026974,
+      "output_tokens": 906,
+      "requests": 5,
+      "total_input_context_tokens": 10480,
+      "unpriced_requests": 0
+    },
+    "assignment_writer": {
+      "base_input_tokens": 26914,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.103328,
+      "output_tokens": 4950,
+      "requests": 9,
+      "total_input_context_tokens": 26914,
+      "unpriced_requests": 0
+    },
+    "classification": {
+      "base_input_tokens": 6362,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.029954,
+      "output_tokens": 1723,
+      "requests": 1,
+      "total_input_context_tokens": 6362,
+      "unpriced_requests": 0
+    },
+    "editorial_selection": {
+      "base_input_tokens": 475,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.00152,
+      "output_tokens": 57,
+      "requests": 1,
+      "total_input_context_tokens": 475,
+      "unpriced_requests": 0
+    },
+    "identity_decision": {
+      "base_input_tokens": 39110,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.09038,
+      "output_tokens": 1216,
+      "requests": 5,
+      "total_input_context_tokens": 39110,
+      "unpriced_requests": 0
+    },
+    "other": {
+      "base_input_tokens": 3106,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.017222,
+      "output_tokens": 1101,
+      "requests": 2,
+      "total_input_context_tokens": 3106,
+      "unpriced_requests": 0
+    }
+  },
+  "calls": [
     {
       "callsite": {
         "file": "generate.py",
         "function": "classify_stories",
         "line": 38892
       },
-      "duration_seconds": 1.765,
-      "error_type": "RateLimitError",
+      "cost_components_usd": {
+        "base_input_usd": 0.012724,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.01723
+      },
+      "duration_seconds": 31.05,
+      "estimated_list_cost_usd": 0.029954,
+      "model": "gpt-6.1-sol",
       "requested_model": "gpt-6.1-sol",
       "sequence": 1,
+      "tokens": {
+        "base_input": 6362,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 1723,
+        "total_input_context": 6362
+      },
       "workload_class": "classification"
     },
     {
@@ -24,10 +172,27 @@
         "function": "adjudicate_candidates",
         "line": 957
       },
-      "duration_seconds": 0.791,
-      "error_type": "RateLimitError",
+      "cost_components_usd": {
+        "base_input_usd": 0.003208,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00214
+      },
+      "duration_seconds": 4.248,
+      "estimated_list_cost_usd": 0.005348,
+      "model": "gpt-6.1-sol",
       "requested_model": "gpt-6.1-sol",
       "sequence": 2,
+      "tokens": {
+        "base_input": 1604,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 214,
+        "total_input_context": 1604
+      },
       "workload_class": "identity_decision"
     },
     {
@@ -36,58 +201,578 @@
         "function": "_run_assignment_editor",
         "line": 12257
       },
-      "duration_seconds": 0.628,
-      "error_type": "RateLimitError",
+      "cost_components_usd": {
+        "base_input_usd": 0.0048,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00201
+      },
+      "duration_seconds": 4.367,
+      "estimated_list_cost_usd": 0.00681,
+      "model": "gpt-6.1-sol",
       "requested_model": "gpt-6.1-sol",
       "sequence": 3,
+      "tokens": {
+        "base_input": 2400,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 201,
+        "total_input_context": 2400
+      },
       "workload_class": "assignment_editor"
     },
     {
       "callsite": {
         "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
+        "function": "_run_assignment_writer",
+        "line": 12615
       },
-      "duration_seconds": 0.594,
-      "error_type": "RateLimitError",
+      "cost_components_usd": {
+        "base_input_usd": 0.006082,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00602
+      },
+      "duration_seconds": 9.369,
+      "estimated_list_cost_usd": 0.012102,
+      "model": "gpt-6.1-sol",
       "requested_model": "gpt-6.1-sol",
       "sequence": 4,
-      "workload_class": "assignment_editor"
+      "tokens": {
+        "base_input": 3041,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 602,
+        "total_input_context": 3041
+      },
+      "workload_class": "assignment_writer"
     },
     {
       "callsite": {
-        "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
+        "file": "semantic_publication_gate.py",
+        "function": "adjudicate_candidates",
+        "line": 957
       },
-      "duration_seconds": 0.85,
-      "error_type": "RateLimitError",
+      "cost_components_usd": {
+        "base_input_usd": 0.003222,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00223
+      },
+      "duration_seconds": 4.219,
+      "estimated_list_cost_usd": 0.005452,
+      "model": "gpt-6.1-sol",
       "requested_model": "gpt-6.1-sol",
       "sequence": 5,
-      "workload_class": "assignment_editor"
+      "tokens": {
+        "base_input": 1611,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 223,
+        "total_input_context": 1611
+      },
+      "workload_class": "identity_decision"
     },
     {
       "callsite": {
-        "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
+        "file": "semantic_publication_gate.py",
+        "function": "adjudicate_candidates",
+        "line": 957
       },
-      "duration_seconds": 0.776,
-      "error_type": "RateLimitError",
+      "cost_components_usd": {
+        "base_input_usd": 0.004016,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00351
+      },
+      "duration_seconds": 7.759,
+      "estimated_list_cost_usd": 0.007526,
+      "model": "gpt-6.1-sol",
       "requested_model": "gpt-6.1-sol",
       "sequence": 6,
-      "workload_class": "assignment_editor"
+      "tokens": {
+        "base_input": 2008,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 351,
+        "total_input_context": 2008
+      },
+      "workload_class": "identity_decision"
     },
     {
       "callsite": {
-        "file": "semantic_publication_gate.py",
-        "function": "adjudicate_candidates",
-        "line": 957
+        "file": "generate.py",
+        "function": "_run_assignment_editor",
+        "line": 12257
       },
-      "duration_seconds": 0.65,
-      "error_type": "RateLimitError",
+      "cost_components_usd": {
+        "base_input_usd": 0.00339,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.0015
+      },
+      "duration_seconds": 3.847,
+      "estimated_list_cost_usd": 0.00489,
+      "model": "gpt-6.1-sol",
       "requested_model": "gpt-6.1-sol",
       "sequence": 7,
+      "tokens": {
+        "base_input": 1695,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 150,
+        "total_input_context": 1695
+      },
+      "workload_class": "assignment_editor"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_writer",
+        "line": 12615
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.005438,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00416
+      },
+      "duration_seconds": 8.294,
+      "estimated_list_cost_usd": 0.009598,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 8,
+      "tokens": {
+        "base_input": 2719,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 416,
+        "total_input_context": 2719
+      },
+      "workload_class": "assignment_writer"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_writer",
+        "line": 12615
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.006236,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00636
+      },
+      "duration_seconds": 11.08,
+      "estimated_list_cost_usd": 0.012596,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 9,
+      "tokens": {
+        "base_input": 3118,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 636,
+        "total_input_context": 3118
+      },
+      "workload_class": "assignment_writer"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_copydesk_repair_assignment_item",
+        "line": 12463
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.00309,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00525
+      },
+      "duration_seconds": 5.402,
+      "estimated_list_cost_usd": 0.00834,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 10,
+      "tokens": {
+        "base_input": 1545,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 525,
+        "total_input_context": 1545
+      },
+      "workload_class": "other"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_editor",
+        "line": 12257
+      },
+      "cost_components_usd": {
+        "base_input_usd": 6e-06,
+        "cache_read_usd": 0.000338,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00149
+      },
+      "duration_seconds": 4.206,
+      "estimated_list_cost_usd": 0.001834,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 11,
+      "tokens": {
+        "base_input": 3,
+        "cache_read": 1692,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 149,
+        "total_input_context": 1695
+      },
+      "workload_class": "assignment_editor"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_writer",
+        "line": 12615
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.005436,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00426
+      },
+      "duration_seconds": 7.84,
+      "estimated_list_cost_usd": 0.009696,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 12,
+      "tokens": {
+        "base_input": 2718,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 426,
+        "total_input_context": 2718
+      },
+      "workload_class": "assignment_writer"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_writer",
+        "line": 12615
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.006236,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00601
+      },
+      "duration_seconds": 8.516,
+      "estimated_list_cost_usd": 0.012246,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 13,
+      "tokens": {
+        "base_input": 3118,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 601,
+        "total_input_context": 3118
+      },
+      "workload_class": "assignment_writer"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_copydesk_repair_assignment_item",
+        "line": 12463
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.003122,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00576
+      },
+      "duration_seconds": 6.407,
+      "estimated_list_cost_usd": 0.008882,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 14,
+      "tokens": {
+        "base_input": 1561,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 576,
+        "total_input_context": 1561
+      },
+      "workload_class": "other"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_editor",
+        "line": 12257
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.007388,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.0031
+      },
+      "duration_seconds": 4.633,
+      "estimated_list_cost_usd": 0.010488,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 15,
+      "tokens": {
+        "base_input": 3694,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 310,
+        "total_input_context": 3694
+      },
+      "workload_class": "assignment_editor"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_writer",
+        "line": 12615
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.006098,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00599
+      },
+      "duration_seconds": 10.9,
+      "estimated_list_cost_usd": 0.012088,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 16,
+      "tokens": {
+        "base_input": 3049,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 599,
+        "total_input_context": 3049
+      },
+      "workload_class": "assignment_writer"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_writer",
+        "line": 12615
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.00529,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00331
+      },
+      "duration_seconds": 6.733,
+      "estimated_list_cost_usd": 0.0086,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 17,
+      "tokens": {
+        "base_input": 2645,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 331,
+        "total_input_context": 2645
+      },
+      "workload_class": "assignment_writer"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_writer",
+        "line": 12615
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.006908,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00765
+      },
+      "duration_seconds": 11.783,
+      "estimated_list_cost_usd": 0.014558,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 18,
+      "tokens": {
+        "base_input": 3454,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 765,
+        "total_input_context": 3454
+      },
+      "workload_class": "assignment_writer"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_editor",
+        "line": 12257
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.001992,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00096
+      },
+      "duration_seconds": 3.409,
+      "estimated_list_cost_usd": 0.002952,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 19,
+      "tokens": {
+        "base_input": 996,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 96,
+        "total_input_context": 996
+      },
+      "workload_class": "assignment_editor"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "_run_assignment_writer",
+        "line": 12615
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.006104,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00574
+      },
+      "duration_seconds": 10.465,
+      "estimated_list_cost_usd": 0.011844,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 20,
+      "tokens": {
+        "base_input": 3052,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 574,
+        "total_input_context": 3052
+      },
+      "workload_class": "assignment_writer"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "select_front_page_hero",
+        "line": 11760
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.00095,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00057
+      },
+      "duration_seconds": 2.327,
+      "estimated_list_cost_usd": 0.00152,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 21,
+      "tokens": {
+        "base_input": 475,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 57,
+        "total_input_context": 475
+      },
+      "workload_class": "editorial_selection"
+    },
+    {
+      "callsite": {
+        "file": "semantic_publication_gate.py",
+        "function": "adjudicate_candidates",
+        "line": 957
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.033938,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00199
+      },
+      "duration_seconds": 3.575,
+      "estimated_list_cost_usd": 0.035928,
+      "model": "gpt-6.1-sol",
+      "requested_model": "gpt-6.1-sol",
+      "sequence": 22,
+      "tokens": {
+        "base_input": 16969,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 199,
+        "total_input_context": 16969
+      },
       "workload_class": "identity_decision"
     },
     {
@@ -96,86 +781,33 @@
         "function": "adjudicate_candidates",
         "line": 957
       },
-      "duration_seconds": 0.889,
-      "error_type": "RateLimitError",
+      "cost_components_usd": {
+        "base_input_usd": 0.033836,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.00229
+      },
+      "duration_seconds": 3.402,
+      "estimated_list_cost_usd": 0.036126,
+      "model": "gpt-6.1-sol",
       "requested_model": "gpt-6.1-sol",
-      "sequence": 8,
+      "sequence": 23,
+      "tokens": {
+        "base_input": 16918,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 229,
+        "total_input_context": 16918
+      },
       "workload_class": "identity_decision"
-    },
-    {
-      "callsite": {
-        "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
-      },
-      "duration_seconds": 0.614,
-      "error_type": "RateLimitError",
-      "requested_model": "gpt-6.1-sol",
-      "sequence": 9,
-      "workload_class": "assignment_editor"
-    },
-    {
-      "callsite": {
-        "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
-      },
-      "duration_seconds": 0.83,
-      "error_type": "RateLimitError",
-      "requested_model": "gpt-6.1-sol",
-      "sequence": 10,
-      "workload_class": "assignment_editor"
-    },
-    {
-      "callsite": {
-        "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
-      },
-      "duration_seconds": 0.574,
-      "error_type": "RateLimitError",
-      "requested_model": "gpt-6.1-sol",
-      "sequence": 11,
-      "workload_class": "assignment_editor"
-    },
-    {
-      "callsite": {
-        "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
-      },
-      "duration_seconds": 0.562,
-      "error_type": "RateLimitError",
-      "requested_model": "gpt-6.1-sol",
-      "sequence": 12,
-      "workload_class": "assignment_editor"
-    },
-    {
-      "callsite": {
-        "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
-      },
-      "duration_seconds": 1.184,
-      "error_type": "RateLimitError",
-      "requested_model": "gpt-6.1-sol",
-      "sequence": 13,
-      "workload_class": "assignment_editor"
-    },
-    {
-      "callsite": {
-        "file": "generate.py",
-        "function": "_run_assignment_editor",
-        "line": 12257
-      },
-      "duration_seconds": 0.49,
-      "error_type": "RateLimitError",
-      "requested_model": "gpt-6.1-sol",
-      "sequence": 14,
-      "workload_class": "assignment_editor"
     }
   ],
-  "finished_at": "2026-10-28T20:55:55Z",
+  "failed_requests_without_usage": 0,
+  "failures": [],
+  "finished_at": "2026-10-28T21:32:05Z",
   "observability_version": "1.13.7.1y",
   "pricing_catalog": {
     "claude-opus-5": {
@@ -223,17 +855,17 @@
       }
     }
   },
-  "provider": "anthropic",
+  "provider": "openai",
   "schema_version": 1,
-  "started_at": "2026-10-28T20:46:23Z",
+  "started_at": "2026-10-28T21:13:20Z",
   "totals": {
-    "base_input_tokens": 0,
-    "cache_read_tokens": 0,
+    "base_input_tokens": 84755,
+    "cache_read_tokens": 1692,
     "cache_write_tokens": 0,
-    "estimated_list_cost_usd": 0.0,
-    "output_tokens": 0,
-    "requests": 0,
-    "total_input_context_tokens": 0,
+    "estimated_list_cost_usd": 0.269378,
+    "output_tokens": 9953,
+    "requests": 23,
+    "total_input_context_tokens": 86447,
     "unpriced_requests": 0
   }
 }
