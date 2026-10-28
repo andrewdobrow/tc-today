@@ -211,7 +211,7 @@ def _rewrite_privacy(text: str) -> str:
         ),
         (
             "<li><strong>App authentication and membership access.</strong> If you sign in, we process your email address and authentication/session credentials to verify access to subscriber content. The app stores session credentials in iOS Keychain. Membership status is verified by our services; your payment card is handled by Stripe, not by the iPhone app.</li>",
-            "<li><strong>App authentication and remaining paid benefits.</strong> Existing paid readers who sign in provide an email address and session credentials so the app can verify their remaining ad-free entitlement. Credentials are stored in iOS Keychain. Stripe, not the iPhone app, processes payment details. No login is required for ordinary free news reading.</li>",
+            "<li><strong>App authentication and remaining paid benefits.</strong> Existing paid readers who sign in provide an email address and session credentials so the app can verify their remaining ad-free entitlement. Credentials are stored in iOS Keychain. Stripe handles historical website subscription payments; optional iPhone tips are processed by Apple. No login is required for ordinary free news reading.</li>",
         ),
         (
             "<li><strong>App preferences and reading access.</strong> The app locally stores certain settings, notification-topic preferences and information needed to recognize its monthly free-article allowance. These settings help the app remember your choices and enforce article access rules.</li>",
