@@ -92,6 +92,14 @@ def _publication_date(item):
 
 
 def _subject(authority):
+    """Identify the original custom subject even after an in-place headline update.
+
+    A material update may legitimately replace "Tyler Horstman arrested" with
+    "Arrest report details..." while retaining the original custom slug/id.
+    Requiring the *current* headline to name the person lets later feed
+    rewrites create fresh duplicate canonicals. Do not guess from the slug:
+    independently require the full name in the custom's reported lead.
+    """
     headline = str(authority.get("headline") or "")
     teaser = str(authority.get("teaser") or "")
     for match in _NAME.finditer(headline):
@@ -101,6 +109,20 @@ def _subject(authority):
         pattern = _person_pattern(first, last)
         # Repeated in the custom reporting: not incidental headline/title words.
         if pattern.search(teaser or headline):
+            return first.casefold(), last.casefold()
+
+    # A renamed custom article keeps its immutable original slug and custom_id.
+    # Use those only to *confirm* a real full name present in its current lead;
+    # never derive a subject from slug tokens or any arbitrary body mention.
+    durable_ids = " ".join(
+        str(authority.get(key) or "") for key in ("slug", "custom_id")
+    ).casefold()
+    for match in _NAME.finditer(teaser[:450]):
+        first, last = match.group(1), match.group(2)
+        if first.casefold() in _BAD_FIRST or last.casefold() in _BAD_LAST:
+            continue
+        durable_name = re.escape(first.casefold()) + r"[-_]" + re.escape(last.casefold())
+        if re.search(r"(?<![a-z])" + durable_name + r"(?![a-z])", durable_ids):
             return first.casefold(), last.casefold()
     return None
 
