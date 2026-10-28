@@ -170,7 +170,7 @@ def _rewrite_privacy(text: str) -> str:
     """
     text = re.sub(
         r'Last updated:\s*[^<]+',
-        'Last updated: October 27, 2026', text, count=1,
+        'Last updated: October 28, 2026', text, count=1,
     )
     # Focused unit-test snippets do not contain the full policy. Enforce all
     # expected disclosures against actual full published pages, not tiny inputs.
@@ -180,6 +180,13 @@ def _rewrite_privacy(text: str) -> str:
         <p>Our one-time, choose-your-own-amount contribution checkout is hosted by Stripe. We may receive transaction amounts, payment status, dates, Stripe identifiers, and contact details supplied for confirmations or receipts. Stripe handles payment credentials; TCT does not collect or store full card numbers. We retain payment records when needed for customer support, accounting, fraud prevention or applicable legal obligations.</p>
         <p>Existing paid subscriptions and billing records continue to be handled through Stripe and Supabase while previously purchased periods conclude. Eligible subscribers may sign in to receive the ad-free website and iPhone app experience already included in their paid terms. New articles do not require paid access. We display clearly labeled sponsorships and advertising, including Mediavine on the website and Google AdMob in the iPhone app, as described below.</p>
         """
+
+    # Current site can be rebuilt from this script during the regular Update
+    # workflow. Keep Apple StoreKit disclosures in the generated policy.
+    stripe_description = "<p>Our one-time, choose-your-own-amount contribution checkout is hosted by Stripe. We may receive transaction amounts, payment status, dates, Stripe identifiers, and contact details supplied for confirmations or receipts. Stripe handles payment credentials; TCT does not collect or store full card numbers. We retain payment records when needed for customer support, accounting, fraud prevention or applicable legal obligations.</p>"
+    apple_disclosure = "<!-- tct-ios-storekit-tips-20261028 -->\n        <p><strong>Optional tips in our iPhone app.</strong> In the iPhone app, optional one-time, repeatable tips are purchased only through Apple's In-App Purchase (StoreKit), not through Stripe. Apple processes the payment and associated billing details under its own terms and <a href=\"https://www.apple.com/legal/privacy/\">privacy policy</a>. TCT may receive limited purchase reporting, such as transaction amounts, dates, and product identifiers, through App Store Connect; our app verifies and completes purchases through StoreKit. TCT does not collect or store full payment card numbers for Apple purchases. Tips are voluntary and do not unlock articles or features, remove advertisements, create a subscription, or confer editorial influence. No TCT account is needed to leave an in-app tip.</p>"
+    if "<!-- tct-ios-storekit-tips-20261028 -->" not in text and stripe_description in text:
+        text = text.replace(stripe_description, stripe_description + "\n        " + apple_disclosure, 1)
     if "<h2>Free articles and voluntary reader contributions</h2>" not in text:
         marker = "<h2>Information we collect</h2>"
         if marker not in text:
@@ -204,7 +211,7 @@ def _rewrite_privacy(text: str) -> str:
         ),
         (
             "<li><strong>App authentication and membership access.</strong> If you sign in, we process your email address and authentication/session credentials to verify access to subscriber content. The app stores session credentials in iOS Keychain. Membership status is verified by our services; your payment card is handled by Stripe, not by the iPhone app.</li>",
-            "<li><strong>App authentication and remaining paid benefits.</strong> Existing paid readers who sign in provide an email address and session credentials so the app can verify their remaining ad-free entitlement. Credentials are stored in iOS Keychain. Stripe, not the iPhone app, processes payment details. No login is required for ordinary free news reading.</li>",
+            "<li><strong>App authentication and remaining paid benefits.</strong> Existing paid readers who sign in provide an email address and session credentials so the app can verify their remaining ad-free entitlement. Credentials are stored in iOS Keychain. Stripe handles historical website subscription payments; optional iPhone tips are processed by Apple. No login is required for ordinary free news reading.</li>",
         ),
         (
             "<li><strong>App preferences and reading access.</strong> The app locally stores certain settings, notification-topic preferences and information needed to recognize its monthly free-article allowance. These settings help the app remember your choices and enforce article access rules.</li>",
@@ -243,6 +250,24 @@ def _rewrite_privacy(text: str) -> str:
             + '\n          <li><strong>Formspree</strong> for information submitted through advertising inquiry forms, such as a contact name, company and message.</li>',
             1,
         )
+
+    # Update pre-existing policy text and append StoreKit payment/service entries
+    # without altering the contractual Mediavine section below.
+    older_app_payment = "<li><strong>App authentication and remaining paid benefits.</strong> Existing paid readers who sign in provide an email address and session credentials so the app can verify their remaining ad-free entitlement. Credentials are stored in iOS Keychain. Stripe, not the iPhone app, processes payment details. No login is required for ordinary free news reading.</li>"
+    updated_app_payment = "<li><strong>App authentication and remaining paid benefits.</strong> Existing paid readers who sign in provide an email address and session credentials so the app can verify their remaining ad-free entitlement. Credentials are stored in iOS Keychain. Stripe handles historical website subscription payments; optional iPhone tips are processed by Apple. No login is required for ordinary free news reading.</li>"
+    if older_app_payment in text:
+        text = text.replace(older_app_payment, updated_app_payment, 1)
+    payment_entry = "<li><strong>Payment and contribution information.</strong> Stripe processes voluntary reader payments and historical subscriptions. We receive related confirmations, amounts, dates, customer contact information when provided, Stripe payment identifiers and existing subscription status. We do not receive or store complete payment card numbers.</li>"
+    apple_payment_entry = "<li><strong>Apple In-App Purchase.</strong> Apple handles optional iPhone tip payments through StoreKit. TCT may receive limited sales reporting through App Store Connect, including amounts, dates and product identifiers, but does not collect your full payment card number or require an app account for tipping.</li>"
+    if apple_payment_entry not in text and payment_entry in text:
+        text = text.replace(payment_entry, payment_entry + "\n          " + apple_payment_entry, 1)
+    stripe_service = "<li><strong>Stripe</strong> for optional one-time contributions, receipts, and management of historical membership billing.</li>"
+    apple_service = "<li><strong>Apple In-App Purchase (StoreKit)</strong> for voluntary, one-time tips offered within the iPhone app. Apple processes the purchase and provides associated transaction records. See <a href=\"https://www.apple.com/legal/privacy/\">Apple's Privacy Policy</a>.</li>"
+    if apple_service not in text and stripe_service in text:
+        text = text.replace(stripe_service, stripe_service + "\n          " + apple_service, 1)
+    if full_policy and ("<!-- tct-ios-storekit-tips-20261028 -->" not in text
+                        or apple_payment_entry not in text or apple_service not in text):
+        raise RuntimeError("Privacy policy: missing Apple In-App Purchase disclosures")
     if full_policy and "<h3>Mediavine Programmatic Advertising (Ver 1.1)</h3>" not in text:
         raise RuntimeError("Required Mediavine privacy disclosure heading missing")
     return text
