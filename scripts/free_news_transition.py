@@ -176,7 +176,7 @@ def _rewrite_privacy(text: str) -> str:
     # expected disclosures against actual full published pages, not tiny inputs.
     full_policy = '<div class="policy-body">' in text
     note = """<h2>Free articles and voluntary reader contributions</h2>
-        <p>Treasure Coast Today's news articles are freely available without a subscription, sign-in or contribution. Readers may optionally contribute to support our reporting. TCT is operated by Treasure Coast Today LLC, a for-profit business; contributions are not tax-deductible charitable donations and do not purchase ad-free access, subscription rights or editorial influence.</p>
+        <p>Treasure Coast Today's news articles are freely available without a subscription, sign-in or contribution. Readers may optionally contribute to support our reporting. TCT is operated by Treasure Coast Today LLC, a for-profit business and not a tax-exempt charity; contributions are not tax-deductible charitable donations and do not purchase ad-free access, subscription rights or editorial influence.</p>
         <p>Our one-time, choose-your-own-amount contribution checkout is hosted by Stripe. We may receive transaction amounts, payment status, dates, Stripe identifiers, and contact details supplied for confirmations or receipts. Stripe handles payment credentials; TCT does not collect or store full card numbers. We retain payment records when needed for customer support, accounting, fraud prevention or applicable legal obligations.</p>
         <p>Existing paid subscriptions and billing records continue to be handled through Stripe and Supabase while previously purchased periods conclude. Eligible subscribers may sign in to receive the ad-free website and iPhone app experience already included in their paid terms. New articles do not require paid access. We display clearly labeled sponsorships and advertising, including Mediavine on the website and Google AdMob in the iPhone app, as described below.</p>
         """
@@ -369,8 +369,8 @@ def create_donation_page(root: Path, payment_link: str) -> None:
         <div class="tct-donate-panel">
           <h2>Make a donation</h2>
           <p>Choose your own amount on Stripe's secure checkout. Contributions are voluntary, and you never have to donate to read a story.</p>
-          <a class="tct-donate-button" href="{html.escape(payment_link, quote=True)}" rel="noopener noreferrer">{DONATE_HEART_SVG} Donate securely with Stripe</a>
-          <p class="tct-donate-disclosure">Treasure Coast Today LLC is a for-profit business, not a tax-exempt charity. Contributions are not tax-deductible charitable donations. Payment processing is handled by Stripe.</p>
+          <a class="tct-donate-button" href="{html.escape(payment_link, quote=True)}" rel="noopener noreferrer">{DONATE_HEART_SVG} Support TCT Today</a>
+          <p class="tct-donate-disclosure">Donations are processed securely using Stripe.</p>
         </div>
         <p class="tct-donate-secondary">Prefer to support us as a local business? <a href="/advertise.html">Explore advertising and sponsorships</a>.</p>
       </div>
