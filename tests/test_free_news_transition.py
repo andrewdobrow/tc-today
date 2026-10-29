@@ -84,7 +84,7 @@ def test_existing_paid_readers_keep_ad_free_tracking_and_account_access():
     assert "tct_member_entitled_hint" in public
     assert "old two article meter prepaint" not in public
     assert '<script src="/membership-config.js"></script>' in public
-    assert '<script type="module" src="/membership.js?v=1"></script>' in public
+    assert '<script type="module" src="/membership.js?v=1.13.9.115"></script>' in public
     assert _rewrite_chrome(public, "article.html") == public
 
 
