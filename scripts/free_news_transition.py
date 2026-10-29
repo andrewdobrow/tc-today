@@ -116,6 +116,12 @@ def _gate_mediavine_for_paid_members(text: str) -> str:
 
 def _rewrite_chrome(text: str, page_name: str) -> str:
     text = _gate_mediavine_for_paid_members(text)
+    # Force the patched membership client on every retained page after rollout.
+    text = re.sub(
+        r'(/membership\\.js\\?v=)[a-zA-Z0-9._-]+',
+        r'\\g<1>1.13.9.115',
+        text,
+    )
     # Replace subscription sales with donations, but do not remove the existing
     # Sign in / account links. Paid readers still need to verify their ad-free
     # entitlement and manage their already-paid subscriptions.
