@@ -25,7 +25,7 @@ def test_static_mediavine_loader_is_replaced_only_in_donation_mode():
     assert html.count('data-tct-mediavine-member-gate') == 1
     assert 'src="/member-ad-gate.js?v=20261029a"' in html
     assert 'data-tct-mediavine-src="//scripts.mediavine.com/tags/' in html
-    assert 'src="//scripts.mediavine.com/tags/' not in html
+    assert ' src="//scripts.mediavine.com/tags/' not in html
     assert _gate_mediavine_for_paid_members(html) == html
     assert _gate_mediavine_for_paid_members('<head></head>') == '<head></head>'
 
@@ -35,7 +35,7 @@ def test_eager_duplicate_cannot_bypass_existing_gate():
     mixed = html.replace('</head>', ORIGINAL.split('<head>', 1)[1].split('</head>')[0] + '</head>')
     repaired = _gate_mediavine_for_paid_members(mixed)
     assert repaired.count('data-tct-mediavine-member-gate') == 1
-    assert 'src="//scripts.mediavine.com/tags/' not in repaired
+    assert ' src="//scripts.mediavine.com/tags/' not in repaired
 
 
 def test_legacy_membership_client_is_cache_busted():
