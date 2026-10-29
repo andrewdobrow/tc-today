@@ -80,7 +80,7 @@ def restore_article(text: str, slug: str, protected: dict[str, str]) -> str:
 # paid reader is entitled.  A body class alone is too late for Mediavine's
 # async wrapper, which is emitted before membership.js verifies the session.
 MEDIAVINE_SCRIPT_RE = re.compile(
-    r'<script\b[^>]*\bsrc=["\'](?P<src>(?:https?:)?//scripts\.mediavine\.com/tags/[a-z0-9-]+\.js)["\'][^>]*>\s*</script>',
+    r'<script\b[^>]*\ssrc=["\'](?P<src>(?:https?:)?//scripts\.mediavine\.com/tags/[a-z0-9-]+\.js)["\'][^>]*>\s*</script>',
     re.I | re.S,
 )
 MEDIAVINE_GATE_TAG_RE = re.compile(
