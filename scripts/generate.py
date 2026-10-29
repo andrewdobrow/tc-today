@@ -1032,7 +1032,7 @@ ASSIGNMENT_EDITOR_PENDING = {}
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.9.81-newsroom-copy-desk"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.9.82-source-chrome-repetition"
 
 # Shared by the live mixed selector/writer and the publication-isolated assignment
 # writer. Keeping one literal contract prevents the Sonnet 5 editor/writer path from
@@ -1156,6 +1156,71 @@ def _temporal_source_refresh_interval(source):
     return None
 
 
+def _focus_sinclair_chrome_article(text, source):
+    """Remove clearly delimited Sinclair recommendation modules from news copy.
+
+    CW34/CBS12 article extraction sometimes includes weather, related headlines
+    and NEWS IN PHOTOS after a 60-word bulletin. This must not masquerade as a
+    full 300-word factual source. Only intervene for the recognizable publisher
+    template and an explicit article dateline.
+    """
+    source = source if isinstance(source, dict) else {}
+    hint = " ".join(str(source.get(k) or "") for k in (
+        "title", "source_title", "link", "source_url", "publisher_name"
+    )).lower()
+    if not any(brand in hint for brand in ("cw34", "cbs12", "wpec")):
+        return text
+    if "share topics:" not in text.lower() or "news in photos:" not in text.lower():
+        return text
+    dateline = re.search(
+        r"\b[A-Z][A-Z ]{3,65},\s*Fla\.\s*\((?:CBS12|CW34|WPEC)\)\s*[—–-]\s*",
+        text,
+    )
+    if not dateline:
+        return text
+    story = text[dateline.end():]
+    story = re.sub(
+        r"\bSee also:.*?(?=\bAccording to\b)", " ",
+        story, count=1, flags=re.I,
+    )
+    sentences = [
+        v.strip() for v in re.split(r"(?<=[.!?])\s+(?=[A-Z])", story)
+        if v.strip()
+    ]
+    if len(sentences) < 4:
+        return text
+    title = str(source.get("title") or source.get("source_title") or "")
+    topic_words = set(re.findall(r"[a-z]{4,}", title.lower())) - {
+        "county", "florida", "deputies", "emergency", "crews", "respond",
+        "local", "news", "after", "following", "with", "from", "cw34",
+        "cbs12", "wpec",
+    }
+    if len(topic_words) < 2:
+        return text
+    kept = []
+    weak = 0
+    strong = 0
+    for sentence in sentences:
+        words = set(re.findall(r"[a-z]{4,}", sentence.lower()))
+        if words & topic_words:
+            strong += 1
+            weak = 0
+            kept.append(sentence)
+        elif strong >= 2 and weak == 0:
+            # Preserve one adjacent detail with no repeated title noun (e.g.
+            # the traffic warning), but stop at the next unrelated headline.
+            kept.append(sentence)
+            weak = 1
+        else:
+            break
+    focused = re.sub(r"\s+", " ", " ".join(kept)).strip()
+    if strong < 2 or not 50 <= _word_count(focused) <= 180:
+        return text
+    if _word_count(focused) >= _word_count(text) * 0.70:
+        return text
+    return focused
+
+
 def _focus_extracted_source_text(text, source):
     """Trim obvious publisher-page contamination before editorial identity sees it.
 
@@ -1172,6 +1237,9 @@ def _focus_extracted_source_text(text, source):
     if not text or len(text.split()) < 220:
         return text
     source = source if isinstance(source, dict) else {}
+    chrome_focused = _focus_sinclair_chrome_article(text, source)
+    if chrome_focused != text:
+        return chrome_focused
     title = str(source.get("title") or source.get("source_title") or source.get("headline") or "")
     if not title:
         return text
@@ -4460,7 +4528,14 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                         h["source_focus_word_count"] = words
                         full = focused
                     recovery_row["source_word_count"] = words
-                    if words >= MIN_SOURCE_WORDS:
+                    age_hours = _source_publication_age_hours(h)
+                    fresh_brief = (
+                        words >= BREAKING_BRIEF_MIN_SOURCE_WORDS
+                        and words <= BREAKING_BRIEF_MAX_SOURCE_WORDS
+                        and age_hours is not None
+                        and age_hours <= BREAKING_BRIEF_MAX_AGE_HOURS
+                    )
+                    if words >= MIN_SOURCE_WORDS or fresh_brief:
                         h["aggregator_url"] = h.get("aggregator_url") or link
                         h["link"] = resolved
                         h["source_url"] = resolved
@@ -12377,6 +12452,43 @@ def _copydesk_text_issues(text):
     return issues
 
 
+_REPETITION_STOPWORDS = frozenset(
+    "the and was were but for that this with from what which where when while who "
+    "whom into over under would could should have has had been being are one two "
+    "three says said their these those about after before they them there here such "
+    "then also than just because during onto behind between according again "
+    "officers office county following".split()
+)
+
+
+def _article_padding_issue(body):
+    """Catch obvious fact recycling without policing ordinary leads.
+
+    This is a conservative warning on 250+ word, four-or-more-paragraph
+    automated drafts, not a general grammar judgment.
+    """
+    raw = str(body or "")
+    paragraphs = [p for p in re.split(r"\n\s*\n", raw) if p.strip()]
+    if len(paragraphs) < 4 or _word_count(raw) < 250:
+        return None
+    tokens = [
+        token for token in re.findall(r"[a-z]{3,}", raw.lower())
+        if token not in _REPETITION_STOPWORDS
+    ][:260]
+    if len(tokens) < 150:
+        return None
+    diversity = len(set(tokens)) / len(tokens)
+    if diversity >= 0.44:
+        return None
+    return {
+        "code": "low_information_repetition",
+        "snippet": (
+            f"Recycled vocabulary across {len(paragraphs)} paragraphs; "
+            f"distinct-token ratio {diversity:.2f}"
+        ),
+    }
+
+
 def _article_copydesk_diagnostics(item):
     """Audit generated headline/teaser/body for enforceable TCT copy defects."""
     if not isinstance(item, dict):
@@ -12389,6 +12501,9 @@ def _article_copydesk_diagnostics(item):
         value = str(item.get(field) or "")
         for issue in _copydesk_text_issues(value):
             issues.append({"field": field, **issue})
+    padding = _article_padding_issue(item.get("body") or "")
+    if padding:
+        issues.append({"field": "body", **padding})
     return {
         "required": True,
         "passed": not issues,
@@ -12443,6 +12558,7 @@ Rules:
 - Do not chain conjunctions in compressed lists. Rewrite constructions like "video and phone and vehicle search warrants" with normal journalistic list structure while preserving the exact relationships among the items.
 - Preserve direct quotations exactly if retained. If a direct quotation contains an em dash that conflicts with house style, paraphrase the supported statement rather than altering quoted wording.
 - Do not make the article longer merely for style. Do not remove a material fact.
+- If low_information_repetition is reported, eliminate entire sentences and paragraphs that merely paraphrase already reported facts. A concise breaking brief is better than recycled claims.
 - Keep the headline concise and preserve meaningful source-supported geographic proper names.
 - Read the complete result once more for grammar and house style before returning it.
 

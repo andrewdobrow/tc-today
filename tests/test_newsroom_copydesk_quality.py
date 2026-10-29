@@ -158,7 +158,7 @@ def test_newsroom_standard_requires_publish_ready_grammar_style_and_no_em_dash()
     assert "engaging" in standard
     assert "Never use an em dash" in standard
     assert "Do not chain repeated conjunctions" in standard
-    assert generate.CATEGORY_GENERATION_PROMPT_VERSION == "v1.13.9.81-newsroom-copy-desk"
+    assert generate.CATEGORY_GENERATION_PROMPT_VERSION == "v1.13.9.82-source-chrome-repetition"
 
 
 def test_assignment_writer_runs_bounded_copydesk_repair_for_and_chain(monkeypatch):
