@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-29T12:47:39Z",
+  "generated_at": "2026-10-29T15:48:19Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,20 +15,22 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 9
+      "category_eligibility_archive_recovery": 7,
+      "generated_live": 1,
+      "no_publishable_sources": 1
     },
     "failures": {
-      "no_category_eligible_sources": 9
+      "no_category_eligible_sources": 7
     },
-    "model_attempt_count": 0,
-    "model_elapsed_seconds": 0.0,
-    "archive_recovery_requested_count": 9,
+    "model_attempt_count": 1,
+    "model_elapsed_seconds": 19.157,
+    "archive_recovery_requested_count": 8,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 2,
-    "published_story_duplicate_suppression_count": 38,
-    "story_aware_update_context_count": 2,
+    "category_eligibility_rejection_count": 7,
+    "published_story_duplicate_suppression_count": 27,
+    "story_aware_update_context_count": 8,
     "material_update_promotion_evaluation_count": 7,
     "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 7,
@@ -39,9 +41,9 @@
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
+      "fetched_candidate_count": 24,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 13,
+      "publishable_source_count": 14,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -58,21 +60,42 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
-      "published_story_duplicate_suppressions": [
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejections": [
         {
+          "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "editorial_story_id": "story_024119",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - WPEC",
+          "source_url": "https://cbs12.com/news/election/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-"
         },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
           "source_headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - cw34.com",
@@ -94,28 +117,80 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - WPEC",
+          "source_url": "https://cbs12.com/news/election/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-10-28-port-st-lucie-man-arrested-accused-of-trying-to-extort-state-rep-meg-weinberger",
+          "canonical_headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_keys": [
+            "story:story_023984",
+            "source:https://cbs12.com/news/election/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['palm-beach-county', 'port-st-lucie', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['public-policy', 'shooting']",
+            "shared_named_people=['anthony pizzarelli']",
+            "shared_precise_locations=[]",
+            "shared_agencies=['st-lucie-county-commission']",
+            "shared_subject_phrases=['accus-trying-extort', 'accus-trying-extort-state', 'extort-state-rep', 'extort-state-rep-meg', 'meg-weinberg-wpec', 'rep-meg-weinberg', 'rep-meg-weinberg-wpec', 'state-rep-meg', 'state-rep-meg-weinberg', 'trying-extort-state', 'trying-extort-state-rep']",
+            "shared_headline_topic_core=['accus', 'extort', 'meg', 'rep', 'state', 'trying', 'weinberg', 'wpec']",
+            "shared_distinctive_token_count=163",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:deb-johnston",
+            "story:story_024119",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:deb-johnston,story:story_024119,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "local_gov",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "local_gov",
           "source_headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - cw34.com",
@@ -164,15 +239,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 33.115
+      "elapsed_seconds": 37.596
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 8,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 9,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -189,21 +264,26 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
-      "published_story_duplicate_suppressions": [
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejections": [
         {
+          "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "editorial_story_id": "story_024119",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
           "source_headline": "Mattamy Homes donates 125 acres in Martin County to support St. Lucie River restoration",
@@ -243,40 +323,41 @@
           "canonical_headline": "Arrest report details speeding, 0.246 blood-alcohol level in deputy's Vero Beach crash",
           "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Martin County puts brakes on new large data centers for one year - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-commissioners-approves-one-year-moratorium-data-center-florida-data-centers-environmental-impact-data-center-expansion-florida-development-news-florida-news",
-          "editorial_story_id": "story_021050",
-          "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
-          "canonical_headline": "Martin County gives final approval to one-year data center moratorium in 4-0 vote",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:deb-johnston",
+            "story:story_024119",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:deb-johnston,story:story_024119,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "crime",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "crime",
           "source_headline": "Mattamy Homes donates 125 acres in Martin County to support St. Lucie River restoration",
@@ -353,33 +434,18 @@
           ],
           "reason": "The canonical already reports the same crash, serious injury, DUI arrest, blood-alcohol finding, speeding and arraignment. The incoming article adds minor condition and administrative details and official commentary, not a material development or independently newsworthy follow-up.",
           "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Martin County puts brakes on new large data centers for one year - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-commissioners-approves-one-year-moratorium-data-center-florida-data-centers-environmental-impact-data-center-expansion-florida-development-news-florida-news",
-          "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
-          "canonical_headline": "Martin County gives final approval to one-year data center moratorium in 4-0 vote",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 31.854
+      "elapsed_seconds": 31.164
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 11,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 14,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -396,21 +462,50 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
-      "published_story_duplicate_suppressions": [
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejections": [
         {
+          "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "editorial_story_id": "story_024119",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:st lucie county"
+          ],
+          "headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
         },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county",
+            "source_locality:st lucie county",
+            "source_locality:indian river county",
+            "source_locality:palm city",
+            "source_locality:fort pierce"
+          ],
+          "headline": "King tides swamp Treasure Coast roads as coastal flood warning stretches into Friday - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/king-tides-swamp-treasure-coast-roads-as-coastal-flood-warning-stretches-into-friday-martin-county-st-lucie-county-indian-river-county-sewalls-point-cbs12-meteorologist-florida-news"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
           "source_headline": "Mattamy Homes donates 125 acres in Martin County to support St. Lucie River restoration",
@@ -420,20 +515,36 @@
           "canonical_headline": "Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Murray Middle School breaks ground on $33 million rebuild after Hurricane Milton damage",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/murray-middle-school-breaks-ground-on-33-million-rebuild-after-hurricane-milton-damage",
-          "editorial_story_id": "story_023854",
-          "canonical_slug": "2026-10-28-murray-middle-school-breaks-ground-on-33-million-rebuild-after-tornado-damage",
-          "canonical_headline": "Murray Middle School breaks ground on $33 million rebuild after tornado damage",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:deb-johnston",
+            "story:story_024119",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:deb-johnston,story:story_024119,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -441,40 +552,10 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
           "source_headline": "Mattamy Homes donates 125 acres in Martin County to support St. Lucie River restoration",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/mattamy-homes-donates-125-acres-in-martin-county-to-support-st-lucie-river-restoration",
           "canonical_slug": "2026-10-28-mattamy-homes-transferring-125-acres-in-martin-county-for-st-lucie-river-muck-st",
           "canonical_headline": "Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Murray Middle School breaks ground on $33 million rebuild after Hurricane Milton damage",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/murray-middle-school-breaks-ground-on-33-million-rebuild-after-hurricane-milton-damage",
-          "canonical_slug": "2026-10-28-murray-middle-school-breaks-ground-on-33-million-rebuild-after-tornado-damage",
-          "canonical_headline": "Murray Middle School breaks ground on $33 million rebuild after tornado damage",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -486,7 +567,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 28.274
+      "elapsed_seconds": 28.549
     },
     {
       "category_key": "sports",
@@ -494,7 +575,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
+      "publishable_source_count": 4,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -524,14 +605,14 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.46
+      "elapsed_seconds": 21.902
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 9,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -587,55 +668,31 @@
       ],
       "published_story_duplicate_suppression_count": 0,
       "published_story_duplicate_suppressions": [],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Treasure Coast families invited to watch and try dog sports at kennel club's Pirate Cluster",
-          "source_url": "https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
-          "canonical_headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_023929",
-            "source:https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_023929,source:https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 32.417
+      "elapsed_seconds": 32.797
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "category_eligibility_archive_recovery",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Florida category eligibility contract",
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -644,7 +701,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -657,14 +714,14 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.139
+      "elapsed_seconds": 22.807
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -685,7 +742,7 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -709,16 +766,6 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Wrong-way crash shuts down Southbound US 1 near Treasure Coast Square Mall - WPBF",
-          "source_url": "https://www.wpbf.com/article/us-1-closed-near-treasure-coast-mall-after-serious-crash/74258757",
-          "editorial_story_id": "story_023665",
-          "canonical_slug": "2026-10-27-southbound-us-1-reopens-after-crash-near-treasure-coast-mall-disrupted-traffic",
-          "canonical_headline": "15-year-old and other driver seriously hurt in U.S. 1 crash near Treasure Coast Square Mall",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Martin County commissioners approve one-year pause on large-scale data center applications - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-martin-county-commission-data-center-applications/74264242",
           "editorial_story_id": "story_021050",
@@ -729,22 +776,22 @@
         },
         {
           "category_key": "martin",
+          "source_headline": "Wrong-way crash shuts down Southbound US 1 near Treasure Coast Square Mall - WPBF",
+          "source_url": "https://www.wpbf.com/article/us-1-closed-near-treasure-coast-mall-after-serious-crash/74258757",
+          "editorial_story_id": "story_023665",
+          "canonical_slug": "2026-10-27-southbound-us-1-reopens-after-crash-near-treasure-coast-mall-disrupted-traffic",
+          "canonical_headline": "15-year-old and other driver seriously hurt in U.S. 1 crash near Treasure Coast Square Mall",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Martin County puts brakes on new large data centers for one year - WPEC",
           "source_url": "https://cbs12.com/news/local/martin-county-commissioners-approves-one-year-moratorium-data-center-florida-data-centers-environmental-impact-data-center-expansion-florida-development-news-florida-news",
           "editorial_story_id": "story_021050",
           "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
           "canonical_headline": "Martin County gives final approval to one-year data center moratorium in 4-0 vote",
           "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County approves 1-year pause on new data center development - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/27/martin-county-approves-1-year-pause-new-data-center-development?outputType=amp",
-          "editorial_story_id": "story_021050",
-          "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
-          "canonical_headline": "Martin County gives final approval to one-year data center moratorium in 4-0 vote",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -787,21 +834,6 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Wrong-way crash shuts down Southbound US 1 near Treasure Coast Square Mall - WPBF",
-          "source_url": "https://www.wpbf.com/article/us-1-closed-near-treasure-coast-mall-after-serious-crash/74258757",
-          "canonical_slug": "2026-10-27-southbound-us-1-reopens-after-crash-near-treasure-coast-mall-disrupted-traffic",
-          "canonical_headline": "15-year-old and other driver seriously hurt in U.S. 1 crash near Treasure Coast Square Mall",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Martin County commissioners approve one-year pause on large-scale data center applications - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-martin-county-commission-data-center-applications/74264242",
           "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
@@ -832,13 +864,13 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County puts brakes on new large data centers for one year - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-commissioners-approves-one-year-moratorium-data-center-florida-data-centers-environmental-impact-data-center-expansion-florida-development-news-florida-news",
-          "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
-          "canonical_headline": "Martin County gives final approval to one-year data center moratorium in 4-0 vote",
+          "source_headline": "Wrong-way crash shuts down Southbound US 1 near Treasure Coast Square Mall - WPBF",
+          "source_url": "https://www.wpbf.com/article/us-1-closed-near-treasure-coast-mall-after-serious-crash/74258757",
+          "canonical_slug": "2026-10-27-southbound-us-1-reopens-after-crash-near-treasure-coast-mall-disrupted-traffic",
+          "canonical_headline": "15-year-old and other driver seriously hurt in U.S. 1 crash near Treasure Coast Square Mall",
           "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -847,12 +879,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County approves 1-year pause on new data center development - WFLX",
-          "source_url": "https://www.wflx.com/2026/10/27/martin-county-approves-1-year-pause-new-data-center-development?outputType=amp",
+          "source_headline": "Martin County puts brakes on new large data centers for one year - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-commissioners-approves-one-year-moratorium-data-center-florida-data-centers-environmental-impact-data-center-expansion-florida-development-news-florida-news",
           "canonical_slug": "2026-10-13-martin-county-commissioners-advance-one-year-moratorium-on-data-centers",
           "canonical_headline": "Martin County gives final approval to one-year data center moratorium in 4-0 vote",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -862,23 +894,30 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 26.466
+      "elapsed_seconds": 31.453
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 1,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 3,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed St. Lucie County category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 19.157,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 19.157,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -887,31 +926,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 13,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "editorial_story_id": "story_024119",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "editorial_story_id": "story_024119",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "st_lucie",
           "source_headline": "Funeral plans set for St. Lucie firefighter-paramedic Austin Hodge, who died on duty - cw34.com",
@@ -954,16 +973,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County: Otto Lenke sentenced to death - Tracking Florida's Death Penalty",
-          "source_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPeHBYQy1qdEtpbndaQmszU05tbzAxdldUMTU2TG9iWmVIaFVPaktlZVlfY3dBZmVJVWxXRHNYWTNXa2plTmNxcWh4X3o5ZFJSU1hnV2NJR2xTVnpnSERZNl83bEtXbE5seV90V0tNSG9qNzh6ckZMYXlIaWFrSktaWA",
-          "editorial_story_id": "story_021277",
-          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-          "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Fort Pierce police seek missing 46-year-old man - WPBF",
           "source_url": "https://www.wpbf.com/article/fort-pierce-police-searching-missing-endangered-adult/74271166",
           "editorial_story_id": "story_023813",
@@ -994,6 +1003,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "editorial_story_id": "story_023617",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "Arrest report details speeding, 0.246 blood-alcohol level in deputy's Vero Beach crash",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "St. Lucie County firefighter paramedic Austin Hodge honored with procession - WPBF",
           "source_url": "https://www.wpbf.com/article/st-lucie-county-firefighter-austin-hodge-procession/74250417",
           "editorial_story_id": "story_023522",
@@ -1011,20 +1030,60 @@
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County partners with Treasure Coast Food Bank for community food drive - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive",
-          "editorial_story_id": "story_022992",
-          "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
-          "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 3,
       "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Health Department takes another look at St. Lucie County glioblastoma cases - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:deb-johnston",
+            "story:story_024119",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:deb-johnston,story:story_024119,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:deb-johnston",
+            "story:story_024119",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:deb-johnston,story:story_024119,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
         {
           "source_headline": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - WPEC",
           "source_url": "https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-",
@@ -1054,36 +1113,6 @@
       "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "st_lucie",
           "source_headline": "Funeral plans set for St. Lucie firefighter-paramedic Austin Hodge, who died on duty - cw34.com",
@@ -1138,21 +1167,6 @@
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County: Otto Lenke sentenced to death - Tracking Florida's Death Penalty",
-          "source_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPeHBYQy1qdEtpbndaQmszU05tbzAxdldUMTU2TG9iWmVIaFVPaktlZVlfY3dBZmVJVWxXRHNYWTNXa2plTmNxcWh4X3o5ZFJSU1hnV2NJR2xTVnpnSERZNl83bEtXbE5seV90V0tNSG9qNzh6ckZMYXlIaWFrSktaWA",
-          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-          "canonical_headline": "Otto Lenke Formally Sentenced to Death for Fort Pierce Murder of Richard Benson",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
-          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1214,6 +1228,21 @@
           "canonical_headline": "Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46",
           "canonical_is_custom": false,
           "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "Arrest report details speeding, 0.246 blood-alcohol level in deputy's Vero Beach crash",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1264,33 +1293,22 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County partners with Treasure Coast Food Bank for community food drive - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-partners-with-treasure-coast-food-bank-for-community-food-drive",
-          "canonical_slug": "2026-10-23-st-lucie-county-and-food-bank-launch-county-wide-food-drive",
-          "canonical_headline": "St. Lucie County and Food Bank Launch County-Wide Food Drive",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 3,
-      "elapsed_seconds": 28.88
+      "new_publication_stale_rejected_count": 2,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
+      "generated_card_count": 0,
+      "elapsed_seconds": 50.202
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 30,
+      "fetched_candidate_count": 28,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 10,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1307,10 +1325,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 12,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1319,16 +1337,6 @@
           "editorial_story_id": "story_024111",
           "canonical_slug": "2026-10-28-erosion-hits-ocean-drive-beachfront-parking-in-vero-beach-as-king-tides-persist",
           "canonical_headline": "Erosion hits Ocean Drive beachfront parking in Vero Beach as king tides persist",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "editorial_story_id": "story_024119",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1354,16 +1362,6 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "14,000 turtle nests: Decades of protection pay off in Indian River County - WPEC",
-          "source_url": "https://cbs12.com/news/local/14000-turtle-nests-decades-of-protection-pay-off-in-indian-river-county",
-          "editorial_story_id": "story_023817",
-          "canonical_slug": "2026-10-27-indian-river-county-sets-record-with-14083-turtle-nests-as-rough-surf-threatens",
-          "canonical_headline": "Indian River County sets record with 14,083 turtle nests as rough surf threatens eggs",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
           "source_headline": "Rescue crews save stranded manatee from ditch in Indian River County - cw34.com",
           "source_url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQWkpnUDF0ZW1HREhwbXd6VktDUTRUV2VadzdGWEh0c3V0RFNEYXpSZ0hBMGt1ZFA4MmVYLTA4a3p2ZGo5cTFfMG9VY1ctQTd2ZTFsZWpxWVJQcnlYSFFoM0VkT1NXaHBIOUhTNk1ZY3d2S09nSGd2WWE4N2lZUUNtTFE0dmM3UzRjVEluTWxybkg4emE5TG5GcE1jWFhMRk1sd0JZakRxNGxzNTJPaTJxampxSWt2SHN0MHRsWHM3SGsyMjFJUjR0X2xsbVJNUVlDS19VM3k1dmtHN2lVYXpvbQ",
           "editorial_story_id": "story_023762",
@@ -1383,8 +1381,34 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:deb-johnston",
+            "story:story_024119",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:deb-johnston,story:story_024119,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
@@ -1421,21 +1445,6 @@
           ],
           "reason": "The incoming article repeats the same source report and specific erosion event. Added regional context and beachgoer reactions do not establish a material development or independently newsworthy follow-up.",
           "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "State review finds St. Lucie County glioblastoma cases in line with expectations",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "indian_river",
@@ -1486,21 +1495,6 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "14,000 turtle nests: Decades of protection pay off in Indian River County - WPEC",
-          "source_url": "https://cbs12.com/news/local/14000-turtle-nests-decades-of-protection-pay-off-in-indian-river-county",
-          "canonical_slug": "2026-10-27-indian-river-county-sets-record-with-14083-turtle-nests-as-rough-surf-threatens",
-          "canonical_headline": "Indian River County sets record with 14,083 turtle nests as rough surf threatens eggs",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
           "source_headline": "Rescue crews save stranded manatee from ditch in Indian River County - cw34.com",
           "source_url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQWkpnUDF0ZW1HREhwbXd6VktDUTRUV2VadzdGWEh0c3V0RFNEYXpSZ0hBMGt1ZFA4MmVYLTA4a3p2ZGo5cTFfMG9VY1ctQTd2ZTFsZWpxWVJQcnlYSFFoM0VkT1NXaHBIOUhTNk1ZY3d2S09nSGd2WWE4N2lZUUNtTFE0dmM3UzRjVEluTWxybkg4emE5TG5GcE1jWFhMRk1sd0JZakRxNGxzNTJPaTJxampxSWt2SHN0MHRsWHM3SGsyMjFJUjR0X2xsbVJNUVlDS19VM3k1dmtHN2lVYXpvbQ",
           "canonical_slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
@@ -1531,7 +1525,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 32.347
+      "elapsed_seconds": 31.613
     }
   ]
 }

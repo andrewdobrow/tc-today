@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-29T12:47:39Z",
+  "generated_at": "2026-10-29T15:48:19Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 18,
-    "rejected_count": 2,
+    "assessed_count": 25,
+    "rejected_count": 7,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,27 +34,112 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 1,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 2,
+      "rejected_count": 2,
+      "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - WPEC",
+          "source_url": "https://cbs12.com/news/election/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+        }
+      ]
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 0,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 1,
+      "rejected_count": 1,
+      "rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+        }
+      ]
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 0,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 2,
+      "rejected_count": 2,
+      "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:st lucie county"
+          ],
+          "headline": "Health Department takes another look at St. Lucie County glioblastoma cases",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county",
+            "source_locality:st lucie county",
+            "source_locality:indian river county",
+            "source_locality:palm city",
+            "source_locality:fort pierce"
+          ],
+          "headline": "King tides swamp Treasure Coast roads as coastal flood warning stretches into Friday - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/king-tides-swamp-treasure-coast-roads-as-coastal-flood-warning-stretches-into-friday-martin-county-st-lucie-county-indian-river-county-sewalls-point-cbs12-meteorologist-florida-news"
+        }
+      ]
     },
     {
       "category_key": "sports",
@@ -112,7 +197,7 @@
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 1,
+      "assessed_count": 0,
       "rejected_count": 0,
       "rejections": []
     },
@@ -130,7 +215,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 1,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -139,7 +224,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 10,
+      "assessed_count": 12,
       "rejected_count": 0,
       "rejections": []
     }
