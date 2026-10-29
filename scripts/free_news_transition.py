@@ -75,7 +75,47 @@ def restore_article(text: str, slug: str, protected: dict[str, str]) -> str:
     return _restore_free_article_schema(page)
 
 
+
+# Ad loading cannot start until the browser has determined whether a returning
+# paid reader is entitled.  A body class alone is too late for Mediavine's
+# async wrapper, which is emitted before membership.js verifies the session.
+MEDIAVINE_SCRIPT_RE = re.compile(
+    r'<script\b[^>]*\bsrc=["\'](?P<src>(?:https?:)?//scripts\.mediavine\.com/tags/[a-z0-9-]+\.js)["\'][^>]*>\s*</script>',
+    re.I | re.S,
+)
+MEDIAVINE_GATE_TAG_RE = re.compile(
+    r'<script\b[^>]*\bdata-tct-mediavine-member-gate\b[^>]*>\s*</script>',
+    re.I | re.S,
+)
+
+
+def _gate_mediavine_for_paid_members(text: str) -> str:
+    """Replace the eager Mediavine wrapper with an entitlement-aware loader.
+
+    Anonymous readers still load ads immediately. Signed-in readers defer
+    loading until membership.js gets a server-verified subscription result.
+    The existing Mediavine URL is reused unmodified.
+    """
+    if MEDIAVINE_GATE_TAG_RE.search(text):
+        # Generated pages may carry an older gate as well as a reinserted eager
+        # script; never let an eager tag bypass a previous gate.
+        return MEDIAVINE_SCRIPT_RE.sub("", text)
+    matches = list(MEDIAVINE_SCRIPT_RE.finditer(text))
+    if not matches:
+        return text
+    if len(matches) != 1:
+        raise RuntimeError("Expected precisely one Mediavine loader per page")
+    script_url = html.escape(matches[0].group("src"), quote=True)
+    replacement = (
+        '<script data-tct-mediavine-member-gate '
+        f'data-tct-mediavine-src="{script_url}" '
+        'src="/member-ad-gate.js?v=20261029a"></script>'
+    )
+    return MEDIAVINE_SCRIPT_RE.sub(lambda _: replacement, text, count=1)
+
+
 def _rewrite_chrome(text: str, page_name: str) -> str:
+    text = _gate_mediavine_for_paid_members(text)
     # Replace subscription sales with donations, but do not remove the existing
     # Sign in / account links. Paid readers still need to verify their ad-free
     # entitlement and manage their already-paid subscriptions.
