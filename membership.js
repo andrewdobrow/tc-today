@@ -21,6 +21,9 @@ function setMemberHint(entitled){
   document.documentElement.classList.toggle('tct-member-preverified', active)
   document.body?.classList.toggle('mv-no-ads', active)
 }
+function resolveMemberAdGate(status){
+  window.TCTMemberAdGate?.resolve(status)
+}
 function endMemberPrepaint(){
   document.documentElement.classList.remove('tct-member-preverified')
 }
@@ -292,6 +295,7 @@ async function membershipStatus(){
     if (!session) {
       setMemberHint(false)
       document.body.classList.remove('tct-member-entitled')
+      resolveMemberAdGate({ authenticated:false, entitled:false })
       return { authenticated:false, entitled:false }
     }
     const { data, error } = await supabase.functions.invoke('membership-status', {
@@ -302,12 +306,14 @@ async function membershipStatus(){
       // normal paywall so its error state is visible, but keep the stored hint so
       // the next navigation can still avoid a flash after service recovers.
       endMemberPrepaint()
+      resolveMemberAdGate({ authenticated:true, entitled:false, error:error.message })
       return { authenticated:true, entitled:false, error:error.message }
     }
     const entitled = Boolean(data?.entitled)
     setMemberHint(entitled)
     document.body.classList.toggle('tct-member-entitled', entitled)
     document.body.classList.toggle('mv-no-ads', entitled)
+    resolveMemberAdGate({ authenticated:true, entitled })
     return data
   })()
   return membershipStatusPromise
@@ -682,6 +688,7 @@ async function unlockArticle(statusPromise=null){
     setMemberHint(true)
     document.body.classList.add('tct-member-entitled')
     document.body.classList.add('mv-no-ads')
+    resolveMemberAdGate({ authenticated:true, entitled:true })
     const rendered = renderProtectedBody(String(data.protected_body || ''), paywall, 'member')
     endMemberPrepaint()
     endMeterPrepaint()
@@ -799,7 +806,10 @@ if (!configured) {
   await refreshSubscribeAccount(initialEffectiveStatus)
 
   supabase.auth.onAuthStateChange((event) => {
-    if (event === 'SIGNED_OUT') setMemberHint(false)
+    if (event === 'SIGNED_OUT') {
+      setMemberHint(false)
+      resolveMemberAdGate({ authenticated:false, entitled:false })
+    }
     invalidateAuthSession()
     invalidateMembershipStatus()
     setTimeout(async () => {
