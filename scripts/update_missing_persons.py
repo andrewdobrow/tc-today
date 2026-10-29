@@ -299,6 +299,66 @@ def _verified_county_result(html: str, county: str) -> tuple[bool, str, int | No
     return True, "", total
 
 
+def _explicit_empty_fdle_result(html: str, county: str) -> bool:
+    """Recognize an actual FDLE zero-results page, not an empty/blocked page.
+
+    Zero-result pages can omit the 'You Searched For: County' text.  This
+    helper deliberately does NOT establish search scope; the caller must also
+    verify the county exists in FDLE's live form and cross-check the endpoint.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    title = _clean(soup.title.get_text(" ", strip=True)).lower() if soup.title else ""
+    text = _clean(soup.get_text(" ", strip=True))
+    if not ("mepic" in title and "search results" in title):
+        return False
+    if _result_total(text) != 0:
+        return False
+    reported = _result_county(text)
+    if reported and _normalized_county(reported) != _normalized_county(county):
+        return False
+    category = _result_category(text)
+    if category and re.sub(r"[^a-z0-9]+", " ", category.lower()).strip() not in {
+        "all", "all category", "all categories"
+    }:
+        return False
+    if _parse_result_rows(html, f"{MEPIC_ORIGIN}/Results.asp", county):
+        return False
+    # A generic blank results template, browser block page, or postback failure
+    # must never be treated as an authoritative zero.
+    return bool(re.search(
+        r"\b(?:0\s+records?|no\s+(?:matching\s+)?records?|"
+        r"no\s+matches\s+found)\b", text, re.I
+    ))
+
+
+def _confirm_empty_qr_county(county: str, source_county: str) -> bool:
+    """Confirm a missing county echo without ever trusting a lone zero page.
+
+    Require a county option in the separately fetched live form (checked in
+    _start_county_search), a positive county control from FDLE's same QR
+    endpoint, and a repeated explicit-empty result in a fresh cookie session.
+    If any proof is missing, fail closed and keep last-known-good records.
+    """
+    independent = _session()
+    positive_control = False
+    for control_county, control_alias in (("Martin", "Martin"), ("St. Lucie", "Saint Lucie")):
+        try:
+            control = _request_response(independent, "GET", _qr_county_url(control_county, control_alias))
+            valid, _reason, count = _verified_county_result(control.text, control_county)
+            if valid and count is not None and count > 0:
+                positive_control = True
+                break
+        except Exception:
+            continue
+    if not positive_control:
+        return False
+    try:
+        repeat = _request_response(independent, "GET", _qr_county_url(county, source_county))
+        return _explicit_empty_fdle_result(repeat.text, county)
+    except Exception:
+        return False
+
+
 def _start_county_search(session: requests.Session, county: str) -> tuple[str, str, dict]:
     """Start the most complete independently verified FDLE county search.
 
@@ -310,6 +370,8 @@ def _start_county_search(session: requests.Session, county: str) -> tuple[str, s
     """
     errors: list[str] = []
     candidates: list[tuple[int, int, str, str, dict]] = []
+    empty_qr_candidates: list[tuple[str, str, str]] = []
+    live_form_county_option_verified = False
 
     aliases = FDLE_QUERY_COUNTY_ALIASES.get(county, (FDLE_QUERY_COUNTY.get(county, county),))
     seen_aliases: set[str] = set()
@@ -329,6 +391,10 @@ def _start_county_search(session: requests.Session, county: str) -> tuple[str, s
                     "category_text": "All Categories",
                 }))
             else:
+                if not ok and not _result_county(
+                    _clean(BeautifulSoup(response.text, "html.parser").get_text(" ", strip=True))
+                ) and _explicit_empty_fdle_result(response.text, county):
+                    empty_qr_candidates.append((source_county, response.text, response.url or qr_url))
                 errors.append(
                     f"QR county search {source_county!r}: {reason}; "
                     + _fdle_response_diagnostic(response, qr_url)
@@ -341,6 +407,9 @@ def _start_county_search(session: requests.Session, county: str) -> tuple[str, s
     try:
         search_response = _request_response(session, "GET", SOURCE_HOME)
         spec = _search_form_submission(search_response.text, search_response.url or SOURCE_HOME, county)
+        # This is independent evidence that the source recognizes the county
+        # label, even if its zero-result page subsequently omits the echo.
+        live_form_county_option_verified = True
         result_response = _request_response(session, spec["method"], spec["action"], data=spec["data"])
         ok, reason, total = _verified_county_result(result_response.text, county)
         if ok and total is not None:
@@ -355,6 +424,25 @@ def _start_county_search(session: requests.Session, county: str) -> tuple[str, s
     except Exception as exc:
         errors.append(f"live form search: {exc}")
 
+    # FDLE can omit the county echo when a previously populated county becomes
+    # empty.  Do not allow that to strand the workflow forever, but require
+    # multiple independent checks before accepting a zero and deleting a case.
+    if not candidates and empty_qr_candidates and live_form_county_option_verified:
+        for alias, first_html, first_url in empty_qr_candidates:
+            if _confirm_empty_qr_county(county, alias):
+                candidates.append((0, 1, first_html, first_url, {
+                    "search_mode": "fdle_qr_confirmed_empty",
+                    "county_value": alias,
+                    "category_text": "All Categories",
+                    "empty_verified": True,
+                }))
+                print(
+                    f"FDLE verified zero active records for {county}: "
+                    "live county option, positive control and independent QR zero",
+                    flush=True,
+                )
+                break
+
     if not candidates:
         raise RuntimeError(f"FDLE county search failed for {county}: " + " | ".join(errors))
 
@@ -366,10 +454,13 @@ def _start_county_search(session: requests.Session, county: str) -> tuple[str, s
     # Probing the live form can change classic-ASP session state after a QR result
     # was first fetched.  If a QR candidate wins, fetch its first page once more
     # now so the pagination links/ID we follow belong to the final active search.
-    if spec.get("search_mode") == "fdle_qr_county":
+    if spec.get("search_mode") in {"fdle_qr_county", "fdle_qr_confirmed_empty"}:
         try:
             refreshed = _request_response(session, "GET", _qr_county_url(county, spec.get("county_value") or None))
-            ok, reason, refreshed_total = _verified_county_result(refreshed.text, county)
+            if spec.get("empty_verified"):
+                ok, reason, refreshed_total = _explicit_empty_fdle_result(refreshed.text, county), "confirmed empty county no longer has a zero-result page", 0
+            else:
+                ok, reason, refreshed_total = _verified_county_result(refreshed.text, county)
             if not ok or refreshed_total != total:
                 raise RuntimeError(reason or f"record total changed from {total} to {refreshed_total}")
             html = refreshed.text
@@ -415,7 +506,13 @@ def _result_total(text: str) -> int | None:
     window = _result_window(text)
     if window:
         return window[2]
-    if re.search(r"\b0\s+record", text, re.I) or re.search(r"no\s+(?:matching\s+)?records", text, re.I):
+    # MEPIC changes its empty-result wording, and often omits the county echo
+    # altogether when a valid search has no cases.
+    if re.search(r"\b0\s+records?\b", text, re.I) or re.search(
+        r"\b(?:no\s+(?:matching\s+)?records?(?:\s+found)?|no\s+matches\s+found|"
+        r"no\s+records?\s+(?:were\s+)?found|no\s+records?\s+to\s+display)\b",
+        text, re.I,
+    ):
         return 0
     return None
 
