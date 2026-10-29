@@ -326,8 +326,8 @@ def _explicit_empty_fdle_result(html: str, county: str) -> bool:
     # A generic blank results template, browser block page, or postback failure
     # must never be treated as an authoritative zero.
     return bool(re.search(
-        r"\\b(?:0\\s+records?|no\\s+(?:matching\\s+)?records?|"
-        r"no\\s+matches\\s+found)\\b", text, re.I
+        r"\b(?:0\s+records?|no\s+(?:matching\s+)?records?|"
+        r"no\s+matches\s+found)\b", text, re.I
     ))
 
 
