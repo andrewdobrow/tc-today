@@ -4,38 +4,37 @@
 
 ## Hero
 
-- Current: **Martin County judge imposes effective life sentence in AI child exploitation case**
-- Recommended: **Martin County judge imposes effective life sentence in AI child exploitation case**
+- Current: **State review finds St. Lucie County glioblastoma cases in line with expectations**
+- Recommended: **State review finds St. Lucie County glioblastoma cases in line with expectations**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Some Florida ACA customers auto-enrolled in replacement health plans for 2027 | Some Florida ACA customers auto-enrolled in replacement health plans for 2027 | 57 | importance 0; freshness 99.86; urgency 8/10 |
-| 2 | Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage | Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage | 46 | importance 0; freshness 95.0; urgency 2/10 |
-| 3 | One hospitalized after rollover on SW Martin Highway in Martin County | One hospitalized after rollover on SW Martin Highway in Martin County | 46 | importance 0; freshness 93.16; urgency 2/10 |
-| 4 | Looking for something to do Halloween weekend? Here are the Top 5 local events for Oct. 30-Nov. 1 | State review finds St. Lucie County glioblastoma cases in line with expectations | 43 | importance 0; freshness 79.7; urgency 2/10 |
-| 5 | Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46 | Florida student aid breach may have exposed Social Security numbers of 4.9 million people | 42 | importance 0; freshness 90.66; urgency 2/10 |
-| 6 | Florida student aid breach may have exposed Social Security numbers of 4.9 million people | Erosion hits Ocean Drive beachfront parking in Vero Beach as king tides persist | 39 | importance 0; freshness 64.75; urgency 2/10 |
-| 7 | State review finds St. Lucie County glioblastoma cases in line with expectations | Looking for something to do Halloween weekend? Here are the Top 5 local events for Oct. 30-Nov. 1 | 39 | importance 0; freshness 58.82; urgency 4/10 |
-| 8 | Erosion hits Ocean Drive beachfront parking in Vero Beach as king tides persist | Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage | 38 | importance 0; freshness 58.82; urgency 2/10 |
-| 9 | Murray Middle School breaks ground on $33 million rebuild after tornado damage | Arrest report details speeding, 0.246 blood-alcohol level in deputy's Vero Beach crash | 35 | importance 0; freshness 21.88; urgency 2/10; validated material update |
-| 10 | Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage | Indian River County sets record with 14,083 turtle nests as rough surf threatens eggs | 29 | importance 0; freshness 20.54; urgency 2/10 |
-| 11 | Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger | Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger | 37 | importance 0; freshness 57.39; urgency 2/10; -12 county saturation |
-| 12 | Arrest report details speeding, 0.246 blood-alcohol level in deputy's Vero Beach crash | Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46 | 42 | importance 0; freshness 57.39; urgency 4/10; -6 category saturation; -12 county saturation |
+| 1 | Suspect in custody after roommate dispute ends in stabbing on SE Indian Street | Suspect in custody after roommate dispute ends in stabbing on SE Indian Street | 61 | importance 0; freshness 99.86; urgency 8/10 |
+| 2 | Some Florida ACA customers auto-enrolled in replacement health plans for 2027 | Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage | 45 | importance 0; freshness 88.95; urgency 2/10 |
+| 3 | Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage | One hospitalized after rollover on SW Martin Highway in Martin County | 45 | importance 0; freshness 87.11; urgency 2/10 |
+| 4 | One hospitalized after rollover on SW Martin Highway in Martin County | Some Florida ACA customers auto-enrolled in replacement health plans for 2027 | 42 | importance 0; freshness 93.81; urgency 2/10 |
+| 5 | Looking for something to do Halloween weekend? Here are the Top 5 local events for Oct. 30-Nov. 1 | Florida student aid breach may have exposed Social Security numbers of 4.9 million people | 40 | importance 0; freshness 84.62; urgency 2/10 |
+| 6 | Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46 | Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46 | 40 | importance 0; freshness 51.34; urgency 4/10 |
+| 7 | Florida student aid breach may have exposed Social Security numbers of 4.9 million people | Erosion hits Ocean Drive beachfront parking in Vero Beach as king tides persist | 38 | importance 0; freshness 58.7; urgency 2/10 |
+| 8 | Erosion hits Ocean Drive beachfront parking in Vero Beach as king tides persist | Looking for something to do Halloween weekend? Here are the Top 5 local events for Oct. 30-Nov. 1 | 37 | importance 0; freshness 52.77; urgency 4/10 |
+| 9 | Murray Middle School breaks ground on $33 million rebuild after tornado damage | Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage | 37 | importance 0; freshness 52.77; urgency 2/10 |
+| 10 | Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage | Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger | 36 | importance 0; freshness 51.34; urgency 2/10; -8 county saturation |
+| 11 | Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger | Murray Middle School breaks ground on $33 million rebuild after tornado damage | 37 | importance 0; freshness 53.7; urgency 2/10; -6 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Indian River County sets record with 14,083 turtle nests as rough surf threatens eggs**: 47 → 10 — importance 0; freshness 20.54; urgency 2/10
-- **Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46**: 5 → 12 — importance 0; freshness 57.39; urgency 4/10; -6 category saturation; -12 county saturation
-- **Murray Middle School breaks ground on $33 million rebuild after tornado damage**: 9 → 13 — importance 0; freshness 59.75; urgency 2/10
-- **State review finds St. Lucie County glioblastoma cases in line with expectations**: 7 → 4 — importance 0; freshness 79.7; urgency 2/10
-- **Looking for something to do Halloween weekend? Here are the Top 5 local events for Oct. 30-Nov. 1**: 4 → 7 — importance 0; freshness 58.82; urgency 4/10
-- **Arrest report details speeding, 0.246 blood-alcohol level in deputy's Vero Beach crash**: 12 → 9 — importance 0; freshness 21.88; urgency 2/10; validated material update
-- **Erosion hits Ocean Drive beachfront parking in Vero Beach as king tides persist**: 8 → 6 — importance 0; freshness 64.75; urgency 2/10
-- **Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage**: 10 → 8 — importance 0; freshness 58.82; urgency 2/10
-- **Florida student aid breach may have exposed Social Security numbers of 4.9 million people**: 6 → 5 — importance 0; freshness 90.66; urgency 2/10
+- **Looking for something to do Halloween weekend? Here are the Top 5 local events for Oct. 30-Nov. 1**: 5 → 8 — importance 0; freshness 52.77; urgency 4/10
+- **Some Florida ACA customers auto-enrolled in replacement health plans for 2027**: 2 → 4 — importance 0; freshness 93.81; urgency 2/10
+- **Florida student aid breach may have exposed Social Security numbers of 4.9 million people**: 7 → 5 — importance 0; freshness 84.62; urgency 2/10
+- **Murray Middle School breaks ground on $33 million rebuild after tornado damage**: 9 → 11 — importance 0; freshness 53.7; urgency 2/10; -6 category saturation; -12 county saturation
+- **Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage**: 3 → 2 — importance 0; freshness 88.95; urgency 2/10
+- **One hospitalized after rollover on SW Martin Highway in Martin County**: 4 → 3 — importance 0; freshness 87.11; urgency 2/10
+- **Erosion hits Ocean Drive beachfront parking in Vero Beach as king tides persist**: 8 → 7 — importance 0; freshness 58.7; urgency 2/10
+- **Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage**: 10 → 9 — importance 0; freshness 52.77; urgency 2/10
+- **Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger**: 11 → 10 — importance 0; freshness 51.34; urgency 2/10; -8 county saturation
 
 ## Guardrails
 
