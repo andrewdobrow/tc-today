@@ -30,9 +30,22 @@ def test_tccn_partner_page_is_true_marketing_landing_page():
     # stale hardcoded version that changes during production generation.
     script = re.search(r'<script type="module" src="/membership\.js\?v=([^"]+)"', page)
     assert script, "Partner page must include the membership JavaScript bundle"
-    # Retained marketing-page HTML may still contain its previous production asset
-    # version until the Update workflow refreshes it on main.
-    assert script.group(1) in {"1.13.9.38", "1.13.9.111", MEMBERSHIP_JS_ASSET_VERSION}
+    # Retained HTML can carry a historical version until the next production
+    # normalization. Once it has reached the current client release, *newer*
+    # cache-busted versions must also pass. The former fixed set blocked the
+    # entire production update on every legitimate membership.js version bump.
+    version = script.group(1)
+    historical = {"1.13.9.38", "1.13.9.111"}
+    if version not in historical:
+        assert re.fullmatch(r"\d+(?:\.\d+){3}", version), (
+            f"Unexpected membership.js asset version: {version!r}"
+        )
+        current = tuple(int(part) for part in MEMBERSHIP_JS_ASSET_VERSION.split("."))
+        published = tuple(int(part) for part in version.split("."))
+        assert published >= current, (
+            f"Partner page uses membership.js {version}, older than "
+            f"the minimum active release {MEMBERSHIP_JS_ASSET_VERSION}"
+        )
 
 
 def test_normal_subscribe_page_remains_on_standard_one_dollar_offer():
