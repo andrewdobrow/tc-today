@@ -37,7 +37,7 @@ def test_tccn_partner_page_is_true_marketing_landing_page():
     version = script.group(1)
     historical = {"1.13.9.38", "1.13.9.111"}
     if version not in historical:
-        assert re.fullmatch(r"\\d+(?:\\.\\d+){3}", version), (
+        assert re.fullmatch(r"\d+(?:\.\d+){3}", version), (
             f"Unexpected membership.js asset version: {version!r}"
         )
         current = tuple(int(part) for part in MEMBERSHIP_JS_ASSET_VERSION.split("."))
