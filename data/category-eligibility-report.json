@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-31T12:47:54Z",
+  "generated_at": "2026-10-31T15:47:05Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 15,
-    "rejected_count": 2,
+    "assessed_count": 18,
+    "rejected_count": 3,
     "enforced_categories": [
       "business",
       "crime",
@@ -43,7 +43,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 3,
+      "assessed_count": 2,
       "rejected_count": 2,
       "rejections": [
         {
@@ -99,16 +99,33 @@
       "category_label": "Things To Do",
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
-      "assessed_count": 1,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 4,
+      "rejected_count": 1,
+      "rejections": [
+        {
+          "contract_version": "1.0-local-attendable-activity-focus",
+          "category_key": "things_to_do",
+          "mode": "enforce",
+          "policy": "local_attendable_activity_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_attendable_activity_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "treasure_coast_locality"
+          ],
+          "headline": "Stuart student turns recycled oyster shells into a cleaner-water mission",
+          "source_url": "https://www.wptv.com/shining-a-light/stuart-student-turns-recycled-oyster-shells-into-a-cleaner-water-mission"
+        }
+      ]
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 1,
+      "assessed_count": 0,
       "rejected_count": 0,
       "rejections": []
     },
@@ -126,7 +143,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 1,
+      "assessed_count": 2,
       "rejected_count": 0,
       "rejections": []
     },
@@ -135,7 +152,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 5,
       "rejected_count": 0,
       "rejections": []
     }
