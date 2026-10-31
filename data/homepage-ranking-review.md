@@ -4,7 +4,7 @@
 
 ## Hero
 
-- Current: **Port St. Lucie man arrested after traffic stop tied to domestic disturbance case**
+- Current: **Fecal bacteria prompt water contact advisory at 10 Martin County locations**
 - Recommended: **Suspect charged with attempted murder after SE Indian Street roommate attack**
 - Recommendation: CHANGE (not enforced)
 
@@ -12,24 +12,31 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Suspect charged with attempted murder after SE Indian Street roommate attack | Suspect charged with attempted murder after SE Indian Street roommate attack | 61 | importance 0; freshness 73.31; urgency 8/10; validated material update |
-| 2 | Updated state review finds St. Lucie County glioblastoma cases in line with expectations | Updated state review finds St. Lucie County glioblastoma cases in line with expectations | 54 | importance 0; freshness 63.25; urgency 6/10; validated material update |
-| 3 | Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival | Thornton’s four touchdowns power Jensen Beach to outright District 13-4A title | 50 | importance 0; freshness 85.98; urgency 2/10; validated material update |
-| 4 | Thornton’s four touchdowns power Jensen Beach to outright District 13-4A title | Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival | 47 | importance 0; freshness 79.99; urgency 4/10 |
-| 5 | Fecal bacteria prompt water contact advisory at 10 Martin County locations | Fecal bacteria prompt water contact advisory at 10 Martin County locations | 45 | importance 0; freshness 85.98; urgency 2/10 |
-| 6 | Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise | Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise | 39 | importance 0; freshness 79.99; urgency 2/10 |
-| 7 | Indian River County early voting ends Saturday ahead of Tuesday election | Indian River County early voting ends Saturday ahead of Tuesday election | 39 | importance 0; freshness 63.25; urgency 2/10 |
-| 8 | Some Florida ACA customers auto-enrolled in replacement health plans for 2027 | Some Florida ACA customers auto-enrolled in replacement health plans for 2027 | 29 | importance 0; freshness 39.99; urgency 2/10 |
-| 9 | Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage | Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage | 32 | importance 0; freshness 35.13; urgency 2/10; -6 category saturation |
-| 10 | One hospitalized after rollover on SW Martin Highway in Martin County | Florida student aid breach may have exposed Social Security numbers of 4.9 million people | 27 | importance 0; freshness 30.79; urgency 2/10; -6 category saturation |
-| 11 | Florida student aid breach may have exposed Social Security numbers of 4.9 million people | One hospitalized after rollover on SW Martin Highway in Martin County | 32 | importance 0; freshness 33.29; urgency 2/10; -12 county saturation |
+| 1 | Suspect charged with attempted murder after SE Indian Street roommate attack | Suspect charged with attempted murder after SE Indian Street roommate attack | 60 | importance 0; freshness 69.89; urgency 8/10; validated material update |
+| 2 | Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival | Thornton’s four touchdowns power Jensen Beach to outright District 13-4A title | 49 | importance 0; freshness 82.56; urgency 2/10; validated material update |
+| 3 | Thornton’s four touchdowns power Jensen Beach to outright District 13-4A title | Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue | 48 | importance 0; freshness 76.56; urgency 2/10; validated material update |
+| 4 | Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue | Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival | 46 | importance 0; freshness 76.57; urgency 4/10 |
+| 5 | Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise | Updated state review finds St. Lucie County glioblastoma cases in line with expectations | 44 | importance 0; freshness 59.83; urgency 2/10; validated material update; -4 county saturation |
+| 6 | Port St. Lucie man arrested after traffic stop tied to domestic disturbance case | Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise | 38 | importance 0; freshness 76.57; urgency 2/10 |
+| 7 | Updated state review finds St. Lucie County glioblastoma cases in line with expectations | Indian River County early voting ends Saturday ahead of Tuesday election | 38 | importance 0; freshness 59.83; urgency 2/10 |
+| 8 | Indian River County early voting ends Saturday ahead of Tuesday election | Some Florida ACA customers auto-enrolled in replacement health plans for 2027 | 29 | importance 0; freshness 36.57; urgency 2/10 |
+| 9 | Some Florida ACA customers auto-enrolled in replacement health plans for 2027 | One hospitalized after rollover on SW Martin Highway in Martin County | 31 | importance 0; freshness 29.87; urgency 2/10; -4 county saturation |
+| 10 | Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage | Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage | 31 | importance 0; freshness 31.71; urgency 2/10; -6 category saturation |
+| 11 | One hospitalized after rollover on SW Martin Highway in Martin County | Florida student aid breach may have exposed Social Security numbers of 4.9 million people | 26 | importance 0; freshness 27.37; urgency 2/10; -6 category saturation |
+| 12 | Florida student aid breach may have exposed Social Security numbers of 4.9 million people | Port St. Lucie man arrested after traffic stop tied to domestic disturbance case | 41 | importance 0; freshness 69.88; urgency 2/10; -12 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Thornton’s four touchdowns power Jensen Beach to outright District 13-4A title**: 4 → 3 — importance 0; freshness 85.98; urgency 2/10; validated material update
-- **Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival**: 3 → 4 — importance 0; freshness 79.99; urgency 4/10
-- **One hospitalized after rollover on SW Martin Highway in Martin County**: 10 → 11 — importance 0; freshness 33.29; urgency 2/10; -12 county saturation
-- **Florida student aid breach may have exposed Social Security numbers of 4.9 million people**: 11 → 10 — importance 0; freshness 30.79; urgency 2/10; -6 category saturation
+- **Port St. Lucie man arrested after traffic stop tied to domestic disturbance case**: 6 → 12 — importance 0; freshness 69.88; urgency 2/10; -12 category saturation; -12 county saturation
+- **Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival**: 2 → 4 — importance 0; freshness 76.57; urgency 4/10
+- **Updated state review finds St. Lucie County glioblastoma cases in line with expectations**: 7 → 5 — importance 0; freshness 59.83; urgency 2/10; validated material update; -4 county saturation
+- **One hospitalized after rollover on SW Martin Highway in Martin County**: 11 → 9 — importance 0; freshness 29.87; urgency 2/10; -4 county saturation
+- **Thornton’s four touchdowns power Jensen Beach to outright District 13-4A title**: 3 → 2 — importance 0; freshness 82.56; urgency 2/10; validated material update
+- **Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue**: 4 → 3 — importance 0; freshness 76.56; urgency 2/10; validated material update
+- **Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise**: 5 → 6 — importance 0; freshness 76.57; urgency 2/10
+- **Indian River County early voting ends Saturday ahead of Tuesday election**: 8 → 7 — importance 0; freshness 59.83; urgency 2/10
+- **Some Florida ACA customers auto-enrolled in replacement health plans for 2027**: 9 → 8 — importance 0; freshness 36.57; urgency 2/10
+- **Florida student aid breach may have exposed Social Security numbers of 4.9 million people**: 12 → 11 — importance 0; freshness 27.37; urgency 2/10; -6 category saturation
 
 ## Guardrails
 
