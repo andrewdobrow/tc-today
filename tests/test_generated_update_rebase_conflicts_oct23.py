@@ -242,3 +242,145 @@ def test_two_commit_checkout_rebases_generated_output_after_human_push(tmp_path)
     assert "Auto-resolving generated rebase conflict" in result.stdout
     assert check_remote_file(tmp_path / "shallow-feed", remote, "feed.xml") == "new bot generated feed\n"
     assert check_remote_file(tmp_path / "shallow-protected", remote, "data/article-content-overrides.json") == '{"editor":"keep"}\n'
+
+
+
+# Oct 30: Events refresh committed while the 25-minute newsroom run was still
+# building. Rebase conflicted on calendars, event pages and the sitemap and
+# refused to publish the entire fresh news batch. Protect the newer calendar
+# without discarding the newly generated articles or manual editorial content.
+CONCURRENT_EVENTS_GENERATED = (
+    "events.html",
+    "events/sample-upcoming-event.html",
+    "data/events.json",
+    "data/events-source-cache.json",
+    "data/events-source-status.json",
+    "data/events-retention.json",
+)
+
+
+@pytest.mark.parametrize("path", CONCURRENT_EVENTS_GENERATED)
+def test_independently_refreshed_calendar_files_are_recognized_as_generated(path):
+    function_only = PUSH.read_text().split("resolve_generated_conflicts()", 1)[0]
+    result = subprocess.run(
+        ["bash", "-c", function_only + '\nis_generated_conflict "$1"', "--", path],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert result.returncode == 0, (path, result.stdout, result.stderr)
+
+
+@pytest.mark.parametrize("path", (
+    "data/events-sources.json",
+    "data/events-manual.json",
+    "data/manual_events.json",
+    "data/custom_articles.json",
+))
+def test_event_source_and_editorial_input_files_are_never_automatically_merged(path):
+    function_only = PUSH.read_text().split("resolve_generated_conflicts()", 1)[0]
+    result = subprocess.run(
+        ["bash", "-c", function_only + '\nis_generated_conflict "$1"', "--", path],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert result.returncode == 1, (path, result.stdout, result.stderr)
+
+
+def test_newer_event_refresh_survives_newsroom_rebase_and_sitemap_has_new_article(tmp_path):
+    import json
+
+    event_path = "events/sample-upcoming-event.html"
+    event_url = "https://treasurecoast.today/" + event_path
+    article_url = "https://treasurecoast.today/articles/new-story.html"
+
+    def event_data(label):
+        return json.dumps({
+            "schema_version": 1,
+            "events": [
+                {
+                    "id": "sample-upcoming-event",
+                    "title": label,
+                    "detail_url": "/" + event_path,
+                    "starts_at": "2027-05-01T12:00:00-04:00",
+                }
+            ],
+        }) + "\n"
+
+    def page(label):
+        # The production lifecycle validator requires an Event JSON-LD schema
+        # and a real detail page for every live calendar row.
+        return '<html><head><script type="application/ld+json">{"@type":"Event"}</script></head><body>' + label + '</body></html>\n'
+
+    def sitemap(*urls):
+        nodes = "".join(f"<url><loc>{url}</loc></url>" for url in urls)
+        return (
+            '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+            + nodes + "</urlset>"
+        )
+
+    paths = CONCURRENT_EVENTS_GENERATED + (
+        "sitemap.xml", "feed.xml", "articles/new-story.html", "data/custom_articles.json"
+    )
+    remote, bot, events_bot = local_repos(tmp_path, paths)
+    # Copy the real sitemap reconciler. In production this module is already
+    # present and uses the current checkout root.
+    script = ROOT / "scripts" / "build_audience_features.py"
+    target = bot / "scripts" / "build_audience_features.py"
+    target.parent.mkdir(exist_ok=True)
+    target.write_text(script.read_text(encoding="utf-8"), encoding="utf-8")
+    write(bot, "data/events-retention.json",
+          '{"schema_version":1,"retain_ids":[],"retain_paths":[]}\n')
+
+    # Independent Events workflow publishes a newer, valid calendar.
+    write(events_bot, "data/events.json", event_data("updated source event"))
+    write(events_bot, "data/events-source-cache.json", '{"publisher":"newer calendar"}\n')
+    write(events_bot, "data/events-source-status.json", '{"fresh":true}\n')
+    write(events_bot, "events.html", "newer calendar listing\n")
+    write(events_bot, event_path, page("NEWER CALENDAR"))
+    write(events_bot, "sitemap.xml", sitemap(event_url))
+    git("add", "-A", cwd=events_bot)
+    git("commit", "-m", "Events: independent refresh", cwd=events_bot)
+    git("push", "origin", "main", cwd=events_bot)
+
+    # Newsroom generated new news after reading the previous calendar, and
+    # should not overwrite the independent Events refresh as it publishes.
+    write(bot, "data/events.json", event_data("stale newsroom event"))
+    write(bot, "data/events-source-cache.json", '{"publisher":"stale newsroom"}\n')
+    write(bot, "data/events-source-status.json", '{"fresh":false}\n')
+    write(bot, "events.html", "stale newsroom calendar\n")
+    write(bot, event_path, page("STALE NEWSROOM"))
+    write(bot, "sitemap.xml", sitemap(event_url, article_url))
+    write(bot, "articles/new-story.html", "NEWLY GENERATED NEWS\n")
+    write(bot, "feed.xml", "FRESH NEWS FEED\n")
+    write(bot, "data/custom_articles.json", "base\n")
+
+    published = run_publish(bot)
+    assert published.returncode == 0, published.stdout + "\n" + published.stderr
+    assert "Keeping newer event-refresh output from main" in published.stdout
+    assert "Reconciled event URLs into newsroom sitemap" in published.stdout
+    assert check_remote_file(tmp_path / "event_page", remote, event_path) == page("NEWER CALENDAR")
+    assert check_remote_file(tmp_path / "event_feed", remote, "data/events.json") == event_data("updated source event")
+    assert check_remote_file(tmp_path / "event_cache", remote, "data/events-source-cache.json") == '{"publisher":"newer calendar"}\n'
+    assert check_remote_file(tmp_path / "event_status", remote, "data/events-source-status.json") == '{"fresh":true}\n'
+    assert check_remote_file(tmp_path / "event_listing", remote, "events.html") == "newer calendar listing\n"
+    xml = check_remote_file(tmp_path / "event_sitemap", remote, "sitemap.xml")
+    assert event_url in xml and article_url in xml
+    assert check_remote_file(tmp_path / "article", remote, "articles/new-story.html") == "NEWLY GENERATED NEWS\n"
+    assert check_remote_file(tmp_path / "feed", remote, "feed.xml") == "FRESH NEWS FEED\n"
+
+
+def test_concurrent_calendar_conflict_with_manual_editorial_override_still_fails_closed(tmp_path):
+    event = "events/sample-upcoming-event.html"
+    protected = "data/article-content-overrides.json"
+    remote, bot, human = local_repos(tmp_path, (event, protected, "sitemap.xml"))
+
+    for path in (event, protected):
+        write(human, path, "reviewed remote update\n")
+        write(bot, path, "stale bot update\n")
+    git("add", "-A", cwd=human)
+    git("commit", "-m", "Concurrent event refresh and editorial correction", cwd=human)
+    git("push", "origin", "main", cwd=human)
+
+    result = run_publish(bot)
+    assert result.returncode == 2, result.stdout + "\n" + result.stderr
+    assert "Unsafe source/config rebase conflict" in result.stderr
+    assert protected in result.stderr
+    assert check_remote_file(tmp_path / "protected", remote, protected) == "reviewed remote update\n"
