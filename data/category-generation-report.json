@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-10-30T22:49:01Z",
+  "generated_at": "2026-10-31T02:26:11Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,25 +15,27 @@
   "summary": {
     "category_count": 9,
     "statuses": {
+      "cache_hit": 1,
       "category_eligibility_archive_recovery": 5,
-      "generated_live": 4
+      "generated_live": 2,
+      "no_publishable_sources": 1
     },
     "failures": {
       "no_category_eligible_sources": 5
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 69.597,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 2,
+    "model_elapsed_seconds": 35.188,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 2,
-    "published_story_duplicate_suppression_count": 26,
-    "story_aware_update_context_count": 4,
-    "material_update_promotion_evaluation_count": 9,
+    "category_eligibility_rejection_count": 6,
+    "published_story_duplicate_suppression_count": 42,
+    "story_aware_update_context_count": 0,
+    "material_update_promotion_evaluation_count": 8,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 5,
-    "material_update_promotion_model_call_count": 4
+    "material_update_promotion_cache_hit_count": 6,
+    "material_update_promotion_model_call_count": 2
   },
   "categories": [
     {
@@ -41,8 +43,8 @@
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 9,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 10,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -59,11 +61,52 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Beachgoers in Martin County urged to stay out of water after high levels of fecal bacteria found: Officials",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/health-officials-urge-martin-county-beachgoers-to-stay-out-of-the-water-after-high-levels-of-fecal-bacteria-found"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Woman, 66, charged with 29 counts of animal cruelty after 124 cats removed from Port St. Lucie home",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-66-charged-with-29-counts-of-animal-cruelty-after-124-cats-removed-from-port-st-lucie-home"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "editorial_story_id": "story_024482",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter",
@@ -84,6 +127,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-man-charged-with-attempted-murder-after-roommate-slashed-in-neck-with-box-cutter",
           "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
@@ -99,28 +157,21 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 26.5
+      "elapsed_seconds": 24.226
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 9,
-      "selected_source_count": 5,
-      "cache_hit": false,
+      "status": "cache_hit",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 7,
+      "selected_source_count": 2,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.542,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 12.542,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -131,9 +182,23 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Beachgoers in Martin County urged to stay out of water after high levels of fecal bacteria found: Officials",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/health-officials-urge-martin-county-beachgoers-to-stay-out-of-the-water-after-high-levels-of-fecal-bacteria-found"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -149,22 +214,52 @@
           "source_url": "https://cbs12.com/news/local/man-charged-with-attempted-murder-slashed-acquaintance-throat-box-cutter-crime-martin-county-sheriffs-office-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 12,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
-          "editorial_story_id": "story_024266",
-          "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
-          "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
+          "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-man-charged-with-attempted-murder-after-roommate-slashed-in-neck-with-box-cutter",
+          "editorial_story_id": "story_024306",
+          "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
+          "canonical_headline": "Suspect charged with attempted murder after SE Indian Street roommate attack",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - cw34.com",
-          "source_url": "https://cw34.com/news/local/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
+          "source_headline": "Port St. Lucie woman, 67, arrested in hoarding of more than 100 cats - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-woman-arrested-ihoarding-ats/74299115",
+          "editorial_story_id": "story_022411",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie woman, 66, arrested on animal cruelty counts after 124 cats found in home - cw34.com",
+          "source_url": "https://cw34.com/news/local/port-st-lucie-woman-66-arrested-on-29-animal-cruelty-counts-in-cat-hoarding-case-florida-news-florida-crime-local-news-local-crime-cat-hoarding-port-st-lucie",
+          "editorial_story_id": "story_022411",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "editorial_story_id": "story_024482",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
           "editorial_story_id": "story_024266",
           "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
           "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
@@ -193,12 +288,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-man-charged-with-attempted-murder-after-roommate-slashed-in-neck-with-box-cutter",
-          "editorial_story_id": "story_024306",
-          "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
-          "canonical_headline": "Suspect charged with attempted murder after SE Indian Street roommate attack",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Port St. Lucie police: Traffic stop leads to nearly 9 pounds of marijuana seizure - WPEC",
+          "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-traffic-stop-leads-to-nearly-9-pounds-of-marijuana-seizure-1450-cash-packaged-for-distribution-intent-to-sell-",
+          "editorial_story_id": "story_024427",
+          "canonical_slug": "2026-10-30-port-st-lucie-man-arrested-after-traffic-stop-tied-to-domestic-disturbance-case",
+          "canonical_headline": "Port St. Lucie man arrested after traffic stop tied to domestic disturbance case",
+          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -213,61 +308,102 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - WPEC",
-          "source_url": "https://cbs12.com/news/election/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-",
-          "editorial_story_id": "story_023984",
-          "canonical_slug": "2026-10-28-port-st-lucie-man-arrested-accused-of-trying-to-extort-state-rep-meg-weinberger",
-          "canonical_headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
+          "source_headline": "Treasure Coast Food Bank dedicates new Fort Pierce operations center - WPEC",
+          "source_url": "https://cbs12.com/news/local/treasure-coast-food-bank-dedicates-new-fort-pierce-operations-center",
+          "editorial_story_id": "story_024238",
+          "canonical_slug": "2026-10-29-treasure-coast-food-bank-dedicates-fort-pierce-center-with-larger-kitchen-food-s",
+          "canonical_headline": "Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County deputies, emergency crews respond to rollover crash on SW Martin Highway - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/one-person-hospital-martin-county-sheriffs-office-emergency-crews-respond-to-rollover-crash-sw-martin-highway-near-fox-brown-road",
+          "editorial_story_id": "story_024218",
+          "canonical_slug": "2026-10-29-one-hospitalized-after-rollover-on-sw-martin-highway-in-martin-county",
+          "canonical_headline": "One hospitalized after rollover on SW Martin Highway in Martin County",
           "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Still no cancer cluster? Florida updates Treasure Coast brain cancer review - cw34.com",
+          "source_url": "https://cw34.com/news/local/still-no-cancer-cluster-florida-updates-treasure-coast-brain-cancer-review-no-statistically-significant-glioblastoma-recent-cases-st-lucie-county-health-department-diagnoses-environmental-records-samples",
+          "editorial_story_id": "story_024119",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "Updated state review finds St. Lucie County glioblastoma cases in line with expectations",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Port St. Lucie police: Traffic stop leads to nearly 9 pounds of marijuana seizure - cw34.com",
-          "source_url": "https://cw34.com/news/local/port-st-lucie-police-traffic-stop-leads-to-nearly-9-pounds-of-marijuana-seizure-1450-cash-packaged-for-distribution-intent-to-sell-",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-10-30-port-st-lucie-man-arrested-after-traffic-stop-tied-to-domestic-disturbance-case",
-          "canonical_headline": "Port St. Lucie man arrested after traffic stop tied to domestic disturbance case",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_024431"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['samuel torres']",
-            "shared_precise_locations=['southwest-chartwell-street', 'southwest-rice-avenue']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['marijuana']",
-            "shared_distinctive_token_count=61",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 3,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-man-charged-with-attempted-murder-after-roommate-slashed-in-neck-with-box-cutter",
+          "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
+          "canonical_headline": "Suspect charged with attempted murder after SE Indian Street roommate attack",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie woman, 67, arrested in hoarding of more than 100 cats - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-woman-arrested-ihoarding-ats/74299115",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie woman, 66, arrested on animal cruelty counts after 124 cats found in home - cw34.com",
+          "source_url": "https://cw34.com/news/local/port-st-lucie-woman-66-arrested-on-29-animal-cruelty-counts-in-cat-hoarding-case-florida-news-florida-crime-local-news-local-crime-cat-hoarding-port-st-lucie",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "crime",
           "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - WPEC",
@@ -279,8 +415,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -301,37 +437,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - cw34.com",
-          "source_url": "https://cw34.com/news/local/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
-          "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
-          "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Daniel Warren's Wednesday sentencing in Martin County",
-            "75 child pornography possession counts and seven video voyeurism counts",
-            "2024 arrest involving AI-generated sexual abuse images made from photographs of neighborhood children",
-            "Prison sentence exceeding 1,000 months and rejection of a lesser sentence"
-          ],
-          "novel_facts": [
-            "Exact sentence of 1,013.1 months, approximately 84 years and five months",
-            "Credit for 1,002 days already served",
-            "Sexual offender designation recorded in court notes"
-          ],
-          "reason": "Both articles report the same sentencing in the same prosecution. The incoming article supplies precise sentencing and court-record details, but reports no subsequent ruling or consequential change to the already reported effective-life sentence. These details do not constitute a material update or an independently newsworthy follow-up.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter - WFLX",
           "source_url": "https://www.wflx.com/2026/10/30/martin-county-man-charged-with-attempted-murder-after-roommate-slashed-neck-with-box-cutter?outputType=amp",
           "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
@@ -362,13 +467,13 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-man-charged-with-attempted-murder-after-roommate-slashed-in-neck-with-box-cutter",
-          "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
-          "canonical_headline": "Suspect charged with attempted murder after SE Indian Street roommate attack",
+          "source_headline": "Port St. Lucie police: Traffic stop leads to nearly 9 pounds of marijuana seizure - WPEC",
+          "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-traffic-stop-leads-to-nearly-9-pounds-of-marijuana-seizure-1450-cash-packaged-for-distribution-intent-to-sell-",
+          "canonical_slug": "2026-10-30-port-st-lucie-man-arrested-after-traffic-stop-tied-to-domestic-disturbance-case",
+          "canonical_headline": "Port St. Lucie man arrested after traffic stop tied to domestic disturbance case",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -392,48 +497,60 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - WPEC",
-          "source_url": "https://cbs12.com/news/election/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-",
-          "canonical_slug": "2026-10-28-port-st-lucie-man-arrested-accused-of-trying-to-extort-state-rep-meg-weinberger",
-          "canonical_headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
+          "source_headline": "Treasure Coast Food Bank dedicates new Fort Pierce operations center - WPEC",
+          "source_url": "https://cbs12.com/news/local/treasure-coast-food-bank-dedicates-new-fort-pierce-operations-center",
+          "canonical_slug": "2026-10-29-treasure-coast-food-bank-dedicates-fort-pierce-center-with-larger-kitchen-food-s",
+          "canonical_headline": "Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County deputies, emergency crews respond to rollover crash on SW Martin Highway - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/one-person-hospital-martin-county-sheriffs-office-emergency-crews-respond-to-rollover-crash-sw-martin-highway-near-fox-brown-road",
+          "canonical_slug": "2026-10-29-one-hospitalized-after-rollover-on-sw-martin-highway-in-martin-county",
+          "canonical_headline": "One hospitalized after rollover on SW Martin Highway in Martin County",
           "canonical_is_custom": false,
           "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
           "promoted": false,
-          "cache_hit": true,
+          "cache_hit": false,
           "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Anthony Pizzarelli, 50, accused of attempting to extort State Rep. Meg Weinberger.",
-            "Same charges: extortion, using a two-way communication device to facilitate a felony, and harassing an elected official.",
-            "Same Palm Beach County Sheriff's Office affidavit describing Feb. 9 and April 6 emails and a May 18, 2026 voice memo.",
-            "Same alleged demands for a public apology and support for audits of Palm Beach and St. Lucie counties."
-          ],
-          "novel_facts": [
-            "Additional affidavit details say Weinberger had never met Pizzarelli and that he had not filed a lawsuit or ethics complaint against her at the time of his interview.",
-            "Additional election background names Weinberger's opponents and references her airport-renaming legislation."
-          ],
-          "reason": "The incoming article repeats the same arrest, charges, communications and alleged demands already covered by the canonical. Added affidavit detail and election background do not establish a new case development or independently newsworthy follow-up.",
-          "validation_errors": []
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Still no cancer cluster? Florida updates Treasure Coast brain cancer review - cw34.com",
+          "source_url": "https://cw34.com/news/local/still-no-cancer-cluster-florida-updates-treasure-coast-brain-cancer-review-no-statistically-significant-glioblastoma-recent-cases-st-lucie-county-health-department-diagnoses-environmental-records-samples",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "Updated state review finds St. Lucie County glioblastoma cases in line with expectations",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Woman arrested on 29 felony cruelty counts after 124 cats removed in Port St. Lucie",
-      "generated_card_count": 0,
-      "elapsed_seconds": 61.551
+      "live_hero_headline": "Woman arrested on 29 felony animal cruelty counts after 124 cats removed in Port St. Lucie",
+      "elapsed_seconds": 23.816
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -451,9 +568,29 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county",
+            "source_locality:stuart",
+            "source_locality:jensen beach",
+            "source_locality:hobe sound"
+          ],
+          "headline": "Beachgoers in Martin County urged to stay out of water after high levels of fecal bacteria found: Officials",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/health-officials-urge-martin-county-beachgoers-to-stay-out-of-the-water-after-high-levels-of-fecal-bacteria-found"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -475,8 +612,18 @@
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-66-charged-with-29-counts-of-animal-cruelty-after-124-cats-removed-from-port-st-lucie-home"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "editorial_story_id": "story_024482",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter",
@@ -517,6 +664,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
           "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-man-charged-with-attempted-murder-after-roommate-slashed-in-neck-with-box-cutter",
           "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
@@ -562,7 +724,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 28.754
+      "elapsed_seconds": 23.632
     },
     {
       "category_key": "sports",
@@ -599,8 +761,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 22.289
+      "new_publication_stale_rejected_count": 4,
+      "elapsed_seconds": 19.898
     },
     {
       "category_key": "things_to_do",
@@ -638,28 +800,21 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.183
+      "elapsed_seconds": 18.635
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.081,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 14.081,
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -670,11 +825,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "editorial_story_id": "story_024482",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "florida",
           "source_headline": "Some Florida ACA customers are being auto-enrolled in new 2027 health plans without their knowledge",
@@ -695,6 +860,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "florida",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "florida",
           "source_headline": "Some Florida ACA customers are being auto-enrolled in new 2027 health plans without their knowledge",
           "source_url": "https://www.wptv.com/news/state/navigating-aca-enrollment-tips-and-a-warning",
           "canonical_slug": "2026-10-29-some-florida-aca-customers-auto-enrolled-in-replacement-health-plans-for-2027",
@@ -710,20 +890,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
-      "generated_card_count": 0,
-      "elapsed_seconds": 34.272
+      "elapsed_seconds": 16.24
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 5,
-      "selected_source_count": 4,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 7,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -731,11 +907,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 23.123,
+          "elapsed_seconds": 25.511,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 23.123,
+      "model_elapsed_seconds": 25.511,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -746,15 +922,15 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
+          "source_headline": "Jensen Beach man sentenced to 84 years in AI child pornography, voyeurism case - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-jensen-beach-man-sentenced-to-84-years-in-ai-child-pornography-voyeurism-case/74298297",
           "editorial_story_id": "story_024266",
           "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
           "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
@@ -763,8 +939,8 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - cw34.com",
-          "source_url": "https://cw34.com/news/local/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
+          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - WPEC",
+          "source_url": "https://cbs12.com/news/crime/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
           "editorial_story_id": "story_024266",
           "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
           "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
@@ -793,8 +969,8 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County deputies, emergency crews respond to rollover crash on SW Martin Highway - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/one-person-hospital-martin-county-sheriffs-office-emergency-crews-respond-to-rollover-crash-sw-martin-highway-near-fox-brown-road",
+          "source_headline": "Martin County deputies, emergency crews respond to rollover crash on SW Martin Highway - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxOSHRQUnpGX1daSldpS3hQZXhEbGlQMEZzMEVHM2Q0b0d2QUJwTHh2dHMyWFdHZGpaNnY4UnV2Vk1aT3ZEVUtKY0VTdnp5Vy1sNjYtLU5SaFJKR1QtWklLdHpBVnVvQ3NlZHpfSW9GbEF2ZVNWLV9Ham1yZTRpTU8tRkJYdG5OVWxua0JUMjBqUWU0bE8tWWdMZmVBSjhBMHd2eHdQN09vUGNSLXF2b1hTUHNHTW8xSHRLZU5HOGd2Y3JkaUl1eU1aYVRmb3FTMXQxajVZNjFuQkRsT3RLUDZWcU1Eam1Xd0JlTEFBVWpfTQ",
           "editorial_story_id": "story_024218",
           "canonical_slug": "2026-10-29-one-hospitalized-after-rollover-on-sw-martin-highway-in-martin-county",
           "canonical_headline": "One hospitalized after rollover on SW Martin Highway in Martin County",
@@ -802,58 +978,17 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Martin County deputies, emergency crews respond to rollover crash on SW Martin Highway - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxOSHRQUnpGX1daSldpS3hQZXhEbGlQMEZzMEVHM2Q0b0d2QUJwTHh2dHMyWFdHZGpaNnY4UnV2Vk1aT3ZEVUtKY0VTdnp5Vy1sNjYtLU5SaFJKR1QtWklLdHpBVnVvQ3NlZHpfSW9GbEF2ZVNWLV9Ham1yZTRpTU8tRkJYdG5OVWxua0JUMjBqUWU0bE8tWWdMZmVBSjhBMHd2eHdQN09vUGNSLXF2b1hTUHNHTW8xSHRLZU5HOGd2Y3JkaUl1eU1aYVRmb3FTMXQxajVZNjFuQkRsT3RLUDZWcU1Eam1Xd0JlTEFBVWpfTQ",
-          "publisher": "news.google.com",
-          "canonical_slug": "2026-10-29-one-hospitalized-after-rollover-on-sw-martin-highway-in-martin-county",
-          "canonical_headline": "One hospitalized after rollover on SW Martin Highway in Martin County",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_024218",
-            "source:https://news.google.com/rss/articles/CBMi7wFBVV95cUxOSHRQUnpGX1daSldpS3hQZXhEbGlQMEZzMEVHM2Q0b0d2QUJwTHh2dHMyWFdHZGpaNnY4UnV2Vk1aT3ZEVUtKY0VTdnp5Vy1sNjYtLU5SaFJKR1QtWklLdHpBVnVvQ3NlZHpfSW9GbEF2ZVNWLV9Ham1yZTRpTU8tRkJYdG5OVWxua0JUMjBqUWU0bE8tWWdMZmVBSjhBMHd2eHdQN09vUGNSLXF2b1hTUHNHTW8xSHRLZU5HOGd2Y3JkaUl1eU1aYVRmb3FTMXQxajVZNjFuQkRsT3RLUDZWcU1Eam1Xd0JlTEFBVWpfTQ"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=legacy_archive_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county']",
-            "shared_event_families=['crash']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['southwest-martin-highway']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['crew-respond-rollov', 'crew-respond-rollov-crash', 'deput-emergency-crew', 'deput-emergency-crew-respond', 'emergency-crew-respond', 'emergency-crew-respond-rollov', 'respond-rollov-crash', 'respond-rollov-crash-highway', 'rollov-crash-highway']",
-            "shared_headline_topic_core=['crash', 'crew', 'deput', 'emergency', 'highway', 'respond', 'rollov']",
-            "shared_distinctive_token_count=8",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 3,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
-          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
+          "source_headline": "Jensen Beach man sentenced to 84 years in AI child pornography, voyeurism case - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-jensen-beach-man-sentenced-to-84-years-in-ai-child-pornography-voyeurism-case/74298297",
           "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
           "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
           "canonical_is_custom": false,
@@ -861,30 +996,32 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
+          "confidence": 0.99,
           "shared_anchors": [
-            "Daniel Warren's Wednesday sentencing in Martin County",
-            "75 child pornography counts and seven video voyeurism counts",
-            "2024 arrest involving AI-generated sexual abuse images of neighborhood children",
-            "Prison term exceeding 1,000 months and rejection of a lesser sentence"
+            "Daniel Warren's sentencing in Martin County for AI-generated child sexual abuse material and video voyeurism",
+            "Circuit Judge Elizabeth Metzger imposed the sentence Wednesday",
+            "Prison term exceeding 1,000 months, effectively a life sentence",
+            "82 total counts involving child sexual abuse material and video voyeurism",
+            "2024 arrest described as Martin County's first AI child exploitation case",
+            "Judge rejected a lesser sentence"
           ],
           "novel_facts": [
-            "Specifies the sentence as 1,013.1 months, approximately 84 years and five months",
-            "Reports credit for 1,002 days served",
-            "Reports a sexual-offender designation"
+            "Exact sentence of 1,013.1 months with credit for 1,002 days served",
+            "Guilty plea entered in July before a scheduled jury trial",
+            "Exact arrest date of January 26, 2024"
           ],
-          "reason": "Both articles cover the same defendant, case and sentencing. The incoming report supplies precise sentence calculations and accompanying court-record details, not a subsequent ruling, changed sentence or distinct accountability development.",
+          "reason": "Both articles report the same defendant's sentencing by the same judge in the same AI child exploitation case. The incoming report supplies sentence precision and procedural background, but no new ruling, charge, consequence, or other material development beyond the sentencing already covered.",
           "validation_errors": []
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - cw34.com",
-          "source_url": "https://cw34.com/news/local/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
+          "source_headline": "Martin County man sentenced to 84 years in child pornography, voyeurism case - WPEC",
+          "source_url": "https://cbs12.com/news/crime/martin-county-man-sentenced-to-84-years-in-child-pornography-voyeurism-case-daniel-clark-warren-posession-child-sexual-abuse-material-video-voyeurism-involving-minor-ai-child-porn-from-real-photos",
           "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
           "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
           "canonical_is_custom": false,
@@ -892,24 +1029,25 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.99,
           "shared_anchors": [
             "Daniel Warren's Wednesday sentencing in Martin County",
-            "75 child pornography possession counts and seven video voyeurism counts",
-            "2024 arrest involving AI-generated sexual abuse images made from photographs of neighborhood children",
-            "Prison sentence exceeding 1,000 months and rejection of a lesser sentence"
+            "2024 arrest involving AI-generated child sexual abuse material made from photographs of neighborhood children",
+            "75 possession counts and seven video voyeurism counts",
+            "Prison sentence exceeding 1,000 months",
+            "Judge declined to impose a lesser sentence"
           ],
           "novel_facts": [
-            "Exact sentence of 1,013.1 months, approximately 84 years and five months",
+            "Exact sentence reported as 1,013.1 months, approximately 84 years and five months",
             "Credit for 1,002 days already served",
-            "Sexual offender designation recorded in court notes"
+            "Court records specify adjudication on all 82 counts and sexual-offender designation"
           ],
-          "reason": "Both articles report the same sentencing in the same prosecution. The incoming article supplies precise sentencing and court-record details, but reports no subsequent ruling or consequential change to the already reported effective-life sentence. These details do not constitute a material update or an independently newsworthy follow-up.",
+          "reason": "Both articles cover the same defendant, prosecution and sentencing. The incoming report supplies more precise sentencing-record details but no subsequent ruling, changed sentence or distinct public-interest development. These details do not materially change the sentencing outcome already reported.",
           "validation_errors": []
         },
         {
@@ -944,47 +1082,35 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County deputies, emergency crews respond to rollover crash on SW Martin Highway - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/one-person-hospital-martin-county-sheriffs-office-emergency-crews-respond-to-rollover-crash-sw-martin-highway-near-fox-brown-road",
+          "source_headline": "Martin County deputies, emergency crews respond to rollover crash on SW Martin Highway - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxOSHRQUnpGX1daSldpS3hQZXhEbGlQMEZzMEVHM2Q0b0d2QUJwTHh2dHMyWFdHZGpaNnY4UnV2Vk1aT3ZEVUtKY0VTdnp5Vy1sNjYtLU5SaFJKR1QtWklLdHpBVnVvQ3NlZHpfSW9GbEF2ZVNWLV9Ham1yZTRpTU8tRkJYdG5OVWxua0JUMjBqUWU0bE8tWWdMZmVBSjhBMHd2eHdQN09vUGNSLXF2b1hTUHNHTW8xSHRLZU5HOGd2Y3JkaUl1eU1aYVRmb3FTMXQxajVZNjFuQkRsT3RLUDZWcU1Eam1Xd0JlTEFBVWpfTQ",
           "canonical_slug": "2026-10-29-one-hospitalized-after-rollover-on-sw-martin-highway-in-martin-county",
           "canonical_headline": "One hospitalized after rollover on SW Martin Highway in Martin County",
           "canonical_is_custom": false,
           "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
           "promoted": false,
           "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
-          "shared_anchors": [
-            "Single-vehicle rollover Thursday on SW Martin Highway just west of Fox Brown Road",
-            "One person hospitalized",
-            "Martin County Sheriff’s Office deputies and emergency personnel responded",
-            "Motorists advised to expect delays while deputies cleared the scene"
-          ],
-          "novel_facts": [],
-          "reason": "The incoming article repeats the canonical’s crash location, timing, hospitalization and response details. The later publication date and newsletter URL do not establish a new development; the appended blurbs concern unrelated stories.",
-          "validation_errors": []
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Jensen Beach man gets more than 84 years in AI child sexual abuse material case",
-      "generated_card_count": 1,
-      "elapsed_seconds": 57.496
+      "live_hero_headline": "Fecal bacteria prompt water contact advisory at 10 Martin County locations",
+      "generated_card_count": 2,
+      "elapsed_seconds": 77.965
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -992,11 +1118,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 19.851,
+          "elapsed_seconds": 9.677,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 19.851,
+      "model_elapsed_seconds": 9.677,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1007,11 +1133,51 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie woman, 67, arrested in hoarding of more than 100 cats - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-woman-arrested-ihoarding-ats/74299115",
+          "editorial_story_id": "story_022411",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Florida police make arrest after more than 100 cats rescued from home - Treasure Coast News",
+          "source_url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNZElyaTJMaU1WZjNwMUtBRUJ4d0RqZjM2TlRFdDRaUU9tSm4xMzBRNEVuTGRvX0hweVVCWEt4VGxvZmxyNHdKTThhWXJ1TlFOa3loMlBEMWRzTUhMTVpNUGJqYWhnR3hnVnFYZTBEZzBIWVZGcDh6RmtTVlBTdzVTUHZOaVpwZ081elBVTU43aDJkSWJUZVZZNmJKNEt3MXBFSy1rS1NxSlhxdDBIRzBiQnVmR1l6NlJ0U3RQaVhqNzZEaUVvYzRDSG9VazlHam9ZRkEtcTd0V2VmVURlTFMzVUFtQQ",
+          "editorial_story_id": "story_022411",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie woman, 66, arrested on animal cruelty counts after 124 cats found in home - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-woman-66-arrested-on-29-animal-cruelty-counts-in-cat-hoarding-case-florida-news-florida-crime-local-news-local-crime-cat-hoarding-port-st-lucie",
+          "editorial_story_id": "story_022411",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Flooding at grounds forces cancellation of St. Lucie County 4-H Fall Festival - cw34.com",
+          "source_url": "https://cw34.com/news/local/flooding-forces-cancellation-of-st-lucie-county-4-h-fall-festival-november-7-heavy-rains-waterlogged-grounds-uf-ifas-extension-st-lucie-county",
+          "editorial_story_id": "story_024497",
+          "canonical_slug": "2026-10-30-flooding-forces-cancellation-of-nov-7-st-lucie-county-4-h-fall-festival",
+          "canonical_headline": "Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie man arrested after officers spot marijuana in plain view - WPBF",
@@ -1020,6 +1186,16 @@
           "canonical_slug": "2026-10-30-port-st-lucie-man-arrested-after-traffic-stop-tied-to-domestic-disturbance-case",
           "canonical_headline": "Port St. Lucie man arrested after traffic stop tied to domestic disturbance case",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie police: Traffic stop leads to nearly 9 pounds of marijuana seizure - WPEC",
+          "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-traffic-stop-leads-to-nearly-9-pounds-of-marijuana-seizure-1450-cash-packaged-for-distribution-intent-to-sell-",
+          "editorial_story_id": "story_024427",
+          "canonical_slug": "2026-10-30-port-st-lucie-man-arrested-after-traffic-stop-tied-to-domestic-disturbance-case",
+          "canonical_headline": "Port St. Lucie man arrested after traffic stop tied to domestic disturbance case",
+          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1044,8 +1220,18 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Still no cancer cluster? Florida updates Treasure Coast brain cancer review - cw34.com",
-          "source_url": "https://cw34.com/news/local/still-no-cancer-cluster-florida-updates-treasure-coast-brain-cancer-review-no-statistically-significant-glioblastoma-recent-cases-st-lucie-county-health-department-diagnoses-environmental-records-samples",
+          "source_headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - WPEC",
+          "source_url": "https://cbs12.com/news/election/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-",
+          "editorial_story_id": "story_023984",
+          "canonical_slug": "2026-10-28-port-st-lucie-man-arrested-accused-of-trying-to-extort-state-rep-meg-weinberger",
+          "canonical_headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/29/health-department-takes-another-look-st-lucie-county-glioblastoma-cases?outputType=amp",
           "editorial_story_id": "story_024119",
           "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
           "canonical_headline": "Updated state review finds St. Lucie County glioblastoma cases in line with expectations",
@@ -1054,86 +1240,82 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie man accused of trying to extort State Rep. Meg Weinberger - WPEC",
-          "source_url": "https://cbs12.com/news/election/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-",
-          "editorial_story_id": "story_023984",
-          "canonical_slug": "2026-10-28-port-st-lucie-man-arrested-accused-of-trying-to-extort-state-rep-meg-weinberger",
-          "canonical_headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
-          "basis": "same_event_and_persistent_story_skip",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "editorial_story_id": "story_023617",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "Arrest report details speeding, 0.246 blood-alcohol level in deputy's Vero Beach crash",
+          "basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Port St. Lucie police: Traffic stop leads to nearly 9 pounds of marijuana seizure - cw34.com",
-          "source_url": "https://cw34.com/news/local/port-st-lucie-police-traffic-stop-leads-to-nearly-9-pounds-of-marijuana-seizure-1450-cash-packaged-for-distribution-intent-to-sell-",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-10-30-port-st-lucie-man-arrested-after-traffic-stop-tied-to-domestic-disturbance-case",
-          "canonical_headline": "Port St. Lucie man arrested after traffic stop tied to domestic disturbance case",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_024427"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['port-st-lucie', 'st-lucie']",
-            "shared_event_families=['drug-case']",
-            "shared_named_people=['samuel torres']",
-            "shared_precise_locations=['southwest-chartwell-street', 'southwest-rice-avenue']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['marijuana']",
-            "shared_distinctive_token_count=61",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Health Department takes another look at St. Lucie County glioblastoma cases - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "Updated state review finds St. Lucie County glioblastoma cases in line with expectations",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "incident:named-person-death:deb-johnston",
-            "story:story_024119",
-            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident",
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:named-person-death:deb-johnston,story:story_024119,source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/health-department-takes-another-look-at-st-lucie-county-glioblastoma-cases",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie woman, 67, arrested in hoarding of more than 100 cats - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-woman-arrested-ihoarding-ats/74299115",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Florida police make arrest after more than 100 cats rescued from home - Treasure Coast News",
+          "source_url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNZElyaTJMaU1WZjNwMUtBRUJ4d0RqZjM2TlRFdDRaUU9tSm4xMzBRNEVuTGRvX0hweVVCWEt4VGxvZmxyNHdKTThhWXJ1TlFOa3loMlBEMWRzTUhMTVpNUGJqYWhnR3hnVnFYZTBEZzBIWVZGcDh6RmtTVlBTdzVTUHZOaVpwZ081elBVTU43aDJkSWJUZVZZNmJKNEt3MXBFSy1rS1NxSlhxdDBIRzBiQnVmR1l6NlJ0U3RQaVhqNzZEaUVvYzRDSG9VazlHam9ZRkEtcTd0V2VmVURlTFMzVUFtQQ",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie woman, 66, arrested on animal cruelty counts after 124 cats found in home - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-woman-66-arrested-on-29-animal-cruelty-counts-in-cat-hoarding-case-florida-news-florida-crime-local-news-local-crime-cat-hoarding-port-st-lucie",
+          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Flooding at grounds forces cancellation of St. Lucie County 4-H Fall Festival - cw34.com",
+          "source_url": "https://cw34.com/news/local/flooding-forces-cancellation-of-st-lucie-county-4-h-fall-festival-november-7-heavy-rains-waterlogged-grounds-uf-ifas-extension-st-lucie-county",
+          "canonical_slug": "2026-10-30-flooding-forces-cancellation-of-nov-7-st-lucie-county-4-h-fall-festival",
+          "canonical_headline": "Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie man arrested after officers spot marijuana in plain view - WPBF",
@@ -1142,6 +1324,21 @@
           "canonical_headline": "Port St. Lucie man arrested after traffic stop tied to domestic disturbance case",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie police: Traffic stop leads to nearly 9 pounds of marijuana seizure - WPEC",
+          "source_url": "https://cbs12.com/news/crime/port-st-lucie-police-traffic-stop-leads-to-nearly-9-pounds-of-marijuana-seizure-1450-cash-packaged-for-distribution-intent-to-sell-",
+          "canonical_slug": "2026-10-30-port-st-lucie-man-arrested-after-traffic-stop-tied-to-domestic-disturbance-case",
+          "canonical_headline": "Port St. Lucie man arrested after traffic stop tied to domestic disturbance case",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1173,21 +1370,6 @@
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Still no cancer cluster? Florida updates Treasure Coast brain cancer review - cw34.com",
-          "source_url": "https://cw34.com/news/local/still-no-cancer-cluster-florida-updates-treasure-coast-brain-cancer-review-no-statistically-significant-glioblastoma-recent-cases-st-lucie-county-health-department-diagnoses-environmental-records-samples",
-          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "canonical_headline": "Updated state review finds St. Lucie County glioblastoma cases in line with expectations",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1223,21 +1405,64 @@
           ],
           "reason": "The incoming article repeats the same arrest, charges, communications and alleged demands already covered by the canonical. Added affidavit detail and election background do not establish a new case development or independently newsworthy follow-up.",
           "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Health Department takes another look at St Lucie County glioblastoma cases - WFLX",
+          "source_url": "https://www.wflx.com/2026/10/29/health-department-takes-another-look-st-lucie-county-glioblastoma-cases?outputType=amp",
+          "canonical_slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
+          "canonical_headline": "Updated state review finds St. Lucie County glioblastoma cases in line with expectations",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County sheriff's deputy arrested on DUI charge after off-duty crash - WPBF",
+          "source_url": "https://www.wpbf.com/article/tyler-horstman-st-lucie-county-sheriffs-deputy-arrested-dui-charge-off-duty-crash/74254345",
+          "canonical_slug": "2026-10-26-st-lucie-detective-tyler-horstman-felony-dui-arrest",
+          "canonical_headline": "Arrest report details speeding, 0.246 blood-alcohol level in deputy's Vero Beach crash",
+          "canonical_is_custom": true,
+          "identity_basis": "durable_custom_incident_identity:named-custom-incident|tyler-horstman|2026-10-26|arrest,crash,dui",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "St. Lucie County Detective Tyler Horstman surrendered to the Indian River County jail on October 26.",
+            "Felony DUI charge involving serious bodily injury from an off-duty Vero Beach crash in a sheriff's office vehicle.",
+            "Blood-alcohol concentration of 0.246.",
+            "Vero Beach Police Department led the criminal investigation.",
+            "Horstman posted $15,000 bond Monday evening."
+          ],
+          "novel_facts": [],
+          "reason": "The canonical already reports the same crash, arrest, charge, blood-test result, administrative leave and bond, with substantially more detail. The incoming article's March 2 crash date differs from the canonical's March 1 date, but the numerous distinctive shared anchors establish the same case; that discrepancy is not evidence of a new development. The sheriff's statement adds no material update.",
+          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Woman arrested on 29 felony cruelty counts after 124 cats removed in Port St. Lucie",
-      "generated_card_count": 1,
-      "elapsed_seconds": 50.855
+      "live_hero_headline": "Woman arrested on 29 felony cruelty counts after 124 cats removed from Port St. Lucie home",
+      "generated_card_count": 0,
+      "elapsed_seconds": 32.226
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1258,8 +1483,18 @@
       "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "editorial_story_id": "story_024482",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter",
@@ -1267,6 +1502,16 @@
           "editorial_story_id": "story_024306",
           "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
           "canonical_headline": "Suspect charged with attempted murder after SE Indian Street roommate attack",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Treasure Coast Food Bank dedicates new Fort Pierce operations center - cw34.com",
+          "source_url": "https://cw34.com/news/local/treasure-coast-food-bank-dedicates-new-fort-pierce-operations-center",
+          "editorial_story_id": "story_024238",
+          "canonical_slug": "2026-10-29-treasure-coast-food-bank-dedicates-fort-pierce-center-with-larger-kitchen-food-s",
+          "canonical_headline": "Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1303,11 +1548,26 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Thanksgiving on a budget: Florida supermarkets offer holiday meal deals as food inflation bites",
+          "source_url": "https://www.wptv.com/money/consumer/thanksgiving-on-a-budget-florida-supermarkets-offer-holiday-meal-deals-as-food-inflation-bites",
+          "canonical_slug": "2026-10-30-florida-supermarkets-offer-thanksgiving-meals-under-40-as-turkey-prices-rise",
+          "canonical_headline": "Florida supermarkets offer Thanksgiving meals under $40 as turkey prices rise",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Martin County man charged with attempted murder after roommate slashed in neck with box cutter",
@@ -1322,6 +1582,35 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Treasure Coast Food Bank dedicates new Fort Pierce operations center - cw34.com",
+          "source_url": "https://cw34.com/news/local/treasure-coast-food-bank-dedicates-new-fort-pierce-operations-center",
+          "canonical_slug": "2026-10-29-treasure-coast-food-bank-dedicates-fort-pierce-center-with-larger-kitchen-food-s",
+          "canonical_headline": "Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Treasure Coast Food Bank's Thursday morning dedication on October 29, 2026",
+            "132,000-square-foot regional operations center at 401 Loop Road in Fort Pierce",
+            "Production kitchen expanded from 7,000 to 15,000 square feet with disaster capacity of 25,000 meals daily",
+            "Ceremonial First Box packing involving Robin Safley, Dee Locke and Tatiana Rousseau"
+          ],
+          "novel_facts": [
+            "Promotional information about Project Thanksgiving donations, including iTHINK Financial drop-off locations and a United Way donation option"
+          ],
+          "reason": "Both articles cover the same dedication and repeat the same facility specifications, programs and ceremonial participants. The incoming article adds holiday donation instructions, not a material development in the dedication story or an independently newsworthy follow-up.",
+          "validation_errors": []
         },
         {
           "category_key": "indian_river",
@@ -1349,8 +1638,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1401,7 +1690,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 32.071
+      "elapsed_seconds": 23.168
     }
   ]
 }
