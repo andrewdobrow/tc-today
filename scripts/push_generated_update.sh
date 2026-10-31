@@ -17,6 +17,12 @@ is_generated_conflict() {
     articles/*|missing-persons/*|martin/*|st-lucie/*|indian-river/*|port-st-lucie/*|jensen-beach/*|stuart/*|vero-beach/*|fellsmere/*|sebastian/*|partners/*)
       return 0
       ;;
+    # Independently refreshed calendar artifacts are generated, never source
+    # configuration. A concurrent Events job can rewrite these while the longer
+    # newsroom build is in flight. Preserve the newer calendar set on rebase.
+    events/*|data/events-source-cache.json|data/events-retention.json)
+      return 0
+      ;;
     data/editorial_story_registry.json|data/editorial_story_registry.preflight.json|data/editorial_story_history.jsonl|data/editorial_story_history/*|data/editorial_state.json|data/editorial_audit.jsonl|data/generation-cache.json)
       return 0
       ;;
@@ -37,8 +43,36 @@ is_generated_conflict() {
   esac
 }
 
+# An independently completed calendar refresh owns these outputs. During
+# rebase --ours is newest origin/main and --theirs is the older newsroom run.
+# Keep the current calendar bundle together, not a mix of stale cache and
+# newer event pages.
+is_concurrent_events_output() {
+  case "$1" in
+    events.html|events/*|data/events.json|data/events-source-cache.json|data/events-source-status.json|data/events-retention.json)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+reconcile_event_sitemap_after_rebase() {
+  # The newsroom sitemap includes the newly generated articles. After
+  # preserving the newer calendar, rewrite only its event URLs against that
+  # calendar; do not lose new news URLs or publish stale/deleted event links.
+  python - <<'PY'
+from scripts.build_audience_features import update_sitemap, validate_event_detail_lifecycle
+
+print("Reconciled event URLs into newsroom sitemap:", update_sitemap())
+print("Event lifecycle validated after concurrent refresh:", validate_event_detail_lifecycle())
+PY
+  git add -- sitemap.xml
+}
+
 resolve_generated_conflicts() {
-  local conflicts unsafe path
+  local conflicts unsafe path event_conflicts=0
   conflicts="$(git diff --name-only --diff-filter=U)"
   if [[ -z "$conflicts" ]]; then
     return 1
@@ -62,16 +96,32 @@ resolve_generated_conflicts() {
 
   while IFS= read -r path; do
     [[ -n "$path" ]] || continue
-    echo "Auto-resolving generated rebase conflict with current run output: $path"
-    # Rebase --theirs means this bot's commit; --ours is fetched origin/main.
-    # Handle a generated file removed by the bot as well as one it rewrote.
-    if git ls-files -u -- "$path" | awk '$3 == 3 { found = 1 } END { exit !found }'; then
-      git checkout --theirs -- "$path"
+    # Rebase semantics: --ours is up-to-date origin/main; --theirs is this
+    # newsroom run. Prefer the newer Events refresh for calendar-owned files.
+    # All other generated outputs keep the newsroom run's freshly written news.
+    local stage=3
+    if is_concurrent_events_output "$path"; then
+      stage=2
+      event_conflicts=1
+      echo "Keeping newer event-refresh output from main: $path"
+    else
+      echo "Auto-resolving generated rebase conflict with current run output: $path"
+    fi
+    # Stage 2 or 3 can be absent when the selected side deleted the file.
+    if git ls-files -u -- "$path" | awk -v stage="$stage" '$3 == stage { found = 1 } END { exit !found }'; then
+      if [[ "$stage" -eq 2 ]]; then
+        git checkout --ours -- "$path"
+      else
+        git checkout --theirs -- "$path"
+      fi
       git add -- "$path"
     else
       git rm -f -- "$path"
     fi
   done <<< "$conflicts"
+  if [[ "$event_conflicts" -eq 1 ]]; then
+    reconcile_event_sitemap_after_rebase
+  fi
   return 0
 }
 
