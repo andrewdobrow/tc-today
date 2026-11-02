@@ -4,15 +4,16 @@
 
 ## Hero
 
-- Current: **Early school pickups allowed amid Port St. Lucie flooding; Oak Hammock excluded**
-- Recommended: **Early school pickups allowed amid Port St. Lucie flooding; Oak Hammock excluded**
+- Current: **Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service**
+- Recommended: **Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Three killed, including 5-year-old boy, in I-95 crash in Martin County | Three killed, including 5-year-old boy, in I-95 crash in Martin County | 43 | importance 0; freshness 54.8; urgency 2/10; validated material update |
+| 1 | Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge | Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge | 66 | importance 0; freshness 99.88; urgency 10/10 |
+| 2 | Three killed, including 5-year-old boy, in I-95 crash in Martin County | Three killed, including 5-year-old boy, in I-95 crash in Martin County | 42 | importance 0; freshness 51.57; urgency 2/10; validated material update |
 
 ## Recommended moves
 
