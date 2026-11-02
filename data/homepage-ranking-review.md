@@ -12,7 +12,7 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault | Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault | 34 | importance 0; freshness 41.57; urgency 2/10 |
+| 1 | Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault | Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault | 30 | importance 0; freshness 26.53; urgency 2/10 |
 
 ## Recommended moves
 
